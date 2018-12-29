@@ -1,0 +1,49 @@
+{
+    "length": {
+      "pageTitle": "车长选择",
+      "title": "请选择对应的车长",
+      "others": "请填写其他车长",
+      "message": "车长选择完成",
+      "tags": [
+        { "code": 1101, "value": "1.8米" },
+        { "code": 1102, "value": "2.7米" },
+        { "code": 1103, "value": "3.8米" },
+        { "code": 1104, "value": "4.2米" },
+        { "code": 1105, "value": "5米" },
+        { "code": 1106, "value": "6.2米" },
+        { "code": 1107, "value": "6.8米" },
+        { "code": 1108, "value": "7.7米" },
+        { "code": 1109, "value": "8.2米" },
+        { "code": 1110, "value": "8.7米" },
+        { "code": 1111, "value": "9.6米" },
+        { "code": 1112, "value": "11.7米" },
+        { "code": 1113, "value": "12.5米" },
+        { "code": 1114, "value": "13米" },
+        { "code": 1115, "value": "15米" },
+        { "code": 1116, "value": "16米" },
+        { "code": 1117, "value": "17.5米" },
+        { "code": 1118, "value": "其他" }
+      ]
+    },
+    "proto": {
+      "pageTitle": "车型选择",
+      "title": "请选择对应的车型",
+      "others": "请填写其他车型",
+      "message": "车型选择完成",
+      "tags": [
+        { "code": 1201, "value": "平板" },
+        { "code": 1202, "value": "高栏" },
+        { "code": 1203, "value": "厢式" },
+        { "code": 1204, "value": "危险品" },
+        { "code": 1205, "value": "自卸" },
+        { "code": 1206, "value": "冷藏" },
+        { "code": 1207, "value": "保温" },
+        { "code": 1208, "value": "高低板" },
+        { "code": 1209, "value": "面包车" },
+        { "code": 1210, "value": "棉被车" },
+        { "code": 1211, "value": "爬梯车" },
+        { "code": 1212, "value": "飞翼车" },
+        { "code": 1213, "value": "其他" }
+      ]
+    }
+  }

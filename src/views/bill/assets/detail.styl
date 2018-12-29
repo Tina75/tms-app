@@ -1,0 +1,75 @@
+.card
+  margin: 0 5px 10px
+  border-radius: 4px
+  overflow: hidden
+  background: #ffffff
+
+  &-title 
+    margin: 10px 0
+    line-height: 19px
+    font-size: 14px
+    color: #999999
+
+    &:before 
+      content: ""
+      display: inline-block
+      width: 3px
+      height: 19px
+      margin-right: 7px
+      border-radius: 2px
+      vertical-align: text-top
+      background: #189CB2
+
+.cell
+  display: flex
+  min-height: 41px
+  margin-left: 10px
+  padding-right: 10px
+  border-bottom: 1px solid #e8e8e8
+  font-size: 15px
+  line-height: 41px
+
+  &:last-child 
+    border-style: none
+
+  &-large 
+    min-height: 54px
+    line-height: 54px
+
+  &-title 
+    flex: none
+    width: 75px
+    color: #555555
+
+  &-content 
+    flex: auto
+    color: #333333
+
+    &-right 
+      text-align: right 
+    
+    &-bold
+      font-weight: bold
+
+    &-text 
+      padding 15px 0
+      line-height 21px
+      color #666666
+  
+  &-text
+    font-size: 14px
+    color: #555555
+
+.detail-page-wrapper
+  height: 100%
+.detail-page 
+  padding-bottom: 68px
+
+.more-detail
+  display block
+  height 48px
+  line-height 48px
+  border-top 1px solid #C2C0C0
+  font-size 14px
+  text-align center
+  color #189CB2
