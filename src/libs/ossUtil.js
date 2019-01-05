@@ -1,5 +1,5 @@
 import OSS from 'ali-oss'
-import server from './Server'
+import server from './server'
 
 /** oss上传文件 */
 export async function uploadOSS (base64Data) {

@@ -8,8 +8,8 @@ module.exports = {
     '@vue/standard'
   ],
   rules: {
-    'no-console': 'off',
-    'no-debugger': 'off',
+    'no-debugger': process.env.NODE_ENV !== 'production' ? 'off' : 'error',
+    'no-debugger': process.env.NODE_ENV !== 'production' ? 'off' : 'error',
     'vue/multiline-html-element-content-newline': 'error',
     'vue/no-spaces-around-equal-signs-in-attribute': 'warning',
     'vue/script-indent': 'error',

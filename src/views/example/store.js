@@ -1,4 +1,4 @@
-import Server from '@/libs/Server'
+import Server from '@/libs/server'
 export default{
   state: {
     news: {
@@ -8,12 +8,12 @@ export default{
     }
   },
   mutations: {
-    news (state, payload) {
+    NEWS (state, payload) {
       state.news.startPage++
       state.news.list = state.news.list.concat(payload.hits)
       state.news.totalPages = payload.nbPages
     },
-    newsClear (state) {
+    NEWS_CLEAR (state) {
       state.news = { list: [], startPage: 1, totalPages: 1 }
     }
   },
@@ -27,7 +27,7 @@ export default{
           page: state.news.startPage
         }
       }).then((response) => {
-        commit('news', response.data)
+        commit('NEWS', response.data)
         // resolve(response)
       })
     }

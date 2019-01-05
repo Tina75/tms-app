@@ -16,6 +16,6 @@ window.vConsole = new VConsole({
       window.vConsole.$.one('.vc-switch', this.$dom).style.display = 'none'
     }
 
-    if (process.env.NODE_ENV === 'production') { window.vConsole.close() }
+    if (process.env.NODE_ENV === 'production' && process.env.VUE_APP_STATUS === 'production') { window.vConsole.close() }
   }
 })

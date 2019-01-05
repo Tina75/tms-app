@@ -1,29 +1,10 @@
 import axios from 'axios'
 import bridge from '@/libs/dsbridge'
 
-var userInfo = ''
-var ClientInfo = ''
-var getToken = function () {
-  if (process.env.NODE_ENV === 'localhost') {
-    return {
-      Authorization: 'Bearer eyJsb2dpblRpbWUiOiIyMDE4LTEyLTI4IDExOjQyOjQ1IiwidXNlcklkIjozfQ==',
-      ClientInfo: '2240563ecfa80fe26c4eb4dd4f6053037db4eee8/yzgdriver/1.0.0/ios'
-    }
-  } else {
-    if (!userInfo || !ClientInfo) {
-      userInfo = bridge.call('user.getUserInfo')
-      ClientInfo = bridge.call('user.getClientInfo')
-    }
-    return {
-      Authorization: userInfo && Number(userInfo.code) === 10000 ? `Bearer ${userInfo.data.token}` : '',
-      ClientInfo: ClientInfo ? ClientInfo.data.ClientInfo : ''
-    }
-  }
-}
 var instance = axios.create({
   baseURL: process.env.VUE_APP_HOST, // 在.env.*文件中配置,
-  headers: Object.assign({ 'Content-Type': 'application/json' }, getToken()),
-  timeout: 10000,
+  headers: Object.assign({ 'Content-Type': 'application/json' }, window.app.userInfo),
+  timeout: 1000,
   withCredentials: true,
   loading: false,
   ignoreCode: false,
@@ -32,7 +13,7 @@ var instance = axios.create({
 
 instance.interceptors.request.use((config) => {
   // loading
-  if (config.loading) window.loadingStart()
+  if (config.loading) window.loading()
   if (process.env.NODE_ENV !== 'production' && (config.mock || Number(process.env.VUE_APP_IS_MOCK))) {
     config.baseURL = process.env.VUE_APP_HOST_MOCK
   }
@@ -45,7 +26,7 @@ instance.interceptors.request.use((config) => {
 })
 
 instance.interceptors.response.use((response) => {
-  if (response.config.loading) window.loadingEnd()
+  if (response.config.loading) window.loading(false)
   const resultCode = response.data.code
   if (response.config.ignoreCode || resultCode === 10000) {
     return response.data
@@ -53,7 +34,7 @@ instance.interceptors.response.use((response) => {
     // 业务逻辑错误
     switch (resultCode) {
       case 210102:
-        window.alert('登录信息失效,请重新登录', logout)
+        window.alert('用户授权过期,请重新登录', logout)
         break
       case 210103:
         window.alert('帐号在别处登录,请重新登录', logout)
@@ -65,25 +46,46 @@ instance.interceptors.response.use((response) => {
     return Promise.reject(response)
   }
 }, (error) => {
-  const msg = error.message | ''
-  if (msg.indexOf('Network Error')) {
-    window.toast('您似乎断网了')
-  } else if (msg.indexOf('timeout')) {
-    window.toast('网络请求超时了')
+  if (error && error.response) {
+    switch (error.response.status) {
+      case 400:
+        error.message = '错误请求'
+        break
+      case 401:
+        error.message = '用户授权过期,请重新登陆'
+        break
+      case 404:
+        error.message = '请求错误,未找到该资源'
+        break
+      case 408:
+        error.message = '请求超时'
+        break
+      case 500:
+        error.message = '服务器内部错误'
+        break
+      case 502:
+        error.message = '网关错误'
+        break
+      case 503:
+        error.message = '服务不可用'
+        break
+      default:
+        error.message = `连接错误${error.response.status}`
+        break
+    }
   } else {
-    window.toast(msg)
+    if (error.message.indexOf('Network Error') !== -1) {
+      error.message = '您似乎断网了'
+    } else if (error.message.indexOf('timeout') !== -1) {
+      error.message = '网络请求超时了'
+    }
   }
-  // 网络错误
-  if (error) { return Promise.reject(error) }
+  window.toast(error.message)
+  return Promise.reject(error)
 })
 
 function logout () {
-  bridge.call('ui.closeWindow', {}, result => {})
-  bridge.call(
-    'navigation.openSchema',
-    { url: 'yzgdriver://user/login' },
-    result => {}
-  )
+  bridge.call('navigation.openSchema', { url: 'yzgdriver://user/login' }, result => { bridge.call('ui.closeWindow', {}, result => {}) })
 }
 
 export default instance

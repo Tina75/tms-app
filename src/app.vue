@@ -1,23 +1,25 @@
 <template>
   <div id="app">
     <keep-alive>
-      <router-view></router-view>
+      <router-view />
     </keep-alive>
-    <loading :status.sync="showLoading"></loading>
+    <loading :status.sync="loadingStatus" />
   </div>
 </template>
 <script>
 import Loading from '@/components/Loading'
+import { mapMutations } from 'vuex'
 
 export default {
   name: 'app',
   components: { Loading },
   data () {
     return {
-      showLoading: false
+      loadingStatus: false
     }
   },
-  mounted () {
+  created () {
+    // 全局toast
     window.toast = (msg) => {
       this.$createToast({
         time: 2000,
@@ -25,12 +27,11 @@ export default {
         type: 'txt'
       }).show()
     }
-    window.loadingStart = () => {
-      this.showLoading = true
+    // 全局loading
+    window.loading = (status = true) => {
+      this.loadingStatus = status
     }
-    window.loadingEnd = () => {
-      this.showLoading = false
-    }
+    // 全局alert
     window.alert = (msg, fn) => {
       this.$createDialog({
         type: 'alert',
@@ -68,6 +69,8 @@ html,body
     left: 0
     width: 100%
     height: 100%
+    overflow-x: hidden
+    overflow-y: auto
     .list-no-data
       height 50px
       line-height 50px

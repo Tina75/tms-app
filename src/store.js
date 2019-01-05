@@ -1,30 +1,24 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+var pkg = require('../package.json')
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    // userInfo: {},
-    // dictionary: [] // 字典
+    app: {
+      pkg,
+      userInfo: {},
+      clintInfo: {}
+    }
   },
   mutations: {
-    // setUserInfo (state, payload) {
-    //   state.userInfo = { ...payload }
-    // }
+    SET_USER: (state, user) => { state.app.userInfo = user }
   },
   actions: {
-    // setUserInfo ({ commit }) {
-    //   Server({
-    //     url: '/seed/userInfo',
-    //     method: 'get',
-    //     mock: true
-    //   }).then(({ code, data, msg }) => {
-    //     commit('setUserInfo', data)
-    //   })
-    // }
+    setUserInfo: ({ commit, state }, user) => { commit('SET_USER', user) }
   },
   getters: {
-    // UserInfo: (state) => state.userInfo
+    UserInfo: state => state.app.userInfo
   }
 })
