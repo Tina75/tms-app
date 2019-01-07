@@ -1,6 +1,4 @@
-const webpack =require('webpack')
-const useBundleAnalyzer = true
-
+const useBundleAnalyzer = false
 const config = {
   baseUrl: './',
   assetsDir: 'static',
@@ -38,7 +36,7 @@ const config = {
         cacheGroups: {
           city: {
             test: /[\\/]node_modules[\\/]ydd_area/,
-            name: 'ydd_area.js',
+            name: 'ydd_area',
             chunks: 'all'
           },
           // alioss: {
@@ -49,7 +47,7 @@ const config = {
           node: {
             test: /[\\/]node_modules[\\/]/,
             priority: -10,
-            name: 'common~vendor',
+            name: 'common',
             chunks: 'all'
           }
         }
