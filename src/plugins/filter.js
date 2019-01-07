@@ -1,11 +1,11 @@
-import { format } from 'date-fns'
+import dayjs from 'dayjs'
 import Vue from 'vue'
 
 const URL_HOST = process.env.VUE_APP_IMG_HOST
 
 Vue.filter('datetimeFormat', (value, formatting = 'YYYY-MM-DD HH:mm', placeholder = '') => {
   if (!value) return placeholder
-  return format(new Date(Number(value)), formatting)
+  return dayjs(Number(value)).format(formatting)
 })
 
 Vue.filter('imgUrlFormat', function (value) {

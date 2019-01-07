@@ -8,7 +8,6 @@
 </template>
 <script>
 import Loading from '@/components/Loading'
-import { mapMutations } from 'vuex'
 
 export default {
   name: 'app',

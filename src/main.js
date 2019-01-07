@@ -1,15 +1,14 @@
 import Vue from 'vue'
+import Cube from 'cube-ui'
 import App from './app.vue'
 import router from './router'
 import store from './store'
 import VueMeta from 'vue-meta'
-import 'amfe-flexible'
-import './libs/filter'
-import './libs/vconsole'
+import './plugins'
 import bridge from './libs/dsbridge'
-
 Vue.config.productionTip = false
 Vue.use(VueMeta)
+Vue.use(Cube)
 
 const app = new Vue({
   router,
