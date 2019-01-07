@@ -48,7 +48,7 @@ export default {
 </script>
 
 <style lang="stylus">
-@import './assets/style/mixin.styl';
+@import './assets/style/helper.styl';
 html,body
   height: 100%
 #app
