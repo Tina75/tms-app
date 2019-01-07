@@ -16,7 +16,7 @@ Vue.use(Lazyload, {
          *  2. 是否有图片处理
          *  3. 是否支持webp格式
          */
-        listener.src = `${process.env.VUE_APP_OSS}${listener.src}${listener.src.includes('x-oss-process=image') ? ',' : '?x-oss-process='}image/format,${options.supportWebp ? 'webp' : 'jpg'}`
+        listener.src = `${process.env.VUE_APP_IMG_HOST}${listener.src}${listener.src.includes('x-oss-process=image') ? ',' : '?x-oss-process='}image/format,${options.supportWebp ? 'webp' : 'jpg'}`
         // loading高斯模糊底图
         listener.loading = `${listener.src},image/blur,r_50,s_30/quality,q_70`
         // 图片质量处理

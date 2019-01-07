@@ -19,6 +19,7 @@ module.exports = {
     'vue/require-prop-types': 'error',
     'vue/attributes-order': 'error',
     'vue/order-in-components': 'error',
+    "space-before-function-paren": 'off',
     'vue/attribute-hyphenation': [
       'error',
       'always'

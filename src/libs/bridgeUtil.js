@@ -1,28 +1,60 @@
 import bridge from './dsbridge'
+import { reuse } from './util'
 
-export const asyncUserInfo = () => {
-
-}
+export const getUserInfo = reuse(() => {
+  let userInfo = {}
+  if (process.env.NODE_ENV === 'production') {
+    userInfo = bridge.call('user.getUserInfo')
+    userInfo.ClientInfo = bridge.call('user.getClientInfo')
+  } else {
+    console.warn('Authorization on mock')
+    try {
+      userInfo = require('./login.json')
+    } catch (e) {
+      userInfo = {
+        Authorization: 'Bearer eyJsb2dpblRpbWUiOiIyMDE4LTEyLTI4IDExOjQyOjQ1IiwidXNlcklkIjozfQ==',
+        ClientInfo: '2240563ecfa80fe26c4eb4dd4f6053037db4eee8/yzgdriver/1.0.0/ios'
+      }
+    }
+  }
+  return userInfo
+})
 
 // 打开app原生页面
-export const openNewPage = (url, config = {}, callback = () => {}) => {
+export const openNewPage = (config = {}, callback = () => {}) => {
+  let { url, data, id } = config
   if (url) {
-    url = `${url}?${parseToStr(config.data)}`
-    console.warn('openAppPage', url)
-    bridge.call('navigation.openSchema', { url }, callback)
+    if (data) {
+      url = `${url}?${parseToStr(data)}`
+    }
+    if (typeof id === 'undefined') {
+      console.warn('openNewPage', url)
+      bridge.call('navigation.openSchema', { url }, callback)
+    } else {
+      console.warn('openWebview', url, id)
+      bridge.call('webview.open', { url, id }, callback)
+    }
   }
 }
 
 // 关闭h5页面
-export const closeWindow = () => console.info('ui.closeWindow') || bridge.call('ui.closeWindow', {}, result => {})
+export const closeWindow = (config = {}) => {
+  let { id, ...others } = config
+  console.info('ui.closeWindow')
+  if (typeof id === 'undefined') {
+    bridge.call('ui.closeWindow', others, () => {})
+  } else {
+    bridge.call('webview.close', { id }, () => {})
+  }
+}
 
 let appBtn = {
   right: 0
 }
 // 设置标题栏按钮
-export const setAppTitleBtn = option => {
+export const setAppTitleBtn = (option) => {
   const { action, position, ...config } = option
-  if ('function' === typeof action) {
+  if (typeof action === 'function') {
     let isLeft = position === 'left'
     let protocol = isLeft ? 'ui.setLeftButtonAction' : (appBtn.right = 1 && 'ui.setRightButtonAction')
     config.action = isLeft ? 'appLeftBtn_H5' : 'appRightBtn_H5'
@@ -33,7 +65,7 @@ export const setAppTitleBtn = option => {
 }
 
 // 默认清设置过的右侧按钮, 左侧按钮默认是返回键, 应该手动控制清除
-export const clearAppTitleBtn = left => {
+export const clearAppTitleBtn = (left) => {
   const empty = {
     text: '',
     action: '',
@@ -76,7 +108,14 @@ export const getDeviceLocation = () => {
       console.info('jsbridge:user.getLocationInfoAsync ')
       bridge.call('user.getLocationInfoAsync', function(result) {
         console.info('jsbridge:success ', result)
-        if (!result || !result.data || !result.data.lon || !result.data.lat || +result.data.lon === 0 || +result.data.lat === 0) {
+        if (
+          !result ||
+          !result.data ||
+          !result.data.lon ||
+          !result.data.lat ||
+          +result.data.lon === 0 ||
+          +result.data.lat === 0
+        ) {
           resolve()
         }
         resolve(result.data)
@@ -89,14 +128,8 @@ export const getDeviceLocation = () => {
 }
 
 /** app通知h5刷新 */
-export const onPageRefresh = callback => {
-  bridge.register(
-    'onRefreshPage',
-    (...arr) => {
-      callback(...arr)
-    },
-    false
-  )
+export const onPageRefresh = (callback = () => {}) => {
+  bridge.register('onRefreshPage', callback, false)
 }
 
 // 拼成url参数

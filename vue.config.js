@@ -28,9 +28,10 @@ const config = {
     externals: {
       BMap: 'BMap'
     },
-    output: {
-      chunkFilename: '[name].js'
-    },
+    // output: {
+    //   filename: '[name].[chunkhash].js',
+    //   chunkFilename: '[name].[chunkhash].js'
+    // },
     optimization: {
       splitChunks: {
         // node_modules中除city走线上,其他走本地common
