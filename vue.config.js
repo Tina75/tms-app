@@ -6,7 +6,6 @@ const config = {
   productionSourceMap: false,
   parallel: true,
   lintOnSave: undefined,
-  filenameHashing: false,
   chainWebpack: config => {
     config.plugins.delete('prefetch')
     config.plugins.delete('preload')
@@ -64,17 +63,6 @@ const config = {
             name: 'ydd_area',
             chunks: 'all'
           },
-          // alioss: {
-          //   test: /[\\/]node_modules[\\/]ali-oss/,
-          //   name: 'oss~vendor',
-          //   chunks: 'all'
-          // }
-          node: {
-            test: /[\\/]node_modules[\\/]/,
-            priority: -10,
-            name: 'common',
-            chunks: 'all'
-          }
         }
       }
     }
