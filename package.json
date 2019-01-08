@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "vue-cli-service build --mode dev",
-    "build_dll": "webpack --config dll.config.js --mode production",
+    "build_dll": "webpack --config dll.config.js --mode development",
     "lint": "vue-cli-service lint",
     "deploy_beta": "vue-cli-service build --mode beta && node upload -e beta",
     "deploy_dev": "vue-cli-service build --mode dev && node upload -e dev",
