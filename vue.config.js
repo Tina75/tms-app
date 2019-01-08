@@ -1,3 +1,4 @@
+const webpack = require('webpack')
 const useBundleAnalyzer = false
 const config = {
   baseUrl: './',
@@ -42,6 +43,15 @@ const config = {
   },
 
   configureWebpack: {
+    plugins: [
+      new webpack.DllReferencePlugin({
+        // 描述 polyfill 动态链接库的文件内容
+        manifest: require('./public/dll/polyfill.json'),
+      }),
+      new webpack.DllReferencePlugin({
+        manifest: require('./public/dll/common.json')
+      })
+    ],
     externals: {
       BMap: 'BMap'
     },
