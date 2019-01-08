@@ -8,9 +8,13 @@ import './cube-ui'
 import './libs/filter'
 import './libs/vconsole'
 import bridge from './libs/dsbridge'
+import './components/Form'
+import Iconfont from './components/Iconfont'
+require('./assets/font/iconfont.css')
 
 Vue.config.productionTip = false
 Vue.use(VueMeta)
+Vue.component('icon-font', Iconfont)
 
 const app = new Vue({
   router,
