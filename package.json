@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "build": "vue-cli-service build --mode dev",
+    "build_dll": "webpack --config dll.config.js --mode production",
     "lint": "vue-cli-service lint",
     "deploy_beta": "vue-cli-service build --mode beta && node upload -e beta",
     "deploy_dev": "vue-cli-service build --mode dev && node upload -e dev",
     "deploy_prod": "vue-cli-service build",
-    "dev": "vue-cli-service serve --mode localhost"
+    "dev": "vue-cli-service serve "
   },
   "dependencies": {
     "ali-oss": "^6.0.2",
@@ -25,6 +26,7 @@
     "vuex": "^3.0.1",
     "vuex-router-sync": "^5.0.0",
     "webpack-bundle-analyzer": "^3.0.3",
+    "webpack-cli": "^3.2.1",
     "ydd_area": "^1.1.13"
   },
   "devDependencies": {

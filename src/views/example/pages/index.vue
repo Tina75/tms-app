@@ -5,7 +5,6 @@
 <script>
 // import ContentLoaderList from '@/components/content-loader-list'
 import { mapGetters, mapActions } from 'vuex'
-
 export default {
   name: 'NewsIndex',
   // components: { ContentLoaderList },

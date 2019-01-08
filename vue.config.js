@@ -1,11 +1,16 @@
-const useBundleAnalyzer = false
+const webpack = require('webpack')
+const useBundleAnalyzer = true
+const proxyUrl = 'https://dev.tms5566.com/dolphin-app'
 const config = {
   baseUrl: './',
   assetsDir: 'static',
   productionSourceMap: false,
   parallel: true,
   lintOnSave: undefined,
-
+  chainWebpack: config => {
+    config.plugins.delete('prefetch')
+    config.plugins.delete('preload')
+  },
   css: {
     loaderOptions: {
       stylus: {
@@ -22,14 +27,34 @@ const config = {
     }
   },
 
+  devServer: {
+    open: true,
+    host: '0.0.0.0',
+    port: 8080,
+    progress: true,
+    inline: true,
+    proxy: {
+      '/': {
+        target: proxyUrl,
+        ws: false,
+        changOrigin: true
+      }
+    }
+  },
+
   configureWebpack: {
+    plugins: [
+      new webpack.DllReferencePlugin({
+        // 描述 polyfill 动态链接库的文件内容
+        manifest: require('./public/dll/polyfill.json'),
+      }),
+      new webpack.DllReferencePlugin({
+        manifest: require('./public/dll/common.json')
+      })
+    ],
     externals: {
       BMap: 'BMap'
     },
-    // output: {
-    //   filename: '[name].[chunkhash].js',
-    //   chunkFilename: '[name].[chunkhash].js'
-    // },
     optimization: {
       splitChunks: {
         // node_modules中除city走线上,其他走本地common
@@ -39,17 +64,6 @@ const config = {
             name: 'ydd_area',
             chunks: 'all'
           },
-          // alioss: {
-          //   test: /[\\/]node_modules[\\/]ali-oss/,
-          //   name: 'oss~vendor',
-          //   chunks: 'all'
-          // }
-          node: {
-            test: /[\\/]node_modules[\\/]/,
-            priority: -10,
-            name: 'common',
-            chunks: 'all'
-          }
         }
       }
     }

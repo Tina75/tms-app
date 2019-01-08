@@ -1,15 +1,19 @@
-import './vendor'
 import Vue from 'vue'
+import Cube from 'cube-ui'
+import VueMeta from 'vue-meta'
 import App from './app.vue'
 import router from './router'
 import store from './store'
+import './plugins'
+Vue.config.productionTip = false
+Vue.use(VueMeta)
+Vue.use(Cube)
 
 new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app')
-
 // function startApp () {
 //   if (startApp.started) return
 //   startApp.started = true
