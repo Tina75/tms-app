@@ -5,7 +5,11 @@ const config = {
   productionSourceMap: false,
   parallel: true,
   lintOnSave: undefined,
-
+  filenameHashing: false,
+  chainWebpack: config => {
+    config.plugins.delete('prefetch')
+    config.plugins.delete('preload')
+  },
   css: {
     loaderOptions: {
       stylus: {
@@ -22,14 +26,25 @@ const config = {
     }
   },
 
+  devServer: {
+    open: true,
+    host: '0.0.0.0',
+    port: 8080,
+    progress: true,
+    inline: true,
+    proxy: {
+      '/': {
+        target: 'https://dev.yundada56.com/bluewhale-line/',
+        ws: false,
+        changOrigin: true
+      }
+    }
+  },
+
   configureWebpack: {
     externals: {
       BMap: 'BMap'
     },
-    // output: {
-    //   filename: '[name].[chunkhash].js',
-    //   chunkFilename: '[name].[chunkhash].js'
-    // },
     optimization: {
       splitChunks: {
         // node_modules中除city走线上,其他走本地common

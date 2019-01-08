@@ -1,5 +1,4 @@
 import '@babel/polyfill'
-import 'ydd_area'
 import Vue from 'vue'
 import Cube from 'cube-ui'
 import VueMeta from 'vue-meta'
