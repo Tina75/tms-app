@@ -19,3 +19,11 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+# mock files
+src/libs/login.json
+
+# dll files
+public/dll/*.js
+public/dll/*.json
+public/dll/*.css

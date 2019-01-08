@@ -1,16 +1,13 @@
 <template>
   <div class="home">
-    <cube-slide
-      :data="items"
-      class="slider">
-    </cube-slide>
-    <p class="cube-mt-10 cube-mb-5 ">车辆</p>
+    <cube-slide :data="items" class="slider"/>
+    <p class="cube-mt-10 cube-mb-5">车辆</p>
     <ul>
       <li>
         <router-link :to="{name:'truck-index'}">车辆信息</router-link>
       </li>
     </ul>
-    <p class="cube-mt-10 cube-mb-5 ">订单</p>
+    <p class="cube-mt-10 cube-mb-5">订单</p>
     <ul>
       <li>
         <router-link :to="{name:'waybill-cargo-list'}">运单货物列表</router-link>
@@ -19,7 +16,7 @@
         <router-link :to="{name:'loabill-cargo-list',params:{billId:963}}">提货单货物列表</router-link>
       </li>
     </ul>
-    <p class="cube-mt-10 cube-mb-5 ">异常</p>
+    <p class="cube-mt-10 cube-mb-5">异常</p>
     <ul>
       <li>
         <router-link :to="{name:'odd-list'}">异常记录</router-link>
@@ -34,9 +31,7 @@
     <br>
     <cube-button :active="true">Active Button</cube-button>
     <br>
-    <cube-checkbox v-model="checked">
-      Checkbox
-    </cube-checkbox>
+    <cube-checkbox v-model="checked">Checkbox</cube-checkbox>
     <br>
     <cube-button :disabled="true">Disabled Button</cube-button>
     <br>
@@ -44,17 +39,9 @@
     <br>
     <cube-button :inline="true">Inline Button</cube-button>
     <br>
-    <cube-button
-      :outline="true"
-      :primary="true">
-      Outline Button
-    </cube-button>
+    <cube-button :outline="true" :primary="true">Outline Button</cube-button>
     <br>
-    <cube-button
-      :primary="true"
-      @click="toList">
-      Primary Button
-    </cube-button>
+    <cube-button :primary="true" @click="toList">Primary Button</cube-button>
   </div>
 </template>
 
@@ -70,15 +57,18 @@ export default {
       items: [
         {
           url: 'http://www.didichuxing.com/',
-          image: '//webapp.didistatic.com/static/webapp/shield/cube-ui-examples-slide01.png'
+          image:
+            '//webapp.didistatic.com/static/webapp/shield/cube-ui-examples-slide01.png'
         },
         {
           url: 'http://www.didichuxing.com/',
-          image: '//webapp.didistatic.com/static/webapp/shield/cube-ui-examples-slide02.png'
+          image:
+            '//webapp.didistatic.com/static/webapp/shield/cube-ui-examples-slide02.png'
         },
         {
           url: 'http://www.didichuxing.com/',
-          image: '//webapp.didistatic.com/static/webapp/shield/cube-ui-examples-slide03.png'
+          image:
+            '//webapp.didistatic.com/static/webapp/shield/cube-ui-examples-slide03.png'
         }
       ]
     }
@@ -96,19 +86,19 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-  .home
-    padding 10px
-    .slider
-      height 80px
-    ul>li
-      line-height 50px
-      height 50px
-      font-size 16px
-      padding-left 20px
-      background white
-      border-bottom 1px solid #e9e9e9
-      :after
-        content '...'
-        float right
-        padding-right 10px
+.home
+  padding 10px
+  .slider
+    height 80px
+  ul>li
+    line-height 50px
+    height 50px
+    font-size 16px
+    padding-left 20px
+    background white
+    border-bottom 1px solid #e9e9e9
+    :after
+      content '...'
+      float right
+      padding-right 10px
 </style>

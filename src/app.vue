@@ -8,7 +8,6 @@
 </template>
 <script>
 import Loading from '@/components/Loading'
-import { mapMutations } from 'vuex'
 
 export default {
   name: 'app',
@@ -51,6 +50,7 @@ export default {
 @import './assets/style/helper.styl';
 html,body
   height: 100%
+  user-select: all
 #app
   font-family 'Avenir', Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
