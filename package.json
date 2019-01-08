@@ -8,7 +8,7 @@
     "deploy_beta": "vue-cli-service build --mode beta && node upload -e beta",
     "deploy_dev": "vue-cli-service build --mode dev && node upload -e dev",
     "deploy_prod": "vue-cli-service build",
-    "dev": "vue-cli-service serve --mode localhost"
+    "dev": "vue-cli-service serve "
   },
   "dependencies": {
     "ali-oss": "^6.0.2",
