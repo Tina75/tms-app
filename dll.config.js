@@ -16,10 +16,10 @@ module.exports = {
   },
   resolve: {
       modules: [path.resolve(__dirname, 'node_modules')],
-      extensions: ['.js', '.json'],
-      alias: {
-          'vue$': 'vue/dist/vue.esm.js'
-      }
+      extensions: ['.js', '.json']
+      // alias: {
+      //     'vue$': 'vue/dist/vue.esm.js'
+      // }
   },
   plugins: [
     new webpack.DllPlugin({

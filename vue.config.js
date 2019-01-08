@@ -1,5 +1,6 @@
 const webpack = require('webpack')
 const useBundleAnalyzer = true
+const proxyUrl = 'https://dev.tms5566.com/dolphin-app'
 const config = {
   baseUrl: './',
   assetsDir: 'static',
@@ -34,7 +35,7 @@ const config = {
     inline: true,
     proxy: {
       '/': {
-        target: 'https://dev.yundada56.com/bluewhale-line/',
+        target: proxyUrl,
         ws: false,
         changOrigin: true
       }
