@@ -45,10 +45,6 @@ const config = {
   configureWebpack: {
     plugins: [
       new webpack.DllReferencePlugin({
-        // 描述 polyfill 动态链接库的文件内容
-        manifest: require('./public/dll/polyfill.json'),
-      }),
-      new webpack.DllReferencePlugin({
         manifest: require('./public/dll/common.json')
       })
     ],
@@ -63,7 +59,7 @@ const config = {
             test: /[\\/]node_modules[\\/]ydd_area/,
             name: 'ydd_area',
             chunks: 'all'
-          },
+          }
         }
       }
     }

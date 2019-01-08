@@ -13,11 +13,9 @@
   },
   "dependencies": {
     "ali-oss": "^6.0.2",
-    "amfe-flexible": "^2.2.1",
     "axios": "^0.18.0",
     "cube-ui": "~1.12.1",
     "dayjs": "^1.7.8",
-    "vconsole": "^3.2.0",
     "vue": "^2.5.17",
     "vue-analytics": "^5.16.1",
     "vue-lazyload": "^1.2.6",
@@ -25,8 +23,6 @@
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
     "vuex-router-sync": "^5.0.0",
-    "webpack-bundle-analyzer": "^3.0.3",
-    "webpack-cli": "^3.2.1",
     "ydd_area": "^1.1.13"
   },
   "devDependencies": {
@@ -43,7 +39,9 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue-cli-plugin-cube-ui": "^0.2.4",
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.5.17",
+    "webpack-bundle-analyzer": "^3.0.3",
+    "webpack-cli": "^3.2.1"
   },
   "transformModules": {
     "cube-ui": {
