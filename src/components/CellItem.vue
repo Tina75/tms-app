@@ -4,21 +4,21 @@
     @click="eventHandle">
     <label v-if="label">{{label}}</label>
     <div class="cell-content">
-      <slot></slot>
+      <slot/>
     </div>
     <icon-font
       v-if="linkIcon || route"
       name="yzg-gengduo-huidanzhao"
       :size="12"
       color="#ADADAD"
-      class="link-icon">
-    </icon-font>
+      class="link-icon"/>
   </div>
 </template>
 <script>
 import IconFont from './Iconfont'
 
 export default {
+  components: { IconFont },
   props: {
     // 标题
     label: {
@@ -36,9 +36,11 @@ export default {
       type: Object,
       default: function () {}
     },
-    tap: Function
+    tap: {
+      type: Function,
+      default: function () {}
+    }
   },
-  components: { IconFont },
   methods: {
     routerLink () {
       const { route, $router } = this

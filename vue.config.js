@@ -1,5 +1,5 @@
 const webpack = require('webpack')
-const useBundleAnalyzer = true
+const useBundleAnalyzer = false
 const proxyUrl = 'https://dev.tms5566.com/dolphin-app'
 const config = {
   baseUrl: './',

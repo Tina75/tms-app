@@ -1,6 +1,6 @@
 <template>
   <div class="consignee">
-    <cube-index-list :data="data">
+    <cube-index-list :data="data" class="consignee_list">
       <cube-index-list-group
         v-for="(group, index) in data"
         :key="index"
@@ -10,7 +10,23 @@
           :key="index"
           :item="item"
           @select="selectItem">
-          <div>我是自定义 {{item.name}}</div>
+          <div class="consignee_item border-bottom-1px">
+            <div class="consignee_item_img">
+              {{item.name.slice(0,1)}}
+            </div>
+            <div class="consignee_item_info">
+              <div>
+                <div class="info_top">
+                  <span>{{item.name}}</span>
+                  <span>{{item.phone}}</span>
+                </div>
+                <div class="info_bottom cube-ellipsis">
+                  {{item.address}}
+                </div>
+              </div>
+              <div class="info_phone">电话</div>
+            </div>
+          </div>
         </cube-index-list-item>
       </cube-index-list-group>
     </cube-index-list>
@@ -28,6 +44,9 @@ export default {
       return Mock.list
     }
   },
+  mounted() {
+    console.log(process.env.VUE_APP_HOST)
+  },
   methods: {
     selectItem () {
 
@@ -37,5 +56,49 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .consignee
-  background-color #ffffff
+  height 100%
+  background-color #EFEFEF
+  &_list
+    height 100%
+    >>>.cube-index-list-anchor
+      // display none
+  .border-bottom-1px:after
+    left 70px
+  &_item
+    width 100%
+    height 60px
+    padding 10px 15px
+    display flex
+    box-sizing border-box
+    align-items center
+    &_img
+      width 40px
+      height 40px
+      border-radius 50%
+      line-height 40px
+      text-align center
+      font-size 17px
+      color #ffffff
+      background-color #E4E7EC
+    &_info
+      margin-left 15px
+      display flex
+      padding 10px 0px
+      .info_top
+        font-size 17px
+        color #333333
+        font-weight 400
+        line-height 18px
+        span
+          margin-right 11px
+      .info_bottom
+        margin-top 8px
+        font-size 14px
+        max-width 224px
+        color #999999
+        line-height 14px
+      .info_phone
+        margin-left 21px
+        width 30px
+        height 30px
 </style>
