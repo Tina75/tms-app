@@ -1,7 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 
-const dlls = ['vue', 'vue-router', 'vuex', 'vue-meta', 'vue-analytics']
+const dlls = ['vue', 'vue-router', 'vuex', 'vue-meta', 'vue-analytics', 'vue-lazyload', 'dayjs', 'axios']
 const polyfill = ['core-js']
 
 module.exports = {

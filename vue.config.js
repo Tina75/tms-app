@@ -1,5 +1,5 @@
 const webpack = require('webpack')
-const useBundleAnalyzer = false
+const useBundleAnalyzer = true
 const config = {
   baseUrl: './',
   assetsDir: 'static',
