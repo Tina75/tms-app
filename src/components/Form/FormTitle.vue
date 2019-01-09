@@ -1,0 +1,36 @@
+<template>
+  <div class="form-title border-bottom-1px">
+    <img class="form-title-image" v-if="image" :src="image">
+    {{ title }}
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'FormTitle',
+  props: {
+    title: String,
+    image: String
+  }
+}
+</script>
+
+<style lang="stylus" scoped>
+  .form-title
+    height 50px
+    padding 0 18px
+    line-height 50px
+    font-size 16px
+    font-weight bold
+    color #333333
+    background #ffffff
+
+    &-image
+      display inline-block
+      width 18px
+      height 18px
+      margin-right 10px
+      border-radius 2px
+      vertical-align text-top
+</style>
+
