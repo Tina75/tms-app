@@ -6,7 +6,7 @@
 </template>
 
 <script>
-const BASE_SIZE = 16
+const BASE_SIZE = 37.5
 export default {
   props: {
     name: {
