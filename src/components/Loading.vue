@@ -3,7 +3,7 @@
     v-show="visible"
     class="wrapper cube-popup cube-popup_mask"
     @click="close">
-    <cube-loading :size="28"></cube-loading>
+    <cube-loading :size="28"/>
   </div>
 </template>
 

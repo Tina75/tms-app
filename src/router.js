@@ -2,9 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { sync } from 'vuex-router-sync'
 import store from '@/store'
-import bridge from '@/libs/dsbridge'
+import { closeWindow } from '@/libs/bridgeUtil'
 import example from '@/views/example/router'
 import pickup from '@/views/pickup/router'
+
+import order from '@/views/order/router'
 
 Vue.use(Router)
 
@@ -16,14 +18,20 @@ let router = new Router({
       component: () => import(/* webpackChunkName: "home" */ './views/home.vue')
     },
     ...example,
+    ...order,
     ...pickup
   ]
 })
 // 同步store和路由
 sync(store, router)
 
-router.back = () => { // 覆写router.back关闭整个webview
-  if (window.history.length <= 1) { bridge.call('ui.closeWindow', { logOut: false }, function (result) {}) } else { router.go(-1) }
+router.back = () => {
+  // 覆写router.back关闭整个webview
+  if (window.history.length <= 1) {
+    closeWindow({ logOut: false })
+  } else {
+    router.go(-1)
+  }
 }
 
 export default router

@@ -47,9 +47,10 @@ export default {
 </script>
 
 <style lang="stylus">
-@import './assets/style/mixin.styl';
+@import './assets/style/helper.styl';
 html,body
   height: 100%
+  user-select: all
 #app
   font-family 'Avenir', Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
