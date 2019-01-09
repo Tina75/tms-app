@@ -180,9 +180,8 @@ export default {
       height 50px
 
       .form-item-input
-        position relative
         width 100%
-        height 40px
+        min-height 40px
         margin-top 5px
         font-size 15px
         color #666666
@@ -206,8 +205,9 @@ export default {
 
   .form-item-textarea
     display block
-    height 105px
+    height auto
     padding-top 16px
+    padding-bottom 10px
     line-height 1
 </style>
 
