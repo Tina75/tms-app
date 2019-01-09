@@ -5,7 +5,7 @@ import store from '@/store'
 import bridge from '@/libs/dsbridge'
 import example from '@/views/example/router'
 
-import createOrder from '@/views/create-order/router'
+import createOrder from '@/views/order/router'
 
 Vue.use(Router)
 

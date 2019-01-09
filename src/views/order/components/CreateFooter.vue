@@ -8,6 +8,7 @@
         @click.prevent="showDetail = true">
         <span class="total-tip">费用合计：</span>
         <money-label money="9999" />
+        <icon-font class="total-detail" name="icon-ico_up" />
       </a>
     </div>
     <div class="footer-item">
@@ -90,6 +91,10 @@ export default {
 
         .total-tip
           color #333333
+        .total-detail
+          margin-left 10px
+          vertical-align top
+          color #C5C8CE
 
       &-button
         flex 1

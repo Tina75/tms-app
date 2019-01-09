@@ -2,16 +2,16 @@
   <div class="form-item-box">
     <div class="form-item border-bottom-1px">
       <label class="form-item-label" :class="{ 'form-item-required': required }">
-        <i class="form-item-label-icon" v-if="labelIcon" />
+        <img v-if="labelImage" class="form-item-label-image" :src="labelImage" />
         {{ label }}
       </label>
 
       <div class="form-item-input-box">
         <input
-          v-model="inputValue"
-          :type="inputType"
           class="form-item-input"
           :class="inputAlignment"
+          v-model="inputValue"
+          :type="inputType"
           :placeholder="inputPlaceHolder"
           :maxlength="maxlength"
           :readonly="inputReadonly"
@@ -24,9 +24,14 @@
 
       <a class="form-item-icon border-left-1px"
         v-if="clickIcon"
-        @click.prevent="iconClickHandler">{{ clickIcon }}</a>
+        @click.prevent="iconClickHandler">
+        <icon-font :name="clickIcon" color="#189cb2" size="20" />
+      </a>
 
-      <i class="form-item-arrow" v-if="this.type === 'click' && this.showArrow" />
+      <icon-font
+        class="form-item-arrow"
+        v-if="this.type === 'click' && this.showArrow"
+        name="icon-ico_right" />
     </div>
   </div>
 
@@ -41,23 +46,25 @@ export default {
   props,
   data () {
     return {
-      inputValue: this.value
+      inputValue: this.value,
+      picker: null
     }
   },
   watch: {
-    value (val) { this.inputValue = val }
+    value (val) { this.inputValue = val; },
+    inputValue (newVal, oldVal) { if (this.type === 'number' && isNaN(Number(newVal))) this.$nextTick(() => { this.inputValue = oldVal }) }
   },
   computed: {
     inputType () {
-      if ([ 'number', 'money', 'telephone' ].indexOf(this.type) > -1) return 'number'
+      if (this.type === 'number') return 'number'
       else return 'text'
     },
-    inputReadonly () { return this.type === 'click' || this.readonly },
+    inputReadonly () { return this.type === 'picker' || this.readonly },
     inputDisabled () { return this.disabled },
     inputPlaceHolder () {
       let ph
       if (this.placeholder) ph = this.placeholder
-      if (this.type === 'click') return (ph || '请选择') + (this.required ? '(必选)' : '')
+      if (this.type === 'picker') return (ph || '请选择') + (this.required ? '(必选)' : '')
       return (ph || '请输入') + (this.required ? '(必填)' : '')
     },
     inputAlignment () {
@@ -68,16 +75,24 @@ export default {
     // 点击图标触发事件
     iconClickHandler () { this.$emit('on-icon-click') },
     // 点击输入框触发事件
-    inputClickHandler () { if (this.type === 'click') this.$emit('on-click') },
+    inputClickHandler () {
+      if (this.type === 'click') this.$emit('on-click')
+    },
     // 输入框事件
-    inputChangeHandler () {
-      this.$emit('input', this.inputValue)
-    },
+    inputChangeHandler () { this.inputEmit() },
     inputBlurHandler () {
-      this.$emit('input', this.inputValue)
+      if (this.type === 'click') return
+      if (this.required && (this.inputValue === '' || this.inputValue === undefined)) {
+        window.toast(`${('请填写' + this.label) || this.requiredMsg}`)
+      }
+      this.inputEmit()
     },
-    inputFocusHandler () {
-      this.$emit('input', this.inputValue)
+    inputFocusHandler () { this.inputEmit() },
+    inputEmit () {
+      let value = this.inputValue
+      if (this.type === 'number' && value !== '') value = Number(value)
+      this.$emit('input', value)
+      return value
     }
   }
 }
@@ -88,6 +103,15 @@ export default {
     border-color #E4E7EC
   .border-bottom-1px:after
     border-color #E4E7EC
+
+  .form-item-input::-webkit-input-placeholder
+    color #C5C8CE
+  .form-item-input:-moz-placeholder
+    color #C5C8CE
+  .form-item-input::-moz-placeholder
+    color #C5C8CE
+  .form-item-input:-ms-input-placeholder
+    color #C5C8CE
 
   .form-item-box
     padding-left 16px
@@ -106,13 +130,13 @@ export default {
       margin-right 10px
       font-size 15px
 
-      &-icon
+      &-image
         display inline-block
-        width 20px
-        height 20px
+        width 18px
+        height 18px
         margin-right 10px
-        vertical-align middle
-        background #adefcb
+        border-radius 2px
+        vertical-align text-top
 
     &-required:after
       content "*"
@@ -121,18 +145,15 @@ export default {
 
     &-icon
       flex none
-      width 50px
       height 25px
       margin-left 10px
+      padding-left 16px
       line-height 25px
-      text-align center
 
     &-arrow
       flex none
-      width 20px
-      height 20px
       margin-left 10px
-      background #adefcb
+      color #C5C8CE
 
     &-input-box
       flex auto

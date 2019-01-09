@@ -1,7 +1,6 @@
 <template>
   <div class="form-title border-bottom-1px">
-    <i class="form-title-icon" v-if="icon" />
-    <img class="form-title-icon" v-if="image" :src="image">
+    <img class="form-title-image" v-if="image" :src="image">
     {{ title }}
   </div>
 </template>
@@ -11,7 +10,6 @@ export default {
   name: 'FormTitle',
   props: {
     title: String,
-    icon: String,
     image: String
   }
 }
@@ -27,12 +25,12 @@ export default {
     color #333333
     background #ffffff
 
-    &-icon
+    &-image
       display inline-block
-      width 20px
-      height 20px
+      width 18px
+      height 18px
       margin-right 10px
-      vertical-align middle
-      background #adefcb
+      border-radius 2px
+      vertical-align text-top
 </style>
 
