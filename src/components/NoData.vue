@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="img"></div>
+    <div class="img"/>
     <span>没找到相关数据~</span>
   </div>
 </template>
