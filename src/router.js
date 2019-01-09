@@ -13,6 +13,10 @@ let router = new Router({
       path: '/',
       name: 'home',
       component: () => import(/* webpackChunkName: "home" */ './views/home.vue')
+    }, {
+      path: '/company',
+      name: 'company',
+      component: () => import(/* webpackChunkName: "company" */'./views/company/pages/index.vue')
     },
     ...example
   ]
