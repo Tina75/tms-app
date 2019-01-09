@@ -2,10 +2,10 @@
   <footer class="create-footer">
     <div class="footer-item">
       <div class="footer-item-select">
-        <cube-checkbox class="footer-item-select-radio" v-model="saveUsually">保存为常发订单</cube-checkbox>
+        <cube-checkbox v-model="saveUsually" class="footer-item-select-radio">保存为常发订单</cube-checkbox>
       </div>
       <a class="footer-item-total"
-        @click.prevent="showDetail = true">
+         @click.prevent="showDetail = true">
         <span class="total-tip">费用合计：</span>
         <money-label money="9999" />
         <icon-font class="total-detail" name="icon-ico_up" />
@@ -19,7 +19,7 @@
         primary>立即发运</cube-button>
     </div>
 
-    <div class="footer-detail-box" v-show="showDetail">
+    <div v-show="showDetail" class="footer-detail-box">
       <div class="detail-box">
         <div class="detail-data">
           <p>费用合计明细</p>
@@ -54,7 +54,6 @@ export default {
   }
 }
 </script>
-
 
 <style lang="stylus" scoped>
   .create-footer
@@ -147,4 +146,3 @@ export default {
               color #999999
               font-weight normal
 </style>
-
