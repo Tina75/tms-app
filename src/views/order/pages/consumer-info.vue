@@ -7,8 +7,8 @@
         <form-item label="对接业务员" type="text" v-model="form.reveivelist" />
       </div>
       <div class="form-section">
-        <form-item label="发货时间" type="click" v-model="form.sendTime" />
-        <form-item label="到货时间" type="click" v-model="form.ariveTime" />
+        <form-item label="发货时间" type="click" placeholder="请选择" v-model="form.sendTime" />
+        <form-item label="到货时间" type="click" placeholder="请选择" v-model="form.ariveTime" />
       </div>
     </form>
   </cube-scroll>

@@ -98,7 +98,7 @@
           <form-item
             v-model="form.extraInfo"
             label="其他信息" :label-image="IMAGES.OTHER"
-            type="click" />
+            type="click" @on-click="$router.push({ name: 'order-other-info' })" />
         </div>
       </form>
     </cube-scroll>

@@ -1,6 +1,6 @@
 <template>
   <div class="form-item-box">
-    <div class="form-item border-bottom-1px">
+    <div class="form-item border-bottom-1px" :class="{'form-item-textarea': type === 'textarea'}">
       <label v-if="label" class="form-item-label" :class="{ 'form-item-required': required }">
         <img v-if="labelImage" class="form-item-label-image" :src="labelImage" />
         {{ label }}
@@ -8,8 +8,10 @@
 
       <div class="form-item-input-box">
         <cube-input
+          v-if="type !== 'switch' && type !== 'textarea'"
           class="form-item-input"
           :class="inputAlignment"
+          v-model="inputValue"
           :type="inputType"
           :placeholder="inputPlaceHolder"
           :maxlength="Number(maxlength)"
@@ -17,9 +19,26 @@
           :disabled="inputDisabled"
           :clearable="clearable"
           @click.native="inputClickHandler"
-          @input="inputChangeHandler"
           @blur="inputBlurHandler"
           @focus="inputFocusHandler" />
+
+        <cube-switch
+          v-if="type === 'switch'"
+          class="form-item-switch"
+          v-model="inputValue" />
+
+        <textarea
+          v-if="type === 'textarea'"
+          class="form-item-input"
+          v-model="inputValue"
+          :placeholder="inputPlaceHolder"
+          :maxlength="maxlength"
+          @blur="inputBlurHandler"
+          @focus="inputFocusHandler"></textarea>
+        <p class="form-item-counter"
+          v-if="this.type === 'textarea' && this.maxlength !== Infinity">
+          {{this.inputValue.length}}/{{this.maxlength}}
+        </p>
       </div>
 
       <a v-if="clickIcon"
@@ -69,7 +88,10 @@ export default {
   },
   watch: {
     value (val) { this.inputValue = val },
-    inputValue (newVal, oldVal) { if (this.type === 'number' && isNaN(Number(newVal))) this.$nextTick(() => { this.inputValue = oldVal }) }
+    inputValue (newVal, oldVal) {
+      if (this.type === 'number' && isNaN(Number(newVal))) this.$nextTick(() => { this.inputValue = oldVal })
+      this.inputEmit()
+    }
   },
   methods: {
     // 点击图标触发事件
@@ -78,21 +100,19 @@ export default {
     inputClickHandler () {
       if (this.type === 'click') this.$emit('on-click')
     },
-    // 输入框事件
-    inputChangeHandler () { this.inputEmit() },
     inputBlurHandler () {
       if (this.type === 'click') return
       if (this.required && (this.inputValue === '' || this.inputValue === undefined)) {
         window.toast(`${('请填写' + this.label) || this.requiredMsg}`)
       }
-      this.inputEmit()
+      this.$emit('on-blur', this.inputValue)
     },
-    inputFocusHandler () { this.inputEmit() },
+    inputFocusHandler () { this.$emit('on-focus', this.inputValue) },
     inputEmit () {
-      let value = this.inputValue
-      if (this.type === 'number' && value !== '') value = Number(value)
-      this.$emit('input', value)
-      return value
+      if (this.type === 'number' && this.inputValue !== '') {
+        this.inputValue = Number(this.inputValue)
+      }
+      this.$emit('input', this.inputValue)
     }
   }
 }
@@ -121,7 +141,7 @@ export default {
     display flex
     align-items center
     position relative
-    min-height 50px
+    height 50px
     padding-right 16px
     line-height 50px
 
@@ -160,16 +180,36 @@ export default {
       height 50px
 
       .form-item-input
+        position relative
         width 100%
         height 40px
         margin-top 5px
+        font-size 15px
         color #666666
 
         &:after
           border-style none
+
+      .form-item-switch
+        float right
+        margin-top 11px
+
+      textarea
+        border-style none
+        font-size 15px
+      .form-item-counter
+        margin-top 5px
+        font-size 13px
+        color #999999
+        text-align right
+
+
+  .form-item-textarea
+    display block
+    height 105px
+    padding-top 16px
+    line-height 1
 </style>
-<<<<<<< HEAD
-=======
 
 <style lang="stylus">
   .form-item-input
@@ -191,4 +231,3 @@ export default {
 </style>
 
 
->>>>>>> 190107_xl

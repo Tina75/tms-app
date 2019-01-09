@@ -33,5 +33,10 @@ export default [
     path: '/order/consumer-info',
     name: 'order-consumer-info', // 客户单号及其他
     component: () => import(/* webpackChunkName: "order" */ './pages/consumer-info.vue')
+  },
+  {
+    path: '/order/other-info',
+    name: 'order-other-info', // 客户单号及其他
+    component: () => import(/* webpackChunkName: "order" */ './pages/other-info.vue')
   }
 ]
