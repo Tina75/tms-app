@@ -39,6 +39,7 @@
           v-if="type === 'textarea'"
           class="form-item-input"
           v-model="inputValue"
+          :rows="rows"
           :placeholder="inputPlaceHolder"
           :maxlength="maxlength"
           @blur="inputBlurHandler"

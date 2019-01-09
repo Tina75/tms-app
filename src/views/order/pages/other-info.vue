@@ -20,16 +20,21 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   metaInfo: { title: '其他信息' },
-  data () {
-    return {
-      form: {
+  computed: {
+    ...mapGetters([
+      'otherInfo'
+    ]),
+    form () {
+      return Object.assign({
         needTicket: '',
         rate: '',
         replace: '',
         remark: ''
-      }
+      }, this.otherInfo)
     }
   }
 }

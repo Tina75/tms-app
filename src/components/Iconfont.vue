@@ -27,7 +27,6 @@ export default {
         style.color = this.color
       }
       if (this.size) {
-        console.log(this.size / BASE_SIZE)
         style['font-size'] = `${this.size / BASE_SIZE}rem`
       }
       return style
