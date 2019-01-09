@@ -1,25 +1,25 @@
 <template>
   <div class="form-item-box">
     <div class="form-item border-bottom-1px">
-      <label class="form-item-label" :class="{ 'form-item-required': required }">
-        <img v-if="labelImage" class="form-item-label-image" :src="labelImage" >
+      <label v-if="label" class="form-item-label" :class="{ 'form-item-required': required }">
+        <img v-if="labelImage" class="form-item-label-image" :src="labelImage" />
         {{ label }}
       </label>
 
       <div class="form-item-input-box">
-        <input
-          v-model="inputValue"
+        <cube-input
           class="form-item-input"
           :class="inputAlignment"
           :type="inputType"
           :placeholder="inputPlaceHolder"
-          :maxlength="maxlength"
+          :maxlength="Number(maxlength)"
           :readonly="inputReadonly"
           :disabled="inputDisabled"
-          @click="inputClickHandler"
+          :clearable="clearable"
+          @click.native="inputClickHandler"
           @input="inputChangeHandler"
           @blur="inputBlurHandler"
-          @focus="inputFocusHandler">
+          @focus="inputFocusHandler" />
       </div>
 
       <a v-if="clickIcon"
@@ -55,7 +55,7 @@ export default {
       if (this.type === 'number') return 'number'
       else return 'text'
     },
-    inputReadonly () { return this.type === 'picker' || this.readonly },
+    inputReadonly () { return this.type === 'click' || this.readonly },
     inputDisabled () { return this.disabled },
     inputPlaceHolder () {
       let ph
@@ -160,16 +160,35 @@ export default {
       height 50px
 
       .form-item-input
-        display block
         width 100%
-        height 30px
-        margin-top 10px
+        height 40px
+        margin-top 5px
         color #666666
 
-        &-align-left
-          text-align left
-        &-align-right
-          text-align right
-        &-align-center
-          text-align center
+        &:after
+          border-style none
 </style>
+<<<<<<< HEAD
+=======
+
+<style lang="stylus">
+  .form-item-input
+    input
+      padding-left 0
+      padding-right 0
+
+    .cube-input-clear
+      line-height 1.2
+      padding-top 0
+      padding-bottom 0
+      padding-left 15px
+    &-align-left input
+      text-align left
+    &-align-right input
+      text-align right
+    &-align-center input
+      text-align center
+</style>
+
+
+>>>>>>> 190107_xl

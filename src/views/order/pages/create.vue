@@ -23,7 +23,8 @@
             type="click" :show-arrow="false" />
           <form-item
             v-model="form.consignerAddress" required
-            label="详细地址" />
+            label="详细地址" placeholder="请输入" :showArrow="false"
+            type="click" @on-click="editAddress" />
           <form-item
             v-model="form.extraData" prop="extraData"
             label="客户单号及其他"
@@ -47,14 +48,15 @@
             type="click" />
           <form-item
             v-model="form.consigneeAddress" required
-            label="详细地址" />
+            label="详细地址" placeholder="请输入" :showArrow="false"
+            type="click" @on-click="editAddress" />
         </div>
 
         <div class="form-section">
           <form-item
             v-model="form.cargoInfo" required
-            label="货物信息" :label-image="IMAGES.BOX"
-            type="click"
+            label="货物信息" :labelImage="IMAGES.BOX"
+            type="click" @on-click="$router.push({ name: 'order-cargo-info' })"
             placeholder="请输入" />
         </div>
 
@@ -63,12 +65,12 @@
             v-model="form.settlementType" required
             type="click"
             label="结算方式"
-            @on-click="showActionSheet('settlementType')" />
+            @on-click="showPicker('settlementType')" />
           <form-item
             v-model="form.pickupType" required
             type="click"
             label="提货方式"
-            @on-click="showActionSheet('pickupType')" />
+            @on-click="showPicker('pickupType')" />
           <form-item
             v-model="form.receiptNumber" required
             type="number"
@@ -84,14 +86,24 @@
             v-model="form.transportFee"
             type="number"
             label="运输费用(元)"
+<<<<<<< HEAD
             click-icon="icon-ico_rule" />
+=======
+            clickIcon="icon-ico_rule"
+            @on-icon-click="chooseChargeRule" />
+>>>>>>> 190107_xl
         </div>
 
         <div class="form-section">
           <form-item
             v-model="form.extraFee"
+<<<<<<< HEAD
             label="其他费用" :label-image="IMAGES.MONEY"
             type="click" />
+=======
+            label="其他费用" :labelImage="IMAGES.MONEY"
+            type="click" @on-click="$router.push({ name: 'order-fee-info' })" />
+>>>>>>> 190107_xl
           <form-item
             v-model="form.extraInfo"
             label="其他信息" :label-image="IMAGES.OTHER"
@@ -117,7 +129,7 @@ const IMAGES = {
 }
 
 export default {
-  name: 'create-order',
+  name: 'order-create',
   components: { CreateFooter },
   data () {
     return {
@@ -151,7 +163,7 @@ export default {
     }
   },
   methods: {
-    showActionSheet (type) {
+    showPicker (type) {
       let data
       if (type === 'settlementType') data = [ SETTLEMENT_TYPE ]
       if (type === 'pickupType') data = [ PICKUP_TYPE ]
@@ -166,6 +178,14 @@ export default {
 
     chooseUserInfo (type) {
       console.log(type)
+    },
+
+    chooseChargeRule () {
+      this.$router.push({ name: 'order-charge-rule' })
+    },
+
+    editAddress () {
+      this.$router.push({ name: 'order-edit-address' })
     }
   }
 
