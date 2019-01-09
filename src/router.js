@@ -6,6 +6,8 @@ import { closeWindow } from '@/libs/bridgeUtil'
 import example from '@/views/example/router'
 import delivery from '@/views/delivery/router'
 
+import order from '@/views/order/router'
+
 Vue.use(Router)
 
 let router = new Router({
@@ -16,7 +18,9 @@ let router = new Router({
       component: () => import(/* webpackChunkName: "home" */ './views/home.vue')
     },
     ...delivery,
-    ...example
+    ...example,
+
+    ...order
   ]
 })
 // 同步store和路由

@@ -1,12 +1,14 @@
 const webpack = require('webpack')
-const useBundleAnalyzer = true
+const useBundleAnalyzer = false // 是否开启打包分析
+const isBuildCube = false //  是否是单独打包cube
+const proxyUrl = 'https://dev.tms5566.com/dolphin-app'
 const config = {
   baseUrl: './',
   assetsDir: 'static',
   productionSourceMap: false,
   parallel: true,
   lintOnSave: undefined,
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     config.plugins.delete('prefetch')
     config.plugins.delete('preload')
   },
@@ -26,27 +28,23 @@ const config = {
     }
   },
 
-  // devServer: {
-  //   open: true,
-  //   host: '0.0.0.0',
-  //   port: 8080,
-  //   progress: true,
-  //   inline: true,
-  //   proxy: {
-  //     '/': {
-  //       target: 'https://dev.yundada56.com/bluewhale-line/',
-  //       ws: false,
-  //       changOrigin: true
-  //     }
-  //   }
-  // },
+  devServer: {
+    open: true,
+    host: '0.0.0.0',
+    port: 8080,
+    progress: true,
+    inline: true,
+    proxy: {
+      '/': {
+        target: proxyUrl,
+        ws: false,
+        changOrigin: true
+      }
+    }
+  },
 
   configureWebpack: {
     plugins: [
-      new webpack.DllReferencePlugin({
-        // 描述 polyfill 动态链接库的文件内容
-        manifest: require('./public/dll/polyfill.json')
-      }),
       new webpack.DllReferencePlugin({
         manifest: require('./public/dll/common.json')
       })
@@ -75,5 +73,14 @@ if (useBundleAnalyzer) {
   webpackConfig.plugins = webpackConfig.plugins || []
   const util = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
   webpackConfig.plugins.push(new util())
+}
+
+// 单独打包cube
+if (isBuildCube) {
+  config.filenameHashing = true
+  config.configureWebpack.output = {
+    filename: 'cube-ui/index.js',
+    chunkFilename: 'cube-ui/chunk.js'
+  }
 }
 module.exports = config

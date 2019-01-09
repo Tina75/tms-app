@@ -1,13 +1,13 @@
 const path = require('path')
 const webpack = require('webpack')
 
-const dlls = ['vue', 'vue-router', 'vuex', 'vue-meta', 'vue-analytics', 'vue-lazyload', 'dayjs', 'axios']
-const polyfill = ['core-js']
+const dlls = ['core-js', 'vue', 'vue-router', 'vuex', 'vue-meta', 'vuex-router-sync', 'vue-analytics', 'vue-lazyload', 'axios', 'ali-oss', 'dayjs']
+// const polyfill = ['core-js']
 
 module.exports = {
   entry: {
-    common: dlls,
-    polyfill
+    common: dlls
+    // polyfill
   },
   output: {
     path: path.resolve(__dirname, 'public/dll'),
@@ -15,11 +15,11 @@ module.exports = {
     library: '[name]'
   },
   resolve: {
-      modules: [path.resolve(__dirname, 'node_modules')],
-      extensions: ['.js', '.json'],
-      alias: {
-          'vue$': 'vue/dist/vue.esm.js'
-      }
+    modules: [path.resolve(__dirname, 'node_modules')],
+    extensions: ['.js', '.json']
+    // alias: {
+    //     'vue$': 'vue/dist/vue.esm.js'
+    // }
   },
   plugins: [
     new webpack.DllPlugin({

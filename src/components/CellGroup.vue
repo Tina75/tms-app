@@ -1,6 +1,6 @@
 <template>
   <div class="cell-group">
-    <slot></slot>
+    <slot/>
   </div>
 </template>
 <style lang='stylus' scoped>
