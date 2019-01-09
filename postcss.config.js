@@ -3,10 +3,8 @@ module.exports = {
     'autoprefixer': {
       browsers: ['Android >= 4.0', 'iOS >= 7']
     },
-    'postcss-pxtorem': {
-      rootValue: 16,
-      // propList: ['*', '!font*', '!border-radius']
-      propList: ['*', '!border-radius']
+    'postcss-px2rem': {
+      remUnit: 37.5
     }
   }
 }
