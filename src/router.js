@@ -5,7 +5,7 @@ import store from '@/store'
 import bridge from '@/libs/dsbridge'
 import example from '@/views/example/router'
 
-import createOrder from '@/views/order/router'
+import order from '@/views/order/router'
 
 Vue.use(Router)
 
@@ -18,7 +18,7 @@ let router = new Router({
     },
     ...example,
 
-    ...createOrder
+    ...order
   ]
 })
 // 同步store和路由
