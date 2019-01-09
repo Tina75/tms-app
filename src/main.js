@@ -5,7 +5,6 @@ import App from './app.vue'
 import router from './router'
 import store from './store'
 import './plugins'
-import 'amfe-flexible'
 import './components/Form'
 import Iconfont from './components/Iconfont'
 require('./assets/font/iconfont.css')
