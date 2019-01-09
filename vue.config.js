@@ -1,5 +1,6 @@
 const webpack = require('webpack')
 const useBundleAnalyzer = true
+const proxyUrl = 'https://dev.tms5566.com/dolphin-app'
 const config = {
   baseUrl: './',
   assetsDir: 'static',
@@ -34,7 +35,7 @@ const config = {
     inline: true,
     proxy: {
       '/': {
-        target: 'https://dev.yundada56.com/bluewhale-line/',
+        target: proxyUrl,
         ws: false,
         changOrigin: true
       }
@@ -43,10 +44,6 @@ const config = {
 
   configureWebpack: {
     plugins: [
-      new webpack.DllReferencePlugin({
-        // 描述 polyfill 动态链接库的文件内容
-        manifest: require('./public/dll/polyfill.json'),
-      }),
       new webpack.DllReferencePlugin({
         manifest: require('./public/dll/common.json')
       })
@@ -62,7 +59,7 @@ const config = {
             test: /[\\/]node_modules[\\/]ydd_area/,
             name: 'ydd_area',
             chunks: 'all'
-          },
+          }
         }
       }
     }
