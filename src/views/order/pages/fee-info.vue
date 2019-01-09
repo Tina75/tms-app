@@ -2,13 +2,13 @@
   <cube-scroll class="scroll-box">
     <form>
       <div class="form-section">
-        <form-item label="提货费用(元)" type="number" v-model="form.pickupFee" />
-        <form-item label="装货费用(元)" type="number" v-model="form.uploadFee" />
-        <form-item label="卸货费用(元)" type="number" v-model="form.unloadFee" />
-        <form-item label="保险费用(元)" type="number" v-model="form.ensuranceFee" />
+        <form-item v-model="form.pickupFee" label="提货费用(元)" type="number" />
+        <form-item v-model="form.uploadFee" label="装货费用(元)" type="number" />
+        <form-item v-model="form.unloadFee" label="卸货费用(元)" type="number" />
+        <form-item v-model="form.ensuranceFee" label="保险费用(元)" type="number" />
       </div>
       <div class="form-section">
-        <form-item label="其它费用(元)" type="number" v-model="form.otherFee" />
+        <form-item v-model="form.otherFee" label="其它费用(元)" type="number" />
       </div>
     </form>
   </cube-scroll>
@@ -37,4 +37,3 @@ export default {
   .form-section
     margin-bottom 15px
 </style>
-

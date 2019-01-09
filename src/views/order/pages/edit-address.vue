@@ -44,7 +44,9 @@
 export default {
   metaInfo: { title: '详细地址' },
   data () {
-    test: ''
+    return {
+      test: ''
+    }
   }
 }
 </script>
@@ -67,4 +69,3 @@ export default {
     line-height 52px
     color #666666
 </style>
-

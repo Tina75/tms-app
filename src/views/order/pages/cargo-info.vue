@@ -7,4 +7,3 @@ export default {
   metaInfo: { title: '货物信息' }
 }
 </script>
-

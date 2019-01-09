@@ -24,7 +24,7 @@
         <form-item
           v-model="form.address"
           label="收货地址"
-          placeholder="请选额省/市/区"
+          placeholder="请选择省/市/区"
         />
         <form-item
           v-model="form.detailAddress"
@@ -39,7 +39,10 @@
       <div class="form_card">
         <form-item
           v-model="form.remark"
+          type="textarea"
           label="备注"
+          placeholder="请输入（最多输入200字）"
+          :maxlength="200"
         />
       </div>
     </form>
