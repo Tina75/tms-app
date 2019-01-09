@@ -1,4 +1,4 @@
-import Server from '@/libs/server'
+import Server from '@/libs/Server'
 export default{
   state: {
     news: {

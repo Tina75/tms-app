@@ -4,6 +4,7 @@ import { sync } from 'vuex-router-sync'
 import store from '@/store'
 import bridge from '@/libs/dsbridge'
 import example from '@/views/example/router'
+import pickup from '@/views/pickup/router'
 
 Vue.use(Router)
 
@@ -14,7 +15,8 @@ let router = new Router({
       name: 'home',
       component: () => import(/* webpackChunkName: "home" */ './views/home.vue')
     },
-    ...example
+    ...example,
+    ...pickup
   ]
 })
 // 同步store和路由
