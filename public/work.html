@@ -29,7 +29,7 @@
   var bridge={default:this,call:function(b,a,c){var e="";"function"==typeof a&&(c=a,a={});a={data:void 0===a?null:a};if("function"==typeof c){var g="dscb"+window.dscb++;window[g]=c;a._dscbstub=g}a=JSON.stringify(a);if(window._dsbridge)e=_dsbridge.call(b,a);else if(window._dswk||-1!=navigator.userAgent.indexOf("_dsbridge"))e=prompt("_dsbridge="+b,a);return JSON.parse(e||"{}").data},register:function(b,a,c){c=c?window._dsaf:window._dsf;window._dsInit||(window._dsInit=!0,setTimeout(function(){bridge.call("_dsb.dsinit")},
   0));"object"==typeof a?c._obs[b]=a:c[b]=a},registerAsyn:function(b,a){this.register(b,a,!0)},hasNativeMethod:function(b,a){return this.call("_dsb.hasNativeMethod",{name:b,type:a||"all"})},disableJavascriptDialogBlock:function(b){this.call("_dsb.disableJavascriptDialogBlock",{disable:!1!==b})}};
   !function(){if(!window._dsf){var b={_dsf:{_obs:{}},_dsaf:{_obs:{}},dscb:0,dsBridge:bridge,close:function(){bridge.call("_dsb.closePage")},_handleMessageFromNative:function(a){var e=JSON.parse(a.data),b={id:a.callbackId,complete:!0},c=this._dsf[a.method],d=this._dsaf[a.method],h=function(a,c){b.data=a.apply(c,e);bridge.call("_dsb.returnValue",b)},k=function(a,c){e.push(function(a,c){b.data=a;b.complete=!1!==c;bridge.call("_dsb.returnValue",b)});a.apply(c,e)};if(c)h(c,this._dsf);else if(d)k(d,this._dsaf);
-  else if(c=a.method.split("."),!(2>c.length)){a=c.pop();var c=c.join("."),d=this._dsf._obs,d=d[c]||{},f=d[a];f&&"function"==typeof f?h(f,d):(d=this._dsaf._obs,d=d[c]||{},(f=d[a])&&"function"==typeof f&&k(f,d))}}},a;for(a in b)window[a]=b[a];bridge.register("_hasJavascriptMethod",function(a,b){b=a.split(".");if(2>b.length)return!(!_dsf[b]&&!_dsaf[b]);a=b.pop();b=b.join(".");return(b=_dsf._obs[b]||_dsaf._obs[b])&&!!b[a]})}}();export default bridge;
+  else if(c=a.method.split("."),!(2>c.length)){a=c.pop();var c=c.join("."),d=this._dsf._obs,d=d[c]||{},f=d[a];f&&"function"==typeof f?h(f,d):(d=this._dsaf._obs,d=d[c]||{},(f=d[a])&&"function"==typeof f&&k(f,d))}}},a;for(a in b)window[a]=b[a];bridge.register("_hasJavascriptMethod",function(a,b){b=a.split(".");if(2>b.length)return!(!_dsf[b]&&!_dsaf[b]);a=b.pop();b=b.join(".");return(b=_dsf._obs[b]||_dsaf._obs[b])&&!!b[a]})}}();
   </script>
   <style>
     /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
@@ -108,48 +108,48 @@
 
 <body ontouchstart>
   <div id="app">
-    <section>
+    <section v-if="permission.length">
       <header>营运中心</header>
       <article>
-        <div class="ssld" @click="intoPage('ssld')">
+        <div v-if="find('110000')" class="ssld" @click="intoPage('ssld')" >
           <?xml version="1.0" encoding="UTF-8"?><svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>syla</title><desc>Created with Sketch.</desc><defs><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1"><stop stop-color="#76C1FD" offset="0%"></stop><stop stop-color="#4483DD" offset="100%"></stop></linearGradient></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="切图" transform="translate(-474.000000, -30.000000)"><g id="syla" transform="translate(474.000000, 30.000000)"><g id="Group-2"><rect id="Rectangle-77" fill="#D8D8D8" opacity="0" x="0" y="0" width="30" height="30"></rect><path d="M9.4484007,8.6860208e-16 L26.998583,0 C27.5508677,-1.01453063e-16 27.998583,0.44771525 27.998583,1 L27.998583,29 C27.998583,29.5522847 27.5508677,30 26.998583,30 L3,30 C2.44771525,30 2,29.5522847 2,29 C2,28.999528 2.00000033,28.999056 2.000001,28.998584 L2.03044092,7.5017015 C2.03081255,7.23925859 2.13434008,6.98748053 2.31868839,6.8006862 L8.73664917,0.297568681 C8.92455023,0.107174455 9.18089973,4.93228341e-16 9.4484007,4.4408921e-16 Z M23.0291138,17.9755859 L17.998583,13 L17.998583,25.0910645 L19.998583,25.0910645 L19.998583,17.9755859 L23.0291138,17.9755859 Z M7,9 L7,11 L23,11 L23,9 L7,9 Z M6.99858298,15 L6.99858298,17 L14.998583,17 L14.998583,15 L6.99858298,15 Z M6.99858298,21 L6.99858298,23 L14.998583,23 L14.998583,21 L6.99858298,21 Z" id="Combined-Shape" fill="url(#linearGradient-1)"></path></g></g></g></g></svg>
           <span>上游来单</span>
-          <aside>3</aside>
+          <aside>{{number}}</aside>
         </div>
-        <div @click="intoPage('slkd')">
+        <div v-if="find('100000')" @click="intoPage('slkd')">
           <?xml version="1.0" encoding="UTF-8"?><svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>slkd</title><desc>Created with Sketch.</desc><defs><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2"><stop stop-color="#00E2BB" offset="0%"></stop><stop stop-color="#1CB283" offset="100%"></stop></linearGradient></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="切图" transform="translate(-567.000000, -30.000000)"><g id="slkd" transform="translate(567.000000, 30.000000)"><g id="Group-7"><rect id="Rectangle-77" fill="#D8D8D8" opacity="0" x="0" y="0" width="30" height="30"></rect><path d="M3,0 L27,0 C27.5522847,-1.01453063e-16 28,0.44771525 28,1 L28,29 C28,29.5522847 27.5522847,30 27,30 L3,30 C2.44771525,30 2,29.5522847 2,29 L2,1 C2,0.44771525 2.44771525,1.01453063e-16 3,0 Z M7,6 L7,8 L24,8 L24,6 L7,6 Z M7,11 L7,13 L18,13 L18,11 L7,11 Z M21.1084883,15.1213203 L13.3303137,22.8994949 C13.67794,23.2471212 14.0255663,23.5947476 14.3731926,23.9423739 C14.7208189,24.2900002 15.0802994,24.6494806 15.451634,25.0208153 L23.2298086,17.2426407 L21.1084883,15.1213203 Z M13.3303137,22.8994949 L13.0606602,25.2904688 L15.451634,25.0208153 L13.3303137,22.8994949 Z M23.9369154,13.7071068 C23.5463911,13.3165825 22.9132261,13.3165825 22.5227018,13.7071068 L21.8155951,14.4142136 C22.1632214,14.7618399 22.5108477,15.1094662 22.858474,15.4570925 C23.2061003,15.8047188 23.5655808,16.1641993 23.9369154,16.5355339 L24.6440222,15.8284271 C25.0345465,15.4379028 25.0345465,14.8047379 24.6440222,14.4142136 L23.9369154,13.7071068 Z" id="Combined-Shape" fill="url(#linearGradient-2)"></path></g></g></g></g></svg>
           <span>受理开单</span>
         </div>
-        <div @click="intoPage('ddgl')">
+        <div v-if="find('100300')" @click="intoPage('ddgl')">
           <?xml version="1.0" encoding="UTF-8"?><svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>ddgl</title><desc>Created with Sketch.</desc><defs><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3"><stop stop-color="#00D1E0" offset="0%"></stop><stop stop-color="#00A4BD" offset="100%"></stop></linearGradient></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="切图" transform="translate(-661.000000, -30.000000)"><g id="ddgl" transform="translate(661.000000, 30.000000)"><g id="Group-9"><rect id="Rectangle-77" fill="#D8D8D8" opacity="0" x="0" y="0" width="30" height="30"></rect><path d="M7.22857143,-8.8817842e-16 L8.14285714,4 L21.8571429,4 L22.7714286,-1.11022302e-16 L27,0 C27.5522847,-1.01453063e-16 28,0.44771525 28,1 L28,29 C28,29.5522847 27.5522847,30 27,30 L3,30 C2.44771525,30 2,29.5522847 2,29 L2,1 C2,0.44771525 2.44771525,1.01453063e-16 3,0 L7.22857143,0 Z M8,9 L8,11 L23,11 L23,9 L8,9 Z M8,21 L8,23 L23,23 L23,21 L8,21 Z M8,15 L8,17 L19,17 L19,15 L8,15 Z M10,0 L20.1362305,0 L19.7581177,2 L10.3978271,2 L10,0 Z" id="Combined-Shape" fill="url(#linearGradient-3)"></path></g></g></g></g></svg>
           <span>订单管理</span>
         </div>
-        <div @click="intoPage('thgl')">
+        <div v-if="find('120200')" @click="intoPage('thgl')">
           <?xml version="1.0" encoding="UTF-8"?><svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>thgl</title><desc>Created with Sketch.</desc><defs><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-4"><stop stop-color="#00D1E0" offset="0%"></stop><stop stop-color="#00A4BD" offset="100%"></stop></linearGradient></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="切图" transform="translate(-754.000000, -30.000000)"><g id="thgl" transform="translate(754.000000, 30.000000)"><g id="Group-10"><rect id="Rectangle-77" fill="#D8D8D8" opacity="0" x="0" y="0" width="30" height="30"></rect><path d="M5.55609636,2 L24.4415747,2 C24.7886347,2 25.1108775,2.17994852 25.2929374,2.47542248 L30,10.1147461 L30,28 C30,28.5522847 29.5522847,29 29,29 L1,29 C0.44771525,29 6.76353751e-17,28.5522847 0,28 L0,10.0505371 L4.7066035,2.47239989 C4.88904515,2.17864923 5.21030104,2 5.55609636,2 Z M24.9496524,17 L19.7732851,22.2073545 L17.3035723,20.0848353 L16,21.6016409 L19.8803849,24.9365192 L26.36808,18.409987 L24.9496524,17 Z M6.31007026,4 L3.51037598,9 L26.6142578,9 L23.5765808,4 L6.31007026,4 Z M5,11 L5,19 L8.47924805,17.7792969 L12,19 L12,11 L5,11 Z" id="Combined-Shape" fill="url(#linearGradient-4)"></path></g></g></g></g></svg>
           <span>提货管理</span>
         </div>
-        <div @click="intoPage('shgl')">
+        <div v-if="find('120100')" @click="intoPage('shgl')">
           <?xml version="1.0" encoding="UTF-8"?><svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>shgl</title><desc>Created with Sketch.</desc><defs><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-5"><stop stop-color="#00D1E0" offset="0%"></stop><stop stop-color="#00A4BD" offset="100%"></stop></linearGradient></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="切图" transform="translate(-473.000000, -94.000000)"><g id="shgl" transform="translate(473.000000, 94.000000)"><g id="Group-2"><g id="Group-11"><rect id="Rectangle-77" fill="#D8D8D8" opacity="0" x="0" y="0" width="30" height="30"></rect><path d="M5.55609636,1 L24.4415747,1 C24.7886347,1 25.1108775,1.17994852 25.2929374,1.47542248 L30,9.11474609 L30,27 C30,27.5522847 29.5522847,28 29,28 L1,28 C0.44771525,28 6.76353751e-17,27.5522847 0,27 L0,9.05053711 L4.7066035,1.47239989 C4.88904515,1.17864923 5.21030104,1 5.55609636,1 Z M6.31007026,3 L3.51037598,8 L26.6142578,8 L23.5765808,3 L6.31007026,3 Z M19,10 L19,18 L22.479248,16.7792969 L26,18 L26,10 L19,10 Z M3,14 L3,16 L14,16 L14,14 L3,14 Z M5,18 L5,20 L14,20 L14,18 L5,18 Z M7,22 L7,24 L14,24 L14,22 L7,22 Z" id="Combined-Shape" fill="url(#linearGradient-5)"></path></g></g></g></g></g></svg>
           <span>送货管理</span>
         </div>
-        <div @click="intoPage('hdgl')">
+        <div v-if="find('120500')" @click="intoPage('hdgl')">
           <?xml version="1.0" encoding="UTF-8"?><svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>hdgl</title><desc>Created with Sketch.</desc><defs><linearGradient x1="50%" y1="0%" x2="50%" y2="97.9791366%" id="linearGradient-6"><stop stop-color="#FDC02F" offset="0%"></stop><stop stop-color="#EF8D24" offset="100%"></stop></linearGradient></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="切图" transform="translate(-567.000000, -94.000000)"><g id="hdgl" transform="translate(567.000000, 94.000000)"><g id="Group-2"><g id="Group-12"><rect id="Rectangle-77" fill="#D8D8D8" opacity="0" x="0" y="0" width="30" height="30"></rect><path d="M3,0 L27,0 C27.5522847,-2.06356265e-15 28,0.44771525 28,1 L28,28.9997771 C28,29.5520619 27.5522847,29.9997771 27,29.9997771 C26.9237171,29.9997771 26.8476847,29.9910486 26.7733863,29.9737618 L14.9946289,27.2332385 L3.22679141,29.9734845 C2.68889735,30.098738 2.15131008,29.7642266 2.02605665,29.2263326 C2.0087425,29.1519779 2,29.0758851 2,28.9995412 L2,1 C2,0.44771525 2.44771525,1.01453063e-16 3,0 Z M12.4246606,19.5744493 L22.0249023,19.5744493 L22.0249023,17.5571724 L8.03186035,17.5571724 L12.4246606,22.0573519 L12.4246606,19.5744493 Z M8,8.04319231 L22,8.04319231 L22,6.04319231 L8,6.04319231 L8,8.04319231 Z M8,14.0863846 L22,14.0863846 L22,12.0863846 L8,12.0863846 L8,14.0863846 Z" id="Combined-Shape" fill="url(#linearGradient-6)"></path></g></g></g></g></g></svg>
           <span>回单管理</span>
         </div>
       </article>
     </section>
-    <section>
+    <section v-if="permission.length">
       <header>自有车管理</header>
       <article>
-        <div @click="intoPage('thgl')">
+        <div v-if="find('190000')" @click="intoPage('thgl')">
           <?xml version="1.0" encoding="UTF-8"?><svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>thgl</title><desc>Created with Sketch.</desc><defs><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-7"><stop stop-color="#00D1E0" offset="0%"></stop><stop stop-color="#00A4BD" offset="100%"></stop></linearGradient></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="切图" transform="translate(-754.000000, -30.000000)"><g id="thgl" transform="translate(754.000000, 30.000000)"><g id="Group-10"><rect id="Rectangle-77" fill="#D8D8D8" opacity="0" x="0" y="0" width="30" height="30"></rect><path d="M5.55609636,2 L24.4415747,2 C24.7886347,2 25.1108775,2.17994852 25.2929374,2.47542248 L30,10.1147461 L30,28 C30,28.5522847 29.5522847,29 29,29 L1,29 C0.44771525,29 6.76353751e-17,28.5522847 0,28 L0,10.0505371 L4.7066035,2.47239989 C4.88904515,2.17864923 5.21030104,2 5.55609636,2 Z M24.9496524,17 L19.7732851,22.2073545 L17.3035723,20.0848353 L16,21.6016409 L19.8803849,24.9365192 L26.36808,18.409987 L24.9496524,17 Z M6.31007026,4 L3.51037598,9 L26.6142578,9 L23.5765808,4 L6.31007026,4 Z M5,11 L5,19 L8.47924805,17.7792969 L12,19 L12,11 L5,11 Z" id="Combined-Shape" fill="url(#linearGradient-7)"></path></g></g></g></g></svg>
           <span>车辆管理</span>
         </div>
-        <div @click="intoPage('madchine')">
+        <div v-if="find('190300')" @click="intoPage('madchine')">
           <?xml version="1.0" encoding="UTF-8"?><svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>madchine</title><desc>Created with Sketch.</desc><defs><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-8"><stop stop-color="#00D1E0" offset="0%"></stop><stop stop-color="#00A4BD" offset="100%"></stop></linearGradient></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="切图" transform="translate(-567.000000, -166.000000)"><g id="madchine" transform="translate(567.000000, 166.000000)"><g id="Group-20"><rect id="Rectangle-77" fill="#D8D8D8" opacity="0" x="0" y="0" width="30" height="30"></rect><g id="Group-5" transform="translate(2.000000, 1.000000)" fill="url(#linearGradient-8)"><path d="M14.6137909,15.4333636 L9.76524545,16.7326364 L6.21679091,13.1825455 L7.51606364,8.33481818 L12.3646091,7.03636364 L15.9130636,10.5848182 L14.6137909,15.4333636 Z M9.86956364,1.28757273 C14.3523818,0.0725727273 19.3392,1.21475455 22.8573818,4.73293636 C28.0896545,9.96357273 28.0896545,18.4456636 22.8573818,23.6771182 C17.6267455,28.9085727 9.14383636,28.9085727 3.9132,23.6771182 C0.395018182,20.1573 -0.745527273,15.1713 0.469472727,10.6893 L9.10210909,19.3211182 L16.5164727,17.3345727 L18.5022,9.92020909 L9.86956364,1.28757273 Z" id="Combined-Shape"></path></g></g></g></g></g></svg>
           <span>维修保养</span>
         </div>
-        <div @click="intoPage('safe')">
+        <div v-if="find('190400')" @click="intoPage('safe')">
           <?xml version="1.0" encoding="UTF-8"?><svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>safe</title><desc>Created with Sketch.</desc><defs><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-9"><stop stop-color="#00D1E0" offset="0%"></stop><stop stop-color="#00A4BD" offset="100%"></stop></linearGradient></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="切图" transform="translate(-643.000000, -166.000000)"><g id="safe" transform="translate(643.000000, 166.000000)"><g id="Group-21"><rect id="Rectangle-77" fill="#D8D8D8" opacity="0" x="0" y="0" width="30" height="30"></rect><path d="M14.6519624,1.06306876 C14.8751966,0.979792657 15.1208295,0.978959747 15.3446233,1.06072003 L15.3446277,1.06070809 C17.6544543,1.9045743 19.5477789,2.52855031 21.0246015,2.93263612 C22.4379805,3.31936258 24.4957226,3.78537676 27.197828,4.33067868 C27.6644721,4.42485041 28.0000486,4.83491346 28.0000486,5.31096498 L28,13.4181965 C28,21.0276083 22.4990597,27.5499612 14.9977774,28.9334906 C7.56484014,27.4648632 2.09946145,21.0468239 2,13.6229808 L2,5.31261672 C2,4.835372 2.33724544,4.42464024 2.80536512,4.33176129 L2.8053603,4.331737 C5.53669483,3.78981681 7.61649676,3.32344985 9.04476608,2.93263612 C10.5345395,2.52499319 12.4036049,1.90180407 14.6519624,1.06306876 Z M13.5,19.4334906 L16.5,19.4334906 L16.5,9.43349061 L13.5,9.43349061 L13.5,19.4334906 Z" id="Combined-Shape" fill="url(#linearGradient-9)"></path></g></g></g></g></svg>
           <span>车辆保险</span>
         </div>
@@ -161,18 +161,31 @@
       el: '#app',
       data: {
         message: 'Hello Vue!',
-        list: []
+        permission: ['110000', '100000', '100300' ,'120200', '120100', '120500', '190000', '190300', '190400'],
+        number: 0
       },
       methods: {
         // 进入对应页面
         intoPage: function(val) {
           alert(val)
+        },
+        // 查找权限
+        find: function(val) {
+          return this.permission.find(function(value){
+            return value === val+''
+          })
         }
       }
     })
 
+    /** 获取权限数组*/
     function getData (val) {
-      app.list = val
+      app.permission = new Array(val)
+    }
+
+    /** 获取上游来单数量*/
+    function getNumber(val) {
+      app.number = val
     }
   </script>
   <script>
