@@ -24,8 +24,23 @@
               label="联系方式"
               maxlength="11"
               required/>
-            <div class="cardInfo-content">
-              <p class="addContact">+添加更多联系人</p>
+            <div v-if="contactList.length < 3" class="cardInfo-content edit">
+              <p class="addContact"><span @click="addContact">+添加更多联系人</span></p>
+            </div>
+          </div>
+          <div v-for="item in contactList" :key="item.index" class="form-section" >
+            <form-item
+              v-model="item.name"
+              label="公司联系人"
+              maxlength="10"
+              required/>
+            <form-item
+              v-model="item.phone"
+              label="联系方式"
+              maxlength="11"
+              required/>
+            <div class="cardInfo-content edit">
+              <p class="removeContact"><span @click="removeContact(item.index)">删除该联系人</span></p>
             </div>
           </div>
           <div class="form-section">
@@ -44,50 +59,65 @@
       <div v-if="step === 2">
         <form class="form">
           <div class="form-section">
-            <form-item
-              v-model="form.value"
-              label="公司LOGO"/>
-            <form-item
-              v-model="form.value"
-              label="公司简介"
-              maxlength="500"/>
+            <div class="cardInfo">
+              <div class="cardInfo-content edit">
+                <span class="cardTitle">公司LOGO</span>
+                <span class="cardContent noneInfo">点击上传&nbsp;&nbsp;&nbsp;></span>
+              </div>
+              <div class="hr"/>
+              <form-item
+                v-model="form.value"
+                label="公司简介"
+                type="textarea"
+                :rows="5"
+                placeholder="请输入，不超过500个字"
+                maxlength="500"/>
+            </div>
           </div>
-          <div class="form-section">
+          <div class="form-section textarea">
             <form-item
               v-model="form.value"
               label="业务介绍"
+              type="textarea"
+              :rows="5"
+              placeholder="请输入，不超过500个字"
               maxlength="500"/>
-            <form-item
-              v-model="form.value"
-              label="上传图片（0/10）"/>
+            <div class="hr"/>
+            <div class="cardInfo-content edit">
+              <span class="cardTitle">上传图片（0/10）</span>
+            </div>
           </div>
-          <div class="form-section">
+          <div class="form-section textarea">
             <form-item
               v-model="form.value"
               label="服务优势"
+              type="textarea"
+              :rows="5"
+              placeholder="请输入，不超过500个字"
               maxlength="500"/>
-            <form-item
-              v-model="form.value"
-              label="上传图片（0/10）"/>
+            <div class="hr"/>
+            <div class="cardInfo-content edit">
+              <span class="cardTitle">上传图片（0/10）</span>
+            </div>
           </div>
         </form>
       </div>
       <div v-if="step === 3">
         <form class="form">
           <div class="form-section">
-            <form-item
-              v-model="form.value"
-              label="公司风貌（0/10）"/>
+            <div class="cardInfo-content edit">
+              <span class="cardTitle">公司风貌（0/10）</span>
+            </div>
           </div>
           <div class="form-section">
-            <form-item
-              v-model="form.value"
-              label="公司微信二维码（0/10）"/>
+            <div class="cardInfo-content edit">
+              <span class="cardTitle">微信二维码（0/10）</span>
+            </div>
           </div>
           <div class="form-section">
-            <form-item
-              v-model="form.value"
-              label="公司形象图"/>
+            <div class="cardInfo-content edit">
+              <span class="cardTitle">公司首页形象图</span>
+            </div>
           </div>
         </form>
       </div>
@@ -124,7 +154,9 @@ export default {
       step: 1,
       form: {
         value: ''
-      }
+      },
+      addContactBtn: true,
+      contactList: []
     }
   },
   methods: {
@@ -132,32 +164,32 @@ export default {
       this.step++
     },
     addContact () {
+      this.contactList.push({ name: '', phone: '' })
+      this.addContactBtn = this.contactList.length < 3
+    },
+    removeContact (item) {
+      this.contactList.splice(item, 1)
+      this.addContactBtn = true
     }
   }
 
 }
 </script>
-
-<style lang="stylus" scoped>
+<style scoped lang="stylus">
+@import "company.styl"
+>>>.form-item-input-box .form-item-counter
+  margin-top: -13px;
+>>>.form-item-box
+  overflow: -webkit-paged-x;
+>>>.textarea .border-bottom-1px:after
+  border none
 .scroll-box
-  height calc(100vh - 88px)
+  height calc(100vh - 45px)
 .form
   margin-bottom 15px
   &-section
     margin-top 15px
-.cardInfo-content
-  width: 100%;
-  padding: 18px 15px 17px 15px
-  background: #ffffff
-  .addContact
-    color #00A4BD
-    text-align: center;
-.footer-button
-  position: absolute
-  bottom: 0px
-  height: 45px
 </style>
-
 <style lang="stylus">
   .create-order-page .form-section .form-item-box:last-child .form-item:after
     border-style none

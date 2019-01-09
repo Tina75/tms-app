@@ -105,7 +105,7 @@ export default {
     ...mapGetters(['companyInfo'])
   },
   created () {
-    this.getCompanyData()
+    // this.getCompanyData()
   },
   methods: {
     ...mapActions(['getCompanyInfo']),
@@ -114,65 +114,10 @@ export default {
       await this.initData()
     },
     initData () {
-      debugger
     }
   }
 }
 </script>
-<style lang="stylus">
-.scroll-box
-  height calc(100vh - 45px)
-.example-index
-  .van-list
-    min-height 55Px
-.head-div
-  width: 100%;
-  height: 30px;
-  // background: #EFEFEF
-.head-p
-  line-height: 18px;
-  color: #999999;
-  padding-left: 15px;
-  line-height: 30px;
-.hr
-  background: #f2f4f6
-  width: calc(100% - 15px)
-  height: 1px
-  margin-left: 15px
-  clear: both;
-.cardInfo.picInfo
-  margin-bottom 30px
-.cardInfo
-  width: 100%;
-  background: #ffff;
-  font-size 15px
-  color #333333
-  margin-bottom 15px
-  .cardInfo-content
-    width: 100%;
-    padding: 18px 15px 17px 15px;
-    .cardContent
-      float: right
-      width: 195px;
-      text-align: right;
-      line-height: 18px;
-    .cardContent.address
-      text-align left
-      margin-bottom: 15px;
-.footer-button
-  position: absolute
-  bottom: 0px
-  height: 45px
-.noneInfo
- color: #C5C8CE
-.avatarDiv
-  width 30px
-  height 30px
-  border-radius 30px
-  background-image url('../assets/logo.png')
-  background-repeat: no-repeat;
-  background-position: center;
-  float right
-  position: relative
-  top: -7px
+<style scoped lang="stylus">
+@import "company.styl"
 </style>
