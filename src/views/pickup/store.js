@@ -1,4 +1,4 @@
-import Server from '@/libs/Server'
+import server from '@/libs/server'
 export default{
   state: {
     dispatchingData: {
@@ -52,7 +52,7 @@ export default{
   },
   actions: {
     getDispatching: ({ commit, state }, pageNo) => {
-      return Server({
+      return server({
         method: 'post',
         url: 'load/bill/wait/pick/list',
         data: {
@@ -65,7 +65,7 @@ export default{
       })
     },
     getBePicking: ({ commit, state }, pageNo) => {
-      return Server({
+      return server({
         method: 'post',
         url: 'load/bill/list',
         data: {
@@ -78,7 +78,7 @@ export default{
       })
     },
     getPicking: ({ commit, state }, pageNo) => {
-      return Server({
+      return server({
         method: 'post',
         url: 'load/bill/list',
         data: {
@@ -91,7 +91,7 @@ export default{
       })
     },
     getPicked: ({ commit, state }, pageNo) => {
-      return Server({
+      return server({
         method: 'post',
         url: 'load/bill/list',
         data: {

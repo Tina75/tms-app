@@ -51,29 +51,6 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'pickup',
-  data () {
-    return {
-      selectedLabelDefault: '待调度',
-      tabs: [
-        {
-          label: '待调度',
-          type: 1
-        },
-        {
-          label: '待提货',
-          type: 2
-        },
-        {
-          label: '提货中',
-          type: 3
-        },
-        {
-          label: '已提货',
-          type: 4
-        }
-      ]
-    }
-  },
   computed: {
     ...mapGetters(['dispatchingData']),
     options () {
@@ -93,13 +70,7 @@ export default {
     /** 上拉加载 */
     async onPullingUp () {
       this.getDispatching()
-    },
-    /** 右侧按钮点击 */
-    onClickRight () {
-      this.$toast('button')
-    },
-    clickHandler () {},
-    changeHandler () {}
+    }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
