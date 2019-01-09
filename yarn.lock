@@ -1030,7 +1030,8 @@ amdefine@>=0.0.4:
 
 amfe-flexible@^2.2.1:
   version "2.2.1"
-  resolved "http://192.168.1.40:4873/amfe-flexible/-/amfe-flexible-2.2.1.tgz#353f00289e4d38ca88a21eb3854420308af0b559"
+  resolved "https://registry.yarnpkg.com/amfe-flexible/-/amfe-flexible-2.2.1.tgz#353f00289e4d38ca88a21eb3854420308af0b559"
+  integrity sha1-NT8AKJ5NOMqIoh6zhUQgMIrwtVk=
 
 ansi-colors@^3.0.0:
   version "3.2.3"
@@ -7374,10 +7375,6 @@ validate-npm-package-license@^3.0.1:
 vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
-
-vconsole@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.npmjs.org/vconsole/-/vconsole-3.2.0.tgz#960e2877d685a9543f5f30ec055a66a96ac15bb5"
 
 vendors@^1.0.0:
   version "1.0.2"
