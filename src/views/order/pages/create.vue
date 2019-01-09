@@ -130,7 +130,7 @@ export default {
         consignerName: '',
         consignerPhone: '',
         consignerCity: '',
-        consignerAddress: '',
+        consignerAddress: '货物信息货物信息货物信息货物信息货物信息货物信息货物信息货物信息',
         extraData: '',
 
         consigneeName: '',
