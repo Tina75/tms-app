@@ -28,5 +28,10 @@ export default [
     path: '/order/fee-info',
     name: 'order-fee-info', // 详细地址
     component: () => import(/* webpackChunkName: "order" */ './pages/fee-info.vue')
+  },
+  {
+    path: '/order/consumer-info',
+    name: 'order-consumer-info', // 客户单号及其他
+    component: () => import(/* webpackChunkName: "order" */ './pages/consumer-info.vue')
   }
 ]

@@ -32,7 +32,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .form-section
+  form
     margin-top 10px
+  .form-section
+    margin-bottom 15px
 </style>
 

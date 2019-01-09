@@ -28,7 +28,7 @@
           <form-item
             v-model="form.extraData" prop="extraData"
             label="客户单号及其他"
-            type="click" />
+            type="click" @on-click="$router.push({ name: 'order-consumer-info' })" />
         </div>
 
         <div class="form-section">
@@ -86,24 +86,15 @@
             v-model="form.transportFee"
             type="number"
             label="运输费用(元)"
-<<<<<<< HEAD
-            click-icon="icon-ico_rule" />
-=======
             clickIcon="icon-ico_rule"
             @on-icon-click="chooseChargeRule" />
->>>>>>> 190107_xl
         </div>
 
         <div class="form-section">
           <form-item
             v-model="form.extraFee"
-<<<<<<< HEAD
-            label="其他费用" :label-image="IMAGES.MONEY"
-            type="click" />
-=======
             label="其他费用" :labelImage="IMAGES.MONEY"
             type="click" @on-click="$router.push({ name: 'order-fee-info' })" />
->>>>>>> 190107_xl
           <form-item
             v-model="form.extraInfo"
             label="其他信息" :label-image="IMAGES.OTHER"
