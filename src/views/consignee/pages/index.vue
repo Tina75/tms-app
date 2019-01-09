@@ -9,7 +9,7 @@
           v-for="(item, index) in group.items"
           :key="index"
           :item="item"
-          @select="selectItem">
+          @select="selectItem(index)">
           <div class="consignee_item border-bottom-1px">
             <div class="consignee_item_img">
               {{item.name.slice(0,1)}}
@@ -24,7 +24,10 @@
                   {{item.address}}
                 </div>
               </div>
-              <div class="info_phone">电话</div>
+              <img
+                src="../assets/consignee_call.png"
+                class="info_phone"
+                @click="callPhone(item.phone)" >
             </div>
           </div>
         </cube-index-list-item>
@@ -48,8 +51,14 @@ export default {
     console.log(process.env.VUE_APP_HOST)
   },
   methods: {
-    selectItem () {
-
+    selectItem (idx) {
+      console.log(idx)
+      this.$router.push({
+        name: 'ConsigneeDetail'
+      })
+    },
+    callPhone(phone) {
+      window.location.href = `tel:${phone}`
     }
   }
 }
@@ -62,6 +71,8 @@ export default {
     height 100%
     >>>.cube-index-list-anchor
       // display none
+    >>>.cube-index-list-fixed
+      // position relative
   .border-bottom-1px:after
     left 70px
   &_item
@@ -99,6 +110,13 @@ export default {
         line-height 14px
       .info_phone
         margin-left 21px
+        margin-top 5px
         width 30px
         height 30px
+        vertical-align middle
+  >>>.cube-index-list-nav
+    top 20%
+    right -5px
+  >>>.cube-index-list-nav > ul > li
+    margin-top 10px
 </style>

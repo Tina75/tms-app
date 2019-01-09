@@ -6,6 +6,11 @@ export default [
     path: '/consignee',
     name: 'Consignee',
     component: () => import(/* webpackChunkName: "Consignee" */ './pages/index.vue')
+  },
+  {
+    path: '/consignee/detail',
+    name: 'ConsigneeDetail',
+    component: () => import(/* webpackChunkName: "Consignee" */ './pages/detail.vue')
   }
 ]
 
