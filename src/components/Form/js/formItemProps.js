@@ -19,6 +19,10 @@ export default {
     type: [ String, Number ],
     default: Infinity
   }, // type = textarea 且值不为 Infinity 时会在输入框下发显示计数器
+  clearable: {
+    type: Boolean,
+    default: false
+  },
   align: {
     type: String,
     default: 'right',
