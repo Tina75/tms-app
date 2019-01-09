@@ -1,6 +1,6 @@
 <template>
   <div class="form-title border-bottom-1px">
-    <img class="form-title-image" v-if="image" :src="image">
+    <img v-if="image" class="form-title-image" :src="image">
     {{ title }}
   </div>
 </template>
@@ -9,8 +9,14 @@
 export default {
   name: 'FormTitle',
   props: {
-    title: String,
-    image: String
+    title: {
+      type: String,
+      default: ''
+    },
+    image: {
+      type: String,
+      default: ''
+    }
   }
 }
 </script>
@@ -33,4 +39,3 @@ export default {
       border-radius 2px
       vertical-align text-top
 </style>
-

@@ -2,15 +2,15 @@
   <div class="form-item-box">
     <div class="form-item border-bottom-1px">
       <label class="form-item-label" :class="{ 'form-item-required': required }">
-        <img v-if="labelImage" class="form-item-label-image" :src="labelImage" />
+        <img v-if="labelImage" class="form-item-label-image" :src="labelImage" >
         {{ label }}
       </label>
 
       <div class="form-item-input-box">
         <input
+          v-model="inputValue"
           class="form-item-input"
           :class="inputAlignment"
-          v-model="inputValue"
           :type="inputType"
           :placeholder="inputPlaceHolder"
           :maxlength="maxlength"
@@ -22,15 +22,15 @@
           @focus="inputFocusHandler">
       </div>
 
-      <a class="form-item-icon border-left-1px"
-        v-if="clickIcon"
-        @click.prevent="iconClickHandler">
+      <a v-if="clickIcon"
+         class="form-item-icon border-left-1px"
+         @click.prevent="iconClickHandler">
         <icon-font :name="clickIcon" color="#189cb2" size="20" />
       </a>
 
       <icon-font
-        class="form-item-arrow"
         v-if="this.type === 'click' && this.showArrow"
+        class="form-item-arrow"
         name="icon-ico_right" />
     </div>
   </div>
@@ -39,20 +39,16 @@
 
 <script>
 import props from './js/formItemProps'
-import computed from './js/formItemProps'
+// import computed from './js/formItemProps'
 
 export default {
-  name:'FormItem',
+  name: 'FormItem',
   props,
   data () {
     return {
       inputValue: this.value,
       picker: null
     }
-  },
-  watch: {
-    value (val) { this.inputValue = val; },
-    inputValue (newVal, oldVal) { if (this.type === 'number' && isNaN(Number(newVal))) this.$nextTick(() => { this.inputValue = oldVal }) }
   },
   computed: {
     inputType () {
@@ -70,6 +66,10 @@ export default {
     inputAlignment () {
       return 'form-item-input-align-' + this.align
     }
+  },
+  watch: {
+    value (val) { this.inputValue = val },
+    inputValue (newVal, oldVal) { if (this.type === 'number' && isNaN(Number(newVal))) this.$nextTick(() => { this.inputValue = oldVal }) }
   },
   methods: {
     // 点击图标触发事件
@@ -173,4 +173,3 @@ export default {
         &-align-center
           text-align center
 </style>
-

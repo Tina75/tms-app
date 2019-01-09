@@ -7,7 +7,7 @@
           <form-item
             v-model="form.consignerCompany" required
             label="客户名称"
-            clickIcon="icon-ico_custerm"
+            click-icon="icon-ico_custerm"
             @on-icon-click="chooseUserInfo('send')" />
           <form-item
             v-model="form.consignerName" required
@@ -20,7 +20,7 @@
             v-model="form.consignerCity"
             label="发货城市"
             placeholder="请选择省/市/区"
-            type="click" :showArrow="false" />
+            type="click" :show-arrow="false" />
           <form-item
             v-model="form.consignerAddress" required
             label="详细地址" />
@@ -34,7 +34,7 @@
           <form-title title="收货方信息" :image="IMAGES.ACCEPT" />
           <form-item
             v-model="form.consigneeName" required
-            label="收货人" clickIcon="icon-ico_custerm"
+            label="收货人" click-icon="icon-ico_custerm"
             @on-icon-click="chooseUserInfo('accept')" />
           <form-item
             v-model="form.consigneePhone" required
@@ -53,7 +53,7 @@
         <div class="form-section">
           <form-item
             v-model="form.cargoInfo" required
-            label="货物信息" :labelImage="IMAGES.BOX"
+            label="货物信息" :label-image="IMAGES.BOX"
             type="click"
             placeholder="请输入" />
         </div>
@@ -84,17 +84,17 @@
             v-model="form.transportFee"
             type="number"
             label="运输费用(元)"
-            clickIcon="icon-ico_rule" />
+            click-icon="icon-ico_rule" />
         </div>
 
         <div class="form-section">
           <form-item
             v-model="form.extraFee"
-            label="其他费用" :labelImage="IMAGES.MONEY"
+            label="其他费用" :label-image="IMAGES.MONEY"
             type="click" />
           <form-item
             v-model="form.extraInfo"
-            label="其他信息" :labelImage="IMAGES.OTHER"
+            label="其他信息" :label-image="IMAGES.OTHER"
             type="click" />
         </div>
       </form>
@@ -147,7 +147,7 @@ export default {
         extraFee: '',
         extraInfo: ''
 
-      },
+      }
     }
   },
   methods: {
@@ -187,6 +187,3 @@ export default {
   .create-order-page .form-section .form-item-box:last-child .form-item:after
     border-style none
 </style>
-
-
-

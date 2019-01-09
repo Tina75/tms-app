@@ -23,4 +23,3 @@ export default {
       content "￥"
       font-size 12px
 </style>
-
