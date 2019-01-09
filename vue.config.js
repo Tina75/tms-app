@@ -26,26 +26,26 @@ const config = {
     }
   },
 
-  devServer: {
-    open: true,
-    host: '0.0.0.0',
-    port: 8080,
-    progress: true,
-    inline: true,
-    proxy: {
-      '/': {
-        target: 'https://dev.yundada56.com/bluewhale-line/',
-        ws: false,
-        changOrigin: true
-      }
-    }
-  },
+  // devServer: {
+  //   open: true,
+  //   host: '0.0.0.0',
+  //   port: 8080,
+  //   progress: true,
+  //   inline: true,
+  //   proxy: {
+  //     '/': {
+  //       target: 'https://dev.yundada56.com/bluewhale-line/',
+  //       ws: false,
+  //       changOrigin: true
+  //     }
+  //   }
+  // },
 
   configureWebpack: {
     plugins: [
       new webpack.DllReferencePlugin({
         // 描述 polyfill 动态链接库的文件内容
-        manifest: require('./public/dll/polyfill.json'),
+        manifest: require('./public/dll/polyfill.json')
       }),
       new webpack.DllReferencePlugin({
         manifest: require('./public/dll/common.json')
@@ -62,7 +62,7 @@ const config = {
             test: /[\\/]node_modules[\\/]ydd_area/,
             name: 'ydd_area',
             chunks: 'all'
-          },
+          }
         }
       }
     }

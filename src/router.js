@@ -4,6 +4,7 @@ import { sync } from 'vuex-router-sync'
 import store from '@/store'
 import { closeWindow } from '@/libs/bridgeUtil'
 import example from '@/views/example/router'
+import delivery from '@/views/delivery/router'
 
 Vue.use(Router)
 
@@ -14,6 +15,7 @@ let router = new Router({
       name: 'home',
       component: () => import(/* webpackChunkName: "home" */ './views/home.vue')
     },
+    ...delivery,
     ...example
   ]
 })
