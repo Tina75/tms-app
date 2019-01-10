@@ -1,5 +1,6 @@
 const webpack = require('webpack')
 const useBundleAnalyzer = false // 是否开启打包分析
+const dllmap = require('../public/dll/common.json')
 const config = {
   baseUrl: './',
   assetsDir: '',
@@ -45,7 +46,7 @@ const config = {
     },
     plugins: [
       new webpack.DllReferencePlugin({
-        manifest: require('./public/dll/common.json')
+        manifest: dllmap
       })
     ]
   }
