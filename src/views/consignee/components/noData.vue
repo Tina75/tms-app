@@ -1,11 +1,12 @@
 <template>
   <div class="main">
     <img :src="img" class="img">
-    <div class="message">老板，您还没有记录{{content}}信息 赶快新增一个，方便联系哦～</div>
-    <div>
+    <div class="message">{{content}}</div>
+    <div v-if="showButton">
       <cube-button
-        :primary="true">
-        新增{{content}}
+        :primary="true"
+        @click="clickHandler">
+        {{buttonText}}
       </cube-button>
     </div>
   </div>
@@ -22,11 +23,24 @@ export default {
     content: {
       type: String,
       default: ''
+    },
+    showButton: {
+      type: Boolean,
+      default: true
+    },
+    buttonText: {
+      type: String,
+      default: ''
     }
   },
   data () {
     return {
 
+    }
+  },
+  methods: {
+    clickHandler () {
+      this.$emit('btn-click')
     }
   }
 }

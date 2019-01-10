@@ -1,8 +1,11 @@
 <template>
   <div class="consignee">
-    <cube-index-list :data="data" class="consignee_list">
+    <cube-index-list
+      v-if="consigneeList && consigneeList.length > 0"
+      :data="consigneeList"
+      class="consignee_list">
       <cube-index-list-group
-        v-for="(group, index) in data"
+        v-for="(group, index) in consigneeList"
         :key="index"
         :group="group">
         <cube-index-list-item
@@ -37,24 +40,39 @@
         </cube-index-list-item>
       </cube-index-list-group>
     </cube-index-list>
+    <NoData
+      v-else
+      :content="config.content"
+      :img="config.img"
+      :button-text="config.button.text"
+      @btn-click="btnClick"/>
   </div>
 </template>
 <script>
-import Mock from './mock.json'
 import IconFont from '@/components/Iconfont'
+import { mapGetters } from 'vuex'
+import NoData from '../components/noData'
+
+const config = {
+  img: require('../assets/consigness_nodata.png'),
+  content: '老板，您还没有记录收货方信息 赶快新增一个，方便联系哦～',
+  button: {
+    text: '新增收货方'
+  }
+}
 export default {
   name: 'Consignee',
   metaInfo: {
     title: '收货方'
   },
-  components: { IconFont },
-  computed: {
-    data () {
-      return Mock.list
+  components: { IconFont, NoData },
+  data () {
+    return {
+      config
     }
   },
-  mounted() {
-    console.log(process.env.VUE_APP_HOST)
+  computed: {
+    ...mapGetters(['consigneeList'])
   },
   methods: {
     selectItem (idx) {
@@ -63,8 +81,13 @@ export default {
         name: 'ConsigneeDetail'
       })
     },
-    callPhone(phone) {
+    callPhone (phone) {
       window.location.href = `tel:${phone}`
+    },
+    btnClick () {
+      this.$router.push({
+        name: 'ConsigneeAdd'
+      })
     }
   }
 }

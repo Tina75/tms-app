@@ -9,26 +9,26 @@
         />
       </div>
       <div class="consignor">
-        <h2>{{detail.name}}</h2>
-        <p>{{detail.phone}}</p>
+        <h2>{{consigneeDetail.name}}</h2>
+        <p>{{consigneeDetail.phone}}</p>
       </div>
     </div>
     <div class="detail_other">
       <div class="otherCard">
         <div class="title">收货地址</div>
-        <div class="address">{{detail.address}}</div>
+        <div class="address">{{consigneeDetail.address}}</div>
       </div>
       <div class="otherCard">
         <div class="title">所属发货方</div>
-        <div class="address">{{detail.address}}</div>
+        <div class="address">{{consigneeDetail.address}}</div>
       </div>
       <div class="otherCard">
         <div class="title">收货人单位</div>
-        <div class="address">{{detail.address}}</div>
+        <div class="address">{{consigneeDetail.address}}</div>
       </div>
       <div class="otherCard">
         <div class="title">备注</div>
-        <div class="address">{{detail.address}}</div>
+        <div class="address">{{consigneeDetail.address}}</div>
       </div>
     </div>
     <div class="detail_call">
@@ -47,8 +47,8 @@
   </div>
 </template>
 <script>
-import Mock from './mock.json'
 import IconFont from '@/components/Iconfont'
+import { mapGetters } from 'vuex'
 // import { setAppTitleBtn } from '@/libs/bridgeUtil'
 export default {
   name: 'ConsigneeDetail',
@@ -57,13 +57,11 @@ export default {
   },
   components: { IconFont },
   computed: {
-    detail() {
-      return Mock.detail
-    }
+    ...mapGetters(['consigneeDetail'])
   },
   methods: {
     callPhone () {
-      window.location.href = `tel:${this.detail.phone}`
+      window.location.href = `tel:${this.consigneeDetail.phone}`
     }
   },
   beforeRouteEnter (to, from, next) {

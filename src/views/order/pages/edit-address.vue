@@ -41,13 +41,12 @@
 </template>
 
 <script>
+import { FormItem } from '@/components/Form'
+
 export default {
   metaInfo: { title: '详细地址' },
-  data () {
-    return {
-      test: ''
-    }
-  }
+  components: { FormItem },
+  data () {}
 }
 </script>
 

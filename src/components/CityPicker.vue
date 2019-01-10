@@ -26,7 +26,7 @@
         <div
           v-for="(item,i) in items"
           :key="i"
-          class="item van-hairline--bottom van-hairline--right"
+          class="item border-bottom-1px border-left-1px"
           @click="choseItem(item)"
         >{{item.shortName}}</div>
       </div>

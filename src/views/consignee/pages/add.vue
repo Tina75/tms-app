@@ -13,6 +13,7 @@
           v-model="form.contact"
           required
           label="收货人"
+          :maxlength="15"
         />
         <form-item
           v-model="form.phone"
@@ -23,9 +24,11 @@
       <div class="form_card">
         <form-item
           v-model="form.address"
+          type="click"
           label="收货地址"
+          :show-arrow="false"
           placeholder="请选择省/市/区"
-          @on-focus="showPickCity = true"
+          @on-click="showPickCity = true"
         />
         <form-item
           v-model="form.detailAddress"
@@ -59,6 +62,7 @@
   </div>
 </template>
 <script>
+import { FormItem } from '@/components/Form'
 import CityPicker from '@/components/CityPicker'
 export default {
   name: 'ConsigneeAdd',
@@ -67,7 +71,7 @@ export default {
       title: '新增收货方'
     }
   },
-  components: { CityPicker },
+  components: { CityPicker, FormItem },
   data() {
     return {
       form: {
@@ -90,6 +94,11 @@ export default {
     },
     citySelect (picker) {
       console.log(picker)
+      if (picker[0].name === picker[1].name) {
+        this.form.address = picker[1].name + picker[2].name
+      } else {
+        this.form.address = picker[0].name + picker[1].name + picker[2].name
+      }
     }
   }
 }

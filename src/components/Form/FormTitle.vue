@@ -11,12 +11,9 @@ export default {
   props: {
     title: {
       type: String,
-      default: ''
+      required: true
     },
-    image: {
-      type: String,
-      default: ''
-    }
+    image: String
   }
 }
 </script>

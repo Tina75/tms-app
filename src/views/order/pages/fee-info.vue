@@ -16,28 +16,34 @@
 
     <div class="footer">
       <div class="footer-total">费用合计：<money-label :money="2500" /></div>
-      <cube-button class="footer-button" primary>确定</cube-button>
+      <cube-button class="footer-button" primary @click="ensure">确定</cube-button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import MoneyLabel from '../components/MoneyLabel'
+import { FormItem } from '@/components/Form'
 
 export default {
   metaInfo: { title: '费用信息' },
-  components: { MoneyLabel },
+  components: { FormItem, MoneyLabel },
   data () {
-    return {
-      form: {
-        pickupFee: '',
-        uploadFee: '',
-        unloadFee: '',
-        ensuranceFee: '',
-        otherFee: ''
-      }
+    return { form: {} }
+  },
+  computed: {
+    ...mapGetters([
+      'feeInfo'
+    ])
+  },
+  methods: {
+    ensure () {
+      this.$store.commit('SET_FEE_INFO', this.form)
     }
   }
+  // beforeRouterEnter
+
 }
 </script>
 

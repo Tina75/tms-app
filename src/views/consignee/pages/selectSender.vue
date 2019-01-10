@@ -1,9 +1,10 @@
 <template>
   <div class="select">
     <div
+      v-if="consignerList && consignerList.length > 0"
       class="border-top-1px">
       <div
-        v-for="(item, index) in data"
+        v-for="(item, index) in consignerList"
         :key="index"
         @click="choose(item.company)">
         <div class="select_item border-bottom-1px">
@@ -29,18 +30,16 @@
       </div>
     </div>
     <NoData
-      v-if="!data"
-      :img="IMG.noSender"
+      v-else
+      :img="Img"
       content="发货方"/>
   </div>
 </template>
 <script>
-import Mock from './mock.json'
 import IconFont from '@/components/Iconfont'
 import NoData from '../components/noData'
-const IMG = {
-  noSender: require('../assets/no-sender.png')
-}
+import { mapGetters } from 'vuex'
+import Img from '../assets/no-sender.png'
 export default {
   name: 'SelectSender',
   metaInfo: {
@@ -49,14 +48,11 @@ export default {
   components: { IconFont, NoData },
   data () {
     return {
-      IMG
+      Img
     }
   },
   computed: {
-    data () {
-      return Mock.sender
-      // return []
-    }
+    ...mapGetters(['consignerList'])
   },
   methods: {
     choose(name) {

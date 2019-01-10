@@ -9,6 +9,7 @@
       <div class="form-item-input-box">
         <cube-input
           v-if="type !== 'switch' && type !== 'textarea' && type !== 'click'"
+          v-model="inputValue"
           class="form-item-input"
           :class="inputAlignment"
           :type="inputType"
@@ -38,6 +39,7 @@
           v-if="type === 'textarea'"
           v-model="inputValue"
           class="form-item-input"
+          :rows="rows"
           :placeholder="inputPlaceHolder"
           :maxlength="maxlength"
           @blur="inputBlurHandler"
@@ -65,7 +67,6 @@
 
 <script>
 import props from './js/formItemProps'
-// import computed from './js/formItemProps'
 
 export default {
   name: 'FormItem',
@@ -193,6 +194,7 @@ export default {
         margin-top 5px
         font-size 15px
         color #666666
+        outline none
         &:after
           border-style none
 
