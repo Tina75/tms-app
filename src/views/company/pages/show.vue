@@ -42,7 +42,11 @@
           <div class="cardInfo-content">
             <span class="cardTitle">公司LOGO</span>
             <span class="cardContent">
-              <div class="avatarDiv"/>
+              <icon-font
+                name="icon-morengongsilogo"
+                color="#CECECE"
+                :size="50"/>
+            <!-- <div class="avatarDiv"/> -->
             </span>
           </div>
           <div class="hr"/>
@@ -88,11 +92,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import IconFont from '@/components/Iconfont'
 export default {
   name: 'company',
   metaInfo: {
     title: '我的公司'
   },
+  components: { IconFont },
   data () {
     return {
       first: true,

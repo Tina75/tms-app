@@ -1,20 +1,10 @@
 <template>
-  <!-- <div
-    v-show="exceptionPhotos && exceptionPhotos.length < 6"
-    class="upload-div"
-    @click="addImg">
-    <icon-font
-      name="yzg-hebingxingzhuang5"
-      color="#CECECE"
-      :size="50">
-    </icon-font>
-  </div> -->
-  <div>
-    <ul class="image-list">
+  <div class="content">
+    <ul class="content-pic-box cube-mt-10">
       <li
         v-for="(item, index) in exceptionPhotos"
         :key="item.url"
-        class="cube-mt-10">
+        class="cube-mt-50">
         <img
           src="./images/icon-del-pic.png"
           class="pic-item-delete"
@@ -24,37 +14,40 @@
           alt="图片加载失败"
           class="pic-item"
           @click="previewPic(exceptionPhotos,index)">
+        <cube-input/>
       </li>
       <li
         v-show="exceptionPhotos && exceptionPhotos.length < 6"
-        class="pic-item-add"
+        class="pic-item-add cube-mt-50"
         @click="addImg">
-        <!-- <icon-font
+        <icon-font
           name="yzg-hebingxingzhuang5"
           color="#CECECE"
-          :size="50">
-        </icon-font> -->
+          :size="50"/>
+        <span>点击上传</span>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import IconFont from '@/components/Iconfont'
 import { uploadOSS } from './ossUtil'
 import bridge from '@/libs/dsbridge'
 
 export default {
   name: 'odd-upload',
-  metaInfo: { title: '上报异常' },
+  components: { IconFont },
+  metaInfo: { title: '图片上传' },
   data () {
     return {
       exceptionPhotos: [
         {
-          url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg?x-oss-process=image/resize,m_fill,h_220,w_220'
+          url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg?x-oss-process=image/resize,m_fill,h_100,w_100'
+        }, {
+          url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/939238940611.8259.jpg?x-oss-process=image/resize,m_fill,h_100,w_100'
         }
         // , {
-        //   url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/939238940611.8259.jpg'
-        // }, {
         //   url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png'
         // }
       ]
@@ -89,6 +82,9 @@ export default {
       }
       window.loadingEnd()
     },
+    deletePic (i) {
+      this.exceptionPhotos.splice(i, 1)
+    },
     previewPic (imgs, index = 0) {
       this.$router.push({ name: 'image-preview', params: { imgs, index } })
     }
@@ -97,14 +93,30 @@ export default {
 
 </script>
 <style lang='stylus' scoped>
-li
-  width 110px
-  height 110px
-  position relative
+.content
+  padding 15px 10px
+  font-size 16px
+  color #555555
+  background white
+  margin-bottom 60px
+  margin-top: -40px;
+  &-pic-box
+    display flex
+    display -webkit-flex
+    justify-content space-between
+    flex-wrap wrap
+    li
+      width 110px
+      height 110px
+      position relative
+    .pic-item
+      width 110px
+      height 110px
   .pic-item-add
     background #F1F1F1
     line-height 110px
     text-align center
+    margin-top 10px
   .pic-item-delete
     position absolute
     width 24px

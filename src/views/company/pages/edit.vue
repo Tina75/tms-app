@@ -55,7 +55,6 @@
               maxlength="50" />
           </div>
         </form>
-        <Upload/>
       </div>
       <div v-if="step === 2">
         <form class="form">
@@ -86,6 +85,7 @@
             <div class="hr"/>
             <div class="cardInfo-content edit">
               <span class="cardTitle">上传图片（0/10）</span>
+              <Upload/>
             </div>
           </div>
           <div class="form-section textarea">
@@ -99,6 +99,7 @@
             <div class="hr"/>
             <div class="cardInfo-content edit">
               <span class="cardTitle">上传图片（0/10）</span>
+              <Upload/>
             </div>
           </div>
         </form>
@@ -108,16 +109,19 @@
           <div class="form-section">
             <div class="cardInfo-content edit">
               <span class="cardTitle">公司风貌（0/10）</span>
+              <Upload/>
             </div>
           </div>
           <div class="form-section">
             <div class="cardInfo-content edit">
               <span class="cardTitle">微信二维码（0/10）</span>
+              <Upload/>
             </div>
           </div>
           <div class="form-section">
             <div class="cardInfo-content edit">
               <span class="cardTitle">公司首页形象图</span>
+              <Upload/>
             </div>
           </div>
         </form>
@@ -143,12 +147,13 @@
 </template>
 <script>
 import Upload from '@/components/Updalod'
+import { FormItem } from '@/components/Form'
 export default {
   name: 'company-edit',
   metaInfo: {
     title: '编辑公司'
   },
-  components: { Upload },
+  components: { Upload, FormItem },
   data () {
     return {
       setpCount: 3,
