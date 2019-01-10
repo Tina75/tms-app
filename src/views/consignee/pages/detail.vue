@@ -35,7 +35,12 @@
       <cube-button
         :primary="true"
         @click="callPhone">
-        <img src="../assets/consignee_call.png" class="phone">
+        <span class="phone">
+          <IconFont
+            name="icon-ico_call"
+            size="24"
+          />
+        </span>
         <span>拨打电话</span>
       </cube-button>
     </div>
@@ -58,7 +63,7 @@ export default {
   },
   methods: {
     callPhone () {
-
+      window.location.href = `tel:${this.detail.phone}`
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -126,13 +131,10 @@ export default {
       font-size 17px
       border-radius 0
       height 44px
-      padding 0
-      span
-        line-height 24px
+      padding 10px 0px
+      line-height 24px
       .phone
-        width 24px
-        height 24px
-        vertical-align top
-        background #000000
         margin-right 5px
+        position relative
+        top -2px
 </style>

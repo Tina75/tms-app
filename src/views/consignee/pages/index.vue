@@ -24,10 +24,14 @@
                   {{item.address}}
                 </div>
               </div>
-              <img
-                src="../assets/consignee_call.png"
-                class="info_phone"
-                @click="callPhone(item.phone)" >
+              <div class="info_phone">
+                <IconFont
+                  name="icon-ico_call"
+                  size="32"
+                  color="#00A4BD"
+                  @click="callPhone(item.phone)"
+                />
+              </div>
             </div>
           </div>
         </cube-index-list-item>
@@ -37,11 +41,13 @@
 </template>
 <script>
 import Mock from './mock.json'
+import IconFont from '@/components/Iconfont'
 export default {
   name: 'Consignee',
   metaInfo: {
     title: '收货方'
   },
+  components: { IconFont },
   computed: {
     data () {
       return Mock.list
@@ -110,10 +116,6 @@ export default {
         line-height 14px
       .info_phone
         margin-left 21px
-        margin-top 5px
-        width 30px
-        height 30px
-        vertical-align middle
   >>>.cube-index-list-nav
     top 20%
     right -5px

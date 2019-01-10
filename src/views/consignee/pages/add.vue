@@ -25,6 +25,7 @@
           v-model="form.address"
           label="收货地址"
           placeholder="请选择省/市/区"
+          @on-focus="showPickCity = true"
         />
         <form-item
           v-model="form.detailAddress"
@@ -41,7 +42,7 @@
           v-model="form.remark"
           type="textarea"
           label="备注"
-          placeholder="请输入（最多输入200字）"
+          placeholder="请输入(最多输入200字)"
           :maxlength="200"
         />
       </div>
@@ -52,9 +53,13 @@
         确定
       </cube-button>
     </div>
+    <CityPicker
+      v-model="showPickCity"
+      @confirm="citySelect"/>
   </div>
 </template>
 <script>
+import CityPicker from '@/components/CityPicker'
 export default {
   name: 'ConsigneeAdd',
   metaInfo () {
@@ -62,6 +67,7 @@ export default {
       title: '新增收货方'
     }
   },
+  components: { CityPicker },
   data() {
     return {
       form: {
@@ -72,7 +78,8 @@ export default {
         detailAddress: '',
         consigneeCompanyName: '',
         remark: ''
-      }
+      },
+      showPickCity: false
     }
   },
   methods: {
@@ -80,6 +87,9 @@ export default {
       this.$router.push({
         name: 'SelectSender'
       })
+    },
+    citySelect (picker) {
+      console.log(picker)
     }
   }
 }
@@ -101,4 +111,6 @@ export default {
       height 44px
       line-height 17px
       padding 0
+>>>textarea
+  outline none
 </style>
