@@ -69,7 +69,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['consigneeList'])
+    ...mapGetters('consignee', ['consigneeList'])
   },
   methods: {
     selectItem (idx) {

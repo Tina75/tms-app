@@ -6,7 +6,7 @@
       <div
         v-for="(item, index) in consignerList"
         :key="index"
-        @click="choose(item.company)">
+        @click="choose(item)">
         <div class="select_item border-bottom-1px">
           <div class="select_item_img">
             <IconFont
@@ -21,7 +21,7 @@
                 <span>{{item.company}}</span>
               </div>
               <div class="info_bottom">
-                <span>{{item.name}}</span>
+                <span>{{item.contact}}</span>
                 <span>{{item.phone}}</span>
               </div>
             </div>
@@ -39,7 +39,7 @@
 <script>
 import IconFont from '@/components/Iconfont'
 import NoData from '@/components/NoData'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 const config = {
   img: require('../assets/no-sender.png'),
   message: '老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～'
@@ -56,11 +56,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['consignerList'])
+    ...mapGetters('consignee', ['consignerList'])
   },
   methods: {
-    choose(name) {
-      console.log(name)
+    ...mapActions('consignee', ['saveConsignerInfo']),
+    async choose(item) {
+      await this.saveConsignerInfo(item)
       this.$router.back()
     }
   }
