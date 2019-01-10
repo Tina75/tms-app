@@ -8,6 +8,8 @@ import consignee from '@/views/consignee/router'
 import delivery from '@/views/delivery/router'
 import order from '@/views/order/router'
 import company from '@/views/company/router'
+import receipt from '@/views/receipt/router'
+import upstream from '@/views/upstream/router'
 
 Vue.use(Router)
 
@@ -23,6 +25,8 @@ let router = new Router({
     ...order,
     ...company,
     ...consignee, // 收货方
+    ...receipt,
+    ...upstream
   ]
 })
 // 同步store和路由
