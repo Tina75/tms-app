@@ -1,15 +1,19 @@
 const webpack = require('webpack')
 const useBundleAnalyzer = false // 是否开启打包分析
-const proxyUrl = 'https://dev.tms5566.com/dolphin-app'
 const config = {
   baseUrl: './',
-  assetsDir: 'static',
+  assetsDir: '',
+  outputDir: 'public/cube',
   productionSourceMap: false,
   parallel: true,
   lintOnSave: undefined,
-  chainWebpack: (config) => {
-    config.plugins.delete('prefetch')
+  // 去掉文件名中的 hash
+  filenameHashing: false,
+   // 删除 HTML 相关的 webpack 插件
+  chainWebpack: config => {
+    config.plugins.delete('html')
     config.plugins.delete('preload')
+    config.plugins.delete('prefetch')
   },
   css: {
     loaderOptions: {
@@ -27,42 +31,23 @@ const config = {
     }
   },
 
-  devServer: {
-    open: true,
-    host: '0.0.0.0',
-    port: 8080,
-    progress: true,
-    inline: true,
-    proxy: {
-      '/': {
-        target: proxyUrl,
-        ws: false,
-        changOrigin: true
-      }
+  pages: {
+    index: {
+      // page 的入口
+      entry: 'cube/entry.js'
     }
   },
 
   configureWebpack: {
+    output: {
+      filename: 'cube-index.js',
+      chunkFilename: 'cube-chunk.js'
+    },
     plugins: [
       new webpack.DllReferencePlugin({
         manifest: require('./public/dll/common.json')
       })
-    ],
-    externals: {
-      BMap: 'BMap'
-    },
-    optimization: {
-      splitChunks: {
-        // node_modules中除city走线上,其他走本地common
-        cacheGroups: {
-          city: {
-            test: /[\\/]node_modules[\\/]ydd_area/,
-            name: 'ydd_area',
-            chunks: 'all'
-          }
-        }
-      }
-    }
+    ]
   }
 }
 
@@ -73,4 +58,5 @@ if (useBundleAnalyzer) {
   const util = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
   webpackConfig.plugins.push(new util())
 }
+
 module.exports = config
