@@ -5,7 +5,7 @@ const to = path.resolve(__dirname, '../.env.cube')
 // 动态的指定项目配置文件
 const data = `
 NODE_ENV = production
-VUE_CLI_SERVICE_CONFIG_PATH = ${path.resolve(__dirname, '../')}/vue.cube.config.js
+VUE_CLI_SERVICE_CONFIG_PATH = ${path.resolve(__dirname, '../')}/cube/vue.config.js
 `
 fs.writeFile(to, data, 'utf8', function(error) {
   if (error) {

@@ -5,10 +5,9 @@ import store from '@/store'
 import { closeWindow } from '@/libs/bridgeUtil'
 import example from '@/views/example/router'
 import delivery from '@/views/delivery/router'
-
 import order from '@/views/order/router'
 import company from '@/views/company/router'
-
+import contacts from '@/views/contacts/router'
 Vue.use(Router)
 
 let router = new Router({
@@ -24,10 +23,9 @@ let router = new Router({
     },
     ...delivery,
     ...example,
-
     ...order,
-
-    ...company
+    ...company,
+    ...contacts // 通信录
   ]
 })
 // 同步store和路由
