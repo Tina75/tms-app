@@ -23,7 +23,6 @@ let router = new Router({
     ...order,
     ...company,
     ...consignee, // 收货方
-    ...order
   ]
 })
 // 同步store和路由
