@@ -1,6 +1,6 @@
 <template>
   <div class="form-item-box">
-    <div class="form-item border-bottom-1px" :class="{'form-item-textarea': type === 'textarea'}">
+    <div class="form-item" :class="{'form-item-textarea': type === 'textarea', 'border-bottom-1px':bottomLine}">
       <label v-if="label" class="form-item-label" :class="{ 'form-item-required': required }">
         <img v-if="labelImage" class="form-item-label-image" :src="labelImage" >
         {{ label }}
@@ -127,6 +127,7 @@ export default {
       if (this.type === 'number' && this.inputValue !== '') {
         this.inputValue = Number(this.inputValue)
       }
+      console.info(this.inputValue)
       this.$emit('input', this.inputValue)
     }
   }
@@ -151,7 +152,9 @@ export default {
   .form-item-box
     padding-left 16px
     background #ffffff
-
+    &:last-of-type
+      .border-bottom-1px:after
+        content none
   .form-item
     display flex
     align-items center

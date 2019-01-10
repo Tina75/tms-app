@@ -1,5 +1,9 @@
 export default {
   value: [ String, Number, Boolean ],
+  bottomLine: {
+    type: Boolean,
+    default: true
+  },
   label: String,
   // prop: String,
   required: {

@@ -2,7 +2,7 @@ const webpack = require('webpack')
 const useBundleAnalyzer = false // 是否开启打包分析
 const dllmap = require('../public/dll/common.json')
 const config = {
-  baseUrl: './',
+  publicPath: './',
   assetsDir: '',
   outputDir: 'public/cube',
   productionSourceMap: false,

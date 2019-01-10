@@ -67,7 +67,7 @@ export default {
         this.feeInfo.unloadFee || 0,
         this.feeInfo.ensuranceFee || 0,
         this.feeInfo.otherFee || 0,
-        this.transportFee || 0,
+        this.transportFee || 0
       )
     }
   }
