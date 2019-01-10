@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { FormItem } from '@/components/Form'
 
 export default {
@@ -37,13 +37,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('order', [
       'otherInfo'
     ])
   },
   methods: {
+    ...mapMutations('order', [ 'SET_OTHER_INFO' ]),
+
     ensure () {
-      this.$store.commit('SET_OTHER_INFO', Object.assign({}, this.form))
+      this.SET_OTHER_INFO(Object.assign({}, this.form))
       this.$router.back()
     }
   },

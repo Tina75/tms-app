@@ -3,13 +3,31 @@
     <cube-scroll class="scroll-box">
       <form>
         <div class="form-section">
-          <form-item v-model="form.customOrderNo" label="客户订单号" type="text" />
-          <form-item v-model="form.customWaybillNo" label="客户运单号" type="text" />
-          <form-item v-model="form.reveivelist" label="对接业务员" type="text" />
+          <form-item
+            v-model="form.customOrderNo"
+            label="客户订单号"
+            maxlength="30" />
+          <form-item
+            v-model="form.customWaybillNo"
+            label="客户运单号"
+            maxlength="30" />
+          <form-item
+            v-model="form.reveivelist"
+            label="对接业务员"
+            type="click"
+            :showArrow="false" />
         </div>
         <div class="form-section">
-          <form-item v-model="form.sendTime" label="发货时间" type="click" placeholder="请选择" />
-          <form-item v-model="form.ariveTime" label="到货时间" type="click" placeholder="请选择" />
+          <form-item
+            v-model="form.sendTime"
+            label="发货时间"
+            type="click"
+            placeholder="请选择" />
+          <form-item
+            v-model="form.ariveTime"
+            label="到货时间"
+            type="click"
+            placeholder="请选择" />
         </div>
       </form>
     </cube-scroll>
@@ -19,7 +37,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { FormItem } from '@/components/Form'
 
 export default {
@@ -37,13 +55,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('order', [
       'consumerInfo'
     ])
   },
   methods: {
+    ...mapMutations('order', [ 'SET_CONSUMER_INFO' ]),
+
     ensure () {
-      this.$store.commit('SET_CONSUMER_INFO', Object.assign({}, this.form))
+      this.SET_CONSUMER_INFO(Object.assign({}, this.form))
       this.$router.back()
     }
   },

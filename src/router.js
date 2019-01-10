@@ -4,9 +4,10 @@ import { sync } from 'vuex-router-sync'
 import store from '@/store'
 import { closeWindow } from '@/libs/bridgeUtil'
 import example from '@/views/example/router'
+import consignee from '@/views/consignee/router'
 import delivery from '@/views/delivery/router'
-
 import order from '@/views/order/router'
+import company from '@/views/company/router'
 
 Vue.use(Router)
 
@@ -19,8 +20,9 @@ let router = new Router({
     },
     ...delivery,
     ...example,
-
-    ...order
+    ...order,
+    ...company,
+    ...consignee, // 收货方
   ]
 })
 // 同步store和路由

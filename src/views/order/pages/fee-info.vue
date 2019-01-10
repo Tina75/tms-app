@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import MoneyLabel from '../components/MoneyLabel'
 import { FormItem } from '@/components/Form'
 import NP from 'number-precision'
@@ -42,7 +42,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('order', [
       'feeInfo'
     ]),
     total () {
@@ -50,8 +50,10 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('order', [ 'SET_FEE_INFO' ]),
+
     ensure () {
-      this.$store.commit('SET_FEE_INFO', Object.assign({}, this.form))
+      this.SET_FEE_INFO(Object.assign({}, this.form))
       this.$router.back()
     }
   },

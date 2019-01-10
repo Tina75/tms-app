@@ -48,6 +48,10 @@ export default {
     type: Boolean,
     default: false
   },
+  showRequiredToast: {
+    type: Boolean,
+    default: true
+  },
   showArrow: {
     type: Boolean,
     default: true

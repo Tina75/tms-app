@@ -11,18 +11,20 @@
             required
             label="客户名称"
             autofocus
+            maxlength="11"
             click-icon="icon-ico_custerm"
-            @on-icon-click="chooseUserInfo('send')" />
+            @on-icon-click="selectSender" />
           <form-item
             v-model="orderInfo.consignerName"
             required
+            maxlength="15"
             label="发货人" />
           <form-item
             v-model="orderInfo.consignerPhone"
             required
             label="联系号码"
             type="number"
-            maxlength="11" />
+            maxlength="20" />
           <form-item
             v-model="orderInfo.consignerCity"
             label="发货城市"
@@ -52,6 +54,7 @@
             v-model="orderInfo.consigneeName"
             required
             label="收货人"
+            maxlength="15"
             click-icon="icon-ico_custerm"
             @on-icon-click="chooseUserInfo('accept')" />
           <form-item
@@ -59,7 +62,7 @@
             required
             label="联系号码"
             type="number"
-            maxlength="11" />
+            maxlength="20" />
           <form-item
             v-model="orderInfo.consigneeCity"
             label="收货城市"
@@ -74,6 +77,10 @@
             :show-arrow="false"
             type="click"
             @on-click="editAddress" />
+          <form-item
+            v-model="orderInfo.consigneeCompany"
+            label="收货人单位"
+            maxlength="50" />
         </div>
 
         <div class="form-section">
@@ -142,7 +149,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import CreateFooter from '../components/CreateFooter'
 import { FormItem, FormTitle } from '@/components/Form'
 import { SETTLEMENT_TYPE, PICKUP_TYPE } from '../js/constant'
@@ -165,9 +172,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'orderInfo'
-    ])
+    ...mapGetters('order', [ 'orderInfo' ]),
+    ...mapGetters('consignee', [ 'saveConsigner' ])
   },
   methods: {
     showPicker (type) {
@@ -183,8 +189,21 @@ export default {
       }).show()
     },
 
-    chooseUserInfo (type) {
-      console.log(type)
+    setSender () {
+      if (this.saveConsigner.company) {
+        this.orderInfo.consignerCompany = this.saveConsigner.company
+        this.orderInfo.consignerName = this.saveConsigner.contact
+        this.orderInfo.consignerPhone = this.saveConsigner.phone
+      }
+    },
+
+    chooseUserInfo () {
+    },
+
+    selectSender () {
+      this.$router.push({
+        name: 'SelectSender'
+      })
     },
 
     chooseChargeRule () {
@@ -194,6 +213,11 @@ export default {
     editAddress () {
       this.$router.push({ name: 'order-edit-address' })
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.setSender()
+    })
   }
 
 }

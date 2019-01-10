@@ -26,7 +26,7 @@
           v-if="type === 'click'"
           class="form-item-input form-item-click"
           :class="inputClickClass"
-          :style="inputValue.toString().length ? 'line-height: 1.5; color: #666666' : 'color: #C5C8CE'"
+          :style="(inputValue !== undefined && inputValue !== '') ? 'line-height: 1.5; color: #666666' : 'color: #C5C8CE'"
           @click="inputClickHandler">
           {{ inputValue || inputPlaceHolder }}
         </div>
@@ -47,7 +47,7 @@
           @focus="inputFocusHandler"/>
         <p v-if="this.type === 'textarea' && this.maxlength !== Infinity"
            class="form-item-counter">
-          {{this.inputValue.length}}/{{this.maxlength}}
+          {{this.inputValue ? this.inputValue.length : 0}}/{{this.maxlength}}
         </p>
       </div>
 
@@ -117,7 +117,7 @@ export default {
     },
     inputBlurHandler () {
       if (this.type === 'click') return
-      if (this.required && (this.inputValue === '' || this.inputValue === undefined)) {
+      if (this.showRequiredToast && this.required && (this.inputValue === '' || this.inputValue === undefined)) {
         window.toast(`${('请填写' + this.label) || this.requiredMsg}`)
       }
       this.$emit('on-blur', this.inputValue)

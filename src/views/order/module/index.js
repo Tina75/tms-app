@@ -16,6 +16,7 @@ const state = {
     consigneePhone: '',
     consigneeCity: '',
     consigneeAddress: '',
+    consigneeCompany: '',
 
     cargoInfo: '',
 
@@ -36,10 +37,13 @@ const state = {
   // 费用信息
   feeInfo: {},
   // 其他信息
-  otherInfo: {}
+  otherInfo: {},
+  // 常发货物
+  cargoOften: null
 }
 
 export default {
+  namespaced: true,
   state,
   getters,
   mutations,

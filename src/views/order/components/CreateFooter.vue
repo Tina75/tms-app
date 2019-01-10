@@ -56,7 +56,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('order', [
       'feeInfo',
       'transportFee'
     ]),

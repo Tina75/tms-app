@@ -15,7 +15,9 @@
             v-model="form.cargoName"
             label="货物名称"
             required
-            clickIcon="icon-ico_boxx" />
+            maxlength="20"
+            clickIcon="icon-ico_boxx"
+            @on-icon-click="chooseCargoInfo(index)" />
           <form-item
             v-model="form.weight"
             label="重量(吨)"
@@ -31,26 +33,32 @@
           <form-item
             v-model="form.package"
             label="包装方式"
-            type="click" />
+            type="click"
+            @on-click="showPackageDialog(index)" />
           <form-item
             v-model="form.count"
             label="包装数量" />
           <form-item
             v-model="form.size"
             label="包装尺寸(毫米)"
-            type="number"
-            placeholder="请输入长*宽*高" />
+            type="click"
+            :showArrow="false"
+            placeholder="请输入长*宽*高"
+            @on-click="showSizeDialog(index)" />
           <form-item
             v-model="form.number"
-            label="货物编码" />
+            label="货物编码"
+            maxlength="200" />
           <form-item
             v-model="form.remark1"
             label="备注1"
+            placeholder="请输入(最多输入200字)"
             type="textarea"
             maxlength="200" />
           <form-item
             v-model="form.remark2"
             label="备注2"
+            placeholder="请输入(最多输入200字)"
             type="textarea"
             maxlength="200" />
         </form>
@@ -80,6 +88,7 @@
 
 <script>
 import NP from 'number-precision'
+import { mapGetters, mapMutations } from 'vuex'
 import { FormItem, FormTitle } from '@/components/Form'
 const CARGO_IMAGE = require('../assets/box.png')
 
@@ -89,12 +98,20 @@ export default {
   data () {
     return {
       CARGO_IMAGE,
-      formList: []
+      formList: [],
+      cargoIndex: void 0,
+      dialogIndex: void 0,
+      sizeDialog: null,
+      packageDialog: null,
+      size: { length: '', width: '', height:'' },
+      package: ''
     }
   },
   computed: {
+    ...mapGetters('order', [ 'cargoOften' ]),
+
     total () {
-      return this.formList.reduce((item, last) => {
+      return this.formList.reduce((last, item) => {
         return {
           weight: NP.plus(item.weight || 0, last.weight),
           volumn: NP.plus(item.volumn || 0, last.volumn),
@@ -110,6 +127,8 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('order', [ 'CLEAR_CARGO_OFTEN' ]),
+
     cargoDelete (index) {
       this.formList.splice(index, 1)
     },
@@ -123,15 +142,166 @@ export default {
         package: '',
         count: '',
         size: '',
+        length: '',
+        width: '',
+        height: '',
         number: '',
         remark1: '',
         remark2: ''
+      })
+    },
+
+    chooseCargoInfo (index) {
+      this.cargoIndex = index
+      this.$router.push({ name: 'order-cargo-often' })
+    },
+
+    setChoosedCargo () {
+      if (this.cargoOften) {
+        this.formList.splice(this.cargoIndex, 1, Object.assign({}, this.cargoOften))
+        this.CLEAR_CARGO_OFTEN()
+      }
+      this.cargoIndex = void 0
+    },
+
+    showSizeDialog (index) {
+      this.dialogIndex = index
+      if (!this.sizeDialog) this.initSizeDialog()
+      const temp = this.formList[index]
+      this.size.length = temp.length
+      this.size.height = temp.height
+      this.size.width = temp.width
+      this.sizeDialog.show()
+    },
+
+    initSizeDialog () {
+      this.sizeDialog = this.$createDialog({
+        title: '包装尺寸(毫米)',
+        type: 'confirm',
+        onConfirm: () => {
+          const temp = this.formList[this.dialogIndex]
+          let extra = { volumn: temp.volumn, size: '' }
+          if (!temp.volumn) {
+            extra.volumn = NP.round(
+              NP.divide(
+                NP.times(this.size.length || 0, this.size.width || 0, this.size.height || 0),
+                1000 * 1000 * 1000
+              ),
+              6
+            )
+          }
+          extra.size = [ this.size.length || 0, this.size.width || 0, this.size.height || 0 ].join('*')
+          this.formList.splice(this.dialogIndex, 1, Object.assign(temp, this.size, extra))
+          this.size.length = this.size.width = this.size.height = ''
+        }
+      }, createElement => {
+        return createElement('div', {
+          class: { 'cargo-info-size-dialog': true },
+          slot: 'content'
+        }, [
+          createElement('cube-input', {
+            class: { 'cargo-info-size-dialog-item': true },
+            props: {
+              type: 'number',
+              placeholder: '长',
+              autofocus: true,
+              value: this.size.length
+            },
+            on: {
+              blur: ({ target }) => {
+                this.size.length = target.value
+              }
+            }
+          }),
+          createElement('cube-input', {
+            class: { 'cargo-info-size-dialog-item': true },
+            props: {
+              type: 'number',
+              placeholder: '宽',
+              value: this.size.width
+            },
+            on: {
+              blur: ({ target }) => {
+                this.size.width = target.value
+              }
+            }
+          }),
+          createElement('cube-input', {
+            class: { 'cargo-info-size-dialog-item': true },
+            props: {
+              type: 'number',
+              placeholder: '高',
+              value: this.size.height
+            },
+            on: {
+              blur: ({ target }) => {
+                this.size.height = target.value
+              }
+            }
+          })
+        ])
+      })
+    },
+
+    showPackageDialog (index) {
+      this.dialogIndex = index
+      if (!this.packageDialog) this.initPackageDialog()
+      const temp = this.formList[index]
+      this.package = temp.package
+      this.packageDialog.show()
+    },
+
+    initPackageDialog () {
+      this.packageDialog = this.$createDialog({
+        title: '包装方式',
+        type: 'confirm',
+        onConfirm: () => {
+          const temp = this.formList[this.dialogIndex]
+          if (this.package) {
+            this.formList.splice(this.dialogIndex, 1, Object.assign(temp, { package: this.package }))
+          }
+        }
+      }, createElement => {
+        return createElement('div', {
+          slot: 'content',
+          placeholder: '请输入',
+          style: {
+            margin: '0 10px'
+          }
+        }, [
+          createElement('cube-input', {
+            props: {
+              value: this.package
+            },
+            on: {
+              blur: ({ target }) => {
+                this.package = target.value
+              }
+            }
+          }),
+
+          createElement('cube-button', {
+            props: {
+              light: true,
+              inline: true,
+            },
+            style: {
+              margin: '5px'
+            },
+            on: {
+              click: () => {
+                this.package = '包装'
+              }
+            }
+          }, '包装')
+        ])
       })
     }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.cargoAdd()
+      if (vm.cargoIndex === undefined) vm.cargoAdd()
+      else vm.setChoosedCargo()
     })
   }
 }
@@ -189,5 +359,15 @@ export default {
 <style lang="stylus">
   .cargo-form-box form .form-item-box:last-child .form-item:after
     border-style none
+
+  .cargo-info-size-dialog
+    display flex
+    justify-content space-around
+    padding 10px 5px
+    &-item
+      flex 1
+      margin 0 5px
+      input
+        text-align center
 </style>
 
