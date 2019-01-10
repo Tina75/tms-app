@@ -5,6 +5,7 @@ import store from '@/store'
 import { closeWindow } from '@/libs/bridgeUtil'
 import example from '@/views/example/router'
 import consignee from '@/views/consignee/router'
+import delivery from '@/views/delivery/router'
 import order from '@/views/order/router'
 
 Vue.use(Router)
@@ -16,6 +17,7 @@ let router = new Router({
       name: 'home',
       component: () => import(/* webpackChunkName: "home" */ './views/home.vue')
     },
+    ...delivery,
     ...example,
     ...consignee, // 收货方
     ...order

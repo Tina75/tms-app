@@ -16,3 +16,9 @@ Vue.filter('moneyFormat', (value, accuracy) => {
   if (!value) return 0
   return (parseFloat(value) / 100).toFixed(isNaN(accuracy) ? 2 : accuracy)
 })
+
+Vue.filter('settlementTypeFormat', (value) => {
+  const settlement = ['未知', '现付', '到付', '回付', '月结']
+  if (value > -1 && value < 4) return settlement[value]
+  else return '未知'
+})

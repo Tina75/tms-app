@@ -8,7 +8,7 @@
 
       <div class="form-item-input-box">
         <cube-input
-          v-if="type !== 'switch' && type !== 'textarea'"
+          v-if="type !== 'switch' && type !== 'textarea' && type !== 'click'"
           class="form-item-input"
           :class="inputAlignment"
           :type="inputType"
@@ -17,9 +17,17 @@
           :readonly="inputReadonly"
           :disabled="inputDisabled"
           :clearable="clearable"
-          @click.native="inputClickHandler"
           @blur="inputBlurHandler"
           @focus="inputFocusHandler" />
+
+        <div
+          v-if="type === 'click'"
+          class="form-item-input form-item-click"
+          :class="inputAlignment"
+          :style="inputValue.length ? 'line-height: 1.5' : 'color: #C5C8CE'"
+          @click="inputClickHandler">
+          {{ inputValue || inputPlaceHolder }}
+        </div>
 
         <cube-switch
           v-if="type === 'switch'"
@@ -47,7 +55,7 @@
       </a>
 
       <icon-font
-        v-if="this.type === 'click' && this.showArrow"
+        v-if="this.type === 'click' && this.inputShowArrow"
         class="form-item-arrow"
         name="icon-ico_right" />
     </div>
@@ -75,6 +83,7 @@ export default {
     },
     inputReadonly () { return this.type === 'click' || this.readonly },
     inputDisabled () { return this.disabled },
+    inputShowArrow () { return this.showArrow },
     inputPlaceHolder () {
       let ph
       if (this.placeholder) ph = this.placeholder
@@ -138,15 +147,15 @@ export default {
 
   .form-item
     display flex
-    align-items center
+    // align-items center
     position relative
-    height 50px
+    min-height 50px
     padding-right 16px
     line-height 50px
 
     &-label
       flex none
-      margin-right 10px
+      margin-right 5px
       font-size 15px
 
       &-image
@@ -159,13 +168,13 @@ export default {
 
     &-required:after
       content "*"
-      margin-left 2px
       color red
 
     &-icon
       flex none
       height 25px
       margin-left 10px
+      margin-top 12px
       padding-left 16px
       line-height 25px
 
@@ -176,7 +185,7 @@ export default {
 
     &-input-box
       flex auto
-      height 50px
+      min-height 50px
 
       .form-item-input
         width 100%
@@ -184,9 +193,13 @@ export default {
         margin-top 5px
         font-size 15px
         color #666666
-
         &:after
           border-style none
+
+      .form-item-click
+        margin 14px 0
+        min-height 22px
+        line-height 22px
 
       .form-item-switch
         float right
@@ -220,10 +233,10 @@ export default {
       padding-top 0
       padding-bottom 0
       padding-left 15px
-    &-align-left input
+    &-align-left, &-align-left input
       text-align left
-    &-align-right input
+    &-align-right, &-align-right input
       text-align right
-    &-align-center input
+    &-align-center, &-align-center input
       text-align center
 </style>
