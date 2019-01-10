@@ -41,11 +41,12 @@
 </template>
 
 <script>
+import { FormItem } from '@/components/Form'
+
 export default {
   metaInfo: { title: '详细地址' },
-  data () {
-    test: ''
-  }
+  components: { FormItem },
+  data () {}
 }
 </script>
 
@@ -67,4 +68,3 @@ export default {
     line-height 52px
     color #666666
 </style>
-

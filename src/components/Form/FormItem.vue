@@ -2,16 +2,16 @@
   <div class="form-item-box">
     <div class="form-item border-bottom-1px" :class="{'form-item-textarea': type === 'textarea'}">
       <label v-if="label" class="form-item-label" :class="{ 'form-item-required': required }">
-        <img v-if="labelImage" class="form-item-label-image" :src="labelImage" />
+        <img v-if="labelImage" class="form-item-label-image" :src="labelImage" >
         {{ label }}
       </label>
 
       <div class="form-item-input-box">
         <cube-input
           v-if="type !== 'switch' && type !== 'textarea' && type !== 'click'"
+          v-model="inputValue"
           class="form-item-input"
           :class="inputAlignment"
-          v-model="inputValue"
           :type="inputType"
           :placeholder="inputPlaceHolder"
           :maxlength="Number(maxlength)"
@@ -32,19 +32,20 @@
 
         <cube-switch
           v-if="type === 'switch'"
-          class="form-item-switch"
-          v-model="inputValue" />
+          v-model="inputValue"
+          class="form-item-switch" />
 
         <textarea
           v-if="type === 'textarea'"
-          class="form-item-input"
           v-model="inputValue"
+          class="form-item-input"
+          :rows="rows"
           :placeholder="inputPlaceHolder"
           :maxlength="maxlength"
           @blur="inputBlurHandler"
-          @focus="inputFocusHandler"></textarea>
-        <p class="form-item-counter"
-          v-if="this.type === 'textarea' && this.maxlength !== Infinity">
+          @focus="inputFocusHandler"/>
+        <p v-if="this.type === 'textarea' && this.maxlength !== Infinity"
+           class="form-item-counter">
           {{this.inputValue.length}}/{{this.maxlength}}
         </p>
       </div>
@@ -66,7 +67,6 @@
 
 <script>
 import props from './js/formItemProps'
-import computed from './js/formItemProps'
 
 export default {
   name: 'FormItem',
@@ -194,6 +194,7 @@ export default {
         margin-top 5px
         font-size 15px
         color #666666
+        outline none
         &:after
           border-style none
 
@@ -214,7 +215,6 @@ export default {
         font-size 13px
         color #999999
         text-align right
-
 
   .form-item-textarea
     display block
@@ -242,5 +242,3 @@ export default {
     &-align-center, &-align-center input
       text-align center
 </style>
-
-

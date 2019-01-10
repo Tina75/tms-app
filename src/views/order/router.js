@@ -1,3 +1,6 @@
+import store from '@/store'
+import order from './module'
+
 export default [
   {
     path: '/order/create',
@@ -40,3 +43,5 @@ export default [
     component: () => import(/* webpackChunkName: "order" */ './pages/other-info.vue')
   }
 ]
+
+store.registerModule('order', order)
