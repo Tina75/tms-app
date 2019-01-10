@@ -55,6 +55,7 @@
               maxlength="50" />
           </div>
         </form>
+        <Upload/>
       </div>
       <div v-if="step === 2">
         <form class="form">
@@ -141,13 +142,13 @@
   </div>
 </template>
 <script>
-
+import Upload from '@/components/Updalod'
 export default {
   name: 'company-edit',
   metaInfo: {
     title: '编辑公司'
   },
-  components: { },
+  components: { Upload },
   data () {
     return {
       setpCount: 3,

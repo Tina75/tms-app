@@ -9,6 +9,7 @@ Vue.filter('datetimeFormat', (value, formatting = 'YYYY-MM-DD HH:mm', placeholde
 })
 
 Vue.filter('imgUrlFormat', function (value) {
+  debugger
   return value ? `${URL_HOST}${value}?x-oss-process=image/resize,m_fill,h_220,w_220` : ' '
 })
 
