@@ -6,6 +6,7 @@ import { closeWindow } from '@/libs/bridgeUtil'
 import example from '@/views/example/router'
 
 import order from '@/views/order/router'
+import carrier from '@/views/carrier/router'
 
 Vue.use(Router)
 
@@ -18,7 +19,9 @@ let router = new Router({
     },
     ...example,
 
-    ...order
+    ...order,
+
+    ...carrier
   ]
 })
 // 同步store和路由
