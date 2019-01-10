@@ -17,6 +17,10 @@ let router = new Router({
       path: '/',
       name: 'home',
       component: () => import(/* webpackChunkName: "home" */ './views/home.vue')
+    }, {
+      path: '/preview',
+      name: 'image-preview',
+      component: () => import(/* webpackChunkName: "odd" */'./components/Updalod/ImagePreview.vue')
     },
     ...delivery,
     ...example,

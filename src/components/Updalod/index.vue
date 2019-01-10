@@ -4,7 +4,7 @@
       <li
         v-for="(item, index) in exceptionPhotos"
         :key="item.url"
-        class="cube-mt-10 image-item">
+        class="image-item">
         <img
           src="./images/icon-del-pic.png"
           class="pic-item-delete"
@@ -13,12 +13,13 @@
           :src="item.url"
           alt="图片加载失败"
           class="pic-item"
-          @click="previewPic(exceptionPhotos,index)">
-        <cube-input/>
+          @click="previewPic(exceptionPhotoList,index)">
+        <cube-input
+          v-model="item.title"/>
       </li>
       <li
         v-show="exceptionPhotos && exceptionPhotos.length < 6"
-        class="cube-mt-10 image-item pic-item-add"
+        class="pic-item-add"
         @click="addImg">
         <icon-font
           name="yzg-hebingxingzhuang5"
@@ -43,16 +44,30 @@ export default {
     return {
       exceptionPhotos: [
         {
-          url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg?x-oss-process=image/resize,m_fill,h_100,w_100'
+          url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg?x-oss-process=image/resize,m_fill,h_100,w_100',
+          title: ''
         }, {
-          url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/939238940611.8259.jpg?x-oss-process=image/resize,m_fill,h_100,w_100'
+          url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/939238940611.8259.jpg?x-oss-process=image/resize,m_fill,h_100,w_100',
+          title: ''
         }, {
-          url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png?x-oss-process=image/resize,m_fill,h_100,w_100'
+          url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png?x-oss-process=image/resize,m_fill,h_100,w_100',
+          title: ''
         }
+      ],
+      exceptionPhotoList: [
+        'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg?x-oss-process=image/resize,m_fill,h_100,w_100',
+        'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/939238940611.8259.jpg?x-oss-process=image/resize,m_fill,h_100,w_100',
+        'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png?x-oss-process=image/resize,m_fill,h_100,w_100'
       ]
     }
   },
   watch: {
+    exceptionPhotos (newVal) {
+      this.exceptionPhotoList = []
+      newVal.forEach(element => {
+        this.exceptionPhotoList.push(element.url)
+      })
+    }
   },
   mounted () {
   },
@@ -93,7 +108,7 @@ export default {
 </script>
 <style lang='stylus' scoped>
 .content
-  padding 15px 0 15px 0
+  padding-top 15px
   font-size 16px
   color #555555
   background white
@@ -103,23 +118,24 @@ export default {
     justify-content space-between
     flex-wrap wrap
     li
-      width 110px
-      height 110px
+      width 100px
+      height 100px
       position relative
     .pic-item
-      width 110px
-      height 110px
+      width 100px
+      height 100px
       border-radius 5px
   .pic-item-add
     background #F1F1F1
-    line-height 110px
+    line-height 100px
     text-align center
     border-radius 5px
+    margin-bottom 10px
   .pic-item-delete
     position absolute
     width 24px
     top -12px
     right -10px
 .image-item
-  margin-bottom 60px
+  margin-bottom 50px
 </style>
