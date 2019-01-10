@@ -196,6 +196,7 @@ export default {
       line-height 25px
       margin-bottom 10px
     &__btn
+      color #189CB2
       position absolute
       right 15px
       bottom 15px

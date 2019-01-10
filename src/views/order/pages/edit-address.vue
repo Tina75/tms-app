@@ -67,4 +67,3 @@ export default {
     line-height 52px
     color #666666
 </style>
-
