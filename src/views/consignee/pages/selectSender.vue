@@ -31,15 +31,19 @@
     </div>
     <NoData
       v-else
-      :img="Img"
-      content="发货方"/>
+      :img="config.img"
+      button-text="新增发货方"
+      :message="config.message"/>
   </div>
 </template>
 <script>
 import IconFont from '@/components/Iconfont'
-import NoData from '../components/noData'
+import NoData from '@/components/NoData'
 import { mapGetters } from 'vuex'
-import Img from '../assets/no-sender.png'
+const config = {
+  img: require('../assets/no-sender.png'),
+  message: '老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～'
+}
 export default {
   name: 'SelectSender',
   metaInfo: {
@@ -48,7 +52,7 @@ export default {
   components: { IconFont, NoData },
   data () {
     return {
-      Img
+      config
     }
   },
   computed: {

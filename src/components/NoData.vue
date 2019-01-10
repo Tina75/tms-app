@@ -1,13 +1,43 @@
 <template>
   <div class="main">
-    <div class="img"/>
-    <span>没找到相关数据~</span>
+    <img :src="img" class="img">
+    <div class="message">{{message}}</div>
+    <div v-if="showButton">
+      <cube-button
+        :primary="true"
+        @click="clickHandler">
+        {{buttonText}}
+      </cube-button>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'no-data'
+  name: 'no-data',
+  props: {
+    img: {
+      type: String,
+      default: '' // 图片
+    },
+    message: {
+      type: String,
+      default: '' // 提示信息
+    },
+    showButton: {
+      type: Boolean,
+      default: true // 是否显示按钮
+    },
+    buttonText: {
+      type: String,
+      default: '' // 按钮文字
+    }
+  },
+  methods: {
+    clickHandler () {
+      this.$emit('btn-click') // 点击按钮的方法
+    }
+  }
 }
 
 </script>
@@ -15,8 +45,25 @@ export default {
 .main
   height 100%
   width 100%
+  background-color #ffffff
   text-align center
-  span
-    color #999
+  .img
+    height 182px
+    width 185px
+    margin-top 121px
+  .message
+    margin 0px 89px
+    font-size 14px
+    color #666666
+    line-height 24px
+    position relative
+    top -48px
+  .cube-btn
+    margin 0px 118px
+    width 140px
+    height 40px
+    padding 0
+    line-height 40px
     font-size 17px
+    font-weight 500
 </style>

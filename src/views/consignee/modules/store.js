@@ -6,7 +6,7 @@ import mock from '../pages/mock.json'
 const state = {
   consigneeList: [], // 收货方列表
   consigneeDetail: mock.detail, // 收货方详情
-  consignerList: mock.sender // 发货人列表
+  consignerList: [] // 发货人列表
 }
 const mutations = {
   [types.GET_CONSIGNEE_LIST] (state, payload = []) {

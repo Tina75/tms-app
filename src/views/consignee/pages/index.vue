@@ -42,23 +42,20 @@
     </cube-index-list>
     <NoData
       v-else
-      :content="config.content"
+      :message="config.content"
       :img="config.img"
-      :button-text="config.button.text"
+      button-text="新增收货方"
       @btn-click="btnClick"/>
   </div>
 </template>
 <script>
 import IconFont from '@/components/Iconfont'
 import { mapGetters } from 'vuex'
-import NoData from '../components/noData'
+import NoData from '@/components/NoData'
 
 const config = {
   img: require('../assets/consigness_nodata.png'),
-  content: '老板，您还没有记录收货方信息 赶快新增一个，方便联系哦～',
-  button: {
-    text: '新增收货方'
-  }
+  content: '老板，您还没有记录收货方信息 赶快新增一个，方便联系哦～'
 }
 export default {
   name: 'Consignee',
