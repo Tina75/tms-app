@@ -9,7 +9,10 @@
 export default {
   name: 'FormTitle',
   props: {
-    title: String,
+    title: {
+      type: String,
+      required: true
+    },
     image: String
   }
 }

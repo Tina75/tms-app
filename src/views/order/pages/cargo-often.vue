@@ -46,4 +46,3 @@ export default {
   .item-info-data span
     margin-right 15px
 </style>
-

@@ -3,8 +3,10 @@
 </template>
 
 <script>
+import { FormItem } from '@/components/Form'
+
 export default {
-  metaInfo: { title: '货物信息' }
+  metaInfo: { title: '货物信息' },
+  components: { FormItem }
 }
 </script>
-

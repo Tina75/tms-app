@@ -23,7 +23,7 @@
             type="click" :show-arrow="false" />
           <form-item
             v-model="orderInfo.consignerAddress" required
-            label="详细地址" placeholder="请输入" :showArrow="false"
+            label="详细地址" placeholder="请输入" :show-arrow="false"
             type="click" @on-click="editAddress" />
           <form-item
             v-model="orderInfo.extraData" prop="extraData"
@@ -48,16 +48,16 @@
             type="click" />
           <form-item
             v-model="orderInfo.consigneeAddress" required
-            label="详细地址" placeholder="请输入" :showArrow="false"
+            label="详细地址" placeholder="请输入" :show-arrow="false"
             type="click" @on-click="editAddress" />
         </div>
 
         <div class="form-section">
           <form-item
             v-model="orderInfo.cargoInfo" required
-            label="货物信息" :labelImage="IMAGES.BOX"
-            type="click" @on-click="$router.push({ name: 'order-cargo-info' })"
-            placeholder="请输入" />
+            label="货物信息" :label-image="IMAGES.BOX"
+            type="click" placeholder="请输入"
+            @on-click="$router.push({ name: 'order-cargo-info' })" />
         </div>
 
         <div class="form-section">
@@ -86,14 +86,14 @@
             v-model="orderInfo.transportFee"
             type="number"
             label="运输费用(元)"
-            clickIcon="icon-ico_rule"
+            click-icon="icon-ico_rule"
             @on-icon-click="chooseChargeRule" />
         </div>
 
         <div class="form-section">
           <form-item
             v-model="orderInfo.extraFee"
-            label="其他费用" :labelImage="IMAGES.MONEY"
+            label="其他费用" :label-image="IMAGES.MONEY"
             type="click" @on-click="$router.push({ name: 'order-fee-info' })" />
           <form-item
             v-model="orderInfo.extraInfo"
@@ -110,6 +110,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import CreateFooter from '../components/CreateFooter'
+import { FormItem, FormTitle } from '@/components/Form'
 import { SETTLEMENT_TYPE, PICKUP_TYPE } from '../js/constant'
 
 const IMAGES = {
@@ -122,10 +123,10 @@ const IMAGES = {
 
 export default {
   name: 'order-create',
-  components: { CreateFooter },
+  components: { FormItem, FormTitle, CreateFooter },
   data () {
     return {
-      IMAGES,
+      IMAGES
     }
   },
   computed: {
