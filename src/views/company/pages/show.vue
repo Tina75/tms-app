@@ -43,10 +43,13 @@
             <span class="cardTitle">公司LOGO</span>
             <span class="cardContent">
               <div
-                v-if="!companyInfo.logoUrl"
-                class="avatarDiv"/>
+                v-if="companyInfo.logoUrl"
+                :style="'backgroundImage:url(' + companyInfo.logoUrl + ');background-repeat: no-repeat;background-position-x: center;background-position-y: center;background-size: 100%;'"
+                class="avatarDiv"
+                @click="previewPic(exceptionPhotoList,index)"/>
               <icon-font
                 v-else
+                style="position:relative;top:-3px;"
                 name="icon-morengongsilogo"
                 color="#CECECE"
                 :size="50"/>
@@ -106,7 +109,8 @@
     <div class="foot">
       <cube-button
         class="footer-button"
-        primary>分享</cube-button>
+        primary
+        @click="share">分享</cube-button>
     </div>
   </div>
 </template>
@@ -207,6 +211,12 @@ export default {
         imageListInit.push({ url: imageList, title: '' })
       }
       return imageListInit
+    },
+    share () {
+      this.$router.push({ name: 'company-edit' })
+    },
+    previewPic (imgs, index = 0) {
+      this.$router.push({ name: 'image-preview', params: { imgs: [this.companyInfo.logoUrl], index: 0 } })
     }
   }
 }
