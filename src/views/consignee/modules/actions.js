@@ -67,3 +67,8 @@ export const updateConsignee = ({ commit }, data) => {
 export const saveConsignerInfo = ({ commit }, data) => {
   commit(types.SAVE_CONSIGNER, data)
 }
+
+/** 清空表单数据 */
+export const clearFormList = ({ commit }) => {
+  commit(types.CLEAR_FORMLIST, {})
+}

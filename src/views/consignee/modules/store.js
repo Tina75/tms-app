@@ -38,6 +38,9 @@ const mutations = {
   },
   [types.SAVE_CONSIGNER] (state, payload = {}) {
     state.saveConsigner = payload
+  },
+  [types.CLEAR_FORMLIST] (state, payload = {}) {
+    state.formList = payload
   }
 }
 
