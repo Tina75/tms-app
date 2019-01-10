@@ -1,5 +1,5 @@
 export default {
-  value: [ String, Number ],
+  value: [ String, Number, Boolean ],
   label: String,
   // prop: String,
   required: {
@@ -15,6 +15,10 @@ export default {
   },
   labelImage: String,
   clickIcon: String, // 右侧可点击按钮的图标，没有则不显示
+  autofocus: {
+    type: Boolean,
+    default: false
+  },
   maxlength: {
     type: [ String, Number ],
     default: Infinity
@@ -24,6 +28,10 @@ export default {
     default: 2
   },
   clearable: {
+    type: Boolean,
+    default: false
+  },
+  ellipsis: {
     type: Boolean,
     default: false
   },

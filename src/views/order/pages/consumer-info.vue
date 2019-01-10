@@ -14,11 +14,12 @@
       </form>
     </cube-scroll>
 
-    <cube-button class="footer" primary>确定</cube-button>
+    <cube-button class="footer" primary @click="ensure">确定</cube-button>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { FormItem } from '@/components/Form'
 
 export default {
@@ -34,6 +35,24 @@ export default {
         ariveTime: ''
       }
     }
+  },
+  computed: {
+    ...mapGetters([
+      'consumerInfo'
+    ])
+  },
+  methods: {
+    ensure () {
+      this.$store.commit('SET_CONSUMER_INFO', Object.assign({}, this.form))
+      this.$router.back()
+    }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      for (let key in vm.form) {
+        vm.form[key] = vm.consumerInfo[key] === undefined ? '' : vm.consumerInfo[key]
+      }
+    })
   }
 }
 </script>

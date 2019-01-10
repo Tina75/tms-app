@@ -10,7 +10,7 @@ const state = {
     consignerPhone: '',
     consignerCity: '',
     consignerAddress: '',
-    extraData: '',
+    consumerInfo: '',
 
     consigneeName: '',
     consigneePhone: '',
@@ -26,13 +26,13 @@ const state = {
     distance: '',
     transportFee: '',
 
-    extraFee: '',
-    extraInfo: ''
+    otherFee: '',
+    otherInfo: ''
   },
   // 货物信息
   cargoInfo: {},
   // 客户单号及其他信息
-  customInfo: {},
+  consumerInfo: {},
   // 费用信息
   feeInfo: {},
   // 其他信息

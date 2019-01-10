@@ -15,7 +15,7 @@
     </cube-scroll>
 
     <div class="footer">
-      <div class="footer-total">费用合计：<money-label :money="2500" /></div>
+      <div class="footer-total">费用合计：<money-label :money="total" /></div>
       <cube-button class="footer-button" primary @click="ensure">确定</cube-button>
     </div>
   </div>
@@ -25,24 +25,43 @@
 import { mapGetters } from 'vuex'
 import MoneyLabel from '../components/MoneyLabel'
 import { FormItem } from '@/components/Form'
+import NP from 'number-precision'
 
 export default {
   metaInfo: { title: '费用信息' },
   components: { FormItem, MoneyLabel },
   data () {
-    return { form: {} }
+    return {
+      form: {
+        pickupFee: '',
+        uploadFee: '',
+        unloadFee: '',
+        ensuranceFee: '',
+        otherFee: ''
+      }
+    }
   },
   computed: {
     ...mapGetters([
       'feeInfo'
-    ])
+    ]),
+    total () {
+      return NP.plus(this.form.pickupFee, this.form.uploadFee, this.form.unloadFee, this.form.ensuranceFee, this.form.otherFee)
+    }
   },
   methods: {
     ensure () {
-      this.$store.commit('SET_FEE_INFO', this.form)
+      this.$store.commit('SET_FEE_INFO', Object.assign({}, this.form))
+      this.$router.back()
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      for (let key in vm.form) {
+        vm.form[key] = vm.feeInfo[key] === undefined ? '' : vm.feeInfo[key]
+      }
+    })
   }
-  // beforeRouterEnter
 
 }
 </script>

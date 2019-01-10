@@ -13,6 +13,7 @@
           class="form-item-input"
           :class="inputAlignment"
           :type="inputType"
+          :autofocus="autofocus"
           :placeholder="inputPlaceHolder"
           :maxlength="Number(maxlength)"
           :readonly="inputReadonly"
@@ -24,8 +25,8 @@
         <div
           v-if="type === 'click'"
           class="form-item-input form-item-click"
-          :class="inputAlignment"
-          :style="inputValue.length ? 'line-height: 1.5' : 'color: #C5C8CE'"
+          :class="inputClickClass"
+          :style="inputValue.toString().length ? 'line-height: 1.5; color: #666666' : 'color: #C5C8CE'"
           @click="inputClickHandler">
           {{ inputValue || inputPlaceHolder }}
         </div>
@@ -93,6 +94,11 @@ export default {
     },
     inputAlignment () {
       return 'form-item-input-align-' + this.align
+    },
+    inputClickClass () {
+      let classes = 'form-item-input-align-' + this.align
+      if (this.ellipsis) classes += ' ' + 'form-item-click-ellipsis'
+      return classes
     }
   },
   watch: {
@@ -148,7 +154,7 @@ export default {
 
   .form-item
     display flex
-    // align-items center
+    align-items center
     position relative
     min-height 50px
     padding-right 16px
@@ -156,7 +162,7 @@ export default {
 
     &-label
       flex none
-      margin-right 5px
+      margin-right 40px
       font-size 15px
 
       &-image
@@ -175,7 +181,6 @@ export default {
       flex none
       height 25px
       margin-left 10px
-      margin-top 12px
       padding-left 16px
       line-height 25px
 
@@ -186,6 +191,7 @@ export default {
 
     &-input-box
       flex auto
+      width 0
       min-height 50px
 
       .form-item-input
@@ -202,6 +208,11 @@ export default {
         margin 14px 0
         min-height 22px
         line-height 22px
+        &-ellipsis
+          height 22px
+          white-space nowrap
+          overflow hidden
+          text-overflow ellipsis
 
       .form-item-switch
         float right
@@ -222,6 +233,9 @@ export default {
     padding-top 16px
     padding-bottom 10px
     line-height 1
+
+    .form-item-input-box
+      width 100%
 </style>
 
 <style lang="stylus">
