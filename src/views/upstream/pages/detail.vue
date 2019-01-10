@@ -65,9 +65,9 @@
         <FormItem label="收货地址">
           {{detail.consigneeAddress}}
         </FormItem>
-        <FormItem label="收货人单位">
+        <!-- <FormItem label="收货人单位">
           {{detail.consigneeCompanyName}}
-        </FormItem>
+        </FormItem> -->
       </Panel>
       <Panel title="货物明细">
         <Cargo v-for="(item, index) in detail.cargoInfos" :key="index" :data="item"/>

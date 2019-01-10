@@ -3,9 +3,10 @@
     <div class="header">
       <Title>上游来单</Title>
       <cube-tab-bar
-        v-model="selectedLabelDefault"
+        v-model="selectedLabel"
         :data="tabs"
-        show-slide
+        show-slider
+        class="tab-bar"
         @click="clickHandler"
         @change="changeHandler"/>
     </div>
@@ -34,7 +35,7 @@ export default {
   },
   data () {
     return {
-      selectedLabelDefault: 'Vip',
+      selectedLabel: '全部',
       tabs: [
         {
           label: '全部'
@@ -68,15 +69,12 @@ export default {
         params: this.keywords
       }).then(response => {
         console.log(response)
-        this.cardList = response.data.list
+        this.cardList = response.data.data.list
       })
     },
     clickHandler (label) {
-      // if you clicked home tab, then print 'Home'
-      console.log(label)
     },
     changeHandler (label) {
-      // if you clicked different tab, this methods can be emitted
     },
     toDetail (id) {
       // 路由跳转
@@ -86,6 +84,10 @@ export default {
         },
         name: 'upstream-detail'
       })
+    },
+    changePage (current) {
+      debugger
+      this.selectedLabel = this.tabs[current]
     },
     // 接受
     recept () {},
@@ -99,4 +101,8 @@ export default {
   user-select none
 .header
   background #fff
+.tab-bar
+  background white
+  height 50px
+  font-size 15px
 </style>
