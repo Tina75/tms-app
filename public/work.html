@@ -154,7 +154,7 @@
     var app = new Vue({
       el: '#app',
       data: {
-        permission: ['110000', '100000', '100300' ,'120200', '120100', '120500', '190000', '190300', '190400'],
+        permission: [],
         number: 0
       },
       methods: {
@@ -171,19 +171,11 @@
         }
       }
     })
-    // /** 获取权限数组*/
-    // function getData (a) {
-    //   app.permission = new Array(a)
-    // }
-
-    // /** 获取上游来单数量*/
-    // function getNumber(val) {
-    //   app.number = val
-    // }
 
     /** 获取权限数组*/
     dsBridge.register('getData', function (val) {
       app.permission = val
+      //['110000', '100000', '100300' ,'120200', '120100', '120500', '190000', '190300', '190400']
     })
 
     /** 获取上游来单数量*/
