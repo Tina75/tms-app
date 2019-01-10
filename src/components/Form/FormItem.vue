@@ -1,25 +1,53 @@
 <template>
   <div class="form-item-box">
-    <div class="form-item border-bottom-1px">
-      <label class="form-item-label" :class="{ 'form-item-required': required }">
+    <div class="form-item border-bottom-1px" :class="{'form-item-textarea': type === 'textarea'}">
+      <label v-if="label" class="form-item-label" :class="{ 'form-item-required': required }">
         <img v-if="labelImage" class="form-item-label-image" :src="labelImage" >
         {{ label }}
       </label>
 
       <div class="form-item-input-box">
-        <input
+        <cube-input
+          v-if="type !== 'switch' && type !== 'textarea' && type !== 'click'"
           v-model="inputValue"
           class="form-item-input"
           :class="inputAlignment"
           :type="inputType"
           :placeholder="inputPlaceHolder"
-          :maxlength="maxlength"
+          :maxlength="Number(maxlength)"
           :readonly="inputReadonly"
           :disabled="inputDisabled"
-          @click="inputClickHandler"
-          @input="inputChangeHandler"
+          :clearable="clearable"
           @blur="inputBlurHandler"
-          @focus="inputFocusHandler">
+          @focus="inputFocusHandler" />
+
+        <div
+          v-if="type === 'click'"
+          class="form-item-input form-item-click"
+          :class="inputAlignment"
+          :style="inputValue.length ? 'line-height: 1.5' : 'color: #C5C8CE'"
+          @click="inputClickHandler">
+          {{ inputValue || inputPlaceHolder }}
+        </div>
+
+        <cube-switch
+          v-if="type === 'switch'"
+          v-model="inputValue"
+          class="form-item-switch" />
+
+        <textarea
+          v-if="type === 'textarea'"
+          v-model="inputValue"
+          class="form-item-input"
+          :rows="rows"
+          :placeholder="inputPlaceHolder"
+          :maxlength="maxlength"
+          @blur="inputBlurHandler"
+          @focus="inputFocusHandler"/>
+        <p v-if="this.type === 'textarea' && this.maxlength !== Infinity"
+           class="form-item-counter">
+          {{this.inputValue.length}}/{{this.maxlength}}
+        </p>
       </div>
 
       <a v-if="clickIcon"
@@ -29,7 +57,7 @@
       </a>
 
       <icon-font
-        v-if="this.type === 'click' && this.showArrow"
+        v-if="this.type === 'click' && this.inputShowArrow"
         class="form-item-arrow"
         name="icon-ico_right" />
     </div>
@@ -39,7 +67,6 @@
 
 <script>
 import props from './js/formItemProps'
-import computed from './js/formItemProps'
 
 export default {
   name: 'FormItem',
@@ -55,8 +82,9 @@ export default {
       if (this.type === 'number') return 'number'
       else return 'text'
     },
-    inputReadonly () { return this.type === 'picker' || this.readonly },
+    inputReadonly () { return this.type === 'click' || this.readonly },
     inputDisabled () { return this.disabled },
+    inputShowArrow () { return this.showArrow },
     inputPlaceHolder () {
       let ph
       if (this.placeholder) ph = this.placeholder
@@ -69,7 +97,10 @@ export default {
   },
   watch: {
     value (val) { this.inputValue = val },
-    inputValue (newVal, oldVal) { if (this.type === 'number' && isNaN(Number(newVal))) this.$nextTick(() => { this.inputValue = oldVal }) }
+    inputValue (newVal, oldVal) {
+      if (this.type === 'number' && isNaN(Number(newVal))) this.$nextTick(() => { this.inputValue = oldVal })
+      this.inputEmit()
+    }
   },
   methods: {
     // 点击图标触发事件
@@ -78,21 +109,19 @@ export default {
     inputClickHandler () {
       if (this.type === 'click') this.$emit('on-click')
     },
-    // 输入框事件
-    inputChangeHandler () { this.inputEmit() },
     inputBlurHandler () {
       if (this.type === 'click') return
       if (this.required && (this.inputValue === '' || this.inputValue === undefined)) {
         window.toast(`${('请填写' + this.label) || this.requiredMsg}`)
       }
-      this.inputEmit()
+      this.$emit('on-blur', this.inputValue)
     },
-    inputFocusHandler () { this.inputEmit() },
+    inputFocusHandler () { this.$emit('on-focus', this.inputValue) },
     inputEmit () {
-      let value = this.inputValue
-      if (this.type === 'number' && value !== '') value = Number(value)
-      this.$emit('input', value)
-      return value
+      if (this.type === 'number' && this.inputValue !== '') {
+        this.inputValue = Number(this.inputValue)
+      }
+      this.$emit('input', this.inputValue)
     }
   }
 }
@@ -119,7 +148,7 @@ export default {
 
   .form-item
     display flex
-    align-items center
+    // align-items center
     position relative
     min-height 50px
     padding-right 16px
@@ -127,7 +156,7 @@ export default {
 
     &-label
       flex none
-      margin-right 10px
+      margin-right 5px
       font-size 15px
 
       &-image
@@ -140,13 +169,13 @@ export default {
 
     &-required:after
       content "*"
-      margin-left 2px
       color red
 
     &-icon
       flex none
       height 25px
       margin-left 10px
+      margin-top 12px
       padding-left 16px
       line-height 25px
 
@@ -157,19 +186,59 @@ export default {
 
     &-input-box
       flex auto
-      height 50px
+      min-height 50px
 
       .form-item-input
-        display block
         width 100%
-        height 30px
-        margin-top 10px
+        min-height 40px
+        margin-top 5px
+        font-size 15px
         color #666666
+        outline none
+        &:after
+          border-style none
 
-        &-align-left
-          text-align left
-        &-align-right
-          text-align right
-        &-align-center
-          text-align center
+      .form-item-click
+        margin 14px 0
+        min-height 22px
+        line-height 22px
+
+      .form-item-switch
+        float right
+        margin-top 11px
+
+      textarea
+        border-style none
+        font-size 15px
+      .form-item-counter
+        margin-top 5px
+        font-size 13px
+        color #999999
+        text-align right
+
+  .form-item-textarea
+    display block
+    height auto
+    padding-top 16px
+    padding-bottom 10px
+    line-height 1
+</style>
+
+<style lang="stylus">
+  .form-item-input
+    input
+      padding-left 0
+      padding-right 0
+
+    .cube-input-clear
+      line-height 1.2
+      padding-top 0
+      padding-bottom 0
+      padding-left 15px
+    &-align-left, &-align-left input
+      text-align left
+    &-align-right, &-align-right input
+      text-align right
+    &-align-center, &-align-center input
+      text-align center
 </style>

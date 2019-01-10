@@ -1,16 +1,19 @@
 
 <!DOCTYPE html>
-<html lang='zh-cmn-Hans'>
+<html lang="zh-cmn-Hans">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=1">
     <meta content="telephone=no,email=no" name=format-detection />
+    <link href="./cube/css/chunk-vendors.css" rel=stylesheet>
     <!--<link rel="stylesheet" href="//at.alicdn.com/t/font_977582_7gsijsuybfi.css">-->
     <title></title>
   </head>
   <body>
     <div id="app"></div>
     <script src="./dll/common.dll.js"></script>
+    <script src="./cube/cube-chunk.js"></script>
+    <script src="./cube/cube-index.js"></script>
     <%= process.env.VUE_APP_STATUS !== 'production' ?
       '<script src="//web.yundada56.com/common-lib/vconsole/3.2.0/vconsole.min.js"></script><script>new VConsole()</script>' : ''
     %>

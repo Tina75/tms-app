@@ -2,7 +2,7 @@
   <i
     class="icon iconfont"
     :class="fontClass"
-    :style="styles"/>
+    :style="styles" />
 </template>
 
 <script>

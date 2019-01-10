@@ -1,5 +1,5 @@
 const webpack = require('webpack')
-const useBundleAnalyzer = true
+const useBundleAnalyzer = false // 是否开启打包分析
 const proxyUrl = 'https://dev.tms5566.com/dolphin-app'
 const config = {
   baseUrl: './',
@@ -7,7 +7,7 @@ const config = {
   productionSourceMap: false,
   parallel: true,
   lintOnSave: undefined,
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     config.plugins.delete('prefetch')
     config.plugins.delete('preload')
   },

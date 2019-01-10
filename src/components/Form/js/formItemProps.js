@@ -11,7 +11,7 @@ export default {
   type: {
     type: String,
     default: 'text',
-    validator: value => itemInArray(value, [ 'text', 'textarea', 'number', 'click' ])
+    validator: value => itemInArray(value, [ 'text', 'textarea', 'number', 'switch', 'click' ])
   },
   labelImage: String,
   clickIcon: String, // 右侧可点击按钮的图标，没有则不显示
@@ -19,6 +19,14 @@ export default {
     type: [ String, Number ],
     default: Infinity
   }, // type = textarea 且值不为 Infinity 时会在输入框下发显示计数器
+  rows: {
+    type: [ String, Number ],
+    default: 2
+  },
+  clearable: {
+    type: Boolean,
+    default: false
+  },
   align: {
     type: String,
     default: 'right',
