@@ -187,7 +187,6 @@ export default {
         consignerCompany: {
           required: true,
           type: 'email',
-          trigger: 'blur',
           pattern: /didi.com$/,
           custom: (val) => {
             return val.length >= 12
