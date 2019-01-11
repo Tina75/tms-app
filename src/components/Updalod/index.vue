@@ -117,7 +117,7 @@ export default {
   &-pic-box
     display flex
     display -webkit-flex
-    justify-content space-between
+    justify-content flex-start
     flex-wrap wrap
     li
       width 100px
@@ -144,4 +144,5 @@ export default {
     right -13px
 .image-item
   margin-bottom 50px
+  margin-right 15px
 </style>

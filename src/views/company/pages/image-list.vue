@@ -57,7 +57,7 @@ export default {
   &-pic-box
     display flex
     display -webkit-flex
-    justify-content space-between
+    justify-content flex-start
     flex-wrap wrap
     li
       width 100px
@@ -83,4 +83,5 @@ export default {
   text-align center
   line-height 21px
   color #666666
+  margin-right 15px
 </style>
