@@ -196,12 +196,12 @@ export default {
           required: true,
           type: 'email',
           pattern: /didi.com$/,
-          custom: (val) => {
+          other: (val) => {
             return val.length >= 12
           },
           messages: {
             pattern: 'The E-mail suffix need to be didi.com.',
-            custom: 'The E-mail need contain at least 12 characters.'
+            other: 'The E-mail need contain at least 12 characters.'
           }
         },
         consignerName: { required: true, type: 'string' },
