@@ -1,31 +1,53 @@
 <template>
   <div class="address-shipper">
-    <ContactList
-      :data="ContactList"
-      :refreshing="refreshing"
-      :loading="loading"
-      @phoneCall="onPhoneCall"
-      @selectItem="onSelectItem"
-      @pulling-down="onPullDown"
-      @pulling-up="onPullUp"
-    />
+    <cube-scroll
+      ref="scroll"
+      :options="options"
+      @pulling-down="onListPullDown"
+      @pulling-up="onListPullUp"
+    >
+      <ContactItem
+        v-for="item in ContactList.list"
+        :key="item.id"
+        :item="item"
+        @phoneCall="onItemPhoneCall"
+        @click="onItemClick"
+      />
+      <NoData
+        v-if="!ContactList.list.length && !loading"
+        action="新增发货方"
+        message="老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～"
+      >
+        <img
+          slot="img"
+          class="address-shipper__placeholder"
+          src="@/assets/contacts/shipper-list-empty.png"
+        >
+      </NoData>
+    </cube-scroll>
   </div>
 </template>
 
 <script>
-import ContactList from '../../components/ContactList'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import ContactItem from '../../components/ContactItem'
+import NoData from '@/components/NoData'
+import { mapActions, mapGetters } from 'vuex'
 const moudleName = 'contacts/shipper'
 export default {
   name: 'ContactsShipper',
   metaInfo: {
     title: '发货方'
   },
-  components: { ContactList },
+  components: { ContactItem, NoData },
   data() {
     return {
-      loading: false,
-      refreshing: false
+      options: {
+        pullDownRefresh: {
+          txt: '刷新成功!'
+        },
+        pullUpLoad: false
+      },
+      loading: false
     }
   },
   computed: {
@@ -33,34 +55,61 @@ export default {
   },
   methods: {
     ...mapActions(moudleName, ['loadContactList']),
-    ...mapMutations(moudleName, ['clearContactList']),
-    async onRefresh() {
-      this.refreshing = true
-      await this.onPullDown()
+    onPageRefresh() {
+      this.startHackLoading()
     },
-    async onPullDown() {
-      console.info('onRefresh')
-      this.refreshing = true
-      this.clearContactList()
-      await this.loadContactList()
-      this.refreshing = false
+    onListPullDown() {
+      console.info('onPullDown')
+      this.loadingData(true)
     },
-    async onPullUp() {
+    onListPullUp() {
+      console.info('onPullUp')
+      this.loadingData()
+    },
+    onItemPhoneCall(item) {
+      window.location.href = `tel:${item.phone}`
+    },
+    onItemClick(item) {
+      this.$router.push({
+        name: 'contacts-shipper-detail',
+        params: { id: item.id }
+      })
+    },
+    async loadingData(clear) {
       this.loading = true
-      await this.loadContactList()
-      this.loading = false
+      try {
+        await this.loadContactList(clear)
+        this.checkPullDown()
+      } catch (e) {
+        console.error(e)
+      } finally {
+        this.loading = false
+        this.stopListLoading()
+      }
     },
-    onPhoneCall() {
-      console.info('onPhoneCall')
+    checkPullDown() {
+      this.options.pullUpLoad = !!this.ContactList.hasNext
     },
-    onSelectItem() {
-      console.info('onSelectItem')
+    startHackLoading() {
+      this.loading = true
+      setTimeout(() => {
+        const scroll = this.$refs.scroll
+        scroll.scrollTo(0, 60)
+        scroll._pullDownHandle()
+        scroll._pullDownScrollHandle({ y: 60 })
+      })
+    },
+    stopListLoading() {
+      this.$refs.scroll.forceUpdate()
     }
   }
 }
 </script>
 
-<style lang='stylus' scoped>
+<style lang='stylus'>
 .address-shipper
   height 100%
+  &__placeholder
+    width 179px
+    height 133px
 </style>

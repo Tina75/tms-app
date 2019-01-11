@@ -1,14 +1,18 @@
 {
     "detail": {
-        "name": "张三胖子",
+        "contact": "张三胖子",
         "phone": "18351825731",
-        "address": "江苏省南京市秦淮区长乐路通福大路通福大"
+        "address": "江苏省南京市秦淮区",
+        "detailAddress":"长乐路通福大路通福大",
+        "consigneeCompanyName": "哈哈哈",
+        "consigner": "哈哈哈",
+        "id":"1"
     },
     "sender": [
         {
             "contact": "张三",
             "phone": "18351825731",
-            "company": "南京海底捞",
+            "name": "南京海底捞",
             "id": "1",
             "payType": "假的假的",
             "createTime":"20190110",
@@ -17,7 +21,7 @@
         {
             "contact": "刘备",
             "phone": "18351825731",
-            "company": "南京串串香",
+            "name": "南京串串香",
             "id": "2",
             "payType": "假的假的",
             "createTime":"20190110",
@@ -26,7 +30,7 @@
         {
             "contact": "李四",
             "phone": "18351825731",
-            "company": "南京烧烤",
+            "name": "南京烧烤",
             "id": "3",
             "payType": "假的假的",
             "createTime":"20190110",

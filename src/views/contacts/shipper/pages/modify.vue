@@ -1,8 +1,8 @@
 <template>
   <div class="modify-shipper">
-    <FormItem v-model="contactModify.name" label="发货人名称" required/>
-    <FormItem v-model="contactModify.contact" label="联系人" required/>
-    <FormItem v-model="contactModify.phone" label="联系人电话" :bottom-line="false" required/>
+    <FormItem v-model="model.name" label="发货人名称" required/>
+    <FormItem v-model="model.contact" label="联系人" required/>
+    <FormItem v-model="model.phone" label="联系人电话" :bottom-line="false" required/>
     <FormItem label="提货方式" :value="test" placeholder="请选择" type="click" class="cube-mt-15"/>
     <FormItem label="支付方式" :value="test" placeholder="请选择" type="click"/>
     <FormItem label="是否开票" :value="test" type="switch"/>
@@ -14,6 +14,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import FormItem from '@/components/Form/FormItem'
+import { ContactModify } from '../modules/model'
 const moudleName = 'contacts/shipper'
 export default {
   name: 'ModifyShipper',
@@ -25,7 +26,7 @@ export default {
   components: { FormItem },
   data() {
     return {
-      test: ''
+      model: new ContactModify()
     }
   },
   computed: {

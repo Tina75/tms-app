@@ -6,13 +6,13 @@ router.afterEach((to, from) => {
   clearAppTitleBtn()
 })
 Vue.mixin({
-  // 路由跳转时根据meta里的noNeedRefresh数组决定是否调用页面实例的onRefresh函数
+  // 路由跳转时根据meta里的noNeedRefresh数组决定是否调用页面实例的onPageRefresh函数
   beforeRouteEnter(to, from, next) {
     const meta = to.meta
     if (meta.noNeedRefresh) {
       next((vm) => {
-        if (vm.onRefresh && !meta.noNeedRefresh.includes(from.name)) {
-          vm.onRefresh()
+        if (vm.onPageRefresh && !meta.noNeedRefresh.includes(from.name)) {
+          vm.onPageRefresh()
         }
       })
     } else {

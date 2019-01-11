@@ -17,7 +17,7 @@ export const getConsignerList = ({ commit }) => {
     url: 'consigner/list',
     method: 'get'
   }).then((res) => {
-    commit(types.GET_CONSIGNER_LIST, res.data.data)
+    commit(types.GET_CONSIGNER_LIST, res.data.data.list)
   })
 }
 /** 获取收货人详情 */
@@ -66,4 +66,9 @@ export const updateConsignee = ({ commit }, data) => {
 /** 存储选择的发货方 */
 export const saveConsignerInfo = ({ commit }, data) => {
   commit(types.SAVE_CONSIGNER, data)
+}
+
+/** 清空表单数据 */
+export const clearFormList = ({ commit }) => {
+  commit(types.CLEAR_FORMLIST, {})
 }

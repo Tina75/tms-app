@@ -1,9 +1,11 @@
 <template>
   <div class="consignee">
     <cube-index-list
-      v-if="consigneeList && consigneeList.length > 0"
+      ref="indexList"
       :data="consigneeList"
-      class="consignee_list">
+      :options="options"
+      class="consignee_list"
+      @pulling-down="onPullingDown">
       <cube-index-list-group
         v-for="(group, index) in consigneeList"
         :key="index"
@@ -39,13 +41,13 @@
           </div>
         </cube-index-list-item>
       </cube-index-list-group>
+      <NoData
+        v-if="consigneeList.length <= 0"
+        :message="config.content"
+        :img="config.img"
+        button-text="新增收货方"
+        @btn-click="btnClick"/>
     </cube-index-list>
-    <NoData
-      v-else
-      :message="config.content"
-      :img="config.img"
-      button-text="新增收货方"
-      @btn-click="btnClick"/>
   </div>
 </template>
 <script>
@@ -65,7 +67,14 @@ export default {
   components: { IconFont, NoData },
   data () {
     return {
-      config
+      config,
+      options: {
+        pullDownRefresh: {
+          threshold: 60,
+          stop: 40,
+          txt: '更新成功'
+        }
+      }
     }
   },
   computed: {
@@ -75,7 +84,7 @@ export default {
     selectItem (idx) {
       console.log(idx)
       this.$router.push({
-        name: 'ConsigneeDetail'
+        name: 'contacts-consignee-detail'
       })
     },
     callPhone (phone) {
@@ -83,8 +92,17 @@ export default {
     },
     btnClick () {
       this.$router.push({
-        name: 'ConsigneeAdd'
+        name: 'contacts-consignee-form',
+        params: {
+          type: 'add'
+        }
       })
+    },
+    onPullingDown () {
+      setTimeout(() => {
+        console.log(1)
+        this.$refs.indexList.forceUpdate()
+      }, 1000)
     }
   }
 }
@@ -95,10 +113,6 @@ export default {
   background-color #EFEFEF
   &_list
     height 100%
-    >>>.cube-index-list-anchor
-      // display none
-    >>>.cube-index-list-fixed
-      // position relative
   .border-bottom-1px:after
     left 70px
   &_item

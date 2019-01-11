@@ -3,31 +3,27 @@ import Router from 'vue-router'
 import { sync } from 'vuex-router-sync'
 import store from '@/store'
 import { closeWindow } from '@/libs/bridgeUtil'
-import example from '@/views/example/router'
-import delivery from '@/views/delivery/router'
-import order from '@/views/order/router'
-import company from '@/views/company/router'
-import contacts from '@/views/contacts/router'
 Vue.use(Router)
+let routes = [{
+  path: '/',
+  name: 'home',
+  component: () => import(/* webpackChunkName: "home" */ './views/home.vue')
+}, {
+  path: '/preview',
+  name: 'image-preview',
+  component: () => import(/* webpackChunkName: "odd" */'./components/Updalod/ImagePreview.vue')
+}]
 
-let router = new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: () => import(/* webpackChunkName: "home" */ './views/home.vue')
-    }, {
-      path: '/preview',
-      name: 'image-preview',
-      component: () => import(/* webpackChunkName: "odd" */'./components/Updalod/ImagePreview.vue')
-    },
-    ...delivery,
-    ...example,
-    ...order,
-    ...company,
-    ...contacts // 通信录
-  ]
+// 自动注册views下所有路由
+const requireContext = require.context('./views', true, /router\.js/)
+requireContext.keys().forEach((filePath) => {
+  const routerConfig = requireContext(filePath)
+  routes = routes.concat(routerConfig.default)
 })
+let router = new Router({
+  routes
+})
+
 // 同步store和路由
 sync(store, router)
 

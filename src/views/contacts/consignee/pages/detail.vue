@@ -36,6 +36,11 @@
       @click="goAdd">
       新增
     </cube-button>
+    <cube-button
+      :primary="true"
+      @click="goEdit">
+      修改
+    </cube-button>
     <div class="detail_call">
       <cube-button
         :primary="true"
@@ -55,7 +60,7 @@
 import IconFont from '@/components/Iconfont'
 import { mapGetters } from 'vuex'
 // import { setAppTitleBtn } from '@/libs/bridgeUtil'
-// const moudleName = 'contacts/consignee'
+const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeDetail',
   metaInfo: {
@@ -63,7 +68,7 @@ export default {
   },
   components: { IconFont },
   computed: {
-    ...mapGetters('consignee', ['consigneeDetail'])
+    ...mapGetters(moudleName, ['consigneeDetail'])
   },
   methods: {
     callPhone () {
@@ -71,7 +76,21 @@ export default {
     },
     goAdd () {
       this.$router.push({
-        name: 'ConsigneeAdd'
+        name: 'contacts-consignee-form',
+        params: {
+          type: 'add'
+        }
+      })
+    },
+    goEdit () {
+      this.$router.push({
+        name: 'contacts-consignee-form',
+        params: {
+          type: 'edit'
+        },
+        query: {
+          id: 1
+        }
       })
     }
   },
