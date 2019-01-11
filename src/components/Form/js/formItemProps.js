@@ -15,7 +15,11 @@ export default {
   type: {
     type: String,
     default: 'text',
-    validator: value => itemInArray(value, [ 'text', 'textarea', 'number', 'switch', 'click' ])
+    validator: value => itemInArray(value, [ 'text', 'textarea', 'number', 'switch', 'select', 'click' ])
+  },
+  options: {
+    type: Array,
+    default: () => [] // { text, value }
   },
   labelImage: String,
   clickIcon: String, // 右侧可点击按钮的图标，没有则不显示
