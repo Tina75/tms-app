@@ -1,11 +1,11 @@
 <template>
   <div class="add">
-    <form class="form">
+    <form-group ref="$form" class="form" :rules="rules">
       <div class="form_card">
         <form-item
           v-model="formList.consigner"
           :show-required-toast="false"
-          required
+          prop="consigner"
           label="所属发货方"
           click-icon="icon-ico_sender"
           @on-icon-click="selectSender"
@@ -13,14 +13,14 @@
         <form-item
           v-model="formList.contact"
           :show-required-toast="false"
-          required
+          prop="contact"
           label="收货人"
           :maxlength="15"
         />
         <form-item
           :value="viewPhone"
           :show-required-toast="false"
-          required
+          prop="viewPhone"
           label="联系电话"
           :maxlength="20"
           @on-blur="validatePhone"
@@ -38,7 +38,7 @@
         />
         <form-item
           v-model="formList.detailAddress"
-          required
+          prop="detailAddress"
           label="详细地址"
           :show-required-toast="false"
         />
@@ -57,7 +57,7 @@
           :maxlength="200"
         />
       </div>
-    </form>
+    </form-group>
     <div class="add_submit">
       <cube-button
         :primary="true"
@@ -71,7 +71,7 @@
   </div>
 </template>
 <script>
-import { FormItem } from '@/components/Form'
+import { FormGroup, FormItem } from '@/components/Form'
 import CityPicker from '@/components/CityPicker'
 import { mapGetters, mapActions } from 'vuex'
 import validator from '@/libs/validate'
@@ -83,12 +83,37 @@ export default {
       title: this.$route.params.type === 'add' ? '新增收货方' : '编辑收货方'
     }
   },
-  components: { CityPicker, FormItem },
+  components: { CityPicker, FormItem, FormGroup },
   data() {
     return {
       form: {},
       showPickCity: false,
-      viewPhone: ''
+      viewPhone: '',
+      rules: {
+        consigner: {
+          required: true
+        },
+        contact: {
+          required: true
+        },
+        viewPhone: {
+          required: true,
+          type: 'tel',
+          validatePhone: (val) => {
+            return (resolve) => {
+              setTimeout(() => {
+                resolve(validator.phone(val) || validator.telphone(val))
+              }, 1000)
+            }
+          },
+          messages: {
+            validatePhone: '请输入正确的手机号或座机号'
+          }
+        },
+        detailAddress: {
+          required: true
+        }
+      }
     }
   },
   computed: {
