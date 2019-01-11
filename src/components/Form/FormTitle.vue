@@ -2,6 +2,10 @@
   <div class="form-title border-bottom-1px">
     <img v-if="image" class="form-title-image" :src="image">
     {{ title }}
+
+    <p class="form-title-extra">
+      <slot name="extra" />
+    </p>
   </div>
 </template>
 
@@ -13,7 +17,10 @@ export default {
       type: String,
       required: true
     },
-    image: String
+    image: {
+      type: String,
+      default: ''
+    }
   }
 }
 </script>
@@ -35,4 +42,9 @@ export default {
       margin-right 10px
       border-radius 2px
       vertical-align text-top
+
+    &-extra
+      float right
+      font-size 15px
+      color #189cb2
 </style>

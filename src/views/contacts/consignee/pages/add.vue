@@ -3,27 +3,27 @@
     <form class="form">
       <div class="form_card">
         <form-item
-          v-model="form.consigner"
+          v-model="formList.consigner"
           required
           label="所属发货方"
           click-icon="icon-ico_sender"
           @on-icon-click="selectSender"
         />
         <form-item
-          v-model="form.contact"
+          v-model="formList.contact"
           required
           label="收货人"
           :maxlength="15"
         />
         <form-item
-          v-model="form.phone"
+          v-model="formList.phone"
           required
           label="联系电话"
         />
       </div>
       <div class="form_card">
         <form-item
-          v-model="form.address"
+          v-model="formList.address"
           type="click"
           label="收货地址"
           :show-arrow="false"
@@ -31,18 +31,18 @@
           @on-click="showPickCity = true"
         />
         <form-item
-          v-model="form.detailAddress"
+          v-model="formList.detailAddress"
           required
           label="详细地址"
         />
         <form-item
-          v-model="form.consigneeCompanyName"
+          v-model="formList.consigneeCompanyName"
           label="收货人单位"
         />
       </div>
       <div class="form_card">
         <form-item
-          v-model="form.remark"
+          v-model="formList.remark"
           type="textarea"
           label="备注"
           placeholder="请输入(最多输入200字)"
@@ -64,6 +64,8 @@
 <script>
 import { FormItem } from '@/components/Form'
 import CityPicker from '@/components/CityPicker'
+import { mapGetters, mapActions } from 'vuex'
+const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeAdd',
   metaInfo () {
@@ -74,19 +76,15 @@ export default {
   components: { CityPicker, FormItem },
   data() {
     return {
-      form: {
-        consigner: '',
-        contact: '',
-        phone: '',
-        address: '',
-        detailAddress: '',
-        consigneeCompanyName: '',
-        remark: ''
-      },
+      form: {},
       showPickCity: false
     }
   },
+  computed: {
+    ...mapGetters(moudleName, ['saveConsigner', 'formList'])
+  },
   methods: {
+    ...mapActions(moudleName, ['saveConsignerInfo']),
     selectSender () {
       this.$router.push({
         name: 'SelectSender'
@@ -100,6 +98,15 @@ export default {
         this.form.address = picker[0].name + picker[1].name + picker[2].name
       }
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.formList.consigner = vm.saveConsigner.company
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    this.saveConsignerInfo()
+    next()
   }
 }
 </script>

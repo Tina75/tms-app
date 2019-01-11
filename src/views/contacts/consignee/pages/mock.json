@@ -6,19 +6,31 @@
     },
     "sender": [
         {
-            "name": "刘备",
+            "contact": "张三",
             "phone": "18351825731",
-            "company": "南京海底捞"
+            "company": "南京海底捞",
+            "id": "1",
+            "payType": "假的假的",
+            "createTime":"20190110",
+            "remark": "备注备注"
         },
         {
-            "name": "刘备",
+            "contact": "刘备",
             "phone": "18351825731",
-            "company": "南京海底捞"
+            "company": "南京串串香",
+            "id": "2",
+            "payType": "假的假的",
+            "createTime":"20190110",
+            "remark": "备注备注"
         },
         {
-            "name": "刘备",
+            "contact": "李四",
             "phone": "18351825731",
-            "company": "南京海底捞"
+            "company": "南京烧烤",
+            "id": "3",
+            "payType": "假的假的",
+            "createTime":"20190110",
+            "remark": "备注备注"
         }
     ],
     "list":[

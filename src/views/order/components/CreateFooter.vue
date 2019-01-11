@@ -7,7 +7,7 @@
       <a class="footer-item-total"
          @click.prevent="showDetail = true">
         <span class="total-tip">费用合计：</span>
-        <money-label money="9999" />
+        <money-label :money="total" />
         <icon-font class="total-detail" name="icon-ico_up" />
       </a>
     </div>
@@ -24,11 +24,12 @@
         <div class="detail-data">
           <p>费用合计明细</p>
           <ul>
-            <li><span>装货费：</span>750元</li>
-            <li><span>装货费：</span>750元</li>
-            <li><span>装货费：</span>750元</li>
-            <li><span>装货费：</span>750元</li>
-            <li><span>装货费：</span>750元</li>
+            <li><span>运输费：</span>{{ transportFee || 0 }}元</li>
+            <li><span>装货费：</span>{{ feeInfo.uploadFee || 0 }}元</li>
+            <li><span>卸货费：</span>{{ feeInfo.unloadFee || 0 }}元</li>
+            <li><span>提货费：</span>{{ feeInfo.pickupFee || 0 }}元</li>
+            <li><span>保险费：</span>{{ feeInfo.ensuranceFee || 0 }}元</li>
+            <li><span>其他费：</span>{{ feeInfo.otherFee || 0 }}元</li>
           </ul>
         </div>
         <cube-button
@@ -42,6 +43,8 @@
 
 <script>
 import MoneyLabel from './MoneyLabel'
+import { mapGetters } from 'vuex'
+import NP from 'number-precision'
 
 export default {
   name: 'CreateFooter',
@@ -50,6 +53,22 @@ export default {
     return {
       saveUsually: false,
       showDetail: false
+    }
+  },
+  computed: {
+    ...mapGetters('order', [
+      'feeInfo',
+      'transportFee'
+    ]),
+    total () {
+      return NP.plus(
+        this.feeInfo.pickupFee || 0,
+        this.feeInfo.uploadFee || 0,
+        this.feeInfo.unloadFee || 0,
+        this.feeInfo.ensuranceFee || 0,
+        this.feeInfo.otherFee || 0,
+        this.transportFee || 0
+      )
     }
   }
 }

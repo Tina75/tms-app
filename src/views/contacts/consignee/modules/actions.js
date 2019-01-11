@@ -62,3 +62,8 @@ export const updateConsignee = ({ commit }, data) => {
     data: data
   })
 }
+
+/** 存储选择的发货方 */
+export const saveConsignerInfo = ({ commit }, data) => {
+  commit(types.SAVE_CONSIGNER, data)
+}

@@ -1,5 +1,5 @@
-import Server from '@/libs/Server'
-export default{
+import Server from '@/libs/server'
+export default {
   state: {
     companyInfo: {}
   },

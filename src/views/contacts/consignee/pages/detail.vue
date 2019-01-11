@@ -31,6 +31,11 @@
         <div class="address">{{consigneeDetail.address}}</div>
       </div>
     </div>
+    <cube-button
+      :primary="true"
+      @click="goAdd">
+      新增
+    </cube-button>
     <div class="detail_call">
       <cube-button
         :primary="true"
@@ -50,6 +55,7 @@
 import IconFont from '@/components/Iconfont'
 import { mapGetters } from 'vuex'
 // import { setAppTitleBtn } from '@/libs/bridgeUtil'
+// const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeDetail',
   metaInfo: {
@@ -57,11 +63,16 @@ export default {
   },
   components: { IconFont },
   computed: {
-    ...mapGetters(['consigneeDetail'])
+    ...mapGetters('consignee', ['consigneeDetail'])
   },
   methods: {
     callPhone () {
       window.location.href = `tel:${this.consigneeDetail.phone}`
+    },
+    goAdd () {
+      this.$router.push({
+        name: 'ConsigneeAdd'
+      })
     }
   },
   beforeRouteEnter (to, from, next) {
