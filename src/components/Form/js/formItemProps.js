@@ -30,12 +30,7 @@ export default {
   // 开启校验时，对应的 model 字段名
   prop: {
     type: String,
-    default: false
-  },
-  // 输入框是否必填
-  required: {
-    type: Boolean,
-    default: false
+    default: ''
   },
   placeholder: {
     type: String,
