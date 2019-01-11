@@ -10,9 +10,18 @@ export default [
     component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/index.vue')
   },
   {
+    // 发货方详情
+    path: '/contacts/shipper/detail/:id',
+    name: 'contacts-shipper-detail',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/detail.vue')
+  },
+  {
     // 编辑发货方
-    path: '/contacts/shipper/modify/:type',
-    name: 'contacts-modify',
+    path: '/contacts/shipper/modify',
+    name: 'contacts-shipper-modify',
     meta: {
       noNeedRefresh: []
     },
@@ -52,25 +61,25 @@ export default [
   {
     path: '/contacts/carrier',
     name: 'Carrier',
-    component: () => import(/* webpackChunkName: "carrier" */'./carrier/pages/index.vue')
+    component: () => import(/* webpackChunkName: "carrier" */ './carrier/pages/index.vue')
   },
   /* 新增承运商 */
   {
     path: '/contacts/carrier/create',
     name: 'CarrierCreate',
-    component: () => import(/* webpackChunkName: "carrier" */'./carrier/pages/create.vue')
+    component: () => import(/* webpackChunkName: "carrier" */ './carrier/pages/create.vue')
   },
   /* 修改承运商 */
   {
     path: '/contacts/carrier/modify',
     name: 'CarrierModify',
-    component: () => import(/* webpackChunkName: "carrier" */'./carrier/pages/modify.vue')
+    component: () => import(/* webpackChunkName: "carrier" */ './carrier/pages/modify.vue')
   },
   /* 承运商详情 */
   {
     path: '/contacts/carrier/detail/:id',
     name: 'CarrierDetail',
-    component: () => import(/* webpackChunkName: "carrier" */'./carrier/pages/detail.vue')
+    component: () => import(/* webpackChunkName: "carrier" */ './carrier/pages/detail.vue')
   }
 ]
 
