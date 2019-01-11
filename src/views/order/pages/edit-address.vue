@@ -3,11 +3,13 @@
     <div class="edit-address-box">
       <form class="border-bottom-1px">
         <form-item
+          v-model="form.address"
           clearable
           align="left"
           maxlength="100"
           placeholder="请输入详细地址" />
         <form-item
+          v-model="form.extra"
           clearable
           align="left"
           maxlength="50"
@@ -54,7 +56,14 @@ import { FormItem } from '@/components/Form'
 export default {
   metaInfo: { title: '详细地址' },
   components: { FormItem },
-  data () {}
+  data () {
+    return {
+      form: {
+        address: '',
+        extra: ''
+      }
+    }
+  }
 }
 </script>
 

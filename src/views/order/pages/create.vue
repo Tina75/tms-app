@@ -1,6 +1,7 @@
 <template>
   <div class="create-order-page scroll-list-wrap">
     <cube-scroll class="scroll-box">
+      <cube-button primary>常发订单</cube-button>
       <form-group ref="$form" class="form" :rules="rules">
         <div class="form-section">
           <form-title
@@ -184,12 +185,24 @@ export default {
       settlementOptions: SETTLEMENT_TYPE,
       pickupOptions: PICKUP_TYPE,
       rules: {
+        // consignerCompany: {
+        //   required: true,
+        //   type: 'string'
+        //   // pattern
+        //   // custom
+        //   // message
+        // },
         consignerCompany: {
           required: true,
-          type: 'string'
-          // pattern
-          // custom
-          // message
+          type: 'email',
+          pattern: /didi.com$/,
+          custom: (val) => {
+            return val.length >= 12
+          },
+          messages: {
+            pattern: 'The E-mail suffix need to be didi.com.',
+            custom: 'The E-mail need contain at least 12 characters.'
+          }
         },
         consignerName: { required: true, type: 'string' },
         consignerPhone: { required: true, type: 'number' },
@@ -198,8 +211,8 @@ export default {
         consigneePhone: { required: true, type: 'number' },
         consigneeAddress: { required: true, type: 'string' },
         cargoInfo: { required: true, type: 'string' },
-        settlementType: { required: true, type: 'string' },
-        pickupType: { required: true, type: 'string' },
+        settlementType: { required: true, type: 'number' },
+        pickupType: { required: true, type: 'number' },
         receiptNumber: { required: true, type: 'number' }
       }
     }

@@ -8,6 +8,8 @@
         </label>
 
         <div class="form-item-input-box">
+          <cube-loading v-if="type === 'loading'" class="form-item-loading" :size="20" />
+
           <!-- 输入框 type = text || number  -->
           <cube-input
             v-if="type === 'text' || type === 'number'"
@@ -98,18 +100,27 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { Validator } from 'cube-ui'
 import props from './js/formItemProps'
+
+Vue.use(Validator)
 
 export default {
   name: 'FormItem',
-  inject: [ 'rules' ],
+  inject: {
+    rules: {
+      from: 'rules',
+      default: null
+    }
+  },
   props,
   data () {
     return {
       inputValue: this.value,
       picker: null,
 
-      valid: true,
+      valid: void 0,
       rule: {}
     }
   },
@@ -127,8 +138,8 @@ export default {
     inputPlaceHolder () {
       let ph
       if (this.placeholder) ph = this.placeholder
-      if (this.type === 'picker') return (ph || '请选择') + (this.required ? '(必选)' : '')
-      return (ph || '请输入') + (this.required ? '(必填)' : '')
+      if (this.type === 'picker') return (ph || '请选择') + (this.inputRequired ? '(必选)' : '')
+      return (ph || '请输入') + (this.inputRequired ? '(必填)' : '')
     },
     inputMaxLength () {
       const maxlength = Number(this.maxlength)
@@ -183,6 +194,10 @@ export default {
     rulesParser () {
       if (!this.prop || !this.rules) return
       this.rule = this.rules[this.prop]
+      if (!this.rule.messages) return
+      for (let key in this.rule.messages) {
+        Validator.addMessage(key, this.rule.messages[key])
+      }
     },
     async doValidate () {
       const valid = this.$refs.$validator.validate()
@@ -288,6 +303,12 @@ export default {
         font-size 13px
         color #999999
         text-align right
+
+      .form-item-loading
+        height 50px
+        display flex
+        justify-content flex-end
+        align-items center
 
   .form-item-textarea
     display block

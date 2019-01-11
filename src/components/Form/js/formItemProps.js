@@ -1,5 +1,5 @@
 // form item type
-const FORM_ITEM_TYPE = [ 'text', 'textarea', 'number', 'switch', 'select', 'click' ]
+const FORM_ITEM_TYPE = [ 'text', 'textarea', 'number', 'switch', 'select', 'click', 'loading' ]
 const FORM_ITEM_ALIGN = [ 'left', 'center', 'right' ]
 const itemInArray = (item, array) => array.indexOf(item) > -1
 
@@ -19,7 +19,7 @@ export default {
   },
   // select类型的选择数据
   options: {
-    type: Array,
+    type: [Array, Promise],
     default: () => [] // { text, value }
   },
   // 输入框提示文字
@@ -29,8 +29,13 @@ export default {
   },
   // 开启校验时，对应的 model 字段名
   prop: {
-    type: String,
-    default: ''
+    type: Boolean,
+    default: false
+  },
+  // 输入框是否必填
+  required: {
+    type: Boolean,
+    default: false
   },
   placeholder: {
     type: String,
