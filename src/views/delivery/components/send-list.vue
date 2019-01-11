@@ -3,6 +3,7 @@
   <delivery-list
     :ref-name="refKey"
     :list="SendList"
+    :force-update="forceUpdate"
     @refresh="refresh"
     @loadmore="loadmore"
   />
@@ -34,13 +35,9 @@ export default {
     refresh() {
       this.clearSend()
       this.getSend()
-      // .then(() => {
-      //   this.$refs[this.refKey].forceUpdate()
-      // })
     },
     loadmore() {
       this.getSend()
-      // this.$refs[this.refKey].forceUpdate()
     }
   }
 }

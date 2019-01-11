@@ -2,7 +2,7 @@ const webpack = require('webpack')
 const useBundleAnalyzer = false // 是否开启打包分析
 const proxyUrl = 'https://dev.tms5566.com/dolphin-app'
 const config = {
-  baseUrl: './',
+  publicPath: './',
   assetsDir: 'static',
   productionSourceMap: false,
   parallel: true,

@@ -1,78 +1,119 @@
 <template>
   <div class="create-order-page scroll-list-wrap">
     <cube-scroll class="scroll-box">
-      <form class="form">
+      <form-group ref="$form" class="form" :rules="rules">
         <div class="form-section">
-          <form-title title="发货方信息" :image="IMAGES.SEND" />
+          <form-title
+            title="发货方信息"
+            :image="IMAGES.SEND" />
           <form-item
-            v-model="orderInfo.consignerCompany" required
+            v-model="orderInfo.consignerCompany"
+            prop="consignerCompany"
+            required
             label="客户名称"
+            autofocus
+            maxlength="11"
             click-icon="icon-ico_custerm"
-            @on-icon-click="chooseUserInfo('send')" />
+            @on-icon-click="selectSender" />
           <form-item
-            v-model="orderInfo.consignerName" required
+            v-model="orderInfo.consignerName"
+            prop="consignerName"
+            maxlength="15"
             label="发货人" />
           <form-item
-            v-model="orderInfo.consignerPhone" required
+            v-model="orderInfo.consignerPhone"
+            prop="consignerPhone"
             label="联系号码"
-            type="number" maxlength="11" />
+            type="number"
+            maxlength="20" />
           <form-item
             v-model="orderInfo.consignerCity"
             label="发货城市"
             placeholder="请选择省/市/区"
-            type="click" :show-arrow="false" />
+            type="click"
+            :show-arrow="false"
+            @on-click="cityPickerType = 'send'" />
           <form-item
-            v-model="orderInfo.consignerAddress" required
-            label="详细地址" placeholder="请输入" :showArrow="false"
-            type="click" @on-click="editAddress" />
+            v-model="orderInfo.consignerAddress"
+            prop="consignerAddress"
+            label="详细地址"
+            placeholder="请输入"
+            :show-arrow="false"
+            type="click"
+            @on-click="editAddress" />
           <form-item
-            v-model="orderInfo.extraData" prop="extraData"
+            v-model="orderInfo.consumerInfo"
             label="客户单号及其他"
-            type="click" @on-click="$router.push({ name: 'order-consumer-info' })" />
+            type="click"
+            @on-click="$router.push({ name: 'order-consumer-info' })" />
         </div>
 
         <div class="form-section">
-          <form-title title="收货方信息" :image="IMAGES.ACCEPT" />
+          <form-title
+            title="收货方信息"
+            :image="IMAGES.ACCEPT" />
           <form-item
-            v-model="orderInfo.consigneeName" required
-            label="收货人" click-icon="icon-ico_custerm"
+            v-model="orderInfo.consigneeName"
+            prop="consigneeName"
+            label="收货人"
+            maxlength="15"
+            click-icon="icon-ico_custerm"
             @on-icon-click="chooseUserInfo('accept')" />
           <form-item
-            v-model="orderInfo.consigneePhone" required
+            v-model="orderInfo.consigneePhone"
+            prop="consigneePhone"
             label="联系号码"
-            type="number" maxlength="11" />
+            type="number"
+            maxlength="20" />
           <form-item
             v-model="orderInfo.consigneeCity"
             label="收货城市"
             placeholder="请选择省/市/区"
-            type="click" />
+            type="click"
+            :show-arrow="false"
+            @on-click="cityPickerType = 'accept'" />
           <form-item
-            v-model="orderInfo.consigneeAddress" required
-            label="详细地址" placeholder="请输入" :showArrow="false"
-            type="click" @on-click="editAddress" />
+            v-model="orderInfo.consigneeAddress"
+            prop="consigneeAddress"
+            ellipsis
+            label="详细地址"
+            placeholder="请输入"
+            :show-arrow="false"
+            type="click"
+            @on-click="editAddress" />
+          <form-item
+            v-model="orderInfo.consigneeCompany"
+            label="收货人单位"
+            maxlength="50" />
         </div>
 
         <div class="form-section">
           <form-item
-            v-model="orderInfo.cargoInfo" required
-            label="货物信息" :labelImage="IMAGES.BOX"
-            type="click" @on-click="$router.push({ name: 'order-cargo-info' })"
-            placeholder="请输入" />
+            v-model="orderInfo.cargoInfo"
+            prop="cargoInfo"
+            label="货物信息"
+            :label-image="IMAGES.BOX"
+            type="click"
+            placeholder="请输入"
+            @on-click="$router.push({ name: 'order-cargo-info' })" />
         </div>
 
         <div class="form-section">
           <form-item
-            v-model="orderInfo.settlementType" required
-            type="click"
-            label="结算方式"
-            @on-click="showPicker('settlementType')" />
+            v-model="orderInfo.settlementType"
+            prop="settlementType"
+            type="select"
+            :options="settlementOptions"
+            label="结算方式" />
           <form-item
-            v-model="orderInfo.pickupType" required
-            type="click"
+            v-model="orderInfo.pickupType"
+            prop="pickupType"
+            type="select"
             label="提货方式"
-            @on-click="showPicker('pickupType')" />
+            :options="pickupOptions" />
           <form-item
-            v-model="orderInfo.receiptNumber" required
+            v-model="orderInfo.receiptNumber"
+            prop="receiptNumber"
             type="number"
             label="回单数量(份)" />
         </div>
@@ -86,30 +127,42 @@
             v-model="orderInfo.transportFee"
             type="number"
             label="运输费用(元)"
-            clickIcon="icon-ico_rule"
+            click-icon="icon-ico_rule"
             @on-icon-click="chooseChargeRule" />
         </div>
 
         <div class="form-section">
           <form-item
-            v-model="orderInfo.extraFee"
-            label="其他费用" :labelImage="IMAGES.MONEY"
-            type="click" @on-click="$router.push({ name: 'order-fee-info' })" />
+            v-model="orderInfo.otherFee"
+            label="其他费用"
+            :label-image="IMAGES.MONEY"
+            type="click"
+            @on-click="$router.push({ name: 'order-fee-info' })" />
           <form-item
-            v-model="orderInfo.extraInfo"
-            label="其他信息" :label-image="IMAGES.OTHER"
-            type="click" @on-click="$router.push({ name: 'order-other-info' })" />
+            v-model="orderInfo.otherInfo"
+            label="其他信息"
+            :label-image="IMAGES.OTHER"
+            type="click"
+            @on-click="$router.push({ name: 'order-other-info' })" />
         </div>
-      </form>
+      </form-group>
     </cube-scroll>
 
-    <create-footer />
+    <create-footer
+      @on-save-order="saveOrder"/>
+
+    <city-picker
+      v-model="showCityPicker"
+      @confirm="pickCity"
+      @input="cityPickerType = ''" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import CreateFooter from '../components/CreateFooter'
+import { FormGroup, FormItem, FormTitle } from '@/components/Form'
+import CityPicker from '@/components/CityPicker'
 import { SETTLEMENT_TYPE, PICKUP_TYPE } from '../js/constant'
 
 const IMAGES = {
@@ -122,33 +175,68 @@ const IMAGES = {
 
 export default {
   name: 'order-create',
-  components: { CreateFooter },
+  metaInfo: { title: '手工开单' },
+  components: { FormGroup, FormItem, FormTitle, CreateFooter, CityPicker },
   data () {
     return {
       IMAGES,
+      cityPickerType: '',
+      settlementOptions: SETTLEMENT_TYPE,
+      pickupOptions: PICKUP_TYPE,
+      rules: {
+        consignerCompany: {
+          required: true,
+          type: 'string'
+          // pattern
+          // custom
+          // message
+        },
+        consignerName: { required: true, type: 'string' },
+        consignerPhone: { required: true, type: 'number' },
+        consignerAddress: { required: true, type: 'string' },
+        consigneeName: { required: true, type: 'string' },
+        consigneePhone: { required: true, type: 'number' },
+        consigneeAddress: { required: true, type: 'string' },
+        cargoInfo: { required: true, type: 'string' },
+        settlementType: { required: true, type: 'number' },
+        pickupType: { required: true, type: 'number' },
+        receiptNumber: { required: true, type: 'number' }
+      }
     }
   },
   computed: {
-    ...mapGetters([
-      'orderInfo'
-    ])
+    ...mapGetters('order', [ 'orderInfo' ]),
+    ...mapGetters('contacts/consignee', [ 'saveConsigner' ]),
+
+    showCityPicker: {
+      get: function () { return !!this.cityPickerType },
+      set: function () { this.cityPickerType = '' }
+    }
   },
   methods: {
-    showPicker (type) {
-      let data
-      if (type === 'settlementType') data = [ SETTLEMENT_TYPE ]
-      if (type === 'pickupType') data = [ PICKUP_TYPE ]
-
-      this.$createPicker({
-        data,
-        onSelect: (valueArr, selectedIndex, textArr) => {
-          this.orderInfo[type] = textArr[0]
-        }
-      }).show()
+    pickCity (data) {
+      const cityName = Array.from(new Set(data.map(item => item.name))).join('')
+      if (this.cityPickerType === 'send') this.orderInfo.consignerCity = cityName
+      else this.orderInfo.consigneeCity = cityName
+      this.cityPickerType = ''
     },
 
-    chooseUserInfo (type) {
-      console.log(type)
+    // 设置选择后的收货人信息
+    setSender () {
+      if (this.saveConsigner.company) {
+        this.orderInfo.consignerCompany = this.saveConsigner.company
+        this.orderInfo.consignerName = this.saveConsigner.contact
+        this.orderInfo.consignerPhone = this.saveConsigner.phone
+      }
+    },
+
+    chooseUserInfo () {
+    },
+
+    selectSender () {
+      this.$router.push({
+        name: 'select-shipper'
+      })
     },
 
     chooseChargeRule () {
@@ -157,7 +245,16 @@ export default {
 
     editAddress () {
       this.$router.push({ name: 'order-edit-address' })
+    },
+
+    async saveOrder () {
+      console.log(await this.$refs.$form.validate())
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.setSender()
+    })
   }
 
 }

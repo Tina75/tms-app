@@ -2,8 +2,18 @@
   <cube-scroll class="scroll-box">
     <div class="edit-address-box">
       <form class="border-bottom-1px">
-        <form-item clearable align="left" placeholder="请输入详细地址" />
-        <form-item clearable align="left" placeholder="补充地址(楼号-门牌号等)" />
+        <form-item
+          v-model="form.address"
+          clearable
+          align="left"
+          maxlength="100"
+          placeholder="请输入详细地址" />
+        <form-item
+          v-model="form.extra"
+          clearable
+          align="left"
+          maxlength="50"
+          placeholder="补充地址(楼号-门牌号等)" />
       </form>
 
       <p class="address-list-title">常用地址</p>
@@ -41,10 +51,18 @@
 </template>
 
 <script>
+import { FormItem } from '@/components/Form'
+
 export default {
   metaInfo: { title: '详细地址' },
+  components: { FormItem },
   data () {
-    test: ''
+    return {
+      form: {
+        address: '',
+        extra: ''
+      }
+    }
   }
 }
 </script>

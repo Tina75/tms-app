@@ -3,24 +3,46 @@
     <cube-scroll class="scroll-box">
       <form>
         <div class="form-section">
-          <form-item label="客户订单号" type="text" v-model="form.customOrderNo" />
-          <form-item label="客户运单号" type="text" v-model="form.customWaybillNo" />
-          <form-item label="对接业务员" type="text" v-model="form.reveivelist" />
+          <form-item
+            v-model="form.customOrderNo"
+            label="客户订单号"
+            maxlength="30" />
+          <form-item
+            v-model="form.customWaybillNo"
+            label="客户运单号"
+            maxlength="30" />
+          <form-item
+            v-model="form.reveivelist"
+            label="对接业务员"
+            type="click"
+            :show-arrow="false" />
         </div>
         <div class="form-section">
-          <form-item label="发货时间" type="click" placeholder="请选择" v-model="form.sendTime" />
-          <form-item label="到货时间" type="click" placeholder="请选择" v-model="form.ariveTime" />
+          <form-item
+            v-model="form.sendTime"
+            label="发货时间"
+            type="click"
+            placeholder="请选择" />
+          <form-item
+            v-model="form.ariveTime"
+            label="到货时间"
+            type="click"
+            placeholder="请选择" />
         </div>
       </form>
     </cube-scroll>
 
-    <cube-button class="footer" primary>确定</cube-button>
+    <cube-button class="footer" primary @click="ensure">确定</cube-button>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
+import { FormItem } from '@/components/Form'
+
 export default {
   metaInfo: { title: '客户单号及其他' },
+  components: { FormItem },
   data () {
     return {
       form: {
@@ -31,6 +53,26 @@ export default {
         ariveTime: ''
       }
     }
+  },
+  computed: {
+    ...mapGetters('order', [
+      'consumerInfo'
+    ])
+  },
+  methods: {
+    ...mapMutations('order', [ 'SET_CONSUMER_INFO' ]),
+
+    ensure () {
+      this.SET_CONSUMER_INFO(Object.assign({}, this.form))
+      this.$router.back()
+    }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      for (let key in vm.form) {
+        vm.form[key] = vm.consumerInfo[key] === undefined ? '' : vm.consumerInfo[key]
+      }
+    })
   }
 }
 </script>
@@ -50,4 +92,3 @@ export default {
     padding 0
     border-radius 0
 </style>
-
