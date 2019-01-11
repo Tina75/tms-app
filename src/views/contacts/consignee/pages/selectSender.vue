@@ -40,6 +40,7 @@
 import IconFont from '@/components/Iconfont'
 import NoData from '@/components/NoData'
 import { mapGetters, mapActions } from 'vuex'
+const moudleName = 'contacts/consignee'
 const config = {
   img: require('../assets/no-sender.png'),
   message: '老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～'
@@ -56,10 +57,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('consignee', ['consignerList'])
+    ...mapGetters(moudleName, ['consignerList'])
   },
   methods: {
-    ...mapActions('consignee', ['saveConsignerInfo']),
+    ...mapActions(moudleName, ['saveConsignerInfo']),
     async choose(item) {
       await this.saveConsignerInfo(item)
       this.$router.back()

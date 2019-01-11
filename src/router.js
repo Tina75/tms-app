@@ -4,13 +4,12 @@ import { sync } from 'vuex-router-sync'
 import store from '@/store'
 import { closeWindow } from '@/libs/bridgeUtil'
 import example from '@/views/example/router'
-import consignee from '@/views/consignee/router'
 import delivery from '@/views/delivery/router'
 import order from '@/views/order/router'
 import company from '@/views/company/router'
 import receipt from '@/views/receipt/router'
 import upstream from '@/views/upstream/router'
-
+import contacts from '@/views/contacts/router'
 Vue.use(Router)
 
 let router = new Router({
@@ -19,14 +18,19 @@ let router = new Router({
       path: '/',
       name: 'home',
       component: () => import(/* webpackChunkName: "home" */ './views/home.vue')
+    }, {
+      path: '/preview',
+      name: 'image-preview',
+      component: () => import(/* webpackChunkName: "odd" */'./components/Updalod/ImagePreview.vue')
     },
     ...delivery,
     ...example,
     ...order,
     ...company,
-    ...consignee, // 收货方
+    // ...consignee, // 收货方
     ...receipt,
-    ...upstream
+    ...upstream,
+    ...contacts // 通信录
   ]
 })
 // 同步store和路由

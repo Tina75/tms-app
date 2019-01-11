@@ -15,29 +15,47 @@
       </form>
     </cube-scroll>
 
-    <cube-button class="footer" primary>确定</cube-button>
+    <cube-button class="footer" primary @click="ensure">确定</cube-button>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { FormItem } from '@/components/Form'
 
 export default {
   metaInfo: { title: '其他信息' },
   components: { FormItem },
-  computed: {
-    ...mapGetters([
-      'otherInfo'
-    ]),
-    form () {
-      return Object.assign({
-        needTicket: '',
+  data () {
+    return {
+      form: {
+        needTicket: false,
         rate: '',
         replace: '',
         remark: ''
-      }, this.otherInfo)
+      }
     }
+  },
+  computed: {
+    ...mapGetters('order', [
+      'otherInfo'
+    ])
+  },
+  methods: {
+    ...mapMutations('order', [ 'SET_OTHER_INFO' ]),
+
+    ensure () {
+      this.SET_OTHER_INFO(Object.assign({}, this.form))
+      this.$router.back()
+    }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      for (let key in vm.form) {
+        if (key === 'needTicket') vm.form[key] = !!vm.otherInfo[key]
+        else vm.form[key] = vm.otherInfo[key] === undefined ? '' : vm.otherInfo[key]
+      }
+    })
   }
 }
 </script>

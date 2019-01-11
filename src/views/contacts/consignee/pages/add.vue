@@ -65,6 +65,7 @@
 import { FormItem } from '@/components/Form'
 import CityPicker from '@/components/CityPicker'
 import { mapGetters, mapActions } from 'vuex'
+const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeAdd',
   metaInfo () {
@@ -80,10 +81,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('consignee', ['saveConsigner', 'formList'])
+    ...mapGetters(moudleName, ['saveConsigner', 'formList'])
   },
   methods: {
-    ...mapActions('consignee', ['saveConsignerInfo']),
+    ...mapActions(moudleName, ['saveConsignerInfo']),
     selectSender () {
       this.$router.push({
         name: 'SelectSender'
