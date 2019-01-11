@@ -1,11 +1,13 @@
 <template>
   <div class="create-order-page scroll-list-wrap">
     <cube-scroll class="scroll-box">
-      <div v-if="step === 1">
-        <form class="form">
+      <form-group ref="$form" class="form" :rules="rules">
+        <div v-if="step === 1">
           <div class="form-section">
             <form-item
-              v-model="companyInfo.name" required
+              v-model="companyInfo.name"
+              prop="name"
+              required
               label="公司全称"
               maxlength="25"/>
             <form-item
@@ -17,8 +19,7 @@
             <form-item
               v-model="companyInfo.contact"
               label="公司联系人"
-              maxlength="10"
-              required/>
+              maxlength="10"/>
             <form-item
               v-model="companyInfo.contactPhone"
               label="联系方式"
@@ -54,20 +55,24 @@
               label="补充地址"
               maxlength="50" />
           </div>
-        </form>
-      </div>
-      <div v-if="step === 2">
-        <form class="form">
+        </div>
+        <div v-if="step === 2">
           <div class="form-section">
             <div class="cardInfo">
               <div class="cardInfo-content edit">
                 <span class="cardTitle">公司LOGO</span>
-                <span class="cardContent noneInfo">点击上传
+                <span v-if="!companyInfo.logoUrl" class="cardContent noneInfo">点击上传
                   <icon-font
                     style="position:relative;top:-1px;"
                     name="icon-ico_right"
                     color="#CECECE"
                     :size="15"/>
+                </span>
+                <span v-else class="cardContent">
+                  <div
+                    :style="'backgroundImage:url(' + companyInfo.logoUrl + ');background-repeat: no-repeat;background-position-x: center;background-position-y: center;background-size: 100%;'"
+                    class="avatarDiv"
+                    @click="previewPic([companyInfo.logoUrl],index)"/>
                 </span>
               </div>
               <div class="hr"/>
@@ -108,10 +113,8 @@
               <Upload :upload-photos="busiAdvantcePicList"/>
             </div>
           </div>
-        </form>
-      </div>
-      <div v-if="step === 3">
-        <form class="form">
+        </div>
+        <div v-if="step === 3">
           <div class="form-section">
             <div class="cardInfo-content edit">
               <span class="cardTitle">公司风貌（{{companyPhotoList.length}}/10）</span>
@@ -130,8 +133,8 @@
               <Upload :upload-photos="homeBannerList" :max-count="1" :input-show="false"/>
             </div>
           </div>
-        </form>
-      </div>
+        </div>
+      </form-group>
     </cube-scroll>
     <div class="foot">
       <cube-button
@@ -218,15 +221,21 @@ export default {
         ]
       },
       addContactBtn: true,
-      contactList: []
+      contactList: [],
+      rules: {
+        name: {
+          required: true
+        }
+      }
     }
   },
   mounted () {
     this.initDate()
   },
   methods: {
-    nextSetp () {
+    async nextSetp () {
       this.step++
+      console.log(await this.$refs.$form.validate())
     },
     addContact () {
       this.contactList.push({ name: '', phone: '' })
