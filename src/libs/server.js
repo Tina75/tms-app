@@ -35,7 +35,7 @@ instance.interceptors.response.use(
     if (response.config.loading) window.loading(false)
     const resultCode = response.data.code
     if (response.config.ignoreCode || resultCode === 10000) {
-      return response.data
+      return response
     } else {
       // 业务逻辑错误
       switch (resultCode) {

@@ -1,68 +1,95 @@
 <template>
-  <div class="example-index">
+  <div class="pickup-edit">
+    <div class="edit-form">
+      <cube-form :model="model" @validate="validateHandler" @submit="submitHandler">
+        <cube-form-group>
+          <cube-form-item :field="fields[0]"/>
+          <cube-form-item :field="fields[1]">
+            <cube-button @click="showDatePicker">{{model.dateValue || 'Please select date'}}</cube-button>
+            <date-picker ref="datePicker" :min="[2008, 8, 8]" :max="[2020, 10, 20]" @select="dateSelectHandler"/>
+          </cube-form-item>
+        </cube-form-group>
+        <cube-form-group>
+          <cube-button type="submit">Submit</cube-button>
+        </cube-form-group>
+      </cube-form>
+    </div>
   </div>
 </template>
 
 <script>
-// import ContentLoaderList from '@/components/content-loader-list'
-import { mapGetters, mapActions } from 'vuex'
+// import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: 'NewsIndex',
-  // components: { ContentLoaderList },
+  name: 'pickup-edit',
   metaInfo: {
-    title: 'HackNews'
+    title: '编辑'
   },
   data () {
     return {
-      first: true,
-      refresh: false,
-      loading: false,
-      finished: false
+      validity: {},
+      valid: undefined,
+      model: {
+        inputValue: '',
+        pcaValue: [],
+        dateValue: ''
+      },
+      fields: [
+        {
+          type: 'input',
+          modelKey: 'inputValue',
+          label: 'Input',
+          props: {
+            placeholder: '请输入'
+          },
+          rules: {
+            required: true
+          }
+        },
+        {
+          modelKey: 'dateValue',
+          label: 'Date',
+          rules: {
+            required: true
+          }
+        }
+      ]
     }
   },
   computed: {
-    ...mapGetters(['News'])
+    // ...mapGetters(['News'])
   },
   methods: {
-    ...mapActions(['getNews', 'clearNews']),
+    // ...mapActions(['getNews', 'clearNews']),
     /** 下拉刷新 */
-    async onRefresh () {
-      try {
-        this.clearNews()
-        await this.getNews()
-        this.refresh = false
-      } catch (err) {
-        this.refresh = false
-      }
+    submitHandler(e) {
+      console.log('submit')
     },
-    /** 上拉加载 */
-    async onLoad () {
-      try {
-        await this.getNews()
-        this.loading = false
-      } catch (err) {
-        this.refresh = false
-      }
+    validateHandler(result) {
+      this.validity = result.validity
+      this.valid = result.valid
+      console.log('validity', result.validity, result.valid, result.dirty, result.firstInvalidFieldIndex)
     },
-    /** 右侧按钮点击 */
-    onClickRight () {
-      this.$toast('button')
+    showDatePicker() {
+      this.$refs.datePicker.show()
+    },
+    dateSelectHandler(selectedVal) {
+      this.model.dateValue = new Date(selectedVal[0], selectedVal[1] - 1, selectedVal[2]).toDateString()
     }
   },
   beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.first = true
-      vm.clearNews()
-      vm.getNews().then(() => {
-        vm.first = false
-      })
-    })
+    // next(vm => {
+    //   vm.first = true
+    //   vm.clearNews()
+    //   vm.getNews().then(() => {
+    //     vm.first = false
+    //   })
+    // })
   }
 }
 </script>
 <style lang="stylus">
-.example-index
+.pickup-edit
   .van-list
     min-height 55Px
 </style>

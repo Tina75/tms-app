@@ -62,22 +62,23 @@ html,body
   background #F3F3F3
   *
     box-sizing border-box
-  .page
-    position: absolute
-    z-index: 10
-    top: 0
-    left: 0
-    width: 100%
-    height: 100%
-    overflow-x: hidden
-    overflow-y: auto
-    .list-no-data
-      height 50px
-      line-height 50px
-      text-align center
-      color #999
-  .scroll-list-wrap
-    height: 100%
-    overflow-x: hidden
-    overflow-y: auto
+
+  // .page
+  //   position: absolute
+  //   z-index: 10
+  //   top: 0
+  //   left: 0
+  //   width: 100%
+  //   height: 100%
+  //   overflow-x: hidden
+  //   overflow-y: auto
+  //   .list-no-data
+  //     height 50px
+  //     line-height 50px
+  //     text-align center
+  //     color #999
+  // .scroll-list-wrap
+  //   height: 100%
+  //   overflow-x: hidden
+  //   overflow-y: auto
 </style>
