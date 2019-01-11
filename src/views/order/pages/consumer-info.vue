@@ -15,7 +15,7 @@
             v-model="form.reveivelist"
             label="对接业务员"
             type="click"
-            :showArrow="false" />
+            :show-arrow="false" />
         </div>
         <div class="form-section">
           <form-item
