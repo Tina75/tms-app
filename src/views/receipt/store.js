@@ -1,5 +1,4 @@
-// import Server from '@/libs/server'
-export default{
+export default {
   state: {
   },
   mutations: {
