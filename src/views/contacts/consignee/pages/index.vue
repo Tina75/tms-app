@@ -75,7 +75,7 @@ export default {
     selectItem (idx) {
       console.log(idx)
       this.$router.push({
-        name: 'ConsigneeDetail'
+        name: 'contacts-consignee-detail'
       })
     },
     callPhone (phone) {
@@ -83,7 +83,10 @@ export default {
     },
     btnClick () {
       this.$router.push({
-        name: 'ConsigneeAdd'
+        name: 'contacts-consignee-form',
+        params: {
+          type: 'add'
+        }
       })
     }
   }

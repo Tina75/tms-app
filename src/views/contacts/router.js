@@ -18,30 +18,35 @@ export default [
     },
     component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/modify.vue')
   },
+    // 发货方列表
   {
     path: '/contacts/consignee',
-    name: 'Consignee',
+    name: 'contacts-consignee',
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/index.vue')
   },
+    // 发货方详情
   {
     path: '/contacts/consignee/detail',
-    name: 'ConsigneeDetail',
+    name: 'contacts-consignee-detail',
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/detail.vue')
   },
+    // 编辑和新增发货方
   {
-    path: '/contacts/consignee/add',
-    name: 'ConsigneeAdd',
-    component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/add.vue')
+    path: '/contacts/consignee/form/:type',
+    name: 'contacts-consignee-form',
+    component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/form.vue')
   },
+    // 选择所属发货方
   {
-    path: '/contacts/consignee/edit',
-    name: 'ConsigneeEdit',
-    component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/add.vue')
+    path: '/contacts/consignee/select/shipper',
+    name: 'select-shipper',
+    component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/select-shipper.vue')
   },
+  // 熟车司机列表
   {
-    path: '/contacts/consignee/select/sender',
-    name: 'SelectSender',
-    component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/selectSender.vue')
+    path: '/contacts/driver',
+    name: 'contacts-driver',
+    component: () => import(/* webpackChunkName: "contacts" */ './driver/pages/index.vue')
   },
   /* 承运商 */
   {

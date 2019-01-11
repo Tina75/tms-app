@@ -4,6 +4,7 @@
       <div class="form_card">
         <form-item
           v-model="formList.consigner"
+          :show-required-toast="false"
           required
           label="所属发货方"
           click-icon="icon-ico_sender"
@@ -11,14 +12,19 @@
         />
         <form-item
           v-model="formList.contact"
+          :show-required-toast="false"
           required
           label="收货人"
           :maxlength="15"
         />
         <form-item
-          v-model="formList.phone"
+          :value="viewPhone"
+          :show-required-toast="false"
           required
           label="联系电话"
+          :maxlength="20"
+          @on-blur="validatePhone"
+          @input="formatPhone"
         />
       </div>
       <div class="form_card">
@@ -34,10 +40,12 @@
           v-model="formList.detailAddress"
           required
           label="详细地址"
+          :show-required-toast="false"
         />
         <form-item
           v-model="formList.consigneeCompanyName"
           label="收货人单位"
+          :maxlength="50"
         />
       </div>
       <div class="form_card">
@@ -52,7 +60,8 @@
     </form>
     <div class="add_submit">
       <cube-button
-        :primary="true">
+        :primary="true"
+        @click="submit">
         确定
       </cube-button>
     </div>
@@ -65,46 +74,88 @@
 import { FormItem } from '@/components/Form'
 import CityPicker from '@/components/CityPicker'
 import { mapGetters, mapActions } from 'vuex'
+import validator from '@/libs/validate'
 const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeAdd',
   metaInfo () {
     return {
-      title: '新增收货方'
+      title: this.$route.query.id === undefined ? '新增收货方' : '编辑收货方'
     }
   },
   components: { CityPicker, FormItem },
   data() {
     return {
       form: {},
-      showPickCity: false
+      showPickCity: false,
+      viewPhone: ''
     }
   },
   computed: {
-    ...mapGetters(moudleName, ['saveConsigner', 'formList'])
+    ...mapGetters(moudleName, ['saveConsigner', 'formList', 'consigneeDetail'])
   },
   methods: {
-    ...mapActions(moudleName, ['saveConsignerInfo']),
+    ...mapActions(moudleName, ['saveConsignerInfo', 'clearFormList', 'addConsignee']),
+    validatePhone (value) {
+      value = value.replace(/\s/g, '')
+      if (value && !(validator.phone(value) || validator.telphone(value))) {
+        window.toast('请输入正确的手机号或座机号')
+      }
+    },
     selectSender () {
       this.$router.push({
-        name: 'SelectSender'
+        name: 'select-shipper'
       })
     },
     citySelect (picker) {
       console.log(picker)
       if (picker[0].name === picker[1].name) {
-        this.form.address = picker[1].name + picker[2].name
+        this.formList.address = picker[1].name + picker[2].name
       } else {
-        this.form.address = picker[0].name + picker[1].name + picker[2].name
+        this.formList.address = picker[0].name + picker[1].name + picker[2].name
       }
+    },
+    formatPhone (value) {
+      if (/^1/.test(value)) {
+        const length = value.length
+        if (length === 4) {
+          value = value.slice(0, 3) + ' ' + value[3]
+        }
+        if (length === 9) {
+          value = value.slice(0, 8) + ' ' + value[8]
+        }
+      }
+      this.viewPhone = value.trim()
+      this.formList.phone = this.viewPhone.replace(/\s/g, '')
+    },
+    async submit () {
+      const data = {
+        contact: this.formList.contact,
+        phone: this.formList.phone,
+        address: this.formList.address + this.formList.detailAddress,
+        consignerId: this.saveConsigner.id,
+        consigneeCompanyName: this.formList.consigneeCompanyName
+      }
+      await this.addConsignee(data)
+      this.clearFormList()
+      this.viewPhone = ''
     }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.formList.consigner = vm.saveConsigner.company
+      vm.clearFormList()
+      vm.formList = vm.consigneeDetail
+      console.log(vm.$route.query.id)
+      // if (vm.saveConsigner.name) {
+      //   vm.formList.consigner = vm.saveConsigner.name
+      // }
+      // if (vm.consigneeDetail.id) {
+      //   vm.formList = vm.consigneeDetail
+      // }
     })
   },
   beforeRouteLeave (to, from, next) {
+    // this.clearFormList()
     this.saveConsignerInfo()
     next()
   }
