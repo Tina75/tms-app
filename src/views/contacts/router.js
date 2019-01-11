@@ -22,9 +22,6 @@ export default [
     // 编辑发货方
     path: '/contacts/shipper/modify',
     name: 'contacts-shipper-modify',
-    meta: {
-      noNeedRefresh: []
-    },
     component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/modify.vue')
   },
   // 发货方列表
