@@ -52,7 +52,7 @@ store.registerModule('contacts', {
 // 动态读取当前目录下所有子文件下的store.js进行注册, 注册模块名为文件名
 const requireContext = require.context('./', true, /store\.js/)
 requireContext.keys().forEach((filePath) => {
-  const moduleName = filePath.replace(/^\.\/(.*)\/\w+\.js$/, '$1')
+  const moduleName = filePath.match(/\.\/(\w+)\//)[1]
   const moduleStore = requireContext(filePath)
   store.registerModule(['contacts', moduleName], moduleStore.default)
 })
