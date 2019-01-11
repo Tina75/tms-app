@@ -5,16 +5,13 @@
         v-for="(item, index) in uploadPhotos"
         :key="index"
         class="image-item">
-        <img
-          src="./images/icon-del-pic.png"
-          class="pic-item-delete"
-          @click.stop="deletePic(index)">
-        <!-- <icon-font
-          name="icon-shanchu-tupian"
-          class="pic-item-delete"
-          color="red"
-          :size="30"
-          @click.stop="deletePic(index)"/> -->
+        <span @click="deletePic(index)">
+          <icon-font
+            name="icon-shanchu-tupian"
+            class="pic-item-delete"
+            color="red"
+            :size="20"/>
+        </span>
         <img
           :src="item.url"
           alt="图片加载失败"
@@ -143,8 +140,8 @@ export default {
   .pic-item-delete
     position absolute
     width 24px
-    top -12px
-    right -10px
+    top -7px
+    right -13px
 .image-item
   margin-bottom 50px
 </style>
