@@ -3,7 +3,7 @@ import store from '@/store'
 
 export default [
   {
-    path: '/',
+    path: '/example',
     name: 'example',
     component: () => import(/* webpackChunkName: "example" */'./pages/index.vue')
   }

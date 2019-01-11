@@ -1,4 +1,4 @@
-import Server from '@/libs/Server'
+import Server from '@/libs/server'
 export default {
   state: {
     companyInfo: {}
