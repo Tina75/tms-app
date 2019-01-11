@@ -13,7 +13,8 @@
     </div>
     <div class="footer-item">
       <cube-button
-        class="footer-item-button">保存</cube-button>
+        class="footer-item-button"
+        @click="saveOrder">保存</cube-button>
       <cube-button
         class="footer-item-button"
         primary>立即发运</cube-button>
@@ -69,6 +70,11 @@ export default {
         this.feeInfo.otherFee || 0,
         this.transportFee || 0
       )
+    }
+  },
+  methods: {
+    saveOrder () {
+      this.$emit('on-save-order')
     }
   }
 }

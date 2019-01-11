@@ -1,82 +1,98 @@
 <template>
   <div class="form-item-box">
-    <div class="form-item" :class="{'form-item-textarea': type === 'textarea', 'border-bottom-1px':bottomLine}">
-      <label v-if="label" class="form-item-label" :class="{ 'form-item-required': required }">
-        <img v-if="labelImage" class="form-item-label-image" :src="labelImage" >
-        {{ label }}
-      </label>
+    <div :class="{ 'border-bottom-1px': bottomLine }">
+      <div class="form-item" :class="{'form-item-textarea': type === 'textarea'}">
+        <label v-if="label" class="form-item-label" :class="{ 'form-item-required': inputRequired }">
+          <img v-if="labelImage" class="form-item-label-image" :src="labelImage" >
+          {{ label }}
+        </label>
 
-      <div class="form-item-input-box">
-        <cube-input
-          v-if="type === 'text' || type === 'number'"
-          v-model="inputValue"
-          class="form-item-input"
-          :class="inputAlignment"
-          :type="inputType"
-          :autofocus="autofocus"
-          :placeholder="inputPlaceHolder"
-          :maxlength="inputMaxLength"
-          :readonly="inputReadonly"
-          :disabled="inputDisabled"
-          :clearable="clearable"
-          @blur="inputBlurHandler"
-          @focus="inputFocusHandler" />
+        <div class="form-item-input-box">
+          <!-- 输入框 type = text || number  -->
+          <cube-input
+            v-if="type === 'text' || type === 'number'"
+            v-model="inputValue"
+            class="form-item-input"
+            :class="inputAlignment"
+            :type="inputType"
+            :autofocus="autofocus"
+            :placeholder="inputPlaceHolder"
+            :maxlength="inputMaxLength"
+            :readonly="inputReadonly"
+            :disabled="inputDisabled"
+            :clearable="clearable"
+            @blur="inputBlurHandler"
+            @focus="inputFocusHandler" />
 
-        <cube-select
-          v-if="type === 'select'"
-          v-model="inputValue"
-          class="form-item-input"
-          :class="inputAlignment"
-          :options="options"
-          :placeholder="inputPlaceHolder"
-          :title="inputPlaceHolder"
-          :disabled="inputDisabled"
-          @change="selectChangeHandler"
-          @picker-show="pickerShowHandler"
-          @picker-hide="pickerHideHandler" />
+          <!-- 选择器 type = selece -->
+          <cube-select
+            v-if="type === 'select'"
+            v-model="inputValue"
+            class="form-item-input"
+            :class="inputAlignment"
+            :options="options"
+            :placeholder="inputPlaceHolder"
+            :title="inputPlaceHolder"
+            :disabled="inputDisabled"
+            @change="selectChangeHandler"
+            @picker-show="pickerShowHandler"
+            @picker-hide="pickerHideHandler" />
 
-        <div
-          v-if="type === 'click'"
-          class="form-item-input form-item-click"
-          :class="inputClickClass"
-          :style="(inputValue !== undefined && inputValue !== '') ? 'line-height: 1.5; color: #666666' : 'color: #C5C8CE'"
-          @click="inputClickHandler">
-          {{ inputValue || inputPlaceHolder }}
+          <!-- 点击按钮 type = click -->
+          <div
+            v-if="type === 'click'"
+            class="form-item-input form-item-click"
+            :class="inputClickClass"
+            :style="(inputValue !== undefined && inputValue !== '') ? 'line-height: 1.5; color: #666666' : 'color: #C5C8CE'"
+            @click="inputClickHandler">
+            {{ inputValue || inputPlaceHolder }}
+          </div>
+
+          <!-- 开关按钮 type = switch -->
+          <cube-switch
+            v-if="type === 'switch'"
+            v-model="inputValue"
+            class="form-item-switch" />
+
+          <!-- 文本框 type = textarea -->
+          <textarea
+            v-if="type === 'textarea'"
+            v-model="inputValue"
+            class="form-item-input"
+            :rows="rows"
+            :placeholder="inputPlaceHolder"
+            :maxlength="inputMaxLength"
+            :readonly="inputReadonly"
+            :disabled="inputDisabled"
+            :autofocus="autofocus"
+            @blur="inputBlurHandler"
+            @focus="inputFocusHandler"/>
+          <p v-if="textareaShowCounter"
+             class="form-item-counter">
+            {{this.inputValue ? this.inputValue.length : 0}}/{{this.inputMaxLength}}
+          </p>
         </div>
 
-        <cube-switch
-          v-if="type === 'switch'"
-          v-model="inputValue"
-          class="form-item-switch" />
+        <a v-if="clickIcon"
+           class="form-item-icon border-left-1px"
+           @click.prevent="iconClickHandler">
+          <icon-font :name="clickIcon" color="#189cb2" size="20" />
+        </a>
 
-        <textarea
-          v-if="type === 'textarea'"
-          v-model="inputValue"
-          class="form-item-input"
-          :rows="rows"
-          :placeholder="inputPlaceHolder"
-          :maxlength="inputMaxLength"
-          :readonly="inputReadonly"
-          :disabled="inputDisabled"
-          @blur="inputBlurHandler"
-          @focus="inputFocusHandler"/>
-        <p v-if="textareaShowCounter"
-           class="form-item-counter">
-          {{this.inputValue ? this.inputValue.length : 0}}/{{this.inputMaxLength}}
-        </p>
+        <icon-font
+          v-if="inputShowArrow"
+          class="form-item-arrow"
+          name="icon-ico_right" />
       </div>
 
-      <a v-if="clickIcon"
-         class="form-item-icon border-left-1px"
-         @click.prevent="iconClickHandler">
-        <icon-font :name="clickIcon" color="#189cb2" size="20" />
-      </a>
-
-      <icon-font
-        v-if="inputShowArrow"
-        class="form-item-arrow"
-        name="icon-ico_right" />
+      <cube-validator
+        ref="$validator"
+        v-model="valid"
+        :model="inputValue"
+        :rules="rule"
+        :message="rule.message || {}" />
     </div>
+
   </div>
 
 </template>
@@ -86,17 +102,24 @@ import props from './js/formItemProps'
 
 export default {
   name: 'FormItem',
+  inject: [ 'rules' ],
   props,
   data () {
     return {
       inputValue: this.value,
-      picker: null
+      picker: null,
+
+      valid: true,
+      rule: {}
     }
   },
   computed: {
     inputType () {
       if (this.type === 'number') return 'number'
       else return 'text'
+    },
+    inputRequired () {
+      return !!this.rule.required
     },
     inputReadonly () { return this.type === 'click' || this.readonly },
     inputDisabled () { return this.disabled },
@@ -131,15 +154,16 @@ export default {
       this.inputEmit()
     }
   },
+  created () {
+    this.rulesParser()
+  },
   methods: {
     iconClickHandler () { if (!this.inputDisabled) this.$emit('on-icon-click') },
     inputClickHandler () { if (this.type === 'click' && !this.inputDisabled) this.$emit('on-click') },
     inputBlurHandler () {
       if (this.type === 'click') return
-      if (this.showRequiredToast && this.required && (this.inputValue === '' || this.inputValue === undefined)) {
-        window.toast(`${('请填写' + this.label) || this.requiredMsg}`)
-      }
       this.$emit('on-blur', this.inputValue)
+      this.doValidate()
     },
     inputFocusHandler () { this.$emit('on-focus', this.inputValue) },
     selectChangeHandler (value, index, text) { this.$emit('change', value, index, text) },
@@ -150,6 +174,16 @@ export default {
         this.inputValue = Number(this.inputValue)
       }
       this.$emit('input', this.inputValue)
+    },
+
+    rulesParser () {
+      if (!this.prop) return
+      this.rule = this.rules[this.prop]
+    },
+    async doValidate () {
+      const valid = this.$refs.$validator.validate()
+      this.valid = valid
+      return valid
     }
   }
 }
@@ -263,6 +297,12 @@ export default {
 </style>
 
 <style lang="stylus">
+  .form-item-box .cube-validator-msg
+    padding-right 16px
+    padding-bottom: 5px;
+    text-align right
+    font-size 12px
+
   .form-item-input-box
     .cube-select
       padding-right 0

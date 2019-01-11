@@ -1,13 +1,14 @@
 <template>
   <div class="create-order-page scroll-list-wrap">
     <cube-scroll class="scroll-box">
-      <form class="form">
+      <form-group ref="$form" class="form" :rules="rules">
         <div class="form-section">
           <form-title
             title="发货方信息"
             :image="IMAGES.SEND" />
           <form-item
             v-model="orderInfo.consignerCompany"
+            prop="consignerCompany"
             required
             label="客户名称"
             autofocus
@@ -144,10 +145,11 @@
             type="click"
             @on-click="$router.push({ name: 'order-other-info' })" />
         </div>
-      </form>
+      </form-group>
     </cube-scroll>
 
-    <create-footer />
+    <create-footer
+      @on-save-order="saveOrder"/>
 
     <city-picker
       v-model="showCityPicker"
@@ -159,7 +161,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import CreateFooter from '../components/CreateFooter'
-import { FormItem, FormTitle } from '@/components/Form'
+import { FormGroup, FormItem, FormTitle } from '@/components/Form'
 import CityPicker from '@/components/CityPicker'
 import { SETTLEMENT_TYPE, PICKUP_TYPE } from '../js/constant'
 
@@ -174,21 +176,36 @@ const IMAGES = {
 export default {
   name: 'order-create',
   metaInfo: { title: '手工开单' },
-  components: { FormItem, FormTitle, CreateFooter, CityPicker },
+  components: { FormGroup, FormItem, FormTitle, CreateFooter, CityPicker },
   data () {
     return {
       IMAGES,
       cityPickerType: '',
       settlementOptions: SETTLEMENT_TYPE,
-      pickupOptions: PICKUP_TYPE
+      pickupOptions: PICKUP_TYPE,
+      rules: {
+        consignerCompany: {
+          required: true,
+          type: 'email',
+          pattern: /didi.com$/,
+          custom: (val) => {
+            return val.length >= 12
+          },
+          messages: {
+            pattern: 'The E-mail suffix need to be didi.com.',
+            custom: 'The E-mail need contain at least 12 characters.'
+          }
+        }
+      }
     }
   },
   computed: {
     ...mapGetters('order', [ 'orderInfo' ]),
     ...mapGetters('contacts/consignee', [ 'saveConsigner' ]),
 
-    showCityPicker () {
-      return !!this.cityPickerType
+    showCityPicker: {
+      get: function () { return !!this.cityPickerType },
+      set: function () { this.cityPickerType = '' }
     }
   },
   methods: {
@@ -223,6 +240,10 @@ export default {
 
     editAddress () {
       this.$router.push({ name: 'order-edit-address' })
+    },
+
+    async saveOrder () {
+      console.log(await this.$refs.$form.validate())
     }
   },
   beforeRouteEnter (to, from, next) {
