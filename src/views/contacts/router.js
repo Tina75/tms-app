@@ -42,6 +42,30 @@ export default [
     path: '/contacts/consignee/select/sender',
     name: 'SelectSender',
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/selectSender.vue')
+  },
+  /* 承运商 */
+  {
+    path: '/contacts/carrier',
+    name: 'Carrier',
+    component: () => import(/* webpackChunkName: "carrier" */'./carrier/pages/index.vue')
+  },
+  /* 新增承运商 */
+  {
+    path: '/contacts/carrier/create',
+    name: 'CarrierCreate',
+    component: () => import(/* webpackChunkName: "carrier" */'./carrier/pages/create.vue')
+  },
+  /* 修改承运商 */
+  {
+    path: '/contacts/carrier/modify',
+    name: 'CarrierModify',
+    component: () => import(/* webpackChunkName: "carrier" */'./carrier/pages/modify.vue')
+  },
+  /* 承运商详情 */
+  {
+    path: '/contacts/carrier/detail/:id',
+    name: 'CarrierDetail',
+    component: () => import(/* webpackChunkName: "carrier" */'./carrier/pages/detail.vue')
   }
 ]
 
