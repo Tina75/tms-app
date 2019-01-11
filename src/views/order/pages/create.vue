@@ -69,7 +69,7 @@
             label="收货城市"
             placeholder="请选择省/市/区"
             type="click"
-            :showArrow="false"
+            :show-arrow="false"
             @on-click="cityPickerType = 'accept'" />
           <form-item
             v-model="orderInfo.consigneeAddress"
