@@ -149,7 +149,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import CreateFooter from '../components/CreateFooter'
 import { FormItem, FormTitle } from '@/components/Form'
 import { SETTLEMENT_TYPE, PICKUP_TYPE } from '../js/constant'
