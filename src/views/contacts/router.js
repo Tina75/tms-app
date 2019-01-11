@@ -46,26 +46,26 @@ export default [
   /* 承运商 */
   {
     path: '/contacts/carrier',
-    name: 'Carrier',
-    component: () => import(/* webpackChunkName: "carrier" */'./carrier/pages/index.vue')
+    name: 'carrier',
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/index.vue')
   },
   /* 新增承运商 */
   {
     path: '/contacts/carrier/create',
-    name: 'CarrierCreate',
-    component: () => import(/* webpackChunkName: "carrier" */'./carrier/pages/create.vue')
+    name: 'carrier-create',
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/create.vue')
   },
   /* 修改承运商 */
   {
     path: '/contacts/carrier/modify',
-    name: 'CarrierModify',
-    component: () => import(/* webpackChunkName: "carrier" */'./carrier/pages/modify.vue')
+    name: 'carrier-modify',
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/modify.vue')
   },
   /* 承运商详情 */
   {
     path: '/contacts/carrier/detail/:id',
-    name: 'CarrierDetail',
-    component: () => import(/* webpackChunkName: "carrier" */'./carrier/pages/detail.vue')
+    name: 'carrier-detail',
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/detail.vue')
   }
 ]
 

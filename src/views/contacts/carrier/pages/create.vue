@@ -36,7 +36,7 @@
     />
 
     <div class="fixed-button">
-      <cube-button :primary="true">确定</cube-button>
+      <cube-button :primary="true" @click="handleSubmit">确定</cube-button>
     </div>
   </div>
 </template>
@@ -82,7 +82,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([ 'createCarrier' ]),
+    ...mapActions('contacts', [ 'createCarrier' ]),
 
     /* 打开结算方式选择器 */
     openSelector () {
@@ -99,7 +99,7 @@ export default {
     /* 结算方式选中 */
     handleSelected (selectedVal, selectedIndex, selectedText) {
       this.payTypePicker = selectedText.shift()
-      this.form.payType = selectedVal.shift()
+      this.form.payType = +selectedVal.shift()
     },
 
     /* 清空表单 */
@@ -122,7 +122,8 @@ export default {
 
     /* 提交表单 */
     handleSubmit () {
-
+      const params = { ...this.form }
+      this.createCarrier(params)
     }
   }
 }
