@@ -1,5 +1,5 @@
 // form item type
-const FORM_ITEM_TYPE = [ 'text', 'textarea', 'number', 'switch', 'select', 'click' ]
+const FORM_ITEM_TYPE = [ 'text', 'textarea', 'number', 'switch', 'select', 'click', 'loading' ]
 const FORM_ITEM_ALIGN = [ 'left', 'center', 'right' ]
 const itemInArray = (item, array) => array.indexOf(item) > -1
 
@@ -11,7 +11,7 @@ export default {
   // 输入框类型
   // text-文字输入框 number-数字输入框 textarea-文本框 switch-开关按钮
   // select-下拉框，该类型需要提供 options [{ text, value}] 属性, 提供的事件与cubeui select相同
-  // click-点击按钮，该类型不会触发校验，提供on-click作为事件处理回调
+  // click-点击按钮，该类型不会触发校验，提供on-click作为事件处理回调，并且无法自动校验，只能通过表单的validate进行校验
   type: {
     type: String,
     default: 'text',
@@ -19,7 +19,7 @@ export default {
   },
   // select类型的选择数据
   options: {
-    type: Array,
+    type: [Array, Promise],
     default: () => [] // { text, value }
   },
   // 输入框提示文字
@@ -29,8 +29,13 @@ export default {
   },
   // 开启校验时，对应的 model 字段名
   prop: {
-    type: String,
-    default: ''
+    type: Boolean,
+    default: false
+  },
+  // 输入框是否必填
+  required: {
+    type: Boolean,
+    default: false
   },
   placeholder: {
     type: String,

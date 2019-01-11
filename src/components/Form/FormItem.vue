@@ -8,6 +8,8 @@
         </label>
 
         <div class="form-item-input-box">
+          <cube-loading v-if="type === 'loading'" class="form-item-loading" :size="20" />
+
           <!-- 输入框 type = text || number  -->
           <cube-input
             v-if="type === 'text' || type === 'number'"
@@ -102,7 +104,12 @@ import props from './js/formItemProps'
 
 export default {
   name: 'FormItem',
-  inject: [ 'rules' ],
+  inject: {
+    rules: {
+      from: 'rules',
+      default: null
+    }
+  },
   props,
   data () {
     return {
@@ -127,8 +134,8 @@ export default {
     inputPlaceHolder () {
       let ph
       if (this.placeholder) ph = this.placeholder
-      if (this.type === 'picker') return (ph || '请选择') + (this.required ? '(必选)' : '')
-      return (ph || '请输入') + (this.required ? '(必填)' : '')
+      if (this.type === 'picker') return (ph || '请选择') + (this.inputRequired ? '(必选)' : '')
+      return (ph || '请输入') + (this.inputRequired ? '(必填)' : '')
     },
     inputMaxLength () {
       const maxlength = Number(this.maxlength)
@@ -168,16 +175,20 @@ export default {
     inputFocusHandler () { this.$emit('on-focus', this.inputValue) },
     selectChangeHandler (value, index, text) { this.$emit('change', value, index, text) },
     pickerShowHandler () { this.$emit('picker-show') },
-    pickerHideHandler () { this.$emit('picker-hide') },
+    pickerHideHandler () {
+      this.$emit('picker-hide')
+      this.doValidate()
+    },
     inputEmit () {
       if (this.type === 'number' && this.inputValue !== '') {
         this.inputValue = Number(this.inputValue)
       }
       this.$emit('input', this.inputValue)
+      this.doValidate()
     },
 
     rulesParser () {
-      if (!this.prop) return
+      if (!this.prop || !this.rules) return
       this.rule = this.rules[this.prop]
     },
     async doValidate () {
@@ -284,6 +295,12 @@ export default {
         font-size 13px
         color #999999
         text-align right
+
+      .form-item-loading
+        height 50px
+        display flex
+        justify-content flex-end
+        align-items center
 
   .form-item-textarea
     display block

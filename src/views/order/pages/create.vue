@@ -17,12 +17,12 @@
             @on-icon-click="selectSender" />
           <form-item
             v-model="orderInfo.consignerName"
-            required
+            prop="consignerName"
             maxlength="15"
             label="发货人" />
           <form-item
             v-model="orderInfo.consignerPhone"
-            required
+            prop="consignerPhone"
             label="联系号码"
             type="number"
             maxlength="20" />
@@ -35,7 +35,7 @@
             @on-click="cityPickerType = 'send'" />
           <form-item
             v-model="orderInfo.consignerAddress"
-            required
+            prop="consignerAddress"
             label="详细地址"
             placeholder="请输入"
             :show-arrow="false"
@@ -54,14 +54,14 @@
             :image="IMAGES.ACCEPT" />
           <form-item
             v-model="orderInfo.consigneeName"
-            required
+            prop="consigneeName"
             label="收货人"
             maxlength="15"
             click-icon="icon-ico_custerm"
             @on-icon-click="chooseUserInfo('accept')" />
           <form-item
             v-model="orderInfo.consigneePhone"
-            required
+            prop="consigneePhone"
             label="联系号码"
             type="number"
             maxlength="20" />
@@ -74,7 +74,7 @@
             @on-click="cityPickerType = 'accept'" />
           <form-item
             v-model="orderInfo.consigneeAddress"
-            required
+            prop="consigneeAddress"
             ellipsis
             label="详细地址"
             placeholder="请输入"
@@ -90,7 +90,7 @@
         <div class="form-section">
           <form-item
             v-model="orderInfo.cargoInfo"
-            required
+            prop="cargoInfo"
             label="货物信息"
             :label-image="IMAGES.BOX"
             type="click"
@@ -101,19 +101,19 @@
         <div class="form-section">
           <form-item
             v-model="orderInfo.settlementType"
-            required
+            prop="settlementType"
             type="select"
             :options="settlementOptions"
             label="结算方式" />
           <form-item
             v-model="orderInfo.pickupType"
-            required
+            prop="pickupType"
             type="select"
             label="提货方式"
             :options="pickupOptions" />
           <form-item
             v-model="orderInfo.receiptNumber"
-            required
+            prop="receiptNumber"
             type="number"
             label="回单数量(份)" />
         </div>
@@ -186,16 +186,21 @@ export default {
       rules: {
         consignerCompany: {
           required: true,
-          type: 'email',
-          pattern: /didi.com$/,
-          custom: (val) => {
-            return val.length >= 12
-          },
-          messages: {
-            pattern: 'The E-mail suffix need to be didi.com.',
-            custom: 'The E-mail need contain at least 12 characters.'
-          }
-        }
+          type: 'string'
+          // pattern
+          // custom
+          // message
+        },
+        consignerName: { required: true, type: 'string' },
+        consignerPhone: { required: true, type: 'number' },
+        consignerAddress: { required: true, type: 'string' },
+        consigneeName: { required: true, type: 'string' },
+        consigneePhone: { required: true, type: 'number' },
+        consigneeAddress: { required: true, type: 'string' },
+        cargoInfo: { required: true, type: 'string' },
+        settlementType: { required: true, type: 'number' },
+        pickupType: { required: true, type: 'number' },
+        receiptNumber: { required: true, type: 'number' }
       }
     }
   },

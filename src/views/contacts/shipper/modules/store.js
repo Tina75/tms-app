@@ -20,7 +20,6 @@ export default {
       }
     },
     setContactModify(state, payload) {
-      state.contactModify[payload.key] = payload.value
     }
   },
   actions,

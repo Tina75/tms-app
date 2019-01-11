@@ -94,9 +94,9 @@ export default {
       this.loading = true
       setTimeout(() => {
         const scroll = this.$refs.scroll
-        scroll.scrollTo(0, 60)
+        scroll.scrollTo(0, 50)
         scroll._pullDownHandle()
-        scroll._pullDownScrollHandle({ y: 60 })
+        scroll._pullDownScrollHandle({ y: 50 })
       })
     },
     stopListLoading() {
