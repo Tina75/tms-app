@@ -80,7 +80,7 @@ export default {
   name: 'ConsigneeAdd',
   metaInfo () {
     return {
-      title: this.$route.query.id === undefined ? '新增收货方' : '编辑收货方'
+      title: this.$route.params.type === 'add' ? '新增收货方' : '编辑收货方'
     }
   },
   components: { CityPicker, FormItem },
@@ -144,14 +144,9 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.clearFormList()
-      vm.formList = vm.consigneeDetail
-      console.log(vm.$route.query.id)
-      // if (vm.saveConsigner.name) {
-      //   vm.formList.consigner = vm.saveConsigner.name
-      // }
-      // if (vm.consigneeDetail.id) {
-      //   vm.formList = vm.consigneeDetail
-      // }
+      if (vm.saveConsigner.name) {
+        vm.formList.consigner = vm.saveConsigner.name
+      }
     })
   },
   beforeRouteLeave (to, from, next) {

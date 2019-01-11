@@ -1,7 +1,7 @@
 import store from '@/store'
 export default [
   {
-    // 发货方通信录
+  // 发货方通信录
     path: '/contacts/shipper',
     name: 'contacts-shipper',
     meta: {
@@ -10,7 +10,7 @@ export default [
     component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/index.vue')
   },
   {
-    // 编辑发货方
+  // 编辑发货方
     path: '/contacts/shipper/modify/:type',
     name: 'contacts-modify',
     meta: {
@@ -18,25 +18,25 @@ export default [
     },
     component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/modify.vue')
   },
-    // 发货方列表
+  // 发货方列表
   {
     path: '/contacts/consignee',
     name: 'contacts-consignee',
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/index.vue')
   },
-    // 发货方详情
+  // 发货方详情
   {
     path: '/contacts/consignee/detail',
     name: 'contacts-consignee-detail',
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/detail.vue')
   },
-    // 编辑和新增发货方
+  // 编辑和新增发货方
   {
     path: '/contacts/consignee/form/:type',
     name: 'contacts-consignee-form',
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/form.vue')
   },
-    // 选择所属发货方
+  // 选择所属发货方
   {
     path: '/contacts/consignee/select/shipper',
     name: 'select-shipper',

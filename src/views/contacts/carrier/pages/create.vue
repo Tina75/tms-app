@@ -46,7 +46,7 @@ import { mapActions } from 'vuex'
 import { FormItem } from '@/components/Form'
 
 const payTypeConf = [
-  { text: '按单结', value: '1'},
+  { text: '按单结', value: '1' },
   { text: '月结', value: '2' }
 ]
 

@@ -48,16 +48,15 @@ export default {
   background-color #ffffff
   text-align center
   .img
-    height 182px
+    // height 182px
     width 185px
-    margin-top 121px
+    margin-top 137px
   .message
     margin 0px 89px
     font-size 14px
     color #666666
     line-height 24px
-    position relative
-    top -48px
+    margin-bottom 27px
   .cube-btn
     margin 0px 118px
     width 140px
