@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import { sync } from 'vuex-router-sync'
 import store from '@/store'
 import { closeWindow } from '@/libs/bridgeUtil'
-
 Vue.use(Router)
 let routes = [{
   path: '/',
