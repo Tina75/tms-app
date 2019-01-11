@@ -42,11 +42,16 @@
         </cube-index-list-item>
       </cube-index-list-group>
       <NoData
-        v-if="consigneeList.length <= 0"
-        :message="config.content"
-        :img="config.img"
-        button-text="新增收货方"
-        @btn-click="btnClick"/>
+        v-if="consigneeList.length <= 0 && !loading"
+        message="老板，您还没有记录收货方信息赶快新增一个，方便联系哦～"
+        action="新增收货方"
+        @btn-click="btnClick">
+        <img
+          slot="img"
+          src="@/assets/contacts/consigness_nodata.png"
+          class="consignee_nodata"
+        >
+      </NoData>
     </cube-index-list>
   </div>
 </template>
@@ -55,10 +60,6 @@ import IconFont from '@/components/Iconfont'
 import { mapGetters } from 'vuex'
 import NoData from '@/components/NoData'
 const moudleName = 'contacts/consignee'
-const config = {
-  img: require('../assets/consigness_nodata.png'),
-  content: '老板，您还没有记录收货方信息 赶快新增一个，方便联系哦～'
-}
 export default {
   name: 'Consignee',
   metaInfo: {
@@ -67,20 +68,22 @@ export default {
   components: { IconFont, NoData },
   data () {
     return {
-      config,
       options: {
         pullDownRefresh: {
-          threshold: 60,
-          stop: 40,
+          threshold: 30,
           txt: '更新成功'
         }
-      }
+      },
+      loading: false
     }
   },
   computed: {
     ...mapGetters(moudleName, ['consigneeList'])
   },
   methods: {
+    onPageRefresh() {
+      this.startHackLoading()
+    },
     selectItem (idx) {
       console.log(idx)
       this.$router.push({
@@ -103,6 +106,15 @@ export default {
         console.log(1)
         this.$refs.indexList.forceUpdate()
       }, 1000)
+    },
+    startHackLoading() {
+      this.loading = true
+      setTimeout(() => {
+        const scroll = this.$refs.indexList
+        scroll.scrollTo(0, 60)
+        scroll._pullDownHandle()
+        scroll._pullDownScrollHandle({ y: 60 })
+      })
     }
   }
 }
@@ -111,6 +123,8 @@ export default {
 .consignee
   height 100%
   background-color #EFEFEF
+  &_nodata
+    width 185px
   &_list
     height 100%
   .border-bottom-1px:after

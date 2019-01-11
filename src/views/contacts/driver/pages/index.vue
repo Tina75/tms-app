@@ -1,9 +1,11 @@
 <template>
-  <div class="consignee">
+  <div class="driver">
     <cube-index-list
-      v-if="driverList && driverList.length > 0"
+      ref="indexList"
       :data="driverList"
-      class="consignee_list">
+      :options="options"
+      class="driver_list"
+      @pulling-down="onPullingDown">
       <cube-index-list-group
         v-for="(group, index) in driverList"
         :key="index"
@@ -13,19 +15,14 @@
           :key="index"
           :item="item"
           @select="selectItem(index)">
-          <div class="consignee_item border-bottom-1px">
-            <div class="consignee_item_img">
+          <div class="driver_item border-bottom-1px">
+            <div class="driver_item_img">
               {{item.name.slice(0,1)}}
             </div>
-            <div class="consignee_item_info">
-              <div>
-                <div class="info_top">
-                  <span>{{item.name}}</span>
-                  <span>{{item.phone}}</span>
-                </div>
-                <div class="info_bottom cube-ellipsis">
-                  {{item.address}}
-                </div>
+            <div class="driver_item_info">
+              <div class="info_detail">
+                <div class="name">{{item.name}}</div>
+                <div class="phone">{{item.phone}}</div>
               </div>
               <div class="info_phone">
                 <IconFont
@@ -39,69 +36,71 @@
           </div>
         </cube-index-list-item>
       </cube-index-list-group>
+      <NoData
+        v-if="driverList.length <= 0"
+        message="老板，您还没有记录熟车司机信息赶快新增一个，方便联系哦～"
+        action="新增熟车司机"
+        @btn-click="btnClick">
+        <img
+          slot="img"
+          src="../assets/driver-nodata.png"
+          class="driver_nodata"
+        >
+      </NoData>
     </cube-index-list>
-    <NoData
-      v-else
-      :message="config.content"
-      :img="config.img"
-      button-text="新增收货方"
-      @btn-click="btnClick"/>
   </div>
 </template>
 <script>
 import IconFont from '@/components/Iconfont'
 import { mapGetters } from 'vuex'
 import NoData from '@/components/NoData'
-// const moudleName = 'contacts/driver'
-const config = {
-  img: require('../assets/driver-nodata.png'),
-  content: '老板，您还没有记录收货方信息 赶快新增一个，方便联系哦～'
-}
+const moudleName = 'contacts/driver'
 export default {
-  name: 'Consignee',
+  name: 'driver',
   metaInfo: {
-    title: '收货方'
+    title: '熟车司机'
   },
   components: { IconFont, NoData },
   data () {
     return {
-      config
+      options: {
+        pullDownRefresh: {
+          threshold: 30,
+          txt: '更新成功'
+        }
+      }
     }
   },
   computed: {
-    ...mapGetters(['driverList'])
+    ...mapGetters(moudleName, ['driverList'])
   },
   methods: {
     selectItem (idx) {
       console.log(idx)
-      this.$router.push({
-        name: 'contacts-consignee-detail'
-      })
     },
     callPhone (phone) {
       window.location.href = `tel:${phone}`
     },
     btnClick () {
-      this.$router.push({
-        name: 'contacts-consignee-form',
-        params: {
-          type: 'add'
-        }
-      })
+
+    },
+    onPullingDown () {
+      setTimeout(() => {
+        console.log(1)
+        this.$refs.indexList.forceUpdate()
+      }, 1000)
     }
   }
 }
 </script>
 <style lang="stylus" scoped>
-.consignee
+.driver
   height 100%
   background-color #EFEFEF
+  &_nodata
+    width 182px
   &_list
     height 100%
-    >>>.cube-index-list-anchor
-      // display none
-    >>>.cube-index-list-fixed
-      // position relative
   .border-bottom-1px:after
     left 70px
   &_item
@@ -121,27 +120,30 @@ export default {
       color #ffffff
       background-color #E4E7EC
     &_info
+      flex 1
       margin-left 15px
       display flex
+      justify-content space-between
       padding 10px 0px
-      .info_top
+      padding-right 10px
+      .info_detail
         font-size 17px
         color #333333
         font-weight 400
         line-height 18px
-        span
-          margin-right 11px
-      .info_bottom
-        margin-top 8px
-        font-size 14px
-        max-width 224px
-        color #999999
-        line-height 14px
+        .name
+          color #333333
+          font-weight 400
+        .phone
+          color #999999
+          margin-top 8px
+          font-size 14px
+          line-height 14px
       .info_phone
-        margin-left 21px
+        // margin-left 150px
   >>>.cube-index-list-nav
     top 20%
-    right -5px
+    right -10px
   >>>.cube-index-list-nav > ul > li
     margin-top 10px
 </style>

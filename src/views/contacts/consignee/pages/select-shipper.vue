@@ -31,9 +31,14 @@
     </div>
     <NoData
       v-else
-      :img="config.img"
-      button-text="新增发货方"
-      :message="config.message"/>
+      action="新增发货方"
+      message="老板，您还没有记录发货方信息赶快新增一个，方便联系哦～">
+      <img
+        slot="img"
+        src="@/assets/contacts/shipper-list-empty.png"
+        class="select_nodata"
+      >
+    </NoData>
   </div>
 </template>
 <script>
@@ -41,10 +46,6 @@ import IconFont from '@/components/Iconfont'
 import NoData from '@/components/NoData'
 import { mapGetters, mapActions } from 'vuex'
 const moudleName = 'contacts/consignee'
-const config = {
-  img: require('../assets/shipper_nodata.png'),
-  message: '老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～'
-}
 export default {
   name: 'SelectSender',
   metaInfo: {
@@ -53,7 +54,6 @@ export default {
   components: { IconFont, NoData },
   data () {
     return {
-      config,
       showData: false
     }
   },
@@ -80,47 +80,49 @@ export default {
 <style lang="stylus" scoped>
 .select
   height 100%
-  // padding-top 40px
-  .border-bottom-1px:after
-    left 70px
-  .select_item
-    width 100%
-    height 60px
-    padding 10px 15px
-    display flex
-    box-sizing border-box
-    align-items center
-    background-color #ffffff
-    &_img
-      width 40px
-      height 40px
-      border-radius 50%
-      line-height 40px
-      text-align center
-      font-size 17px
-      color #ffffff
-      background-color #E4E7EC
-    &_info
-      margin-left 15px
+// padding-top 40px
+  &_nodata
+    width 182px
+    .border-bottom-1px:after
+      left 70px
+    .select_item
+      width 100%
+      height 60px
+      padding 10px 15px
       display flex
-      padding 10px 0px
-      .info_top
-        font-size 17px
-        color #333333
-        font-weight 400
-        line-height 18px
-      .info_bottom
-        margin-top 8px
-        font-size 14px
-        max-width 224px
-        color #999999
-        line-height 14px
-        span
-          margin-right 10px
-      .info_phone
-        margin-left 21px
-        margin-top 5px
-        width 30px
-        height 30px
-        vertical-align middle
+      box-sizing border-box
+      align-items center
+      background-color #ffffff
+  &_img
+    width 40px
+    height 40px
+    border-radius 50%
+    line-height 40px
+    text-align center
+    font-size 17px
+    color #ffffff
+    background-color #E4E7EC
+  &_info
+    margin-left 15px
+    display flex
+    padding 10px 0px
+    .info_top
+      font-size 17px
+      color #333333
+      font-weight 400
+      line-height 18px
+    .info_bottom
+      margin-top 8px
+      font-size 14px
+      max-width 224px
+      color #999999
+      line-height 14px
+      span
+        margin-right 10px
+    .info_phone
+      margin-left 21px
+      margin-top 5px
+      width 30px
+      height 30px
+      vertical-align middle
 </style>

@@ -63,7 +63,7 @@ export default {
     // height 182px
     width 185px
   &__message
-    width 200px
+    width 210px
     font-size 14px
     color #666666
     line-height 24px
