@@ -168,16 +168,20 @@ export default {
     inputFocusHandler () { this.$emit('on-focus', this.inputValue) },
     selectChangeHandler (value, index, text) { this.$emit('change', value, index, text) },
     pickerShowHandler () { this.$emit('picker-show') },
-    pickerHideHandler () { this.$emit('picker-hide') },
+    pickerHideHandler () {
+      this.$emit('picker-hide')
+      this.doValidate()
+    },
     inputEmit () {
       if (this.type === 'number' && this.inputValue !== '') {
         this.inputValue = Number(this.inputValue)
       }
       this.$emit('input', this.inputValue)
+      this.doValidate()
     },
 
     rulesParser () {
-      if (!this.prop) return
+      if (!this.prop || !this.rules) return
       this.rule = this.rules[this.prop]
     },
     async doValidate () {

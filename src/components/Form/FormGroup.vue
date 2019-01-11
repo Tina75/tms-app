@@ -13,13 +13,11 @@ export default {
     }
   },
   props: {
-    value: {
-      type: Object,
-      default: () => {}
-    },
+    // rules 为表单校验规则，使用请参考 /order/create 和 cubeui-validator
+    // 当前不支持校验触发事件，会在input和blur事件时自动触发校验
     rules: {
       type: Object,
-      default: () => {}
+      default: null
     }
   },
   methods: {
