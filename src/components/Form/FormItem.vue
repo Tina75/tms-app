@@ -98,7 +98,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { Validator } from 'cube-ui'
 import props from './js/formItemProps'
+
+Vue.use(Validator)
 
 export default {
   name: 'FormItem',
@@ -114,7 +118,7 @@ export default {
       inputValue: this.value,
       picker: null,
 
-      valid: true,
+      valid: void 0,
       rule: {}
     }
   },
@@ -188,6 +192,10 @@ export default {
     rulesParser () {
       if (!this.prop || !this.rules) return
       this.rule = this.rules[this.prop]
+      if (!this.rule.messages) return
+      for (let key in this.rule.messages) {
+        Validator.addMessage(key, this.rule.messages[key])
+      }
     },
     async doValidate () {
       const valid = this.$refs.$validator.validate()
