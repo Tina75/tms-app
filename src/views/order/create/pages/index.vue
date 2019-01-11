@@ -1,6 +1,7 @@
 <template>
   <div class="create-order-page scroll-list-wrap">
     <cube-scroll class="scroll-box">
+      <cube-button primary @click="$router.push({ name: 'order-often' })">常发订单</cube-button>
       <form-group ref="$form" class="form" :rules="rules">
         <div class="form-section">
           <form-title
@@ -191,6 +192,18 @@ export default {
           // custom
           // message
         },
+        // consignerCompany: {
+        //   required: true,
+        //   type: 'email',
+        //   pattern: /didi.com$/,
+        //   other: (val) => {
+        //     return val.length >= 12
+        //   },
+        //   messages: {
+        //     pattern: 'The E-mail suffix need to be didi.com.',
+        //     other: 'The E-mail need contain at least 12 characters.'
+        //   }
+        // },
         consignerName: { required: true, type: 'string' },
         consignerPhone: { required: true, type: 'number' },
         consignerAddress: { required: true, type: 'string' },
@@ -205,7 +218,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order', [ 'orderInfo' ]),
+    ...mapGetters('order/create', [ 'orderInfo' ]),
     ...mapGetters('contacts/consignee', [ 'saveConsigner' ]),
 
     showCityPicker: {
