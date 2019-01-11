@@ -1,6 +1,6 @@
 <template>
   <div class="form-item-box">
-    <div class="form-item border-bottom-1px" :class="{'form-item-textarea': type === 'textarea'}">
+    <div class="form-item" :class="{'form-item-textarea': type === 'textarea', 'border-bottom-1px':bottomLine}">
       <label v-if="label" class="form-item-label" :class="{ 'form-item-required': required }">
         <img v-if="labelImage" class="form-item-label-image" :src="labelImage" >
         {{ label }}
@@ -13,6 +13,7 @@
           class="form-item-input"
           :class="inputAlignment"
           :type="inputType"
+          :autofocus="autofocus"
           :placeholder="inputPlaceHolder"
           :maxlength="Number(maxlength)"
           :readonly="inputReadonly"
@@ -24,8 +25,8 @@
         <div
           v-if="type === 'click'"
           class="form-item-input form-item-click"
-          :class="inputAlignment"
-          :style="inputValue.length ? 'line-height: 1.5' : 'color: #C5C8CE'"
+          :class="inputClickClass"
+          :style="(inputValue !== undefined && inputValue !== '') ? 'line-height: 1.5; color: #666666' : 'color: #C5C8CE'"
           @click="inputClickHandler">
           {{ inputValue || inputPlaceHolder }}
         </div>
@@ -46,7 +47,7 @@
           @focus="inputFocusHandler"/>
         <p v-if="this.type === 'textarea' && this.maxlength !== Infinity"
            class="form-item-counter">
-          {{this.inputValue.length}}/{{this.maxlength}}
+          {{this.inputValue ? this.inputValue.length : 0}}/{{this.maxlength}}
         </p>
       </div>
 
@@ -93,6 +94,11 @@ export default {
     },
     inputAlignment () {
       return 'form-item-input-align-' + this.align
+    },
+    inputClickClass () {
+      let classes = 'form-item-input-align-' + this.align
+      if (this.ellipsis) classes += ' ' + 'form-item-click-ellipsis'
+      return classes
     }
   },
   watch: {
@@ -111,7 +117,7 @@ export default {
     },
     inputBlurHandler () {
       if (this.type === 'click') return
-      if (this.required && (this.inputValue === '' || this.inputValue === undefined)) {
+      if (this.showRequiredToast && this.required && (this.inputValue === '' || this.inputValue === undefined)) {
         window.toast(`${('请填写' + this.label) || this.requiredMsg}`)
       }
       this.$emit('on-blur', this.inputValue)
@@ -121,6 +127,7 @@ export default {
       if (this.type === 'number' && this.inputValue !== '') {
         this.inputValue = Number(this.inputValue)
       }
+      console.info(this.inputValue)
       this.$emit('input', this.inputValue)
     }
   }
@@ -145,10 +152,12 @@ export default {
   .form-item-box
     padding-left 16px
     background #ffffff
-
+    &:last-of-type
+      .border-bottom-1px:after
+        content none
   .form-item
     display flex
-    // align-items center
+    align-items center
     position relative
     min-height 50px
     padding-right 16px
@@ -156,7 +165,7 @@ export default {
 
     &-label
       flex none
-      margin-right 5px
+      margin-right 40px
       font-size 15px
 
       &-image
@@ -175,7 +184,6 @@ export default {
       flex none
       height 25px
       margin-left 10px
-      margin-top 12px
       padding-left 16px
       line-height 25px
 
@@ -186,6 +194,7 @@ export default {
 
     &-input-box
       flex auto
+      width 0
       min-height 50px
 
       .form-item-input
@@ -202,6 +211,11 @@ export default {
         margin 14px 0
         min-height 22px
         line-height 22px
+        &-ellipsis
+          height 22px
+          white-space nowrap
+          overflow hidden
+          text-overflow ellipsis
 
       .form-item-switch
         float right
@@ -222,6 +236,9 @@ export default {
     padding-top 16px
     padding-bottom 10px
     line-height 1
+
+    .form-item-input-box
+      width 100%
 </style>
 
 <style lang="stylus">

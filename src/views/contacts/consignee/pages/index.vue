@@ -52,7 +52,7 @@
 import IconFont from '@/components/Iconfont'
 import { mapGetters } from 'vuex'
 import NoData from '@/components/NoData'
-
+const moudleName = 'contacts/consignee'
 const config = {
   img: require('../assets/consigness_nodata.png'),
   content: '老板，您还没有记录收货方信息 赶快新增一个，方便联系哦～'
@@ -69,7 +69,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('consignee', ['consigneeList'])
+    ...mapGetters(moudleName, ['consigneeList'])
   },
   methods: {
     selectItem (idx) {

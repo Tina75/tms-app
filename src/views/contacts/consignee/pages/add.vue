@@ -70,6 +70,7 @@ import { FormItem } from '@/components/Form'
 import CityPicker from '@/components/CityPicker'
 import { mapGetters, mapActions } from 'vuex'
 import validator from '@/libs/validate'
+const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeAdd',
   metaInfo () {
@@ -86,10 +87,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('consignee', ['saveConsigner', 'formList'])
+    ...mapGetters(moudleName, ['saveConsigner', 'formList'])
   },
   methods: {
-    ...mapActions('consignee', ['saveConsignerInfo', 'clearFormList']),
+    ...mapActions(moudleName, ['saveConsignerInfo', 'clearFormList']),
     validatePhone (value) {
       value = value.replace(/\s/g, '')
       if (value && !(validator.phone(value) || validator.telphone(value))) {

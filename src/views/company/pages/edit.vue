@@ -176,6 +176,9 @@ export default {
     removeContact (item) {
       this.contactList.splice(item, 1)
       this.addContactBtn = true
+    },
+    save () {
+      this.$router.push({ name: 'company' })
     }
   }
 

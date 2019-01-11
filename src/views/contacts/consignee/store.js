@@ -1,7 +1,7 @@
-import * as types from './mutationTypes'
-import * as actions from './actions'
-import * as getters from './getters'
-import mock from '../pages/mock.json'
+import * as types from './modules/mutationTypes'
+import * as actions from './modules/actions'
+import * as getters from './modules/getters'
+import mock from './pages/mock.json'
 
 const state = {
   consigneeList: mock.list, // 收货方列表
@@ -45,7 +45,7 @@ const mutations = {
 }
 
 export default {
-  namespaced:true,
+  namespaced: true,
   actions,
   state,
   getters,
