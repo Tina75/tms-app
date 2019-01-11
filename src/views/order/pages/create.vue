@@ -30,7 +30,8 @@
             label="发货城市"
             placeholder="请选择省/市/区"
             type="click"
-            :show-arrow="false" />
+            :show-arrow="false"
+            @on-click="cityPickerType = 'send'" />
           <form-item
             v-model="orderInfo.consignerAddress"
             required
@@ -67,7 +68,9 @@
             v-model="orderInfo.consigneeCity"
             label="收货城市"
             placeholder="请选择省/市/区"
-            type="click" />
+            type="click"
+            :show-arrow="false"
+            @on-click="cityPickerType = 'accept'" />
           <form-item
             v-model="orderInfo.consigneeAddress"
             required
@@ -98,15 +101,15 @@
           <form-item
             v-model="orderInfo.settlementType"
             required
-            type="click"
-            label="结算方式"
-            @on-click="showPicker('settlementType')" />
+            type="select"
+            :options="settlementOptions"
+            label="结算方式" />
           <form-item
             v-model="orderInfo.pickupType"
             required
-            type="click"
+            type="select"
             label="提货方式"
-            @on-click="showPicker('pickupType')" />
+            :options="pickupOptions" />
           <form-item
             v-model="orderInfo.receiptNumber"
             required
@@ -145,6 +148,11 @@
     </cube-scroll>
 
     <create-footer />
+
+    <city-picker
+      v-model="showCityPicker"
+      @confirm="pickCity"
+      @input="cityPickerType = ''" />
   </div>
 </template>
 
@@ -152,6 +160,7 @@
 import { mapGetters } from 'vuex'
 import CreateFooter from '../components/CreateFooter'
 import { FormItem, FormTitle } from '@/components/Form'
+import CityPicker from '@/components/CityPicker'
 import { SETTLEMENT_TYPE, PICKUP_TYPE } from '../js/constant'
 
 const IMAGES = {
@@ -165,30 +174,32 @@ const IMAGES = {
 export default {
   name: 'order-create',
   metaInfo: { title: '手工开单' },
-  components: { FormItem, FormTitle, CreateFooter },
+  components: { FormItem, FormTitle, CreateFooter, CityPicker },
   data () {
     return {
-      IMAGES
+      IMAGES,
+      cityPickerType: '',
+      settlementOptions: SETTLEMENT_TYPE,
+      pickupOptions: PICKUP_TYPE
     }
   },
   computed: {
     ...mapGetters('order', [ 'orderInfo' ]),
-    ...mapGetters('consignee', [ 'saveConsigner' ])
+    ...mapGetters('contacts/consignee', [ 'saveConsigner' ]),
+
+    showCityPicker () {
+      return !!this.cityPickerType
+    }
   },
   methods: {
-    showPicker (type) {
-      let data
-      if (type === 'settlementType') data = [ SETTLEMENT_TYPE ]
-      if (type === 'pickupType') data = [ PICKUP_TYPE ]
-
-      this.$createPicker({
-        data,
-        onSelect: (valueArr, selectedIndex, textArr) => {
-          this.orderInfo[type] = textArr[0]
-        }
-      }).show()
+    pickCity (data) {
+      const cityName = Array.from(new Set(data.map(item => item.name))).join('')
+      if (this.cityPickerType === 'send') this.orderInfo.consignerCity = cityName
+      else this.orderInfo.consigneeCity = cityName
+      this.cityPickerType = ''
     },
 
+    // 设置选择后的收货人信息
     setSender () {
       if (this.saveConsigner.company) {
         this.orderInfo.consignerCompany = this.saveConsigner.company
@@ -202,7 +213,7 @@ export default {
 
     selectSender () {
       this.$router.push({
-        name: 'SelectSender'
+        name: 'select-shipper'
       })
     },
 

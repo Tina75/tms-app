@@ -70,7 +70,7 @@ const webpackConfig = config.configureWebpack
 // 打包分析
 if (useBundleAnalyzer) {
   webpackConfig.plugins = webpackConfig.plugins || []
-  const util = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-  webpackConfig.plugins.push(new util())
+  const Util = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+  webpackConfig.plugins.push(new Util())
 }
 module.exports = config

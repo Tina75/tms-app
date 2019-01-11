@@ -13,12 +13,15 @@ var instance = axios.create({
 
 instance.interceptors.request.use(
   (config) => {
+    const startTime = getTime()
+    console.info(`${config.method}: ${config.url} ${startTime.string} `, config)
     // 取实时的认证信息
     Object.assign(config.headers, getUserInfo())
     // loading
     if (config.loading) window.loading()
     if (process.env.NODE_ENV !== 'production' && (config.mock || Number(process.env.VUE_APP_IS_MOCK))) {
-      config.baseURL = process.env.VUE_APP_HOST_MOCK
+      config.baseURL = '/'
+      // config.baseURL = process.env.VUE_APP_HOST_MOCK
     }
     if (config.method === 'get' && config.data) {
       config.params = config.data
@@ -32,6 +35,8 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (response) => {
+    const endTime = getTime()
+    console.info(`response ${endTime.string} `, response)
     if (response.config.loading) window.loading(false)
     const resultCode = response.data.code
     if (response.config.ignoreCode || resultCode === 10000) {
@@ -97,3 +102,11 @@ function logout() {
 }
 
 export default instance
+
+function getTime() {
+  const date = new Date()
+  return {
+    time: date.getTime(),
+    string: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+  }
+}

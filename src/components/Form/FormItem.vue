@@ -8,19 +8,32 @@
 
       <div class="form-item-input-box">
         <cube-input
-          v-if="type !== 'switch' && type !== 'textarea' && type !== 'click'"
+          v-if="type === 'text' || type === 'number'"
           v-model="inputValue"
           class="form-item-input"
           :class="inputAlignment"
           :type="inputType"
           :autofocus="autofocus"
           :placeholder="inputPlaceHolder"
-          :maxlength="Number(maxlength)"
+          :maxlength="inputMaxLength"
           :readonly="inputReadonly"
           :disabled="inputDisabled"
           :clearable="clearable"
           @blur="inputBlurHandler"
           @focus="inputFocusHandler" />
+
+        <cube-select
+          v-if="type === 'select'"
+          v-model="inputValue"
+          class="form-item-input"
+          :class="inputAlignment"
+          :options="options"
+          :placeholder="inputPlaceHolder"
+          :title="inputPlaceHolder"
+          :disabled="inputDisabled"
+          @change="selectChangeHandler"
+          @picker-show="pickerShowHandler"
+          @picker-hide="pickerHideHandler" />
 
         <div
           v-if="type === 'click'"
@@ -42,12 +55,14 @@
           class="form-item-input"
           :rows="rows"
           :placeholder="inputPlaceHolder"
-          :maxlength="maxlength"
+          :maxlength="inputMaxLength"
+          :readonly="inputReadonly"
+          :disabled="inputDisabled"
           @blur="inputBlurHandler"
           @focus="inputFocusHandler"/>
-        <p v-if="this.type === 'textarea' && this.maxlength !== Infinity"
+        <p v-if="textareaShowCounter"
            class="form-item-counter">
-          {{this.inputValue ? this.inputValue.length : 0}}/{{this.maxlength}}
+          {{this.inputValue ? this.inputValue.length : 0}}/{{this.inputMaxLength}}
         </p>
       </div>
 
@@ -58,7 +73,7 @@
       </a>
 
       <icon-font
-        v-if="this.type === 'click' && this.inputShowArrow"
+        v-if="inputShowArrow"
         class="form-item-arrow"
         name="icon-ico_right" />
     </div>
@@ -85,12 +100,17 @@ export default {
     },
     inputReadonly () { return this.type === 'click' || this.readonly },
     inputDisabled () { return this.disabled },
-    inputShowArrow () { return this.showArrow },
+    inputShowArrow () { return this.showArrow && (this.type === 'click' || this.type === 'select') },
     inputPlaceHolder () {
       let ph
       if (this.placeholder) ph = this.placeholder
       if (this.type === 'picker') return (ph || '请选择') + (this.required ? '(必选)' : '')
       return (ph || '请输入') + (this.required ? '(必填)' : '')
+    },
+    inputMaxLength () {
+      const maxlength = Number(this.maxlength)
+      if (isNaN(maxlength)) return Infinity
+      return maxlength
     },
     inputAlignment () {
       return 'form-item-input-align-' + this.align
@@ -99,6 +119,9 @@ export default {
       let classes = 'form-item-input-align-' + this.align
       if (this.ellipsis) classes += ' ' + 'form-item-click-ellipsis'
       return classes
+    },
+    textareaShowCounter () {
+      return this.type === 'textarea' && this.inputMaxLength !== Infinity && this.inputMaxLength
     }
   },
   watch: {
@@ -109,12 +132,8 @@ export default {
     }
   },
   methods: {
-    // 点击图标触发事件
-    iconClickHandler () { this.$emit('on-icon-click') },
-    // 点击输入框触发事件
-    inputClickHandler () {
-      if (this.type === 'click') this.$emit('on-click')
-    },
+    iconClickHandler () { if (!this.inputDisabled) this.$emit('on-icon-click') },
+    inputClickHandler () { if (this.type === 'click' && !this.inputDisabled) this.$emit('on-click') },
     inputBlurHandler () {
       if (this.type === 'click') return
       if (this.showRequiredToast && this.required && (this.inputValue === '' || this.inputValue === undefined)) {
@@ -123,11 +142,13 @@ export default {
       this.$emit('on-blur', this.inputValue)
     },
     inputFocusHandler () { this.$emit('on-focus', this.inputValue) },
+    selectChangeHandler (value, index, text) { this.$emit('change', value, index, text) },
+    pickerShowHandler () { this.$emit('picker-show') },
+    pickerHideHandler () { this.$emit('picker-hide') },
     inputEmit () {
       if (this.type === 'number' && this.inputValue !== '') {
         this.inputValue = Number(this.inputValue)
       }
-      console.info(this.inputValue)
       this.$emit('input', this.inputValue)
     }
   }
@@ -242,6 +263,13 @@ export default {
 </style>
 
 <style lang="stylus">
+  .form-item-input-box
+    .cube-select
+      padding-right 0
+      padding-left 0
+      &-icon
+        display none
+
   .form-item-input
     input
       padding-left 0
