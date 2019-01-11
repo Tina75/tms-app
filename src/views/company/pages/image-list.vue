@@ -2,14 +2,14 @@
   <div class="content">
     <ul class="content-pic-box cube-mt-10">
       <li
-        v-for="(item, index) in exceptionPhotos"
+        v-for="(item, index) in uploadPhotos"
         :key="index"
         class="image-item">
         <img
           :src="item.url"
           alt="图片加载失败"
           class="pic-item"
-          @click="previewPic(exceptionPhotoList,index)">
+          @click="previewPic(uploadPhotoList,index)">
         <p v-if="item.title">{{item.title}}</p>
       </li>
     </ul>
@@ -21,26 +21,21 @@ export default {
   name: 'odd-upload',
   metaInfo: { title: '图片展示' },
   props: {
-    exceptionPhotos: {
+    uploadPhotos: {
       type: Array,
       default: Array
     }
   },
   data () {
     return {
-      exceptionPhotoList: []
-      // exceptionPhotoList: [
-      //   'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg?x-oss-process=image/resize,m_fill,h_100,w_100',
-      //   'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/939238940611.8259.jpg?x-oss-process=image/resize,m_fill,h_100,w_100',
-      //   'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png?x-oss-process=image/resize,m_fill,h_100,w_100'
-      // ]
+      uploadPhotoList: []
     }
   },
   mounted () {
-    if (this.exceptionPhotos.length) {
-      this.exceptionPhotoList = []
-      this.exceptionPhotos.forEach(element => {
-        this.exceptionPhotoList.push(element.url)
+    if (this.uploadPhotos.length) {
+      this.uploadPhotoList = []
+      this.uploadPhotos.forEach(element => {
+        this.uploadPhotoList.push(element.url)
       })
     }
   },
