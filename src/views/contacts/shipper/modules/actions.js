@@ -18,13 +18,25 @@ export const loadContactList = async ({ state, commit }, needClear) => {
     commit('addContactList', response.data.data)
   }
 }
-export const modifyContact = ({ state, commit }) => {
-  const isCreate = !state.contactModify.id
+export const modifyContact = ({ state, commit }, data) => {
+  const isCreate = !data.id
   return Server({
     method: 'post',
     url: isCreate ? '/consigner/add' : '/consigner/update',
     data: {
       ...state.contactModify
     }
+  })
+}
+export const queryButtOperator = () => {
+  return Server({
+    method: 'get',
+    url: '/permission/buttOperator'
+  }).then(response => {
+    const data = response.data.data || []
+    return data.map(item => ({
+      value: item.id,
+      text: item.name
+    }))
   })
 }

@@ -1,76 +1,49 @@
 <template>
   <div class="form-item-box">
-    <div :class="{ 'border-bottom-1px': bottomLine }">
-      <div class="form-item" :class="{'form-item-textarea': type === 'textarea'}">
-        <label v-if="label" class="form-item-label" :class="{ 'form-item-required': inputRequired }">
-          <img v-if="labelImage" class="form-item-label-image" :src="labelImage" >
-          {{ label }}
-        </label>
+    <div class="form-item" :class="{'form-item-textarea': type === 'textarea', 'border-bottom-1px':bottomLine}">
+      <label v-if="label" class="form-item-label" :class="{ 'form-item-required': required }">
+        <img v-if="labelImage" class="form-item-label-image" :src="labelImage" >
+        {{ label }}
+      </label>
 
-        <div class="form-item-input-box">
-          <!-- 输入框 type = text || number  -->
-          <cube-input
-            v-if="type === 'text' || type === 'number'"
-            v-model="inputValue"
-            class="form-item-input"
-            :class="inputAlignment"
-            :type="inputType"
-            :autofocus="autofocus"
-            :placeholder="inputPlaceHolder"
-            :maxlength="inputMaxLength"
-            :readonly="inputReadonly"
-            :disabled="inputDisabled"
-            :clearable="clearable"
-            @blur="inputBlurHandler"
-            @focus="inputFocusHandler" />
+      <div class="form-item-input-box">
+        <cube-loading v-if="type === 'loading'" class="form-item-loading" :size="20" />
 
-          <!-- 选择器 type = selece -->
-          <cube-select
-            v-if="type === 'select'"
-            v-model="inputValue"
-            class="form-item-input"
-            :class="inputAlignment"
-            :options="options"
-            :placeholder="inputPlaceHolder"
-            :title="inputPlaceHolder"
-            :disabled="inputDisabled"
-            @change="selectChangeHandler"
-            @picker-show="pickerShowHandler"
-            @picker-hide="pickerHideHandler" />
+        <cube-input
+          v-if="type === 'text' || type === 'number'"
+          v-model="inputValue"
+          class="form-item-input"
+          :class="inputAlignment"
+          :type="inputType"
+          :autofocus="autofocus"
+          :placeholder="inputPlaceHolder"
+          :maxlength="inputMaxLength"
+          :readonly="inputReadonly"
+          :disabled="inputDisabled"
+          :clearable="clearable"
+          @blur="inputBlurHandler"
+          @focus="inputFocusHandler" />
 
-          <!-- 点击按钮 type = click -->
-          <div
-            v-if="type === 'click'"
-            class="form-item-input form-item-click"
-            :class="inputClickClass"
-            :style="(inputValue !== undefined && inputValue !== '') ? 'line-height: 1.5; color: #666666' : 'color: #C5C8CE'"
-            @click="inputClickHandler">
-            {{ inputValue || inputPlaceHolder }}
-          </div>
+        <cube-select
+          v-if="type === 'select'"
+          v-model="inputValue"
+          class="form-item-input"
+          :class="inputAlignment"
+          :options="options"
+          :placeholder="inputPlaceHolder"
+          :title="inputPlaceHolder"
+          :disabled="inputDisabled"
+          @change="selectChangeHandler"
+          @picker-show="pickerShowHandler"
+          @picker-hide="pickerHideHandler" />
 
-          <!-- 开关按钮 type = switch -->
-          <cube-switch
-            v-if="type === 'switch'"
-            v-model="inputValue"
-            class="form-item-switch" />
-
-          <!-- 文本框 type = textarea -->
-          <textarea
-            v-if="type === 'textarea'"
-            v-model="inputValue"
-            class="form-item-input"
-            :rows="rows"
-            :placeholder="inputPlaceHolder"
-            :maxlength="inputMaxLength"
-            :readonly="inputReadonly"
-            :disabled="inputDisabled"
-            :autofocus="autofocus"
-            @blur="inputBlurHandler"
-            @focus="inputFocusHandler"/>
-          <p v-if="textareaShowCounter"
-             class="form-item-counter">
-            {{this.inputValue ? this.inputValue.length : 0}}/{{this.inputMaxLength}}
-          </p>
+        <div
+          v-if="type === 'click'"
+          class="form-item-input form-item-click"
+          :class="inputClickClass"
+          :style="(inputValue !== undefined && inputValue !== '') ? 'line-height: 1.5; color: #666666' : 'color: #C5C8CE'"
+          @click="inputClickHandler">
+          {{ inputValue || inputPlaceHolder }}
         </div>
 
         <a v-if="clickIcon"
@@ -293,6 +266,12 @@ export default {
         font-size 13px
         color #999999
         text-align right
+
+      .form-item-loading
+        height 50px
+        display flex
+        justify-content flex-end
+        align-items center
 
   .form-item-textarea
     display block
