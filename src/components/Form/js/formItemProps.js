@@ -29,8 +29,13 @@ export default {
   },
   // 开启校验时，对应的 model 字段名
   prop: {
-    type: String,
-    default: ''
+    type: Boolean,
+    default: false
+  },
+  // 输入框是否必填
+  required: {
+    type: Boolean,
+    default: false
   },
   placeholder: {
     type: String,
