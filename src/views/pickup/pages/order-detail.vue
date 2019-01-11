@@ -1,36 +1,12 @@
 <template>
-  <div class="order-detail">
-    <detail-group
-      :status="{text: '调度中', time: '2019-01-07 17:54'}"
-      :tabs="tabData">
-      <template slot-scope="slotProps">
-        <detail-item
-          :tab-name="slotProps.data.label"
-          :name="'一'">
-          <div class="content-box">{{slotProps.data.label}}</div>
-        </detail-item>
-        <detail-item
-          :tab-name="slotProps.data.label"
-          :name="'二'">
-          <div class="content-box">{{slotProps.data.label}}</div>
-        </detail-item>
-        <detail-item
-          :tab-name="slotProps.data.label"
-          :name="'三'">
-          <div class="content-box">{{slotProps.data.label}}</div>
-        </detail-item>
-      </template>
-    </detail-group>
-  </div>
+  <div class="order-detail"/>
 </template>
 
 <script>
-import DetailGroup from '@/components/DetailGroup'
-import DetailItem from '@/components/DetailItem'
 
 export default {
   name: 'pickup-order-detail',
-  components: { DetailGroup, DetailItem },
+  components: {},
   metaInfo: {
     title: '订单详情'
   },

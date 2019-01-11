@@ -15,22 +15,273 @@ export default{
           customerOrderNo: '111222333444',
           settlementType: '月结',
           totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
         }
       ],
       next: true
     },
     bePickingData: {
-      list: [],
+      list: [
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        }
+      ],
       next: true
     },
     pickingData: {
-      list: [],
+      list: [
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        }
+      ],
       next: true
     },
     pickedData: {
-      list: [],
+      list: [
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        },
+        {
+          createTime: '2019-01-08 17:23',
+          collectionMoney: 100,
+          start: '江苏南京',
+          end: '上海',
+          weight: 10,
+          volume: 10,
+          quantity: 10,
+          consignerName: '龙虎山道教文化传播有限公司',
+          customerOrderNo: '111222333444',
+          settlementType: '月结',
+          totalFee: 10000
+        }
+      ],
       next: true
-    }
+    },
+    pickupDetail: {}
   },
   mutations: {
     getDispatching (state, data) {
@@ -108,6 +359,7 @@ export default{
     dispatchingData: (state) => state.dispatchingData,
     bePickingData: (state) => state.bePickingData,
     pickingData: (state) => state.pickingData,
-    pickedData: (state) => state.pickedData
+    pickedData: (state) => state.pickedData,
+    pickupDetail: (state) => state.pickupDetail
   }
 }

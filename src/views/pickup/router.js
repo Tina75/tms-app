@@ -38,7 +38,7 @@ export default [
     component: () => import(/* webpackChunkName: "pickup" */'./pages/assign.vue')
   },
   {
-    path: '/pickup/track/',
+    path: '/pickup/track',
     name: 'pickup-track',
     component: () => import(/* webpackChunkName: "pickup" */'./pages/track.vue')
   }

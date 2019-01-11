@@ -1,53 +1,47 @@
 <template>
-  <detail-panel :title="'提货单信息'">
-    <detail-panel-item :label="'提货单单号'">
-      <p>
-        提货单单号
-        <a>复制</a>
-      </p>
-    </detail-panel-item>
-    <detail-panel-item :label="'派车方式'">
-      <p>外传</p>
-    </detail-panel-item>
-    <detail-panel-item :label="'承运商'">
-      <p>南京海底捞</p>
-    </detail-panel-item>
-    <detail-panel-item :label="'司机'">
-      <p>刘亦菲</p>
-    </detail-panel-item>
-    <detail-panel-item :label="'联系方式'">
-      <p>
-        18709870987
-        <a>
-          复制
-          <icon-font
-            name="icon-ico_call"
-            :size="20"
-            color="#00A4BD"/>
-        </a>
-      </p>
-    </detail-panel-item>
-    <detail-panel-item :label="'车型'">
-      <p>冷藏</p>
-    </detail-panel-item>
-    <detail-panel-item :label="'车长'">
-      <p>12.5米</p>
-    </detail-panel-item>
-    <detail-panel-item :label="'备注'">
-      <p class="remark">好嗨哟！感觉人生已经到达了高潮！ 感觉人</p>
-    </detail-panel-item>
+  <detail-panel :title="'货物明细'">
+    <div class="order-list">
+      <ul>
+        <li class="order-item">
+          <div class="order-no">
+            <span>D9384834783748374</span>
+            <a>复制</a>
+          </div>
+          <ul>
+            <li class="cargo-item">
+              <p class="cargo-title">可口可乐</p>
+              <p class="cargo-content">2吨 2方 桶装 2件 1000元 小心轻放 这个东西比较贵装卸货的 时候轻拿轻放</p>
+            </li>
+            <li class="cargo-item">
+              <p class="cargo-title">可口可乐</p>
+              <p class="cargo-content">2吨 2方 桶装 2件 1000元 小心轻放 这个东西比较贵装卸货的 时候轻拿轻放</p>
+            </li>
+          </ul>
+        </li>
+        <li class="order-item">
+          <div class="order-no">
+            <span>D9384834783748374</span>
+            <a>复制</a>
+          </div>
+          <ul>
+            <li class="cargo-item">
+              <p class="cargo-title">可口可乐</p>
+              <p class="cargo-content">2吨 2方 桶装 2件 1000元 小心轻放 这个东西比较贵装卸货的 时候轻拿轻放</p>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
   </detail-panel>
 </template>
 
 <script>
 // import { mapGetters, mapActions } from 'vuex'
-import detailPanel from '@/components/detailPanel'
-import detailPanelItem from '@/components/detailPanelItem'
-import IconFont from '@/components/Iconfont'
+import detailPanel from '@/components/DetailPanel'
 
 export default {
   name: 'pickupInfo',
-  components: { detailPanel, detailPanelItem, IconFont },
+  components: { detailPanel },
   computed: {
     // ...mapGetters(['BePickingData']),
     options () {
@@ -64,5 +58,31 @@ export default {
 }
 </script>
 <style scoped lang="stylus">
-
+  .order-list
+    padding: 15px 15px 0 0
+    .order-item
+      margin-bottom: 15px;
+      padding: 15px 10px 0
+      background-color: #F9F9F9
+      .order-no
+        display: flex
+        justify-content space-between
+        span
+          color: #666666
+          font-size: 15px;
+        a
+          color: #00A4BD;
+          font-size: 15px;
+      .cargo-item
+        padding: 15px 0 10px
+        &:not(:last-child)
+          border-bottom 1px dashed #C8C8C8
+        .cargo-title
+          color: #000000;
+          font-size: 15px;
+          margin-bottom: 5px;
+        .cargo-content
+          color: #666666
+          font-size: 12px;
+          line-height: 18px;
 </style>

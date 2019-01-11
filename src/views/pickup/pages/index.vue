@@ -5,11 +5,10 @@
       :data="tabs"
       :show-slider="true"
       :use-transition="true"
-      @change="changeHandler">
-    </cube-tab-bar>
+      @change="changeHandler"/>
     <div class="scroll-list-wrap">
       <keep-alive>
-        <component :is="currentTab"></component>
+        <component :is="currentTab"/>
       </keep-alive>
     </div>
   </div>
@@ -54,9 +53,15 @@ export default {
 </script>
 <style scoped lang="stylus">
 .pickup
+  height: 100%
   background-color: #EFEFEF;
+  display: flex
+  flex-direction column
   .cube-tab-bar
     background-color: #ffffff;
     height: 50px
     margin-bottom: 15px;
+  .scroll-list-wrap
+    flex: 1
+    overflow-y auto
 </style>
