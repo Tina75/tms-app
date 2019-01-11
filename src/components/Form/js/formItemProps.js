@@ -11,7 +11,7 @@ export default {
   // 输入框类型
   // text-文字输入框 number-数字输入框 textarea-文本框 switch-开关按钮
   // select-下拉框，该类型需要提供 options [{ text, value}] 属性, 提供的事件与cubeui select相同
-  // click-点击按钮，该类型不会触发校验，提供on-click作为事件处理回调
+  // click-点击按钮，该类型不会触发校验，提供on-click作为事件处理回调，并且无法自动校验，只能通过表单的validate进行校验
   type: {
     type: String,
     default: 'text',
