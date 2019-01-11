@@ -13,7 +13,7 @@ const state = {
     company: '',
     id: '',
     payType: '',
-    createTime:'',
+    createTime: '',
     remark: ''
   }, // 存储所属发货方
   formList: {
@@ -24,7 +24,7 @@ const state = {
     detailAddress: '',
     consigneeCompanyName: '',
     remark: ''
-  },// 表单数据
+  } // 表单数据
 }
 const mutations = {
   [types.GET_CONSIGNEE_LIST] (state, payload = []) {

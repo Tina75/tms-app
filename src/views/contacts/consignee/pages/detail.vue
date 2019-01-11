@@ -55,7 +55,7 @@
 import IconFont from '@/components/Iconfont'
 import { mapGetters } from 'vuex'
 // import { setAppTitleBtn } from '@/libs/bridgeUtil'
-// const moudleName = 'contacts/consignee'
+const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeDetail',
   metaInfo: {
@@ -63,7 +63,7 @@ export default {
   },
   components: { IconFont },
   computed: {
-    ...mapGetters('consignee', ['consigneeDetail'])
+    ...mapGetters(moudleName, ['consigneeDetail'])
   },
   methods: {
     callPhone () {

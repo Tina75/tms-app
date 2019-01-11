@@ -1,5 +1,5 @@
 import Server from '@/libs/server'
-export default{
+export default {
   state: {
     dispatch: {
       list: [],

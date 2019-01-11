@@ -7,8 +7,8 @@
             :image="CARGO_IMAGE"
             :title="'货物' + (index + 1)">
             <span
-              slot="extra"
               v-if="index"
+              slot="extra"
               @click="cargoDelete(index)">删除</span>
           </form-title>
           <form-item
@@ -16,7 +16,7 @@
             label="货物名称"
             required
             maxlength="20"
-            clickIcon="icon-ico_boxx"
+            click-icon="icon-ico_boxx"
             @on-icon-click="chooseCargoInfo(index)" />
           <form-item
             v-model="form.weight"
@@ -42,7 +42,7 @@
             v-model="form.size"
             label="包装尺寸(毫米)"
             type="click"
-            :showArrow="false"
+            :show-arrow="false"
             placeholder="请输入长*宽*高"
             @on-click="showSizeDialog(index)" />
           <form-item
@@ -103,7 +103,7 @@ export default {
       dialogIndex: void 0,
       sizeDialog: null,
       packageDialog: null,
-      size: { length: '', width: '', height:'' },
+      size: { length: '', width: '', height: '' },
       package: ''
     }
   },
@@ -116,7 +116,7 @@ export default {
           weight: NP.plus(item.weight || 0, last.weight),
           volumn: NP.plus(item.volumn || 0, last.volumn),
           count: NP.plus(item.count || 0, last.count),
-          cost: NP.plus(item.cost || 0, last.cost),
+          cost: NP.plus(item.cost || 0, last.cost)
         }
       }, {
         weight: 0,
@@ -283,7 +283,7 @@ export default {
           createElement('cube-button', {
             props: {
               light: true,
-              inline: true,
+              inline: true
             },
             style: {
               margin: '5px'
@@ -353,7 +353,6 @@ export default {
           color #333333
           font-weight bold
 
-
 </style>
 
 <style lang="stylus">
@@ -370,4 +369,3 @@ export default {
       input
         text-align center
 </style>
-
