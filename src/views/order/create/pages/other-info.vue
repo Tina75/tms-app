@@ -51,12 +51,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order', [
+    ...mapGetters('order/create', [
       'otherInfo'
     ])
   },
   methods: {
-    ...mapMutations('order', [ 'SET_OTHER_INFO' ]),
+    ...mapMutations('order/create', [ 'SET_OTHER_INFO' ]),
 
     ensure () {
       this.SET_OTHER_INFO(Object.assign({}, this.form))

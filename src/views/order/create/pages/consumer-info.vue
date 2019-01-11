@@ -55,12 +55,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order', [
+    ...mapGetters('order/create', [
       'consumerInfo'
     ])
   },
   methods: {
-    ...mapMutations('order', [ 'SET_CONSUMER_INFO' ]),
+    ...mapMutations('order/create', [ 'SET_CONSUMER_INFO' ]),
 
     ensure () {
       this.SET_CONSUMER_INFO(Object.assign({}, this.form))
