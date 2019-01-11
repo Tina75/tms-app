@@ -6,7 +6,10 @@
 export default {
   name: 'MoneyLabel',
   props: {
-    money: [ String, Number ]
+    money: {
+      type: [ String, Number ],
+      required: true
+    }
   },
   computed: {
     value () { return this.money }

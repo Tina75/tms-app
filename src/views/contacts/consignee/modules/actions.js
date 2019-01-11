@@ -17,7 +17,7 @@ export const getConsignerList = ({ commit }) => {
     url: 'consigner/list',
     method: 'get'
   }).then((res) => {
-    commit(types.GET_CONSIGNER_LIST, res.data.data)
+    commit(types.GET_CONSIGNER_LIST, res.data.data.list)
   })
 }
 /** 获取收货人详情 */

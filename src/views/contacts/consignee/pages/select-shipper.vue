@@ -1,5 +1,5 @@
 <template>
-  <div class="select">
+  <div v-if="showData" class="select">
     <div
       v-if="consignerList && consignerList.length > 0"
       class="border-top-1px">
@@ -18,7 +18,7 @@
           <div class="select_item_info">
             <div>
               <div class="info_top">
-                <span>{{item.company}}</span>
+                <span>{{item.name}}</span>
               </div>
               <div class="info_bottom">
                 <span>{{item.contact}}</span>
@@ -53,18 +53,27 @@ export default {
   components: { IconFont, NoData },
   data () {
     return {
-      config
+      config,
+      showData: false
     }
   },
   computed: {
     ...mapGetters(moudleName, ['consignerList'])
   },
   methods: {
-    ...mapActions(moudleName, ['saveConsignerInfo']),
+    ...mapActions(moudleName, ['saveConsignerInfo', 'getConsignerList']),
     async choose(item) {
       await this.saveConsignerInfo(item)
       this.$router.back()
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.showData = false
+      vm.getConsignerList().then(() => {
+        vm.showData = true
+      })
+    })
   }
 }
 </script>

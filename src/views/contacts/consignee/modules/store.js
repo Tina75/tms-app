@@ -1,12 +1,12 @@
-import * as types from './modules/mutationTypes'
-import * as actions from './modules/actions'
-import * as getters from './modules/getters'
-import mock from './pages/mock.json'
+import * as types from './mutationTypes'
+import * as actions from './actions'
+import * as getters from './getters'
+import mock from '../pages/mock.json'
 
 const state = {
   consigneeList: mock.list, // 收货方列表
   consigneeDetail: mock.detail, // 收货方详情
-  consignerList: mock.sender, // 发货人列表
+  consignerList: [], // 发货人列表
   saveConsigner: {
     contact: '',
     phone: '',
@@ -39,8 +39,16 @@ const mutations = {
   [types.SAVE_CONSIGNER] (state, payload = {}) {
     state.saveConsigner = payload
   },
-  [types.CLEAR_FORMLIST] (state, payload = {}) {
-    state.formList = payload
+  [types.CLEAR_FORMLIST] (state) {
+    state.formList = {
+      consigner: '',
+      contact: '',
+      phone: '',
+      address: '',
+      detailAddress: '',
+      consigneeCompanyName: '',
+      remark: ''
+    }
   }
 }
 
