@@ -7,6 +7,7 @@
           :show-required-toast="false"
           prop="consigner"
           label="所属发货方"
+          placeholder="请选择所属发货方"
           click-icon="icon-ico_sender"
           @on-icon-click="selectSender"
         />
@@ -15,6 +16,7 @@
           :show-required-toast="false"
           prop="contact"
           label="收货人"
+          placeholder="请输入收货人姓名"
           :maxlength="15"
         />
         <form-item
@@ -22,8 +24,8 @@
           :show-required-toast="false"
           prop="viewPhone"
           label="联系电话"
+          placeholder="请输入手机号或座机号,座机需加区号"
           :maxlength="20"
-          @on-blur="validatePhone"
           @input="formatPhone"
         />
       </div>
@@ -98,16 +100,13 @@ export default {
         },
         viewPhone: {
           required: true,
-          type: 'tel',
-          validatePhone: (val) => {
-            return (resolve) => {
-              setTimeout(() => {
-                resolve(validator.phone(val) || validator.telphone(val))
-              }, 1000)
-            }
+          type: 'string',
+          custom: (val) => {
+            const value = val.replace(/\s/g, '')
+            return validator.phone(value) || validator.telphone(value)
           },
           messages: {
-            validatePhone: '请输入正确的手机号或座机号'
+            custom: '请输入正确的手机号或座机号'
           }
         },
         detailAddress: {
@@ -121,12 +120,6 @@ export default {
   },
   methods: {
     ...mapActions(moudleName, ['saveConsignerInfo', 'clearFormList', 'addConsignee']),
-    validatePhone (value) {
-      value = value.replace(/\s/g, '')
-      if (value && !(validator.phone(value) || validator.telphone(value))) {
-        window.toast('请输入正确的手机号或座机号')
-      }
-    },
     selectSender () {
       this.$router.push({
         name: 'select-shipper'
@@ -154,16 +147,16 @@ export default {
       this.formList.phone = this.viewPhone.replace(/\s/g, '')
     },
     async submit () {
-      const data = {
-        contact: this.formList.contact,
-        phone: this.formList.phone,
-        address: this.formList.address + this.formList.detailAddress,
-        consignerId: this.saveConsigner.id,
-        consigneeCompanyName: this.formList.consigneeCompanyName
-      }
-      await this.addConsignee(data)
-      this.clearFormList()
-      this.viewPhone = ''
+      // const data = {
+      //   contact: this.formList.contact,
+      //   phone: this.formList.phone,
+      //   address: this.formList.address + this.formList.detailAddress,
+      //   consignerId: this.saveConsigner.id,
+      //   consigneeCompanyName: this.formList.consigneeCompanyName
+      // }
+      // await this.addConsignee(data)
+      // this.clearFormList()
+      // this.viewPhone = ''
     }
   },
   beforeRouteEnter (to, from, next) {
