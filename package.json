@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "build": "vue-cli-service build --mode dev",
+    "build_all": "npm run build_dll && npm run build_cube",
     "build_dll": "webpack --config dll.config.js --mode development",
+    "build_cube": "node cube/before && vue-cli-service build --mode cube && node cube/after",
     "lint": "vue-cli-service lint",
     "deploy_beta": "vue-cli-service build --mode beta && node upload -e beta",
     "deploy_dev": "vue-cli-service build --mode dev && node upload -e dev",
@@ -17,6 +19,7 @@
     "axios": "^0.18.0",
     "cube-ui": "~1.12.1",
     "dayjs": "^1.7.8",
+    "number-precision": "^1.2.1",
     "postcss-pxtorem": "^4.0.1",
     "vue": "^2.5.17",
     "vue-analytics": "^5.16.1",

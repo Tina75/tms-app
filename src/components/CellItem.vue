@@ -36,7 +36,10 @@ export default {
       type: Object,
       default: function () {}
     },
-    tap: Function
+    tap: {
+      type: Function,
+      default: function () {}
+    }
   },
   methods: {
     routerLink () {

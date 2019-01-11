@@ -8,6 +8,8 @@
     color #189CB2
   &-yellow
     color #FA8C16
+  &-white
+    color $color-white
   &-grey
     color $color-grey
   &-grey-dark
@@ -40,6 +42,12 @@ for num in (8..30)
   .cube-font-{num}
     font-size num px
 
+.cube-ellipsis
+  overflow hidden
+  text-overflow ellipsis
+  white-space nowrap
+  word-wrap normal
+
 //页面及组件
 .page
   position: absolute
@@ -53,3 +61,17 @@ for num in (8..30)
     height: 100%
     overflow-x: hidden
     overflow-y: auto
+
+.cube-flex-center
+  display flex
+  align-items center
+  justify-content center
+.cube-bottom-button
+  position fixed
+  height 44px
+  line-height 44px
+  padding 0
+  font-size 17px
+  left 0
+  bottom 0
+  width 100%

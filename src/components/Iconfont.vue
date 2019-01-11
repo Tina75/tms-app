@@ -11,11 +11,16 @@ export default {
   props: {
     name: {
       type: String,
-      required: true,
-      default: ''
+      required: true
     },
-    color: String,
-    size: [String, Number]
+    color: {
+      type: String,
+      default: void 0
+    },
+    size: {
+      type: [String, Number],
+      default: void 0
+    }
   },
   computed: {
     fontClass () {
@@ -27,7 +32,6 @@ export default {
         style.color = this.color
       }
       if (this.size) {
-        console.log(this.size / BASE_SIZE)
         style['font-size'] = `${this.size / BASE_SIZE}rem`
       }
       return style

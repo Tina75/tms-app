@@ -41,5 +41,3 @@ export default {
       font-size 15px
       color #333333
 </style>
-
-

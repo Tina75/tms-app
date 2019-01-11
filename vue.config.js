@@ -1,9 +1,8 @@
 const webpack = require('webpack')
 const useBundleAnalyzer = false // 是否开启打包分析
-const isBuildCube = false //  是否是单独打包cube
 const proxyUrl = 'https://dev.tms5566.com/dolphin-app'
 const config = {
-  baseUrl: './',
+  publicPath: './',
   assetsDir: 'static',
   productionSourceMap: false,
   parallel: true,
@@ -71,16 +70,7 @@ const webpackConfig = config.configureWebpack
 // 打包分析
 if (useBundleAnalyzer) {
   webpackConfig.plugins = webpackConfig.plugins || []
-  const util = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-  webpackConfig.plugins.push(new util())
-}
-
-// 单独打包cube
-if (isBuildCube) {
-  config.filenameHashing = true
-  config.configureWebpack.output = {
-    filename: 'cube-ui/index.js',
-    chunkFilename: 'cube-ui/chunk.js'
-  }
+  const Util = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+  webpackConfig.plugins.push(new Util())
 }
 module.exports = config
