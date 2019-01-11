@@ -8,6 +8,8 @@
         </label>
 
         <div class="form-item-input-box">
+          <cube-loading v-if="type === 'loading'" class="form-item-loading" :size="20" />
+
           <!-- 输入框 type = text || number  -->
           <cube-input
             v-if="type === 'text' || type === 'number'"
@@ -293,6 +295,12 @@ export default {
         font-size 13px
         color #999999
         text-align right
+
+      .form-item-loading
+        height 50px
+        display flex
+        justify-content flex-end
+        align-items center
 
   .form-item-textarea
     display block

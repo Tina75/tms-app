@@ -1,5 +1,5 @@
 // form item type
-const FORM_ITEM_TYPE = [ 'text', 'textarea', 'number', 'switch', 'select', 'click' ]
+const FORM_ITEM_TYPE = [ 'text', 'textarea', 'number', 'switch', 'select', 'click', 'loading' ]
 const FORM_ITEM_ALIGN = [ 'left', 'center', 'right' ]
 const itemInArray = (item, array) => array.indexOf(item) > -1
 
@@ -19,7 +19,7 @@ export default {
   },
   // select类型的选择数据
   options: {
-    type: Array,
+    type: [Array, Promise],
     default: () => [] // { text, value }
   },
   // 输入框提示文字
