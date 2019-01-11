@@ -8,7 +8,7 @@
 
       <div class="form-item-input-box">
         <cube-input
-          v-if="type !== 'switch' && type !== 'textarea' && type !== 'click'"
+          v-if="type === 'text' || type === 'number'"
           v-model="inputValue"
           class="form-item-input"
           :class="inputAlignment"
@@ -21,6 +21,15 @@
           :clearable="clearable"
           @blur="inputBlurHandler"
           @focus="inputFocusHandler" />
+
+        <cube-select
+          v-if="type === 'select'"
+          class="form-item-input"
+          :class="inputAlignment"
+          v-model="inputValue"
+          :options="options"
+          :placeholder="inputPlaceHolder"
+          :title="inputPlaceHolder" />
 
         <div
           v-if="type === 'click'"
@@ -58,7 +67,7 @@
       </a>
 
       <icon-font
-        v-if="this.type === 'click' && this.inputShowArrow"
+        v-if="inputShowArrow"
         class="form-item-arrow"
         name="icon-ico_right" />
     </div>
@@ -85,7 +94,7 @@ export default {
     },
     inputReadonly () { return this.type === 'click' || this.readonly },
     inputDisabled () { return this.disabled },
-    inputShowArrow () { return this.showArrow },
+    inputShowArrow () { return this.showArrow && (this.type === 'click' || this.type === 'select') },
     inputPlaceHolder () {
       let ph
       if (this.placeholder) ph = this.placeholder
@@ -242,6 +251,13 @@ export default {
 </style>
 
 <style lang="stylus">
+  .form-item-input-box
+    .cube-select
+      padding-right 0
+      padding-left 0
+      &-icon
+        display none
+
   .form-item-input
     input
       padding-left 0
