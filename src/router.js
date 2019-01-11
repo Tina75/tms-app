@@ -7,6 +7,8 @@ import example from '@/views/example/router'
 import delivery from '@/views/delivery/router'
 import order from '@/views/order/router'
 import company from '@/views/company/router'
+import receipt from '@/views/receipt/router'
+import upstream from '@/views/upstream/router'
 import contacts from '@/views/contacts/router'
 Vue.use(Router)
 
@@ -25,6 +27,9 @@ let router = new Router({
     ...example,
     ...order,
     ...company,
+    // ...consignee, // 收货方
+    ...receipt,
+    ...upstream,
     ...contacts // 通信录
   ]
 })
