@@ -198,8 +198,8 @@ export default {
         consigneePhone: { required: true, type: 'number' },
         consigneeAddress: { required: true, type: 'string' },
         cargoInfo: { required: true, type: 'string' },
-        settlementType: { required: true, type: 'string' },
-        pickupType: { required: true, type: 'string' },
+        settlementType: { required: true, type: 'number' },
+        pickupType: { required: true, type: 'number' },
         receiptNumber: { required: true, type: 'number' }
       }
     }

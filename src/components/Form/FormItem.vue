@@ -102,7 +102,12 @@ import props from './js/formItemProps'
 
 export default {
   name: 'FormItem',
-  inject: [ 'rules' ],
+  inject: {
+    rules: {
+      from: 'rules',
+      default: null
+    }
+  },
   props,
   data () {
     return {
@@ -127,8 +132,8 @@ export default {
     inputPlaceHolder () {
       let ph
       if (this.placeholder) ph = this.placeholder
-      if (this.type === 'picker') return (ph || '请选择') + (this.required ? '(必选)' : '')
-      return (ph || '请输入') + (this.required ? '(必填)' : '')
+      if (this.type === 'picker') return (ph || '请选择') + (this.inputRequired ? '(必选)' : '')
+      return (ph || '请输入') + (this.inputRequired ? '(必填)' : '')
     },
     inputMaxLength () {
       const maxlength = Number(this.maxlength)
