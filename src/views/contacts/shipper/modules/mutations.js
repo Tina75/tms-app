@@ -1,5 +1,4 @@
-import * as MODEL from './model'
-const mutations = {
+export default {
   // ---------发货方------
   // 加载业务员
   setOperatpr(state, payload = []) {
@@ -15,21 +14,3 @@ const mutations = {
   }
   // ---------地址------
 }
-
-MODEL.LISTS.forEach((names) => {
-  // 添加
-  mutations[names.addMutation] = (state, payload) => {
-    const lazylist = state[names.state]
-    const parser = MODEL[names.itemModel] ? MODEL[names.itemModel].parse : ''
-    if (payload.pageNo === lazylist.nextPage) {
-      const parsedData = parser ? payload.list.map(parser) : payload.list
-      lazylist.list = [...lazylist.list, ...parsedData]
-      lazylist.nextPage = payload.nextPageNo
-      lazylist.hasNext = payload.hasNext
-    }
-  }
-
-  // 清空
-  mutations[names.clearMutation] = (state) => (state[names.state] = new MODEL.InfinateList())
-})
-export default mutations

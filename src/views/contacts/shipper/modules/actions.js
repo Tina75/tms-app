@@ -1,7 +1,5 @@
 import Server from '@/libs/server'
-import * as MODEL from './model'
-
-const actions = {
+export default {
   // -------发货方-----
   // 删除/创建发货方
   modifyContact({ state, commit }, data) {
@@ -20,34 +18,6 @@ const actions = {
       method: 'get',
       url: '/permission/buttOperator'
     }).then((response) => commit('setOperatpr', response.data.data))
-  },
-  // ------发货地址---------
-
-}
-
-async function InfinateLoader(names, { state, rootState, commit, dispatch }, needClear) {
-  const list = state.contactList
-  const needSend = list.hasNext || needClear
-  const pageNo = needClear ? 1 : list.nextPage
-  if (needSend) {
-    const response = await Server({
-      method: 'get',
-      url: names.loadUrl,
-      params: {
-        pageNo,
-        pageSize: list.pageSize,
-        ...rootState.route.query
-      }
-    })
-    if (needClear) {
-      commit(names.clearMutation)
-    }
-    commit(names.addMutation, response.data.data)
   }
+  // ------发货地址---------
 }
-
-MODEL.LISTS.forEach((list) => {
-  actions[list.loadAction] = InfinateLoader.bind(null, list)
-})
-
-export default actions
