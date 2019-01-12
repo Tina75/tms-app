@@ -25,7 +25,7 @@ import { mapMutations } from 'vuex'
 export default {
   metaInfo: { title: '选择常发货物' },
   methods: {
-    ...mapMutations('order', [ 'SET_CARGO_OFTEN' ]),
+    ...mapMutations('order/create', [ 'SET_CARGO_OFTEN' ]),
 
     chooseCargo () {
       this.SET_CARGO_OFTEN({

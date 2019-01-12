@@ -1,10 +1,7 @@
+
 <template>
   <div class="pickup-order-detail">
     <cube-scroll-nav @change="changeHandler">
-      <div slot="prepend" class="status-block">
-        <h2>已提货</h2>
-        <p>2019-01-01 12:00</p>
-      </div>
       <cube-scroll-nav-panel
         v-for="(item, index) in pageData"
         :key="index"
@@ -15,7 +12,7 @@
       </cube-scroll-nav-panel>
     </cube-scroll-nav>
     <div class="handle-btns">
-      <a>调度</a>
+      <a>再来一单</a>
     </div>
   </div>
 </template>
@@ -28,9 +25,9 @@ import OrderCargoList from '../components/OrderCargoList'
 import CostDetail from '../components/CostDetail'
 
 export default {
-  name: 'pickup-order-detail',
+  name: 'order-often-detail',
   metaInfo: {
-    title: '提货管理详情'
+    title: '常发订单详情'
   },
   components: { OrderBaseInfo, OrderCargoList, CostDetail, ReceiveAndSend },
   data () {
@@ -111,3 +108,5 @@ export default {
         height 0
         visibility: hidden
 </style>
+
+

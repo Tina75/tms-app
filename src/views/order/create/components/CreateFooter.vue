@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import MoneyLabel from './MoneyLabel'
+import MoneyLabel from '../../components/MoneyLabel'
 import { mapGetters } from 'vuex'
 import NP from 'number-precision'
 
@@ -57,7 +57,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order', [
+    ...mapGetters('order/create', [
       'feeInfo',
       'transportFee'
     ]),

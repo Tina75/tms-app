@@ -1,26 +1,29 @@
 <template>
   <div class="create-order-page scroll-list-wrap">
     <cube-scroll class="scroll-box">
-      <div v-if="step === 1">
-        <form class="form">
+      <form-group ref="$form" class="form" :rules="rules">
+        <div v-if="step === 1">
           <div class="form-section">
             <form-item
-              v-model="companyInfo.name" required
+              v-model="companyInfo.name"
+              prop="name"
               label="公司全称"
               maxlength="25"/>
             <form-item
               v-model="companyInfo.shortName"
+              prop="shortName"
               label="公司简称"
               maxlength="6" />
           </div>
           <div class="form-section">
             <form-item
               v-model="companyInfo.contact"
+              prop="contact"
               label="公司联系人"
-              maxlength="10"
-              required/>
+              maxlength="10"/>
             <form-item
               v-model="companyInfo.contactPhone"
+              prop="contactPhone"
               label="联系方式"
               maxlength="11"
               required/>
@@ -28,24 +31,63 @@
               <p class="addContact"><span @click="addContact">+添加更多联系人</span></p>
             </div>
           </div>
-          <div v-for="item in contactList" :key="item.index" class="form-section" >
+          <!-- 业务联系 -->
+          <div v-if="contactList.length > 0" class="form-section">
             <form-item
-              v-model="companyInfo.busiContact.name"
+              v-model="companyInfo.busiContactName1"
+              prop="busiContactName1"
               label="业务联系人"
               maxlength="10"
               required/>
             <form-item
-              v-model="companyInfo.busiContact.phone"
+              v-model="companyInfo.busiContactPhone1"
+              prop="busiContactPhone1"
               label="联系方式"
               maxlength="11"
               required/>
             <div class="cardInfo-content edit">
-              <p class="removeContact"><span @click="removeContact(item.index)">删除该联系人</span></p>
+              <p class="removeContact"><span @click="removeContact(0)">删除该联系人</span></p>
             </div>
           </div>
+          <div v-if="contactList.length > 1" class="form-section">
+            <form-item
+              v-model="companyInfo.busiContactName2"
+              prop="busiContactName2"
+              label="业务联系人"
+              maxlength="10"
+              required/>
+            <form-item
+              v-model="companyInfo.busiContactPhone2"
+              prop="busiContactPhone2"
+              label="联系方式"
+              maxlength="11"
+              required/>
+            <div class="cardInfo-content edit">
+              <p class="removeContact"><span @click="removeContact(1)">删除该联系人</span></p>
+            </div>
+          </div>
+          <div v-if="contactList.length > 2" class="form-section">
+            <form-item
+              v-model="companyInfo.busiContactName3"
+              prop="busiContactName3"
+              label="业务联系人"
+              maxlength="10"
+              required/>
+            <form-item
+              v-model="companyInfo.busiContactPhone3"
+              prop="busiContactPhone3"
+              label="联系方式"
+              maxlength="11"
+              required/>
+            <div class="cardInfo-content edit">
+              <p class="removeContact"><span @click="removeContact(2)">删除该联系人</span></p>
+            </div>
+          </div>
+          <!-- 业务联系 -->
           <div class="form-section">
             <form-item
               v-model="companyInfo.address"
+              prop="address"
               label="公司地址"
               maxlength="50"
               required/>
@@ -54,20 +96,24 @@
               label="补充地址"
               maxlength="50" />
           </div>
-        </form>
-      </div>
-      <div v-if="step === 2">
-        <form class="form">
+        </div>
+        <div v-if="step === 2">
           <div class="form-section">
             <div class="cardInfo">
               <div class="cardInfo-content edit">
                 <span class="cardTitle">公司LOGO</span>
-                <span class="cardContent noneInfo">点击上传
+                <span v-if="!companyInfo.logoUrl" class="cardContent noneInfo">点击上传
                   <icon-font
                     style="position:relative;top:-1px;"
                     name="icon-ico_right"
                     color="#CECECE"
                     :size="15"/>
+                </span>
+                <span v-else class="cardContent">
+                  <div
+                    :style="'backgroundImage:url(' + companyInfo.logoUrl + ');background-repeat: no-repeat;background-position-x: center;background-position-y: center;background-size: 100%;'"
+                    class="avatarDiv"
+                    @click="previewPic([companyInfo.logoUrl],index)"/>
                 </span>
               </div>
               <div class="hr"/>
@@ -108,10 +154,8 @@
               <Upload :upload-photos="busiAdvantcePicList"/>
             </div>
           </div>
-        </form>
-      </div>
-      <div v-if="step === 3">
-        <form class="form">
+        </div>
+        <div v-if="step === 3">
           <div class="form-section">
             <div class="cardInfo-content edit">
               <span class="cardTitle">公司风貌（{{companyPhotoList.length}}/10）</span>
@@ -130,8 +174,8 @@
               <Upload :upload-photos="homeBannerList" :max-count="1" :input-show="false"/>
             </div>
           </div>
-        </form>
-      </div>
+        </div>
+      </form-group>
     </cube-scroll>
     <div class="foot">
       <cube-button
@@ -154,13 +198,13 @@
 </template>
 <script>
 import Upload from '@/components/Updalod'
-import { FormItem } from '@/components/Form'
+import { FormGroup, FormItem } from '@/components/Form'
 export default {
   name: 'company-edit',
   metaInfo: {
     title: '编辑公司'
   },
-  components: { Upload, FormItem },
+  components: { Upload, FormItem, FormGroup },
   data () {
     return {
       validity: {},
@@ -188,6 +232,12 @@ export default {
         shortName: 'asdad',
         userAddress: '运满满9F',
         busiContact: [],
+        busiContactName1: '',
+        busiContactName2: '',
+        busiContactName3: '',
+        busiContactPhone1: '',
+        busiContactPhone2: '',
+        busiContactPhone3: '',
         busiIntroduce: '业务介绍',
         busiIntroducePic:
         [
@@ -209,27 +259,49 @@ export default {
           { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png', title: '微信2' }
         ],
         homeBanner: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg',
-        // [
-        //   { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg', title: '' }
-        // ],
         companyPhoto:
         [
           { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg', title: '公司风貌' }
         ]
       },
       addContactBtn: true,
-      contactList: []
+      contactList: [],
+      rules: {
+        name: { required: true, type: 'string' },
+        shortName: { required: true, type: 'string' },
+        contact: { required: true, type: 'string' },
+        contactPhone: { required: true, type: 'string' },
+        address: { required: true, type: 'string' },
+        busiContactName1: { required: true, type: 'string' },
+        busiContactName2: { required: true, type: 'string' },
+        busiContactName3: { required: true, type: 'string' },
+        busiContactPhone1: { required: true, type: 'string' },
+        busiContactPhone2: { required: true, type: 'string' },
+        busiContactPhone3: { required: true, type: 'string' }
+      }
     }
   },
   mounted () {
     this.initDate()
   },
   methods: {
-    nextSetp () {
-      this.step++
+    async nextSetp () {
+      if (await this.$refs.$form.validate()) {
+        this.step++
+      }
     },
     addContact () {
-      this.contactList.push({ name: '', phone: '' })
+      switch (this.contactList.length) {
+        case 1:
+          this.contactList.push({ busiContactName1: '', busiContactPhone1: '' })
+          break
+        case 2:
+          this.contactList.push({ busiContactName2: '', busiContactPhone2: '' })
+          break
+        case 3:
+          this.contactList.push({ busiContactName3: '', busiContactPhone3: '' })
+          break
+      }
       this.addContactBtn = this.contactList.length < 3
     },
     removeContact (item) {
@@ -237,6 +309,7 @@ export default {
       this.addContactBtn = true
     },
     save () {
+      console.dir(this.companyInfo)
       this.$router.push({ name: 'company' })
     },
     initDate () {

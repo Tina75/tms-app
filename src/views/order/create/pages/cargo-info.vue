@@ -108,7 +108,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order', [ 'cargoOften' ]),
+    ...mapGetters('order/create', [ 'cargoOften' ]),
 
     total () {
       return this.formList.reduce((last, item) => {
@@ -127,7 +127,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('order', [ 'CLEAR_CARGO_OFTEN' ]),
+    ...mapMutations('order/create', [ 'CLEAR_CARGO_OFTEN' ]),
 
     cargoDelete (index) {
       this.formList.splice(index, 1)
@@ -190,7 +190,7 @@ export default {
               6
             )
           }
-          extra.size = [ this.size.length || 0, this.size.width || 0, this.size.height || 0 ].join('*')
+          extra.size = [ this.size.length || '-', this.size.width || '-', this.size.height || '-' ].join('x')
           this.formList.splice(this.dialogIndex, 1, Object.assign(temp, this.size, extra))
           this.size.length = this.size.width = this.size.height = ''
         }

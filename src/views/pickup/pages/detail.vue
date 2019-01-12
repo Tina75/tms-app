@@ -14,6 +14,10 @@
         </ul>
       </cube-scroll-nav-panel>
     </cube-scroll-nav>
+    <div class="handle-btns">
+      <a class="light-btn">查看位置</a>
+      <a>确定</a>
+    </div>
   </div>
 </template>
 
@@ -62,6 +66,23 @@ export default {
 .pickup-detail
   height: 100%
   background-color: #EFEFEF;
+  display: flex
+  flex-direction column
+  .cube-scroll-nav
+    flex: 1
+  .handle-btns
+    height: 45px
+    display: flex
+    a
+      flex: 1
+      background: #27A3BD;
+      text-align: center
+      height: 45px
+      line-height: 45px
+      font-size: 17px
+      color: #ffffff
+      &.light-btn
+        background: #32C4D3;
   .status-block
     height: 90px
     background-color: #252A2F
@@ -73,6 +94,14 @@ export default {
     p
       color: #ffffff
       font-size: 15px;
+  >>> .cube-scroll-content
+    width 100%
+    .cube-scroll-nav-bar-items
+      display: flex
+      .cube-scroll-nav-bar-item
+        flex 1
+        padding-top: 15px;
+        padding-bottom: 15px;
   >>> .cube-scroll-nav-panel
     .cube-sticky-ele
       height 0
