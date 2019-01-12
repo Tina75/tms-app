@@ -1,21 +1,12 @@
 import * as types from './mutationTypes'
 import * as actions from './actions'
 import * as getters from './getters'
-import mock from '../pages/mock.json'
 
 const state = {
-  consigneeList:[], // 收货方列表
-  consigneeDetail: mock.detail, // 收货方详情
-  consignerList: mock.sender, // 发货人列表
-  saveConsigner: {
-    contact: '',
-    phone: '',
-    company: '',
-    id: '',
-    payType: '',
-    createTime: '',
-    remark: ''
-  }, // 存储所属发货方
+  consigneeList: [], // 收货方列表
+  consigneeDetail: {}, // 收货方详情
+  consignerList: [], // 发货人列表
+  saveConsigner: {}, // 存储所属发货方
   formList: {
     consigner: '',
     contact: '',

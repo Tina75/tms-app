@@ -3,8 +3,9 @@
     <form-group ref="$form" class="form" :rules="rules">
       <div class="form_card">
         <form-item
-          v-model="formList.consigner"
+          v-model="form.consigner"
           :show-required-toast="false"
+          readonly
           prop="consigner"
           label="所属发货方"
           placeholder="请选择所属发货方"
@@ -12,7 +13,7 @@
           @on-icon-click="selectSender"
         />
         <form-item
-          v-model="formList.contact"
+          v-model="form.contact"
           :show-required-toast="false"
           prop="contact"
           label="收货人"
@@ -26,12 +27,12 @@
           label="联系电话"
           placeholder="请输入手机号或座机号"
           :maxlength="20"
-          @input="formatPhone"
+          @input="formatTel"
         />
       </div>
       <div class="form_card">
         <form-item
-          v-model="formList.address"
+          v-model="form.address"
           type="click"
           label="收货地址"
           :show-arrow="false"
@@ -39,20 +40,20 @@
           @on-click="showPickCity = true"
         />
         <form-item
-          v-model="formList.detailAddress"
+          v-model="form.detailAddress"
           prop="detailAddress"
           label="详细地址"
           :show-required-toast="false"
         />
         <form-item
-          v-model="formList.consigneeCompanyName"
+          v-model="form.consigneeCompanyName"
           label="收货人单位"
           :maxlength="50"
         />
       </div>
       <div class="form_card">
         <form-item
-          v-model="formList.remark"
+          v-model="form.remark"
           type="textarea"
           label="备注"
           placeholder="请输入(最多输入200字)"
@@ -76,19 +77,20 @@
 import { FormGroup, FormItem } from '@/components/Form'
 import CityPicker from '@/components/CityPicker'
 import { mapGetters, mapActions } from 'vuex'
-import validator from '@/libs/validate'
+import { validatePhone, formatPhone, ConsigneeDetail } from '../modules/model'
 const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeAdd',
   metaInfo () {
     return {
-      title: this.$route.params.type === 'add' ? '新增收货方' : '编辑收货方'
+      title: this.isEdit ? '编辑收货方' : '新增收货方'
     }
   },
   components: { CityPicker, FormItem, FormGroup },
   data() {
     return {
-      form: {},
+      formatPhone,
+      form: new ConsigneeDetail(),
       showPickCity: false,
       viewPhone: '',
       rules: {
@@ -97,10 +99,7 @@ export default {
         viewPhone: {
           required: true,
           type: 'string',
-          validatePhone: (val) => {
-            const value = val.replace(/\s/g, '')
-            return validator.phone(value) || validator.telphone(value)
-          },
+          validatePhone: validatePhone,
           messages: {
             validatePhone: '请输入正确的手机号或座机号'
           }
@@ -110,10 +109,31 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(moudleName, ['saveConsigner', 'formList', 'consigneeDetail'])
+    ...mapGetters(moudleName, ['saveConsigner', 'formList', 'consigneeDetail']),
+    isEdit () {
+      return this.$route.params.type === 'edit'
+    }
+    // consigner () {
+    //   const type = this.$route.params.type
+    //   if (type === 'add') {
+    //     return this.saveConsigner.name
+    //   } else if (this.saveConsigner.name && type === 'edit') {
+    //     return this.saveConsigner.name
+    //   } else {
+    //     return this.consigneeDetail.contact || ''
+    //   }
+    // }
   },
   methods: {
     ...mapActions(moudleName, ['saveConsignerInfo', 'clearFormList', 'addConsignee']),
+    onPageRefresh () {
+      if (this.isEdit) {
+        this.form = ConsigneeDetail.parse(this.consigneeDetail)
+      } else {
+        this.form = new ConsigneeDetail()
+      }
+      console.log(this.form)
+    },
     selectSender () {
       this.$router.push({
         name: 'select-shipper'
@@ -122,23 +142,14 @@ export default {
     citySelect (picker) {
       console.log(picker)
       if (picker[0].name === picker[1].name) {
-        this.formList.address = picker[1].name + picker[2].name
+        this.form.address = picker[1].name + picker[2].name
       } else {
-        this.formList.address = picker[0].name + picker[1].name + picker[2].name
+        this.form.address = picker[0].name + picker[1].name + picker[2].name
       }
     },
-    formatPhone (value) {
-      if (/^1/.test(value)) {
-        const length = value.length
-        if (length === 4) {
-          value = value.slice(0, 3) + ' ' + value[3]
-        }
-        if (length === 9) {
-          value = value.slice(0, 8) + ' ' + value[8]
-        }
-      }
-      this.viewPhone = value.trim()
-      this.formList.phone = this.viewPhone.replace(/\s/g, '')
+    formatTel (value) {
+      this.viewPhone = this.formatPhone()
+      this.form.phone = this.viewPhone.replace(/\s/g, '')
     },
     async submit () {
       // const data = {
@@ -156,15 +167,7 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.clearFormList()
-      if (vm.saveConsigner.name) {
-        vm.formList.consigner = vm.saveConsigner.name
-      }
     })
-  },
-  beforeRouteLeave (to, from, next) {
-    // this.clearFormList()
-    this.saveConsignerInfo()
-    next()
   }
 }
 </script>

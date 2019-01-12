@@ -25,18 +25,24 @@ export const getConsignerList = ({ commit }) => {
   })
 }
 /** 获取收货人详情 */
-export const getConsigneeDetail = ({ commit }, id) => {
-  commit(types.GET_CONSIGNEE_DETAIL)
-  return server({
-    url: 'consigner/consignee/list',
-    method: 'get',
-    data: {
-      id: id
-    }
-  }).then((res) => {
-    commit(types.GET_CONSIGNEE_DETAIL, res.data.data)
-  })
+export const getConsigneeDetail = ({ commit, state }, idx) => {
+  console.log(state.consigneeList[0].items[0])
+  const data = state.consigneeList[0].items[idx]
+  commit(types.GET_CONSIGNEE_DETAIL, data)
 }
+/** 获取收货人详情 */
+// export const getConsigneeDetail = ({ commit }, id) => {
+//   commit(types.GET_CONSIGNEE_DETAIL)
+//   return server({
+//     url: 'consigner/consignee/list',
+//     method: 'get',
+//     data: {
+//       id: id
+//     }
+//   }).then((res) => {
+//     commit(types.GET_CONSIGNEE_DETAIL, res.data.data)
+//   })
+// }
 
 /** 新增收货人 */
 export const addConsignee = ({ commit }, data) => {

@@ -1,5 +1,5 @@
 <template>
-  <div class="contact-item border-bottom-1px cube-ellipsis" @click="$emit('click', item)">
+  <div class="contact-item border-bottom-1px cube-ellipsis" @click="$emit('click', item, index)">
     <div class="contact-item__prefix cube-flex-center">
       <span v-if="useNameIcon" v-text="prefix"/>
       <span v-else class="iconfont icon-ico_accept"/>
@@ -10,7 +10,7 @@
     </div>
     <i
       class="contact-item__tel iconfont icon-ico_call"
-      @click.stop="$emit('phoneCall', item)"
+      @click.stop="$emit('phoneCall', item, index)"
     />
   </div>
 </template>
@@ -21,6 +21,10 @@ export default {
     item: {
       type: Object,
       default: () => {}
+    },
+    index: {
+      type: [String, Number],
+      default: ''
     },
     useNameIcon: {
       type: Boolean,

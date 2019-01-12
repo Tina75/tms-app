@@ -9,26 +9,27 @@
         />
       </div>
       <div class="consignor">
-        <h2>{{consigneeDetail.name}}</h2>
+        <h2>{{consigneeDetail.contact}}</h2>
         <p>{{consigneeDetail.phone}}</p>
       </div>
     </div>
     <div class="detail_other">
       <div class="otherCard">
         <div class="title">收货地址</div>
+        <div class="address">{{consigneeDetail.cityName}}</div>
         <div class="address">{{consigneeDetail.address}}</div>
       </div>
       <div class="otherCard">
         <div class="title">所属发货方</div>
-        <div class="address">{{consigneeDetail.address}}</div>
+        <div class="address">{{consigneeDetail.consignerHourseNumber}}</div>
       </div>
       <div class="otherCard">
         <div class="title">收货人单位</div>
-        <div class="address">{{consigneeDetail.address}}</div>
+        <div class="address">{{consigneeDetail.consigneeCompanyName}}</div>
       </div>
       <div class="otherCard">
         <div class="title">备注</div>
-        <div class="address">{{consigneeDetail.address}}</div>
+        <div class="address">{{consigneeDetail.remark}}</div>
       </div>
     </div>
     <cube-button
@@ -146,11 +147,11 @@ export default {
         font-size 16px
         color #333333
         font-weight 500
+        margin-bottom 13px
       .address
         font-size 15px
         color #666666
         line-height 24px
-        margin-top 13px
     .otherCard:last-child
       border-bottom none
   &_call

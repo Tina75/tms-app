@@ -1,113 +1,75 @@
 <template>
-  <div class="address-shipper">
-    <cube-scroll
-      ref="scroll"
-      :options="options"
-      @pulling-down="onListPullDown"
-      @pulling-up="onListPullUp"
+  <div class="contacts-shipper">
+    <InfiniteList
+      v-model="loading"
+      :data="contactList.list"
+      :loader="loadContactList"
     >
       <ContactItem
-        v-for="item in ContactList.list"
+        v-for="(item, i) in contactList.list"
         :key="item.id"
+        :index="i"
         :item="item"
         @phoneCall="onItemPhoneCall"
         @click="onItemClick"
       />
-      <NoData
-        v-if="!ContactList.list.length && !loading"
-        action="新增发货方"
-        message="老板，您还没有记录发货方信息赶快新增一个，方便联系哦～"
-      >
-        <img
-          slot="img"
-          class="address-shipper__placeholder"
-          src="@/assets/contacts/shipper-list-empty.png"
+      <template slot="empty">
+        <NoData
+          action="新增发货方"
+          message="老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～"
+          @btn-click="addNew"
         >
-      </NoData>
-    </cube-scroll>
+          <img
+            slot="img"
+            class="contacts-shipper__placeholder"
+            src="@/assets/contacts/shipper-list-empty.png"
+          >
+        </NoData>
+      </template>
+    </InfiniteList>
   </div>
 </template>
 
 <script>
 import ContactItem from '../../components/ContactItem'
+import InfiniteList from '../../components/InfiniteList'
 import NoData from '@/components/NoData'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 const moudleName = 'contacts/shipper'
 export default {
   name: 'ContactsShipper',
   metaInfo: {
     title: '发货方'
   },
-  components: { ContactItem, NoData },
+  components: { ContactItem, NoData, InfiniteList },
   data() {
     return {
-      options: {
-        pullDownRefresh: {
-          txt: '刷新成功!'
-        },
-        pullUpLoad: false
-      },
       loading: false
     }
   },
-  computed: {
-    ...mapGetters(moudleName, ['ContactList'])
-  },
+  computed: mapState(moudleName, ['contactList']),
   methods: {
-    ...mapActions(moudleName, ['loadContactList']),
+    ...mapActions(moudleName, ['loadContactList', 'syncContactDetail']),
+    ...mapMutations(moudleName, ['setContactDetail']),
     onPageRefresh() {
-      this.startHackLoading()
-    },
-    onListPullDown() {
-      console.info('onPullDown')
-      this.loadingData(true)
-    },
-    onListPullUp() {
-      console.info('onPullUp')
-      this.loadingData()
+      this.loading = true
     },
     onItemPhoneCall(item) {
       window.location.href = `tel:${item.phone}`
     },
-    onItemClick(item) {
-      this.$router.push({
-        name: 'contacts-shipper-detail',
-        params: { id: item.id }
-      })
+    onItemClick(item, index) {
+      this.setContactDetail(index)
+      this.$router.push({ name: 'contacts-shipper-detail' })
     },
-    async loadingData(clear) {
-      this.loading = true
-      try {
-        await this.loadContactList(clear)
-        this.checkPullDown()
-      } catch (e) {
-        console.error(e)
-      } finally {
-        this.loading = false
-        this.stopListLoading()
-      }
-    },
-    checkPullDown() {
-      this.options.pullUpLoad = !!this.ContactList.hasNext
-    },
-    startHackLoading() {
-      this.loading = true
-      setTimeout(() => {
-        const scroll = this.$refs.scroll
-        scroll.scrollTo(0, 50)
-        scroll._pullDownHandle()
-        scroll._pullDownScrollHandle({ y: 50 })
-      })
-    },
-    stopListLoading() {
-      this.$refs.scroll.forceUpdate()
+    addNew() {
+      this.$router.push({ name: 'contacts-shipper-modify' })
     }
   }
 }
 </script>
 
 <style lang='stylus'>
-.address-shipper
+.contacts-shipper
   height 100%
   &__placeholder
     width 179px

@@ -1,10 +1,10 @@
 <template>
   <div class="consignee">
-    <cube-scroll
-      ref="indexList"
+    <InfiniteList
+      v-model="loading"
       :data="consigneeList"
-      :options="options"
-      @pulling-down="onPullingDown">
+      :loader="getConsigneeList"
+    >
       <cube-index-list class="consignee_list" :data="consigneeList">
         <cube-index-list-group
           v-for="(group, index) in consigneeList"
@@ -29,34 +29,36 @@
                     {{item.address}}
                   </div>
                 </div>
-                <div class="info_phone">
-                  <IconFont
-                    name="icon-ico_call"
-                    size="32"
-                    color="#00A4BD"
-                    @click="callPhone(item.phone)"
-                  />
-                </div>
+              </div>
+              <div class="info_phone">
+                <IconFont
+                  name="icon-ico_call"
+                  size="32"
+                  color="#00A4BD"
+                  @click="callPhone(item.phone)"
+                />
               </div>
             </div>
           </cube-index-list-item>
         </cube-index-list-group>
       </cube-index-list>
-      <NoData
-        v-if="consigneeList.length <= 0 && !loading"
-        message="老板，您还没有记录收货方信息赶快新增一个，方便联系哦～"
-        action="新增收货方"
-        @btn-click="btnClick">
-        <img
-          slot="img"
-          src="@/assets/contacts/consigness_nodata.png"
-          class="consignee_nodata"
-        >
-      </NoData>
-    </cube-scroll>
+      <template slot="empty">
+        <NoData
+          message="老板，您还没有记录收货方信息赶快新增一个，方便联系哦～"
+          action="新增收货方"
+          @btn-click="btnClick">
+          <img
+            slot="img"
+            src="@/assets/contacts/consigness_nodata.png"
+            class="consignee_nodata"
+          >
+        </NoData>
+      </template>
+    </InfiniteList>
   </div>
 </template>
 <script>
+import InfiniteList from '../../components/InfiniteList'
 import IconFont from '@/components/Iconfont'
 import { mapGetters, mapActions } from 'vuex'
 import NoData from '@/components/NoData'
@@ -66,7 +68,7 @@ export default {
   metaInfo: {
     title: '收货方'
   },
-  components: { IconFont, NoData },
+  components: { IconFont, NoData, InfiniteList },
   data () {
     return {
       options: {
@@ -82,12 +84,13 @@ export default {
     ...mapGetters(moudleName, ['consigneeList'])
   },
   methods: {
-    ...mapActions(moudleName, ['getConsigneeList']),
+    ...mapActions(moudleName, ['getConsigneeList', 'getConsigneeDetail']),
     onPageRefresh() {
-      this.startHackLoading()
+      this.loading = true
     },
-    selectItem (idx) {
+    async selectItem (idx) {
       console.log(idx)
+      await this.getConsigneeDetail(idx)
       this.$router.push({
         name: 'contacts-consignee-detail',
         params: {
@@ -105,28 +108,6 @@ export default {
           type: 'add'
         }
       })
-    },
-    onPullingDown () {
-      this.loadingData()
-    },
-    async loadingData() {
-      this.loading = true
-      try {
-        await this.getConsigneeList()
-      } catch (e) {
-        console.error(e)
-      } finally {
-        this.loading = false
-      }
-    },
-    startHackLoading() {
-      this.loading = true
-      setTimeout(() => {
-        const scroll = this.$refs.indexList
-        scroll.scrollTo(0, 60)
-        scroll._pullDownHandle()
-        scroll._pullDownScrollHandle({ y: 60 })
-      })
     }
   }
 }
@@ -139,6 +120,7 @@ export default {
     width 185px
   &_list
     height 100%
+    min-height 668px
   .border-bottom-1px:after
     left 70px
   &_item
@@ -174,8 +156,10 @@ export default {
         max-width 224px
         color #999999
         line-height 14px
-      .info_phone
-        margin-left 21px
+    .info_phone
+      margin-right 5px
+      text-align right
+      flex 1
   >>>.cube-index-list-nav
     top 20%
     right -5px

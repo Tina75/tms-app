@@ -69,10 +69,10 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.showData = true
-      // vm.getConsignerList().then(() => {
-      //   vm.showData = true
-      // })
+      vm.showData = false
+      vm.getConsignerList().then(() => {
+        vm.showData = true
+      })
     })
   }
 }

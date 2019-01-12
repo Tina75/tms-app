@@ -4,7 +4,23 @@ export class LazyList {
   nextPage = 1
   pageSize = 10
 }
-export class ContactModify {
+export class ContactItem {
+  name = ''
+  detail = ''
+  id = ''
+  phone = ''
+  data = {}
+  static parse(data) {
+    return {
+      name: data.name,
+      detail: data.contact + '  ' + data.phone,
+      phone: data.phone,
+      data
+    }
+  }
+}
+
+export class ContactDetail {
   id = ''
   name = '' //
   contact = '' // 发货方联系人
@@ -24,20 +40,8 @@ export class ContactModify {
     { text: '月结', value: 4 }
   ]
   static channels = [{ text: '公司开拓', value: 1 }, { text: '个人开拓', value: 2 }]
-}
-export class ContactItem {
-  name = ''
-  detail = ''
-  id = ''
-  phone = ''
-  data = {}
   static parse(data) {
-    return {
-      name: data.name,
-      detail: data.contact + '  ' + data.phone,
-      id: data.id,
-      phone: data.phone,
-      data
-    }
+    const instance = new ContactDetail()
+    return instance
   }
 }

@@ -1,7 +1,8 @@
 import store from '@/store'
 export default [
+  // -------发货方-----------
   {
-  // 发货方通信录
+    // 发货方通信录
     path: '/contacts/shipper',
     name: 'contacts-shipper',
     meta: {
@@ -11,7 +12,7 @@ export default [
   },
   {
     // 发货方详情
-    path: '/contacts/shipper/detail/:id',
+    path: '/contacts/shipper/detail',
     name: 'contacts-shipper-detail',
     meta: {
       noNeedRefresh: []
@@ -19,12 +20,26 @@ export default [
     component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/detail.vue')
   },
   {
-    // 编辑发货方
+    // 发货方地址列表
+    path: '/contacts/shipper/address',
+    name: 'contacts-shipper-address',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/address.vue')
+  },
+  {
+    // 编辑详细地址
     path: '/contacts/shipper/modify',
     name: 'contacts-shipper-modify',
+    meta: {
+      noNeedRefresh: []
+    },
     component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/modify.vue')
   },
-  // 发货方列表
+
+  // -------------收货方------------------
+  // 收货方列表
   {
     path: '/contacts/consignee',
     name: 'contacts-consignee',
@@ -33,7 +48,7 @@ export default [
     },
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/index.vue')
   },
-  // 发货方详情
+  // 收货方详情
   {
     path: '/contacts/consignee/detail/:id',
     name: 'contacts-consignee-detail',
