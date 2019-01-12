@@ -1,5 +1,5 @@
 <template>
-  <div class="shipper-detail">
+  <div class="shipper-detail cube-has-bottom-btn">
     <div class="shipper-detail__header">
       <span class="cube-font-18" v-text="viewData.name"/>
       <div class="cube-font-14">
@@ -57,7 +57,7 @@ const ListConfig = [
   { text: '业务员', key: 'operatorName' }
 ]
 export default {
-  name: 'ShipperDetail',
+  name: 'ContactsShipperDetail',
   metaInfo: {
     title: ''
   },

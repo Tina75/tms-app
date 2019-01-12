@@ -32,12 +32,12 @@
 
 <script>
 import ListItem from '../../components/ListItem'
-import InfiniteList from '../../components/InfiniteList'
+import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import { mapActions, mapState, mapMutations } from 'vuex'
 const moudleName = 'contacts/shipper'
 export default {
-  name: 'ContactsShipper',
+  name: 'ContactsShipperList',
   metaInfo: {
     title: '发货方'
   },

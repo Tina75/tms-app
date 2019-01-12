@@ -1,5 +1,5 @@
 <template>
-  <div class="modify-shipper">
+  <div class="cube-has-bottom-btn">
     <FromGroup :rules="rules">
       <FormItem v-model="model.name" label="发货人名称" maxlength="20" prop="require"/>
       <FormItem v-model="model.contact" label="联系人" maxlength="15" prop="require"/>
@@ -56,13 +56,13 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import LoadingButton from '../../components/LoadingButton'
+import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
 import { ContactDetail } from '../modules/model'
 const moudleName = 'contacts/shipper'
 export default {
-  name: 'ModifyShipper',
+  name: 'ModifyContactsShipper',
   metaInfo() {
     return {
       title: this.isCreate ? '新增发货方' : '编辑发货方'
@@ -129,8 +129,4 @@ export default {
 }
 </script>
 <style lang='stylus' >
-.modify-shipper
-  min-height 100%
-  box-sizing border-box
-  padding-bottom 60px
 </style>
