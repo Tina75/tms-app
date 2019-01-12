@@ -24,7 +24,7 @@
           :show-required-toast="false"
           prop="viewPhone"
           label="联系电话"
-          placeholder="请输入手机号或座机号,座机需加区号"
+          placeholder="请输入手机号或座机号"
           :maxlength="20"
           @input="formatPhone"
         />
@@ -92,26 +92,20 @@ export default {
       showPickCity: false,
       viewPhone: '',
       rules: {
-        consigner: {
-          required: true
-        },
-        contact: {
-          required: true
-        },
+        consigner: { required: true },
+        contact: { required: true },
         viewPhone: {
           required: true,
           type: 'string',
-          custom: (val) => {
+          validatePhone: (val) => {
             const value = val.replace(/\s/g, '')
             return validator.phone(value) || validator.telphone(value)
           },
           messages: {
-            custom: '请输入正确的手机号或座机号'
+            validatePhone: '请输入正确的手机号或座机号'
           }
         },
-        detailAddress: {
-          required: true
-        }
+        detailAddress: { required: true }
       }
     }
   },

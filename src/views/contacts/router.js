@@ -54,6 +54,12 @@ export default [
     name: 'contacts-driver',
     component: () => import(/* webpackChunkName: "contacts" */ './driver/pages/index.vue')
   },
+  // 熟车司机详情
+  {
+    path: '/contacts/driver/detail',
+    name: 'contacts-driver-detail',
+    component: () => import(/* webpackChunkName: "contacts" */ './driver/pages/detail.vue')
+  },
   /* 承运商 */
   {
     path: '/contacts/carrier',
