@@ -44,12 +44,6 @@ export default {
   components: { ContactItem, NoData, InfiniteList },
   data() {
     return {
-      options: {
-        pullDownRefresh: {
-          txt: '刷新成功!'
-        },
-        pullUpLoad: false
-      },
       loading: false
     }
   },
