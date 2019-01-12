@@ -13,11 +13,6 @@ const store = {
   actions,
   state,
   getters: {
-    ContactOperatorOptions: (state) =>
-      state.operator.map((item) => ({
-        value: item.id,
-        text: item.name
-      }))
   }
 }
 const lists = [

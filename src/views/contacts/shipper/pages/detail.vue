@@ -1,11 +1,11 @@
 <template>
   <div class="shipper-detail">
     <div class="shipper-detail__header">
-      <span class="cube-font-18" v-text="contactDetail.name"/>
+      <span class="cube-font-18" v-text="viewData.name"/>
       <div class="cube-font-14">
         <i class="cubeic-person cube-mr-10"/>
-        <span class="cube-mr-10" v-text="contactDetail.contact"/>
-        <span v-text="contactDetail.phone"/>
+        <span class="cube-mr-10" v-text="viewData.contact"/>
+        <span v-text="viewData.phone"/>
       </div>
     </div>
     <div v-if="infoList.length" class="shipper-detail__info border-bottom-1px">
@@ -18,24 +18,24 @@
         <span class="cube-font-14 cube-c-light-grey" v-text="item.text"/>
       </div>
     </div>
-    <div v-if="contactDetail.remark" class="shipper-detail__remark cube-font-15">
+    <div v-if="viewData.remark" class="shipper-detail__remark cube-font-15">
       <div class="cube-c-black cube-mb-15" v-text="'备注'"/>
-      <p class="cube-c-grey" v-text="contactDetail.remark"/>
+      <p class="cube-c-grey" v-text="viewData.remark"/>
     </div>
 
     <CellItem
       class="cube-mt-15"
       label="发货地址"
       left-icon="icon-ico_location"
-      :right-title="contactDetail.addressCnt"
-      @click="$router.push({name: 'contacts-shipper-address', query:{consignerId: contactDetail.id}})"
+      :right-title="viewData.addressCnt"
+      @click="$router.push({name: 'contacts-shipper-address', query:{consignerId: viewData.id}})"
     />
 
     <CellItem
       class="cube-mt-15"
       label="常发货物"
       left-icon="icon-ico_location"
-      :right-title="contactDetail.cargoCnt"
+      :right-title="viewData.cargoCnt"
     />
 
     <cube-button class="cube-bottom-button" :primary="true" @click="phoneCall">
@@ -48,6 +48,7 @@
 <script>
 import CellItem from '../../components/CellItem.vue'
 import { mapState } from 'vuex'
+import { ContactDetail } from '../modules/model'
 const moudleName = 'contacts/shipper'
 const ListConfig = [
   { text: '结算方式', key: 'payType' },
@@ -65,9 +66,12 @@ export default {
     return {}
   },
   computed: {
-    ...mapState(moudleName, ['contactDetail']),
+    ...mapState(moudleName, ['contactDetail', 'operator']),
+    viewData() {
+      return ContactDetail.toView(this.contactDetail, this.operator)
+    },
     infoList() {
-      const detail = this.contactDetail
+      const detail = this.viewData
       if (detail) {
         let value
         return ListConfig.reduce((arr, { text, key }, index) => {
@@ -86,7 +90,7 @@ export default {
   },
   methods: {
     phoneCall() {
-      window.location.href = `tel:${this.contactDetail.phone}`
+      window.location.href = `tel:${this.viewData.phone}`
     }
   }
 }

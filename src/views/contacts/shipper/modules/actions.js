@@ -7,9 +7,7 @@ export default {
     return Server({
       method: 'post',
       url: isCreate ? '/consigner/add' : '/consigner/update',
-      data: {
-        ...state.contactModify
-      }
+      data
     })
   },
   // 同步对接业务员

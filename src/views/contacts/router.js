@@ -8,7 +8,7 @@ export default [
     meta: {
       noNeedRefresh: ['contacts-shipper-detail']
     },
-    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/index.vue')
+    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/index.vue')
   },
   {
     // 发货方详情
@@ -17,7 +17,7 @@ export default [
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/detail.vue')
+    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/detail.vue')
   },
   {
     // 编辑发货方
@@ -26,7 +26,7 @@ export default [
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/modify.vue')
+    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/modify.vue')
   },
   {
     // 发货方地址列表 ?consignerId
@@ -35,7 +35,7 @@ export default [
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/address.vue')
+    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/address.vue')
   },
   {
     // 编辑发货方地址
@@ -44,7 +44,7 @@ export default [
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/address-modify.vue')
+    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/address-modify.vue')
   },
   {
     // 发货方常发货列表 ?consignerId
@@ -53,7 +53,7 @@ export default [
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/cargo.vue')
+    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/cargo.vue')
   },
   {
     // 编辑发货方常发货
@@ -62,7 +62,7 @@ export default [
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/cargo-modify.vue')
+    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/cargo-modify.vue')
   },
   // -------------收货方------------------
   // 收货方列表

@@ -50,7 +50,7 @@ export default {
   computed: mapState(moudleName, ['contactList']),
   methods: {
     ...mapActions(moudleName, ['loadContactList', 'syncContactDetail', 'syncButtOperator']),
-    ...mapMutations(moudleName, ['setContactDetailView']),
+    ...mapMutations(moudleName, ['setContactDetail']),
     loader(refresh) {
       if (refresh) {
         this.syncButtOperator()
@@ -64,10 +64,11 @@ export default {
       window.location.href = `tel:${item.phone}`
     },
     onItemClick(item, index) {
-      this.setContactDetailView(index)
+      this.setContactDetail(index)
       this.$router.push({ name: 'contacts-shipper-detail' })
     },
     addNew() {
+      this.setContactDetail()
       this.$router.push({ name: 'contacts-shipper-modify' })
     }
   }
