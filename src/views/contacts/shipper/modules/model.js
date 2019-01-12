@@ -1,19 +1,3 @@
-export class ContactItem {
-  name = ''
-  detail = ''
-  id = ''
-  phone = ''
-  data = {}
-  static parse(data) {
-    return {
-      name: data.name,
-      detail: data.contact + '  ' + data.phone,
-      phone: data.phone,
-      data
-    }
-  }
-}
-
 export class ContactDetail {
   id = ''
   name = '' //
@@ -26,16 +10,27 @@ export class ContactDetail {
   salesmanId = '' // 对接业务员
   pickUp = '' // 提货方式
   exploiteChannel = '' // 开括渠道
-  static pickUps = [{ text: '小车上门自提', value: 1 }, { text: '大车直接送货', value: 2 }]
-  static payTypes = [
+  static pickUp = [{ text: '小车上门自提', value: 1 }, { text: '大车直接送货', value: 2 }]
+  static payType = [
     { text: '现付', value: 1 },
     { text: '到付', value: 2 },
     { text: '回单付', value: 3 },
     { text: '月结', value: 4 }
   ]
-  static channels = [{ text: '公司开拓', value: 1 }, { text: '个人开拓', value: 2 }]
-  static parse(data) {
-    const instance = new ContactDetail()
-    return instance
+  static exploiteChannel = [{ text: '公司开拓', value: 1 }, { text: '个人开拓', value: 2 }]
+  static parse(data = new ContactDetail(), operators = []) {
+    data = { ...data }
+    if (data.salesmanId) {
+      data.salesmanId = +data.salesmanId
+      const operator = operators.find((item) => +item.id === data.salesmanId)
+      data.operatorName = operator ? operator.name : ''
+    }
+    ['pickUp', 'payType', 'exploiteChannel'].forEach((key) => {
+      const value = +data[key]
+      const options = ContactDetail[key]
+      const option = options.find(item => item.value === value)
+      data[key] = option ? option.text : ''
+    })
+    return data
   }
 }

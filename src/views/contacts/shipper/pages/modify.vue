@@ -8,14 +8,14 @@
       label="提货方式"
       placeholder="请选择"
       type="select"
-      :options="options.pickUps"
+      :options="options.pickUp"
     />
     <FormItem
       label="支付方式"
       placeholder="请选择"
       :value="model.payType"
       type="select"
-      :options="options.payTypes"
+      :options="options.payType"
     />
     <FormItem v-model="model.isInvoice" label="是否开票" type="switch"/>
     <FormItem
@@ -39,7 +39,7 @@
       class="cube-mb-15"
       type="select"
       :bottom-line="false"
-      :options="options.channels"
+      :options="options.exploiteChannel"
     />
     <FormItem maxlength="200" type="textarea" :value="model.remark" label="备注"/>
     <cube-button class="cube-bottom-button" :primary="true" @click="submit">确定</cube-button>
@@ -62,9 +62,9 @@ export default {
     return {
       model: new ContactDetail(),
       options: {
-        pickUps: ContactDetail.pickUps,
-        payTypes: ContactDetail.payTypes,
-        channels: ContactDetail.channels
+        pickUp: ContactDetail.pickUp,
+        payType: ContactDetail.payType,
+        exploiteChannel: ContactDetail.exploiteChannel
       }
     }
   },

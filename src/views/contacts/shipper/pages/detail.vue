@@ -3,25 +3,40 @@
     <div class="shipper-detail__header">
       <span class="cube-font-18" v-text="contactDetail.name"/>
       <div class="cube-font-14">
-        <i class="cubeic-person cube-mr-10" />
+        <i class="cubeic-person cube-mr-10"/>
         <span class="cube-mr-10" v-text="contactDetail.contact"/>
-        <span v-text="contactDetail.phone" />
+        <span v-text="contactDetail.phone"/>
       </div>
     </div>
-    <div class="shipper-detail__info border-bottom-1px">
-      <div v-for="(item, i) in info" :key="i" class="shipper-detail__info-item border-right-1px">
-        <span class="cube-font-15 cube-c-black" v-text="item.value" />
-        <span class="cube-font-14 cube-c-light-grey" v-text="item.text" />
+    <div v-if="infoList.length" class="shipper-detail__info border-bottom-1px">
+      <div
+        v-for="(item, i) in infoList"
+        :key="i"
+        class="shipper-detail__info-item border-right-1px"
+      >
+        <span class="cube-font-15 cube-c-black" v-text="item.value"/>
+        <span class="cube-font-14 cube-c-light-grey" v-text="item.text"/>
       </div>
     </div>
     <div v-if="contactDetail.remark" class="shipper-detail__remark cube-font-15">
       <div class="cube-c-black cube-mb-15" v-text="'备注'"/>
-      <p class="cube-c-grey" v-text="contactDetail.remark" />
+      <p class="cube-c-grey" v-text="contactDetail.remark"/>
     </div>
 
-    <CellItem class="cube-mt-15" label="发货地址" left-icon="icon-ico_location" :right-title="contactDetail.addressCnt"/>
+    <CellItem
+      class="cube-mt-15"
+      label="发货地址"
+      left-icon="icon-ico_location"
+      :right-title="contactDetail.addressCnt"
+      @click="$router.push({name: 'contacts-shipper-address', query:{consignerId: contactDetail.id}})"
+    />
 
-    <CellItem class="cube-mt-15" label="常发货物" left-icon="icon-ico_location" :right-title="contactDetail.cargoCnt"/>
+    <CellItem
+      class="cube-mt-15"
+      label="常发货物"
+      left-icon="icon-ico_location"
+      :right-title="contactDetail.cargoCnt"
+    />
 
     <cube-button class="cube-bottom-button" :primary="true" @click="phoneCall">
       <i class="iconfont icon-ico_call"/>
@@ -34,32 +49,40 @@
 import CellItem from '../../components/CellItem.vue'
 import { mapState } from 'vuex'
 const moudleName = 'contacts/shipper'
+const ListConfig = [
+  { text: '结算方式', key: 'payType' },
+  { text: '提货方式', key: 'pickUp' },
+  { text: '开票税率', key: 'invoiceRate' },
+  { text: '业务员', key: 'operatorName' }
+]
 export default {
   name: 'ShipperDetail',
   metaInfo: {
     title: ''
   },
   components: { CellItem },
-  data () {
-    return {
-      info: [{
-        text: '结算方式',
-        value: '月结'
-      }, {
-        text: '提货方式',
-        value: '上门提货'
-      }, {
-        text: '开票税率',
-        value: '0.5%'
-      }, {
-        text: '业务员',
-        value: '李四'
-      }]
-    }
+  data() {
+    return {}
   },
   computed: {
-    ...mapState(moudleName, ['contactDetail'])
-
+    ...mapState(moudleName, ['contactDetail']),
+    infoList() {
+      const detail = this.contactDetail
+      if (detail) {
+        let value
+        return ListConfig.reduce((arr, { text, key }, index) => {
+          value = detail[key]
+          if (value) {
+            arr.push({
+              text,
+              value
+            })
+          }
+          return arr
+        }, [])
+      }
+      return []
+    }
   },
   methods: {
     phoneCall() {

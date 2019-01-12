@@ -1,3 +1,4 @@
+import { ContactDetail } from './model'
 export default {
   // ---------发货方------
   // 加载业务员
@@ -5,12 +6,10 @@ export default {
     state.operator = payload
   },
   // 设置发货方详情
-  setContactDetail(state, index) {
+  setContactDetailView(state, index) {
     const list = state.contactList.list
     const detail = list[index]
-    if (detail) {
-      state.contactDetail = detail.data
-    }
+    state.contactDetail = detail ? ContactDetail.parse(detail.data, state.operator) : {}
   }
   // ---------地址------
 }
