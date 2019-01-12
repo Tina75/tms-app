@@ -1,23 +1,33 @@
 <template>
   <div class="contact-item border-bottom-1px cube-ellipsis" @click="$emit('click', item, index)">
     <div class="contact-item__prefix cube-flex-center">
-      <span v-if="useNameIcon" v-text="prefix"/>
-      <span v-else class="iconfont icon-ico_accept"/>
+      <slot name="left">
+        <span v-if="useNameIcon" v-text="prefix"/>
+        <i v-else class="iconfont cube-font-22" :class="icon"/>
+      </slot>
     </div>
     <div class="contact-item__content cube-ml-15 cube-ellipsis">
-      <span class="cube-c-black cube-ellipsis cube-font-17" v-text="item.name"/>
-      <span class="cube-c-light-grey cube-ellipsis cube-font-14" v-text="item.detail"/>
+      <slot>
+        <span class="cube-c-black cube-ellipsis cube-font-17" v-text="item.name"/>
+        <span class="cube-c-light-grey cube-ellipsis cube-font-14" v-text="item.detail"/>
+      </slot>
     </div>
-    <i
-      class="contact-item__tel iconfont icon-ico_call"
-      @click.stop="$emit('phoneCall', item, index)"
-    />
+    <slot name="right">
+      <i
+        class="contact-item__tel iconfont icon-ico_call"
+        @click.stop="$emit('phoneCall', item, index)"
+      />
+    </slot>
   </div>
 </template>
 
 <script>
 export default {
   props: {
+    icon: {
+      type: String,
+      default: 'icon-ico_accept'
+    },
     item: {
       type: Object,
       default: () => {}

@@ -29,8 +29,8 @@
       v-model="model.salesmanId"
       label="对接业务员"
       placeholder="请选择"
-      :type="operatorType"
-      :options="options.operators"
+      type="select"
+      :options="ContactOperatorOptions"
     />
     <FormItem
       v-model="model.exploiteChannel"
@@ -64,16 +64,14 @@ export default {
       options: {
         pickUps: ContactDetail.pickUps,
         payTypes: ContactDetail.payTypes,
-        channels: ContactDetail.channels,
-        operators: []
-      },
-      operatorType: 'select'
+        channels: ContactDetail.channels
+      }
     }
   },
   computed: {
-    ...mapGetters(moudleName, ['ContactOperatorSelection']),
+    ...mapGetters(moudleName, ['ContactOperatorOptions']),
     isCreate() {
-      return !this.$route.query.index
+      return !this.model.id
     }
   },
   methods: {
@@ -88,17 +86,6 @@ export default {
         this.model = new ContactDetail()
       }
       this.loadOperators()
-    },
-    async loadOperators() {
-      this.operatorType = 'loading'
-      try {
-        await this.syncButtOperator()
-        this.options.operators = this.ContactOperatorSelection
-      } catch (e) {
-        this.options.operators = []
-      } finally {
-        this.operatorType = 'select'
-      }
     }
   }
 }

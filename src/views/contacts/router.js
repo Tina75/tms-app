@@ -20,7 +20,16 @@ export default [
     component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/detail.vue')
   },
   {
-    // 发货方地址列表
+    // 编辑发货方
+    path: '/contacts/shipper/modify',
+    name: 'contacts-shipper-modify',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/modify.vue')
+  },
+  {
+    // 发货方地址列表 ?consignerId
     path: '/contacts/shipper/address',
     name: 'contacts-shipper-address',
     meta: {
@@ -29,15 +38,32 @@ export default [
     component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/address.vue')
   },
   {
-    // 编辑详细地址
-    path: '/contacts/shipper/modify',
-    name: 'contacts-shipper-modify',
+    // 编辑发货方地址
+    path: '/contacts/shipper/address/modify',
+    name: 'contacts-shipper-address-modify',
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/modify.vue')
+    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/address-modify.vue')
   },
-
+  {
+    // 发货方常发货列表 ?consignerId
+    path: '/contacts/shipper/cargo',
+    name: 'contacts-shipper-cargo',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/cargo.vue')
+  },
+  {
+    // 编辑发货方常发货
+    path: '/contacts/shipper/cargo/modify',
+    name: 'contacts-shipper-cargo-modify',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/cargo-modify.vue')
+  },
   // -------------收货方------------------
   // 收货方列表
   {

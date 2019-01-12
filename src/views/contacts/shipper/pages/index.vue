@@ -5,7 +5,7 @@
       :data="contactList.list"
       :loader="loadContactList"
     >
-      <ContactItem
+      <ListItem
         v-for="(item, i) in contactList.list"
         :key="item.id"
         :index="i"
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import ContactItem from '../../components/ContactItem'
+import ListItem from '../../components/ListItem'
 import InfiniteList from '../../components/InfiniteList'
 import NoData from '@/components/NoData'
 import { mapActions, mapState, mapMutations } from 'vuex'
@@ -41,7 +41,7 @@ export default {
   metaInfo: {
     title: '发货方'
   },
-  components: { ContactItem, NoData, InfiniteList },
+  components: { ListItem, NoData, InfiniteList },
   data() {
     return {
       loading: false
@@ -49,8 +49,14 @@ export default {
   },
   computed: mapState(moudleName, ['contactList']),
   methods: {
-    ...mapActions(moudleName, ['loadContactList', 'syncContactDetail']),
+    ...mapActions(moudleName, ['loadContactList', 'syncContactDetail', 'syncButtOperator']),
     ...mapMutations(moudleName, ['setContactDetail']),
+    loader(refresh) {
+      if (refresh) {
+        this.syncButtOperator()
+      }
+      this.loadContactList(refresh)
+    },
     onPageRefresh() {
       this.loading = true
     },

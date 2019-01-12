@@ -1,38 +1,26 @@
 <template>
-  <div class="contacts-shipper-address">
-    <!-- <InfiniteList
-      v-model="loading"
-      :data="addressList.list"
-      :loader="loadAddressList"
-    >
-      <ListItem
-        v-for="(item, i) in addressList.list"
-        :key="item.id"
-        :index="i"
-        :item="item"
-        icon="icon-ico_location"
-    >-->
-    <InfiniteList v-model="loading" :data="test" :loader="loadAddressList">
+  <div class="contacts-shipper-cargo">
+    <InfiniteList v-model="loading" :data="test" :loader="loadCargoList">
       <ListItem
         v-for="(item, i) in test"
         :key="item.id"
         :index="i"
         :item="item"
-        icon="icon-ico_location"
+        icon="icon-ico_thing"
       >
         <div
           slot="right"
-          class="contacts-shipper-address__item border-left-1px cube-font-14 cube-c-light-grey"
+          class="contacts-shipper-cargo__item border-left-1px cube-font-14 cube-c-light-grey"
           @click="modify(i)"
           v-text="'修改'"
         />
       </ListItem>
       <template slot="empty">
-        <NoData action="新增发货地址" message="老板，您还没有记录发货地址信息 赶快新增一个，用着方便哦～" @btn-click="modify">
+        <NoData action="新增常发货物" message="老板，您还没有记录常发货物信息 赶快新增一个，用着方便哦～" @btn-click="modify">
           <img
             slot="img"
             class="contacts-shipper__placeholder"
-            src="@/assets/contacts/address-list-empty.png"
+            src="@/assets/contacts/cargo-list-empty.png"
           >
         </NoData>
       </template>
@@ -47,9 +35,9 @@ import NoData from '@/components/NoData'
 import { mapActions, mapState } from 'vuex'
 const moudleName = 'contacts/shipper'
 export default {
-  name: 'ContactsShipper',
+  name: 'ContactsShipperCargo',
   metaInfo: {
-    title: '发货方'
+    title: '常发货物'
   },
   components: { ListItem, NoData, InfiniteList },
   data() {
@@ -79,9 +67,9 @@ export default {
       ]
     }
   },
-  computed: mapState(moudleName, ['addressList']),
+  computed: mapState(moudleName, ['cargoList']),
   methods: {
-    ...mapActions(moudleName, ['loadAddressList']),
+    ...mapActions(moudleName, ['loadCargoList']),
     onPageRefresh() {
       this.loading = true
     },
@@ -89,14 +77,14 @@ export default {
       if (index) {
 
       }
-      this.$router.push({ name: 'contacts-shipper-address-modify' })
+      this.$router.push({ name: 'contacts-shipper-cargo-modify' })
     }
   }
 }
 </script>
 
 <style lang='stylus'>
-.contacts-shipper-address
+.contacts-shipper-cargo
   height 100%
   &__placeholder
     width 179px

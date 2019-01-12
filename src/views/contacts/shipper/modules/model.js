@@ -1,4 +1,30 @@
-export class LazyList {
+export const LISTS = [
+  {// 发货方
+    key: 'contact',
+    url: '/consigner/page'
+  },
+  {// 发货方地址
+    key: 'address',
+    url: '/consigner/address/list'
+  },
+  {// 常发货物
+    key: 'cargo',
+    url: '/consigner/cargo/list'
+  }
+].map((list) => {
+  const { key, url } = list
+  const name = key[0].toUpperCase() + key.slice(1)
+  return {
+    addMutation: `add${name}List`,
+    clearMutation: `clear${name}List`,
+    loadAction: `load${name}List`,
+    state: `${key}List`,
+    itemModel: `${name}Item`,
+    loadUrl: url
+  }
+})
+
+export class InfinateList {
   list = []
   hasNext = true
   nextPage = 1
@@ -43,5 +69,11 @@ export class ContactDetail {
   static parse(data) {
     const instance = new ContactDetail()
     return instance
+  }
+}
+
+export class AddressItem {
+  static parse(data) {
+    return data
   }
 }
