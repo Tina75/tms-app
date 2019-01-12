@@ -80,7 +80,6 @@ export default {
 <style lang="stylus" scoped>
 .select
   height 100%
-// padding-top 40px
   &_nodata
     width 182px
     .border-bottom-1px:after

@@ -103,6 +103,9 @@ export default {
 <style lang="stylus" scoped>
 .detail
   height 100%
+  padding-bottom 44px
+  box-sizing border-box
+  overflow-y auto
   &_info
     width 100%
     height 110px

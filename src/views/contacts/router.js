@@ -32,7 +32,7 @@ export default [
   },
   // 发货方详情
   {
-    path: '/contacts/consignee/detail',
+    path: '/contacts/consignee/detail/:id',
     name: 'contacts-consignee-detail',
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/detail.vue')
   },
@@ -56,7 +56,7 @@ export default [
   },
   // 熟车司机详情
   {
-    path: '/contacts/driver/detail',
+    path: '/contacts/driver/detail/:id',
     name: 'contacts-driver-detail',
     component: () => import(/* webpackChunkName: "contacts" */ './driver/pages/detail.vue')
   },

@@ -87,7 +87,10 @@ export default {
     selectItem (idx) {
       console.log(idx)
       this.$router.push({
-        name: 'contacts-consignee-detail'
+        name: 'contacts-consignee-detail',
+        params: {
+          id: idx
+        }
       })
     },
     callPhone (phone) {

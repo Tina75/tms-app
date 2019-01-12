@@ -77,6 +77,12 @@ export default {
   methods: {
     selectItem (idx) {
       console.log(idx)
+      this.$router.push({
+        name: 'contacts-driver-detail',
+        params: {
+          id: idx
+        }
+      })
     },
     callPhone (phone) {
       window.location.href = `tel:${phone}`
