@@ -28,6 +28,9 @@ export default [
   {
     path: '/contacts/consignee',
     name: 'contacts-consignee',
+    meta: {
+      noNeedRefresh: []
+    },
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/index.vue')
   },
   // 发货方详情

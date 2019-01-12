@@ -84,44 +84,38 @@ export default {
     width 182px
     .border-bottom-1px:after
       left 70px
-    .select_item
-      width 100%
-      height 60px
-      padding 10px 15px
-      display flex
-      box-sizing border-box
-      align-items center
-      background-color #ffffff
-  &_img
-    width 40px
-    height 40px
-    border-radius 50%
-    line-height 40px
-    text-align center
-    font-size 17px
-    color #ffffff
-    background-color #E4E7EC
-  &_info
-    margin-left 15px
+  .select_item
+    width 100%
+    height 60px
+    padding 10px 15px
     display flex
-    padding 10px 0px
-    .info_top
+    box-sizing border-box
+    align-items center
+    background-color #ffffff
+    &_img
+      width 40px
+      height 40px
+      border-radius 50%
+      line-height 40px
+      text-align center
       font-size 17px
-      color #333333
-      font-weight 400
-      line-height 18px
-    .info_bottom
-      margin-top 8px
-      font-size 14px
-      max-width 224px
-      color #999999
-      line-height 14px
-      span
-        margin-right 10px
-    .info_phone
-      margin-left 21px
-      margin-top 5px
-      width 30px
-      height 30px
-      vertical-align middle
+      color #ffffff
+      background-color #E4E7EC
+    &_info
+      margin-left 15px
+      display flex
+      padding 10px 0px
+      .info_top
+        font-size 17px
+        color #333333
+        font-weight 400
+        line-height 18px
+      .info_bottom
+        margin-top 8px
+        font-size 14px
+        max-width 224px
+        color #999999
+        line-height 14px
+        span
+          margin-right 10px
 </style>

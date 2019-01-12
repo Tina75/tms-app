@@ -6,6 +6,10 @@ export const getConsigneeList = ({ commit }) => {
   return server({
     url: 'consigner/consignee/list',
     method: 'get'
+    // date: {
+    //   pageSize: 10,
+    //   pageNo: 1
+    // }
   }).then((res) => {
     commit(types.GET_CONSIGNEE_LIST, res.data.data)
   })

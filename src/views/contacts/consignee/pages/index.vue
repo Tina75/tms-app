@@ -1,46 +1,47 @@
 <template>
   <div class="consignee">
-    <cube-index-list
+    <cube-scroll
       ref="indexList"
       :data="consigneeList"
       :options="options"
-      class="consignee_list"
       @pulling-down="onPullingDown">
-      <cube-index-list-group
-        v-for="(group, index) in consigneeList"
-        :key="index"
-        :group="group">
-        <cube-index-list-item
-          v-for="(item, index) in group.items"
+      <cube-index-list class="consignee_list" :data="consigneeList">
+        <cube-index-list-group
+          v-for="(group, index) in consigneeList"
           :key="index"
-          :item="item"
-          @select="selectItem(index)">
-          <div class="consignee_item border-bottom-1px">
-            <div class="consignee_item_img">
-              {{item.name.slice(0,1)}}
-            </div>
-            <div class="consignee_item_info">
-              <div>
-                <div class="info_top">
-                  <span>{{item.name}}</span>
-                  <span>{{item.phone}}</span>
+          :group="group">
+          <cube-index-list-item
+            v-for="(item, index) in group.items"
+            :key="index"
+            :item="item"
+            @select="selectItem(index)">
+            <div class="consignee_item border-bottom-1px">
+              <div class="consignee_item_img">
+                {{item.contact.slice(0,1)}}
+              </div>
+              <div class="consignee_item_info">
+                <div>
+                  <div class="info_top">
+                    <span>{{item.contact}}</span>
+                    <span>{{item.phone}}</span>
+                  </div>
+                  <div class="info_bottom cube-ellipsis">
+                    {{item.address}}
+                  </div>
                 </div>
-                <div class="info_bottom cube-ellipsis">
-                  {{item.address}}
+                <div class="info_phone">
+                  <IconFont
+                    name="icon-ico_call"
+                    size="32"
+                    color="#00A4BD"
+                    @click="callPhone(item.phone)"
+                  />
                 </div>
               </div>
-              <div class="info_phone">
-                <IconFont
-                  name="icon-ico_call"
-                  size="32"
-                  color="#00A4BD"
-                  @click="callPhone(item.phone)"
-                />
-              </div>
             </div>
-          </div>
-        </cube-index-list-item>
-      </cube-index-list-group>
+          </cube-index-list-item>
+        </cube-index-list-group>
+      </cube-index-list>
       <NoData
         v-if="consigneeList.length <= 0 && !loading"
         message="老板，您还没有记录收货方信息赶快新增一个，方便联系哦～"
@@ -52,12 +53,12 @@
           class="consignee_nodata"
         >
       </NoData>
-    </cube-index-list>
+    </cube-scroll>
   </div>
 </template>
 <script>
 import IconFont from '@/components/Iconfont'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import NoData from '@/components/NoData'
 const moudleName = 'contacts/consignee'
 export default {
@@ -81,6 +82,7 @@ export default {
     ...mapGetters(moudleName, ['consigneeList'])
   },
   methods: {
+    ...mapActions(moudleName, ['getConsigneeList']),
     onPageRefresh() {
       this.startHackLoading()
     },
@@ -105,10 +107,17 @@ export default {
       })
     },
     onPullingDown () {
-      setTimeout(() => {
-        console.log(1)
-        this.$refs.indexList.forceUpdate()
-      }, 1000)
+      this.loadingData()
+    },
+    async loadingData() {
+      this.loading = true
+      try {
+        await this.getConsigneeList()
+      } catch (e) {
+        console.error(e)
+      } finally {
+        this.loading = false
+      }
     },
     startHackLoading() {
       this.loading = true
