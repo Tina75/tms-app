@@ -3,11 +3,35 @@
     <FormItem v-model="model.name" label="发货人名称" required/>
     <FormItem v-model="model.contact" label="联系人" required/>
     <FormItem v-model="model.phone" label="联系人电话" :bottom-line="false" class="cube-mb-15" required/>
-    <FormItem v-model="model.pickUp" label="提货方式" placeholder="请选择" type="select" :options="options.pickUps"/>
-    <FormItem label="支付方式" placeholder="请选择" :value="model.payType" type="select" :options="options.payTypes"/>
+    <FormItem
+      v-model="model.pickUp"
+      label="提货方式"
+      placeholder="请选择"
+      type="select"
+      :options="options.pickUps"
+    />
+    <FormItem
+      label="支付方式"
+      placeholder="请选择"
+      :value="model.payType"
+      type="select"
+      :options="options.payTypes"
+    />
     <FormItem v-model="model.isInvoice" label="是否开票" type="switch"/>
-    <FormItem v-if="model.isInvoice" v-model="model.invoiceRate" label="开票税率(%)" required type="number"/>
-    <FormItem v-model="model.salesmanId" label="对接业务员" placeholder="请选择" :type="operatorType" :options="options.operators"/>
+    <FormItem
+      v-if="model.isInvoice"
+      v-model="model.invoiceRate"
+      label="开票税率(%)"
+      required
+      type="number"
+    />
+    <FormItem
+      v-model="model.salesmanId"
+      label="对接业务员"
+      placeholder="请选择"
+      :type="operatorType"
+      :options="options.operators"
+    />
     <FormItem
       v-model="model.exploiteChannel"
       label="开拓渠道"
@@ -22,9 +46,9 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import FormItem from '@/components/Form/FormItem'
-import { ContactModify } from '../modules/model'
+import { ContactDetail } from '../modules/model'
 const moudleName = 'contacts/shipper'
 export default {
   name: 'ModifyShipper',
@@ -36,33 +60,46 @@ export default {
   components: { FormItem },
   data() {
     return {
-      model: new ContactModify(),
+      model: new ContactDetail(),
       options: {
-        pickUps: ContactModify.pickUps,
-        payTypes: ContactModify.payTypes,
-        channels: ContactModify.channels,
+        pickUps: ContactDetail.pickUps,
+        payTypes: ContactDetail.payTypes,
+        channels: ContactDetail.channels,
         operators: []
       },
-      operatorType: 'loading'
+      operatorType: 'select'
     }
   },
   computed: {
-    ...mapState(moudleName, ['contactModify']),
+    ...mapGetters(moudleName, ['ContactOperatorSelection']),
     isCreate() {
-      return this.$route.params.type === 'create'
+      return !this.$route.query.index
     }
   },
   methods: {
-    ...mapActions(moudleName, ['queryButtOperator', 'modifyContact']),
+    ...mapActions(moudleName, ['syncButtOperator', 'modifyContact']),
     submit() {
       console.info('...', this.model)
+    },
+    onPageRefresh() {
+      if (!this.isCreate) {
+        this.model = ContactDetail.parse(this.contactList[this.$route.query.index])
+      } else {
+        this.model = new ContactDetail()
+      }
+      this.loadOperators()
+    },
+    async loadOperators() {
+      this.operatorType = 'loading'
+      try {
+        await this.syncButtOperator()
+        this.options.operators = this.ContactOperatorSelection
+      } catch (e) {
+        this.options.operators = []
+      } finally {
+        this.operatorType = 'select'
+      }
     }
-  },
-  beforeRouteEnter (to, from, next) {
-    next(async (vm) => {
-      vm.options.operators = await vm.queryButtOperator()
-      vm.operatorType = 'select'
-    })
   }
 }
 </script>

@@ -1,25 +1,69 @@
 <template>
-  <div class="" >
-    发货方地址
+  <div class="contacts-shipper-address">
+    <InfiniteList
+      :data="contactList.list"
+      :loader="loadContactList"
+    >
+      <ContactItem
+        v-for="(item, i) in contactList.list"
+        :key="item.id"
+        :index="i"
+        :item="item"
+        @phoneCall="onItemPhoneCall"
+        @click="onItemClick"
+      />
+      <template slot="empty">
+        <NoData
+          action="新增发货方"
+          message="老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～"
+        >
+          <img
+            slot="img"
+            class="contacts-shipper__placeholder"
+            src="@/assets/contacts/shipper-list-empty.png"
+          >
+        </NoData>
+      </template>
+    </InfiniteList>
   </div>
 </template>
 
 <script>
+import ContactItem from '../../components/ContactItem'
+import InfiniteList from '../../components/InfiniteList'
+import NoData from '@/components/NoData'
+import { mapActions, mapState } from 'vuex'
+const moudleName = 'contacts/shipper'
 export default {
-  name: '',
+  name: 'ContactsShipper',
   metaInfo: {
-    title: ''
+    title: '发货地址'
   },
-  data () {
-    return {}
+  components: { ContactItem, NoData, InfiniteList },
+  data() {
+    return {
+      options: {
+        pullDownRefresh: {
+          txt: '刷新成功!'
+        },
+        pullUpLoad: false
+      },
+      loading: false
+    }
   },
-  computed: {},
-  methods: {},
-  beforeRouteEnter (to, from, next) {
-    next()
+  computed: {
+    ...mapState(moudleName, ['contactList'])
+  },
+  methods: {
+    ...mapActions(moudleName, ['loadContactList', 'syncContactDetail'])
   }
 }
 </script>
 
-<style lang='stylus' >
+<style lang='stylus'>
+.contacts-shipper-address
+  height 100%
+  &__placeholder
+    width 179px
+    height 133px
 </style>
