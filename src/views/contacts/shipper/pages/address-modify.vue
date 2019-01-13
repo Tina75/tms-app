@@ -9,17 +9,16 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
 import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
 import { ContactDetail } from '../modules/model'
-const moudleName = 'contacts/shipper'
+// const moudleName = 'contacts/shipper'
 export default {
   name: 'ModifyContactsShipperAddress',
   metaInfo() {
     return {
-      title: this.isCreate ? '新增发货方' : '编辑发货方'
+      title: this.isCreate ? '新增发货地址' : '修改发货地址'
     }
   },
   components: { FormItem, FromGroup, LoadingButton },
@@ -30,13 +29,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(moudleName, ['operator', 'contactDetail']),
     isCreate() {
-      return !this.contactDetail.id
+      return true
     }
   },
   methods: {
-    ...mapActions(moudleName, ['syncButtOperator', 'modifyContact']),
     async submit() {
       this.submiting = true
       try {
@@ -47,7 +44,7 @@ export default {
         // this.submiting = false
       }
     },
-    onPageRefresh() {
+    onRefreshPage() {
     }
   }
 }

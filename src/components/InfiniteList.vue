@@ -46,7 +46,13 @@ export default {
         pullDownRefresh: {
           txt: '刷新成功!'
         },
-        pullUpLoad: false
+        pullUpLoad: {
+          threshold: 0,
+          txt: {
+            more: '加载更多',
+            noMore: '没有更多数据了'
+          }
+        }
       },
       loading: false
     }
@@ -59,44 +65,55 @@ export default {
     }
   },
   methods: {
+    getCubeScroll() {
+      let scroll
+      switch (this.type) {
+        case 'cube-index-list':
+          scroll = this.$refs.scroll.$refs.scroll
+          break
+        case 'cube-scroll':
+          scroll = this.$refs.scroll
+          break
+      }
+      return scroll
+    },
     onListPullDown() {
-      console.info('onPullDown')
+      console.info('onListPullDown')
       this.loadingData(true)
     },
     onListPullUp() {
-      console.info('onPullUp')
       this.loadingData()
     },
     async loadingData(clear) {
       this.loading = true
       try {
         await this.loader(clear)
-        this.checkPullDown()
       } catch (e) {
         console.error(e)
       } finally {
-        this.loading = false
         this.stopListLoading()
       }
     },
-    checkPullDown() {
-      const betterScroll = this.$refs.scroll.scroll
-      const pullUpLoad = !!this.isEnd
-      this.options.pullUpLoad = pullUpLoad
-      pullUpLoad ? betterScroll.openPullUp() : betterScroll.closePullUp()
-    },
+    // 问过better-scroll黄轶，莫的直接的api手动控制的刷新下拉动画的
+    // cube基于cube-scroll改造的组件都可以这么玩
     startHackLoading() {
       this.loading = true
       setTimeout(() => {
-        const scroll = this.$refs.scroll
-        scroll.scrollTo(0, 50)
-        scroll._pullDownHandle()
-        scroll._pullDownScrollHandle({ y: 50 })
-        this.$emit('refresh', false)
+        let scroll = this.getCubeScroll()
+        if (scroll) {
+          scroll.scrollTo(0, 50)
+          scroll._pullDownHandle()
+          scroll._pullDownScrollHandle({ y: 50 })
+        } else {
+          this.onListPullDown()
+        }
       })
     },
     stopListLoading() {
-      this.$refs.scroll.forceUpdate()
+      let scroll = this.getCubeScroll()
+      scroll.forceUpdate()
+      this.loading = false
+      this.$emit('refresh', false)
     }
   }
 }

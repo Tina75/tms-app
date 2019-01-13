@@ -1,6 +1,6 @@
 <template>
   <div class="contacts-shipper-address">
-    <InfiniteList v-model="loading" :data="addressList.list" :loader="loadAddressList">
+    <InfiniteList v-model="loading" :data="addressList.list" :loader="loadAddressList" :is-end="addressList.hasNext">
       <ListItem
         v-for="(item, i) in addressList.list"
         :key="item.id"
@@ -48,7 +48,7 @@ export default {
   computed: mapState(moudleName, ['addressList']),
   methods: {
     ...mapActions(moudleName, ['loadAddressList']),
-    onPageRefresh() {
+    onRefreshPage() {
       this.loading = true
     },
     modify(index) {

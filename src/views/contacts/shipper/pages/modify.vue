@@ -1,6 +1,6 @@
 <template>
-  <div class="cube-has-bottom-btn">
-    <FromGroup :rules="rules">
+  <div class="cube-has-bottom-btn cube-pt-10">
+    <FromGroup :rules="rules" >
       <FormItem v-model="model.name" label="发货人名称" maxlength="20" prop="require"/>
       <FormItem v-model="model.contact" label="联系人" maxlength="15" prop="require"/>
       <FormItem
@@ -55,7 +55,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
@@ -65,7 +65,7 @@ export default {
   name: 'ModifyContactsShipper',
   metaInfo() {
     return {
-      title: this.isCreate ? '新增发货方' : '编辑发货方'
+      title: this.isCreate ? '新增发货方' : '修改发货方'
     }
   },
   components: { FormItem, FromGroup, LoadingButton },
@@ -87,7 +87,8 @@ export default {
     }
   },
   computed: {
-    ...mapState(moudleName, ['operator', 'contactDetail']),
+    ...mapState(moudleName, ['operator']),
+    ...mapGetters(moudleName, ['contactDetail']),
     operatorOptions() {
       return this.operator.map(item => ({ value: item.id, text: item.name }))
     },
@@ -101,13 +102,14 @@ export default {
       this.submiting = true
       try {
         await this.modifyContact(ContactDetail.toServer(this.model))
+        this.$refreshPage('contacts-shipper', 'contacts-shipper-detail')
       } catch (e) {
         console.error(e)
       } finally {
         this.submiting = false
       }
     },
-    onPageRefresh() {
+    onRefreshPage() {
       this.model = this.isCreate
         ? new ContactDetail()
         : ContactDetail.toFrom(this.contactDetail)

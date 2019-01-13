@@ -1,6 +1,6 @@
 export class ContactDetail {
   id = ''
-  name = '' //
+  name = ''
   contact = '' // 发货方联系人
   phone = ''
   payType = '' // 支付方式 1：现付 2：到付 3：回单付 4：月结
@@ -10,6 +10,7 @@ export class ContactDetail {
   salesmanId = '' // 对接业务员
   pickUp = '' // 提货方式
   exploiteChannel = '' // 开括渠道
+  // 值和展示内容的印射
   static pickUp = [{ text: '小车上门自提', value: 1 }, { text: '大车直接送货', value: 2 }]
   static payType = [
     { text: '现付', value: 1 },
@@ -18,6 +19,9 @@ export class ContactDetail {
     { text: '月结', value: 4 }
   ]
   static exploiteChannel = [{ text: '公司开拓', value: 1 }, { text: '个人开拓', value: 2 }]
+
+  // 转化函数
+  // 后端接口 => 展示
   static toView(data, operators = []) {
     data = {
       ...data,
@@ -29,7 +33,7 @@ export class ContactDetail {
       const operator = operators.find((item) => +item.id === data.salesmanId)
       data.operatorName = operator ? operator.name : ''
     }
-    ['pickUp', 'payType', 'exploiteChannel'].forEach((key) => {
+    ;['pickUp', 'payType', 'exploiteChannel'].forEach((key) => {
       const value = +data[key]
       const options = ContactDetail[key]
       const option = options.find((item) => item.value === value)
@@ -37,6 +41,7 @@ export class ContactDetail {
     })
     return data
   }
+  // 后端接口 => from表单格式
   static toFrom(data) {
     data = { ...data }
     // cube-switch 需要boolean类型 防止报错
@@ -45,10 +50,30 @@ export class ContactDetail {
     data.invoiceRate = +data.invoiceRate
     return data
   }
+
+  // 表单格式 => 后端所需
   static toServer(data) {
     data = { ...data }
     data.isInvoice = data.isInvoice ? 1 : 0
     data.invoiceRate = data.isInvoice ? data.invoiceRate : 0
     return data
   }
+}
+
+export class CargoDetail {
+  id = '' // 货物id
+  cargoName = '' // 货物名称
+  cargoNo = '' // 货物编号
+  cargoCost = 0 // 货物价值，单位：分
+  unit = '' // 包装
+  dimension = {
+    // 包装尺寸
+    length: 0,
+    width: 0,
+    height: 0
+  }
+  weight = 0 // 重量
+  volume = 0 // 体积
+  remark1 = ''
+  remark2 = ''
 }

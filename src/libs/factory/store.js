@@ -11,7 +11,8 @@ class InfinateList {
  *  key: 指定键名,
  *  url: action加载的链接,
  *  method?: 请求方式
- *  useQuery?: 可选将route的query值加入请求中
+ *  useQuery?: 将route的query加入请求中
+ *  useParam?: 将route的param加入请求
  *  itemParser?: 有则遍历List转化后再存入state
  * }
  * 后端返回格式为如下格式时规范化无限列表的store生成工厂
@@ -23,8 +24,7 @@ class InfinateList {
  * @param {*} store
  */
 
-export function InfinateListFactory(config = {}, store = {}) {
-  let { key, url, itemParser, useQuery, method = 'get' } = config
+export function InfinateListFactory({ key, url, itemParser, useQuery, useParam, method = 'get' } = {}, store = {}) {
   method = method.toLowerCase()
   const name = key[0].toUpperCase() + key.slice(1)
   const NAME = {
@@ -45,7 +45,7 @@ export function InfinateListFactory(config = {}, store = {}) {
       const parsedData = itemParser ? payload.list.map(itemParser) : payload.list
       lazylist.list = [...lazylist.list, ...parsedData]
       lazylist.nextPage = payload.nextPageNo
-      lazylist.hasNext = payload.hasNext
+      lazylist.hasNext = !!payload.hasNext
     }
   }
 
@@ -63,13 +63,9 @@ export function InfinateListFactory(config = {}, store = {}) {
     if (needSend) {
       let data = {
         pageNo,
-        pageSize: list.pageSize
-      }
-      if (useQuery) {
-        data = {
-          ...data,
-          ...rootState.route.query
-        }
+        pageSize: list.pageSize,
+        ...(useParam ? rootState.route.params : {}),
+        ...(useQuery ? rootState.route.query : {})
       }
       const response = await Server({
         method,

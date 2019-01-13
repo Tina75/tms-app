@@ -36,6 +36,7 @@
       label="常发货物"
       left-icon="icon-ico_location"
       :right-title="viewData.cargoCnt"
+      @click="$router.push({name: 'contacts-shipper-cargo', query:{consignerId: viewData.id}})"
     />
 
     <cube-button class="cube-bottom-button" :primary="true" @click="phoneCall">
@@ -47,7 +48,7 @@
 
 <script>
 import CellItem from '../../components/CellItem.vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { ContactDetail } from '../modules/model'
 const moudleName = 'contacts/shipper'
 const ListConfig = [
@@ -66,7 +67,8 @@ export default {
     return {}
   },
   computed: {
-    ...mapState(moudleName, ['contactDetail', 'operator']),
+    ...mapState(moudleName, ['contactList', 'operator']),
+    ...mapGetters(moudleName, ['contactDetail']),
     viewData() {
       return ContactDetail.toView(this.contactDetail, this.operator)
     },

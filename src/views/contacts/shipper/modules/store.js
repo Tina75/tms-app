@@ -1,10 +1,12 @@
 import actions from './actions'
 import mutations from './mutations'
-import { InfinateListFactory } from '@/libs/storeFactory'
+import { InfinateListFactory } from '@/libs/factory/store'
 
 const state = {
   operator: [], // 业务员
-  contactDetail: {} // 发货方详情
+  // contactDetail: {}, // 发货方详情
+  cargoDetail: {}, // 常发货详情
+  addressDetail: {} // 地址详情
 }
 
 const store = {
@@ -13,6 +15,15 @@ const store = {
   actions,
   state,
   getters: {
+    contactDetail(state, getters, rootState) {
+      const list = state.contactList.list
+      const id = +rootState.route.query.consignerId
+      if (id) {
+        const detail = list.find((item) => item.id === id) || { data: {} }
+        return detail.data
+      }
+      return {}
+    }
   }
 }
 const lists = [
@@ -22,6 +33,7 @@ const lists = [
     url: '/consigner/page',
     itemParser(data) {
       return {
+        id: data.id,
         name: data.name,
         detail: data.contact + '  ' + data.phone,
         phone: data.phone,

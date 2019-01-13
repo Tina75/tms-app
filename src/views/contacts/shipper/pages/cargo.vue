@@ -1,8 +1,8 @@
 <template>
   <div class="contacts-shipper-cargo">
-    <InfiniteList v-model="loading" :data="test" :loader="loadCargoList">
+    <InfiniteList v-model="loading" :data="cargoList.list" :loader="loadCargoList" :is-end="cargoList.hasNext">
       <ListItem
-        v-for="(item, i) in test"
+        v-for="(item, i) in cargoList.list"
         :key="item.id"
         :index="i"
         :item="item"
@@ -42,35 +42,13 @@ export default {
   components: { ListItem, NoData, InfiniteList },
   data() {
     return {
-      loading: false,
-      test: [
-        {
-          detail: '..2sdsadsadaasdsdadsadsadsa...aaaa..',
-          id: 0
-        },
-        {
-          detail: '..3sdsadsadaasdsdadsadsadsa...aaaa..',
-          id: 1
-        },
-        {
-          detail: '..4sdsadsadaasdsdadsadsadsa...aaaa..',
-          id: 2
-        },
-        {
-          detail: '..5sdsadsadaasdsdadsadsadsa...aaaa..',
-          id: 3
-        },
-        {
-          detail: '..6sdsadsadaasdsdadsadsadsa...aaaa..',
-          id: 4
-        }
-      ]
+      loading: false
     }
   },
   computed: mapState(moudleName, ['cargoList']),
   methods: {
     ...mapActions(moudleName, ['loadCargoList']),
-    onPageRefresh() {
+    onRefreshPage() {
       this.loading = true
     },
     modify(index) {
