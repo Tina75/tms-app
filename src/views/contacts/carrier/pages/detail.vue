@@ -1,80 +1,78 @@
 <template>
-  <div class="carrier-detail">
-    <div class="company-header">
-      <h4 class="company-name">北京百事物流有限公司</h4>
-      <div class="company-other">
-        <span class="company-icon"></span>
-        <span class="company-phone">曹操 18817802222</span>
-        <span class="company-payType">月结</span>
+  <div class="carrier-detail cube-has-bottom-btn">
+    <div class="carrier-detail__header">
+      <span class="cube-font-18" v-text="viewData.carrierName"/>
+      <div class="cube-font-14">
+        <i class="cubeic-person cube-mr-10"/>
+        <span class="cube-mr-10" v-text="viewData.carrierPrincipal"/>
+        <span v-text="viewData.carrierPhone"/>
       </div>
     </div>
-
-    <div class="company-remark">
-      <h4 class="company-remark-title">备注</h4>
-      <div>测试车窗外测试车窗外测试车窗外测试车窗外测试车窗外</div>
+    <div v-if="viewData.remark" class="carrier-detail__remark cube-font-15">
+      <div class="cube-c-black cube-mb-15" v-text="'备注'"/>
+      <p class="cube-c-grey" v-text="viewData.remark"/>
     </div>
 
-    <div class="split-line" />
+    <CellItem
+      class="cube-mt-15"
+      label="合作车辆"
+      left-icon="icon-ico_location"
+      :right-title="viewData.addressCnt"
+      @click="$router.push({name: 'contacts-carrier-truck', query:{carrierId: viewData.id}})"
+    />
 
-    <cell-group>
-      <cell-item label="合作车辆" :route="{ name: 'Car' }">12</cell-item>
-    </cell-group>
 
-    <div class="fixed-button">
-      <cube-button :primary="true">拨打电话</cube-button>
-    </div>
+    <cube-button class="cube-bottom-button" :primary="true" @click="phoneCall">
+      <i class="iconfont icon-ico_call"/>
+      拨打电话
+    </cube-button>
   </div>
 </template>
 
 <script>
-import CellGroup from '@/components/CellGroup'
-import CellItem from '@/components/CellItem'
+import CellItem from '../../components/CellItem.vue'
+import { mapState, mapGetters } from 'vuex'
+import { ContactDetail } from '../modules/model'
+const moudleName = 'contacts/carrier'
 
 export default {
-  name: 'CarrierDetail',
-
-  components: { CellGroup, CellItem }
+  name: 'ContactsCarrierDetail',
+  metaInfo: {
+    title: ''
+  },
+  components: { CellItem },
+  data() {
+    return {}
+  },
+  computed: {
+    ...mapState(moudleName, ['contactList', 'operator']),
+    ...mapGetters(moudleName, ['contactDetail']),
+    viewData() {
+      return ContactDetail.toView(this.contactDetail, this.operator)
+    }
+  },
+  methods: {
+    phoneCall() {
+      window.location.href = `tel:${this.viewData.phone}`
+    }
+  }
 }
 </script>
 
-
-<style lang="stylus" scoped>
-.fixed-button
-  position fixed
-  bottom 0
-  left 0
-  right 0
-  z-index 100
-.split-line
-  margin-top 15px
-  background transparent
+<style lang='stylus' >
 .carrier-detail
-  >>>.cell-item
-    min-height 50px
-  .company
-    &-header
-      padding 20px 15px
-      background-color #3A424B
-      color #FFFFFF
-    &-name
-      font-weight 500
-      font-size 18px
-      line-height 18px
-    &-other
-      display flex
-      margin-top 17px
-      font-size 14px
-    &-phone
-      flex 1
-    &-remark
-      min-height 100px
-      box-sizing border-box
-      padding 16px 15px
-      font-size 15px
-      color #666666
-      background #ffffff
-      &-title
-        margin-bottom 16px
-        color #333
-        font-weight 500
+  .cell-item
+    background #fff
+  &__header
+    display flex
+    flex-direction column
+    justify-content space-between
+    padding 20px 15px
+    height 90px
+    color #fff
+    background #3A424B
+  &__remark
+    padding 16px 15px
+    min-height 100px
+    background #fff
 </style>

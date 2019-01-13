@@ -1,22 +1,47 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10">
     <FromGroup :rules="rules" >
-      <FormItem v-model="model.carrierName" label="承运商名称" maxlength="20" prop="require"/>
-      <FormItem v-model="model.carrierPrincipal" label="负责人" maxlength="15" prop="require"/>
+      <FormItem v-model="model.carNO" label="车牌号" maxlength="20" prop="require"/>
+      <FormItem v-model="model.driverName" label="司机姓名" maxlength="15" prop="require"/>
+      <FormItem v-model="model.driverPhone" label="手机号" maxlength="15" prop="require"/>
       <FormItem
-        v-model="model.carrierPhone"
-        label="联系电话"
-        prop="require"
+        v-model="model.driverType"
+        label="合作方式"
+        placeholder="请选择"
+        type="select"
+        class="cube-mb-15"
+        :bottom-line="false"
+        :options="options.driverType"
+      />
+
+      <FormItem
+        v-model="model.carType"
+        label="车型"
+        placeholder="请选择"
+        type="select"
+        :options="options.carType"
       />
       <FormItem
+        v-model="model.carLength"
+        label="车长"
+        placeholder="请选择"
+        type="select"
+        :options="options.carLength"
+      />
+      <FormItem v-model="model.shippingWeight" label="载重（吨）" maxlength="15"/>
+      <FormItem v-model="model.shippingVolume" label="净空（方）" maxlength="15"/>
+      <FormItem v-model="model.driverPhone" label="品牌" maxlength="15"/>
+
+      <FormItem
         v-model="model.payType"
-        label="结算方式"
+        label="购买日期"
         placeholder="请选择"
         type="select"
         class="cube-mb-15"
         :bottom-line="false"
         :options="options.payType"
       />
+
       <FormItem v-model="model.remark" maxlength="200" type="textarea" label="备注"/>
     </FromGroup>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
@@ -33,7 +58,7 @@ export default {
   name: 'ModifyContactsCarrier',
   metaInfo() {
     return {
-      title: this.isCreate ? '新增承运商' : '修改承运商'
+      title: this.isCreate ? '新增车辆' : '修改车辆'
     }
   },
   components: { FormItem, FromGroup, LoadingButton },
