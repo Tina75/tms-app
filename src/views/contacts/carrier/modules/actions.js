@@ -30,7 +30,7 @@ export const createCarrier = ({ commit }, data) => {
 }
 
 /* 修改承运商 */
-export const setCarrier = ({ commit }, data) => {
+export const updateCarrier = ({ commit }, data) => {
   return axios({
     url: '/carrier/for/company/update',
     method: 'delete',

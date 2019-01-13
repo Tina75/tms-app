@@ -64,13 +64,19 @@ export default [
   {
     path: '/contacts/carrier/modify',
     name: 'carrier-modify',
-    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/modify.vue')
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/create.vue')
   },
   /* 承运商详情 */
   {
     path: '/contacts/carrier/detail/:id',
     name: 'carrier-detail',
     component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/detail.vue')
+  },
+  /* 承运商合作车辆 */
+  {
+    path: '/contacts/carrier/truck',
+    name: 'carrier-truck',
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck.vue')
   }
 ]
 

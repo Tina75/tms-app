@@ -11,16 +11,7 @@ const state = {
   },
 
   /* 承运商详情 */
-  carrierDetail: {},
-
-  /* 新增承运商入参 */
-  carrierParams: {
-    carrierName: '',
-    carrierPrincipal: '',
-    carrierPhone: '',
-    payType: '',
-    remark: ''
-  }
+  carrierDetail: {}
 }
 
 const mutations = {
@@ -44,6 +35,7 @@ const mutations = {
 }
 
 export default {
+  namespaced: true,
   state,
   mutations,
   actions,

@@ -1,75 +1,31 @@
 <template>
   <div class="carrier_index">
-    <cell-group>
-      <cell-item label="顺丰速运">
-        123
-      </cell-item>
-    </cell-group>
+    <Medias>
+      <Media title="南京奋斗物流" desc="曹操 18817803333" />
+      <Media title="南京奋斗物流" desc="曹操 18817803333" />
+      <Media title="南京奋斗物流" desc="曹操 18817803333" />
+    </Medias>
   </div>
 </template>
 
 <script>
-// import ContentLoaderList from '@/components/content-loader-list'
-// import { mapGetters, mapActions } from 'vuex'
-import CellGroup from '@/components/CellGroup'
-import CellItem from '@/components/CellItem'
+import { Medias, Media } from '../components'
 
 export default {
   name: 'CarrierIndex',
-  components: { CellGroup, CellItem },
-  metaInfo: {
-    title: '承运商'
-  },
+
+  metaInfo: { title: '承运商' },
+
+  components: { Medias, Media },
+
   data () {
     return {
-      first: true,
-      refresh: false,
-      loading: false,
-      finished: false
+
     }
   },
-  computed: {
-    // ...mapGetters(['News'])
-  },
+
   methods: {
-    // ...mapActions(['getNews', 'clearNews']),
-    /** 下拉刷新 */
-    async onRefresh () {
-      try {
-        // this.clearNews()
-        // await this.getNews()
-        this.refresh = false
-      } catch (err) {
-        this.refresh = false
-      }
-    },
-    /** 上拉加载 */
-    async onLoad () {
-      try {
-        // await this.getNews()
-        // this.loading = false
-      } catch (err) {
-        this.refresh = false
-      }
-    },
-    /** 右侧按钮点击 */
-    onClickRight () {
-      // this.$toast('button')
-    }
-  },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      // vm.first = true
-      // vm.clearNews()
-      // vm.getNews().then(() => {
-      //   vm.first = false
-      // })
-    })
+
   }
 }
 </script>
-<style lang="stylus">
-.example-index
-  .van-list
-    min-height 55Px
-</style>

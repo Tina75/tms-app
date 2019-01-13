@@ -19,10 +19,10 @@
       required
     />
     <form-item
-      v-model="payTypePicker"
-      type="click"
+      v-model="form.payType"
+      :options="payTypeConf"
+      type="select"
       label="结算方式"
-      @on-click="openSelector"
     />
 
     <div class="split-line" />
@@ -42,18 +42,19 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { FormItem } from '@/components/Form'
 
-const payTypeConf = [
-  { text: '按单结', value: '1'},
-  { text: '月结', value: '2' }
-]
+const moduleName = 'contacts/carrier'
 
 export default {
   name: 'CarrierCreate',
 
-  metaInfo: { title: '新增承运商' },
+  metaInfo () {
+    return {
+      title: this.isCreator ? '新增承运商' : '修改承运商'
+    }
+  },
 
   components: { FormItem },
 
@@ -67,40 +68,27 @@ export default {
         remark: ''
       },
 
-      payTypePicker: ''
+      payTypeConf: [
+        { text: '按单结', value: '1'},
+        { text: '月结', value: '2' }
+      ]
     }
   },
 
   computed: {
-    // validator
-    validateCarrierName () {
-      return /^\s{20}$/ig.test(this.form.carrierName)
-    },
-    validateCarrierPrincipal () {
-      return /^\s{15}$/ig.test(this.form.carrierPrincipal)
+    ...mapState(moduleName, [ 'carrierDetail' ]),
+
+    isCreator () {
+      return this.$route.name === 'carrier-create'
     }
   },
 
+  created () {
+    console.log(this.carrierDetail)
+  },
+
   methods: {
-    ...mapActions('contacts', [ 'createCarrier' ]),
-
-    /* 打开结算方式选择器 */
-    openSelector () {
-      if (!this.picker) {
-        this.picker = this.$createPicker({
-          title: '结算方式',
-          data: [ payTypeConf ],
-          onSelect: this.handleSelected
-        })
-      }
-      this.picker.show()
-    },
-
-    /* 结算方式选中 */
-    handleSelected (selectedVal, selectedIndex, selectedText) {
-      this.payTypePicker = selectedText.shift()
-      this.form.payType = +selectedVal.shift()
-    },
+    ...mapActions(moduleName, [ 'createCarrier', 'updateCarrier' ]),
 
     /* 清空表单 */
     clearForm () {
@@ -115,15 +103,23 @@ export default {
       }
     },
 
-    /* 校验表单 */
-    validateForm () {
-
-    },
-
     /* 提交表单 */
-    handleSubmit () {
-      const params = { ...this.form }
-      this.createCarrier(params)
+    async handleSubmit () {
+      try {
+        const params = { ...this.form }
+        if (this.isCreator) {
+          await this.createCarrier(params)
+          this.$createToast({ time: 1000, txt: '新增承运商成功' })
+        } else {
+          params.carrierId = 12
+          await this.updateCarrier(params)
+          this.$createToast({ time: 1000, txt: '修改承运商成功' })
+        }
+        this.clearForm()
+        this.$router.back()
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 }
