@@ -4,9 +4,9 @@ import * as getters from './getters'
 import mock from '../pages/mock.json'
 
 const state = {
-  consigneeList: mock.list, // 收货方列表
+  consigneeList: [], // 收货方列表
   consigneeDetail: mock.detail, // 收货方详情
-  consignerList: [], // 发货人列表
+  consignerList: mock.sender, // 发货人列表
   saveConsigner: {
     contact: '',
     phone: '',

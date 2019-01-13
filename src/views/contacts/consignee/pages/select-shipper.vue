@@ -42,7 +42,7 @@ import NoData from '@/components/NoData'
 import { mapGetters, mapActions } from 'vuex'
 const moudleName = 'contacts/consignee'
 const config = {
-  img: require('../assets/no-sender.png'),
+  img: require('../assets/shipper_nodata.png'),
   message: '老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～'
 }
 export default {
@@ -69,10 +69,10 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.showData = false
-      vm.getConsignerList().then(() => {
-        vm.showData = true
-      })
+      vm.showData = true
+      // vm.getConsignerList().then(() => {
+      //   vm.showData = true
+      // })
     })
   }
 }

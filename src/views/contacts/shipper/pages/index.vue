@@ -1,66 +1,80 @@
 <template>
-  <div class="address-shipper">
-    <ContactList
-      :data="ContactList"
-      :refreshing="refreshing"
-      :loading="loading"
-      @phoneCall="onPhoneCall"
-      @selectItem="onSelectItem"
-      @pulling-down="onPullDown"
-      @pulling-up="onPullUp"
-    />
+  <div class="contacts-shipper">
+    <InfiniteList
+      v-model="loading"
+      :data="contactList.list"
+      :loader="loadContactList"
+      :is-end="contactList.hasNext"
+    >
+      <ListItem
+        v-for="(item, i) in contactList.list"
+        :key="item.id"
+        :index="i"
+        :item="item"
+        @phoneCall="onItemPhoneCall"
+        @click="onItemClick"
+      />
+      <template slot="empty">
+        <NoData
+          action="新增发货方"
+          message="老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～"
+          @btn-click="$router.push({ name: 'contacts-shipper-modify' })"
+        >
+          <img
+            slot="img"
+            class="contacts-shipper__placeholder"
+            src="@/assets/contacts/shipper-list-empty.png"
+          >
+        </NoData>
+      </template>
+    </InfiniteList>
   </div>
 </template>
 
 <script>
-import ContactList from '../../components/ContactList'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import ListItem from '../../components/ListItem'
+import InfiniteList from '@/components/InfiniteList'
+import NoData from '@/components/NoData'
+import { mapActions, mapState } from 'vuex'
 const moudleName = 'contacts/shipper'
 export default {
-  name: 'ContactsShipper',
+  name: 'ContactsShipperList',
   metaInfo: {
     title: '发货方'
   },
-  components: { ContactList },
+  components: { ListItem, NoData, InfiniteList },
   data() {
     return {
-      loading: false,
-      refreshing: false
+      loading: false
     }
   },
-  computed: {
-    ...mapGetters(moudleName, ['ContactList'])
-  },
+  computed: mapState(moudleName, ['contactList']),
   methods: {
-    ...mapActions(moudleName, ['loadContactList']),
-    ...mapMutations(moudleName, ['clearContactList']),
-    async onRefresh() {
-      this.refreshing = true
-      await this.onPullDown()
+    ...mapActions(moudleName, ['loadContactList', 'syncContactDetail', 'syncButtOperator']),
+    loader(refresh) {
+      if (refresh) {
+        this.syncButtOperator()
+      }
+      this.loadContactList(refresh)
     },
-    async onPullDown() {
-      console.info('onRefresh')
-      this.refreshing = true
-      this.clearContactList()
-      await this.loadContactList()
-      this.refreshing = false
-    },
-    async onPullUp() {
+    onRefreshPage() {
+      console.info('onRefreshPage')
       this.loading = true
-      await this.loadContactList()
-      this.loading = false
     },
-    onPhoneCall() {
-      console.info('onPhoneCall')
+    onItemPhoneCall(item) {
+      window.location.href = `tel:${item.phone}`
     },
-    onSelectItem() {
-      console.info('onSelectItem')
+    onItemClick(item, index) {
+      this.$router.push({ name: 'contacts-shipper-detail', query: { consignerId: item.id } })
     }
   }
 }
 </script>
 
-<style lang='stylus' scoped>
-.address-shipper
+<style lang='stylus'>
+.contacts-shipper
   height 100%
+  &__placeholder
+    width 179px
+    height 133px
 </style>

@@ -2,30 +2,32 @@
   <div class="content">
     <ul class="content-pic-box cube-mt-10">
       <li
-        v-for="(item, index) in exceptionPhotos"
-        :key="item.url"
+        v-for="(item, index) in uploadPhotos"
+        :key="index"
         class="image-item">
-        <img
-          src="./images/icon-del-pic.png"
-          class="pic-item-delete"
-          @click.stop="deletePic(index)">
+        <span @click="deletePic(index)">
+          <icon-font
+            name="icon-shanchu-tupian"
+            class="pic-item-delete"
+            color="red"
+            :size="20"/>
+        </span>
         <img
           :src="item.url"
           alt="图片加载失败"
           class="pic-item"
-          @click="previewPic(exceptionPhotoList,index)">
-        <cube-input
-          v-model="item.title"/>
+          @click="previewPic(uploadPhotoList,index)">
+        <cube-input v-if="inputShow" v-model="item.title" :maxlength="maxlength"/>
       </li>
       <li
-        v-show="exceptionPhotos && exceptionPhotos.length < 6"
+        v-show="uploadPhotos && uploadPhotos.length < maxCount"
         class="pic-item-add"
         @click="addImg">
         <icon-font
-          name="yzg-hebingxingzhuang5"
+          name="icon-zengjia"
           color="#CECECE"
-          :size="50"/>
-        <span>点击上传</span>
+          :size="30"/>
+        <p class="addImg-p">点击上传</p>
       </li>
     </ul>
   </div>
@@ -40,41 +42,41 @@ export default {
   name: 'odd-upload',
   components: { IconFont },
   metaInfo: { title: '图片上传' },
+  props: {
+    uploadPhotos: {
+      type: Array,
+      default: Array
+    },
+    maxCount: { // 图片数量限制
+      type: [Number, String],
+      default: 10
+    },
+    inputShow: { // 照片标题输入框，默认显示
+      type: Boolean,
+      default: true
+    },
+    maxlength: { // 输入框 字数限制
+      type: [Number, String],
+      default: 10
+    }
+  },
   data () {
     return {
-      exceptionPhotos: [
-        {
-          url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg',
-          title: ''
-        }, {
-          url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/939238940611.8259.jpg',
-          title: ''
-        }, {
-          url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png',
-          title: ''
-        }
-      ],
-      exceptionPhotoList: [
-        'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg',
-        'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/939238940611.8259.jpg',
-        'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png'
-      ]
+      uploadPhotoList: []
     }
   },
   watch: {
-    exceptionPhotos (newVal) {
-      this.exceptionPhotoList = []
+    uploadPhotos (newVal) {
+      this.uploadPhotoList = []
       newVal.forEach(element => {
-        this.exceptionPhotoList.push(element.url)
+        this.uploadPhotoList.push(element.url)
       })
     }
-  },
-  mounted () {
   },
   methods: {
     addImg () {
       const vm = this
-      const limit = 6 - this.exceptionPhotos.length
+      const limit = this.maxCount - this.uploadPhotos.length
       bridge.call('ui.selectPictures', { size: 1200, maxBytes: 300 * 1024, num: limit }, function (result) {
         if (result.data.images.length > 0) {
           result.data.images.forEach((item) => {
@@ -90,14 +92,14 @@ export default {
       window.loadingStart()
       const img = await uploadOSS(baseData)
       if (img) {
-        this.exceptionPhotos.push(img)
+        this.uploadPhotos.push(img)
       } else {
         window.toast('图片上传失败')
       }
       window.loadingEnd()
     },
     deletePic (i) {
-      this.exceptionPhotos.splice(i, 1)
+      this.uploadPhotos.splice(i, 1)
     },
     previewPic (imgs, index = 0) {
       this.$router.push({ name: 'image-preview', params: { imgs, index } })
@@ -115,7 +117,7 @@ export default {
   &-pic-box
     display flex
     display -webkit-flex
-    justify-content space-between
+    justify-content flex-start
     flex-wrap wrap
     li
       width 100px
@@ -127,15 +129,20 @@ export default {
       border-radius 5px
   .pic-item-add
     background #F1F1F1
-    line-height 100px
     text-align center
     border-radius 5px
     margin-bottom 10px
+    padding 25px 0
+    .addImg-p
+      color #999999
+      font-size 12px
+      line-height: 35px;
   .pic-item-delete
     position absolute
     width 24px
-    top -12px
-    right -10px
+    top -7px
+    right -13px
 .image-item
   margin-bottom 50px
+  margin-right 15px
 </style>

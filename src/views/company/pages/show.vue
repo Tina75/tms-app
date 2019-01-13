@@ -46,13 +46,13 @@
                 v-if="companyInfo.logoUrl"
                 :style="'backgroundImage:url(' + companyInfo.logoUrl + ');background-repeat: no-repeat;background-position-x: center;background-position-y: center;background-size: 100%;'"
                 class="avatarDiv"
-                @click="previewPic(exceptionPhotoList,index)"/>
+                @click="previewPic([companyInfo.logoUrl],index)"/>
               <icon-font
                 v-else
                 style="position:relative;top:-3px;"
                 name="icon-morengongsilogo"
                 color="#CECECE"
-                :size="50"/>
+                :size="35"/>
             </span>
           </div>
           <div class="hr"/>
@@ -67,7 +67,7 @@
             <span class="cardTitle">业务介绍</span>
             <span v-if="!busiIntroducePicList.length" class="cardContent noneInfo">暂未上传</span>
             <pre v-if="companyInfo.busiIntroduce">{{companyInfo.busiIntroduce}}</pre>
-            <image-list v-if="busiIntroducePicList.length" :exception-photos="busiIntroducePicList"/>
+            <image-list v-if="busiIntroducePicList.length" :upload-photos="busiIntroducePicList"/>
           </div>
           <div class="hr"/>
         </div>
@@ -76,32 +76,28 @@
             <span class="cardTitle">服务优势</span>
             <span v-if="!busiAdvantcePicList.length" class="cardContent noneInfo">暂未上传</span>
             <pre v-if="companyInfo.busiAdvantce">{{companyInfo.busiAdvantce}}</pre>
-            <image-list v-if="busiAdvantcePicList.length" :exception-photos="busiAdvantcePicList"/>
+            <image-list v-if="busiAdvantcePicList.length" :upload-photos="busiAdvantcePicList"/>
           </div>
         </div>
         <div class="cardInfo">
           <div class="cardInfo-content">
             <span class="cardTitle">公司风貌</span>
             <span v-if="!companyPhotoList.length" class="cardContent noneInfo">暂未上传</span>
-          </div>
-          <div class="hr"/>
-          <div class="cardInfo-content">
-            <span class="cardTitle">上传图片（0/10）</span>
-            <image-list v-if="companyPhotoList.length" :exception-photos="companyPhotoList"/>
+            <image-list v-if="companyPhotoList.length" :upload-photos="companyPhotoList"/>
           </div>
         </div>
         <div class="cardInfo">
           <div class="cardInfo-content">
             <span class="cardTitle">微信二维码</span>
             <span v-if="!wxQrPicList.length" class="cardContent noneInfo">暂未上传</span>
-            <image-list v-else :exception-photos="wxQrPicList"/>
+            <image-list v-else :upload-photos="wxQrPicList"/>
           </div>
         </div>
         <div class="cardInfo">
           <div class="cardInfo-content">
             <span class="cardTitle">公司首页形象图</span>
             <span v-if="!homeBannerList.length" class="cardContent noneInfo">暂未上传</span>
-            <image-list v-else :exception-photos="homeBannerList"/>
+            <image-list v-else :upload-photos="homeBannerList"/>
           </div>
         </div>
       </div>
@@ -142,7 +138,7 @@ export default {
         cityId: 310100,
         cityName: '上海市',
         address: '上海市静安区南京西路1038号梅龙镇广场F3e',
-        logoUrl: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/2a5dabb2-5fb6-4a19-83f2-65377fe439d9/128895253164.47852.png',
+        logoUrl: '', // 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/2a5dabb2-5fb6-4a19-83f2-65377fe439d9/128895253164.47852.png',
         contact: '张三',
         contactPhone: '18550175435',
         longitud: '121.4630120',

@@ -1,13 +1,16 @@
 <template>
-  <div class="main">
-    <img :src="img" class="img">
-    <div class="message">{{message}}</div>
-    <div v-if="showButton">
-      <cube-button
-        :primary="true"
-        @click="clickHandler">
-        {{buttonText}}
-      </cube-button>
+  <div class="list-placeholder">
+    <div class="list-placeholder__content">
+      <cube-loading v-if="loading" :size="40" />
+      <template v-else>
+        <slot name="img">
+          <img :src="img" class="list-placeholder__img">
+        </slot>
+        <div class="list-placeholder__message cube-mb-25 cube-mt-5" v-text="message"/>
+        <div v-if="action">
+          <cube-button :primary="true" @click="clickHandler">{{action}}</cube-button>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -16,6 +19,10 @@
 export default {
   name: 'no-data',
   props: {
+    loading: {
+      type: Boolean,
+      default: false
+    },
     img: {
       type: String,
       default: '' // 图片
@@ -24,42 +31,44 @@ export default {
       type: String,
       default: '' // 提示信息
     },
-    showButton: {
-      type: Boolean,
-      default: true // 是否显示按钮
-    },
-    buttonText: {
+    action: {
       type: String,
-      default: '' // 按钮文字
+      default: '' // 按钮动作描述
     }
   },
   methods: {
-    clickHandler () {
+    clickHandler() {
       this.$emit('btn-click') // 点击按钮的方法
     }
   }
 }
-
 </script>
-<style lang='stylus' scoped>
-.main
+<style lang='stylus'>
+.list-placeholder
   height 100%
-  width 100%
-  background-color #ffffff
-  text-align center
-  .img
-    height 182px
+  min-height 100vh
+  background-color #fff
+  display flex
+  flex-direction column
+  align-items center
+  justify-content center
+  &__content
+    display flex
+    flex-direction column
+    align-items center
+    position relative
+    text-align center
+    top -45px //native头部大概高度
+  &__img
+    // height 182px
     width 185px
-    margin-top 121px
-  .message
-    margin 0px 89px
+  &__message
+    width 200px
     font-size 14px
     color #666666
     line-height 24px
     position relative
-    top -48px
   .cube-btn
-    margin 0px 118px
     width 140px
     height 40px
     padding 0

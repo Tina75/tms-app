@@ -13,6 +13,7 @@ module.exports = {
   rules: {
     'no-console': 'off',
     'no-debugger': 'off',
+    'no-extra-boolean-cast': 'off',
     'vue/html-end-tags': 'error',
     'vue/html-self-closing': 'error',
     'vue/require-default-prop': 'error',

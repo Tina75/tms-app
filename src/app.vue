@@ -47,6 +47,7 @@ export default {
 </script>
 
 <style lang="stylus">
+@import './assets/font/iconfont.css'
 @import './assets/style/helper.styl';
 html,body
   height: 100%
