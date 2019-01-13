@@ -1,47 +1,60 @@
-import axios from '@/libs/server'
-import * as types from './mutationTypes'
+import Server from '@/libs/server'
 
-/* 承运商列表（和熟车司机公用） */
-export const queryCarrier = ({ commit }, params) => {
-  return axios({
-    url: '/carrier/list',
-    method: 'get',
-    params
-  })
-    .then(res => commit(types.CARRIER, res.data.data))
+const CONFIG = [
+  {
+    key: 'contact',
+    api: {
+      create: '/carrier/add/for/company',
+      update: '/carrier/for/company/update',
+      remove: '/carrier/delete'
+    }
+  },
+  {
+    key: 'truck',
+    api: {
+      create: '/carrier/add/vehicle',
+      update: '/carrier/update/vehicle',
+      remove: '/carrier/delete/vehicle'
+    }
+  }
+]
+
+const ACTIONS = {
+  // loadTruckDetail ({ coomit }, carId) {
+  //   return Server({
+  //     url: '',
+  //     method: ''
+  //   })
+  // }
 }
+// 批量生成actions
+CONFIG.forEach(factory)
 
-/* 承运商详情 */
-export const getCarrier = ({ commit }, carrierId) => {
-  return axios({
-    url: '/carrier/details/for/company',
-    method: 'get',
-    params: { carrierId }
-  })
-}
+export default ACTIONS
 
-/* 添加承运商 */
-export const createCarrier = ({ commit }, data) => {
-  return axios({
-    url: '/carrier/add/for/company',
-    method: 'post',
-    data
-  })
-}
+function factory({ api, key }) {
+  const name = key[0].toUpperCase() + key.slice(1)
+  const NAME = {
+    modifyAction: `modify${name}`,
+    removeAction: `remove${name}`
+  }
 
-/* 修改承运商 */
-export const setCarrier = ({ commit }, data) => {
-  return axios({
-    url: '/carrier/for/company/update',
-    method: 'delete',
-    data
-  })
-}
+  ACTIONS[NAME.modifyAction] = ({ state, commit }, data) => {
+    const isCreate = !data.id
+    return Server({
+      method: 'post',
+      url: isCreate ? api.create : api.update,
+      data
+    })
+  }
 
-/* 删除承运商 */
-export const deleteCarrier = ({ commit }, carrierId) => {
-  return axios({
-    url: '/carrier/delete'
-  })
-    .then(res => commit(types.CARRIER_DETAIL, res.data.data))
+  ACTIONS[NAME.removeAction] = ({ state, commit }, id) => {
+    return Server({
+      method: 'delete',
+      url: api.remove,
+      data: {
+        id
+      }
+    })
+  }
 }

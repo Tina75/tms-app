@@ -1,75 +1,80 @@
 <template>
-  <div class="carrier_index">
-    <cell-group>
-      <cell-item label="顺丰速运">
-        123
-      </cell-item>
-    </cell-group>
+  <div class="contacts-carrier">
+    <InfiniteList
+      v-model="loading"
+      :data="contactList.list"
+      :loader="loadContactList"
+      :is-end="contactList.hasNext"
+    >
+      <ListItem
+        v-for="(item, i) in contactList.list"
+        :key="item.id"
+        :index="i"
+        :item="item"
+        @phoneCall="onItemPhoneCall"
+        @click="onItemClick"
+      />
+      <template slot="empty">
+        <NoData
+          action="新增承运商"
+          message="当前未添加承运商"
+          @btn-click="$router.push({ name: 'contacts-carrier-create' })"
+        >
+          <img
+            slot="img"
+            class="contacts-carrier__placeholder"
+            src="@/assets/contacts/shipper-list-empty.png"
+          >
+        </NoData>
+      </template>
+    </InfiniteList>
   </div>
 </template>
 
 <script>
-// import ContentLoaderList from '@/components/content-loader-list'
-// import { mapGetters, mapActions } from 'vuex'
-import CellGroup from '@/components/CellGroup'
-import CellItem from '@/components/CellItem'
-
+import ListItem from '../../components/ListItem'
+import InfiniteList from '@/components/InfiniteList'
+import NoData from '@/components/NoData'
+import { mapActions, mapState } from 'vuex'
+const moudleName = 'contacts/carrier'
 export default {
-  name: 'CarrierIndex',
-  components: { CellGroup, CellItem },
+  name: 'ContactsCarrierList',
   metaInfo: {
     title: '承运商'
   },
-  data () {
+  components: { ListItem, NoData, InfiniteList },
+  data() {
     return {
-      first: true,
-      refresh: false,
-      loading: false,
-      finished: false
+      loading: false
     }
   },
-  computed: {
-    // ...mapGetters(['News'])
-  },
+  computed: mapState(moudleName, ['contactList']),
   methods: {
-    // ...mapActions(['getNews', 'clearNews']),
-    /** 下拉刷新 */
-    async onRefresh () {
-      try {
-        // this.clearNews()
-        // await this.getNews()
-        this.refresh = false
-      } catch (err) {
-        this.refresh = false
+    ...mapActions(moudleName, ['loadContactList']),
+    loader(refresh) {
+      if (refresh) {
+        this.syncButtOperator()
       }
+      this.loadContactList(refresh)
     },
-    /** 上拉加载 */
-    async onLoad () {
-      try {
-        // await this.getNews()
-        // this.loading = false
-      } catch (err) {
-        this.refresh = false
-      }
+    onRefreshPage() {
+      console.info('onRefreshPage')
+      this.loading = true
     },
-    /** 右侧按钮点击 */
-    onClickRight () {
-      // this.$toast('button')
+    onItemPhoneCall(item) {
+      window.location.href = `tel:${item.phone}`
+    },
+    onItemClick(item, index) {
+      this.$router.push({ name: 'contacts-carrier-detail', query: { carrierId: item.id } })
     }
-  },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      // vm.first = true
-      // vm.clearNews()
-      // vm.getNews().then(() => {
-      //   vm.first = false
-      // })
-    })
   }
 }
 </script>
-<style lang="stylus">
-.example-index
-  .van-list
-    min-height 55Px
+
+<style lang='stylus'>
+.contacts-carrier
+  height 100%
+  &__placeholder
+    width 179px
+    height 133px
 </style>

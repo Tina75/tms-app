@@ -95,29 +95,73 @@ export default [
     name: 'contacts-driver',
     component: () => import(/* webpackChunkName: "contacts" */ './driver/pages/index.vue')
   },
+  {
+    path: '/contacts/driver/modify',
+    name: 'contacts-driver-modify',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck-create.vue')
+  },
+  {
+    path: '/contacts/driver/detail',
+    name: 'contacts-driver-detail',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck-detail.vue')
+  },
   /* 承运商 */
   {
     path: '/contacts/carrier',
-    name: 'Carrier',
-    component: () => import(/* webpackChunkName: "carrier" */ './carrier/pages/index.vue')
+    name: 'contacts-carrier',
+    meta: {
+      noNeedRefresh: ['contacts-carrier-detail']
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/index.vue')
   },
-  /* 新增承运商 */
-  {
-    path: '/contacts/carrier/create',
-    name: 'CarrierCreate',
-    component: () => import(/* webpackChunkName: "carrier" */ './carrier/pages/create.vue')
-  },
-  /* 修改承运商 */
+  /* 修改/新增 承运商 */
   {
     path: '/contacts/carrier/modify',
-    name: 'CarrierModify',
-    component: () => import(/* webpackChunkName: "carrier" */ './carrier/pages/modify.vue')
+    name: 'contacts-carrier-modify',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/create.vue')
   },
   /* 承运商详情 */
   {
     path: '/contacts/carrier/detail/:id',
-    name: 'CarrierDetail',
-    component: () => import(/* webpackChunkName: "carrier" */ './carrier/pages/detail.vue')
+    name: 'contacts-carrier-detail',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/detail.vue')
+  },
+  /* 承运商合作车辆 */
+  {
+    path: '/contacts/carrier/truck',
+    name: 'contacts-carrier-truck',
+    meta: {
+      noNeedRefresh: ['contacts-carrier-truck-detail']
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck.vue')
+  },
+  {
+    path: '/contacts/carrier/truck/modify',
+    name: 'contacts-carrier-truck-modify',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck-create.vue')
+  },
+  {
+    path: '/contacts/carrier/truck/detail',
+    name: 'contacts-carrier-truck-detail',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck-detail.vue')
   }
 ]
 
