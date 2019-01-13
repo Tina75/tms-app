@@ -50,7 +50,7 @@ export default {
       return ''
     },
     isCreate() {
-      return !this.cargoDetail.id
+      return !this.model.id
     }
   },
   methods: {
@@ -64,7 +64,7 @@ export default {
         this.submiting = false
       }
     },
-    onRefreshPage() {
+    onPageRefresh() {
     }
   }
 }

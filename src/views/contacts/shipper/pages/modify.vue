@@ -109,7 +109,7 @@ export default {
         this.submiting = false
       }
     },
-    onRefreshPage() {
+    onPageRefresh() {
       this.model = this.isCreate
         ? new ContactDetail()
         : ContactDetail.toFrom(this.contactDetail)

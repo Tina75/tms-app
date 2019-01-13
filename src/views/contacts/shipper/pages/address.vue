@@ -48,7 +48,7 @@ export default {
   computed: mapState(moudleName, ['addressList']),
   methods: {
     ...mapActions(moudleName, ['loadAddressList']),
-    onRefreshPage() {
+    onPageRefresh() {
       this.loading = true
     },
     modify(index) {

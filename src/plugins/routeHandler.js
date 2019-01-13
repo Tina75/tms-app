@@ -20,13 +20,13 @@ Vue.mixin({
       const toName = to.name
       next((vm) => {
         try {
-          if (vm.onRefreshPage) {
+          if (vm.onPageRefresh) {
             if (!noNeedRefresh.includes(fromName) || REFRESH_MAP[toName]) {
-              vm.onRefreshPage()
+              vm.onPageRefresh()
               REFRESH_MAP[toName] = 0
             }
           }
-        } catch(e){
+        } catch (e) {
           console.error('error in [plugins/routeHandler]', e)
         }
       })

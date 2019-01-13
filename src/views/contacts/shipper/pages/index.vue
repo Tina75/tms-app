@@ -57,8 +57,8 @@ export default {
       }
       this.loadContactList(refresh)
     },
-    onRefreshPage() {
-      console.info('onRefreshPage')
+    onPageRefresh() {
+      console.info('onPageRefresh')
       this.loading = true
     },
     onItemPhoneCall(item) {

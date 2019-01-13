@@ -128,7 +128,7 @@ export const getDeviceLocation = () => {
 }
 
 /** app通知h5刷新 */
-export const onRefreshPage = (callback = () => {}) => {
+export const appCallRefresh = (callback = () => {}) => {
   bridge.register('onRefreshPage', callback, false)
 }
 

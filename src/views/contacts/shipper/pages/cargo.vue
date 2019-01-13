@@ -48,7 +48,7 @@ export default {
   computed: mapState(moudleName, ['cargoList']),
   methods: {
     ...mapActions(moudleName, ['loadCargoList']),
-    onRefreshPage() {
+    onPageRefresh() {
       this.loading = true
     },
     modify(index) {

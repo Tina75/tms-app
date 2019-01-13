@@ -1,5 +1,9 @@
 import Server from '@/libs/server'
-
+class Store {
+  actions = {}
+  state = {}
+  mutations = {}
+}
 class InfinateList {
   list = []
   hasNext = true
@@ -24,14 +28,17 @@ class InfinateList {
  * @param {*} store
  */
 
-export function InfinateListFactory({ key, url, itemParser, useQuery, useParam, method = 'get' } = {}, store = {}) {
+export function InfinateListFactory(
+  store = new Store(),
+  { key, url, itemParser, useQuery, useParam, method = 'get' } = {}
+) {
   method = method.toLowerCase()
   const name = key[0].toUpperCase() + key.slice(1)
   const NAME = {
+    state: `${key}List`,
     addMutation: `add${name}List`,
     clearMutation: `clear${name}List`,
     loadAction: `load${name}List`,
-    state: `${key}List`,
     itemModel: `${name}Item`
   }
   // ------state-----
@@ -78,4 +85,35 @@ export function InfinateListFactory({ key, url, itemParser, useQuery, useParam, 
       commit(NAME.addMutation, response.data.data)
     }
   }
+  return store
+}
+
+export function DetailFactory(store = new Store(), { api, key }) {
+  const name = key[0].toUpperCase() + key.slice(1)
+  const NAME = {
+    state: `${key}Detail`,
+    modifyAction: `modify${name}`,
+    removeAction: `remove${name}`
+  }
+
+  store.state[NAME.state] = {}
+
+  store.actions[NAME.modifyAction] = ({ state, commit }, data) => {
+    const isCreate = !data.id
+    return Server({
+      method: 'post',
+      url: isCreate ? api.create : api.update,
+      data
+    })
+  }
+
+  store.actions[NAME.removeAction] = ({ state, commit }, data) => {
+    return Server({
+      method: 'delete',
+      url: api.remove,
+      data
+    })
+  }
+
+  return store
 }

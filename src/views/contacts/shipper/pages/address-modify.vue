@@ -44,7 +44,7 @@ export default {
         // this.submiting = false
       }
     },
-    onRefreshPage() {
+    onPageRefresh() {
     }
   }
 }
