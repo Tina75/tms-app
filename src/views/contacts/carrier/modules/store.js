@@ -53,5 +53,5 @@ const lists = [
     }
   }
 ]
-lists.forEach((config) => InfinateListFactory(config, store))
+lists.forEach(InfinateListFactory.bind(null, store))
 export default store
