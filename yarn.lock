@@ -7528,7 +7528,7 @@ vue-cli-plugin-cube-ui@^0.2.4:
 
 vue-clipboard2@^0.2.1:
   version "0.2.1"
-  resolved "http://registry.npm.taobao.org/vue-clipboard2/download/vue-clipboard2-0.2.1.tgz#9f06690af1c98aef344be1fc4beb00cdc5307ee1"
+  resolved "http://192.168.1.40:4873/vue-clipboard2/-/vue-clipboard2-0.2.1.tgz#9f06690af1c98aef344be1fc4beb00cdc5307ee1"
   integrity sha1-nwZpCvHJiu80S+H8S+sAzcUwfuE=
   dependencies:
     clipboard "^2.0.0"
