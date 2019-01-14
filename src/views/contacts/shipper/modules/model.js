@@ -26,7 +26,7 @@ export class ContactDetail {
     data = {
       ...data,
       isInvoice: !!data.isInvoice,
-      invoiceRate: !!data.isInvoice ? +data.invoiceRate + '%' : ''
+      invoiceRate: !!data.isInvoice ? +data.invoiceRate * 100 + '%' : ''
     }
     if (data.salesmanId) {
       data.salesmanId = +data.salesmanId
@@ -47,7 +47,7 @@ export class ContactDetail {
     // cube-switch 需要boolean类型 防止报错
     data.isInvoice = !!data.isInvoice
     // 后端是0.xx 前端显示xx%
-    data.invoiceRate = +data.invoiceRate
+    data.invoiceRate = +data.invoiceRate * 100
     return data
   }
 
@@ -55,7 +55,8 @@ export class ContactDetail {
   static toServer(data) {
     data = { ...data }
     data.isInvoice = data.isInvoice ? 1 : 0
-    data.invoiceRate = data.isInvoice ? data.invoiceRate : 0
+    // 后端最大值是1....
+    data.invoiceRate = data.isInvoice ? +data.invoiceRate / 100 : 0
     return data
   }
 }
