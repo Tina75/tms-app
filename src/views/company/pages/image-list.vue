@@ -19,7 +19,7 @@
 <script>
 export default {
   name: 'odd-upload',
-  metaInfo: { title: '图片展示' },
+  metaInfo: { title: '公司设置' },
   props: {
     uploadPhotos: {
       type: Array,
@@ -57,7 +57,7 @@ export default {
   &-pic-box
     display flex
     display -webkit-flex
-    justify-content space-between
+    justify-content flex-start
     flex-wrap wrap
     li
       width 100px
@@ -83,4 +83,5 @@ export default {
   text-align center
   line-height 21px
   color #666666
+  margin-right 15px
 </style>

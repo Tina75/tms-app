@@ -1,25 +1,131 @@
 <template>
-  <div class="">
-    detail
+  <div class="shipper-detail cube-has-bottom-btn">
+    <div class="shipper-detail__header">
+      <span class="cube-font-18" v-text="viewData.name"/>
+      <div class="cube-font-14">
+        <i class="cubeic-person cube-mr-10"/>
+        <span class="cube-mr-10" v-text="viewData.contact"/>
+        <span v-text="viewData.phone"/>
+      </div>
+    </div>
+    <div v-if="infoList.length" class="shipper-detail__info border-bottom-1px">
+      <div
+        v-for="(item, i) in infoList"
+        :key="i"
+        class="shipper-detail__info-item border-right-1px"
+      >
+        <span class="cube-font-15 cube-c-black" v-text="item.value"/>
+        <span class="cube-font-14 cube-c-light-grey" v-text="item.text"/>
+      </div>
+    </div>
+    <div v-if="viewData.remark" class="shipper-detail__remark cube-font-15">
+      <div class="cube-c-black cube-mb-15" v-text="'备注'"/>
+      <p class="cube-c-grey" v-text="viewData.remark"/>
+    </div>
+
+    <CellItem
+      class="cube-mt-15"
+      label="发货地址"
+      left-icon="icon-ico_location"
+      :right-title="viewData.addressCnt"
+      @click="$router.push({name: 'contacts-shipper-address', query:{consignerId: viewData.id}})"
+    />
+
+    <CellItem
+      class="cube-mt-15"
+      label="常发货物"
+      left-icon="icon-ico_location"
+      :right-title="viewData.cargoCnt"
+      @click="$router.push({name: 'contacts-shipper-cargo', query:{consignerId: viewData.id}})"
+    />
+
+    <cube-button class="cube-bottom-button" :primary="true" @click="phoneCall">
+      <i class="iconfont icon-ico_call"/>
+      拨打电话
+    </cube-button>
   </div>
 </template>
 
 <script>
+import CellItem from '../../components/CellItem.vue'
+import { mapState, mapGetters, mapActions } from 'vuex'
+import { ContactDetail } from '../modules/model'
+const moudleName = 'contacts/shipper'
+const ListConfig = [
+  { text: '结算方式', key: 'payType' },
+  { text: '提货方式', key: 'pickUp' },
+  { text: '开票税率', key: 'invoiceRate' },
+  { text: '业务员', key: 'operatorName' }
+]
 export default {
-  name: '',
+  name: 'ContactsShipperDetail',
   metaInfo: {
     title: ''
   },
-  data () {
+  components: { CellItem },
+  data() {
     return {}
   },
-  computed: {},
-  methods: {},
-  beforeRouteEnter (to, from, next) {
-    next()
+  computed: {
+    ...mapState(moudleName, ['contactDetail', 'operator']),
+    viewData() {
+      return ContactDetail.toView(this.contactDetail, this.operator)
+    },
+    infoList() {
+      const detail = this.viewData
+      if (detail) {
+        let value
+        return ListConfig.reduce((arr, { text, key }, index) => {
+          value = detail[key]
+          if (value) {
+            arr.push({
+              text,
+              value
+            })
+          }
+          return arr
+        }, [])
+      }
+      return []
+    }
+  },
+  methods: {
+    ...mapActions(moudleName, ['loadContactDetail']),
+    onPageRefresh() {
+      this.loadContactDetail()
+    },
+    phoneCall() {
+      window.location.href = `tel:${this.viewData.phone}`
+    }
   }
 }
 </script>
 
 <style lang='stylus' >
+.shipper-detail
+  .cell-item
+    background #fff
+  &__header
+    display flex
+    flex-direction column
+    justify-content space-between
+    padding 20px 15px
+    height 90px
+    color #fff
+    background #3A424B
+  &__remark
+    padding 16px 15px
+    min-height 100px
+    background #fff
+  &__info
+    height 86px
+    padding 23px 0 13px
+    display flex
+    background #fff
+    &-item
+      flex 1
+      display flex
+      flex-direction column
+      align-items center
+      justify-content space-around
 </style>
