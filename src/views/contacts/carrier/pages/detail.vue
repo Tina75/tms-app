@@ -21,7 +21,6 @@
       @click="$router.push({name: 'contacts-carrier-truck', query:{carrierId: viewData.id}})"
     />
 
-
     <cube-button class="cube-bottom-button" :primary="true" @click="phoneCall">
       <i class="iconfont icon-ico_call"/>
       拨打电话

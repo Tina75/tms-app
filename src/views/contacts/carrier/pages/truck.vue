@@ -62,4 +62,3 @@ export default {
 .truck-number
   margin-bottom 10px
 </style>
-
