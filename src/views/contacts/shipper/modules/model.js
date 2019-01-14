@@ -65,7 +65,7 @@ export class CargoDetail {
   id = '' // 货物id
   cargoName = '' // 货物名称
   cargoNo = '' // 货物编号
-  cargoCost = 0 // 货物价值，单位：分
+  cargoCost = '' // 货物价值，单位：分
   unit = '' // 包装
   dimension = {
     // 包装尺寸
@@ -73,8 +73,8 @@ export class CargoDetail {
     width: 0,
     height: 0
   }
-  weight = 0 // 重量
-  volume = 0 // 体积
+  weight = '' // 重量
+  volume = '' // 体积
   remark1 = ''
   remark2 = ''
 }
