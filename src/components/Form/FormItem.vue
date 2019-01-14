@@ -34,7 +34,7 @@
             :class="inputAlignment"
             :options="options"
             :placeholder="inputPlaceHolder"
-            :title="inputPlaceHolder"
+            :title="label"
             :disabled="inputDisabled"
             @change="selectChangeHandler"
             @picker-show="pickerShowHandler"
@@ -104,6 +104,7 @@
 import Vue from 'vue'
 import { Validator } from 'cube-ui'
 import props from './js/formItemProps'
+import precision from './js/precision'
 
 Vue.use(Validator)
 
@@ -162,7 +163,24 @@ export default {
   watch: {
     value (val) { this.inputValue = val },
     inputValue (newVal, oldVal) {
-      if (this.type === 'number' && isNaN(Number(newVal))) this.$nextTick(() => { this.inputValue = oldVal })
+      if (this.type === 'number') {
+        if (isNaN(Number(newVal))) {
+          this.$nextTick(() => {
+            this.inputValue = ''
+            this.inputEmit()
+          })
+          return
+        }
+        const value = precision(newVal, Number(this.precision))
+        if (String(value) !== newVal) {
+          this.$nextTick(() => {
+            this.inputValue = value
+            this.inputEmit()
+          })
+          return
+        }
+        return
+      }
       this.inputEmit()
     }
   },

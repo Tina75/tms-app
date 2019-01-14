@@ -2,66 +2,71 @@
   <div class="scroll-list-wrap">
     <cube-scroll class="scroll-box">
       <div class="cargo-form-box">
-        <form v-for="(form, index) in formList" :key="index">
-          <form-title
-            :image="CARGO_IMAGE"
-            :title="'货物' + (index + 1)">
-            <span
-              v-if="index"
-              slot="extra"
-              @click="cargoDelete(index)">删除</span>
-          </form-title>
-          <form-item
-            v-model="form.cargoName"
-            label="货物名称"
-            required
-            maxlength="20"
-            click-icon="icon-ico_boxx"
-            @on-icon-click="chooseCargoInfo(index)" />
-          <form-item
-            v-model="form.weight"
-            label="重量(吨)"
-            type="number" />
-          <form-item
-            v-model="form.volumn"
-            label="体积(方)"
-            type="number" />
-          <form-item
-            v-model="form.cost"
-            label="货值(元)"
-            type="number" />
-          <form-item
-            v-model="form.package"
-            label="包装方式"
-            type="click"
-            @on-click="showPackageDialog(index)" />
-          <form-item
-            v-model="form.count"
-            label="包装数量" />
-          <form-item
-            v-model="form.size"
-            label="包装尺寸(毫米)"
-            type="click"
-            :show-arrow="false"
-            placeholder="请输入长*宽*高"
-            @on-click="showSizeDialog(index)" />
-          <form-item
-            v-model="form.number"
-            label="货物编码"
-            maxlength="200" />
-          <form-item
-            v-model="form.remark1"
-            label="备注1"
-            placeholder="请输入(最多输入200字)"
-            type="textarea"
-            maxlength="200" />
-          <form-item
-            v-model="form.remark2"
-            label="备注2"
-            placeholder="请输入(最多输入200字)"
-            type="textarea"
-            maxlength="200" />
-        </form>
+        <form-group :rules="rules">
+          <div class="form-section" v-for="(form, index) in formList" :key="index">
+            <form-title
+              :image="CARGO_IMAGE"
+              :title="'货物' + (index + 1)">
+              <span
+                v-if="index"
+                slot="extra"
+                @click="cargoDelete(index)">删除</span>
+            </form-title>
+            <form-item
+              v-model="form.cargoName"
+              prop="cargoName"
+              label="货物名称"
+              required
+              maxlength="200"
+              click-icon="icon-ico_boxx"
+              @on-icon-click="chooseCargoInfo(index)" />
+            <form-item
+              v-model="form.weight"
+              label="重量(公斤)"
+              type="number" />
+            <form-item
+              v-model="form.volumn"
+              label="体积(方)"
+              type="number"
+              precision="6" />
+            <form-item
+              v-model="form.cost"
+              label="货值(元)"
+              type="number"
+              precision="4" />
+            <form-item
+              v-model="form.package"
+              label="包装方式"
+              type="click"
+              @on-click="showPackageDialog(index)" />
+            <form-item
+              v-model="form.count"
+              label="包装数量" />
+            <form-item
+              v-model="form.size"
+              label="包装尺寸(毫米)"
+              type="click"
+              :show-arrow="false"
+              placeholder="请输入长*宽*高"
+              @on-click="showSizeDialog(index)" />
+            <form-item
+              v-model="form.number"
+              label="货物编码"
+              maxlength="200" />
+            <form-item
+              v-model="form.remark1"
+              label="备注1"
+              placeholder="请输入(最多输入200字)"
+              type="textarea"
+              maxlength="200" />
+            <form-item
+              v-model="form.remark2"
+              label="备注2"
+              placeholder="请输入(最多输入200字)"
+              type="textarea"
+              maxlength="200" />
+          </div>
+        </form-group>
         <cube-button
           class="form-add border-top-1px"
           @click="cargoAdd">
@@ -89,12 +94,14 @@
 <script>
 import NP from 'number-precision'
 import { mapGetters, mapMutations } from 'vuex'
-import { FormItem, FormTitle } from '@/components/Form'
+import { FormGroup, FormItem, FormTitle } from '@/components/Form'
+import SizeInput from '../components/SizeInput'
+import { PACKAGE_TYPE } from '../../js/constant'
 const CARGO_IMAGE = require('../assets/box.png')
 
 export default {
   metaInfo: { title: '货物信息' },
-  components: { FormItem, FormTitle },
+  components: { FormGroup, FormItem, FormTitle, SizeInput },
   data () {
     return {
       CARGO_IMAGE,
@@ -104,7 +111,10 @@ export default {
       sizeDialog: null,
       packageDialog: null,
       size: { length: '', width: '', height: '' },
-      package: ''
+      package: '',
+      rules: {
+        cargoName: { required: true, type: 'string' }
+      }
     }
   },
   computed: {
@@ -195,51 +205,16 @@ export default {
           this.size.length = this.size.width = this.size.height = ''
         }
       }, createElement => {
-        return createElement('div', {
-          class: { 'cargo-info-size-dialog': true },
-          slot: 'content'
-        }, [
-          createElement('cube-input', {
-            class: { 'cargo-info-size-dialog-item': true },
-            props: {
-              type: 'number',
-              placeholder: '长',
-              autofocus: true,
-              value: this.size.length
-            },
-            on: {
-              blur: ({ target }) => {
-                this.size.length = target.value
-              }
+        return createElement(SizeInput, {
+          slot: 'content',
+          on: {
+            blur: (length, width, height) => {
+              this.size.length = length
+              this.size.width = width
+              this.size.height = height
             }
-          }),
-          createElement('cube-input', {
-            class: { 'cargo-info-size-dialog-item': true },
-            props: {
-              type: 'number',
-              placeholder: '宽',
-              value: this.size.width
-            },
-            on: {
-              blur: ({ target }) => {
-                this.size.width = target.value
-              }
-            }
-          }),
-          createElement('cube-input', {
-            class: { 'cargo-info-size-dialog-item': true },
-            props: {
-              type: 'number',
-              placeholder: '高',
-              value: this.size.height
-            },
-            on: {
-              blur: ({ target }) => {
-                this.size.height = target.value
-              }
-            }
-          })
-        ])
+          }
+        })
       })
     },
 
@@ -262,6 +237,25 @@ export default {
           }
         }
       }, createElement => {
+        const buttons = PACKAGE_TYPE.map(item => createElement(
+          'cube-button',
+          {
+            props: {
+              light: true,
+              inline: true
+            },
+            style: {
+              margin: '5px'
+            },
+            on: {
+              click: () => {
+                this.package = item.text
+              }
+            }
+          },
+          item.text)
+        )
+
         return createElement('div', {
           slot: 'content',
           placeholder: '请输入',
@@ -280,20 +274,7 @@ export default {
             }
           }),
 
-          createElement('cube-button', {
-            props: {
-              light: true,
-              inline: true
-            },
-            style: {
-              margin: '5px'
-            },
-            on: {
-              click: () => {
-                this.package = '包装'
-              }
-            }
-          }, '包装')
+          ...buttons
         ])
       })
     }
@@ -356,16 +337,6 @@ export default {
 </style>
 
 <style lang="stylus">
-  .cargo-form-box form .form-item-box:last-child .form-item:after
+  .cargo-form-box .form-section .form-item-box:last-child .form-item:after
     border-style none
-
-  .cargo-info-size-dialog
-    display flex
-    justify-content space-around
-    padding 10px 5px
-    &-item
-      flex 1
-      margin 0 5px
-      input
-        text-align center
 </style>

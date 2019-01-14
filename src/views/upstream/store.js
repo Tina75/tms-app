@@ -1,24 +1,25 @@
-// import Server from '@/libs/server'
+import * as API from './libs/api'
+
 export default {
   state: {
-    list: []
+    // 全部
+    allList: []
   },
   mutations: {
+    GET_LIST(state, payload) {
+      state.allList = payload.list
+    }
   },
   actions: {
-    // getList: ({ commit, state }, payload) => {
-    //   return Server({
-    //     method: 'get',
-    //     url: 'busconnector/shipper/list',
-    //     params: {
-    //       tags: 'story',
-    //       page: state.news.startPage
-    //     }
-    //   }).then((response) => {
-    //     commit('NEWS', response.data)
-    //   })
-    // }
+    getList: ({ commit }) => {
+      API.initList().then((response) => {
+        commit('GET_LIST', response.data.data)
+      })
+    }
   },
   getters: {
+    allList (state) {
+      return state.allList
+    }
   }
 }

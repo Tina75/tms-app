@@ -109,7 +109,7 @@ export default {
   },
   methods: {
     ...mapMutations('order/often', [ 'SET_PAGE_NO' ]),
-    ...mapActions('order/often', [ 'getOftenList' ]),
+    ...mapActions('order/often', [ 'getOftenList', 'deleteOftenOrder' ]),
 
     async fetchData () {
       if (this.noMore) return
@@ -117,7 +117,7 @@ export default {
       try {
         const hasList = await this.getOftenList()
         this.noMore = !hasList
-        if (!hasList) window.toast('没有更多数据')
+        if (!hasList && this.getOftenList.length) window.toast('没有更多数据')
       } catch (err) {
         //
       } finally {
@@ -127,7 +127,12 @@ export default {
     },
 
     orderAdd (id) {},
-    orderDelete (id) {},
+    async orderDelete (id) {
+      const confirm = confirm('确认需要删除此常发订单？')
+      if (!confirm) return
+      await this.deleteOftenOrder(id)
+      window.toast('删除成功')
+    },
 
     pullDownHandler () {
       this.SET_PAGE_NO(0)
