@@ -1,113 +1,78 @@
 <template>
-  <div class="address-shipper">
-    <cube-scroll
-      ref="scroll"
-      :options="options"
-      @pulling-down="onListPullDown"
-      @pulling-up="onListPullUp"
+  <div class="contacts-shipper">
+    <InfiniteList
+      v-model="loading"
+      :data="contactList.list"
+      :loader="loadContactList"
+      :is-end="contactList.hasNext"
     >
-      <ContactItem
-        v-for="item in ContactList.list"
+      <ListItem
+        v-for="(item, i) in contactList.list"
         :key="item.id"
+        :index="i"
         :item="item"
         @phoneCall="onItemPhoneCall"
         @click="onItemClick"
       />
-      <NoData
-        v-if="!ContactList.list.length && !loading"
-        action="新增发货方"
-        message="老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～"
-      >
-        <img
-          slot="img"
-          class="address-shipper__placeholder"
-          src="@/assets/contacts/shipper-list-empty.png"
+      <template slot="empty">
+        <NoData
+          action="新增发货方"
+          message="老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～"
+          @btn-click="$router.push({ name: 'contacts-shipper-modify' })"
         >
-      </NoData>
-    </cube-scroll>
+          <img
+            slot="img"
+            class="contacts-shipper__placeholder"
+            src="@/assets/contacts/shipper-list-empty.png"
+          >
+        </NoData>
+      </template>
+    </InfiniteList>
   </div>
 </template>
 
 <script>
-import ContactItem from '../../components/ContactItem'
+import ListItem from '../../components/ListItem'
+import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 const moudleName = 'contacts/shipper'
 export default {
-  name: 'ContactsShipper',
+  name: 'ContactsShipperList',
   metaInfo: {
     title: '发货方'
   },
-  components: { ContactItem, NoData },
+  components: { ListItem, NoData, InfiniteList },
   data() {
     return {
-      options: {
-        pullDownRefresh: {
-          txt: '刷新成功!'
-        },
-        pullUpLoad: false
-      },
       loading: false
     }
   },
-  computed: {
-    ...mapGetters(moudleName, ['ContactList'])
-  },
+  computed: mapState(moudleName, ['contactList']),
   methods: {
-    ...mapActions(moudleName, ['loadContactList']),
+    ...mapActions(moudleName, ['loadContactList', 'syncContactDetail', 'syncButtOperator']),
+    loader(refresh) {
+      if (refresh) {
+        this.syncButtOperator()
+      }
+      this.loadContactList(refresh)
+    },
     onPageRefresh() {
-      this.startHackLoading()
-    },
-    onListPullDown() {
-      console.info('onPullDown')
-      this.loadingData(true)
-    },
-    onListPullUp() {
-      console.info('onPullUp')
-      this.loadingData()
+      console.info('onPageRefresh')
+      this.loading = true
     },
     onItemPhoneCall(item) {
       window.location.href = `tel:${item.phone}`
     },
-    onItemClick(item) {
-      this.$router.push({
-        name: 'contacts-shipper-detail',
-        params: { id: item.id }
-      })
-    },
-    async loadingData(clear) {
-      this.loading = true
-      try {
-        await this.loadContactList(clear)
-        this.checkPullDown()
-      } catch (e) {
-        console.error(e)
-      } finally {
-        this.loading = false
-        this.stopListLoading()
-      }
-    },
-    checkPullDown() {
-      this.options.pullUpLoad = !!this.ContactList.hasNext
-    },
-    startHackLoading() {
-      this.loading = true
-      setTimeout(() => {
-        const scroll = this.$refs.scroll
-        scroll.scrollTo(0, 60)
-        scroll._pullDownHandle()
-        scroll._pullDownScrollHandle({ y: 60 })
-      })
-    },
-    stopListLoading() {
-      this.$refs.scroll.forceUpdate()
+    onItemClick(item, index) {
+      this.$router.push({ name: 'contacts-shipper-detail', query: { consignerId: item.id } })
     }
   }
 }
 </script>
 
 <style lang='stylus'>
-.address-shipper
+.contacts-shipper
   height 100%
   &__placeholder
     width 179px

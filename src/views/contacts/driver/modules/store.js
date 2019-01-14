@@ -4,11 +4,15 @@ import * as getters from './getters'
 import mock from '../pages/mock..json'
 
 const state = {
-  driverList: mock.list // 司机列表
+  driverList: mock.list, // 司机列表
+  driverDetail: {} // 司机详情
 }
 const mutations = {
   [types.GET_DRIVER_LIST] (state, payload = []) {
     state.driverList = payload
+  },
+  [types.GET_DRIVER_DETAIL] (state, payload = {}) {
+    state.driverDetail = payload
   }
 }
 

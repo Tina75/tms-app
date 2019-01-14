@@ -11,7 +11,7 @@ let routes = [{
 }, {
   path: '/preview',
   name: 'image-preview',
-  component: () => import(/* webpackChunkName: "odd" */'./components/Updalod/ImagePreview.vue')
+  component: () => import(/* webpackChunkName: "odd" */'./components/Upload/ImagePreview.vue')
 }]
 
 // 自动注册views下所有路由
