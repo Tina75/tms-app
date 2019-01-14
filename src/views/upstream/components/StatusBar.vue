@@ -1,14 +1,18 @@
 <template>
   <div class="status-bar">
-    <p class="status">{{status}}</p>
-    <p class="time">{{time}}</p>
+    <p class="status">{{status | orderStatus}}</p>
+    <p class="time" >{{time | datetimeFormat}}</p>
   </div>
 </template>
 <script>
+import { orderStatus } from '../libs'
 export default {
   name: 'status-bar',
   metaInfo: {
     title: 'status-bar'
+  },
+  filters: {
+    orderStatus
   },
   props: {
     status: {
@@ -16,8 +20,8 @@ export default {
       default: ''
     },
     time: {
-      type: String,
-      default: ''
+      type: Number,
+      default: 0
     }
   }
 }
