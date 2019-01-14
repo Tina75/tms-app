@@ -27,12 +27,12 @@
               label="联系方式"
               maxlength="11"
               required/>
-            <div v-if="contactList.length < 3" class="cardInfo-content edit">
+            <div v-if="addContactBtn" class="cardInfo-content edit">
               <p class="addContact"><span @click="addContact">+添加更多联系人</span></p>
             </div>
           </div>
           <!-- 业务联系 -->
-          <div v-if="contactList.length > 0" class="form-section">
+          <div v-if="contact1" class="form-section">
             <form-item
               v-model="companyInfo.busiContactName1"
               prop="busiContactName1"
@@ -46,10 +46,10 @@
               maxlength="11"
               required/>
             <div class="cardInfo-content edit">
-              <p class="removeContact"><span @click="removeContact(0)">删除该联系人</span></p>
+              <p class="removeContact"><span @click="removeContact('contact1', 1)">删除该联系人</span></p>
             </div>
           </div>
-          <div v-if="contactList.length > 1" class="form-section">
+          <div v-if="contact2" class="form-section">
             <form-item
               v-model="companyInfo.busiContactName2"
               prop="busiContactName2"
@@ -63,10 +63,10 @@
               maxlength="11"
               required/>
             <div class="cardInfo-content edit">
-              <p class="removeContact"><span @click="removeContact(1)">删除该联系人</span></p>
+              <p class="removeContact"><span @click="removeContact('contact2', 2)">删除该联系人</span></p>
             </div>
           </div>
-          <div v-if="contactList.length > 2" class="form-section">
+          <div v-if="contact3" class="form-section">
             <form-item
               v-model="companyInfo.busiContactName3"
               prop="busiContactName3"
@@ -80,7 +80,7 @@
               maxlength="11"
               required/>
             <div class="cardInfo-content edit">
-              <p class="removeContact"><span @click="removeContact(2)">删除该联系人</span></p>
+              <p class="removeContact"><span @click="removeContact('contact3', 3)">删除该联系人</span></p>
             </div>
           </div>
           <!-- 业务联系 -->
@@ -216,6 +216,9 @@ export default {
       wxQrPicList: [],
       homeBannerList: '',
       companyPhotoList: [],
+      contact1: false,
+      contact2: false,
+      contact3: false,
       companyInfo: {
         id: 237,
         name: 'qwee',
@@ -291,21 +294,21 @@ export default {
       }
     },
     addContact () {
-      switch (this.contactList.length) {
-        case 1:
-          this.contactList.push({ busiContactName1: '', busiContactPhone1: '' })
-          break
-        case 2:
-          this.contactList.push({ busiContactName2: '', busiContactPhone2: '' })
-          break
-        case 3:
-          this.contactList.push({ busiContactName3: '', busiContactPhone3: '' })
-          break
+      if (!this.contact1) {
+        this.contact1 = true
+      } else if (!this.contact2) {
+        this.contact2 = true
+      } else if (!this.contact3) {
+        this.contact3 = true
       }
-      this.addContactBtn = this.contactList.length < 3
+      if (this.contact1 && this.contact2 && this.contact3) {
+        this.addContactBtn = false
+      }
     },
-    removeContact (item) {
-      this.contactList.splice(item, 1)
+    removeContact (contact, index) {
+      this[contact] = false
+      this.companyInfo['busiContactName' + index] = ''
+      this.companyInfo['busiContactPhone' + index] = ''
       this.addContactBtn = true
     },
     save () {
