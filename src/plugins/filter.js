@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import Vue from 'vue'
+import City from '@/libs/city'
 
 const URL_HOST = process.env.VUE_APP_IMG_HOST
 
@@ -21,4 +22,8 @@ Vue.filter('settlementTypeFormat', (value) => {
   const settlement = ['未知', '现付', '到付', '回付', '月结']
   if (value > -1 && value < 4) return settlement[value]
   else return '未知'
+})
+
+Vue.filter('codeToName', value => {
+  return City.getUniqueName(value)
 })

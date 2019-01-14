@@ -3,7 +3,6 @@
   <delivery-list
     :ref-name="refKey"
     :list="SendList"
-    :force-update="forceUpdate"
     @refresh="refresh"
     @loadmore="loadmore"
   />

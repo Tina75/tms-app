@@ -1,5 +1,6 @@
 import Server from '@/libs/server'
 export default {
+  namespace: 'delivery',
   state: {
     dispatch: {
       list: [],
@@ -23,7 +24,9 @@ export default {
       list: [],
       pageNo: 1,
       total: 1
-    }
+    },
+    waybillDetail: {}
+
   },
   mutations: {
     DISPATCH (state, payload) {
@@ -57,6 +60,9 @@ export default {
     },
     ARRIVAL_CLEAR (state) {
       state.dispatch = { list: [], pageNo: 1, total: 1 }
+    },
+    WAYBILL_DETAIL (state, details) {
+      state.waybillDetail = details
     }
   },
   actions: {
@@ -122,13 +128,34 @@ export default {
       }).then(({ data }) => {
         window.toast('到货成功')
       })
+    },
+    // 调度 or 创建运单
+    dispatchOrder: ({ commit }, data) => {
+      return Server({
+        url: '/waybill/create',
+        method: 'post',
+        data
+      }).then(({ data }) => {
+        window.toast(data.msg)
+      })
+    },
+    // 获取运单详情
+    getWaybillDetail: ({ commit }, id) => {
+      Server(
+        { url: '/waybill/details',
+          method: 'post',
+          data: { waybillId: id } }
+      ).then(({ data }) => {
+        commit('WAYBILL_DETAIL', data.data)
+      })
     }
-
   },
   getters: {
     DispatchList: (state) => state.dispatch.list,
     SendList: state => state.send.list,
     SendingList: state => state.sending.list,
-    ArrivalList: state => state.arrival.list
+    ArrivalList: state => state.arrival.list,
+    WaybillDetail: state => state.waybillDetail,
+    WaybillOrderList: state => state.waybillDetail.orderList
   }
 }

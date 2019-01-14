@@ -20,8 +20,7 @@ instance.interceptors.request.use(
     // loading
     if (config.loading) window.loading()
     if (process.env.NODE_ENV !== 'production' && (config.mock || Number(process.env.VUE_APP_IS_MOCK))) {
-      config.baseURL = '/'
-      // config.baseURL = process.env.VUE_APP_HOST_MOCK
+      config.baseURL = process.env.VUE_APP_HOST_MOCK
     }
     if (config.method === 'get' && config.data) {
       config.params = config.data

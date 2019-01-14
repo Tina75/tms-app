@@ -20,8 +20,7 @@ export default {
   components: { DeliveryListItem },
   props: {
     refName: { type: String, default: '' },
-    list: { type: Array, required: true, default: function () { return [] } },
-    forceUpdate: { type: Function, default: function() {} }
+    list: { type: Array, required: true, default: function () { return [] } }
   },
 
   computed: {
