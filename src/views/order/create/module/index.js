@@ -22,7 +22,7 @@ const state = {
 
     settlementType: '',
     pickupType: '',
-    receiptNumber: '',
+    receiptNumber: 1,
 
     distance: '',
     transportFee: '',

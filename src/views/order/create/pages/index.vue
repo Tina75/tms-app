@@ -28,16 +28,9 @@
             maxlength="20"
             @input="consignerPhoneInputHandler" />
           <form-item
-            v-model="orderInfo.consignerCity"
-            label="发货城市"
-            placeholder="请选择省/市/区"
-            type="click"
-            :show-arrow="false"
-            @on-click="cityPickerType = 'send'" />
-          <form-item
             v-model="orderInfo.consignerAddress"
             prop="consignerAddress"
-            label="详细地址"
+            label="发货地址"
             placeholder="请输入"
             :show-arrow="false"
             type="click"
@@ -59,7 +52,7 @@
             label="收货人"
             maxlength="15"
             click-icon="icon-ico_custerm"
-            @on-icon-click="chooseUserInfo('accept')" />
+            @on-icon-click="chooseConsignee" />
           <form-item
             v-model="orderInfo.consigneePhone"
             prop="consigneePhone"
@@ -67,17 +60,10 @@
             maxlength="20"
             @input="consigneePhoneInputHandler" />
           <form-item
-            v-model="orderInfo.consigneeCity"
-            label="收货城市"
-            placeholder="请选择省/市/区"
-            type="click"
-            :show-arrow="false"
-            @on-click="cityPickerType = 'accept'" />
-          <form-item
             v-model="orderInfo.consigneeAddress"
             prop="consigneeAddress"
             ellipsis
-            label="详细地址"
+            label="收货地址"
             placeholder="请输入"
             :show-arrow="false"
             type="click"
@@ -151,11 +137,6 @@
 
     <create-footer
       @on-save-order="saveOrder"/>
-
-    <city-picker
-      v-model="showCityPicker"
-      @confirm="pickCity"
-      @input="cityPickerType = ''" />
   </div>
 </template>
 
@@ -181,11 +162,10 @@ export default {
   components: { FormGroup, FormItem, FormTitle, CreateFooter, CityPicker },
   data () {
     const phoneValidate = validatePhone
-    const phoneMessage = { phoneValidate: '手机号格式不正确' }
+    const phoneMessage = { phoneValidate: '请输入正确的手机号或座机号' }
 
     return {
       IMAGES,
-      cityPickerType: '',
       settlementOptions: SETTLEMENT_TYPE,
       pickupOptions: PICKUP_TYPE,
       rules: {
@@ -223,22 +203,9 @@ export default {
   },
   computed: {
     ...mapGetters('order/create', [ 'orderInfo' ]),
-    ...mapState('contacts/consignee', [ 'saveConsigner' ]),
-
-    showCityPicker: {
-      get: function () { return !!this.cityPickerType },
-      set: function () { this.cityPickerType = '' }
-    }
+    ...mapState('contacts/consignee', [ 'saveConsigner' ])
   },
   methods: {
-    // 选择省市区
-    pickCity (data) {
-      const cityName = Array.from(new Set(data.map(item => item.name))).join('')
-      if (this.cityPickerType === 'send') this.orderInfo.consignerCity = cityName
-      else this.orderInfo.consigneeCity = cityName
-      this.cityPickerType = ''
-    },
-
     // 设置选择后的收货人信息
     setSender () {
       if (this.saveConsigner.company) {
@@ -248,7 +215,8 @@ export default {
       }
     },
 
-    chooseUserInfo () {
+    chooseConsignee () {
+      this.$router.push({ name: 'order-select-consignee' })
     },
 
     selectSender () {
@@ -305,7 +273,6 @@ export default {
       vm.setSender()
     })
   }
-
 }
 </script>
 

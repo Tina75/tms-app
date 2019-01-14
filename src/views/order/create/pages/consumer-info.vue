@@ -14,20 +14,23 @@
           <form-item
             v-model="form.reveivelist"
             label="对接业务员"
-            type="click"
+            type="select"
+            :options="operators"
             :show-arrow="false" />
         </div>
         <div class="form-section">
           <form-item
-            v-model="form.sendTime"
+            v-model="sendTimeText"
             label="发货时间"
             type="click"
-            placeholder="请选择" />
+            placeholder="请选择"
+            @on-click="pickTimeHandler('send')" />
           <form-item
-            v-model="form.ariveTime"
+            v-model="arriveTimeText"
             label="到货时间"
             type="click"
-            placeholder="请选择" />
+            placeholder="请选择"
+            @on-click="pickTimeHandler('arrive')" />
         </div>
       </form>
     </cube-scroll>
@@ -37,7 +40,8 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import dayjs from 'dayjs'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { FormItem } from '@/components/Form'
 
 export default {
@@ -45,13 +49,19 @@ export default {
   components: { FormItem },
   data () {
     return {
+      operators: [],
       form: {
         customOrderNo: '',
         customWaybillNo: '',
         reveivelist: '',
         sendTime: '',
-        ariveTime: ''
-      }
+        arriveTime: ''
+      },
+      sendTimePicker: null,
+      arriveTimePicker: null,
+      timePickerType: '',
+      sendTimeText: '',
+      arriveTimeText: ''
     }
   },
   computed: {
@@ -61,17 +71,67 @@ export default {
   },
   methods: {
     ...mapMutations('order/create', [ 'SET_CONSUMER_INFO' ]),
+    ...mapActions('order/create', [ 'getOpetator' ]),
+
+    pickTimeHandler (type) {
+      this.timePickerType = type
+      if (type === 'send') {
+        this.sendTimePicker = this.$createDatePicker({
+          title: '发货时间',
+          min: new Date(),
+          max: this.form.arriveTime ? new Date(this.form.arriveTime) : new Date(2020, 12, 31),
+          value: this.form.sendTime ? new Date(this.form.sendTime) : new Date(),
+          columnCount: 4,
+          format: {
+            year: 'YY年',
+            month: 'M月',
+            date: 'D日',
+            hour: 'h点'
+          },
+          onSelect: this.selectTime
+        }).show()
+      } else {
+        this.$createDatePicker({
+          title: '到货时间',
+          min: this.form.sendTime ? new Date(this.form.sendTime) : new Date(),
+          value: this.form.arriveTime ? new Date(this.form.arriveTime) : new Date(),
+          columnCount: 4,
+          format: {
+            year: 'YY年',
+            month: 'MM月',
+            date: 'D日',
+            hour: 'h点'
+          },
+          onSelect: this.selectTime
+        }).show()
+      }
+    },
+    selectTime (date) {
+      if (this.timePickerType === 'send') {
+        this.form.sendTime = date.getTime()
+        this.sendTimeText = dayjs(this.form.sendTime).format('YYYY-MM-DD HH:mm') + '前'
+      } else {
+        this.form.arriveTime = date.getTime()
+        this.arriveTimeText = dayjs(this.form.arriveTime).format('YYYY-MM-DD HH:mm') + '前'
+      }
+    },
 
     ensure () {
       this.SET_CONSUMER_INFO(Object.assign({}, this.form))
       this.$router.back()
-    }
+    },
   },
   beforeRouteEnter (to, from, next) {
-    next(vm => {
+    next(async vm => {
       for (let key in vm.form) {
         vm.form[key] = vm.consumerInfo[key] === undefined ? '' : vm.consumerInfo[key]
       }
+      vm.operators = (await vm.getOpetator()).map(item => {
+        return {
+          value: item.id,
+          text: item.name
+        }
+      })
     })
   }
 }
