@@ -3,7 +3,7 @@
     <form-group ref="$form" class="form" :rules="rules">
       <div class="form_card">
         <form-item
-          v-model="form.consigner"
+          v-model="form.consignerName"
           :show-required-toast="false"
           readonly
           prop="consigner"
@@ -118,19 +118,18 @@ export default {
   },
   methods: {
     ...mapActions(moudleName, ['saveConsignerInfo', 'modifyConsignee']),
-    onPageRefresh () {
-      if (this.isEdit) {
-        this.form = new ConsigneeDetail()
-        this.viewPhone = ''
-        this.setSender()
-      } else {
-        try {
-          this.form = ConsigneeDetail.toForm(this.consigneeDetail)
-          this.editTel(this.consigneeDetail.phone)
-          this.setSender()
-        } catch (err) {
-          console.log(err)
+    async onPageRefresh() {
+      this.form = new ConsigneeDetail()
+      this.viewPhone = ''
+      this.setSender()
+      if (!this.isEdit) {
+        const urlId = +this.$route.query.consigneeId
+        if (urlId !== +this.consigneeDetail.id) {
+          await this.loadContactDetail()
         }
+        this.form = ConsigneeDetail.toForm(this.consigneeDetail)
+        this.editTel(this.consigneeDetail.phone)
+        this.setSender()
       }
     },
     selectSender () {
@@ -140,7 +139,7 @@ export default {
     },
     setSender () {
       if (this.saveConsigner.name) {
-        this.form.consigner = this.saveConsigner.name
+        this.form.consignerName = this.saveConsigner.name
       }
     },
     citySelect (picker) {

@@ -3,26 +3,29 @@ import { InfinateListFactory, DetailFactory } from '@/libs/factory/store'
 const store = {
   namespaced: true,
   state: {
-    saveConsigner: {} // 存储所属发货方
+    saveConsigner: {}, // 存储所属发货方
+    consigneeDetail: {}
   },
   mutations: {
-    saveConsigner: (state, payload = {}) => { state.saveConsigner = payload }
+    saveConsigner: (state, payload = {}) => { state.saveConsigner = payload },
+    consigneeDetail: (state, payload = {}) => { state.consigneeDetail = payload }
   },
   actions: {
     saveConsignerInfo: ({ state, commit }, data = {}) => {
       commit('saveConsigner', data)
-    }
-  },
-  getters: {
-    consigneeDetail(state, getters, rootState) {
+    },
+    loadConsigneeDetail: ({state, commit, rootState }) => {
       const list = state.consigneeList.list
       const id = +rootState.route.query.consigneeId
       if (id) {
         const detail = list.find((item) => item.id === id) || { data: {} }
-        return detail.data
+        commit('consigneeDetail', detail.data )
       }
-      return {}
+      commit('consigneeDetail',{} )
     }
+  },
+  getters: {
+    consigneeDetail: (state) => state.consigneeDetail
   }
 }
 // -----下拉列表-----
@@ -33,7 +36,8 @@ const lists = [
     url: '/consigner/consignee/list',
     itemParser: (data) => ({
       id: data.id,
-      name: data.contact,
+
+      name: data.contact + '  ' + data.phone,
       detail: data.cityName ? data.cityName + data.address : data.address,
       phone: data.phone,
       data

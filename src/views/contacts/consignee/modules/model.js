@@ -37,11 +37,12 @@ export const editPhone = (value) => {
 export class ConsigneeDetail {
   // id = ''
   longitude = '' // 经度
-  latitude =  '' // 纬度
+  latitude = '' // 纬度
   mapType = 1
   address = '' // 收货详细地址
   consigneeCompanyName = '' // 收货人单位
-  consigner = '' // 发货方名称
+  consignerName = '' // 发货方名称
+  consignerId = ''
   contact = '' // 收货联系人
   cityName = '' // 收货地址
   phone = '' // 收货人联系方式
@@ -51,7 +52,8 @@ export class ConsigneeDetail {
     return {
       address: data.address,
       consigneeCompanyName: data.consigneeCompanyName ? data.consigneeCompanyName : '',
-      consigner: data.contact,
+      consignerName: data.consignerName,
+      consignerId: data.consignerId,
       contact: data.contact,
       cityName: data.cityName ? data.cityName : '',
       phone: data.phone,

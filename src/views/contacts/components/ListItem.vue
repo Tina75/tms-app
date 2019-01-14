@@ -8,8 +8,8 @@
     </div>
     <div class="contact-item__content cube-ml-15 cube-ellipsis">
       <slot>
-        <span class="cube-c-black cube-ellipsis cube-font-17" v-text="item.name"/>
-        <span class="cube-c-light-grey cube-ellipsis cube-font-14" v-text="item.detail"/>
+        <span class="cube-c-black cube-font-17" v-text="item.name"/>
+        <span class="cube-c-light-grey cube-ellipsis cube-font-14 cube-mt-5" v-text="item.detail"/>
       </slot>
     </div>
     <slot name="right">

@@ -78,6 +78,9 @@ export default [
   {
     path: '/contacts/consignee/detail',
     name: 'contacts-consignee-detail',
+    meta: {
+      noNeedRefresh: ['contacts-consignee-modify']
+    },
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/detail.vue')
   },
   // 编辑和新增发货方
