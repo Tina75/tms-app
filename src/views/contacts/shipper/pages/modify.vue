@@ -121,6 +121,7 @@ export default {
           await this.loadContactDetail()
         }
         this.model = ContactDetail.toForm(this.contactDetail)
+        console.info(this.model)
       }
     },
     async loadOperators() {
