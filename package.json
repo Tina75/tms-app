@@ -23,6 +23,7 @@
     "postcss-pxtorem": "^4.0.1",
     "vue": "^2.5.17",
     "vue-analytics": "^5.16.1",
+    "vue-baidu-map": "^0.21.16",
     "vue-lazyload": "^1.2.6",
     "vue-meta": "^1.5.8",
     "vue-router": "^3.0.1",
