@@ -77,27 +77,12 @@ export default {
     },
     goAdd () {
       this.$router.push({
-        name: 'contacts-consignee-form',
-        params: {
-          type: 'add'
-        }
+        name: 'contacts-consignee-modify'
       })
     },
     goEdit () {
-      this.$router.push({
-        name: 'contacts-consignee-form',
-        params: {
-          type: 'edit'
-        },
-        query: {
-          id: 1
-        }
-      })
+      this.$router.push({ name: 'contacts-consignee-modify', query: { consigneeId: this.consigneeDetail.id } })
     }
-  },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-    })
   }
 }
 </script>

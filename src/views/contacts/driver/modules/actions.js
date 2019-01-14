@@ -19,6 +19,6 @@ export const getDriverDetail = ({ commit }) => {
     url: 'carrier/details/for/driver',
     method: 'post'
   }).then((res) => {
-    commit(typ.GET_DRIVER_DETAIL, res.data.data)
+    commit(types.GET_DRIVER_DETAIL, res.data.data)
   })
 }

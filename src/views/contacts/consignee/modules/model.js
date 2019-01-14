@@ -15,7 +15,7 @@ export const validatePhone = (val) => {
 }
 
 export const formatPhone = (value) => {
-  if (/^1/.test(value)) {
+  if (value && /^1/.test(value)) {
     const length = value.length
     if (length === 4) {
       value = value.slice(0, 3) + ' ' + value[3]
@@ -27,25 +27,55 @@ export const formatPhone = (value) => {
   return value.trim()
 }
 
+export const editPhone = (value) => {
+  if (value && /^1/.test(value)) {
+    return value.slice(0, 3) + ' ' + value.slice(3, 7) + ' ' + value.slice(7)
+  } else {
+    return value
+  }
+}
 export class ConsigneeDetail {
+  // id = ''
+  longitude = '' // 经度
+  latitude =  '' // 纬度
+  mapType = 1
   address = '' // 收货详细地址
   consigneeCompanyName = '' // 收货人单位
-  consignerId = '' // 发货方id
   consigner = '' // 发货方名称
   contact = '' // 收货联系人
   cityName = '' // 收货地址
-  phone = ''  // 收货人联系方式
+  phone = '' // 收货人联系方式
   remark = '' // 备注
-  static parse(data) {
+  cityCode = ''
+  static toForm(data) {
     return {
-      address:data.address,
+      address: data.address,
       consigneeCompanyName: data.consigneeCompanyName,
-      consignerId: data.consignerId,
       consigner: data.consignerHourseNumber,
       contact: data.contact,
       cityName: data.cityName,
       phone: data.phone,
-      remark: data.remark
+      remark: data.remark,
+      longitude: data.longitude,
+      latitude: data.latitude,
+      id: data.id,
+      cityCode: data.cityCode
     }
+  }
+  static toServer(data) {
+    const body = {
+      address: data.address,
+      consignerId: data.consignerId,
+      consigneeCompanyName: data.consigneeCompanyName,
+      contact: data.contact,
+      latitude: data.latitude,
+      longitude: data.longitude,
+      mapType: data.mapType,
+      phone: data.phone,
+      remark: data.remark,
+      id: data.id,
+      cityCode: data.cityCode
+    }
+    return body
   }
 }

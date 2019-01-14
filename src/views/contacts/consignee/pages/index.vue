@@ -1,168 +1,77 @@
 <template>
-  <div class="consignee">
+  <div class="contacts-consignee">
     <InfiniteList
       v-model="loading"
-      :data="consigneeList"
-      :loader="getConsigneeList"
+      :data="consigneeList.list"
+      :loader="loadConsigneeList"
+      :is-end="consigneeList.hasNext"
     >
-      <cube-index-list class="consignee_list" :data="consigneeList">
-        <cube-index-list-group
-          v-for="(group, index) in consigneeList"
-          :key="index"
-          :group="group">
-          <cube-index-list-item
-            v-for="(item, index) in group.items"
-            :key="index"
-            :item="item"
-            @select="selectItem(index)">
-            <div class="consignee_item border-bottom-1px">
-              <div class="consignee_item_img">
-                {{item.contact.slice(0,1)}}
-              </div>
-              <div class="consignee_item_info">
-                <div>
-                  <div class="info_top">
-                    <span>{{item.contact}}</span>
-                    <span>{{item.phone}}</span>
-                  </div>
-                  <div class="info_bottom cube-ellipsis">
-                    {{item.address}}
-                  </div>
-                </div>
-              </div>
-              <div class="info_phone">
-                <IconFont
-                  name="icon-ico_call"
-                  size="32"
-                  color="#00A4BD"
-                  @click="callPhone(item.phone)"
-                />
-              </div>
-            </div>
-          </cube-index-list-item>
-        </cube-index-list-group>
-      </cube-index-list>
+      <ListItem
+        v-for="(item, i) in consigneeList.list"
+        :key="item.id"
+        :index="i"
+        :item="item"
+        @phoneCall="onItemPhoneCall"
+        @click="onItemClick"
+      />
       <template slot="empty">
         <NoData
-          message="老板，您还没有记录收货方信息赶快新增一个，方便联系哦～"
-          action="新增收货方"
-          @btn-click="btnClick">
+          action="新增发货方"
+          message="老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～"
+          @btn-click="$router.push({ name: 'contacts-shipper-modify' })"
+        >
           <img
             slot="img"
-            src="@/assets/contacts/consigness_nodata.png"
-            class="consignee_nodata"
+            class="contacts-consignee__placeholder"
+            src="@/assets/contacts/shipper-list-empty.png"
           >
         </NoData>
       </template>
     </InfiniteList>
   </div>
 </template>
+
 <script>
+import ListItem from '../../components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
-import IconFont from '@/components/Iconfont'
-import { mapGetters, mapActions } from 'vuex'
 import NoData from '@/components/NoData'
+import { mapActions, mapState } from 'vuex'
 const moudleName = 'contacts/consignee'
 export default {
-  name: 'Consignee',
+  name: 'ContactsConsigneeList',
   metaInfo: {
     title: '收货方'
   },
-  components: { IconFont, NoData, InfiniteList },
-  data () {
+  components: { ListItem, NoData, InfiniteList },
+  data() {
     return {
-      options: {
-        pullDownRefresh: {
-          threshold: 30,
-          txt: '更新成功'
-        }
-      },
       loading: false
     }
   },
-  computed: {
-    ...mapGetters(moudleName, ['consigneeList'])
-  },
+  computed: mapState(moudleName, ['consigneeList']),
   methods: {
-    ...mapActions(moudleName, ['getConsigneeList', 'getConsigneeDetail']),
+    ...mapActions(moudleName, ['loadConsigneeList']),
+    loader(refresh) {
+      this.loadContactList(refresh)
+    },
     onPageRefresh() {
+      console.info('onPageRefresh')
       this.loading = true
     },
-    async selectItem (idx) {
-      console.log(idx)
-      await this.getConsigneeDetail(idx)
-      this.$router.push({
-        name: 'contacts-consignee-detail',
-        params: {
-          id: idx
-        }
-      })
+    onItemPhoneCall(item) {
+      window.location.href = `tel:${item.phone}`
     },
-    callPhone (phone) {
-      window.location.href = `tel:${phone}`
-    },
-    btnClick () {
-      this.$router.push({
-        name: 'contacts-consignee-form',
-        params: {
-          type: 'add'
-        }
-      })
+    onItemClick(item, index) {
+      this.$router.push({ name: 'contacts-consignee-detail', query: { consigneeId: item.id } })
     }
   }
 }
 </script>
-<style lang="stylus" scoped>
-.consignee
+
+<style lang='stylus'>
+.contacts-consignee
   height 100%
-  background-color #EFEFEF
-  &_nodata
-    width 185px
-  &_list
-    height 100%
-    min-height 668px
-  .border-bottom-1px:after
-    left 70px
-  &_item
-    width 100%
-    height 60px
-    padding 10px 15px
-    display flex
-    box-sizing border-box
-    align-items center
-    &_img
-      width 40px
-      height 40px
-      border-radius 50%
-      line-height 40px
-      text-align center
-      font-size 17px
-      color #ffffff
-      background-color #E4E7EC
-    &_info
-      margin-left 15px
-      display flex
-      padding 10px 0px
-      .info_top
-        font-size 17px
-        color #333333
-        font-weight 400
-        line-height 18px
-        span
-          margin-right 11px
-      .info_bottom
-        margin-top 8px
-        font-size 14px
-        max-width 224px
-        color #999999
-        line-height 14px
-    .info_phone
-      margin-right 5px
-      text-align right
-      flex 1
-  >>>.cube-index-list-nav
-    top 20%
-    right -5px
-  >>>.cube-index-list-nav > ul > li
-    margin-top 10px
+  &__placeholder
+    width 179px
+    height 133px
 </style>

@@ -32,7 +32,7 @@
       </div>
       <div class="form_card">
         <form-item
-          v-model="form.address"
+          v-model="form.cityName"
           type="click"
           label="收货地址"
           :show-arrow="false"
@@ -40,7 +40,7 @@
           @on-click="showPickCity = true"
         />
         <form-item
-          v-model="form.detailAddress"
+          v-model="form.address"
           prop="detailAddress"
           label="详细地址"
           :show-required-toast="false"
@@ -76,20 +76,21 @@
 <script>
 import { FormGroup, FormItem } from '@/components/Form'
 import CityPicker from '@/components/CityPicker'
-import { mapGetters, mapActions } from 'vuex'
-import { validatePhone, formatPhone, ConsigneeDetail } from '../modules/model'
+import { mapGetters, mapActions, mapState } from 'vuex'
+import { validatePhone, formatPhone, ConsigneeDetail, editPhone } from '../modules/model'
 const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeAdd',
   metaInfo () {
     return {
-      title: this.isEdit ? '编辑收货方' : '新增收货方'
+      title: this.isEdit ? '新增收货方' : '编辑收货方'
     }
   },
   components: { CityPicker, FormItem, FormGroup },
   data() {
     return {
       formatPhone,
+      editPhone,
       form: {},
       showPickCity: false,
       viewPhone: '',
@@ -109,65 +110,61 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(moudleName, ['saveConsigner', 'formList', 'consigneeDetail']),
+    ...mapState(moudleName, ['saveConsigner']),
+    ...mapGetters(moudleName, ['consigneeDetail']),
     isEdit () {
-      return this.$route.params.type === 'edit'
+      return !this.consigneeDetail.id
     }
-    // consigner () {
-    //   const type = this.$route.params.type
-    //   if (type === 'add') {
-    //     return this.saveConsigner.name
-    //   } else if (this.saveConsigner.name && type === 'edit') {
-    //     return this.saveConsigner.name
-    //   } else {
-    //     return this.consigneeDetail.contact || ''
-    //   }
-    // }
   },
   methods: {
-    ...mapActions(moudleName, ['saveConsignerInfo', 'clearFormList', 'addConsignee']),
+    ...mapActions(moudleName, ['saveConsignerInfo', 'modifyConsignee']),
     onPageRefresh () {
       if (this.isEdit) {
-        this.form = ConsigneeDetail.parse(this.consigneeDetail)
-      } else {
         this.form = new ConsigneeDetail()
+        this.viewPhone = ''
+        this.setSender()
+      } else {
+        try {
+          this.form = ConsigneeDetail.toForm(this.consigneeDetail)
+          this.editTel(this.consigneeDetail.phone)
+          this.setSender()
+        } catch (err) {
+          console.log(err)
+        }
       }
-      console.log(this.form)
     },
     selectSender () {
       this.$router.push({
         name: 'select-shipper'
       })
     },
+    setSender () {
+      if (this.saveConsigner.name) {
+        this.form.consigner = this.saveConsigner.name
+      }
+    },
     citySelect (picker) {
       console.log(picker)
       if (picker[0].name === picker[1].name) {
-        this.form.address = picker[1].name + picker[2].name
+        this.form.cityName = picker[1].name + picker[2].name
       } else {
-        this.form.address = picker[0].name + picker[1].name + picker[2].name
+        this.form.cityName = picker[0].name + picker[1].name + picker[2].name
       }
+      this.form.cityCode = picker[2].code
     },
     formatTel (value) {
-      this.viewPhone = this.formatPhone()
+      this.viewPhone = this.formatPhone(value)
+      this.form.phone = this.viewPhone.replace(/\s/g, '')
+    },
+    editTel (value) {
+      this.viewPhone = this.editPhone(value)
       this.form.phone = this.viewPhone.replace(/\s/g, '')
     },
     async submit () {
-      // const data = {
-      //   contact: this.formList.contact,
-      //   phone: this.formList.phone,
-      //   address: this.formList.address + this.formList.detailAddress,
-      //   consignerId: this.saveConsigner.id,
-      //   consigneeCompanyName: this.formList.consigneeCompanyName
-      // }
-      // await this.addConsignee(data)
-      // this.clearFormList()
-      // this.viewPhone = ''
+      const data = ConsigneeDetail.toServer(Object.assign({}, { consignerId: this.saveConsigner.id }, this.form))
+      console.log(data)
+      await this.modifyConsignee(data)
     }
-  },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.clearFormList()
-    })
   }
 }
 </script>

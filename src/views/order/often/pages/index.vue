@@ -3,7 +3,7 @@
     <ul class="order-list">
       <li
         v-for="item in 'text'"
-        class="order-list-item" :key="item"
+        :key="item" class="order-list-item"
         @click="$router.push({ name: 'order-often-detail' })">
         <p class="order-company order-container">南京大猪蹄子物流公司</p>
 

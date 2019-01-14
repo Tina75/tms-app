@@ -76,20 +76,26 @@ export default [
   },
   // 收货方详情
   {
-    path: '/contacts/consignee/detail/:id',
+    path: '/contacts/consignee/detail',
     name: 'contacts-consignee-detail',
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/detail.vue')
   },
   // 编辑和新增发货方
   {
-    path: '/contacts/consignee/form/:type',
-    name: 'contacts-consignee-form',
-    component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/form.vue')
+    path: '/contacts/consignee/modify',
+    name: 'contacts-consignee-modify',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/modify.vue')
   },
   // 选择所属发货方
   {
     path: '/contacts/consignee/select/shipper',
     name: 'select-shipper',
+    meta: {
+      noNeedRefresh: []
+    },
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/select-shipper.vue')
   },
   // 熟车司机列表
@@ -100,7 +106,7 @@ export default [
   },
   // 熟车司机详情
   {
-    path: '/contacts/driver/detail/:id',
+    path: '/contacts/driver/detail',
     name: 'contacts-driver-detail',
     component: () => import(/* webpackChunkName: "contacts" */ './driver/pages/detail.vue')
   },
