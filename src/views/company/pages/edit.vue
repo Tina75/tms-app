@@ -102,14 +102,14 @@
             <div class="cardInfo">
               <div class="cardInfo-content edit">
                 <span class="cardTitle">公司LOGO</span>
-                <span v-if="!companyInfo.logoUrl" class="cardContent noneInfo">点击上传
+                <span v-if="!companyInfo.logoUrl" class="cardContent noneInfo" @click="addImg">点击上传
                   <icon-font
                     style="position:relative;top:-1px;"
                     name="icon-ico_right"
                     color="#CECECE"
                     :size="15"/>
                 </span>
-                <span v-else class="cardContent">
+                <span v-else class="cardContent" @click="addImg">
                   <div
                     :style="'backgroundImage:url(' + companyInfo.logoUrl + ');background-repeat: no-repeat;background-position-x: center;background-position-y: center;background-size: 100%;'"
                     class="avatarDiv"
@@ -197,8 +197,10 @@
   </div>
 </template>
 <script>
-import Upload from '@/components/Updalod'
+import Upload from '@/components/Upload'
 import { FormGroup, FormItem } from '@/components/Form'
+import { uploadOSS } from '@/components/Upload/ossUtil'
+import bridge from '@/libs/dsbridge'
 export default {
   name: 'company-edit',
   metaInfo: {
@@ -330,6 +332,29 @@ export default {
         imageListInit = [{ url: imageList, title: '' }]
       }
       return imageListInit
+    },
+    addImg () {
+      const vm = this
+      bridge.call('ui.selectPictures', { size: 1200, maxBytes: 300 * 1024, num: 1 }, function (result) {
+        if (result.data.images.length > 0) {
+          result.data.images.forEach((item) => {
+            bridge.call('ui.getBase64Picture', { key: item }, function (result) {
+              let baseData = 'data:image/jpeg;base64,' + result.data.image
+              vm.uploadOSS(baseData)
+            })
+          })
+        }
+      })
+    },
+    async uploadOSS (baseData) {
+      window.loadingStart()
+      const img = await uploadOSS(baseData)
+      if (img) {
+        this.uploadPhotos.push(img)
+      } else {
+        window.toast('图片上传失败')
+      }
+      window.loadingEnd()
     }
   }
 
