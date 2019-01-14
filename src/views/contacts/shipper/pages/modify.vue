@@ -1,111 +1,134 @@
 <template>
-  <div class="modify-shipper">
-    <FormItem v-model="model.name" label="发货人名称" required/>
-    <FormItem v-model="model.contact" label="联系人" required/>
-    <FormItem v-model="model.phone" label="联系人电话" :bottom-line="false" class="cube-mb-15" required/>
-    <FormItem
-      v-model="model.pickUp"
-      label="提货方式"
-      placeholder="请选择"
-      type="select"
-      :options="options.pickUps"
-    />
-    <FormItem
-      label="支付方式"
-      placeholder="请选择"
-      :value="model.payType"
-      type="select"
-      :options="options.payTypes"
-    />
-    <FormItem v-model="model.isInvoice" label="是否开票" type="switch"/>
-    <FormItem
-      v-if="model.isInvoice"
-      v-model="model.invoiceRate"
-      label="开票税率(%)"
-      required
-      type="number"
-    />
-    <FormItem
-      v-model="model.salesmanId"
-      label="对接业务员"
-      placeholder="请选择"
-      :type="operatorType"
-      :options="options.operators"
-    />
-    <FormItem
-      v-model="model.exploiteChannel"
-      label="开拓渠道"
-      placeholder="请选择"
-      class="cube-mb-15"
-      type="select"
-      :bottom-line="false"
-      :options="options.channels"
-    />
-    <FormItem maxlength="200" type="textarea" :value="model.remark" label="备注"/>
-    <cube-button class="cube-bottom-button" :primary="true" @click="submit">确定</cube-button>
+  <div class="cube-has-bottom-btn cube-pt-10">
+    <FromGroup :rules="rules" >
+      <FormItem v-model="model.name" label="发货人名称" maxlength="20" prop="require"/>
+      <FormItem v-model="model.contact" label="联系人" maxlength="15" prop="require"/>
+      <FormItem
+        v-model="model.phone"
+        label="联系人电话"
+        :bottom-line="false"
+        class="cube-mb-15"
+        prop="require"
+      />
+      <FormItem
+        v-model="model.pickUp"
+        label="提货方式"
+        placeholder="请选择"
+        type="select"
+        :options="options.pickUp"
+      />
+      <FormItem
+        v-model="model.payType"
+        label="支付方式"
+        placeholder="请选择"
+        type="select"
+        :options="options.payType"
+      />
+      <FormItem v-model="model.isInvoice" label="是否开票" type="switch"/>
+      <FormItem
+        v-if="model.isInvoice"
+        v-model="model.invoiceRate"
+        label="开票税率(%)"
+        required
+        maxlength="2"
+        type="number"
+      />
+      <FormItem
+        v-model="model.salesmanId"
+        label="对接业务员"
+        placeholder="请选择"
+        :type="operatorSelectType"
+        :options="operatorOptions"
+      />
+      <FormItem
+        v-model="model.exploiteChannel"
+        label="开拓渠道"
+        placeholder="请选择"
+        class="cube-mb-15"
+        type="select"
+        :bottom-line="false"
+        :options="options.exploiteChannel"
+      />
+      <FormItem v-model="model.remark" maxlength="200" type="textarea" label="备注"/>
+    </FromGroup>
+    <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
+import LoadingButton from '@/components/LoadingButton'
+import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
 import { ContactDetail } from '../modules/model'
 const moudleName = 'contacts/shipper'
 export default {
-  name: 'ModifyShipper',
+  name: 'ModifyContactsShipper',
   metaInfo() {
     return {
-      title: this.isCreate ? '新增发货方' : '编辑发货方'
+      title: this.isCreate ? '新增发货方' : '修改发货方'
     }
   },
-  components: { FormItem },
+  components: { FormItem, FromGroup, LoadingButton },
   data() {
     return {
       model: new ContactDetail(),
       options: {
-        pickUps: ContactDetail.pickUps,
-        payTypes: ContactDetail.payTypes,
-        channels: ContactDetail.channels,
-        operators: []
+        pickUp: ContactDetail.pickUp,
+        payType: ContactDetail.payType,
+        exploiteChannel: ContactDetail.exploiteChannel
       },
-      operatorType: 'select'
+      operatorSelectType: 'select',
+      rules: {
+        require: {
+          required: true
+        }
+      },
+      submiting: false
     }
   },
   computed: {
-    ...mapGetters(moudleName, ['ContactOperatorSelection']),
+    ...mapState(moudleName, ['operator']),
+    ...mapGetters(moudleName, ['contactDetail']),
+    operatorOptions() {
+      return this.operator.map(item => ({ value: item.id, text: item.name }))
+    },
     isCreate() {
-      return !this.$route.query.index
+      return !this.contactDetail.id
     }
   },
   methods: {
     ...mapActions(moudleName, ['syncButtOperator', 'modifyContact']),
-    submit() {
-      console.info('...', this.model)
+    async submit() {
+      this.submiting = true
+      try {
+        await this.modifyContact(ContactDetail.toServer(this.model))
+        this.$refreshPage('contacts-shipper', 'contacts-shipper-detail')
+      } catch (e) {
+        console.error(e)
+      } finally {
+        this.submiting = false
+      }
     },
     onPageRefresh() {
-      if (!this.isCreate) {
-        this.model = ContactDetail.parse(this.contactList[this.$route.query.index])
-      } else {
-        this.model = new ContactDetail()
-      }
+      this.model = this.isCreate
+        ? new ContactDetail()
+        : ContactDetail.toFrom(this.contactDetail)
       this.loadOperators()
     },
     async loadOperators() {
-      this.operatorType = 'loading'
-      try {
-        await this.syncButtOperator()
-        this.options.operators = this.ContactOperatorSelection
-      } catch (e) {
-        this.options.operators = []
-      } finally {
-        this.operatorType = 'select'
+      if (!this.operatorOptions.length) {
+        try {
+          this.operatorSelectType = 'loading'
+          await this.syncButtOperator()
+        } catch (e) {
+          console.error(e)
+        } finally {
+          this.operatorSelectType = 'select'
+        }
       }
     }
   }
 }
 </script>
 <style lang='stylus' >
-.modify-shipper
-  min-height 100%
-  box-sizing border-box
-  padding-bottom 60px
 </style>

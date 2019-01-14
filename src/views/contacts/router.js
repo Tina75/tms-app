@@ -6,9 +6,9 @@ export default [
     path: '/contacts/shipper',
     name: 'contacts-shipper',
     meta: {
-      noNeedRefresh: []
+      noNeedRefresh: ['contacts-shipper-detail']
     },
-    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/index.vue')
+    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/index.vue')
   },
   {
     // 发货方详情
@@ -17,27 +17,53 @@ export default [
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/detail.vue')
+    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/detail.vue')
   },
   {
-    // 发货方地址列表
-    path: '/contacts/shipper/address',
-    name: 'contacts-shipper-address',
-    meta: {
-      noNeedRefresh: []
-    },
-    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/address.vue')
-  },
-  {
-    // 编辑详细地址
+    // 编辑发货方
     path: '/contacts/shipper/modify',
     name: 'contacts-shipper-modify',
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */ './shipper/pages/modify.vue')
+    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/modify.vue')
   },
-
+  {
+    // 发货方地址列表 ?consignerId
+    path: '/contacts/shipper/address',
+    name: 'contacts-shipper-address',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/address.vue')
+  },
+  {
+    // 编辑发货方地址
+    path: '/contacts/shipper/address/modify',
+    name: 'contacts-shipper-address-modify',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/address-modify.vue')
+  },
+  {
+    // 发货方常发货列表 ?consignerId
+    path: '/contacts/shipper/cargo',
+    name: 'contacts-shipper-cargo',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/cargo.vue')
+  },
+  {
+    // 编辑发货方常发货
+    path: '/contacts/shipper/cargo/modify',
+    name: 'contacts-shipper-cargo-modify',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/cargo-modify.vue')
+  },
   // -------------收货方------------------
   // 收货方列表
   {
@@ -80,27 +106,72 @@ export default [
   },
   /* 承运商 */
   {
-    path: '/contacts/carrier',
-    name: 'Carrier',
-    component: () => import(/* webpackChunkName: "carrier" */ './carrier/pages/index.vue')
+    path: '/contacts/driver/modify',
+    name: 'contacts-driver-modify',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck-create.vue')
   },
-  /* 新增承运商 */
   {
-    path: '/contacts/carrier/create',
-    name: 'CarrierCreate',
-    component: () => import(/* webpackChunkName: "carrier" */ './carrier/pages/create.vue')
+    path: '/contacts/driver/detail',
+    name: 'contacts-driver-detail',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck-detail.vue')
   },
-  /* 修改承运商 */
+  /* 承运商 */
+  {
+    path: '/contacts/carrier',
+    name: 'contacts-carrier',
+    meta: {
+      noNeedRefresh: ['contacts-carrier-detail']
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/index.vue')
+  },
+  /* 修改/新增 承运商 */
   {
     path: '/contacts/carrier/modify',
-    name: 'CarrierModify',
-    component: () => import(/* webpackChunkName: "carrier" */ './carrier/pages/modify.vue')
+    name: 'contacts-carrier-modify',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/create.vue')
   },
   /* 承运商详情 */
   {
     path: '/contacts/carrier/detail/:id',
-    name: 'CarrierDetail',
-    component: () => import(/* webpackChunkName: "carrier" */ './carrier/pages/detail.vue')
+    name: 'contacts-carrier-detail',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/detail.vue')
+  },
+  /* 承运商合作车辆 */
+  {
+    path: '/contacts/carrier/truck',
+    name: 'contacts-carrier-truck',
+    meta: {
+      noNeedRefresh: ['contacts-carrier-truck-detail']
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck.vue')
+  },
+  {
+    path: '/contacts/carrier/truck/modify',
+    name: 'contacts-carrier-truck-modify',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck-create.vue')
+  },
+  {
+    path: '/contacts/carrier/truck/detail',
+    name: 'contacts-carrier-truck-detail',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck-detail.vue')
   }
 ]
 

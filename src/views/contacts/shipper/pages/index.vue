@@ -4,8 +4,9 @@
       v-model="loading"
       :data="contactList.list"
       :loader="loadContactList"
+      :is-end="contactList.hasNext"
     >
-      <ContactItem
+      <ListItem
         v-for="(item, i) in contactList.list"
         :key="item.id"
         :index="i"
@@ -17,7 +18,7 @@
         <NoData
           action="新增发货方"
           message="老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～"
-          @btn-click="addNew"
+          @btn-click="$router.push({ name: 'contacts-shipper-modify' })"
         >
           <img
             slot="img"
@@ -31,17 +32,17 @@
 </template>
 
 <script>
-import ContactItem from '../../components/ContactItem'
-import InfiniteList from '../../components/InfiniteList'
+import ListItem from '../../components/ListItem'
+import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
-import { mapActions, mapState, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 const moudleName = 'contacts/shipper'
 export default {
-  name: 'ContactsShipper',
+  name: 'ContactsShipperList',
   metaInfo: {
     title: '发货方'
   },
-  components: { ContactItem, NoData, InfiniteList },
+  components: { ListItem, NoData, InfiniteList },
   data() {
     return {
       loading: false
@@ -49,20 +50,22 @@ export default {
   },
   computed: mapState(moudleName, ['contactList']),
   methods: {
-    ...mapActions(moudleName, ['loadContactList', 'syncContactDetail']),
-    ...mapMutations(moudleName, ['setContactDetail']),
+    ...mapActions(moudleName, ['loadContactList', 'syncContactDetail', 'syncButtOperator']),
+    loader(refresh) {
+      if (refresh) {
+        this.syncButtOperator()
+      }
+      this.loadContactList(refresh)
+    },
     onPageRefresh() {
+      console.info('onPageRefresh')
       this.loading = true
     },
     onItemPhoneCall(item) {
       window.location.href = `tel:${item.phone}`
     },
     onItemClick(item, index) {
-      this.setContactDetail(index)
-      this.$router.push({ name: 'contacts-shipper-detail' })
-    },
-    addNew() {
-      this.$router.push({ name: 'contacts-shipper-modify' })
+      this.$router.push({ name: 'contacts-shipper-detail', query: { consignerId: item.id } })
     }
   }
 }

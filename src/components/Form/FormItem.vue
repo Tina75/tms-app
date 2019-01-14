@@ -60,7 +60,7 @@
           <textarea
             v-if="type === 'textarea'"
             v-model="inputValue"
-            class="form-item-input"
+            class="form-item-input form-item-textarea"
             :rows="rows"
             :placeholder="inputPlaceHolder"
             :maxlength="inputMaxLength"
@@ -324,7 +324,8 @@ export default {
 <style lang="stylus">
   .form-item-box .cube-validator-msg
     padding-right 16px
-    padding-bottom: 5px;
+    // padding-bottom: 5px; 无值也会有占位
+    line-height 20px
     text-align right
     font-size 12px
 
@@ -351,4 +352,7 @@ export default {
       text-align right
     &-align-center, &-align-center input
       text-align center
+
+  .form-item-textarea
+    resize none
 </style>

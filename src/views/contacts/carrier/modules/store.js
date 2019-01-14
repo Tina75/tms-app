@@ -1,51 +1,57 @@
-import * as types from './mutationTypes'
-import * as actions from './actions'
-import * as getters from './getters'
+import actions from './actions'
+import mutations from './mutations'
+import { InfinateListFactory } from '@/libs/factory/store'
 
 const state = {
-  /* 承运商列表 */
-  carrier: {
-    list: [],
-    total: 0,
-    pageNo: 1
-  },
 
-  /* 承运商详情 */
-  carrierDetail: {},
-
-  /* 新增承运商入参 */
-  carrierParams: {
-    carrierName: '',
-    carrierPrincipal: '',
-    carrierPhone: '',
-    payType: '',
-    remark: ''
-  }
 }
 
-const mutations = {
-  [types.CARRIER] (state, data) {
-    state.carrier.list = data.carrierList || []
-    state.carrier.total = data.total || 0
-    state.carrier.pageNo = data.pageNo || 1
-  },
-
-  [types.CLEAR_CARRIER] (state) {
-    state.carrier = { list: [], total: 0, pageNo: 1 }
-  },
-
-  [types.CARRIER_DETAIL] (state, data) {
-    state.carrierDetail = data.carrierInfo || {}
-  },
-
-  [types.CLEAR_CARRIER_DETAIL] (state) {
-    state.carrierDetail = {}
-  }
-}
-
-export default {
-  state,
+const store = {
+  namespaced: true,
   mutations,
   actions,
-  getters
+  state,
+  getters: {
+    contactDetail(state, getters, rootState) {
+      const list = state.contactList.list
+      const id = +rootState.route.query.carrierId
+      if (id) {
+        const detail = list.find((item) => item.id === id) || { data: {} }
+        return detail.data
+      }
+      return {}
+    }
+  }
 }
+const lists = [
+  {
+    // 承运商
+    key: 'contact',
+    url: '/carrier/list',
+    itemParser(data) {
+      return {
+        id: data.id,
+        name: data.carrierName,
+        detail: data.carrierPrincipal + '  ' + data.carrierPhone,
+        phone: data.carrierPhone,
+        data
+      }
+    }
+  },
+  {
+    // 合作车辆
+    key: 'truck',
+    useQuery: true,
+    url: '/carrier/list/car',
+    itemParser(data) {
+      return {
+        name: data.driverName,
+        type: data.carType,
+        size: data.carLength,
+        phone: data.driverPhone
+      }
+    }
+  }
+]
+lists.forEach((config) => InfinateListFactory(config, store))
+export default store

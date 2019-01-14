@@ -90,7 +90,7 @@ export default {
   data() {
     return {
       formatPhone,
-      form: new ConsigneeDetail(),
+      form: {},
       showPickCity: false,
       viewPhone: '',
       rules: {

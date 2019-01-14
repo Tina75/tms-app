@@ -1,26 +1,26 @@
 <template>
-  <div class="contacts-shipper-address">
-    <InfiniteList v-model="loading" :data="addressList.list" :loader="loadAddressList" :is-end="addressList.hasNext">
+  <div class="contacts-shipper-cargo">
+    <InfiniteList v-model="loading" :data="cargoList.list" :loader="loadCargoList" :is-end="cargoList.hasNext">
       <ListItem
-        v-for="(item, i) in addressList.list"
+        v-for="(item, i) in cargoList.list"
         :key="item.id"
         :index="i"
         :item="item"
-        icon="icon-ico_location"
+        icon="icon-ico_thing"
       >
         <div
           slot="right"
-          class="contacts-shipper-address__item border-left-1px cube-font-14 cube-c-light-grey"
+          class="contacts-shipper-cargo__item border-left-1px cube-font-14 cube-c-light-grey"
           @click="modify(i)"
           v-text="'修改'"
         />
       </ListItem>
       <template slot="empty">
-        <NoData action="新增发货地址" message="老板，您还没有记录发货地址信息 赶快新增一个，用着方便哦～" @btn-click="modify">
+        <NoData action="新增常发货物" message="老板，您还没有记录常发货物信息 赶快新增一个，用着方便哦～" @btn-click="modify">
           <img
             slot="img"
             class="contacts-shipper__placeholder"
-            src="@/assets/contacts/address-list-empty.png"
+            src="@/assets/contacts/cargo-list-empty.png"
           >
         </NoData>
       </template>
@@ -37,7 +37,7 @@ const moudleName = 'contacts/shipper'
 export default {
   name: 'ContactsShipperCargoList',
   metaInfo: {
-    title: '发货方'
+    title: '常发货物'
   },
   components: { ListItem, NoData, InfiniteList },
   data() {
@@ -45,23 +45,24 @@ export default {
       loading: false
     }
   },
-  computed: mapState(moudleName, ['addressList']),
+  computed: mapState(moudleName, ['cargoList']),
   methods: {
-    ...mapActions(moudleName, ['loadAddressList']),
+    ...mapActions(moudleName, ['loadCargoList']),
     onPageRefresh() {
       this.loading = true
     },
     modify(index) {
       if (index) {
+
       }
-      this.$router.push({ name: 'contacts-shipper-address-modify' })
+      this.$router.push({ name: 'contacts-shipper-cargo-modify' })
     }
   }
 }
 </script>
 
 <style lang='stylus'>
-.contacts-shipper-address
+.contacts-shipper-cargo
   height 100%
   &__placeholder
     width 179px

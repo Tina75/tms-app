@@ -1,43 +1,35 @@
 <template>
-  <div class="shipper-detail cube-has-bottom-btn">
-    <div class="shipper-detail__header">
-      <span class="cube-font-18" v-text="viewData.name"/>
-      <div class="cube-font-14">
-        <i class="cubeic-person cube-mr-10"/>
-        <span class="cube-mr-10" v-text="viewData.contact"/>
-        <span v-text="viewData.phone"/>
+  <div class="carrier-detail cube-has-bottom-btn">
+    <div class="carrier-detail__header">
+      <div class="avatar">
+        <IconFont
+          name="icon-ico_send"
+          :size="40"
+          class="avatar_icon"
+        />
+      </div>
+      <div class="truck">
+        <span class="cube-font-18" v-text="viewData.name"/>
+        <div class="cube-font-14">
+          <span class="cube-mr-10" v-text="viewData.contact"/>
+          <span v-text="viewData.phone"/>
+        </div>
       </div>
     </div>
-    <div v-if="infoList.length" class="shipper-detail__info border-bottom-1px">
+    <div v-if="infoList.length" class="carrier-detail__info border-bottom-1px">
       <div
         v-for="(item, i) in infoList"
         :key="i"
-        class="shipper-detail__info-item border-right-1px"
+        class="carrier-detail__info-item border-right-1px"
       >
         <span class="cube-font-15 cube-c-black" v-text="item.value"/>
         <span class="cube-font-14 cube-c-light-grey" v-text="item.text"/>
       </div>
     </div>
-    <div v-if="viewData.remark" class="shipper-detail__remark cube-font-15">
+    <div v-if="viewData.remark" class="carrier-detail__remark cube-font-15">
       <div class="cube-c-black cube-mb-15" v-text="'备注'"/>
       <p class="cube-c-grey" v-text="viewData.remark"/>
     </div>
-
-    <CellItem
-      class="cube-mt-15"
-      label="发货地址"
-      left-icon="icon-ico_location"
-      :right-title="viewData.addressCnt"
-      @click="$router.push({name: 'contacts-shipper-address', query:{consignerId: viewData.id}})"
-    />
-
-    <CellItem
-      class="cube-mt-15"
-      label="常发货物"
-      left-icon="icon-ico_location"
-      :right-title="viewData.cargoCnt"
-      @click="$router.push({name: 'contacts-shipper-cargo', query:{consignerId: viewData.id}})"
-    />
 
     <cube-button class="cube-bottom-button" :primary="true" @click="phoneCall">
       <i class="iconfont icon-ico_call"/>
@@ -48,9 +40,11 @@
 
 <script>
 import CellItem from '../../components/CellItem.vue'
+import IconFont from '@/components/Iconfont'
+
 import { mapState, mapGetters } from 'vuex'
 import { ContactDetail } from '../modules/model'
-const moudleName = 'contacts/shipper'
+const moudleName = 'contacts/carrier'
 const ListConfig = [
   { text: '结算方式', key: 'payType' },
   { text: '提货方式', key: 'pickUp' },
@@ -99,17 +93,29 @@ export default {
 </script>
 
 <style lang='stylus' >
-.shipper-detail
+.carrier-detail
   .cell-item
     background #fff
   &__header
     display flex
-    flex-direction column
-    justify-content space-between
-    padding 20px 15px
-    height 90px
-    color #fff
+    align-items center
     background #3A424B
+    .avatar
+      width 70px
+      height 70px
+      margin 0 10px 0 16px
+      background-color rgba(0,0,0,0.2238)
+      text-align center
+      line-height 70px
+      border-radius 50%
+    .truck
+      flex 1
+      display flex
+      flex-direction column
+      justify-content space-between
+      padding 20px 15px
+      height 90px
+      color #fff
   &__remark
     padding 16px 15px
     min-height 100px
