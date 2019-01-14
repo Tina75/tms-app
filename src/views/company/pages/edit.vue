@@ -11,7 +11,6 @@
               maxlength="25"/>
             <form-item
               v-model="companyInfo.shortName"
-              prop="shortName"
               label="公司简称"
               maxlength="6" />
           </div>
@@ -273,7 +272,6 @@ export default {
       contactList: [],
       rules: {
         name: { required: true, type: 'string' },
-        shortName: { required: true, type: 'string' },
         contact: { required: true, type: 'string' },
         contactPhone: { required: true, type: 'string' },
         address: { required: true, type: 'string' },
@@ -314,6 +312,13 @@ export default {
       this.addContactBtn = true
     },
     save () {
+      for (let index = 1; index <= 3; index++) {
+        if (this.companyInfo['busiContactName' + index]) {
+          this.companyInfo.busiContact.push({ name: this.companyInfo['busiContactName' + index], phone: this.companyInfo['busiContactPhone' + index] })
+        }
+        delete this.companyInfo['busiContactName' + index]
+        delete this.companyInfo['busiContactPhone' + index]
+      }
       console.dir(this.companyInfo)
       this.$router.push({ name: 'company' })
     },
