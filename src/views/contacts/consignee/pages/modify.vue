@@ -32,18 +32,13 @@
       </div>
       <div class="form_card">
         <form-item
-          v-model="form.cityName"
-          type="click"
-          label="收货地址"
-          :show-arrow="false"
-          placeholder="请选择省/市/区"
-          @on-click="showPickCity = true"
-        />
-        <form-item
           v-model="form.address"
-          prop="detailAddress"
-          label="详细地址"
+          type="click"
+          prop="address"
           :show-required-toast="false"
+          label="详细地址"
+          :show-arrow="false"
+          @on-click="goToAddress"
         />
         <form-item
           v-model="form.consigneeCompanyName"
@@ -76,7 +71,7 @@
 <script>
 import { FormGroup, FormItem } from '@/components/Form'
 import CityPicker from '@/components/CityPicker'
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { validatePhone, formatPhone, ConsigneeDetail, editPhone } from '../modules/model'
 const moudleName = 'contacts/consignee'
 export default {
@@ -91,7 +86,7 @@ export default {
     return {
       formatPhone,
       editPhone,
-      form: {},
+      form: new ConsigneeDetail(),
       showPickCity: false,
       viewPhone: '',
       rules: {
@@ -105,13 +100,12 @@ export default {
             validatePhone: '请输入正确的手机号或座机号'
           }
         },
-        detailAddress: { required: true }
+        address: { required: true }
       }
     }
   },
   computed: {
-    ...mapState(moudleName, ['saveConsigner']),
-    ...mapGetters(moudleName, ['consigneeDetail']),
+    ...mapState(moudleName, ['saveConsigner', 'consigneeDetail']),
     isEdit () {
       return !this.consigneeDetail.id
     }
@@ -161,7 +155,11 @@ export default {
     async submit () {
       const data = ConsigneeDetail.toServer(Object.assign({}, { consignerId: this.saveConsigner.id }, this.form))
       console.log(data)
-      await this.modifyConsignee(data)
+      await this.$refs.$form.validate()
+      // await this.modifyConsignee(data)
+    },
+    goToAddress () {
+      this.$router.push({ name: 'contacts-address' })
     }
   },
   beforeRouteLeave (to, from, next) {

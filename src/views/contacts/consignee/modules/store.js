@@ -1,3 +1,4 @@
+import Server from '@/libs/server'
 import { InfinateListFactory, DetailFactory } from '@/libs/factory/store'
 
 const store = {
@@ -8,25 +9,22 @@ const store = {
   },
   mutations: {
     saveConsigner: (state, payload = {}) => { state.saveConsigner = payload },
-    consigneeDetail: (state, payload = {}) => { state.consigneeDetail = payload }
+    setConsigneeDetail: (state, payload = {}) => { state.consigneeDetail = payload }
   },
   actions: {
     saveConsignerInfo: ({ state, commit }, data = {}) => {
       commit('saveConsigner', data)
     },
-    loadConsigneeDetail: ({state, commit, rootState }) => {
-      const list = state.consigneeList.list
-      const id = +rootState.route.query.consigneeId
-      if (id) {
-        const detail = list.find((item) => item.id === id) || { data: {} }
-        commit('consigneeDetail', detail.data )
-      }
-      commit('consigneeDetail',{} )
+    loadConsigneeDetail: ({ commit, rootState }) => {
+      Server({
+        method: 'get',
+        url: '/consignee/detail',
+        loading: true,
+        params: { id: rootState.route.query.consigneeId }
+      }).then((response) => commit('setConsigneeDetail', response.data.data))
     }
   },
-  getters: {
-    consigneeDetail: (state) => state.consigneeDetail
-  }
+  getters: {}
 }
 // -----下拉列表-----
 const lists = [

@@ -59,7 +59,7 @@
 </template>
 <script>
 import IconFont from '@/components/Iconfont'
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 // import { setAppTitleBtn } from '@/libs/bridgeUtil'
 const moudleName = 'contacts/consignee'
 export default {
@@ -69,13 +69,12 @@ export default {
   },
   components: { IconFont },
   computed: {
-    ...mapState(moudleName, ['consigneeList']),
-    ...mapGetters(moudleName, ['consigneeDetail'])
+    ...mapState(moudleName, ['consigneeList', 'consigneeDetail'])
   },
   methods: {
-    ...mapActions(['loadConsigneeDetail']),
+    ...mapActions(moudleName, ['loadConsigneeDetail']),
     onPageRefresh() {
-      this.loadConsigneeDetail()
+      // this.loadConsigneeDetail()
     },
     callPhone () {
       window.location.href = `tel:${this.consigneeDetail.phone}`
