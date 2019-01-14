@@ -1,5 +1,5 @@
 <template>
-  <div class="create-order-page scroll-list-wrap">
+  <div class="create-order-page">
     <cube-scroll class="scroll-box">
       <cube-button primary @click="$router.push({ name: 'order-often' })">常发订单</cube-button>
       <form-group ref="$form" class="form" :rules="rules">
@@ -13,7 +13,7 @@
             required
             label="客户名称"
             autofocus
-            maxlength="11"
+            maxlength="20"
             click-icon="icon-ico_custerm"
             @on-icon-click="selectSender" />
           <form-item
@@ -25,8 +25,8 @@
             v-model="orderInfo.consignerPhone"
             prop="consignerPhone"
             label="联系号码"
-            type="number"
-            maxlength="20" />
+            maxlength="20"
+            @input="consignerPhoneInputHandler" />
           <form-item
             v-model="orderInfo.consignerCity"
             label="发货城市"
@@ -64,8 +64,8 @@
             v-model="orderInfo.consigneePhone"
             prop="consigneePhone"
             label="联系号码"
-            type="number"
-            maxlength="20" />
+            maxlength="20"
+            @input="consigneePhoneInputHandler" />
           <form-item
             v-model="orderInfo.consigneeCity"
             label="收货城市"
@@ -164,7 +164,7 @@ import { mapGetters } from 'vuex'
 import CreateFooter from '../components/CreateFooter'
 import { FormGroup, FormItem, FormTitle } from '@/components/Form'
 import CityPicker from '@/components/CityPicker'
-import { SETTLEMENT_TYPE, PICKUP_TYPE } from '../js/constant'
+import { SETTLEMENT_TYPE, PICKUP_TYPE } from '../../js/constant'
 
 const IMAGES = {
   ACCEPT: require('../assets/accept.png'),
@@ -179,6 +179,13 @@ export default {
   metaInfo: { title: '手工开单' },
   components: { FormGroup, FormItem, FormTitle, CreateFooter, CityPicker },
   data () {
+    const phoneReg = val => {
+      const v = /(\d|\-|\(|\)|\（|\）|\s){1,20}/.test(val)
+      console.log(v, val)
+      return v
+    }
+    const phoneMessage = { phoneReg: '手机号格式不正确' }
+
     return {
       IMAGES,
       cityPickerType: '',
@@ -205,10 +212,10 @@ export default {
         //   }
         // },
         consignerName: { required: true, type: 'string' },
-        consignerPhone: { required: true, type: 'number' },
+        consignerPhone: { required: true, type: 'string', phoneReg, messages: phoneMessage },
         consignerAddress: { required: true, type: 'string' },
         consigneeName: { required: true, type: 'string' },
-        consigneePhone: { required: true, type: 'number' },
+        consigneePhone: { required: true, type: 'string', phoneReg, messages: phoneMessage },
         consigneeAddress: { required: true, type: 'string' },
         cargoInfo: { required: true, type: 'string' },
         settlementType: { required: true, type: 'number' },
@@ -227,6 +234,7 @@ export default {
     }
   },
   methods: {
+    // 选择省市区
     pickCity (data) {
       const cityName = Array.from(new Set(data.map(item => item.name))).join('')
       if (this.cityPickerType === 'send') this.orderInfo.consignerCity = cityName
@@ -258,6 +266,18 @@ export default {
 
     editAddress () {
       this.$router.push({ name: 'order-edit-address' })
+    },
+
+    // 联系电话格式化
+    consignerPhoneInputHandler (phone) {
+      this.phoneFormatter(phone, 'consignerPhone')
+    },
+    consigneePhoneInputHandler (phone) {
+      this.phoneFormatter(phone, 'consigneePhone')
+    },
+    phoneFormatter (phone, field) {
+      if (!phone || phone[0] !== '1') return
+
     },
 
     async saveOrder () {

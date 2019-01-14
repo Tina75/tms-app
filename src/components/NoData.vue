@@ -6,7 +6,7 @@
         <slot name="img">
           <img :src="img" class="list-placeholder__img">
         </slot>
-        <div class="list-placeholder__message cube-mb-25 cube-mt-5" v-text="message"/>
+        <div class="list-placeholder__message cube-mb-25 cube-mt-5" v-html="message"/>
         <div v-if="action">
           <cube-button :primary="true" @click="clickHandler">{{action}}</cube-button>
         </div>
