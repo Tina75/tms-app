@@ -15,7 +15,7 @@ export default [
     path: '/contacts/shipper/detail',
     name: 'contacts-shipper-detail',
     meta: {
-      noNeedRefresh: []
+      noNeedRefresh: ['contacts-shipper-modify']
     },
     component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/detail.vue')
   },

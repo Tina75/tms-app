@@ -1,6 +1,11 @@
 <template>
   <div class="contacts-shipper-address">
-    <InfiniteList v-model="loading" :data="addressList.list" :loader="loadAddressList" :is-end="addressList.hasNext">
+    <InfiniteList
+      v-model="loading"
+      :data="addressList.list"
+      :loader="loadAddressList"
+      :is-end="addressList.hasNext"
+    >
       <ListItem
         v-for="(item, i) in addressList.list"
         :key="item.id"
@@ -33,6 +38,7 @@ import ListItem from '../../components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import { mapActions, mapState } from 'vuex'
+import { loadBMap } from '@/libs/util'
 const moudleName = 'contacts/shipper'
 export default {
   name: 'ContactsShipperCargoList',
@@ -46,6 +52,10 @@ export default {
     }
   },
   computed: mapState(moudleName, ['addressList']),
+  mounted() {
+    // 预加载百度地图
+    loadBMap()
+  },
   methods: {
     ...mapActions(moudleName, ['loadAddressList']),
     onPageRefresh() {
