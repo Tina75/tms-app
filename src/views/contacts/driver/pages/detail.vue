@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-    <div class="detail_line cube-mt-10">
+    <div class="detail_line cube-mt-15">
       <div class="routes">
         <h2 class="cube-c-grey-dark cube-font-16">常跑路线</h2>
         <div class="cube-c-grey cube-pl-15 cube-pr-15 cube-font-15">
@@ -161,30 +161,30 @@ export default {
     height 110px
     padding 20px 16px
     box-sizing border-box
-    background-color #3A424B
+    background-color #ffffff
     display flex
     .avatar
       width 70px
       height 70px
-      background-color rgba(0,0,0,0.2238)
+      background-color #E4E7EC
       text-align center
       line-height 70px
       border-radius 50%
       &_icon
-        background: linear-gradient(180deg,rgba(113,124,135,1) 0%,rgba(58,66,75,1) 100%)
+        background: #FFFFFF
         -webkit-background-clip: text
         color: transparent
     .driver
       padding 10px 0px
       margin-left 9px
-      color #ffffff
+      color #333333
       span
         display inline-block
         margin-left 10px
-        background-color rgba(255,255,255,0.1)
+        background-color #FCA950
         padding 4px 5px
         font-size 12px
-        color  rgba(255,255,255,0.8);
+        color  #FFFFFF
       h2
         font-size 18px
         font-weight 500
@@ -193,8 +193,9 @@ export default {
         font-size 14px
         line-height 14px
         margin-top 15px
-        color rgba(255,255,255,0.8)
+        color #666666
   &_other
+    margin-top 15px
     padding 0px 15px
     background-color #ffffff
     .type:last-child
