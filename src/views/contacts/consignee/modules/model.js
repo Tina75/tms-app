@@ -50,12 +50,12 @@ export class ConsigneeDetail {
   static toForm(data) {
     return {
       address: data.address,
-      consigneeCompanyName: data.consigneeCompanyName,
-      consigner: data.consignerHourseNumber,
+      consigneeCompanyName: data.consigneeCompanyName ? data.consigneeCompanyName : '',
+      consigner: data.contact,
       contact: data.contact,
-      cityName: data.cityName,
+      cityName: data.cityName ? data.cityName : '',
       phone: data.phone,
-      remark: data.remark,
+      remark: data.remark ? data.remark : '',
       longitude: data.longitude,
       latitude: data.latitude,
       id: data.id,

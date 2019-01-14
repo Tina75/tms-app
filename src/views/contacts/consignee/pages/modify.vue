@@ -158,13 +158,19 @@ export default {
     },
     editTel (value) {
       this.viewPhone = this.editPhone(value)
-      this.form.phone = this.viewPhone.replace(/\s/g, '')
     },
     async submit () {
       const data = ConsigneeDetail.toServer(Object.assign({}, { consignerId: this.saveConsigner.id }, this.form))
       console.log(data)
       await this.modifyConsignee(data)
     }
+  },
+  beforeRouteLeave (to, from, next) {
+    console.log(to)
+    if (to.name !== 'select-shipper') {
+      this.saveConsignerInfo()
+    }
+    next()
   }
 }
 </script>
