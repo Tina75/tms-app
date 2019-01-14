@@ -2,8 +2,8 @@
   <cube-scroll>
     <ul class="order-list">
       <li
-        class="order-list-item"
-        v-for="item in 'text'" :key="item"
+        v-for="item in 'text'"
+        :key="item" class="order-list-item"
         @click="$router.push({ name: 'order-often-detail' })">
         <p class="order-company order-container">南京大猪蹄子物流公司</p>
 
@@ -116,4 +116,3 @@ export default {
       span
         margin-right 12px
 </style>
-
