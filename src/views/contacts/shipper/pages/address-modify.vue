@@ -1,18 +1,39 @@
 <template>
   <div>
     <FromGroup>
-      <FormItem v-model="model.name" label="所在地区" type="click" maxlength="20" prop="require"/>
-      <FormItem v-model="model.contact" label="详细地址" maxlength="15" prop="require"/>
-      <FormItem v-model="model.contact" label="补充地址" maxlength="15" prop="require"/>
+      <FormItem
+        v-model="model.locale"
+        label="所在地区"
+        type="click"
+        maxlength="20"
+        prop="require"
+        placeholder="请选择省/市/区"
+        @click.native="showCityPicker = true"
+      />
+      <FormItem
+        v-model="model.address"
+        label="详细地址"
+        placeholder="请输入详细地址"
+        maxlength="15"
+        prop="require"
+      />
+      <FormItem
+        v-model="model.detail"
+        label="补充地址"
+        placeholder="请输入楼号-门牌号"
+        maxlength="15"
+        prop="require"
+      />
     </FromGroup>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
+    <CityPicker v-model="showCityPicker" @confirm="confirmCity"/>
   </div>
 </template>
 <script>
+import CityPicker from '@/components/CityPicker'
 import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
-import { ContactDetail } from '../modules/model'
 // const moudleName = 'contacts/shipper'
 export default {
   name: 'ModifyContactsShipperAddress',
@@ -21,11 +42,16 @@ export default {
       title: this.isCreate ? '新增发货地址' : '修改发货地址'
     }
   },
-  components: { FormItem, FromGroup, LoadingButton },
+  components: { FormItem, FromGroup, LoadingButton, CityPicker },
   data() {
     return {
-      model: new ContactDetail(),
-      submiting: false
+      model: {
+        locale: '',
+        address: '',
+        detail: ''
+      },
+      submiting: false,
+      showCityPicker: false
     }
   },
   computed: {
@@ -44,8 +70,16 @@ export default {
         // this.submiting = false
       }
     },
-    onPageRefresh() {
-    }
+    confirmCity(data) {
+      const [province, city, area] = data
+      const locale = [province.name]
+      if (province.name !== city.name) {
+        locale.push(city.name)
+      }
+      locale.push(area.name)
+      this.model.locale = locale.join('/')
+    },
+    onPageRefresh() {}
   }
 }
 </script>

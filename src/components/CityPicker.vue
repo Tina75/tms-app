@@ -26,7 +26,7 @@
         <div
           v-for="(item,i) in items"
           :key="i"
-          class="item border-bottom-1px border-left-1px"
+          class="item border-bottom-1px border-right-1px"
           @click="choseItem(item)"
         >{{item.shortName}}</div>
       </div>
@@ -214,10 +214,13 @@ export default {
   height 100%
   transform translateY(100%)
   transition transform 0.3s
+  >>>>.border-right-1px
+    transform-origin 0 0
   &.active
     transform translateY(0)
   .cover
     flex 1
+    min-height 50px
     background rgba(0, 0, 0, 0.5)
   .item
     text-align center
