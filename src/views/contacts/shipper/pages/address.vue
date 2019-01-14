@@ -64,7 +64,7 @@ export default {
     modify(index) {
       if (index) {
       }
-      this.$router.push({ name: 'contacts-shipper-address-modify' })
+      this.$router.push({ name: 'contacts-address' })
     }
   }
 }

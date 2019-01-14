@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="contacts-address">
     <FromGroup>
       <FormItem
         v-model="model.locale"
@@ -25,6 +25,7 @@
         prop="require"
       />
     </FromGroup>
+    <BmapAddressList :limit="limitLocation" :search="model.address" @select="onSelectAddress"/>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
     <CityPicker v-model="showCityPicker" @confirm="confirmCity"/>
   </div>
@@ -34,6 +35,7 @@ import CityPicker from '@/components/CityPicker'
 import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
+import BmapAddressList from '../../components/BmapAddressList'
 // const moudleName = 'contacts/shipper'
 export default {
   name: 'ModifyContactsShipperAddress',
@@ -42,7 +44,7 @@ export default {
       title: this.isCreate ? '新增发货地址' : '修改发货地址'
     }
   },
-  components: { FormItem, FromGroup, LoadingButton, CityPicker },
+  components: { FormItem, FromGroup, LoadingButton, CityPicker, BmapAddressList },
   data() {
     return {
       model: {
@@ -51,7 +53,8 @@ export default {
         detail: ''
       },
       submiting: false,
-      showCityPicker: false
+      showCityPicker: false,
+      limitLocation: ''
     }
   },
   computed: {
@@ -60,6 +63,10 @@ export default {
     }
   },
   methods: {
+    onPageRefresh() {},
+    onSelectAddress() {
+
+    },
     async submit() {
       this.submiting = true
       try {
@@ -78,10 +85,14 @@ export default {
       }
       locale.push(area.name)
       this.model.locale = locale.join('/')
-    },
-    onPageRefresh() {}
+    }
   }
 }
 </script>
 <style lang='stylus' >
+.contacts-address
+  height 100%
+  display flex
+  flex-direction column
+  padding-bottom 44px
 </style>

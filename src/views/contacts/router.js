@@ -1,5 +1,27 @@
 import store from '@/store'
+import commonStore from './common/store'
+
+store.registerModule('contacts', commonStore)
+
+// 动态读取当前目录下所有子文件下的store.js进行注册, 注册模块名为文件名
+const requireContext = require.context('./', true, /store\.js/)
+requireContext.keys().forEach((filePath) => {
+  const moduleName = filePath.match(/\.\/(\w+)\//)[1]
+  const moduleStore = requireContext(filePath)
+  store.registerModule(['contacts', moduleName], moduleStore.default)
+})
+
 export default [
+  // -------公共页面---------
+  {
+    // 修改/编辑地址
+    path: '/contacts/address',
+    name: 'contacts-address',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts-common" */ './common/pages/address.vue')
+  },
   // -------发货方-----------
   {
     // 发货方通信录
@@ -36,15 +58,6 @@ export default [
       noNeedRefresh: []
     },
     component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/address.vue')
-  },
-  {
-    // 编辑发货方地址
-    path: '/contacts/shipper/address/modify',
-    name: 'contacts-shipper-address-modify',
-    meta: {
-      noNeedRefresh: []
-    },
-    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/address-modify.vue')
   },
   {
     // 发货方常发货列表 ?consignerId
@@ -164,15 +177,3 @@ export default [
     component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck-detail.vue')
   }
 ]
-
-store.registerModule('contacts', {
-  namespaced: true
-})
-
-// 动态读取当前目录下所有子文件下的store.js进行注册, 注册模块名为文件名
-const requireContext = require.context('./', true, /store\.js/)
-requireContext.keys().forEach((filePath) => {
-  const moduleName = filePath.match(/\.\/(\w+)\//)[1]
-  const moduleStore = requireContext(filePath)
-  store.registerModule(['contacts', moduleName], moduleStore.default)
-})

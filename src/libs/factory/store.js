@@ -96,11 +96,14 @@ export function DetailFactory(store = new Store(), { api, key }) {
   const name = key[0].toUpperCase() + key.slice(1)
   const NAME = {
     state: `${key}Detail`,
+    setMutation: `set${name}Detail`,
     modifyAction: `modify${name}`,
     removeAction: `remove${name}`
   }
 
   safeSet(store.state, NAME.state, {})
+
+  safeSet(store.mutations, NAME.setMutation, (state, data) => (state[NAME.state] = data))
 
   safeSet(store.actions, NAME.modifyAction, ({ state, commit }, data) => {
     const isCreate = !data.id

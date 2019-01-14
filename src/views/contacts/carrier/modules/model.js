@@ -34,7 +34,7 @@ export class ContactDetail {
     return data
   }
   // 后端接口 => from表单格式
-  static toFrom(data) {
+  static toForm(data) {
     data = { ...data }
     // cube-switch 需要boolean类型 防止报错
     data.isInvoice = !!data.isInvoice
