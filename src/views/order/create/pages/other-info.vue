@@ -1,22 +1,25 @@
 <template>
   <div class="scroll-list-wrap">
     <cube-scroll class="scroll-box">
-      <form>
+      <form-group>
         <div class="form-section">
           <form-item
             v-model="form.needTicket"
             label="是否开票"
             type="switch" />
           <form-item
+            v-if="form.needTicket"
             v-model="form.rate"
             label="开票税率(%)"
-            type="text" />
+            type="number"
+            precision="2" />
         </div>
         <div class="form-section">
           <form-item
             v-model="form.replace"
             label="代收货款(元)"
-            type="number" />
+            type="number"
+            precision="4" />
         </div>
         <div class="form-section">
           <form-item
@@ -26,7 +29,7 @@
             placeholder="请输入(最多输入200字)"
             maxlength="200" />
         </div>
-      </form>
+      </form-group>
     </cube-scroll>
 
     <cube-button class="footer" primary @click="ensure">确定</cube-button>
@@ -35,11 +38,11 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import { FormItem } from '@/components/Form'
+import { FormGroup, FormItem } from '@/components/Form'
 
 export default {
   metaInfo: { title: '其他信息' },
-  components: { FormItem },
+  components: { FormGroup, FormItem },
   data () {
     return {
       form: {

@@ -20,20 +20,27 @@ const mutations = {
 
 const actions = {
   getOftenList: async (state, query) => {
-    const list = require('./mock').default
-    state.commit('SET_OFTEN_LIST', list)
-    return true
-    // const { data } = await Server({
-    //   url: '/ordertemplate/list',
-    //   method: 'post',
-    //   loading: true,
-    //   data: { pageNo: state.pageNo }
-    // })
-    // const res = data.data
-    // console.log(res)
-    // state.commit('SET_OFTEN_LIST', res.list)
-    // if (res.list.length) state.commit('SET_PAGE_NO', state.pageNo + 1)
-    // return !!res.list.length
+    // const list = require('./mock').default
+    // state.commit('SET_OFTEN_LIST', list)
+    // return true
+    const { data } = await Server({
+      url: '/ordertemplate/list',
+      method: 'post',
+      loading: true,
+      data: { pageNo: state.pageNo }
+    })
+    const res = data.data
+    state.commit('SET_OFTEN_LIST', res.list)
+    if (res.list.length) state.commit('SET_PAGE_NO', state.pageNo + 1)
+    return !!res.list.length
+  },
+
+  deleteOftenOrder: async (state, id) => {
+    Server({
+      url: '/ordertemplate/delete',
+      method: 'post',
+      data: { id }
+    })
   }
 }
 
