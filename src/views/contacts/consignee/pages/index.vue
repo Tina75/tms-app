@@ -58,7 +58,7 @@
   </div>
 </template>
 <script>
-import InfiniteList from '../../components/InfiniteList'
+import InfiniteList from '@/components/InfiniteList'
 import IconFont from '@/components/Iconfont'
 import { mapGetters, mapActions } from 'vuex'
 import NoData from '@/components/NoData'
