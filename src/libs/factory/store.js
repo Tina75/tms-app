@@ -18,6 +18,7 @@ class InfinateList {
  *  useQuery?: 将route的query加入请求中
  *  useParam?: 将route的param加入请求
  *  itemParser?: 有则遍历List转化后再存入state
+ *  nameMap?: 键别名设置
  * }
  * 后端返回格式为如下格式时规范化无限列表的store生成工厂
  * pageNo
@@ -30,7 +31,7 @@ class InfinateList {
 
 export function InfinateListFactory(
   store = new Store(),
-  { key, url, itemParser, useQuery, useParam, method = 'get' } = {}
+  { key, url, itemParser, useQuery, useParam, method = 'get', nameMap = { data: 'list' } } = {}
 ) {
   method = method.toLowerCase()
   const name = key[0].toUpperCase() + key.slice(1)
@@ -49,10 +50,13 @@ export function InfinateListFactory(
   store.mutations[NAME.addMutation] = (state, payload) => {
     const lazylist = state[NAME.state]
     if (payload.pageNo === lazylist.nextPage) {
-      const parsedData = itemParser ? payload.list.map(itemParser) : payload.list
-      lazylist.list = [...lazylist.list, ...parsedData]
-      lazylist.nextPage = payload.nextPageNo
-      lazylist.hasNext = !!payload.hasNext
+      const data = payload[nameMap.data]
+      if (data) {
+        const parsedData = itemParser ? data.map(itemParser) : data
+        lazylist.list = [...lazylist.list, ...parsedData]
+        lazylist.nextPage = payload.nextPageNo
+        lazylist.hasNext = !!payload.hasNext
+      }
     }
   }
 
@@ -64,7 +68,7 @@ export function InfinateListFactory(
   // 请求成功后再删除数据进行更新，保障若失败也能保留请求前的显示
   // 取
   store.actions[NAME.loadAction] = async ({ state, rootState, commit, dispatch }, needClear) => {
-    const list = state.contactList
+    const list = state[NAME.state]
     const needSend = list.hasNext || needClear
     const pageNo = needClear ? 1 : list.nextPage
     if (needSend) {
