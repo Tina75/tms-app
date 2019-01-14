@@ -106,7 +106,48 @@
       <cube-button
         class="footer-button"
         primary
-        @click="share">分享</cube-button>
+        @click="sharFoot = true">分享</cube-button>
+    </div>
+    <div v-show="sharFoot" class="share-foot">
+      <div class="share-div">
+        <p class="share-title">分享到</p>
+        <div>
+          <ul>
+            <li @click="sharePath">
+              <icon-font
+                name="icon-weixin"
+                :size="44"/>
+              <div class="title">微信好友</div>
+            </li>
+            <li>
+              <!-- <icon-font
+                name="icon-pengyouquan"
+                :size="44"/> -->
+              <svg class="icon closeImg" aria-hidden="true" style="font-size: 44px;">
+                <use xlink:href="#icon-pengyouquan"/></svg>
+              <div class="title">朋友圈</div>
+            </li>
+            <li>
+              <icon-font
+                name="icon-qq"
+                :size="44"/>
+              <div class="title">手机QQ</div>
+            </li>
+            <li>
+              <!-- <icon-font
+                name="icon-qqkongjian"
+                :size="44"/> -->
+              <svg class="icon closeImg" aria-hidden="true" style="font-size: 44px;">
+                <use xlink:href="#icon-qqkongjian"/></svg>
+              <div class="title">QQ空间</div>
+            </li>
+          </ul>
+        </div>
+        <cube-button
+          class="footer-button"
+          light
+          @click="sharFoot = false">取消</cube-button>
+      </div>
     </div>
   </div>
 </template>
@@ -174,7 +215,8 @@ export default {
         companyPhoto:
         [ { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg', title: '12323' }
         ]
-      }
+      },
+      sharFoot: false
     }
   },
   computed: {
@@ -208,11 +250,11 @@ export default {
       }
       return imageListInit
     },
-    share () {
-      this.$router.push({ name: 'company-edit' })
-    },
     previewPic (imgs, index = 0) {
       this.$router.push({ name: 'image-preview', params: { imgs: [this.companyInfo.logoUrl], index: 0 } })
+    },
+    sharePath () {
+      alert(11)
     }
   }
 }
