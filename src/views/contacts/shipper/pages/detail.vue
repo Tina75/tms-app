@@ -48,7 +48,7 @@
 
 <script>
 import CellItem from '../../components/CellItem.vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { ContactDetail } from '../modules/model'
 const moudleName = 'contacts/shipper'
 const ListConfig = [
@@ -67,8 +67,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapState(moudleName, ['contactList', 'operator']),
-    ...mapGetters(moudleName, ['contactDetail']),
+    ...mapState(moudleName, ['contactDetail', 'operator']),
     viewData() {
       return ContactDetail.toView(this.contactDetail, this.operator)
     },
@@ -91,6 +90,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions(moudleName, ['loadContactDetail']),
+    onPageRefresh() {
+      this.loadContactDetail()
+    },
     phoneCall() {
       window.location.href = `tel:${this.viewData.phone}`
     }
