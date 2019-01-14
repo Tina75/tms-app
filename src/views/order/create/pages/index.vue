@@ -1,5 +1,5 @@
 <template>
-  <div class="create-order-page scroll-list-wrap">
+  <div class="create-order-page">
     <cube-scroll class="scroll-box">
       <cube-button primary @click="$router.push({ name: 'order-often' })">常发订单</cube-button>
       <form-group ref="$form" class="form" :rules="rules">
@@ -13,7 +13,7 @@
             required
             label="客户名称"
             autofocus
-            maxlength="11"
+            maxlength="20"
             click-icon="icon-ico_custerm"
             @on-icon-click="selectSender" />
           <form-item
@@ -25,8 +25,8 @@
             v-model="orderInfo.consignerPhone"
             prop="consignerPhone"
             label="联系号码"
-            type="number"
-            maxlength="20" />
+            maxlength="20"
+            @input="consignerPhoneInputHandler" />
           <form-item
             v-model="orderInfo.consignerCity"
             label="发货城市"
@@ -64,8 +64,8 @@
             v-model="orderInfo.consigneePhone"
             prop="consigneePhone"
             label="联系号码"
-            type="number"
-            maxlength="20" />
+            maxlength="20"
+            @input="consigneePhoneInputHandler" />
           <form-item
             v-model="orderInfo.consigneeCity"
             label="收货城市"
@@ -160,11 +160,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import CreateFooter from '../components/CreateFooter'
 import { FormGroup, FormItem, FormTitle } from '@/components/Form'
 import CityPicker from '@/components/CityPicker'
-import { SETTLEMENT_TYPE, PICKUP_TYPE } from '../js/constant'
+import { SETTLEMENT_TYPE, PICKUP_TYPE } from '../../js/constant'
+import { validatePhone, formatPhone } from '@/views/contacts/consignee/modules/model'
 
 const IMAGES = {
   ACCEPT: require('../assets/accept.png'),
@@ -179,6 +180,9 @@ export default {
   metaInfo: { title: '手工开单' },
   components: { FormGroup, FormItem, FormTitle, CreateFooter, CityPicker },
   data () {
+    const phoneValidate = validatePhone
+    const phoneMessage = { phoneValidate: '手机号格式不正确' }
+
     return {
       IMAGES,
       cityPickerType: '',
@@ -205,10 +209,10 @@ export default {
         //   }
         // },
         consignerName: { required: true, type: 'string' },
-        consignerPhone: { required: true, type: 'number' },
+        consignerPhone: { required: true, type: 'string', phoneValidate, messages: phoneMessage },
         consignerAddress: { required: true, type: 'string' },
         consigneeName: { required: true, type: 'string' },
-        consigneePhone: { required: true, type: 'number' },
+        consigneePhone: { required: true, type: 'string', phoneValidate, messages: phoneMessage },
         consigneeAddress: { required: true, type: 'string' },
         cargoInfo: { required: true, type: 'string' },
         settlementType: { required: true, type: 'number' },
@@ -219,7 +223,7 @@ export default {
   },
   computed: {
     ...mapGetters('order/create', [ 'orderInfo' ]),
-    ...mapGetters('contacts/consignee', [ 'saveConsigner' ]),
+    ...mapState('contacts/consignee', [ 'saveConsigner' ]),
 
     showCityPicker: {
       get: function () { return !!this.cityPickerType },
@@ -227,6 +231,7 @@ export default {
     }
   },
   methods: {
+    // 选择省市区
     pickCity (data) {
       const cityName = Array.from(new Set(data.map(item => item.name))).join('')
       if (this.cityPickerType === 'send') this.orderInfo.consignerCity = cityName
@@ -258,6 +263,37 @@ export default {
 
     editAddress () {
       this.$router.push({ name: 'order-edit-address' })
+    },
+
+    // 联系电话格式化
+    consignerPhoneInputHandler (phone) {
+      this.phoneFormatter(phone, 'consignerPhone')
+    },
+    consigneePhoneInputHandler (phone) {
+      this.phoneFormatter(phone, 'consigneePhone')
+    },
+    phoneFormatter (phone, field) {
+      if (!phone || phone[0] !== '1') return
+      phone = phone.trim().split(' ').join('')
+      let phoneArr = []
+      let phoneTemp = ''
+      for (let i in phone) {
+        i = Number(i)
+        phoneTemp += phone[i]
+        if (!phoneArr.length && i === 2) {
+          phoneArr.push(phoneTemp)
+          phoneTemp = ''
+        } else if (phoneTemp.length === 4) {
+          phoneArr.push(phoneTemp)
+          phoneTemp = ''
+        } else if (i === (phone.length - 1)) {
+          phoneArr.push(phoneTemp)
+          phoneTemp = ''
+        }
+      }
+      this.$nextTick(() => {
+        this.orderInfo[field] = phoneArr.join(' ')
+      })
     },
 
     async saveOrder () {

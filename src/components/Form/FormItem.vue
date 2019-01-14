@@ -60,7 +60,7 @@
           <textarea
             v-if="type === 'textarea'"
             v-model="inputValue"
-            class="form-item-input"
+            class="form-item-input form-item-textarea"
             :rows="rows"
             :placeholder="inputPlaceHolder"
             :maxlength="inputMaxLength"
@@ -88,6 +88,7 @@
       </div>
 
       <cube-validator
+        v-if="rule"
         ref="$validator"
         v-model="valid"
         :model="inputValue"
@@ -121,7 +122,7 @@ export default {
       picker: null,
 
       valid: void 0,
-      rule: {}
+      rule: null
     }
   },
   computed: {
@@ -130,7 +131,7 @@ export default {
       else return 'text'
     },
     inputRequired () {
-      return !!this.rule.required
+      return !!this.rule && !!this.rule.required
     },
     inputReadonly () { return this.type === 'click' || this.readonly },
     inputDisabled () { return this.disabled },
@@ -194,13 +195,14 @@ export default {
     rulesParser () {
       if (!this.prop || !this.rules) return
       this.rule = this.rules[this.prop]
-      if (!this.rule.messages) return
+      if (!this.rule || !this.rule.messages) return
       for (let key in this.rule.messages) {
         Validator.addMessage(key, this.rule.messages[key])
       }
     },
     async doValidate () {
-      const valid = this.$refs.$validator.validate()
+      if (!this.rule) return true
+      const valid = await this.$refs.$validator.validate()
       this.valid = valid
       return valid
     }
@@ -324,7 +326,8 @@ export default {
 <style lang="stylus">
   .form-item-box .cube-validator-msg
     padding-right 16px
-    padding-bottom: 5px;
+    // padding-bottom: 5px; 无值也会有占位
+    line-height 20px
     text-align right
     font-size 12px
 
@@ -351,4 +354,7 @@ export default {
       text-align right
     &-align-center, &-align-center input
       text-align center
+
+  .form-item-textarea
+    resize none
 </style>

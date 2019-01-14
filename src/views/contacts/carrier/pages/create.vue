@@ -1,143 +1,82 @@
 <template>
-  <div class="carrier-create">
-    <form-item
-      v-model="form.carrierName"
-      :maxlength="20"
-      label="承运商名称"
-      required
-    />
-    <form-item
-      v-model="form.carrierPrincipal"
-      :maxlength="15"
-      label="负责人"
-      required
-    />
-    <form-item
-      v-model="form.carrierPhone"
-      :maxlength="11"
-      label="联系电话"
-      required
-    />
-    <form-item
-      v-model="payTypePicker"
-      type="click"
-      label="结算方式"
-      @on-click="openSelector"
-    />
-
-    <div class="split-line" />
-
-    <form-item
-      v-model="form.remark"
-      label="备注"
-      type="textarea"
-      placeholder="请输入（最多输入100字）"
-      maxlength="100"
-    />
-
-    <div class="fixed-button">
-      <cube-button :primary="true">确定</cube-button>
-    </div>
+  <div class="cube-has-bottom-btn cube-pt-10">
+    <FromGroup :rules="rules" >
+      <FormItem v-model="model.carrierName" label="承运商名称" maxlength="20" prop="require"/>
+      <FormItem v-model="model.carrierPrincipal" label="负责人" maxlength="15" prop="require"/>
+      <FormItem
+        v-model="model.carrierPhone"
+        label="联系电话"
+        prop="require"
+      />
+      <FormItem
+        v-model="model.payType"
+        label="结算方式"
+        placeholder="请选择"
+        type="select"
+        class="cube-mb-15"
+        :bottom-line="false"
+        :options="options.payType"
+      />
+      <FormItem v-model="model.remark" maxlength="200" type="textarea" label="备注"/>
+    </FromGroup>
+    <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
   </div>
 </template>
-
 <script>
-import { mapActions } from 'vuex'
-import { FormItem } from '@/components/Form'
-
-const payTypeConf = [
-  { text: '按单结', value: '1' },
-  { text: '月结', value: '2' }
-]
-
+import { mapActions, mapState, mapGetters } from 'vuex'
+import LoadingButton from '@/components/LoadingButton'
+import FromGroup from '@/components/Form/FormGroup'
+import FormItem from '@/components/Form/FormItem'
+import { ContactDetail } from '../modules/model'
+const moudleName = 'contacts/carrier'
 export default {
-  name: 'CarrierCreate',
-
-  metaInfo: { title: '新增承运商' },
-
-  components: { FormItem },
-
-  data () {
+  name: 'ModifyContactsCarrier',
+  metaInfo() {
     return {
-      form: {
-        carrierName: '',
-        carrierPrincipal: '',
-        carrierPhone: '',
-        payType: '',
-        remark: ''
+      title: this.isCreate ? '新增承运商' : '修改承运商'
+    }
+  },
+  components: { FormItem, FromGroup, LoadingButton },
+  data() {
+    return {
+      model: new ContactDetail(),
+      options: {
+        payType: ContactDetail.payType
       },
-
-      payTypePicker: ''
-    }
-  },
-
-  computed: {
-    // validator
-    validateCarrierName () {
-      return /^\s{20}$/ig.test(this.form.carrierName)
-    },
-    validateCarrierPrincipal () {
-      return /^\s{15}$/ig.test(this.form.carrierPrincipal)
-    }
-  },
-
-  methods: {
-    ...mapActions([ 'createCarrier' ]),
-
-    /* 打开结算方式选择器 */
-    openSelector () {
-      if (!this.picker) {
-        this.picker = this.$createPicker({
-          title: '结算方式',
-          data: [ payTypeConf ],
-          onSelect: this.handleSelected
-        })
-      }
-      this.picker.show()
-    },
-
-    /* 结算方式选中 */
-    handleSelected (selectedVal, selectedIndex, selectedText) {
-      this.payTypePicker = selectedText.shift()
-      this.form.payType = selectedVal.shift()
-    },
-
-    /* 清空表单 */
-    clearForm () {
-      this.form = {
-        ...{
-          carrierName: '',
-          carrierPrincipal: '',
-          carrierPhone: '',
-          payType: '',
-          remark: ''
+      rules: {
+        require: {
+          required: true
         }
+      },
+      submiting: false
+    }
+  },
+  computed: {
+    ...mapGetters(moudleName, ['contactDetail']),
+    isCreate() {
+      return !this.contactDetail.id
+    }
+  },
+  methods: {
+    ...mapActions(moudleName, ['modifyContact']),
+    async submit() {
+      this.submiting = true
+      try {
+        await this.modifyContact(ContactDetail.toServer(this.model))
+        this.$refreshPage('contacts-carrier', 'contacts-carrier-detail')
+      } catch (e) {
+        console.error(e)
+      } finally {
+        this.submiting = false
       }
     },
-
-    /* 校验表单 */
-    validateForm () {
-
-    },
-
-    /* 提交表单 */
-    handleSubmit () {
-
+    onRefreshPage() {
+      this.model = this.isCreate
+        ? new ContactDetail()
+        : ContactDetail.toFrom(this.contactDetail)
     }
   }
 }
 </script>
-
-<style lang="stylus" scoped>
-.carrier-create
-  padding-top 10px
-.fixed-button
-  position fixed
-  bottom 0
-  left 0
-  right 0
-  z-index 100
-.split-line
-  margin-top 15px
-  background transparent
+<style lang='stylus' >
 </style>
