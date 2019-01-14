@@ -19,7 +19,7 @@
 <script>
 export default {
   name: 'odd-upload',
-  metaInfo: { title: '图片展示' },
+  metaInfo: { title: '公司设置' },
   props: {
     uploadPhotos: {
       type: Array,

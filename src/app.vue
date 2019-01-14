@@ -63,6 +63,12 @@ html,body
   background #F3F3F3
   *
     box-sizing border-box
+.icon
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
 
   // .page
   //   position: absolute

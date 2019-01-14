@@ -4,29 +4,29 @@ import { InfinateListFactory, DetailFactory } from '@/libs/factory/store'
 const store = {
   namespaced: true,
   state: {
-    operator: [] // 业务员
+    operator: [], // 业务员
+    contactDetail: {} // 发货人详情
   },
   mutations: {
-    setOperatpr: (state, payload = []) => (state.operator = payload)
+    setOperatpr: (state, payload = []) => (state.operator = payload),
+    setContactDetail: (state, payload) => (state.contactDetail = payload)
   },
   actions: {
     syncButtOperator: ({ state, commit }) =>
       Server({ method: 'get', url: '/permission/buttOperator' }).then((response) =>
         commit('setOperatpr', response.data.data)
-      )
+      ),
+    loadContactDetail: ({ rootState, commit }) =>
+      Server({
+        method: 'get',
+        url: '/consigner/detail',
+        loading: true,
+        params: { id: rootState.route.query.consignerId }
+      }).then((response) => commit('setContactDetail', response.data.data))
   },
-  getters: {
-    contactDetail(state, getters, rootState) {
-      const list = state.contactList.list
-      const id = +rootState.route.query.consignerId
-      if (id) {
-        const detail = list.find((item) => item.id === id) || { data: {} }
-        return detail.data
-      }
-      return {}
-    }
-  }
+  getters: {}
 }
+
 // -----下拉列表-----
 const lists = [
   {

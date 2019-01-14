@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-import Upload from '@/components/Updalod'
+import Upload from '@/components/Upload'
 import { FormItem } from '@/components/Form'
 export default {
   name: 'recept-upload',

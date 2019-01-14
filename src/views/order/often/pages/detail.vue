@@ -108,5 +108,3 @@ export default {
         height 0
         visibility: hidden
 </style>
-
-

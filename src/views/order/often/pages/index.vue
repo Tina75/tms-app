@@ -209,4 +209,3 @@ export default {
       span
         margin-right 12px
 </style>
-

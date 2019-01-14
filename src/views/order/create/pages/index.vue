@@ -160,11 +160,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import CreateFooter from '../components/CreateFooter'
 import { FormGroup, FormItem, FormTitle } from '@/components/Form'
 import CityPicker from '@/components/CityPicker'
 import { SETTLEMENT_TYPE, PICKUP_TYPE } from '../../js/constant'
+import { validatePhone, formatPhone } from '@/views/contacts/consignee/modules/model'
 
 const IMAGES = {
   ACCEPT: require('../assets/accept.png'),
@@ -179,12 +180,8 @@ export default {
   metaInfo: { title: '手工开单' },
   components: { FormGroup, FormItem, FormTitle, CreateFooter, CityPicker },
   data () {
-    const phoneReg = val => {
-      const v = /(\d|\-|\(|\)|\（|\）|\s){1,20}/.test(val)
-      console.log(v, val)
-      return v
-    }
-    const phoneMessage = { phoneReg: '手机号格式不正确' }
+    const phoneValidate = validatePhone
+    const phoneMessage = { phoneValidate: '手机号格式不正确' }
 
     return {
       IMAGES,
@@ -212,10 +209,10 @@ export default {
         //   }
         // },
         consignerName: { required: true, type: 'string' },
-        consignerPhone: { required: true, type: 'string', phoneReg, messages: phoneMessage },
+        consignerPhone: { required: true, type: 'string', phoneValidate, messages: phoneMessage },
         consignerAddress: { required: true, type: 'string' },
         consigneeName: { required: true, type: 'string' },
-        consigneePhone: { required: true, type: 'string', phoneReg, messages: phoneMessage },
+        consigneePhone: { required: true, type: 'string', phoneValidate, messages: phoneMessage },
         consigneeAddress: { required: true, type: 'string' },
         cargoInfo: { required: true, type: 'string' },
         settlementType: { required: true, type: 'number' },
@@ -226,7 +223,7 @@ export default {
   },
   computed: {
     ...mapGetters('order/create', [ 'orderInfo' ]),
-    ...mapGetters('contacts/consignee', [ 'saveConsigner' ]),
+    ...mapState('contacts/consignee', [ 'saveConsigner' ]),
 
     showCityPicker: {
       get: function () { return !!this.cityPickerType },
@@ -277,7 +274,26 @@ export default {
     },
     phoneFormatter (phone, field) {
       if (!phone || phone[0] !== '1') return
-
+      phone = phone.trim().split(' ').join('')
+      let phoneArr = []
+      let phoneTemp = ''
+      for (let i in phone) {
+        i = Number(i)
+        phoneTemp += phone[i]
+        if (!phoneArr.length && i === 2) {
+          phoneArr.push(phoneTemp)
+          phoneTemp = ''
+        } else if (phoneTemp.length === 4) {
+          phoneArr.push(phoneTemp)
+          phoneTemp = ''
+        } else if (i === (phone.length - 1)) {
+          phoneArr.push(phoneTemp)
+          phoneTemp = ''
+        }
+      }
+      this.$nextTick(() => {
+        this.orderInfo[field] = phoneArr.join(' ')
+      })
     },
 
     async saveOrder () {
