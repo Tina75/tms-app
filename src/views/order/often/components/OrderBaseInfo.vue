@@ -52,11 +52,10 @@
 // import { mapGetters, mapActions } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
-import IconFont from '@/components/Iconfont'
 
 export default {
   name: 'pickupInfo',
-  components: { detailPanel, detailPanelItem, IconFont },
+  components: { detailPanel, detailPanelItem },
   computed: {
     // ...mapGetters(['BePickingData']),
     options () {

@@ -9,7 +9,7 @@
             type="number"
             precision="4" />
           <form-item
-            v-model="form.uploadFee"
+            v-model="form.loadFee"
             label="装货费用(元)"
             type="number"
             precision="4" />
@@ -19,7 +19,7 @@
             type="number"
             precision="4" />
           <form-item
-            v-model="form.ensuranceFee"
+            v-model="form.insuranceFee"
             label="保险费用(元)"
             type="number"
             precision="4" />
@@ -54,9 +54,9 @@ export default {
     return {
       form: {
         pickupFee: '',
-        uploadFee: '',
+        loadFee: '',
         unloadFee: '',
-        ensuranceFee: '',
+        insuranceFee: '',
         otherFee: ''
       }
     }
@@ -66,7 +66,7 @@ export default {
       'feeInfo'
     ]),
     total () {
-      return NP.plus(this.form.pickupFee, this.form.uploadFee, this.form.unloadFee, this.form.ensuranceFee, this.form.otherFee)
+      return NP.plus(this.form.pickupFee, this.form.loadFee, this.form.unloadFee, this.form.insuranceFee, this.form.otherFee)
     }
   },
   methods: {

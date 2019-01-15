@@ -1,25 +1,23 @@
 <template>
   <div class="cargo-info-size-dialog">
     <cube-input
-      class="cargo-info-size-dialog-item"
       v-model="length"
+      class="cargo-info-size-dialog-item"
       type="number"
       placeholder="长"
       autofocus
       @blur="inputBlurHandler" />
     <cube-input
-      class="cargo-info-size-dialog-item"
       v-model="width"
+      class="cargo-info-size-dialog-item"
       type="number"
       placeholder="宽"
-      autofocus
       @blur="inputBlurHandler" />
     <cube-input
-      class="cargo-info-size-dialog-item"
       v-model="height"
+      class="cargo-info-size-dialog-item"
       type="number"
       placeholder="高"
-      autofocus
       @blur="inputBlurHandler" />
   </div>
 </template>
@@ -51,7 +49,7 @@ export default {
         return
       }
       const number = precesion(val, 1)
-      if (number !== val) this.$nextTick(() => { this[field]  = number })
+      if (number !== val) this.$nextTick(() => { this[field] = number })
     }
   }
 }
@@ -68,5 +66,3 @@ export default {
       >>> input
         text-align center
 </style>
-
-

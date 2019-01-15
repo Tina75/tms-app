@@ -37,7 +37,7 @@ export const editPhone = (value) => {
 export class ConsigneeDetail {
   // id = ''
   longitude = '' // 经度
-  latitude =  '' // 纬度
+  latitude = '' // 纬度
   mapType = 1
   address = '' // 收货详细地址
   consigneeCompanyName = '' // 收货人单位
