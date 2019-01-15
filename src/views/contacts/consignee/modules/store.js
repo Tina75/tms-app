@@ -1,15 +1,32 @@
 import Server from '@/libs/server'
+import { ConsigneeDetail } from './model'
 import { InfinateListFactory, DetailFactory } from '@/libs/factory/store'
 
 const store = {
   namespaced: true,
   state: {
     saveConsigner: {}, // 存储所属发货方
-    consigneeDetail: {}
+    consigneeDetail: {},
+    formList: {
+      id: '',
+      address: '',
+      cityCode: '',
+      cityName: '',
+      consigneeCompanyName: '',
+      consignerId: '',
+      consignerName: '',
+      contact: '',
+      latitude: '',
+      longitude: '',
+      mapType: 1,
+      phone: '',
+      remark: ''
+    }
   },
   mutations: {
     saveConsigner: (state, payload = {}) => { state.saveConsigner = payload },
-    setConsigneeDetail: (state, payload = {}) => { state.consigneeDetail = payload }
+    setConsigneeDetail: (state, payload = {}) => { state.consigneeDetail = payload },
+    formList: (state, payload) => { state.formList = payload }
   },
   actions: {
     saveConsignerInfo: ({ state, commit }, data = {}) => {
@@ -22,9 +39,15 @@ const store = {
         loading: true,
         params: { id: rootState.route.query.consigneeId }
       }).then((response) => commit('setConsigneeDetail', response.data.data))
+    },
+    clearForm: ({ commit }) => {
+      const data = new ConsigneeDetail()
+      commit('formList', data)
     }
   },
-  getters: {}
+  getters: {
+    formList: (state) => state.formList
+  }
 }
 // -----下拉列表-----
 const lists = [
@@ -34,7 +57,6 @@ const lists = [
     url: '/consigner/consignee/list',
     itemParser: (data) => ({
       id: data.id,
-
       name: data.contact + '  ' + data.phone,
       detail: data.cityName ? data.cityName + data.address : data.address,
       phone: data.phone,

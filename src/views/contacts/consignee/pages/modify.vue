@@ -21,7 +21,7 @@
           :maxlength="15"
         />
         <form-item
-          :value="viewPhone"
+          v-model="form.phone"
           :show-required-toast="false"
           prop="viewPhone"
           label="联系电话"
@@ -63,15 +63,11 @@
         确定
       </cube-button>
     </div>
-    <CityPicker
-      v-model="showPickCity"
-      @confirm="citySelect"/>
   </div>
 </template>
 <script>
 import { FormGroup, FormItem } from '@/components/Form'
-import CityPicker from '@/components/CityPicker'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import { validatePhone, formatPhone, ConsigneeDetail, editPhone } from '../modules/model'
 const moudleName = 'contacts/consignee'
 export default {
@@ -81,14 +77,13 @@ export default {
       title: this.isEdit ? '新增收货方' : '编辑收货方'
     }
   },
-  components: { CityPicker, FormItem, FormGroup },
+  components: { FormItem, FormGroup },
   data() {
     return {
       formatPhone,
       editPhone,
-      form: new ConsigneeDetail(),
+      form: {},
       showPickCity: false,
-      viewPhone: '',
       rules: {
         consigner: { required: true },
         contact: { required: true },
@@ -106,15 +101,15 @@ export default {
   },
   computed: {
     ...mapState(moudleName, ['saveConsigner', 'consigneeDetail']),
+    ...mapGetters(moudleName, ['formList']),
     isEdit () {
       return !this.$route.query.consigneeId
     }
   },
   methods: {
-    ...mapActions(moudleName, ['saveConsignerInfo', 'modifyConsignee', 'loadConsigneeDetail']),
+    ...mapActions(moudleName, ['saveConsignerInfo', 'modifyConsignee', 'loadConsigneeDetail', 'clearForm']),
     async onPageRefresh() {
-      this.form = new ConsigneeDetail()
-      this.viewPhone = ''
+      this.form = this.formList
       this.setSender()
       console.log(!this.isEdit)
       if (!this.isEdit) {
@@ -137,21 +132,11 @@ export default {
         this.form.consignerName = this.saveConsigner.name
       }
     },
-    citySelect (picker) {
-      console.log(picker)
-      if (picker[0].name === picker[1].name) {
-        this.form.cityName = picker[1].name + picker[2].name
-      } else {
-        this.form.cityName = picker[0].name + picker[1].name + picker[2].name
-      }
-      this.form.cityCode = picker[2].code
-    },
     formatTel (value) {
-      this.viewPhone = this.formatPhone(value)
-      this.form.phone = this.viewPhone.replace(/\s/g, '')
+      this.form.phone = this.formatPhone(value)
     },
     editTel (value) {
-      this.viewPhone = this.editPhone(value)
+      this.form.phone = this.editPhone(value)
     },
     async submit () {
       const consignerId = this.saveConsigner.id ? this.saveConsigner.id : this.form.consignerId
@@ -159,6 +144,9 @@ export default {
       console.log(data)
       // await this.$refs.$form.validate()
       // await this.modifyConsignee(data)
+      // this.$refreshPage('contacts-consignee', 'contacts-consignee-detail')
+      // this.clearForm()
+      // this.$router.back()
     },
     goToAddress () {
       this.$router.push({ name: 'contacts-address' })

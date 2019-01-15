@@ -35,7 +35,7 @@ export const editPhone = (value) => {
   }
 }
 export class ConsigneeDetail {
-  // id = ''
+  id = ''
   longitude = '' // 经度
   latitude = '' // 纬度
   mapType = 1
@@ -73,7 +73,7 @@ export class ConsigneeDetail {
       latitude: data.latitude,
       longitude: data.longitude,
       mapType: data.mapType,
-      phone: data.phone,
+      phone: data.phone.replace(/\s/g, ''),
       remark: data.remark,
       id: data.id,
       cityCode: data.cityCode

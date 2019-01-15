@@ -52,9 +52,9 @@ export default {
   computed: mapState(moudleName, ['consigneeList']),
   methods: {
     ...mapActions(moudleName, ['loadConsigneeList']),
-    loader(refresh) {
-      this.loadContactList(refresh)
-    },
+    // loader(refresh) {
+    //   this.loadContactList(refresh)
+    // },
     onPageRefresh() {
       console.info('onPageRefresh')
       this.loading = true
