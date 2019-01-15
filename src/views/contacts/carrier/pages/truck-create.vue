@@ -98,7 +98,7 @@ export default {
     onRefreshPage() {
       this.model = this.isCreate
         ? new ContactDetail()
-        : ContactDetail.toFrom(this.contactDetail)
+        : ContactDetail.toForm(this.contactDetail)
     }
   }
 }

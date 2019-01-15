@@ -42,12 +42,13 @@ export class ContactDetail {
     return data
   }
   // 后端接口 => from表单格式
-  static toFrom(data) {
+  static toForm(data) {
     data = { ...data }
     // cube-switch 需要boolean类型 防止报错
     data.isInvoice = !!data.isInvoice
     // 后端是0.xx 前端显示xx%
     data.invoiceRate = +data.invoiceRate * 100
+    data.salesmanId = data.salesmanId || ''
     return data
   }
 
@@ -77,4 +78,15 @@ export class CargoDetail {
   volume = '' // 体积
   remark1 = ''
   remark2 = ''
+}
+
+export class AddressDetail {
+  id = ''
+  address = '' // 详细地址
+  cityName = ''
+  cityCode = ''
+  longitude = ''
+  latitude = ''
+  mapType = '' // 1百度地图；2高德地图
+  consignerHourseNumber = '' // 门牌号
 }

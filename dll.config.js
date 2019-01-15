@@ -13,7 +13,8 @@ const dlls = [
   'axios',
   'ali-oss',
   'dayjs',
-  'number-precision'
+  'number-precision',
+  'vue-clipboard2'
 ]
 // const polyfill = ['core-js']
 

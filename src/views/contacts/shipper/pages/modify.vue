@@ -120,7 +120,8 @@ export default {
         if (urlId !== +this.contactDetail.id) {
           await this.loadContactDetail()
         }
-        this.model = ContactDetail.toFrom(this.contactDetail)
+        this.model = ContactDetail.toForm(this.contactDetail)
+        console.info(this.model)
       }
     },
     async loadOperators() {
