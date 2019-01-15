@@ -116,7 +116,8 @@ export default {
       size: { length: '', width: '', height: '' },
       unit: '',
       rules: {
-        cargoName: { required: true, type: 'string' }
+        cargoName: { required: true, type: 'string' },
+        weightKg: { type: 'number', min: 0 }
       }
     }
   },
