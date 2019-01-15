@@ -1,40 +1,40 @@
 <template>
   <cube-scroll
     ref="scroll"
-    :data="dispatchingData.list"
+    :data="pickingData.list"
     :options="options"
     @pulling-down="onPullingDown"
     @pulling-up="onPullingUp">
     <ul class="order-wrapper">
       <li
-        v-for="(item, index) in dispatchingData.list"
+        v-for="(item, index) in pickingData.list"
         :key="index"
         class="order-item">
         <div class="item-header border-bottom-1px">
-          <span>{{item.createTime}}</span>
+          <span>{{item.createTime|datetimeFormat}}</span>
           <i v-if="item.collectionMoney">3</i>
         </div>
         <div class="item-content border-bottom-1px">
           <p class="order-route">
-            <span>{{item.start}}</span>
-            <i></i>
-            <span>{{item.end}}</span>
+            <span>{{item.pickupNo}}</span>
           </p>
           <p class="order-stat">
             <span v-if="item.weight">{{item.weight}}吨</span>
             <span v-if="item.volume">{{item.volume}}方</span>
             <span v-if="item.quantity">{{item.quantity}}件</span>
           </p>
-          <p class="order-custom">
-            {{item.consignerName}}
+          <p v-if="item.assignCarType === 1" class="order-custom">
+            {{item.carrierName}}
           </p>
           <p class="order-custom">
-            客户单号：{{item.customerOrderNo}}
+            <i class="assign-type">{{item.assignCarType === 2 ? '自送' : '外转'}}</i>
+            <span>{{item.driverName}}</span>
+            <span>{{item.carNo}}</span>
           </p>
         </div>
         <div class="item-footer">
           <div class="order-cost">
-            <p class="cost-label">应收费用（{{item.settlementType}}）</p>
+            <p class="cost-label">应收费用（{{settlementTypeMap[item.settlementType]}}）</p>
             <p class="cost-money">{{item.totalFee}}<span>/元</span></p>
           </div>
           <div class="order-btns">
@@ -52,24 +52,30 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'pickup',
   computed: {
-    ...mapGetters(['dispatchingData']),
+    ...mapGetters(['pickingData', 'settlementTypeMap']),
     options () {
       return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
+        pullDownRefresh: {
+          txt: '刷新成功'
+        },
+        pullUpLoad: this.pickingData.next,
         scrollbar: true
       }
     }
   },
+  mounted () {
+    this.getPicking()
+  },
   methods: {
-    ...mapActions(['getDispatching']),
+    ...mapActions(['setPageStart', 'getPicking']),
     /** 下拉刷新 */
     async onPullingDown () {
-      this.getDispatching()
+      this.setPageStart('pickingData')
+      this.getPicking()
     },
     /** 上拉加载 */
     async onPullingUp () {
-      this.getDispatching()
+      this.getPicking()
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -126,6 +132,19 @@ export default {
       font-size: 14px;
       line-height: 20px;
       color: #666666;
+      i
+        display: inline-block
+        vertical-align: middle
+        padding: 0 5px
+        font-size: 12px;
+        font-style normal
+        line-height: 17px;
+        border: 1px solid #999999;
+        margin-right: 10px;
+      span
+        display: inline-block
+        vertical-align: middle
+        margin-right: 10px;
   .item-footer
     padding-top: 10px;
     display: flex
