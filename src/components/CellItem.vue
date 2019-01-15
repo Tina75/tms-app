@@ -8,7 +8,7 @@
     </div>
     <icon-font
       v-if="linkIcon || route"
-      name="yzg-gengduo-huidanzhao"
+      name="icon-ico_right"
       :size="12"
       color="#ADADAD"
       class="link-icon"/>
