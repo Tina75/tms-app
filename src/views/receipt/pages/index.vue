@@ -1,36 +1,42 @@
 <template>
-  <div class="receipt-order">
+  <div class="receipt page">
     <div class="header">
-      <Title>回单管理</Title>
       <cube-tab-bar
         v-model="selectedLabel"
         :data="tabs"
         show-slider
-        class="tab-bar"
-        @click="clickHandler"
-        @change="changeHandler"/>
+        class="tab-bar"/>
     </div>
     <div class="list-bar">
-      <Card
-        v-for="(el, index) in cardList"
-        :key="index"
-        :data="el"
-        @click.native="toDetail(el.shipperOrderId)"/>
+      <cube-tab-panels v-model="selectedLabel">
+        <cube-tab-panel v-for="(item) in tabs" :key="item.label" :label="item.label">
+          <cube-scroll
+            ref="scroll"
+            :data="cardList"
+            :options="scrollOptions"
+            @pulling-down="onPullingDown"
+            @pulling-up="onPullingUp">
+            <Card
+              v-for="(el, index) in cardList"
+              :key="index"
+              :data="el"
+              @card-action="handleClick"
+              @click.native="toDetail(el.shipperOrderId)"/>
+          </cube-scroll>
+        </cube-tab-panel>
+      </cube-tab-panels>
     </div>
   </div>
 </template>
 <script>
-import Title from '@/views/upstream/components/Title'
 import Card from '../components/Card'
-import Server from '@/libs/server'
-import router from '@/router'
+import * as Api from '../libs/api'
 export default {
-  name: 'receipt-order',
+  name: 'receipt',
   metaInfo: {
-    title: 'receiptOrder'
+    title: 'receipt'
   },
   components: {
-    Title,
     Card
   },
   data () {
@@ -51,8 +57,13 @@ export default {
         }
       ],
       cardList: [],
+      scrollOptions: {
+        pullDownRefresh: true,
+        pullUpLoad: true,
+        directionLockThreshold: 0
+      },
       keywords: {
-        pageNo: 0,
+        pageNo: 1,
         pageSize: 10
       }
     }
@@ -62,32 +73,32 @@ export default {
   },
   methods: {
     initList () {
-      Server({
-        mock: true,
-        method: 'post',
-        url: '/busconnector/shipper/list',
-        params: this.keywords
-      }).then(response => {
-        console.log(response)
-        this.cardList = response.data.data.list
-      })
+      Api.initList(this.keywords)
+        .then(response => {
+          this.cardList = response.data.data.list
+        })
     },
-    clickHandler (label) {
+    onPullingDown () {
+      this.initList()
     },
-    changeHandler (label) {
+    onPullingUp () {
+      this.keywords.pageNo += 1
+      Api.initList(this.keywords)
+        .then(response => {
+          this.cardList = this.cardList.concat(response.data.data.list)
+        })
     },
     toDetail (id) {
       // 路由跳转
-      router.push({
+      this.$router.push({
         params: {
           id
         },
         name: 'upstream-detail'
       })
     },
-    changePage (current) {
-      debugger
-      this.selectedLabel = this.tabs[current]
+    handleClick () {
+
     },
     // 接受
     recept () {},
@@ -103,4 +114,16 @@ export default {
   background white
   height 50px
   font-size 15px
+.list-bar
+    height calc(100% - 50px)
+    overflow-y auto
+</style>
+<style lang="stylus">
+.receipt
+  .cube-tab-panels-group
+    height 100%
+  .cube-tab-panels
+    height 100%
+  .cube-tab-panel
+    height 100%
 </style>

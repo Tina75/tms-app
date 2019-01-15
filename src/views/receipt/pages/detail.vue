@@ -112,14 +112,14 @@
   </div>
 </template>
 <script>
-import Panel from '../components/Panel'
-import FormItem from '../components/FormItem'
-import StatusBar from '../components/StatusBar'
-import Cargo from '../components/Cargo'
+import Panel from '@/views/upstream/components/Panel'
+import FormItem from '@/views/upstream/components/FormItem'
+import StatusBar from '@/views/upstream/components/StatusBar'
+import Cargo from '@/views/upstream/components/Cargo'
 import VueClipboard from 'vue-clipboard2'
 import Vue from 'vue'
-import { rateGet, money, mile } from '../libs'
-import * as API from '../libs/api'
+import { rateGet, money, mile } from '@/views/upstream/libs'
+import * as API from '@/views/upstream/libs/api'
 Vue.use(VueClipboard)
 
 export default {

@@ -8,6 +8,11 @@ export default [
     component: () => import(/* webpackChunkName: "回单tab" */'./pages/index.vue')
   },
   {
+    path: '/receipt/:id',
+    name: 'receipt-detail',
+    component: () => import(/* webpackChunkName: "回单tab" */'./pages/detail.vue')
+  },
+  {
     path: '/receipt/upload',
     name: 'receipt-upload',
     component: () => import(/* webpackChunkName: "回单tab" */'./pages/upload.vue')
