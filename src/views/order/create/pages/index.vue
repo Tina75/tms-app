@@ -8,8 +8,8 @@
             title="发货方信息"
             :image="IMAGES.SEND" />
           <form-item
-            v-model="orderInfo.consignerCompany"
-            prop="consignerCompany"
+            v-model="orderInfo.consignerName"
+            prop="consignerName"
             required
             label="客户名称"
             autofocus
@@ -17,8 +17,8 @@
             click-icon="icon-ico_custerm"
             @on-icon-click="selectSender" />
           <form-item
-            v-model="orderInfo.consignerName"
-            prop="consignerName"
+            v-model="orderInfo.consignerContact"
+            prop="consignerContact"
             maxlength="15"
             label="发货人" />
           <form-item
@@ -47,8 +47,8 @@
             title="收货方信息"
             :image="IMAGES.ACCEPT" />
           <form-item
-            v-model="orderInfo.consigneeName"
-            prop="consigneeName"
+            v-model="orderInfo.consigneeContact"
+            prop="consigneeContact"
             label="收货人"
             maxlength="15"
             click-icon="icon-ico_custerm"
@@ -69,7 +69,7 @@
             type="click"
             @on-click="editAddress" />
           <form-item
-            v-model="orderInfo.consigneeCompany"
+            v-model="orderInfo.consigneeCompanyName"
             label="收货人单位"
             maxlength="50" />
         </div>
@@ -93,25 +93,25 @@
             :options="settlementOptions"
             label="结算方式" />
           <form-item
-            v-model="orderInfo.pickupType"
-            prop="pickupType"
+            v-model="orderInfo.pickup"
+            prop="pickup"
             type="select"
             label="提货方式"
             :options="pickupOptions" />
           <form-item
-            v-model="orderInfo.receiptNumber"
-            prop="receiptNumber"
+            v-model="orderInfo.receiptCount"
+            prop="receiptCount"
             type="number"
             label="回单数量(份)" />
         </div>
 
         <div class="form-section">
           <form-item
-            v-model="orderInfo.distance"
+            v-model="orderInfo.mileage"
             type="number"
             label="计费里程(公里)" />
           <form-item
-            v-model="orderInfo.transportFee"
+            v-model="orderInfo.freightFee"
             type="number"
             label="运输费用(元)"
             click-icon="icon-ico_rule"
@@ -144,9 +144,8 @@
 import { mapState, mapGetters } from 'vuex'
 import CreateFooter from '../components/CreateFooter'
 import { FormGroup, FormItem, FormTitle } from '@/components/Form'
-import CityPicker from '@/components/CityPicker'
 import { SETTLEMENT_TYPE, PICKUP_TYPE } from '../../js/constant'
-import { validatePhone, formatPhone } from '@/views/contacts/consignee/modules/model'
+import { validatePhone } from '@/views/contacts/consignee/modules/model'
 
 const IMAGES = {
   ACCEPT: require('../assets/accept.png'),
@@ -159,7 +158,7 @@ const IMAGES = {
 export default {
   name: 'order-create',
   metaInfo: { title: '手工开单' },
-  components: { FormGroup, FormItem, FormTitle, CreateFooter, CityPicker },
+  components: { FormGroup, FormItem, FormTitle, CreateFooter },
   data () {
     const phoneValidate = validatePhone
     const phoneMessage = { phoneValidate: '请输入正确的手机号或座机号' }
@@ -169,35 +168,20 @@ export default {
       settlementOptions: SETTLEMENT_TYPE,
       pickupOptions: PICKUP_TYPE,
       rules: {
-        consignerCompany: {
+        consignerName: {
           required: true,
           type: 'string'
-          // pattern
-          // custom
-          // message
         },
-        // consignerCompany: {
-        //   required: true,
-        //   type: 'email',
-        //   pattern: /didi.com$/,
-        //   other: (val) => {
-        //     return val.length >= 12
-        //   },
-        //   messages: {
-        //     pattern: 'The E-mail suffix need to be didi.com.',
-        //     other: 'The E-mail need contain at least 12 characters.'
-        //   }
-        // },
-        consignerName: { required: true, type: 'string' },
+        consignerContact: { required: true, type: 'string' },
         consignerPhone: { required: true, type: 'string', phoneValidate, messages: phoneMessage },
         consignerAddress: { required: true, type: 'string' },
-        consigneeName: { required: true, type: 'string' },
+        consigneeContact: { required: true, type: 'string' },
         consigneePhone: { required: true, type: 'string', phoneValidate, messages: phoneMessage },
         consigneeAddress: { required: true, type: 'string' },
         cargoInfo: { required: true, type: 'string' },
         settlementType: { required: true, type: 'number' },
-        pickupType: { required: true, type: 'number' },
-        receiptNumber: { required: true, type: 'number' }
+        pickup: { required: true, type: 'number' },
+        receiptCount: { required: true, type: 'number' }
       }
     }
   },
@@ -209,8 +193,8 @@ export default {
     // 设置选择后的收货人信息
     setSender () {
       if (this.saveConsigner.company) {
-        this.orderInfo.consignerCompany = this.saveConsigner.company
-        this.orderInfo.consignerName = this.saveConsigner.contact
+        this.orderInfo.consignerName = this.saveConsigner.company
+        this.orderInfo.consignerContact = this.saveConsigner.contact
         this.orderInfo.consignerPhone = this.saveConsigner.phone
       }
     },

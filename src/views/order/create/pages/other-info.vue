@@ -4,19 +4,19 @@
       <form-group>
         <div class="form-section">
           <form-item
-            v-model="form.needTicket"
+            v-model="isInvoice"
             label="是否开票"
             type="switch" />
           <form-item
-            v-if="form.needTicket"
-            v-model="form.rate"
+            v-if="isInvoice"
+            v-model="form.invoiceRate"
             label="开票税率(%)"
             type="number"
             precision="2" />
         </div>
         <div class="form-section">
           <form-item
-            v-model="form.replace"
+            v-model="form.collectionMoney"
             label="代收货款(元)"
             type="number"
             precision="4" />
@@ -45,10 +45,11 @@ export default {
   components: { FormGroup, FormItem },
   data () {
     return {
+      isInvoice: false,
       form: {
-        needTicket: false,
-        rate: '',
-        replace: '',
+        isInvoice: 0,
+        invoiceRate: '',
+        collectionMoney: '',
         remark: ''
       }
     }
@@ -57,6 +58,9 @@ export default {
     ...mapGetters('order/create', [
       'otherInfo'
     ])
+  },
+  watch: {
+    isInvoice (val) { this.form.isInvoice = Number(val) }
   },
   methods: {
     ...mapMutations('order/create', [ 'SET_OTHER_INFO' ]),
@@ -69,7 +73,7 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       for (let key in vm.form) {
-        if (key === 'needTicket') vm.form[key] = !!vm.otherInfo[key]
+        if (key === 'isInvoice') vm.form[key] = !!vm.otherInfo[key]
         else vm.form[key] = vm.otherInfo[key] === undefined ? '' : vm.otherInfo[key]
       }
     })

@@ -13,8 +13,8 @@
       @pulling-up="fetchData">
       <ul class="order-list">
         <li
-          class="order-list-item"
-          v-for="(item, index) in oftenList" :key="index"
+          v-for="(item, index) in oftenList"
+          :key="index" class="order-list-item"
           @click="$router.push({ name: 'order-often-detail' })">
           <p class="order-company order-container">{{ item.consignerName }}</p>
 
@@ -69,25 +69,7 @@ import NO_DATA from '@/assets/img-no-data.png'
 export default {
   name: 'order-often',
   metaInfo: { title: '常发订单' },
-  data () {
-    return {
-      NO_DATA,
-      loading: true,
-      noMore: false
-    }
-  },
   components: { MoneyLabel, NoData },
-  computed: {
-    ...mapGetters('order/often', [ 'pageNo', 'oftenList' ]),
-
-    options() {
-      return {
-        pullDownRefresh: { txt: '刷新成功' },
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
-  },
   filters: {
     settlementType (type) {
       for (let i in SETTLEMENT_TYPE) {
@@ -105,6 +87,24 @@ export default {
           order.pickupFee || 0
         ), 100
       )
+    }
+  },
+  data () {
+    return {
+      NO_DATA,
+      loading: true,
+      noMore: false
+    }
+  },
+  computed: {
+    ...mapGetters('order/often', [ 'pageNo', 'oftenList' ]),
+
+    options() {
+      return {
+        pullDownRefresh: { txt: '刷新成功' },
+        pullUpLoad: true,
+        scrollbar: true
+      }
     }
   },
   methods: {
@@ -128,8 +128,7 @@ export default {
 
     orderAdd (id) {},
     async orderDelete (id) {
-      const confirm = confirm('确认需要删除此常发订单？')
-      if (!confirm) return
+      if (!confirm('确认需要删除此常发订单？')) return
       await this.deleteOftenOrder(id)
       window.toast('删除成功')
     },

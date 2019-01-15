@@ -18,9 +18,9 @@ export default {
     state.feeInfo = payload
     state.orderInfo.otherFee = NP.plus(
       payload.pickupFee || 0,
-      payload.uploadFee || 0,
+      payload.loadFee || 0,
       payload.unloadFee || 0,
-      payload.ensuranceFee || 0,
+      payload.insuranceFee || 0,
       payload.otherFee || 0
     )
   },
@@ -31,5 +31,7 @@ export default {
   // 设置常发货物
   SET_CARGO_OFTEN: (state, payload) => { state.cargoOften = payload },
   // 清空常发货物
-  CLEAR_CARGO_OFTEN: (state, payload) => { state.cargoOften = null }
+  CLEAR_CARGO_OFTEN: (state, payload) => { state.cargoOften = null },
+  // 设置货物信息
+  SET_CARGO_LIST: (state, payload) => { state.orderCargoList = payload }
 }

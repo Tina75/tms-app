@@ -6,7 +6,7 @@ const store = {
     saveConsigner: {} // 存储所属发货方
   },
   mutations: {
-    saveConsigner: (state, payload = {}) => { state.saveConsigner = payload}
+    saveConsigner: (state, payload = {}) => { state.saveConsigner = payload }
   },
   actions: {
     saveConsignerInfo: ({ state, commit }, data) => {
