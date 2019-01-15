@@ -3,13 +3,33 @@
     <cube-scroll class="scroll-box">
       <form>
         <div class="form-section">
-          <form-item v-model="form.pickupFee" label="提货费用(元)" type="number" />
-          <form-item v-model="form.uploadFee" label="装货费用(元)" type="number" />
-          <form-item v-model="form.unloadFee" label="卸货费用(元)" type="number" />
-          <form-item v-model="form.ensuranceFee" label="保险费用(元)" type="number" />
+          <form-item
+            v-model="form.pickupFee"
+            label="提货费用(元)"
+            type="number"
+            precision="4" />
+          <form-item
+            v-model="form.loadFee"
+            label="装货费用(元)"
+            type="number"
+            precision="4" />
+          <form-item
+            v-model="form.unloadFee"
+            label="卸货费用(元)"
+            type="number"
+            precision="4" />
+          <form-item
+            v-model="form.insuranceFee"
+            label="保险费用(元)"
+            type="number"
+            precision="4" />
         </div>
         <div class="form-section">
-          <form-item v-model="form.otherFee" label="其它费用(元)" type="number" />
+          <form-item
+            v-model="form.otherFee"
+            label="其它费用(元)"
+            type="number"
+            precision="4" />
         </div>
       </form>
     </cube-scroll>
@@ -34,9 +54,9 @@ export default {
     return {
       form: {
         pickupFee: '',
-        uploadFee: '',
+        loadFee: '',
         unloadFee: '',
-        ensuranceFee: '',
+        insuranceFee: '',
         otherFee: ''
       }
     }
@@ -46,7 +66,7 @@ export default {
       'feeInfo'
     ]),
     total () {
-      return NP.plus(this.form.pickupFee, this.form.uploadFee, this.form.unloadFee, this.form.ensuranceFee, this.form.otherFee)
+      return NP.plus(this.form.pickupFee, this.form.loadFee, this.form.unloadFee, this.form.insuranceFee, this.form.otherFee)
     }
   },
   methods: {

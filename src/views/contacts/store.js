@@ -1,7 +1,12 @@
 class Address {
-  cityCode = ''
-  address = ''
-  detail = ''
+  data = {
+    cityCode: '',
+    address: '',
+    detail: ''
+  }
+  dispatch = ''
+  namespace = ''
+  title = ''
 }
 
 export default {
@@ -19,11 +24,18 @@ export default {
       if (!data) {
         console.warn('[contacts/address]: you will modify nothing!!')
       }
-      commit('setAddress', data)
+      commit('setAddress', data && { ...data })
     },
     resetAddress({ commit }) {
       commit('setAddress')
     }
   },
-  getters: {}
+  getters: {
+    // 防修改
+    CommonAddress(state) {
+      return {
+        ...state.address
+      }
+    }
+  }
 }

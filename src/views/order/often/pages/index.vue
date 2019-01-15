@@ -13,8 +13,8 @@
       @pulling-up="fetchData">
       <ul class="order-list">
         <li
-          class="order-list-item"
-          v-for="(item, index) in oftenList" :key="index"
+          v-for="(item, index) in oftenList"
+          :key="index" class="order-list-item"
           @click="$router.push({ name: 'order-often-detail' })">
           <p class="order-company order-container">{{ item.consignerName }}</p>
 
@@ -69,25 +69,7 @@ import NO_DATA from '@/assets/img-no-data.png'
 export default {
   name: 'order-often',
   metaInfo: { title: '常发订单' },
-  data () {
-    return {
-      NO_DATA,
-      loading: true,
-      noMore: false
-    }
-  },
   components: { MoneyLabel, NoData },
-  computed: {
-    ...mapGetters('order/often', [ 'pageNo', 'oftenList' ]),
-
-    options() {
-      return {
-        pullDownRefresh: { txt: '刷新成功' },
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
-  },
   filters: {
     settlementType (type) {
       for (let i in SETTLEMENT_TYPE) {
@@ -107,9 +89,27 @@ export default {
       )
     }
   },
+  data () {
+    return {
+      NO_DATA,
+      loading: true,
+      noMore: false
+    }
+  },
+  computed: {
+    ...mapGetters('order/often', [ 'pageNo', 'oftenList' ]),
+
+    options() {
+      return {
+        pullDownRefresh: { txt: '刷新成功' },
+        pullUpLoad: true,
+        scrollbar: true
+      }
+    }
+  },
   methods: {
     ...mapMutations('order/often', [ 'SET_PAGE_NO' ]),
-    ...mapActions('order/often', [ 'getOftenList' ]),
+    ...mapActions('order/often', [ 'getOftenList', 'deleteOftenOrder' ]),
 
     async fetchData () {
       if (this.noMore) return
@@ -117,7 +117,7 @@ export default {
       try {
         const hasList = await this.getOftenList()
         this.noMore = !hasList
-        if (!hasList) window.toast('没有更多数据')
+        if (!hasList && this.getOftenList.length) window.toast('没有更多数据')
       } catch (err) {
         //
       } finally {
@@ -127,7 +127,11 @@ export default {
     },
 
     orderAdd (id) {},
-    orderDelete (id) {},
+    async orderDelete (id) {
+      if (!confirm('确认需要删除此常发订单？')) return
+      await this.deleteOftenOrder(id)
+      window.toast('删除成功')
+    },
 
     pullDownHandler () {
       this.SET_PAGE_NO(0)

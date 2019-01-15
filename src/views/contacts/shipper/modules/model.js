@@ -48,6 +48,7 @@ export class ContactDetail {
     data.isInvoice = !!data.isInvoice
     // 后端是0.xx 前端显示xx%
     data.invoiceRate = +data.invoiceRate * 100
+    data.salesmanId = data.salesmanId || ''
     return data
   }
 

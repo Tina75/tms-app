@@ -44,6 +44,11 @@ export default [
     component: () => import(/* webpackChunkName: "order" */ './create/pages/other-info.vue')
   },
   {
+    path: '/order/select-consignee',
+    name: 'order-select-consignee', // 客户单号及其他
+    component: () => import(/* webpackChunkName: "order" */ './create/pages/select-consignee.vue')
+  },
+  {
     path: '/order/often',
     name: 'order-often', // 常发订单
     component: () => import(/* webpackChunkName: "order" */ './often/pages/index.vue')

@@ -2,7 +2,7 @@
   <div class="create-order-page scroll-list-wrap">
     <cube-scroll class="scroll-box">
       <form-group ref="$form" class="form" :rules="rules">
-        <div v-if="step === 1">
+        <div v-if="step === 1" key="1">
           <div class="form-section">
             <form-item
               v-model="companyInfo.name"
@@ -11,7 +11,6 @@
               maxlength="25"/>
             <form-item
               v-model="companyInfo.shortName"
-              prop="shortName"
               label="公司简称"
               maxlength="6" />
           </div>
@@ -25,8 +24,8 @@
               v-model="companyInfo.contactPhone"
               prop="contactPhone"
               label="联系方式"
-              maxlength="11"
-              required/>
+              required
+              @input="busPhoneInputHandler"/>
             <div v-if="addContactBtn" class="cardInfo-content edit">
               <p class="addContact"><span @click="addContact">+添加更多联系人</span></p>
             </div>
@@ -43,8 +42,8 @@
               v-model="companyInfo.busiContactPhone1"
               prop="busiContactPhone1"
               label="联系方式"
-              maxlength="11"
-              required/>
+              required
+              @input="contactPhoneInputHandler1"/>
             <div class="cardInfo-content edit">
               <p class="removeContact"><span @click="removeContact('contact1', 1)">删除该联系人</span></p>
             </div>
@@ -60,8 +59,8 @@
               v-model="companyInfo.busiContactPhone2"
               prop="busiContactPhone2"
               label="联系方式"
-              maxlength="11"
-              required/>
+              required
+              @input="contactPhoneInputHandler2"/>
             <div class="cardInfo-content edit">
               <p class="removeContact"><span @click="removeContact('contact2', 2)">删除该联系人</span></p>
             </div>
@@ -77,8 +76,8 @@
               v-model="companyInfo.busiContactPhone3"
               prop="busiContactPhone3"
               label="联系方式"
-              maxlength="11"
-              required/>
+              required
+              @input="contactPhoneInputHandler3"/>
             <div class="cardInfo-content edit">
               <p class="removeContact"><span @click="removeContact('contact3', 3)">删除该联系人</span></p>
             </div>
@@ -97,7 +96,7 @@
               maxlength="50" />
           </div>
         </div>
-        <div v-if="step === 2">
+        <div v-if="step === 2" key="2">
           <div class="form-section">
             <div class="cardInfo">
               <div class="cardInfo-content edit">
@@ -155,7 +154,7 @@
             </div>
           </div>
         </div>
-        <div v-if="step === 3">
+        <div v-if="step === 3" key="3">
           <div class="form-section">
             <div class="cardInfo-content edit">
               <span class="cardTitle">公司风貌（{{companyPhotoList.length}}/10）</span>
@@ -197,10 +196,12 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 import Upload from '@/components/Upload'
 import { FormGroup, FormItem } from '@/components/Form'
 import { uploadOSS } from '@/components/Upload/ossUtil'
 import bridge from '@/libs/dsbridge'
+import { validatePhone, CHECK_NAME } from './validator'
 export default {
   name: 'company-edit',
   metaInfo: {
@@ -208,6 +209,10 @@ export default {
   },
   components: { Upload, FormItem, FormGroup },
   data () {
+    const phoneValidate = validatePhone
+    const phoneMessage = { phoneValidate: '手机号格式不正确' }
+    const nameMessage = { CHECK_NAME: '姓名不能小于2个字且不能多于20个字' }
+
     return {
       validity: {},
       valid: undefined,
@@ -236,7 +241,10 @@ export default {
         companyProfile: '公司简介公司简介公司简介公司简介',
         shortName: 'asdad',
         userAddress: '运满满9F',
-        busiContact: [],
+        busiContact: [
+          { name: '2222', phone: '12556543255' },
+          { name: '1112', phone: '11556535855' }
+        ],
         busiContactName1: '',
         busiContactName2: '',
         busiContactName3: '',
@@ -273,16 +281,15 @@ export default {
       contactList: [],
       rules: {
         name: { required: true, type: 'string' },
-        shortName: { required: true, type: 'string' },
-        contact: { required: true, type: 'string' },
-        contactPhone: { required: true, type: 'string' },
+        contact: { required: true, type: 'string', CHECK_NAME, messages: nameMessage },
+        contactPhone: { required: true, type: 'string', phoneValidate, messages: phoneMessage },
         address: { required: true, type: 'string' },
-        busiContactName1: { required: true, type: 'string' },
-        busiContactName2: { required: true, type: 'string' },
-        busiContactName3: { required: true, type: 'string' },
-        busiContactPhone1: { required: true, type: 'string' },
-        busiContactPhone2: { required: true, type: 'string' },
-        busiContactPhone3: { required: true, type: 'string' }
+        busiContactName1: { required: true, type: 'string', CHECK_NAME, messages: nameMessage },
+        busiContactName2: { required: true, type: 'string', CHECK_NAME, messages: nameMessage },
+        busiContactName3: { required: true, type: 'string', CHECK_NAME, messages: nameMessage },
+        busiContactPhone1: { required: true, type: 'string', phoneValidate, messages: phoneMessage },
+        busiContactPhone2: { required: true, type: 'string', phoneValidate, messages: phoneMessage },
+        busiContactPhone3: { required: true, type: 'string', phoneValidate, messages: phoneMessage }
       }
     }
   },
@@ -290,6 +297,76 @@ export default {
     this.initDate()
   },
   methods: {
+    ...mapActions(['saveCompanyInfo']),
+    // 公司联系电话格式化
+    busPhoneInputHandler (phone) {
+      this.phoneFormatter(phone, 'contactPhone')
+    },
+    // 联系人电话格式化1
+    contactPhoneInputHandler1 (phone) {
+      this.phoneFormatter(phone, 'busiContactPhone1')
+    },
+    // 联系人电话格式化2
+    contactPhoneInputHandler2 (phone) {
+      this.phoneFormatter(phone, 'busiContactPhone2')
+    },
+    // 联系人电话格式化3
+    contactPhoneInputHandler3 (phone) {
+      this.phoneFormatter(phone, 'busiContactPhone3')
+    },
+    phoneFormatter (phone, field) {
+      if (!phone || phone[0] !== '1') return
+      phone = phone.trim().split(' ').join('')
+      let phoneArr = []
+      let phoneTemp = ''
+      for (let i in phone) {
+        i = Number(i)
+        phoneTemp += phone[i]
+        if (!phoneArr.length && i === 2) {
+          phoneArr.push(phoneTemp)
+          phoneTemp = ''
+        } else if (phoneTemp.length === 4) {
+          phoneArr.push(phoneTemp)
+          phoneTemp = ''
+        } else if (i === (phone.length - 1)) {
+          phoneArr.push(phoneTemp)
+          phoneTemp = ''
+        }
+      }
+      this.$nextTick(() => {
+        this.companyInfo[field] = phoneArr.join(' ')
+      })
+    },
+    initDate () {
+      // 图片相关
+      this.busiIntroducePicList = this.initImage(this.companyInfo.busiIntroducePic)
+      this.busiAdvantcePicList = this.initImage(this.companyInfo.busiAdvantcePic)
+      this.wxQrPicList = this.initImage(this.companyInfo.wxQrPic)
+      this.companyPhotoList = this.initImage(this.companyInfo.companyPhoto)
+      this.homeBannerList = this.initImage(this.companyInfo.homeBanner)
+      // 业务联系人
+      if (this.companyInfo.busiContact) {
+        for (let index = 0; index < this.companyInfo.busiContact.length; index++) { // JSON.parse
+          this.companyInfo['busiContactName' + (index + 1)] = this.companyInfo.busiContact[index].name
+          this.companyInfo['busiContactPhone' + (index + 1)] = this.companyInfo.busiContact[index].phone
+          this['contact' + (index + 1)] = true
+        }
+      }
+      // 手机号码格式化
+      this.busPhoneInputHandler(this.companyInfo.contactPhone)
+      if (this.contact1) this.contactPhoneInputHandler1(this.companyInfo.busiContactPhone1)
+      if (this.contact2) this.contactPhoneInputHandler2(this.companyInfo.busiContactPhone2)
+      if (this.contact3) this.contactPhoneInputHandler3(this.companyInfo.busiContactPhone3)
+    },
+    initImage (imageList) {
+      let imageListInit = []
+      if (Array.isArray(imageList)) {
+        imageListInit = imageList // JSON.parse(imageList)
+      } else {
+        imageListInit = [{ url: imageList, title: '' }]
+      }
+      return imageListInit
+    },
     async nextSetp () {
       if (await this.$refs.$form.validate()) {
         this.step++
@@ -314,24 +391,18 @@ export default {
       this.addContactBtn = true
     },
     save () {
-      console.dir(this.companyInfo)
-      this.$router.push({ name: 'company' })
-    },
-    initDate () {
-      this.busiIntroducePicList = this.initImage(this.companyInfo.busiIntroducePic)
-      this.busiAdvantcePicList = this.initImage(this.companyInfo.busiAdvantcePic)
-      this.wxQrPicList = this.initImage(this.companyInfo.wxQrPic)
-      this.companyPhotoList = this.initImage(this.companyInfo.companyPhoto)
-      this.homeBannerList = this.initImage(this.companyInfo.homeBanner)
-    },
-    initImage (imageList) {
-      let imageListInit = []
-      if (Array.isArray(imageList)) {
-        imageListInit = imageList // JSON.parse(imageList)
-      } else {
-        imageListInit = [{ url: imageList, title: '' }]
+      for (let index = 1; index <= 3; index++) {
+        if (this.companyInfo['busiContactName' + index]) {
+          this.companyInfo.busiContact.push({ name: this.companyInfo['busiContactName' + index], phone: this.companyInfo['busiContactPhone' + index] })
+        }
+        delete this.companyInfo['busiContactName' + index]
+        delete this.companyInfo['busiContactPhone' + index]
       }
-      return imageListInit
+      this.saveCompanyInfo(this.companyInfo).then(({ data }) => {
+        this.$Message.success('保存成功!')
+        // 跳转页面show.vue
+        this.$router.push({ name: 'company' })
+      })
     },
     addImg () {
       const vm = this

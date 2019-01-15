@@ -5,33 +5,35 @@ import actions from './actions'
 const state = {
   // 订单信息
   orderInfo: {
-    consignerCompany: '',
-    consignerName: '',
-    consignerPhone: '',
-    consignerCity: '',
-    consignerAddress: '',
+    consignerName: '', //
+    consignerContact: '', //
+    consignerPhone: '', //
+    start: '', //
+    consignerAddress: '', //
     consumerInfo: '',
 
-    consigneeName: '',
-    consigneePhone: '',
-    consigneeCity: '',
-    consigneeAddress: '',
-    consigneeCompany: '',
+    consigneeContact: '', //
+    consigneePhone: '', //
+    end: '', //
+    consigneeAddress: '', //
+    consigneeCompanyName: '', //
 
     cargoInfo: '',
 
-    settlementType: '',
-    pickupType: '',
-    receiptNumber: '',
+    settlementType: '', //
+    pickup: '', //
+    receiptCount: 1, //
 
-    distance: '',
-    transportFee: '',
+    mileage: '', //
+    freightFee: '', //
 
     otherFee: '',
-    otherInfo: ''
+    otherInfo: '',
+
+    isSaveOrderTemplate: 0 //
   },
   // 货物信息
-  cargoInfo: {},
+  orderCargoList: {},
   // 客户单号及其他信息
   consumerInfo: {},
   // 费用信息

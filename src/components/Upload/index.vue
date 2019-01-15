@@ -17,7 +17,7 @@
           alt="图片加载失败"
           class="pic-item"
           @click="previewPic(uploadPhotoList,index)">
-        <cube-input v-if="inputShow" v-model="item.title" :maxlength="maxlength"/>
+        <cube-input v-if="inputShow" v-model="item.title" :maxlength="maxlength" />
       </li>
       <li
         v-show="uploadPhotos && uploadPhotos.length < maxCount"
