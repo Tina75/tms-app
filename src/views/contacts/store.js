@@ -1,13 +1,4 @@
-class Address {
-  data = {
-    cityCode: '',
-    address: '',
-    detail: ''
-  }
-  dispatch = ''
-  namespace = ''
-  title = ''
-}
+import { Address } from './common/model'
 
 export default {
   namespaced: true,
@@ -15,24 +6,18 @@ export default {
     address: new Address()
   },
   mutations: {
-    setAddress(state, payload = new Address()) {
+    setAddressPage(state, payload) {
       state.address = payload
     }
   },
   actions: {
-    modifyAddress({ commit }, data) {
-      if (!data) {
-        console.warn('[contacts/address]: you will modify nothing!!')
-      }
-      commit('setAddress', data && { ...data })
-    },
-    resetAddress({ commit }) {
-      commit('setAddress')
+    resetAddressPage({ commit }, data = new Address()) {
+      commit('setAddressPage', data)
     }
   },
   getters: {
     // 防修改
-    CommonAddress(state) {
+    AddressPage(state) {
       return {
         ...state.address
       }

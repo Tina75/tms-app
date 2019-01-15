@@ -8,16 +8,18 @@
         placeholder="请选择省/市/区"
         @click.native="showCityPicker = true"
       />
-      <FormItem v-model="model.address" label="详细地址" placeholder="请输入详细地址"/>
-      <FormItem v-model="model.detail" label="补充地址" placeholder="请输入楼号-门牌号" maxlength="15"/>
+      <FormItem v-model="form.address" label="详细地址" placeholder="请输入详细地址"/>
+      <FormItem v-model="form.additional" label="补充地址" placeholder="请输入楼号-门牌号"/>
     </FromGroup>
-    <BmapAddressList :city="limitCityGeo" :search="model.address" @select="onSelectAddress"/>
+    <BmapAddressList :city="limitCityGeo" :search="form.address" @select="onSelectAddress"/>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
     <CityPicker v-model="showCityPicker" @confirm="confirmCity"/>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import { Address } from './model'
+import cityUtil from '@/libs/city'
 import CityPicker from '@/components/CityPicker'
 import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
@@ -25,10 +27,10 @@ import FormItem from '@/components/Form/FormItem'
 import BmapAddressList from '../components/BmapAddressList'
 const moudleName = 'contacts'
 export default {
-  name: 'ModifyContactsShipperAddress',
+  name: 'CommonAddressSelect',
   metaInfo() {
     return {
-      title: this.CommonAddress.title || ''
+      title: this.AddressPage.title || ''
     }
   },
   components: {
@@ -40,55 +42,58 @@ export default {
   },
   data() {
     return {
-      model: {
+      form: {
         locale: [],
         address: '',
-        detail: ''
+        additional: ''
       },
       submiting: false,
-      showCityPicker: false
+      showCityPicker: false,
+      confirmed: false
     }
   },
   computed: {
-    ...mapGetters(moudleName, ['CommonAddress']),
+    ...mapGetters(moudleName, ['AddressPage']),
     localeView() {
-      const data = this.model.locale
-      if (data.length) {
-        let locale = data.reduce((arr, item, i) => {
-          if (i === 0 || item.name !== arr[i - 1]) {
-            arr.push(item.name)
-          }
-          return arr
-        }, [])
-        return locale.join('/')
-      }
-      return ''
+      return cityUtil.getCityNameArray(this.form.locale).join('/')
     },
     limitCityGeo() {
-      const data = this.model.locale
-      if (data.length) {
+      const data = this.form.locale
+      const length = data.length
+      if (length) {
+        let deeper = data[length - 1]
         return {
-          lat: data[1].lat,
-          lon: data[1].lon
+          lat: deeper.lat,
+          lon: deeper.lon
         }
       }
       return ''
     }
   },
   methods: {
+    ...mapActions(moudleName, ['resetAddressPage']),
     onSelectAddress(item) {
-      console.info(item)
+      this.form.address = item.detail
     },
     async submit() {
       this.submiting = true
+      this.confirmed = true
       try {
-        const dispatchName = this.CommonAddress.dispatch
-        const namespace = this.CommonAddress.namespace
-          ? this.CommonAddress.namespace + '/'
+        const dispatchName = this.AddressPage.dispatch
+        const namespace = this.AddressPage.namespace
+          ? this.AddressPage.namespace + '/'
           : ''
+        const storeData = Address.toStore(this.form, this.AddressPage.data)
         if (dispatchName) {
-          await this.$store.dispatch(namespace + dispatchName)
+          await this.$store.dispatch(namespace + dispatchName, storeData)
+          this.resetAddressPage()
+        } else {
+          this.resetAddressPage({
+            ...this.AddressPage,
+            data: storeData
+          })
         }
+        this.$router.back()
       } catch (e) {
         console.error(e)
       } finally {
@@ -97,7 +102,36 @@ export default {
     },
     confirmCity(data) {
       console.info(data)
-      this.model.locale = data
+      this.form.locale = data
+    },
+    reset() {
+      const options = this.AddressPage
+      this.form = Address.toForm(options.data)
+      if (options.appButton) {
+        // TODO set app
+      }
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => vm.reset())
+  },
+  beforeRouteLeave(to, from, next) {
+    this.showCityPicker = false
+    const leave = () => {
+      this.confirmed = false
+      this.resetAddressPage()
+      next()
+    }
+    if (this.confirmed) {
+      leave()
+    } else {
+      this.$createDialog({
+        type: 'confirm',
+        title: '',
+        content: '信息未保存，确认退出吗？',
+        icon: 'cubeic-alert',
+        onConfirm: leave
+      }).show()
     }
   }
 }
