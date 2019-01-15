@@ -1,6 +1,6 @@
 import Server from '@/libs/server'
 export default {
-  namespace: 'delivery',
+  namespaced: true,
   state: {
     dispatch: {
       list: [],

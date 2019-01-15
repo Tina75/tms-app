@@ -27,3 +27,9 @@ Vue.filter('settlementTypeFormat', (value) => {
 Vue.filter('codeToName', value => {
   return City.getUniqueName(value)
 })
+
+Vue.filter('orderType', value => {
+  const orderTypes = { '10': '待提货', '20': '待调度', '30': '在途', '40': '已到货', '50': '已回单', '100': '已删除' }
+  if (value) return orderTypes[value]
+  else return '未知'
+})

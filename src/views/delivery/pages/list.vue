@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+// import { mapGetters, mapActions } from 'vuex'
 import DispatchList from '../components/dispath-list.vue'
 import SendList from '../components/send-list'
 import SendingList from '../components/sending-list'
@@ -33,14 +33,14 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['DispatchList'])
+    // ...mapGetters(['DispatchList'])
   },
 
   mounted() {
     this.updateView(this.selectedLabel)
   },
   methods: {
-    ...mapActions(['getDispatch']),
+    // ...mapActions(['getDispatch']),
     updateView(label) {
       this.current = this.tabs.find(item => item.label === label).componentName
     }
