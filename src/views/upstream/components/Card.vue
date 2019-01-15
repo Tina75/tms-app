@@ -25,7 +25,7 @@
           {{data.totalFee | money}}/元
         </div>
       </div>
-      <div class="right">
+      <div v-if="status[data.acceptStatus].name == '待接收'" class="right">
         <a class="btn btn-active" @click.stop="recept">接受</a>
         <a class="btn" style="margin-right: 8px" @click.stop="refuse">拒绝</a>
       </div>
