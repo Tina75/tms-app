@@ -107,19 +107,20 @@ export default {
   computed: {
     ...mapState(moudleName, ['saveConsigner', 'consigneeDetail']),
     isEdit () {
-      return !this.consigneeDetail.id
+      return !this.$route.query.consigneeId
     }
   },
   methods: {
-    ...mapActions(moudleName, ['saveConsignerInfo', 'modifyConsignee']),
+    ...mapActions(moudleName, ['saveConsignerInfo', 'modifyConsignee', 'loadConsigneeDetail']),
     async onPageRefresh() {
       this.form = new ConsigneeDetail()
       this.viewPhone = ''
       this.setSender()
+      console.log(!this.isEdit)
       if (!this.isEdit) {
         const urlId = +this.$route.query.consigneeId
         if (urlId !== +this.consigneeDetail.id) {
-          await this.loadContactDetail()
+          await this.loadConsigneeDetail()
         }
         this.form = ConsigneeDetail.toForm(this.consigneeDetail)
         this.editTel(this.consigneeDetail.phone)
@@ -153,9 +154,10 @@ export default {
       this.viewPhone = this.editPhone(value)
     },
     async submit () {
-      const data = ConsigneeDetail.toServer(Object.assign({}, { consignerId: this.saveConsigner.id }, this.form))
+      const consignerId = this.saveConsigner.id ? this.saveConsigner.id : this.form.consignerId
+      const data = ConsigneeDetail.toServer(Object.assign({}, { consignerId: consignerId }, this.form))
       console.log(data)
-      await this.$refs.$form.validate()
+      // await this.$refs.$form.validate()
       // await this.modifyConsignee(data)
     },
     goToAddress () {
@@ -164,7 +166,7 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     console.log(to)
-    if (to.name !== 'select-shipper') {
+    if (to.name !== 'select-shipper' && to.name !== 'contacts-address') {
       this.saveConsignerInfo()
     }
     next()

@@ -69,12 +69,12 @@ export default {
   },
   components: { IconFont },
   computed: {
-    ...mapState(moudleName, ['consigneeList', 'consigneeDetail'])
+    ...mapState(moudleName, ['consigneeDetail'])
   },
   methods: {
     ...mapActions(moudleName, ['loadConsigneeDetail']),
     onPageRefresh() {
-      // this.loadConsigneeDetail()
+      this.loadConsigneeDetail()
     },
     callPhone () {
       window.location.href = `tel:${this.consigneeDetail.phone}`

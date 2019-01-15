@@ -108,7 +108,7 @@
 </template>
 <script>
 import IconFont from '@/components/Iconfont'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 // import { setAppTitleBtn } from '@/libs/bridgeUtil'
 const moudleName = 'contacts/consignee'
 export default {
@@ -118,11 +118,15 @@ export default {
   },
   components: { IconFont },
   computed: {
-    ...mapGetters(moudleName, ['consigneeDetail'])
+    ...mapGetters(moudleName, ['driverDetail'])
   },
   methods: {
+    ...mapActions(moudleName, ['loadDriverDetail']),
+    onPageRefresh() {
+      this.loadDriverDetail()
+    },
     callPhone () {
-      window.location.href = `tel:${this.consigneeDetail.phone}`
+      window.location.href = `tel:${this.driverDetail.phone}`
     },
     goAdd () {
       this.$router.push({

@@ -18,7 +18,7 @@ const store = {
     loadConsigneeDetail: ({ commit, rootState }) => {
       Server({
         method: 'get',
-        url: '/consignee/detail',
+        url: '/consigner/consignee/detail',
         loading: true,
         params: { id: rootState.route.query.consigneeId }
       }).then((response) => commit('setConsigneeDetail', response.data.data))

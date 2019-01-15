@@ -124,6 +124,9 @@ export default [
   {
     path: '/contacts/driver/detail',
     name: 'contacts-driver-detail',
+    meta: {
+      noNeedRefresh: []
+    },
     component: () => import(/* webpackChunkName: "contacts" */ './driver/pages/detail.vue')
   },
   /* 承运商 */
