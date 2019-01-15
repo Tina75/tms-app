@@ -1,30 +1,22 @@
 <template>
   <div class="upstream page">
     <div class="header">
-      <!-- <Title>上游来单</Title> -->
       <cube-tab-bar
         v-model="selectedLabel"
         :data="tabs"
         show-slider
-        class="tab-bar"
-        @click="clickHandler"
-        @change="changeHandler"/>
+        class="tab-bar"/>
     </div>
     <div class="list-bar">
       <cube-tab-panels v-model="selectedLabel">
         <cube-tab-panel v-for="(item) in tabs" :key="item.label" :label="item.label">
           <cube-scroll
             ref="scroll"
-            :data="cardList"
+            :data="item.data"
             :options="scrollOptions"
-            @pulling-down="onPullingDown"
-            @pulling-up="onPullingUp">
-            <Card
-              v-for="(el, index) in cardList"
-              :key="index"
-              :data="el"
-              @card-action="handleClick"
-              @click.native="toDetail(el.shipperOrderId)"/>
+            @pulling-down="onPullingDown(item.key)"
+            @pulling-up="onPullingUp(item.key)">
+            <CardList :ref="item.key" :status="item.acceptStatus" @change="(data) => { dataChange(item.key, data) }"/>
           </cube-scroll>
         </cube-tab-panel>
       </cube-tab-panels>
@@ -32,99 +24,64 @@
   </div>
 </template>
 <script>
-import Card from '../components/Card'
-import router from '@/router'
-import * as API from '../libs/api'
+import CardList from '../components/CardList'
 export default {
   name: 'upstream',
   metaInfo: {
     title: 'upstream'
   },
   components: {
-    Card
+    CardList
   },
   data () {
     return {
       selectedLabel: '全部',
       tabs: [
         {
-          label: '全部'
+          label: '全部',
+          key: 'all',
+          acceptStatus: '',
+          data: []
         },
         {
-          label: '待接收'
+          label: '待接收',
+          key: 'wait',
+          acceptStatus: '0',
+          data: []
         },
         {
-          label: '已接收'
+          label: '已接收',
+          key: 'received',
+          acceptStatus: '1',
+          data: []
         },
         {
-          label: '已拒绝'
+          label: '已拒绝',
+          key: 'refused',
+          acceptStatus: '2',
+          data: []
         }
       ],
-      cardList: [],
       scrollOptions: {
         pullDownRefresh: true,
         pullUpLoad: true,
         directionLockThreshold: 0
-      },
-      keywords: {
-        pageNo: 1,
-        pageSize: 10
       }
     }
   },
-  mounted () {
-    this.initList()
-  },
   methods: {
-    initList () {
-      API.initList(this.keywords)
-        .then(response => {
-          this.cardList = response.data.data.list
-        })
+    onPullingDown (ref) {
+      this.$refs[ref][0].refresh()
     },
-    clickHandler (label) {
+    onPullingUp (ref) {
+      this.$refs[ref][0].load()
     },
-    changeHandler (label) {
-    },
-    toDetail (id) {
-      // 路由跳转
-      router.push({
-        params: {
-          id
-        },
-        name: 'upstream-detail'
+    dataChange (key, data) {
+      this.tabs.map(el => {
+        if (el.key === key) {
+          el.data = data
+        }
       })
-    },
-    onPullingDown () {
-      setTimeout(() => {
-        this.$refs.scroll.forceUpdate()
-      }, 1000)
-    },
-    onPullingUp () {
-      setTimeout(() => {
-        this.$refs.scroll.forceUpdate()
-      }, 1000)
-    },
-    handleClick (type, id) {
-      if (type === 'recept') {
-        this.recept(id)
-      } else if (type === 'refuse') {
-        this.refuse(id)
-      }
-    },
-    // 接受
-    recept (id) {
-      API.receipt(id)
-        .then(() => {
-          this.initList()
-        })
-    },
-    // 拒绝
-    refuse (id) {
-      API.refuse(id)
-        .then(() => {
-          this.initList()
-        })
     }
   }
 }
