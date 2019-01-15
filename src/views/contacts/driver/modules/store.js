@@ -15,7 +15,7 @@ const store = {
         method: 'get',
         url: '/carrier/details/for/driver',
         loading: true,
-        params: { id: rootState.route.query.driverId }
+        params: { carrierId: rootState.route.query.driverId }
       }).then((response) => commit('setDriverDetail', response.data.data))
     }
   },
@@ -26,12 +26,13 @@ const lists = [
   {
     // 司机
     key: 'driver',
-    url: '/carrier/list',
+    useQuery: true,
+    url: '/carrier/list?type=2&carrierType=1',
     itemParser: (data) => ({
       id: data.id,
-      name: data.contact + '  ' + data.phone,
-      detail: data.cityName ? data.cityName + data.address : data.address,
-      phone: data.phone,
+      name: data.carrierName,
+      detail: data.carrierPhone,
+      phone: data.carrierPhone,
       data
     })
   }

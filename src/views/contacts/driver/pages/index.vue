@@ -11,6 +11,7 @@
         :key="item.id"
         :index="i"
         :item="item"
+        :use-name-icon="true"
         @phoneCall="onItemPhoneCall"
         @click="onItemClick"
       />
@@ -40,7 +41,7 @@ const moudleName = 'contacts/driver'
 export default {
   name: 'ContactsDriverList',
   metaInfo: {
-    title: '承运商'
+    title: '熟车司机'
   },
   components: { ListItem, NoData, InfiniteList },
   data() {
@@ -54,8 +55,8 @@ export default {
     loader(refresh) {
       this.loadDriverList(refresh)
     },
-    onRefreshPage() {
-      console.info('onRefreshPage')
+    onPageRefresh() {
+      console.info('onPageRefresh')
       this.loading = true
     },
     onItemPhoneCall(item) {
