@@ -27,6 +27,18 @@
             <span class="cardContent">{{configPhone(companyInfo.contactPhone)}}</span>
           </div>
         </div>
+        <!-- 业务联系人 -->
+        <div v-for="(item, index) in busiContactInit" :key="index" class="cardInfo" >
+          <div class="cardInfo-content">
+            <span class="cardTitle">公司联系人</span>
+            <span class="cardContent">{{item.name}}</span>
+          </div>
+          <div class="hr"/>
+          <div class="cardInfo-content">
+            <span class="cardTitle">联系方式</span>
+            <span class="cardContent">{{configPhone(item.phone)}}</span>
+          </div>
+        </div>
         <div class="cardInfo">
           <div class="cardInfo-content">
             <span class="cardTitle">公司地址</span>
@@ -147,7 +159,7 @@
 </template>
 
 <script>
-// import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import IconFont from '@/components/Iconfont'
 import imageList from './image-list'
 import bridge from '@/libs/dsbridge'
@@ -183,7 +195,10 @@ export default {
         companyProfile: '公司简介公司简介公司简介公司简介',
         shortName: 'asdad',
         userAddress: '运满满9F',
-        busiContact: [],
+        busiContact: [
+          { name: '2222', phone: '12556543255' },
+          { name: '1112', phone: '11556535855' }
+        ],
         busiIntroduce: '',
         busiIntroducePic:
         [ { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg', title: '12323' },
@@ -211,11 +226,12 @@ export default {
         [ { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg', title: '12323' }
         ]
       },
+      busiContactInit: [],
       sharFoot: false
     }
   },
   computed: {
-    // ...mapGetters(['companyInfo'])
+    ...mapGetters(['companyInfo'])
   },
   created () {
     // this.getCompanyData()
@@ -226,13 +242,14 @@ export default {
       function(result) {}
     )
     this.initData()
+    // this.getCompanyData()
   },
   methods: {
-    // ...mapActions(['getCompanyInfo']),
-    // async getCompanyData () {
-    //   await this.getCompanyInfo()
-    //   await this.initData()
-    // },
+    ...mapActions(['getCompanyInfo', 'shareCompanyInfo']),
+    async getCompanyData () {
+      await this.getCompanyInfo()
+      await this.initData()
+    },
     configPhone (phoneNumber) {
       if (phoneNumber.length === 11) {
         let phone = phoneNumber.toString()
@@ -245,6 +262,8 @@ export default {
       this.wxQrPicList = this.initImage(this.companyInfo.wxQrPic)
       this.homeBannerList = this.initImage(this.companyInfo.homeBanner)
       this.companyPhotoList = this.initImage(this.companyInfo.companyPhoto)
+      // 业务联系人
+      if (this.companyInfo.busiContact) this.busiContactInit = this.companyInfo.busiContact
     },
     initImage (imageList) {
       let imageListInit = []

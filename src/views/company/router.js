@@ -1,3 +1,6 @@
+import modules from './store'
+import store from '@/store'
+
 export default [
   {
     path: '/company',
@@ -10,3 +13,5 @@ export default [
     component: () => import(/* webpackChunkName: "company" */'./pages/edit.vue')
   }
 ]
+
+store.registerModule('company', { ...modules })
