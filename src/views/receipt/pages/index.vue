@@ -16,12 +16,13 @@
             :options="scrollOptions"
             @pulling-down="onPullingDown"
             @pulling-up="onPullingUp">
-            <Card
+            <CardList :ref="item.key" :status="item.acceptStatus" @change="(data) => { dataChange(item.key, data) }"/>
+            <!-- <Card
               v-for="(el, index) in cardList"
               :key="index"
               :data="el"
               @card-action="handleClick"
-              @click.native="toDetail(el.shipperOrderId)"/>
+              @click.native="toDetail(el.shipperOrderId)"/> -->
           </cube-scroll>
         </cube-tab-panel>
       </cube-tab-panels>
@@ -29,7 +30,7 @@
   </div>
 </template>
 <script>
-import Card from '../components/Card'
+import CardList from '../components/CardList'
 import * as Api from '../libs/api'
 export default {
   name: 'receipt',
@@ -37,23 +38,41 @@ export default {
     title: 'receipt'
   },
   components: {
-    Card
+    CardList
   },
   data () {
     return {
-      selectedLabel: '代签收',
+      selectedLabel: '全部',
       tabs: [
         {
-          label: '代签收'
+          label: '全部',
+          key: 'all',
+          receiptStatus: '',
+          data: []
         },
         {
-          label: '待回收'
+          label: '代签收',
+          key: 'waitReceipt',
+          receiptStatus: '-1',
+          data: []
         },
         {
-          label: '待反厂'
+          label: '待回收',
+          key: 'waitRecycle',
+          receiptStatus: '0',
+          data: []
         },
         {
-          label: '已反厂'
+          label: '待返厂',
+          key: 'waitBack',
+          receiptStatus: '1',
+          data: []
+        },
+        {
+          label: '已返厂',
+          key: 'backedFactory',
+          receiptStatus: '2',
+          data: []
         }
       ],
       cardList: [],
@@ -91,10 +110,8 @@ export default {
     toDetail (id) {
       // 路由跳转
       this.$router.push({
-        params: {
-          id
-        },
-        name: 'upstream-detail'
+        params: { id },
+        name: 'receipt-detail'
       })
     },
     handleClick () {

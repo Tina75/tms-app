@@ -1,18 +1,16 @@
 <template>
   <div class="tab-card">
     <div class="tab-card-title">
-      <div class="create-time">2018-10-1 12:00</div>
-      <!-- <div v-if="status[data.acceptStatus]" :class="status[data.acceptStatus].color" class="order-status right">{{status[data.acceptStatus].name}}</div> -->
+      <div class="create-time">{{data.createTime | datetimeFormat}}</div>
     </div>
     <div class="consignee-info">
       <div class="city">
         {{data.departureCityName}} - {{data.destinationCityName}}
       </div>
       <div class="cargos">
-        <div class="cargo-infos">花棉袄</div>
-        <div class="cargo-infos">{{data.weight}}吨</div>
-        <div class="cargo-infos">{{data.volume}}16方</div>
-        <div class="cargo-infos">{{data.cargoCnt}}件</div>
+        <div class="cargo-infos">{{data.weight || 0}}吨</div>
+        <div class="cargo-infos">{{data.volume || 0}}方</div>
+        <div class="cargo-infos">{{data.cargoCnt || 0}}件</div>
       </div>
       <div class="company">
         {{data.consignerAddress}} {{data.consignerContact}}
@@ -34,13 +32,14 @@
       </div>
       <!-- <div class="right">
         <a class="btn btn-active">回收</a>
-        <a class="btn" style="margin-right: 8px">拒绝</a>
+        <a class="btn" style="margin-right: 8px">上传回单</a>
+        <a class="btn" style="margin-right: 8px">修改回单</a>
+        <a class="btn" style="margin-right: 8px">返厂</a>
       </div> -->
     </div>
   </div>
 </template>
 <script>
-import ORDER_STATUS from '@/views/upstream/constant/ORDER_STATUS'
 export default {
   name: 'tab-card',
   metaInfo: {
@@ -56,19 +55,24 @@ export default {
     return {
     }
   },
-  computed: {
-    status () {
-      const obj = {}
-      ORDER_STATUS.forEach(el => {
-        obj[el.value] = {
-          name: el.name,
-          color: el.color
-        }
-      })
-      return obj
-    }
-  },
   methods: {
+    showAlert() {
+      this.dialog = this.$createDialog({
+        type: 'prompt',
+        title: '回收',
+        prompt: {
+          value: '',
+          placeholder: '请输入回收人'
+        },
+        onConfirm: (e, promptValue) => {
+          this.$createToast({
+            type: 'warn',
+            time: 1000,
+            txt: `Prompt value: ${promptValue || ''}`
+          }).show()
+        }
+      }).show()
+    }
   }
 }
 </script>
@@ -78,20 +82,12 @@ export default {
   margin-top 15px
   padding 0 15px
 .tab-card-title
-  padding 10px
+  padding 10px 10px 10px 0
   .create-time
     font-size 14px
     line-height 20px
     color #666
     display inline-block
-  .order-status
-    font-size 12px
-    line-height 16px
-    margin-top 2px
-    display inline-block
-    width 45px
-    text-align center
-    color #fff
 .consignee-info
   padding-bottom 15px
   .city
