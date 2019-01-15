@@ -3,7 +3,7 @@
     <form-group ref="$form" class="form" :rules="rules">
       <div class="form_card">
         <form-item
-          v-model="form.consigner"
+          v-model="form.consignerName"
           :show-required-toast="false"
           readonly
           prop="consigner"
@@ -32,18 +32,13 @@
       </div>
       <div class="form_card">
         <form-item
-          v-model="form.cityName"
-          type="click"
-          label="收货地址"
-          :show-arrow="false"
-          placeholder="请选择省/市/区"
-          @on-click="showPickCity = true"
-        />
-        <form-item
           v-model="form.address"
-          prop="detailAddress"
-          label="详细地址"
+          type="click"
+          prop="address"
           :show-required-toast="false"
+          label="详细地址"
+          :show-arrow="false"
+          @on-click="goToAddress"
         />
         <form-item
           v-model="form.consigneeCompanyName"
@@ -76,7 +71,7 @@
 <script>
 import { FormGroup, FormItem } from '@/components/Form'
 import CityPicker from '@/components/CityPicker'
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { validatePhone, formatPhone, ConsigneeDetail, editPhone } from '../modules/model'
 const moudleName = 'contacts/consignee'
 export default {
@@ -91,7 +86,7 @@ export default {
     return {
       formatPhone,
       editPhone,
-      form: {},
+      form: new ConsigneeDetail(),
       showPickCity: false,
       viewPhone: '',
       rules: {
@@ -105,32 +100,31 @@ export default {
             validatePhone: '请输入正确的手机号或座机号'
           }
         },
-        detailAddress: { required: true }
+        address: { required: true }
       }
     }
   },
   computed: {
-    ...mapState(moudleName, ['saveConsigner']),
-    ...mapGetters(moudleName, ['consigneeDetail']),
+    ...mapState(moudleName, ['saveConsigner', 'consigneeDetail']),
     isEdit () {
-      return !this.consigneeDetail.id
+      return !this.$route.query.consigneeId
     }
   },
   methods: {
-    ...mapActions(moudleName, ['saveConsignerInfo', 'modifyConsignee']),
-    onPageRefresh () {
-      if (this.isEdit) {
-        this.form = new ConsigneeDetail()
-        this.viewPhone = ''
-        this.setSender()
-      } else {
-        try {
-          this.form = ConsigneeDetail.toForm(this.consigneeDetail)
-          this.editTel(this.consigneeDetail.phone)
-          this.setSender()
-        } catch (err) {
-          console.log(err)
+    ...mapActions(moudleName, ['saveConsignerInfo', 'modifyConsignee', 'loadConsigneeDetail']),
+    async onPageRefresh() {
+      this.form = new ConsigneeDetail()
+      this.viewPhone = ''
+      this.setSender()
+      console.log(!this.isEdit)
+      if (!this.isEdit) {
+        const urlId = +this.$route.query.consigneeId
+        if (urlId !== +this.consigneeDetail.id) {
+          await this.loadConsigneeDetail()
         }
+        this.form = ConsigneeDetail.toForm(this.consigneeDetail)
+        this.editTel(this.consigneeDetail.phone)
+        this.setSender()
       }
     },
     selectSender () {
@@ -140,7 +134,7 @@ export default {
     },
     setSender () {
       if (this.saveConsigner.name) {
-        this.form.consigner = this.saveConsigner.name
+        this.form.consignerName = this.saveConsigner.name
       }
     },
     citySelect (picker) {
@@ -158,13 +152,24 @@ export default {
     },
     editTel (value) {
       this.viewPhone = this.editPhone(value)
-      this.form.phone = this.viewPhone.replace(/\s/g, '')
     },
     async submit () {
-      const data = ConsigneeDetail.toServer(Object.assign({}, { consignerId: this.saveConsigner.id }, this.form))
+      const consignerId = this.saveConsigner.id ? this.saveConsigner.id : this.form.consignerId
+      const data = ConsigneeDetail.toServer(Object.assign({}, { consignerId: consignerId }, this.form))
       console.log(data)
-      await this.modifyConsignee(data)
+      // await this.$refs.$form.validate()
+      // await this.modifyConsignee(data)
+    },
+    goToAddress () {
+      this.$router.push({ name: 'contacts-address' })
     }
+  },
+  beforeRouteLeave (to, from, next) {
+    console.log(to)
+    if (to.name !== 'select-shipper' && to.name !== 'contacts-address') {
+      this.saveConsignerInfo()
+    }
+    next()
   }
 }
 </script>
