@@ -17,7 +17,7 @@
         <div class="item-content border-bottom-1px">
           <p class="order-route">
             <span>{{item.start}}</span>
-            <i></i>
+            <i/>
             <span>{{item.end}}</span>
           </p>
           <p class="order-stat">

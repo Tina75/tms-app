@@ -179,7 +179,6 @@ export default {
           })
           return
         }
-        return
       }
       this.inputEmit()
     }

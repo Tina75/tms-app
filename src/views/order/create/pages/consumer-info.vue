@@ -4,15 +4,15 @@
       <form>
         <div class="form-section">
           <form-item
-            v-model="form.customOrderNo"
+            v-model="form.customerOrderNo"
             label="客户订单号"
             maxlength="30" />
           <form-item
-            v-model="form.customWaybillNo"
+            v-model="form.customerWaybillNo"
             label="客户运单号"
             maxlength="30" />
           <form-item
-            v-model="form.reveivelist"
+            v-model="form.salesmanId"
             label="对接业务员"
             type="select"
             :options="operators"
@@ -20,11 +20,11 @@
         </div>
         <div class="form-section">
           <form-item
-            v-model="sendTimeText"
+            v-model="deliveryTimeText"
             label="发货时间"
             type="click"
             placeholder="请选择"
-            @on-click="pickTimeHandler('send')" />
+            @on-click="pickTimeHandler('delivery')" />
           <form-item
             v-model="arriveTimeText"
             label="到货时间"
@@ -51,16 +51,14 @@ export default {
     return {
       operators: [],
       form: {
-        customOrderNo: '',
-        customWaybillNo: '',
-        reveivelist: '',
-        sendTime: '',
+        customerOrderNo: '',
+        customerWaybillNo: '',
+        salesmanId: '',
+        deliveryTime: '',
         arriveTime: ''
       },
-      sendTimePicker: null,
-      arriveTimePicker: null,
       timePickerType: '',
-      sendTimeText: '',
+      deliveryTimeText: '',
       arriveTimeText: ''
     }
   },
@@ -75,12 +73,12 @@ export default {
 
     pickTimeHandler (type) {
       this.timePickerType = type
-      if (type === 'send') {
-        this.sendTimePicker = this.$createDatePicker({
+      if (type === 'delivery') {
+        this.$createDatePicker({
           title: '发货时间',
           min: new Date(),
           max: this.form.arriveTime ? new Date(this.form.arriveTime) : new Date(2020, 12, 31),
-          value: this.form.sendTime ? new Date(this.form.sendTime) : new Date(),
+          value: this.form.deliveryTime ? new Date(this.form.deliveryTime) : new Date(),
           columnCount: 4,
           format: {
             year: 'YY年',
@@ -93,7 +91,7 @@ export default {
       } else {
         this.$createDatePicker({
           title: '到货时间',
-          min: this.form.sendTime ? new Date(this.form.sendTime) : new Date(),
+          min: this.form.deliveryTime ? new Date(this.form.deliveryTime) : new Date(),
           value: this.form.arriveTime ? new Date(this.form.arriveTime) : new Date(),
           columnCount: 4,
           format: {
@@ -107,9 +105,9 @@ export default {
       }
     },
     selectTime (date) {
-      if (this.timePickerType === 'send') {
-        this.form.sendTime = date.getTime()
-        this.sendTimeText = dayjs(this.form.sendTime).format('YYYY-MM-DD HH:mm') + '前'
+      if (this.timePickerType === 'delivery') {
+        this.form.deliveryTime = date.getTime()
+        this.deliveryTimeText = dayjs(this.form.deliveryTime).format('YYYY-MM-DD HH:mm') + '前'
       } else {
         this.form.arriveTime = date.getTime()
         this.arriveTimeText = dayjs(this.form.arriveTime).format('YYYY-MM-DD HH:mm') + '前'
@@ -119,7 +117,7 @@ export default {
     ensure () {
       this.SET_CONSUMER_INFO(Object.assign({}, this.form))
       this.$router.back()
-    },
+    }
   },
   beforeRouteEnter (to, from, next) {
     next(async vm => {
