@@ -12,11 +12,12 @@
         :index="i"
         :item="item"
         icon="icon-ico_location"
+        @click="removeAddress({id:item.id})"
       >
         <div
           slot="right"
           class="contacts-shipper-address__item border-left-1px cube-font-14 cube-c-light-grey"
-          @click="modify(i)"
+          @click.native="modify(item)"
           v-text="'修改'"
         />
       </ListItem>
@@ -57,13 +58,33 @@ export default {
     loadBMap()
   },
   methods: {
-    ...mapActions(moudleName, ['loadAddressList']),
+    ...mapActions({
+      loadAddressList: moudleName + '/loadAddressList',
+      removeAddress: moudleName + '/removeAddress',
+      resetAddressPage: 'contacts/resetAddressPage'
+    }),
     onPageRefresh() {
       this.loading = true
     },
-    modify(index) {
-      if (index) {
+    modify(item) {
+      const data = {}
+      const config = {
+        title: item ? '修改发货地址' : '新增发货地址',
+        namespace: moudleName,
+        dispatch: 'addressAction',
+        data
       }
+      if (item) {
+        item = item.data
+        data.id = item.id
+        data.code = item.cityCode
+        data.address = item.address
+        data.additional = item.consignerHourseNumber
+      } else {
+        data.consignerId = this.$route.query.consignerId
+      }
+
+      this.resetAddressPage(config)
       this.$router.push({ name: 'contacts-address' })
     }
   }

@@ -20,9 +20,6 @@ export default [
     // 修改/编辑地址
     path: '/contacts/address',
     name: 'contacts-address',
-    meta: {
-      noNeedRefresh: []
-    },
     component: () => import(/* webpackChunkName: "contacts-common" */ './common/address.vue')
   },
   // -------发货方-----------
@@ -94,6 +91,9 @@ export default [
   {
     path: '/contacts/consignee/detail',
     name: 'contacts-consignee-detail',
+    meta: {
+      noNeedRefresh: ['contacts-consignee-modify']
+    },
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/detail.vue')
   },
   // 编辑和新增发货方
@@ -118,15 +118,20 @@ export default [
   {
     path: '/contacts/driver',
     name: 'contacts-driver',
+    meta: {
+      noNeedRefresh: []
+    },
     component: () => import(/* webpackChunkName: "contacts" */ './driver/pages/index.vue')
   },
   // 熟车司机详情
   {
     path: '/contacts/driver/detail',
     name: 'contacts-driver-detail',
+    meta: {
+      noNeedRefresh: []
+    },
     component: () => import(/* webpackChunkName: "contacts" */ './driver/pages/detail.vue')
   },
-  /* 承运商 */
   {
     path: '/contacts/driver/modify',
     name: 'contacts-driver-modify',
@@ -134,14 +139,6 @@ export default [
       noNeedRefresh: []
     },
     component: () => import(/* webpackChunkName: "contacts" */ './carrier/pages/truck-create.vue')
-  },
-  {
-    path: '/contacts/driver/detail',
-    name: 'contacts-driver-detail',
-    meta: {
-      noNeedRefresh: []
-    },
-    component: () => import(/* webpackChunkName: "contacts" */ './carrier/pages/truck-detail.vue')
   },
   /* 承运商 */
   {

@@ -59,12 +59,17 @@
                 :style="'backgroundImage:url(' + companyInfo.logoUrl + ');background-repeat: no-repeat;background-position-x: center;background-position-y: center;background-size: 100%;'"
                 class="avatarDiv"
                 @click="previewPic([companyInfo.logoUrl], 0)"/>
-              <icon-font
+              <svg
                 v-else
+                class="icon closeImg"
+                aria-hidden="true"
+                style="font-size: 35px;position:relative;top:-10px;">
+                <use xlink:href="#icon-morengongsilogo"/></svg>
+              <!-- <icon-font
                 style="position:relative;top:-3px;"
                 name="icon-morengongsilogo"
                 color="#CECECE"
-                :size="35"/>
+                :size="35"/> -->
             </span>
           </div>
           <div class="hr"/>
@@ -105,7 +110,7 @@
             <image-list v-else :upload-photos="wxQrPicList"/>
           </div>
         </div>
-        <div class="cardInfo">
+        <div class="cardInfo last-card">
           <div class="cardInfo-content">
             <span class="cardTitle">公司首页形象图</span>
             <span v-if="!homeBannerList.length" class="cardContent noneInfo">暂未上传</span>
@@ -186,7 +191,7 @@ export default {
         cityId: 310100,
         cityName: '上海市',
         address: '上海市静安区南京西路1038号梅龙镇广场F3e',
-        logoUrl: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/2a5dabb2-5fb6-4a19-83f2-65377fe439d9/128895253164.47852.png',
+        logoUrl: '', // 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/2a5dabb2-5fb6-4a19-83f2-65377fe439d9/128895253164.47852.png',
         contact: '张三',
         contactPhone: '18550175435',
         longitud: '121.4630120',
