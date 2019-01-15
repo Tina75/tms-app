@@ -8,10 +8,12 @@
               v-model="companyInfo.name"
               prop="name"
               label="公司全称"
+              clearable
               maxlength="25"/>
             <form-item
               v-model="companyInfo.shortName"
               label="公司简称"
+              clearable
               maxlength="6" />
           </div>
           <div class="form-section">
@@ -19,12 +21,14 @@
               v-model="companyInfo.contact"
               prop="contact"
               label="公司联系人"
+              clearable
               maxlength="10"/>
             <form-item
               v-model="companyInfo.contactPhone"
               prop="contactPhone"
               label="联系方式"
               required
+              clearable
               @input="busPhoneInputHandler"/>
             <div v-if="addContactBtn" class="cardInfo-content edit">
               <p class="addContact"><span @click="addContact">+添加更多联系人</span></p>
@@ -36,12 +40,14 @@
               v-model="companyInfo.busiContactName1"
               prop="busiContactName1"
               label="业务联系人"
+              clearable
               maxlength="10"
               required/>
             <form-item
               v-model="companyInfo.busiContactPhone1"
               prop="busiContactPhone1"
               label="联系方式"
+              clearable
               required
               @input="contactPhoneInputHandler1"/>
             <div class="cardInfo-content edit">
@@ -53,12 +59,14 @@
               v-model="companyInfo.busiContactName2"
               prop="busiContactName2"
               label="业务联系人"
+              clearable
               maxlength="10"
               required/>
             <form-item
               v-model="companyInfo.busiContactPhone2"
               prop="busiContactPhone2"
               label="联系方式"
+              clearable
               required
               @input="contactPhoneInputHandler2"/>
             <div class="cardInfo-content edit">
@@ -70,12 +78,14 @@
               v-model="companyInfo.busiContactName3"
               prop="busiContactName3"
               label="业务联系人"
+              clearable
               maxlength="10"
               required/>
             <form-item
               v-model="companyInfo.busiContactPhone3"
               prop="busiContactPhone3"
               label="联系方式"
+              clearable
               required
               @input="contactPhoneInputHandler3"/>
             <div class="cardInfo-content edit">
@@ -83,16 +93,18 @@
             </div>
           </div>
           <!-- 业务联系 -->
-          <div class="form-section">
+          <div class="form-section" style="margin-bottom: 30px">
             <form-item
               v-model="companyInfo.address"
               prop="address"
               label="公司地址"
+              clearable
               maxlength="50"
               required/>
             <form-item
               v-model="companyInfo.userAddress"
               label="补充地址"
+              clearable
               maxlength="50" />
           </div>
         </div>
@@ -139,7 +151,7 @@
               <Upload :upload-photos="busiIntroducePicList"/>
             </div>
           </div>
-          <div class="form-section textarea">
+          <div class="form-section textarea last-card">
             <form-item
               v-model="companyInfo.busiAdvantce"
               label="服务优势"
@@ -167,7 +179,7 @@
               <Upload :upload-photos="wxQrPicList" :max-count="2" :maxlength="8"/>
             </div>
           </div>
-          <div class="form-section">
+          <div class="form-section last-card">
             <div class="cardInfo-content edit">
               <span class="cardTitle">公司首页形象图</span>
               <Upload :upload-photos="homeBannerList" :max-count="1" :input-show="false"/>
@@ -368,6 +380,12 @@ export default {
       return imageListInit
     },
     async nextSetp () {
+      if (this.step === 2 &&
+         (!this.isEntryPicTitle(this.busiAdvantcePicList) ||
+         !this.isEntryPicTitle(this.busiIntroducePicList))) {
+        this.showToastPicTitle()
+        return
+      }
       if (await this.$refs.$form.validate()) {
         this.step++
       }
@@ -391,6 +409,14 @@ export default {
       this.addContactBtn = true
     },
     save () {
+      // 图片校验title是否填写
+      if (!this.isEntryPicTitle(this.companyPhotoList) || !this.isEntryPicTitle(this.wxQrPicList)) {
+        this.showToastPicTitle()
+        return
+      }
+      this.companyInfo.busiContact = []
+      if (this.homeBannerList.length) this.companyInfo.homeBanner = this.homeBannerList[0].url
+      else this.companyInfo.homeBanner = ''
       for (let index = 1; index <= 3; index++) {
         if (this.companyInfo['busiContactName' + index]) {
           this.companyInfo.busiContact.push({ name: this.companyInfo['busiContactName' + index], phone: this.companyInfo['busiContactPhone' + index] })
@@ -426,6 +452,23 @@ export default {
         window.toast('图片上传失败')
       }
       window.loadingEnd()
+    },
+    showToastPicTitle() {
+      this.toast = this.$createToast({
+        txt: '请完善图片标题',
+        type: 'txt'
+      })
+      this.toast.show()
+    },
+    isEntryPicTitle (picList) {
+      let flag = true
+      picList.forEach(element => {
+        if (!element.title) {
+          flag = false
+          return flag
+        }
+      })
+      return flag
     }
   }
 

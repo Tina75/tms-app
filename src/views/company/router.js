@@ -8,7 +8,7 @@ export default [
     component: () => import(/* webpackChunkName: "company" */'./pages/show.vue')
   },
   {
-    path: '/companyEdit',
+    path: '/company/edit',
     name: 'company-edit',
     component: () => import(/* webpackChunkName: "company" */'./pages/edit.vue')
   }

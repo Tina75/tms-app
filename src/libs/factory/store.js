@@ -105,22 +105,26 @@ export function DetailFactory(store = new Store(), { api, key }) {
 
   safeSet(store.mutations, NAME.setMutation, (state, data) => (state[NAME.state] = data))
 
-  safeSet(store.actions, NAME.modifyAction, ({ state, commit }, data) => {
-    const isCreate = !data.id
-    return Server({
-      method: 'post',
-      url: isCreate ? api.create : api.update,
-      data
+  if (api.create && api.update) {
+    safeSet(store.actions, NAME.modifyAction, ({ state, commit }, data) => {
+      const isCreate = !data.id
+      return Server({
+        method: 'post',
+        url: isCreate ? api.create : api.update,
+        data
+      })
     })
-  })
+  }
 
-  safeSet(store.actions, NAME.removeAction, ({ state, commit }, data) => {
-    return Server({
-      method: 'delete',
-      url: api.remove,
-      data
+  if (api.remove) {
+    safeSet(store.actions, NAME.removeAction, ({ state, commit }, data) => {
+      return Server({
+        method: 'delete',
+        url: api.remove,
+        params: data
+      })
     })
-  })
+  }
 
   return store
 }

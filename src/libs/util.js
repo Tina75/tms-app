@@ -43,7 +43,7 @@ export function throttle(fn, threshhold = 160, context) {
 
 // 加载百度地图
 let BmapLoaded = false
-const BmapUrl = 'https://api.map.baidu.com/api?v=3.0&ak=ggbutTkfutBprx75Y438DhypnH0uGH45'
+const BmapUrl = 'https://api.map.baidu.com/api?v=3.0&ak=EkPR9YNO4Ez9LW301kyTGCyTfQ5cweIz'
 export function loadBMap() {
   if (!BmapLoaded) {
     BmapLoaded = new Promise((resolve, reject) => {
