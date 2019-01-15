@@ -391,6 +391,9 @@ export default {
       this.addContactBtn = true
     },
     save () {
+      this.companyInfo.busiContact = []
+      if (this.homeBannerList.length) this.companyInfo.homeBanner = this.homeBannerList[0].url
+      else this.companyInfo.homeBanner = ''
       for (let index = 1; index <= 3; index++) {
         if (this.companyInfo['busiContactName' + index]) {
           this.companyInfo.busiContact.push({ name: this.companyInfo['busiContactName' + index], phone: this.companyInfo['busiContactPhone' + index] })
