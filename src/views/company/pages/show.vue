@@ -123,9 +123,9 @@
       <cube-button
         class="footer-button"
         primary
-        @click="sharFoot = true">分享</cube-button>
+        @click="sharePath">分享</cube-button>
     </div>
-    <div v-show="sharFoot" class="share-foot">
+    <!-- <div v-show="sharFoot" class="share-foot">
       <div class="share-div">
         <p class="share-title">分享到</p>
         <div>
@@ -147,11 +147,6 @@
                 :size="44"/>
               <div class="title">手机QQ</div>
             </li>
-            <!-- <li>
-              <svg class="icon closeImg" aria-hidden="true" style="font-size: 44px;">
-                <use xlink:href="#icon-qqkongjian"/></svg>
-              <div class="title">QQ空间</div>
-            </li> -->
           </ul>
         </div>
         <cube-button
@@ -159,13 +154,12 @@
           light
           @click="sharFoot = false">取消</cube-button>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import IconFont from '@/components/Iconfont'
 import imageList from './image-list'
 import bridge from '@/libs/dsbridge'
 export default {
@@ -173,7 +167,7 @@ export default {
   metaInfo: {
     title: '我的公司'
   },
-  components: { IconFont, imageList },
+  components: { imageList },
   data () {
     return {
       busiIntroducePicList: [],
@@ -233,13 +227,13 @@ export default {
       this.$router.push({ name: 'image-preview', params: { imgs: [this.companyInfo.logoUrl], index } })
     },
     // 分享
-    sharePath (type) {
+    sharePath () {
       let param = {}
       param.title = '运掌柜'
       param.desc = '运掌柜详情'
       param.url = 'https://yzg.tms5566.com'
       param.thumburl = ''
-      param.platformType = type
+      param.platformType = ''
       param.log = {}
       bridge.call('navigation.share', { param }, function(result) {
       })
