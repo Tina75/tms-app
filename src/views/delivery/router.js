@@ -16,6 +16,11 @@ export default [
     path: '/delivery/send-car',
     name: 'delivery-send-car',
     component: () => import(/* webpackChunkName: "delivery" */'./pages/send-car.vue')
+  },
+  {
+    path: '/delivery/order-list/:id',
+    name: 'delivery-order-list',
+    component: () => import(/* webpackChunkName: "delivery" */'./pages/order-list.vue')
   }
 ]
 

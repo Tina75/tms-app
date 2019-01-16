@@ -20,41 +20,40 @@
 </template>
 
 <script>
+import ListAll from './components/list-all'
+import ListPickup from './components/list-pickup'
+import ListDelivery from './components/list-delivery'
+import ListSending from './components/list-sending'
+import ListArrival from './components/list-arrival'
 import { mapGetters, mapActions } from 'vuex'
-import DispatchList from '../components/dispath-list.vue'
-import SendList from '../components/send-list'
-import SendingList from '../components/sending-list'
-import ArrivalList from '../components/arrival-list'
 export default {
-  name: 'delivery-list',
-  metaInfo: { title: '送货管理' },
-  components: { DispatchList, SendList, SendingList, ArrivalList },
+  name: 'order-list',
+  metaInfo: { title: '订单管理' },
+  components: { ListAll, ListPickup, ListDelivery, ListSending, ListArrival },
   data () {
     return {
       current: '',
-      selectedLabel: '待调度',
+      selectedLabel: '全部',
       tabs: [
-        { label: '待调度', componentName: 'dispatch-list', value: 'dispatch' },
-        { label: '待发运', componentName: 'send-list', value: 'send' },
-        { label: '在途', componentName: 'sending-list', value: 'sending' },
-        { label: '已到货', componentName: 'arrival-list', value: 'arrival' }]
+        { label: '全部', componentName: 'list-all', value: 'all' },
+        { label: '待提货', componentName: 'list-pickup', value: 'pickup' },
+        { label: '待送货', componentName: 'list-delivery', value: 'delivery' },
+        { label: '在途', componentName: 'list-sending', value: 'sending' },
+        { label: '已到货', componentName: 'list-arrival', value: 'arrival' }
+      ]
     }
   },
 
   computed: {
-    ...mapGetters('delivery', ['TabCount'])
+    ...mapGetters('order/list', ['TabCount'])
   },
 
-  beforeRouteEnter(from, to, next) {
-    next(vm => {
-      vm.getTabCount()
-    })
-  },
   mounted() {
     this.updateView(this.selectedLabel)
+    this.getTabCount()
   },
   methods: {
-    ...mapActions('delivery', ['getTabCount']),
+    ...mapActions('order/list', ['getTabCount']),
     updateView(label) {
       this.current = this.tabs.find(item => item.label === label).componentName
     }
