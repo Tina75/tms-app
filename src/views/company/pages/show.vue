@@ -182,11 +182,12 @@ export default {
       homeBannerList: [],
       companyPhotoList: [],
       busiContactInit: [],
-      sharFoot: false
+      sharFoot: false,
+      companyInfo: {}
     }
   },
   computed: {
-    ...mapGetters(['companyInfo'])
+    ...mapGetters(['companyInfoInit'])
   },
   mounted () {
     bridge.call('ui.setRightButtonAction', { text: '编辑', action: 'action', color: '#666666' },
@@ -211,6 +212,7 @@ export default {
       }
     },
     initData () {
+      this.companyInfo = Object.assign(this.companyInfoInit)
       this.busiIntroducePicList = this.initImage(this.companyInfo.busiIntroducePic)
       this.busiAdvantcePicList = this.initImage(this.companyInfo.busiAdvantcePic)
       this.wxQrPicList = this.initImage(this.companyInfo.wxQrPic)
@@ -234,7 +236,7 @@ export default {
     sharePath (type) {
       let param = {}
       param.title = '运掌柜'
-      param.desc = '运掌柜详情巴拉巴拉'
+      param.desc = '运掌柜详情'
       param.url = 'https://yzg.tms5566.com'
       param.thumburl = ''
       param.platformType = type

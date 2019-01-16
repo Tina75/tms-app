@@ -30,7 +30,7 @@
               required
               clearable
               @input="busPhoneInputHandler"/>
-            <div v-if="addContactBtn" class="cardInfo-content edit">
+            <div v-if="!(contact1 && contact2 && contact3)" class="cardInfo-content edit">
               <p class="addContact"><span @click="addContact">+添加更多联系人</span></p>
             </div>
           </div>
@@ -238,8 +238,20 @@ export default {
       contact1: false,
       contact2: false,
       contact3: false,
-      addContactBtn: true,
-      contactList: [],
+      companyInfo: {
+        name: '',
+        shortName: '',
+        contact: '',
+        contactPhone: '',
+        address: '',
+        userAddress: '',
+        busiContactName1: '',
+        busiContactPhone1: '',
+        busiContactName2: '',
+        busiContactPhone2: '',
+        busiContactName3: '',
+        busiContactPhone3: ''
+      },
       rules: {
         name: { required: true, type: 'string' },
         contact: { required: true, type: 'string', CHECK_NAME, messages: nameMessage },
@@ -255,9 +267,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['companyInfo'])
+    ...mapGetters(['companyInfoInit'])
   },
-  created () {
+  mounted () {
     this.getCompanyData()
   },
   methods: {
@@ -306,6 +318,7 @@ export default {
       })
     },
     initData () {
+      this.companyInfo = Object.assign({}, this.companyInfo, this.companyInfoInit)
       // 图片相关
       this.busiIntroducePicList = this.initImage(this.companyInfo.busiIntroducePic)
       this.busiAdvantcePicList = this.initImage(this.companyInfo.busiAdvantcePic)
@@ -354,15 +367,11 @@ export default {
       } else if (!this.contact3) {
         this.contact3 = true
       }
-      if (this.contact1 && this.contact2 && this.contact3) {
-        this.addContactBtn = false
-      }
     },
     removeContact (contact, index) {
       this[contact] = false
       this.companyInfo['busiContactName' + index] = ''
       this.companyInfo['busiContactPhone' + index] = ''
-      this.addContactBtn = true
     },
     save () {
       let vm = this

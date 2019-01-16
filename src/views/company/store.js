@@ -1,11 +1,11 @@
 import Server from '@/libs/server'
 export default {
   state: {
-    companyInfo: {}
+    companyInfoInit: {}
   },
   mutations: {
     setCompanyInfo (state, info) {
-      state.companyInfo = { ...info }
+      state.companyInfoInit = { ...info }
     }
   },
   actions: {
@@ -31,8 +31,8 @@ export default {
     }
   },
   getters: {
-    companyInfo: (state) => {
-      return state.companyInfo
+    companyInfoInit: (state) => {
+      return state.companyInfoInit
     }
   }
 }
