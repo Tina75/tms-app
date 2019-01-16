@@ -1,6 +1,11 @@
 <template>
   <div class="contacts-shipper-cargo">
-    <InfiniteList v-model="loading" :data="cargoList.list" :loader="loadCargoList" :has-next="cargoList.hasNext">
+    <InfiniteList
+      v-model="loading"
+      :has-data="cargoList.list.length"
+      :loader="loadCargoList"
+      :has-next="cargoList.hasNext"
+    >
       <ListItem
         v-for="(item, i) in cargoList.list"
         :key="item.id"
@@ -53,7 +58,6 @@ export default {
     },
     modify(index) {
       if (index) {
-
       }
       this.$router.push({ name: 'contacts-shipper-cargo-modify' })
     }
