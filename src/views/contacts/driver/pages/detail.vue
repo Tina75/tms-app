@@ -161,9 +161,15 @@ export default {
     },
     del () {
       const data = {
-        id: this.driverDetail.id
+        carrierId: this.$route.query.driverId
       }
-      this.removeDriver(data)
+      try {
+        this.removeDriver(data)
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.$router.back()
+      }
     }
   },
   beforeRouteEnter (to, from, next) {
