@@ -2,9 +2,9 @@
   <div class="order-create-consignee">
     <InfiniteList
       v-model="loading"
-      :data="consigneeList.list.length"
+      :has-data="consigneeList.list.length"
       :loader="loadConsigneeList"
-      :is-end="consigneeList.hasNext"
+      :has-next="consigneeList.hasNext"
     >
       <ListItem
         v-for="(item, i) in consigneeList.list"
