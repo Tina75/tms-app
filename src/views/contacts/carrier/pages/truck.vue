@@ -2,9 +2,9 @@
   <div class="contacts-carrier">
     <InfiniteList
       v-model="loading"
-      :data="truckList.list"
+      :has-data="truckList.list.length"
       :loader="loadTruckList"
-      :is-end="truckList.hasNext"
+      :has-next="truckList.hasNext"
     >
       <Media
         v-for="(item, i) in truckList.list"
@@ -33,7 +33,7 @@
 
 <script>
 // import ListItem from '../../components/ListItem'
-import Media from '../components/Media'
+import Media from '../components/media'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import { mapActions, mapState } from 'vuex'

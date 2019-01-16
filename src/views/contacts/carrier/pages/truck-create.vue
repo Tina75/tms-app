@@ -12,6 +12,7 @@
         class="cube-mb-15"
         :bottom-line="false"
         :options="options.driverType"
+        prop="require"
       />
 
       <FormItem
@@ -42,12 +43,11 @@
         @on-click="showDatePicker"
       />
 
-      <div class="cube-mb-15">
+      <card class="cube-mb-15" title="常跑线路">
         <form-item
           v-model="model.regularLine"
           type="click"
           label="出发地1"
-          :show-arrow="false"
           placeholder="请选择出发地城市"
           @on-click="showPickCity = true"
         />
@@ -55,7 +55,6 @@
           v-model="model.regularLine"
           type="click"
           label="目的地1"
-          :show-arrow="false"
           placeholder="请选择目的地城市"
           @on-click="showPickCity = true"
         />
@@ -63,7 +62,6 @@
           v-model="model.regularLine"
           type="click"
           label="出发地2"
-          :show-arrow="false"
           placeholder="请选择出发地城市"
           @on-click="showPickCity = true"
         />
@@ -71,11 +69,17 @@
           v-model="model.regularLine"
           type="click"
           label="目的地2"
-          :show-arrow="false"
           placeholder="请选择目的地城市"
           @on-click="showPickCity = true"
         />
-      </div>
+      </card>
+
+      <card class="cube-mb-15" title="证件上传">
+        <div class="uploadWrap">
+          <upload v-model="model.drivePhoto" label="点击上传行驶证"/>
+          <upload v-model="model.travelPhoto" label="点击上传道路运输证"/>
+        </div>
+      </card>
 
       <FormItem v-model="model.remark" maxlength="200" type="textarea" label="备注"/>
     </FromGroup>
@@ -92,7 +96,8 @@ import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
 import { TruckDetail } from '../modules/model'
 import CityPicker from '@/components/CityPicker'
-// import Upload
+import Upload from '../components/upload'
+import Card from '../components/card'
 const moudleName = 'contacts/carrier'
 export default {
   name: 'ModifyContactsCarrierTruck',
@@ -101,7 +106,7 @@ export default {
       title: this.isCreate ? '新增车辆' : '修改车辆'
     }
   },
-  components: { FormItem, FromGroup, LoadingButton, CityPicker },
+  components: { FormItem, FromGroup, LoadingButton, CityPicker, Upload, Card },
   data() {
     return {
       model: new TruckDetail(),
@@ -134,18 +139,30 @@ export default {
       try {
         this.model.carrierId = this.$route.query.carrierId
         await this.modifyTruck(TruckDetail.toServer(this.model))
-        this.$refreshPage('contacts-carrier-truck', 'contacts-carrier-truck-detail')
+        this.afterSubmit()
       } catch (e) {
         console.error(e)
       } finally {
         this.submiting = false
       }
     },
+
     onRefreshPage() {
       this.model = this.isCreate
         ? new TruckDetail()
         : TruckDetail.toFrom(this.TruckDetail)
     },
+
+    /* 提交成功后续操作 */
+    afterSubmit () {
+      this.$refreshPage('contacts-carrier-truck', 'contacts-carrier-truck-detail')
+      this.$createToast({
+        time: 1500,
+        txt: this.isCreate ? '新增车辆成功' : '修改车辆成功'
+      }).show()
+      this.$router.back()
+    },
+
     showDatePicker() {
       const self = this
       if (!this.datePicker) {
@@ -177,4 +194,7 @@ export default {
   height auto
   min-height 100%
   background #efeff4
+  .uploadWrap
+    display flex
+    padding 0 15px 15px
 </style>
