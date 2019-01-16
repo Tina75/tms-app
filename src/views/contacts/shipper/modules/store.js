@@ -16,21 +16,23 @@ const store = {
     // 交给common/address页面处理的action
     addressAction: ({ state, dispatch }, addressData) =>
       dispatch('modifyAddress', {
+        cityName: cityUtil.getCityNameArray(addressData.locale).join(''),
+        address: addressData.address,
         id: addressData.id,
         consignerId: addressData.consignerId,
-        address: addressData.address,
         longitude: addressData.lon,
         latitude: addressData.lat,
-        cityName: cityUtil.getCityNameArray(addressData.locale).join(''),
         cityCode: addressData.code,
         consignerHourseNumber: addressData.additional,
         mapType: 1
       }),
+
     // 同步业务员
     syncButtOperator: ({ state, commit }) =>
       Server({ method: 'get', url: '/permission/buttOperator' }).then((response) =>
         commit('setOperator', response.data.data)
       ),
+
     loadContactDetail: ({ rootState, commit }) =>
       Server({
         method: 'get',

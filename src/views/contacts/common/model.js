@@ -16,7 +16,8 @@ export class Address {
     // 表单提交后将补充的内容
     lat: '',
     lon: '',
-    locale: [] // 选中的完整城市信息
+    locale: [], // 选中的完整城市信息
+    addressDetail: null // 选中的百度地图列表项
     // any other customs
   }
 
@@ -25,6 +26,7 @@ export class Address {
     return {
       additional: store.additional || '',
       address: store.address || '',
+      addressDetail: null,
       locale: cityUtil.getPathByCode(store.code) || []
     }
   }
@@ -36,9 +38,7 @@ export class Address {
     const locale = form.locale
     storeData = {
       ...storeData,
-      additional: form.additional,
-      address: form.address,
-      locale,
+      ...form,
       code: '',
       lat: '',
       lon: ''

@@ -9,6 +9,7 @@
       <ListItem
         v-for="(item, i) in addressList.list"
         :key="item.id"
+        :nowrap="false"
         :index="i"
         :item="item"
         icon="icon-ico_location"

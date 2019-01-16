@@ -8,7 +8,7 @@
         placeholder="请选择省/市/区"
         @click.native="showCityPicker = true"
       />
-      <FormItem v-model="form.address" label="详细地址" placeholder="请输入详细地址"/>
+      <FormItem v-model="form.address" label="详细地址" :focus-on-end="true" placeholder="请输入详细地址"/>
       <FormItem v-model="form.additional" label="补充地址" placeholder="请输入楼号-门牌号"/>
     </FromGroup>
     <BmapAddressList :city="limitCityGeo" :search="form.address" @select="onSelectAddress"/>
@@ -45,7 +45,8 @@ export default {
       form: {
         locale: [],
         address: '',
-        additional: ''
+        additional: '',
+        addressDetail: null
       },
       submiting: false,
       showCityPicker: false,
@@ -73,7 +74,10 @@ export default {
   methods: {
     ...mapActions(moudleName, ['resetAddressPage']),
     onSelectAddress(item) {
-      this.form.address = item.detail || ''
+      const detail = item.detail || ''
+      const title = item.name || ''
+      this.form.address = detail.includes(title) ? detail : detail + title
+      this.form.addressDetail = item.data
     },
     async submit() {
       this.submiting = true
@@ -101,7 +105,6 @@ export default {
       }
     },
     confirmCity(data) {
-      console.info(data)
       this.form.locale = data
     },
     reset() {
@@ -118,8 +121,12 @@ export default {
   beforeRouteLeave(to, from, next) {
     this.showCityPicker = false
     const leave = () => {
-      this.confirmed = false
-      this.resetAddressPage()
+      if (!this.confirmed) {
+        this.resetAddressPage()
+      } else {
+        this.confirmed = false
+      }
+      // 清理百度列表
       this.form.address = ''
       next()
     }

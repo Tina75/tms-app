@@ -56,6 +56,11 @@ export default {
     type: Boolean,
     default: false
   },
+  // 焦点在末尾
+  focusOnEnd: {
+    type: Boolean,
+    default: false
+  },
   // 当 type = textarea 且 maxlength != Infinity 或 0 时，会在文本框下方显示计数器
   maxlength: {
     type: [ String, Number ],
