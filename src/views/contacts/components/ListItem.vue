@@ -8,13 +8,15 @@
     </div>
     <div class="contact-item__content cube-ml-15 cube-ellipsis">
       <slot>
-        <span class="cube-c-black cube-ellipsis cube-font-17" v-text="item.name"/>
-        <span class="cube-c-light-grey cube-ellipsis cube-font-14" v-text="item.detail"/>
+        <span class="cube-c-black cube-font-17" v-text="item.name"/>
+        <span class="cube-c-light-grey cube-ellipsis cube-font-14 cube-mt-5" v-text="item.detail"/>
       </slot>
     </div>
     <slot name="right">
       <i
-        class="contact-item__tel iconfont icon-ico_call"
+        v-if="rightIcon"
+        class="contact-item__right-icon"
+        :class="rightIcon"
         @click.stop="$emit('phoneCall', item, index)"
       />
     </slot>
@@ -27,6 +29,10 @@ export default {
     icon: {
       type: String,
       default: 'icon-ico_accept'
+    },
+    rightIcon: {
+      type: [String, Boolean],
+      default: 'iconfont icon-ico_call'
     },
     item: {
       type: Object,
@@ -67,7 +73,7 @@ export default {
     font-size 17px
     color #fff
     border-radius 100%
-  &__tel
+  &__right-icon
     font-size 30px
     color #00A4BD
   &__content

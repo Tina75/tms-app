@@ -26,7 +26,7 @@ export class ContactDetail {
     data = {
       ...data,
       isInvoice: !!data.isInvoice,
-      invoiceRate: !!data.isInvoice ? +data.invoiceRate + '%' : ''
+      invoiceRate: !!data.isInvoice ? +data.invoiceRate * 100 + '%' : ''
     }
     if (data.salesmanId) {
       data.salesmanId = +data.salesmanId
@@ -42,12 +42,13 @@ export class ContactDetail {
     return data
   }
   // 后端接口 => from表单格式
-  static toFrom(data) {
+  static toForm(data) {
     data = { ...data }
     // cube-switch 需要boolean类型 防止报错
     data.isInvoice = !!data.isInvoice
     // 后端是0.xx 前端显示xx%
-    data.invoiceRate = +data.invoiceRate
+    data.invoiceRate = +data.invoiceRate * 100
+    data.salesmanId = data.salesmanId || ''
     return data
   }
 
@@ -55,7 +56,8 @@ export class ContactDetail {
   static toServer(data) {
     data = { ...data }
     data.isInvoice = data.isInvoice ? 1 : 0
-    data.invoiceRate = data.isInvoice ? data.invoiceRate : 0
+    // 后端最大值是1....
+    data.invoiceRate = data.isInvoice ? +data.invoiceRate / 100 : 0
     return data
   }
 }
@@ -64,7 +66,7 @@ export class CargoDetail {
   id = '' // 货物id
   cargoName = '' // 货物名称
   cargoNo = '' // 货物编号
-  cargoCost = 0 // 货物价值，单位：分
+  cargoCost = '' // 货物价值，单位：分
   unit = '' // 包装
   dimension = {
     // 包装尺寸
@@ -72,8 +74,19 @@ export class CargoDetail {
     width: 0,
     height: 0
   }
-  weight = 0 // 重量
-  volume = 0 // 体积
+  weight = '' // 重量
+  volume = '' // 体积
   remark1 = ''
   remark2 = ''
+}
+
+export class AddressDetail {
+  id = ''
+  address = '' // 详细地址
+  cityName = ''
+  cityCode = ''
+  longitude = ''
+  latitude = ''
+  mapType = '' // 1百度地图；2高德地图
+  consignerHourseNumber = '' // 门牌号
 }

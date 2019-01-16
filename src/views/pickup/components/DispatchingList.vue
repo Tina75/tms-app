@@ -11,14 +11,17 @@
         :key="index"
         class="order-item">
         <div class="item-header border-bottom-1px">
-          <span>{{item.createTime}}</span>
+          <span>{{item.createTime|datetimeFormat}}</span>
           <i v-if="item.collectionMoney">代</i>
         </div>
         <div class="item-content border-bottom-1px">
-          <p class="order-route">
-            <span>{{item.start}}</span>
-            <i></i>
-            <span>{{item.end}}</span>
+          <p v-if="item.start" class="order-route">
+            <span>{{item.startName}}</span>
+            <icon-font
+              name="icon-line"
+              :size="20"
+              color="#333333"/>
+            <span>{{item.endName}}</span>
           </p>
           <p class="order-stat">
             <span v-if="item.weight">{{item.weight}}吨</span>
@@ -28,17 +31,17 @@
           <p class="order-custom">
             {{item.consignerName}}
           </p>
-          <p class="order-custom">
+          <p v-if="item.customerOrderNo" class="order-custom">
             客户单号：{{item.customerOrderNo}}
           </p>
         </div>
         <div class="item-footer">
           <div class="order-cost">
-            <p class="cost-label">应收费用（{{item.settlementType}}）</p>
+            <p class="cost-label">应收费用（{{settlementTypeMap[item.settlementType]}}）</p>
             <p class="cost-money">{{item.totalFee}}<span>/元</span></p>
           </div>
           <div class="order-btns">
-            <a>调度</a>
+            <a @click="dispatch(item)">调度</a>
           </div>
         </div>
       </li>
@@ -48,15 +51,19 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import IconFont from '@/components/Iconfont'
 
 export default {
   name: 'DispatchingList',
+  components: { IconFont },
   computed: {
-    ...mapGetters(['dispatchingData']),
+    ...mapGetters(['dispatchingData', 'settlementTypeMap']),
     options () {
       return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
+        pullDownRefresh: {
+          txt: '刷新成功'
+        },
+        pullUpLoad: this.dispatchingData.next,
         scrollbar: true
       }
     }
@@ -65,17 +72,17 @@ export default {
     this.getDispatching()
   },
   methods: {
-    ...mapActions(['getDispatching']),
+    ...mapActions(['setPageStart', 'getDispatching']),
     /** 下拉刷新 */
     async onPullingDown () {
+      this.setPageStart('dispatchingData')
       this.getDispatching()
     },
     /** 上拉加载 */
     async onPullingUp () {
       this.getDispatching()
     },
-    clickHandler () {},
-    changeHandler () {}
+    dispatch (data) {}
   }
 }
 </script>

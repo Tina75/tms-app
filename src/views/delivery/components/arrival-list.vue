@@ -17,7 +17,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['ArrivalList'])
+    ...mapGetters('delivery', ['ArrivalList'])
   },
 
   created () {
@@ -25,7 +25,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getArrival', 'clearArrival']),
+    ...mapActions('delivery', ['getArrival', 'clearArrival']),
     refresh() {
       this.clearArrival()
       this.getArrival()

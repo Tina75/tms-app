@@ -2,17 +2,18 @@
   <div class="create-order-page scroll-list-wrap">
     <cube-scroll class="scroll-box">
       <form-group ref="$form" class="form" :rules="rules">
-        <div v-if="step === 1">
+        <div v-if="step === 1" key="1">
           <div class="form-section">
             <form-item
               v-model="companyInfo.name"
               prop="name"
               label="公司全称"
+              clearable
               maxlength="25"/>
             <form-item
               v-model="companyInfo.shortName"
-              prop="shortName"
               label="公司简称"
+              clearable
               maxlength="6" />
           </div>
           <div class="form-section">
@@ -20,96 +21,106 @@
               v-model="companyInfo.contact"
               prop="contact"
               label="公司联系人"
+              clearable
               maxlength="10"/>
             <form-item
               v-model="companyInfo.contactPhone"
               prop="contactPhone"
               label="联系方式"
-              maxlength="11"
-              required/>
-            <div v-if="contactList.length < 3" class="cardInfo-content edit">
+              required
+              clearable
+              @input="busPhoneInputHandler"/>
+            <div v-if="addContactBtn" class="cardInfo-content edit">
               <p class="addContact"><span @click="addContact">+添加更多联系人</span></p>
             </div>
           </div>
           <!-- 业务联系 -->
-          <div v-if="contactList.length > 0" class="form-section">
+          <div v-if="contact1" class="form-section">
             <form-item
               v-model="companyInfo.busiContactName1"
               prop="busiContactName1"
               label="业务联系人"
+              clearable
               maxlength="10"
               required/>
             <form-item
               v-model="companyInfo.busiContactPhone1"
               prop="busiContactPhone1"
               label="联系方式"
-              maxlength="11"
-              required/>
+              clearable
+              required
+              @input="contactPhoneInputHandler1"/>
             <div class="cardInfo-content edit">
-              <p class="removeContact"><span @click="removeContact(0)">删除该联系人</span></p>
+              <p class="removeContact"><span @click="removeContact('contact1', 1)">删除该联系人</span></p>
             </div>
           </div>
-          <div v-if="contactList.length > 1" class="form-section">
+          <div v-if="contact2" class="form-section">
             <form-item
               v-model="companyInfo.busiContactName2"
               prop="busiContactName2"
               label="业务联系人"
+              clearable
               maxlength="10"
               required/>
             <form-item
               v-model="companyInfo.busiContactPhone2"
               prop="busiContactPhone2"
               label="联系方式"
-              maxlength="11"
-              required/>
+              clearable
+              required
+              @input="contactPhoneInputHandler2"/>
             <div class="cardInfo-content edit">
-              <p class="removeContact"><span @click="removeContact(1)">删除该联系人</span></p>
+              <p class="removeContact"><span @click="removeContact('contact2', 2)">删除该联系人</span></p>
             </div>
           </div>
-          <div v-if="contactList.length > 2" class="form-section">
+          <div v-if="contact3" class="form-section">
             <form-item
               v-model="companyInfo.busiContactName3"
               prop="busiContactName3"
               label="业务联系人"
+              clearable
               maxlength="10"
               required/>
             <form-item
               v-model="companyInfo.busiContactPhone3"
               prop="busiContactPhone3"
               label="联系方式"
-              maxlength="11"
-              required/>
+              clearable
+              required
+              @input="contactPhoneInputHandler3"/>
             <div class="cardInfo-content edit">
-              <p class="removeContact"><span @click="removeContact(2)">删除该联系人</span></p>
+              <p class="removeContact"><span @click="removeContact('contact3', 3)">删除该联系人</span></p>
             </div>
           </div>
           <!-- 业务联系 -->
-          <div class="form-section">
+          <div class="form-section" style="margin-bottom: 30px">
             <form-item
               v-model="companyInfo.address"
               prop="address"
               label="公司地址"
+              clearable
               maxlength="50"
               required/>
             <form-item
               v-model="companyInfo.userAddress"
               label="补充地址"
+              clearable
               maxlength="50" />
           </div>
         </div>
-        <div v-if="step === 2">
+        <div v-if="step === 2" key="2">
           <div class="form-section">
             <div class="cardInfo">
               <div class="cardInfo-content edit">
                 <span class="cardTitle">公司LOGO</span>
-                <span v-if="!companyInfo.logoUrl" class="cardContent noneInfo">点击上传
+                <span v-if="!companyInfo.logoUrl" class="cardContent noneInfo" @click="addImg">点击上传
                   <icon-font
                     style="position:relative;top:-1px;"
                     name="icon-ico_right"
                     color="#CECECE"
                     :size="15"/>
                 </span>
-                <span v-else class="cardContent">
+                <span v-else class="cardContent" @click="addImg">
                   <div
                     :style="'backgroundImage:url(' + companyInfo.logoUrl + ');background-repeat: no-repeat;background-position-x: center;background-position-y: center;background-size: 100%;'"
                     class="avatarDiv"
@@ -140,7 +151,7 @@
               <Upload :upload-photos="busiIntroducePicList"/>
             </div>
           </div>
-          <div class="form-section textarea">
+          <div class="form-section textarea last-card">
             <form-item
               v-model="companyInfo.busiAdvantce"
               label="服务优势"
@@ -155,7 +166,7 @@
             </div>
           </div>
         </div>
-        <div v-if="step === 3">
+        <div v-if="step === 3" key="3">
           <div class="form-section">
             <div class="cardInfo-content edit">
               <span class="cardTitle">公司风貌（{{companyPhotoList.length}}/10）</span>
@@ -168,7 +179,7 @@
               <Upload :upload-photos="wxQrPicList" :max-count="2" :maxlength="8"/>
             </div>
           </div>
-          <div class="form-section">
+          <div class="form-section last-card">
             <div class="cardInfo-content edit">
               <span class="cardTitle">公司首页形象图</span>
               <Upload :upload-photos="homeBannerList" :max-count="1" :input-show="false"/>
@@ -197,8 +208,12 @@
   </div>
 </template>
 <script>
-import Upload from '@/components/Updalod'
+import { mapActions } from 'vuex'
+import Upload from '@/components/Upload'
 import { FormGroup, FormItem } from '@/components/Form'
+import { uploadOSS } from '@/components/Upload/ossUtil'
+import bridge from '@/libs/dsbridge'
+import { validatePhone, CHECK_NAME } from './validator'
 export default {
   name: 'company-edit',
   metaInfo: {
@@ -206,6 +221,10 @@ export default {
   },
   components: { Upload, FormItem, FormGroup },
   data () {
+    const phoneValidate = validatePhone
+    const phoneMessage = { phoneValidate: '手机号格式不正确' }
+    const nameMessage = { CHECK_NAME: '姓名不能小于2个字且不能多于20个字' }
+
     return {
       validity: {},
       valid: undefined,
@@ -216,6 +235,9 @@ export default {
       wxQrPicList: [],
       homeBannerList: '',
       companyPhotoList: [],
+      contact1: false,
+      contact2: false,
+      contact3: false,
       companyInfo: {
         id: 237,
         name: 'qwee',
@@ -231,7 +253,10 @@ export default {
         companyProfile: '公司简介公司简介公司简介公司简介',
         shortName: 'asdad',
         userAddress: '运满满9F',
-        busiContact: [],
+        busiContact: [
+          { name: '2222', phone: '12556543255' },
+          { name: '1112', phone: '11556535855' }
+        ],
         busiContactName1: '',
         busiContactName2: '',
         busiContactName3: '',
@@ -268,16 +293,15 @@ export default {
       contactList: [],
       rules: {
         name: { required: true, type: 'string' },
-        shortName: { required: true, type: 'string' },
-        contact: { required: true, type: 'string' },
-        contactPhone: { required: true, type: 'string' },
+        contact: { required: true, type: 'string', CHECK_NAME, messages: nameMessage },
+        contactPhone: { required: true, type: 'string', phoneValidate, messages: phoneMessage },
         address: { required: true, type: 'string' },
-        busiContactName1: { required: true, type: 'string' },
-        busiContactName2: { required: true, type: 'string' },
-        busiContactName3: { required: true, type: 'string' },
-        busiContactPhone1: { required: true, type: 'string' },
-        busiContactPhone2: { required: true, type: 'string' },
-        busiContactPhone3: { required: true, type: 'string' }
+        busiContactName1: { required: true, type: 'string', CHECK_NAME, messages: nameMessage },
+        busiContactName2: { required: true, type: 'string', CHECK_NAME, messages: nameMessage },
+        busiContactName3: { required: true, type: 'string', CHECK_NAME, messages: nameMessage },
+        busiContactPhone1: { required: true, type: 'string', phoneValidate, messages: phoneMessage },
+        busiContactPhone2: { required: true, type: 'string', phoneValidate, messages: phoneMessage },
+        busiContactPhone3: { required: true, type: 'string', phoneValidate, messages: phoneMessage }
       }
     }
   },
@@ -285,39 +309,66 @@ export default {
     this.initDate()
   },
   methods: {
-    async nextSetp () {
-      if (await this.$refs.$form.validate()) {
-        this.step++
+    ...mapActions(['saveCompanyInfo']),
+    // 公司联系电话格式化
+    busPhoneInputHandler (phone) {
+      this.phoneFormatter(phone, 'contactPhone')
+    },
+    // 联系人电话格式化1
+    contactPhoneInputHandler1 (phone) {
+      this.phoneFormatter(phone, 'busiContactPhone1')
+    },
+    // 联系人电话格式化2
+    contactPhoneInputHandler2 (phone) {
+      this.phoneFormatter(phone, 'busiContactPhone2')
+    },
+    // 联系人电话格式化3
+    contactPhoneInputHandler3 (phone) {
+      this.phoneFormatter(phone, 'busiContactPhone3')
+    },
+    phoneFormatter (phone, field) {
+      if (!phone || phone[0] !== '1') return
+      phone = phone.trim().split(' ').join('')
+      let phoneArr = []
+      let phoneTemp = ''
+      for (let i in phone) {
+        i = Number(i)
+        phoneTemp += phone[i]
+        if (!phoneArr.length && i === 2) {
+          phoneArr.push(phoneTemp)
+          phoneTemp = ''
+        } else if (phoneTemp.length === 4) {
+          phoneArr.push(phoneTemp)
+          phoneTemp = ''
+        } else if (i === (phone.length - 1)) {
+          phoneArr.push(phoneTemp)
+          phoneTemp = ''
+        }
       }
-    },
-    addContact () {
-      switch (this.contactList.length) {
-        case 1:
-          this.contactList.push({ busiContactName1: '', busiContactPhone1: '' })
-          break
-        case 2:
-          this.contactList.push({ busiContactName2: '', busiContactPhone2: '' })
-          break
-        case 3:
-          this.contactList.push({ busiContactName3: '', busiContactPhone3: '' })
-          break
-      }
-      this.addContactBtn = this.contactList.length < 3
-    },
-    removeContact (item) {
-      this.contactList.splice(item, 1)
-      this.addContactBtn = true
-    },
-    save () {
-      console.dir(this.companyInfo)
-      this.$router.push({ name: 'company' })
+      this.$nextTick(() => {
+        this.companyInfo[field] = phoneArr.join(' ')
+      })
     },
     initDate () {
+      // 图片相关
       this.busiIntroducePicList = this.initImage(this.companyInfo.busiIntroducePic)
       this.busiAdvantcePicList = this.initImage(this.companyInfo.busiAdvantcePic)
       this.wxQrPicList = this.initImage(this.companyInfo.wxQrPic)
       this.companyPhotoList = this.initImage(this.companyInfo.companyPhoto)
       this.homeBannerList = this.initImage(this.companyInfo.homeBanner)
+      // 业务联系人
+      if (this.companyInfo.busiContact) {
+        for (let index = 0; index < this.companyInfo.busiContact.length; index++) { // JSON.parse
+          this.companyInfo['busiContactName' + (index + 1)] = this.companyInfo.busiContact[index].name
+          this.companyInfo['busiContactPhone' + (index + 1)] = this.companyInfo.busiContact[index].phone
+          this['contact' + (index + 1)] = true
+        }
+      }
+      // 手机号码格式化
+      this.busPhoneInputHandler(this.companyInfo.contactPhone)
+      if (this.contact1) this.contactPhoneInputHandler1(this.companyInfo.busiContactPhone1)
+      if (this.contact2) this.contactPhoneInputHandler2(this.companyInfo.busiContactPhone2)
+      if (this.contact3) this.contactPhoneInputHandler3(this.companyInfo.busiContactPhone3)
     },
     initImage (imageList) {
       let imageListInit = []
@@ -327,6 +378,97 @@ export default {
         imageListInit = [{ url: imageList, title: '' }]
       }
       return imageListInit
+    },
+    async nextSetp () {
+      if (this.step === 2 &&
+         (!this.isEntryPicTitle(this.busiAdvantcePicList) ||
+         !this.isEntryPicTitle(this.busiIntroducePicList))) {
+        this.showToastPicTitle()
+        return
+      }
+      if (await this.$refs.$form.validate()) {
+        this.step++
+      }
+    },
+    addContact () {
+      if (!this.contact1) {
+        this.contact1 = true
+      } else if (!this.contact2) {
+        this.contact2 = true
+      } else if (!this.contact3) {
+        this.contact3 = true
+      }
+      if (this.contact1 && this.contact2 && this.contact3) {
+        this.addContactBtn = false
+      }
+    },
+    removeContact (contact, index) {
+      this[contact] = false
+      this.companyInfo['busiContactName' + index] = ''
+      this.companyInfo['busiContactPhone' + index] = ''
+      this.addContactBtn = true
+    },
+    save () {
+      // 图片校验title是否填写
+      if (!this.isEntryPicTitle(this.companyPhotoList) || !this.isEntryPicTitle(this.wxQrPicList)) {
+        this.showToastPicTitle()
+        return
+      }
+      this.companyInfo.busiContact = []
+      if (this.homeBannerList.length) this.companyInfo.homeBanner = this.homeBannerList[0].url
+      else this.companyInfo.homeBanner = ''
+      for (let index = 1; index <= 3; index++) {
+        if (this.companyInfo['busiContactName' + index]) {
+          this.companyInfo.busiContact.push({ name: this.companyInfo['busiContactName' + index], phone: this.companyInfo['busiContactPhone' + index] })
+        }
+        delete this.companyInfo['busiContactName' + index]
+        delete this.companyInfo['busiContactPhone' + index]
+      }
+      this.saveCompanyInfo(this.companyInfo).then(({ data }) => {
+        this.$Message.success('保存成功!')
+        // 跳转页面show.vue
+        this.$router.push({ name: 'company' })
+      })
+    },
+    addImg () {
+      const vm = this
+      bridge.call('ui.selectPictures', { size: 1200, maxBytes: 300 * 1024, num: 1 }, function (result) {
+        if (result.data.images.length > 0) {
+          result.data.images.forEach((item) => {
+            bridge.call('ui.getBase64Picture', { key: item }, function (result) {
+              let baseData = 'data:image/jpeg;base64,' + result.data.image
+              vm.uploadOSS(baseData)
+            })
+          })
+        }
+      })
+    },
+    async uploadOSS (baseData) {
+      window.loadingStart()
+      const img = await uploadOSS(baseData)
+      if (img) {
+        this.uploadPhotos.push(img)
+      } else {
+        window.toast('图片上传失败')
+      }
+      window.loadingEnd()
+    },
+    showToastPicTitle() {
+      this.toast = this.$createToast({
+        txt: '请完善图片标题',
+        type: 'txt'
+      })
+      this.toast.show()
+    },
+    isEntryPicTitle (picList) {
+      let flag = true
+      picList.forEach(element => {
+        if (!element.title) {
+          flag = false
+          return flag
+        }
+      })
+      return flag
     }
   }
 

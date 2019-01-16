@@ -45,13 +45,14 @@
         </li>
       </ul>
 
-      <cube-button>确定</cube-button>
+      <cube-button @click="ensure">确定</cube-button>
     </div>
   </cube-scroll>
 </template>
 
 <script>
 import { FormItem } from '@/components/Form'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   metaInfo: { title: '详细地址' },
@@ -60,9 +61,35 @@ export default {
     return {
       form: {
         address: '',
-        extra: ''
+        extra: '',
+        longtitude: '',
+        latitude: ''
       }
     }
+  },
+  computed: { ...mapGetters('order/create', [ 'currentArrdessType', 'orderInfo' ]) },
+  methods: {
+    ...mapMutations('order/create', [ 'SET_ADDRESS_INFO' ]),
+
+    ensure () {
+      this.SET_ADDRESS_INFO(Object.assign({}, this.form))
+      this.$router.back()
+    }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if (vm.currentArrdessType === 'send') {
+        vm.form.address = vm.orderInfo.consignerAddress
+        vm.form.extra = vm.orderInfo.consignerHourseNumber
+        vm.form.longitude = vm.orderInfo.consignerAddressLongitude
+        vm.form.latitude = vm.orderInfo.consignerAddressLatitude
+      } else {
+        vm.form.address = vm.orderInfo.consigneeAddress
+        vm.form.extra = vm.orderInfo.consigneeHourseNumber
+        vm.form.longitude = vm.orderInfo.consigneeAddressLongitude
+        vm.form.latitude = vm.orderInfo.consigneeAddressLatitude
+      }
+    })
   }
 }
 </script>

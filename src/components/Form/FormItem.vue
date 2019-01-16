@@ -34,7 +34,7 @@
             :class="inputAlignment"
             :options="options"
             :placeholder="inputPlaceHolder"
-            :title="inputPlaceHolder"
+            :title="label"
             :disabled="inputDisabled"
             @change="selectChangeHandler"
             @picker-show="pickerShowHandler"
@@ -88,6 +88,7 @@
       </div>
 
       <cube-validator
+        v-if="rule"
         ref="$validator"
         v-model="valid"
         :model="inputValue"
@@ -103,6 +104,7 @@
 import Vue from 'vue'
 import { Validator } from 'cube-ui'
 import props from './js/formItemProps'
+import precision from './js/precision'
 
 Vue.use(Validator)
 
@@ -121,7 +123,7 @@ export default {
       picker: null,
 
       valid: void 0,
-      rule: {}
+      rule: null
     }
   },
   computed: {
@@ -130,7 +132,7 @@ export default {
       else return 'text'
     },
     inputRequired () {
-      return !!this.rule.required
+      return !!this.rule && !!this.rule.required
     },
     inputReadonly () { return this.type === 'click' || this.readonly },
     inputDisabled () { return this.disabled },
@@ -161,7 +163,23 @@ export default {
   watch: {
     value (val) { this.inputValue = val },
     inputValue (newVal, oldVal) {
-      if (this.type === 'number' && isNaN(Number(newVal))) this.$nextTick(() => { this.inputValue = oldVal })
+      if (this.type === 'number') {
+        if (isNaN(Number(newVal))) {
+          this.$nextTick(() => {
+            this.inputValue = ''
+            this.inputEmit()
+          })
+          return
+        }
+        const value = precision(newVal, Number(this.precision))
+        if (String(value) !== newVal) {
+          this.$nextTick(() => {
+            this.inputValue = value
+            this.inputEmit()
+          })
+          return
+        }
+      }
       this.inputEmit()
     }
   },
@@ -194,13 +212,14 @@ export default {
     rulesParser () {
       if (!this.prop || !this.rules) return
       this.rule = this.rules[this.prop]
-      if (!this.rule.messages) return
+      if (!this.rule || !this.rule.messages) return
       for (let key in this.rule.messages) {
         Validator.addMessage(key, this.rule.messages[key])
       }
     },
     async doValidate () {
-      const valid = this.$refs.$validator.validate()
+      if (!this.rule) return true
+      const valid = await this.$refs.$validator.validate()
       this.valid = valid
       return valid
     }

@@ -8,9 +8,10 @@ class InfinateList {
   list = []
   hasNext = true
   nextPage = 1
-  pageSize = 10
+  pageSize = 12
 }
 /**
+ * 参考: contacts/shipper/pages/index
  * config:{
  *  key: 指定键名,
  *  url: action加载的链接,
@@ -43,11 +44,11 @@ export function InfinateListFactory(
     itemModel: `${name}Item`
   }
   // ------state-----
-  store.state[NAME.state] = new InfinateList()
+  safeSet(store.state, NAME.state, new InfinateList())
 
   // ----mutations---
   // 添加，校验当前返回的pageNo是否是需要的nextPage索引
-  store.mutations[NAME.addMutation] = (state, payload) => {
+  safeSet(store.mutations, NAME.addMutation, (state, payload) => {
     const lazylist = state[NAME.state]
     if (payload.pageNo === lazylist.nextPage) {
       const data = payload[nameMap.data]
@@ -58,16 +59,15 @@ export function InfinateListFactory(
         lazylist.hasNext = !!payload.hasNext
       }
     }
-  }
+  })
 
   // 清空
-  store.mutations[NAME.clearMutation] = (state) => (state[NAME.state] = new InfinateList())
+  safeSet(store.mutations, NAME.clearMutation, (state) => (state[NAME.state] = new InfinateList()))
 
   // ----actions-----
   // 根据clear入参决定是否是刷新操作, 在请求完后再更新数据
   // 请求成功后再删除数据进行更新，保障若失败也能保留请求前的显示
-  // 取
-  store.actions[NAME.loadAction] = async ({ state, rootState, commit, dispatch }, needClear) => {
+  safeSet(store.actions, NAME.loadAction, async ({ state, rootState, commit, dispatch }, needClear) => {
     const list = state[NAME.state]
     const needSend = list.hasNext || needClear
     const pageNo = needClear ? 1 : list.nextPage
@@ -88,7 +88,7 @@ export function InfinateListFactory(
       }
       commit(NAME.addMutation, response.data.data)
     }
-  }
+  })
   return store
 }
 
@@ -96,28 +96,41 @@ export function DetailFactory(store = new Store(), { api, key }) {
   const name = key[0].toUpperCase() + key.slice(1)
   const NAME = {
     state: `${key}Detail`,
+    setMutation: `set${name}Detail`,
     modifyAction: `modify${name}`,
     removeAction: `remove${name}`
   }
 
-  store.state[NAME.state] = {}
+  safeSet(store.state, NAME.state, {})
 
-  store.actions[NAME.modifyAction] = ({ state, commit }, data) => {
-    const isCreate = !data.id
-    return Server({
-      method: 'post',
-      url: isCreate ? api.create : api.update,
-      data
+  safeSet(store.mutations, NAME.setMutation, (state, data) => (state[NAME.state] = data))
+
+  if (api.create && api.update) {
+    safeSet(store.actions, NAME.modifyAction, ({ state, commit }, data) => {
+      const isCreate = !data.id
+      return Server({
+        method: 'post',
+        url: isCreate ? api.create : api.update,
+        data
+      })
     })
   }
 
-  store.actions[NAME.removeAction] = ({ state, commit }, data) => {
-    return Server({
-      method: 'delete',
-      url: api.remove,
-      data
+  if (api.remove) {
+    safeSet(store.actions, NAME.removeAction, ({ state, commit }, data) => {
+      return Server({
+        method: 'delete',
+        url: api.remove,
+        params: data
+      })
     })
   }
 
   return store
+}
+// 有重名则不修改
+function safeSet(obj, key, value) {
+  if (typeof obj[key] === 'undefined') {
+    obj[key] = value
+  }
 }

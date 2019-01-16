@@ -1,6 +1,11 @@
 <template>
   <div class="contacts-shipper-address">
-    <InfiniteList v-model="loading" :data="addressList.list" :loader="loadAddressList" :is-end="addressList.hasNext">
+    <InfiniteList
+      v-model="loading"
+      :data="addressList.list"
+      :loader="loadAddressList"
+      :has-next="addressList.hasNext"
+    >
       <ListItem
         v-for="(item, i) in addressList.list"
         :key="item.id"
@@ -11,7 +16,7 @@
         <div
           slot="right"
           class="contacts-shipper-address__item border-left-1px cube-font-14 cube-c-light-grey"
-          @click="modify(i)"
+          @click.native="modify(item)"
           v-text="'修改'"
         />
       </ListItem>
@@ -33,6 +38,7 @@ import ListItem from '../../components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import { mapActions, mapState } from 'vuex'
+import { loadBMap } from '@/libs/util'
 const moudleName = 'contacts/shipper'
 export default {
   name: 'ContactsShipperCargoList',
@@ -46,15 +52,39 @@ export default {
     }
   },
   computed: mapState(moudleName, ['addressList']),
+  mounted() {
+    // 预加载百度地图
+    loadBMap()
+  },
   methods: {
-    ...mapActions(moudleName, ['loadAddressList']),
+    ...mapActions({
+      loadAddressList: moudleName + '/loadAddressList',
+      removeAddress: moudleName + '/removeAddress',
+      resetAddressPage: 'contacts/resetAddressPage'
+    }),
     onPageRefresh() {
       this.loading = true
     },
-    modify(index) {
-      if (index) {
+    modify(item) {
+      const data = {}
+      const config = {
+        title: item ? '修改发货地址' : '新增发货地址',
+        namespace: moudleName,
+        dispatch: 'addressAction',
+        data
       }
-      this.$router.push({ name: 'contacts-shipper-address-modify' })
+      if (item) {
+        item = item.data
+        data.id = item.id
+        data.code = item.cityCode
+        data.address = item.address
+        data.additional = item.consignerHourseNumber
+      } else {
+        data.consignerId = this.$route.query.consignerId
+      }
+
+      this.resetAddressPage(config)
+      this.$router.push({ name: 'contacts-address' })
     }
   }
 }

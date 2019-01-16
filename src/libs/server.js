@@ -20,8 +20,7 @@ instance.interceptors.request.use(
     // loading
     if (config.loading) window.loading()
     if (process.env.NODE_ENV !== 'production' && (config.mock || Number(process.env.VUE_APP_IS_MOCK))) {
-      config.baseURL = '/'
-      // config.baseURL = process.env.VUE_APP_HOST_MOCK
+      config.baseURL = process.env.VUE_APP_HOST_MOCK
     }
     if (config.method === 'get' && config.data) {
       config.params = config.data
@@ -38,7 +37,7 @@ instance.interceptors.response.use(
     const endTime = getTime()
     console.info(`response ${endTime.string} `, response)
     if (response.config.loading) window.loading(false)
-    const resultCode = response.data.code
+    const resultCode = Number(response.data.code)
     if (response.config.ignoreCode || resultCode === 10000) {
       return response
     } else {

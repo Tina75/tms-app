@@ -1,20 +1,20 @@
 <template>
   <div class="shipper-detail cube-has-bottom-btn">
     <div class="shipper-detail__header">
-      <span class="cube-font-18" v-text="viewData.name"/>
-      <div class="cube-font-14">
-        <i class="cubeic-person cube-mr-10"/>
+      <span class="cube-font-20 cube-font-weight--m" v-text="viewData.name"/>
+      <div class="cube-font-14 cube-c-grey">
+        <i class="cube-c-orange cubeic-person cube-mr-10"/>
         <span class="cube-mr-10" v-text="viewData.contact"/>
         <span v-text="viewData.phone"/>
       </div>
     </div>
-    <div v-if="infoList.length" class="shipper-detail__info border-bottom-1px">
+    <div v-if="infoList.length" class="shipper-detail__info border-bottom-1px cube-mt-15">
       <div
         v-for="(item, i) in infoList"
         :key="i"
         class="shipper-detail__info-item border-right-1px"
       >
-        <span class="cube-font-15 cube-c-black" v-text="item.value"/>
+        <span class="cube-font-15 cube-c-black cube-font-weight--m" v-text="item.value"/>
         <span class="cube-font-14 cube-c-light-grey" v-text="item.text"/>
       </div>
     </div>
@@ -48,7 +48,7 @@
 
 <script>
 import CellItem from '../../components/CellItem.vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { ContactDetail } from '../modules/model'
 const moudleName = 'contacts/shipper'
 const ListConfig = [
@@ -67,8 +67,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapState(moudleName, ['contactList', 'operator']),
-    ...mapGetters(moudleName, ['contactDetail']),
+    ...mapState(moudleName, ['contactDetail', 'operator']),
     viewData() {
       return ContactDetail.toView(this.contactDetail, this.operator)
     },
@@ -91,6 +90,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions(moudleName, ['loadContactDetail']),
+    onPageRefresh() {
+      this.loadContactDetail()
+    },
     phoneCall() {
       window.location.href = `tel:${this.viewData.phone}`
     }
@@ -106,10 +109,10 @@ export default {
     display flex
     flex-direction column
     justify-content space-between
-    padding 20px 15px
-    height 90px
-    color #fff
-    background #3A424B
+    padding 20px 15px 30px
+    height 100px
+    box-sizing border-box
+    background #fff
   &__remark
     padding 16px 15px
     min-height 100px

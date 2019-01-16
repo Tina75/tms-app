@@ -1,14 +1,14 @@
 <template>
   <div class="cargo-detail">
     <div class="cargo-name">
-      可口可乐（123456780）
+      {{data.name}}
     </div>
     <div class="cargo-info">
-      <span>{{data.weight}}吨</span>
-      <span>{{data.volume}}方</span>
-      <span>{{data.packageUnit}}</span>
-      <span>{{data.num}}件</span>
-      <span>{{data.cost}}元</span>
+      <span>{{data.weight || 0}}吨</span>
+      <span>{{data.volume || 0}}方</span>
+      <span>{{data.packageUnit || '-'}}</span>
+      <span>{{data.num || 0 }}件</span>
+      <span>{{data.cost || 0 }}元</span>
       <span>{{data.remark1}}</span>
       <span>{{data.remark2}}</span>
     </div>

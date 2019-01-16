@@ -1,6 +1,6 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10">
-    <FromGroup :rules="rules" >
+    <FromGroup :rules="rules">
       <FormItem v-model="model.name" label="发货人名称" maxlength="20" prop="require"/>
       <FormItem v-model="model.contact" label="联系人" maxlength="15" prop="require"/>
       <FormItem
@@ -55,7 +55,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
@@ -87,17 +87,20 @@ export default {
     }
   },
   computed: {
-    ...mapState(moudleName, ['operator']),
-    ...mapGetters(moudleName, ['contactDetail']),
+    ...mapState(moudleName, ['operator', 'contactDetail']),
     operatorOptions() {
       return this.operator.map(item => ({ value: item.id, text: item.name }))
     },
     isCreate() {
-      return !this.contactDetail.id
+      return !this.$route.query.consignerId
     }
   },
   methods: {
-    ...mapActions(moudleName, ['syncButtOperator', 'modifyContact']),
+    ...mapActions(moudleName, [
+      'syncButtOperator',
+      'modifyContact',
+      'loadContactDetail'
+    ]),
     async submit() {
       this.submiting = true
       try {
@@ -109,11 +112,17 @@ export default {
         this.submiting = false
       }
     },
-    onPageRefresh() {
-      this.model = this.isCreate
-        ? new ContactDetail()
-        : ContactDetail.toFrom(this.contactDetail)
+    async onPageRefresh() {
+      this.model = new ContactDetail()
       this.loadOperators()
+      if (!this.isCreate) {
+        const urlId = +this.$route.query.consignerId
+        if (urlId !== +this.contactDetail.id) {
+          await this.loadContactDetail()
+        }
+        this.model = ContactDetail.toForm(this.contactDetail)
+        console.info(this.model)
+      }
     },
     async loadOperators() {
       if (!this.operatorOptions.length) {

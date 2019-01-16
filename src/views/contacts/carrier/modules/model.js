@@ -27,7 +27,7 @@ export class ContactDetail {
     return data
   }
   // 后端接口 => from表单格式
-  static toFrom(data) {
+  static toForm(data) {
     data = { ...data }
     return data
   }

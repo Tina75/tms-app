@@ -1,5 +1,27 @@
 import store from '@/store'
+import commonStore from './store'
+
+store.registerModule('contacts', commonStore)
+
+// 动态读取当前目录下所有子文件下的store.js进行注册, 注册模块名为文件名
+const requireContext = require.context('./', true, /store\.js/)
+requireContext.keys().forEach((filePath) => {
+  let match = filePath.match(/\.\/(\w+)\//)
+  if (match) {
+    const moduleName = filePath.match(/\.\/(\w+)\//)[1]
+    const moduleStore = requireContext(filePath)
+    store.registerModule(['contacts', moduleName], moduleStore.default)
+  }
+})
+
 export default [
+  // -------公共页面---------
+  {
+    // 修改/编辑地址
+    path: '/contacts/address',
+    name: 'contacts-address',
+    component: () => import(/* webpackChunkName: "contacts-common" */ './common/address.vue')
+  },
   // -------发货方-----------
   {
     // 发货方通信录
@@ -15,7 +37,7 @@ export default [
     path: '/contacts/shipper/detail',
     name: 'contacts-shipper-detail',
     meta: {
-      noNeedRefresh: []
+      noNeedRefresh: ['contacts-shipper-modify']
     },
     component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/detail.vue')
   },
@@ -36,15 +58,6 @@ export default [
       noNeedRefresh: []
     },
     component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/address.vue')
-  },
-  {
-    // 编辑发货方地址
-    path: '/contacts/shipper/address/modify',
-    name: 'contacts-shipper-address-modify',
-    meta: {
-      noNeedRefresh: []
-    },
-    component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/address-modify.vue')
   },
   {
     // 发货方常发货列表 ?consignerId
@@ -69,31 +82,55 @@ export default [
   {
     path: '/contacts/consignee',
     name: 'contacts-consignee',
+    meta: {
+      noNeedRefresh: []
+    },
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/index.vue')
   },
   // 收货方详情
   {
     path: '/contacts/consignee/detail',
     name: 'contacts-consignee-detail',
+    meta: {
+      noNeedRefresh: ['contacts-consignee-modify']
+    },
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/detail.vue')
   },
   // 编辑和新增发货方
   {
-    path: '/contacts/consignee/form/:type',
-    name: 'contacts-consignee-form',
-    component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/form.vue')
+    path: '/contacts/consignee/modify',
+    name: 'contacts-consignee-modify',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/modify.vue')
   },
   // 选择所属发货方
   {
     path: '/contacts/consignee/select/shipper',
     name: 'select-shipper',
+    meta: {
+      noNeedRefresh: []
+    },
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/select-shipper.vue')
   },
   // 熟车司机列表
   {
     path: '/contacts/driver',
     name: 'contacts-driver',
+    meta: {
+      noNeedRefresh: []
+    },
     component: () => import(/* webpackChunkName: "contacts" */ './driver/pages/index.vue')
+  },
+  // 熟车司机详情
+  {
+    path: '/contacts/driver/detail',
+    name: 'contacts-driver-detail',
+    meta: {
+      noNeedRefresh: []
+    },
+    component: () => import(/* webpackChunkName: "contacts" */ './driver/pages/detail.vue')
   },
   {
     path: '/contacts/driver/modify',
@@ -101,15 +138,7 @@ export default [
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck-create.vue')
-  },
-  {
-    path: '/contacts/driver/detail',
-    name: 'contacts-driver-detail',
-    meta: {
-      noNeedRefresh: []
-    },
-    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck-detail.vue')
+    component: () => import(/* webpackChunkName: "contacts" */ './carrier/pages/truck-create.vue')
   },
   /* 承运商 */
   {
@@ -118,7 +147,7 @@ export default [
     meta: {
       noNeedRefresh: ['contacts-carrier-detail']
     },
-    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/index.vue')
+    component: () => import(/* webpackChunkName: "contacts" */ './carrier/pages/index.vue')
   },
   /* 修改/新增 承运商 */
   {
@@ -127,7 +156,7 @@ export default [
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/create.vue')
+    component: () => import(/* webpackChunkName: "contacts" */ './carrier/pages/create.vue')
   },
   /* 承运商详情 */
   {
@@ -136,7 +165,7 @@ export default [
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/detail.vue')
+    component: () => import(/* webpackChunkName: "contacts" */ './carrier/pages/detail.vue')
   },
   /* 承运商合作车辆 */
   {
@@ -145,7 +174,7 @@ export default [
     meta: {
       noNeedRefresh: ['contacts-carrier-truck-detail']
     },
-    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck.vue')
+    component: () => import(/* webpackChunkName: "contacts" */ './carrier/pages/truck.vue')
   },
   {
     path: '/contacts/carrier/truck/modify',
@@ -153,7 +182,7 @@ export default [
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck-create.vue')
+    component: () => import(/* webpackChunkName: "contacts" */ './carrier/pages/truck-create.vue')
   },
   {
     path: '/contacts/carrier/truck/detail',
@@ -161,18 +190,6 @@ export default [
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */'./carrier/pages/truck-detail.vue')
+    component: () => import(/* webpackChunkName: "contacts" */ './carrier/pages/truck-detail.vue')
   }
 ]
-
-store.registerModule('contacts', {
-  namespaced: true
-})
-
-// 动态读取当前目录下所有子文件下的store.js进行注册, 注册模块名为文件名
-const requireContext = require.context('./', true, /store\.js/)
-requireContext.keys().forEach((filePath) => {
-  const moduleName = filePath.match(/\.\/(\w+)\//)[1]
-  const moduleStore = requireContext(filePath)
-  store.registerModule(['contacts', moduleName], moduleStore.default)
-})

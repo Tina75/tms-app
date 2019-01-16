@@ -4,12 +4,12 @@
       <FormItem v-model="model.cargoName" label="货物名称" class="cube-mb-15" maxlength="20" prop="require"/>
       <FormItem v-model="model.cargoNo" label="货物编号" />
       <FormItem v-model="model.cargoCost" label="货值(元)" type="number"/>
-      <FormItem v-model="model.unit" label="包装方式" />
-      <FormItem :value="viewDimension" label="包装尺寸(毫米)" type="click"/>
+      <FormItem v-model="model.unit" label="包装方式" type="click" placeholder="请选择"/>
+      <FormItem :value="viewDimension" label="包装尺寸(毫米)" type="click" placeholder="请输入长*宽*高"/>
       <FormItem v-model="model.weight" label="重量(公斤)" type="number"/>
       <FormItem v-model="model.volume" label="体积(方)" maxlength="6" type="number" class="cube-mb-15"/>
-      <FormItem v-model="model.remark1" label="备注1" maxlength="200" type="textarea"  class="cube-mb-15"/>
-      <FormItem v-model="model.remark2" label="备注2" maxlength="200" type="textarea" />
+      <FormItem v-model="model.remark1" label="备注1" maxlength="200" placeholder="请输入（最多输入200字）" type="textarea"  class="cube-mb-15"/>
+      <FormItem v-model="model.remark2" label="备注2" maxlength="200" placeholder="请输入（最多输入200字）" type="textarea" />
     </FromGroup>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
   </div>

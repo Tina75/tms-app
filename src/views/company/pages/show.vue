@@ -24,7 +24,19 @@
           <div class="hr"/>
           <div class="cardInfo-content">
             <span class="cardTitle">联系方式</span>
-            <span class="cardContent">{{companyInfo.contactPhone}}</span>
+            <span class="cardContent">{{configPhone(companyInfo.contactPhone)}}</span>
+          </div>
+        </div>
+        <!-- 业务联系人 -->
+        <div v-for="(item, index) in busiContactInit" :key="index" class="cardInfo" >
+          <div class="cardInfo-content">
+            <span class="cardTitle">公司联系人</span>
+            <span class="cardContent">{{item.name}}</span>
+          </div>
+          <div class="hr"/>
+          <div class="cardInfo-content">
+            <span class="cardTitle">联系方式</span>
+            <span class="cardContent">{{configPhone(item.phone)}}</span>
           </div>
         </div>
         <div class="cardInfo">
@@ -46,13 +58,18 @@
                 v-if="companyInfo.logoUrl"
                 :style="'backgroundImage:url(' + companyInfo.logoUrl + ');background-repeat: no-repeat;background-position-x: center;background-position-y: center;background-size: 100%;'"
                 class="avatarDiv"
-                @click="previewPic([companyInfo.logoUrl],index)"/>
-              <icon-font
+                @click="previewPic([companyInfo.logoUrl], 0)"/>
+              <svg
                 v-else
+                class="icon closeImg"
+                aria-hidden="true"
+                style="font-size: 35px;position:relative;top:-10px;">
+                <use xlink:href="#icon-morengongsilogo"/></svg>
+              <!-- <icon-font
                 style="position:relative;top:-3px;"
                 name="icon-morengongsilogo"
                 color="#CECECE"
-                :size="35"/>
+                :size="35"/> -->
             </span>
           </div>
           <div class="hr"/>
@@ -93,7 +110,7 @@
             <image-list v-else :upload-photos="wxQrPicList"/>
           </div>
         </div>
-        <div class="cardInfo">
+        <div class="cardInfo last-card">
           <div class="cardInfo-content">
             <span class="cardTitle">公司首页形象图</span>
             <span v-if="!homeBannerList.length" class="cardContent noneInfo">暂未上传</span>
@@ -106,15 +123,51 @@
       <cube-button
         class="footer-button"
         primary
-        @click="share">分享</cube-button>
+        @click="sharFoot = true">分享</cube-button>
+    </div>
+    <div v-show="sharFoot" class="share-foot">
+      <div class="share-div">
+        <p class="share-title">分享到</p>
+        <div>
+          <ul>
+            <li @click="sharePath">
+              <icon-font
+                name="icon-weixin"
+                :size="44"/>
+              <div class="title">微信好友</div>
+            </li>
+            <li>
+              <svg class="icon closeImg" aria-hidden="true" style="font-size: 44px;">
+                <use xlink:href="#icon-pengyouquan"/></svg>
+              <div class="title">朋友圈</div>
+            </li>
+            <li>
+              <icon-font
+                name="icon-qq"
+                :size="44"/>
+              <div class="title">手机QQ</div>
+            </li>
+            <!-- <li>
+              <svg class="icon closeImg" aria-hidden="true" style="font-size: 44px;">
+                <use xlink:href="#icon-qqkongjian"/></svg>
+              <div class="title">QQ空间</div>
+            </li> -->
+          </ul>
+        </div>
+        <cube-button
+          class="footer-button"
+          light
+          @click="sharFoot = false">取消</cube-button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-// import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import IconFont from '@/components/Iconfont'
 import imageList from './image-list'
+import bridge from '@/libs/dsbridge'
 export default {
   name: 'company',
   metaInfo: {
@@ -147,7 +200,10 @@ export default {
         companyProfile: '公司简介公司简介公司简介公司简介',
         shortName: 'asdad',
         userAddress: '运满满9F',
-        busiContact: [],
+        busiContact: [
+          { name: '2222', phone: '12556543255' },
+          { name: '1112', phone: '11556535855' }
+        ],
         busiIntroduce: '',
         busiIntroducePic:
         [ { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg', title: '12323' },
@@ -174,30 +230,45 @@ export default {
         companyPhoto:
         [ { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg', title: '12323' }
         ]
-      }
+      },
+      busiContactInit: [],
+      sharFoot: false
     }
   },
   computed: {
-    // ...mapGetters(['companyInfo'])
+    ...mapGetters(['companyInfo'])
   },
   created () {
     // this.getCompanyData()
   },
   mounted () {
+    bridge.call('ui.setRightButtonAction', { text: '编辑', action: 'action', color: '#666666' },
+      // text:按钮标题 action:按钮方法名 color：按钮标题颜色，不传默认白色
+      function(result) {}
+    )
     this.initData()
+    // this.getCompanyData()
   },
   methods: {
-    // ...mapActions(['getCompanyInfo']),
-    // async getCompanyData () {
-    //   await this.getCompanyInfo()
-    //   await this.initData()
-    // },
+    ...mapActions(['getCompanyInfo', 'shareCompanyInfo']),
+    async getCompanyData () {
+      await this.getCompanyInfo()
+      await this.initData()
+    },
+    configPhone (phoneNumber) {
+      if (phoneNumber.length === 11) {
+        let phone = phoneNumber.toString()
+        return [phone.substr(0, 3), phone.substr(3, 4), phone.substr(7, 4)].join(' ')
+      }
+    },
     initData () {
       this.busiIntroducePicList = this.initImage(this.companyInfo.busiIntroducePic)
       this.busiAdvantcePicList = this.initImage(this.companyInfo.busiAdvantcePic)
       this.wxQrPicList = this.initImage(this.companyInfo.wxQrPic)
       this.homeBannerList = this.initImage(this.companyInfo.homeBanner)
       this.companyPhotoList = this.initImage(this.companyInfo.companyPhoto)
+      // 业务联系人
+      if (this.companyInfo.busiContact) this.busiContactInit = this.companyInfo.busiContact
     },
     initImage (imageList) {
       let imageListInit = []
@@ -208,11 +279,20 @@ export default {
       }
       return imageListInit
     },
-    share () {
-      this.$router.push({ name: 'company-edit' })
-    },
     previewPic (imgs, index = 0) {
-      this.$router.push({ name: 'image-preview', params: { imgs: [this.companyInfo.logoUrl], index: 0 } })
+      this.$router.push({ name: 'image-preview', params: { imgs: [this.companyInfo.logoUrl], index } })
+    },
+    // 分享
+    sharePath () {
+      let param = {}
+      param.title = ''
+      param.desc = ''
+      param.url = ''
+      param.thumburl = ''
+      param.platformType = ''
+      param.log = {}
+      bridge.call('navigation.share', { param }, function(result) {
+      })
     }
   }
 }
