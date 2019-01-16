@@ -163,14 +163,14 @@ export default {
     &__time:after
       content ''
       display block
-      border-bottom 1px solid #E4E7EC
+      border-bottom 1px solid #F3F5F9
       margin-top 6px
     &__money
       min-height 46px
     &__money:before
       content ''
       display block
-      border-bottom 1px solid #E4E7EC
+      border-bottom 1px solid #F3F5F9
       margin-bottom 10px
     &__body
       padding-left 15px

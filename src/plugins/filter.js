@@ -20,12 +20,11 @@ Vue.filter('moneyFormat', (value, accuracy) => {
 
 Vue.filter('settlementTypeFormat', (value) => {
   const settlement = ['未知', '现付', '到付', '回付', '月结']
-  if (value > -1 && value < 4) return settlement[value]
-  else return '未知'
+  return settlement[value] ? settlement[value] : '未知'
 })
 
 Vue.filter('codeToName', value => {
-  return City.getUniqueName(value)
+  return City.getNameByCode(value)
 })
 
 Vue.filter('orderType', value => {

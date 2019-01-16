@@ -37,6 +37,9 @@ export default {
     },
     loadmore() {
       this.getSending()
+    },
+    editBillById(id, type) {
+      // TODO: 提货单和送货单不同
     }
   }
 }

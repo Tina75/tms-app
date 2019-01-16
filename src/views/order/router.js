@@ -1,6 +1,7 @@
 import store from '@/store'
 import createModule from './create/module'
 import listModule from './list/store'
+import oftenModule from './often/store'
 
 export default [
   {
@@ -63,3 +64,4 @@ export default [
 store.registerModule('order', { namespaced: true })
 store.registerModule(['order', 'create'], createModule)
 store.registerModule(['order', 'list'], listModule)
+store.registerModule(['order', 'often'], oftenModule)

@@ -8,7 +8,7 @@
       @change="updateView">
       <cube-tab v-for="item in tabs" :key="item.label" :label="item.label">
         <p class="tab-label">{{item.label}}</p>
-        <p class="tab-count">{{tabCount[item.value]}}</p>
+        <p v-if="TabCount" class="tab-count">{{TabCount[item.value]}}</p>
       </cube-tab>
     </cube-tab-bar>
     <div class="wrapper">
@@ -25,7 +25,7 @@ import ListPickup from './components/list-pickup'
 import ListDelivery from './components/list-delivery'
 import ListSending from './components/list-sending'
 import ListArrival from './components/list-arrival'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'order-list',
   metaInfo: { title: '订单管理' },
@@ -35,23 +35,25 @@ export default {
       current: '',
       selectedLabel: '全部',
       tabs: [
-        { label: '全部', componentName: 'list-all' },
-        { label: '待提货', componentName: 'list-pickup' },
-        { label: '待送货', componentName: 'list-delivery' },
-        { label: '在途', componentName: 'list-sending' },
-        { label: '已到货', componentName: 'list-arrival' }
+        { label: '全部', componentName: 'list-all', value: 'all' },
+        { label: '待提货', componentName: 'list-pickup', value: 'pickup' },
+        { label: '待送货', componentName: 'list-delivery', value: 'delivery' },
+        { label: '在途', componentName: 'list-sending', value: 'sending' },
+        { label: '已到货', componentName: 'list-arrival', value: 'arrival' }
       ]
     }
   },
 
   computed: {
-    ...mapGetters('pickup', ['tabCount'])
+    ...mapGetters('order/list', ['TabCount'])
   },
 
   mounted() {
     this.updateView(this.selectedLabel)
+    this.getTabCount()
   },
   methods: {
+    ...mapActions('order/list', ['getTabCount']),
     updateView(label) {
       this.current = this.tabs.find(item => item.label === label).componentName
     }
@@ -75,7 +77,11 @@ export default {
   .tab-count
     font-size: 13px;
     line-height: 18px;
+    min-height 18px
     color: #666666;
     margin-bottom: 5px;
+  .cube-tab_active
+    .tab-label, .tab-count
+      color: #00A4BD;
 
 </style>

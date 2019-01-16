@@ -7,9 +7,10 @@
       <detail-panel-item :label="'联系方式'">
         <p class="remix-content">
           <span class="border-right-1px">18709870987</span>
-          <a>
+          <a href="tel:18709870987">
             联系TA
             <icon-font
+              class="call-icon"
               name="icon-ico_call"
               :size="18"
               color="#00A4BD"/>
@@ -27,9 +28,10 @@
       <detail-panel-item :label="'联系方式'">
         <p class="remix-content">
           <span class="border-right-1px">18709870987</span>
-          <a>
+          <a href="tel:18709870987">
             联系TA
             <icon-font
+              class="call-icon"
               name="icon-ico_call"
               :size="18"
               color="#00A4BD"/>
@@ -84,4 +86,6 @@ export default {
     max-width 240px
     text-align: left
     float: right
+  .call-icon
+    vertical-align unset
 </style>

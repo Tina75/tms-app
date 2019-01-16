@@ -30,7 +30,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('order/list', ['getDelivery', 'clearDelivery']),
+    ...mapActions('order/list', ['getDelivery', 'clearDelivery', 'deleteOrder']),
 
     refresh() {
       this.clearDelivery()
@@ -38,6 +38,15 @@ export default {
     },
     loadmore() {
       this.getDelivery()
+    },
+    deleteById(id) {
+      this.deleteOrder(id)
+    },
+    editOrderById(id) { // 修改订单
+      this.$router.push({ name: 'order-create', params: { id } })
+    },
+    editBillById(id, type) {
+      // TODO: 提货单和送货单不同
     }
   }
 }

@@ -29,7 +29,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('order/list', ['getPickup', 'clearPickup']),
+    ...mapActions('order/list', ['getPickup', 'clearPickup', 'deleteOrder']),
 
     refresh() {
       this.clearPickup()
@@ -37,6 +37,15 @@ export default {
     },
     loadmore() {
       this.getPickup()
+    },
+    deleteById(id) {
+      this.deleteOrder(id)
+    },
+    editOrderById(id) { // 修改订单
+      this.$router.push({ name: 'order-create', params: { id } })
+    },
+    editBillById(id, type) {
+      // TODO: 提货单和送货单不同
     }
   }
 }

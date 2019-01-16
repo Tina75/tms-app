@@ -31,6 +31,9 @@ export default {
       list: [],
       pageNo: 1,
       total: 1
+    },
+    tabCount: {
+
     }
 
   },
@@ -74,6 +77,9 @@ export default {
     },
     ARRIVAL_CLEAR (state) {
       state.arrival = { list: [], pageNo: 1, total: 1 }
+    },
+    TAB_COUNT(state, payload) {
+      state.tabCount = { ...payload }
     }
   },
   actions: {
@@ -140,52 +146,68 @@ export default {
         // TODO: update list
       })
     },
-    // 发运
-    doSetOff: ({ commit, state }, waybillIds = []) => {
+    getTabCount: ({ commit, state }) => {
       Server({
-        url: '/waybill/shipment',
-        method: 'post',
-        data: { waybillIds }
+        url: '/order/getOrderNumByStatus'
       }).then(({ data }) => {
-        window.toast('发运成功')
-      })
-    },
-    // 到货
-    doArrival: ({ commit, state }, waybillIds = []) => {
-      Server({
-        url: '/waybill/confirm/arrival',
-        method: 'post',
-        data: { waybillIds }
-      }).then(({ data }) => {
-        window.toast('到货成功')
-      })
-    },
-    // 调度 or 创建运单
-    dispatchOrder: ({ commit }, data) => {
-      return Server({
-        url: '/waybill/create',
-        method: 'post',
-        data
-      }).then(({ data }) => {
-        window.toast(data.msg)
-      })
-    },
-    // 获取运单详情
-    getWaybillDetail: ({ commit }, id) => {
-      Server(
-        { url: '/waybill/details',
-          method: 'post',
-          data: { waybillId: id } }
-      ).then(({ data }) => {
-        commit('WAYBILL_DETAIL', data.data)
+        commit('TAB_COUNT', data.data)
       })
     }
+    // // 发运
+    // doSetOff: ({ commit, state }, waybillIds = []) => {
+    //   Server({
+    //     url: '/waybill/shipment',
+    //     method: 'post',
+    //     data: { waybillIds }
+    //   }).then(({ data }) => {
+    //     window.toast('发运成功')
+    //   })
+    // },
+    // // 到货
+    // doArrival: ({ commit, state }, waybillIds = []) => {
+    //   Server({
+    //     url: '/waybill/confirm/arrival',
+    //     method: 'post',
+    //     data: { waybillIds }
+    //   }).then(({ data }) => {
+    //     window.toast('到货成功')
+    //   })
+    // },
+    // // 调度 or 创建运单
+    // dispatchOrder: ({ commit }, data) => {
+    //   return Server({
+    //     url: '/waybill/create',
+    //     method: 'post',
+    //     data
+    //   }).then(({ data }) => {
+    //     window.toast(data.msg)
+    //   })
+    // },
+    // // 获取运单详情
+    // getWaybillDetail: ({ commit }, id) => {
+    //   Server(
+    //     { url: '/waybill/details',
+    //       method: 'post',
+    //       data: { waybillId: id } }
+    //   ).then(({ data }) => {
+    //     commit('WAYBILL_DETAIL', data.data)
+    //   })
+    // }
   },
   getters: {
     AllList: state => state.all.list,
     PickupList: state => state.pickup.list,
     DeliveryList: (state) => state.delivery.list,
     SendingList: state => state.sending.list,
-    ArrivalList: state => state.arrival.list
+    ArrivalList: state => state.arrival.list,
+    TabCount: state => {
+      return {
+        all: '',
+        pickup: state.tabCount.pickup,
+        delivery: state.tabCount.dispatch,
+        sending: state.tabCount.transit,
+        arrival: state.tabCount.arrive + state.tabCount.receipt
+      }
+    }
   }
 }

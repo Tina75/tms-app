@@ -25,8 +25,8 @@ export default {
   name: 'delivery-dispach-city',
   components: { CityPicker },
   props: {
-    startCode: { type: String, default: '' },
-    endCode: { type: String, default: '' }
+    startCode: { type: Number, default: -1 },
+    endCode: { type: Number, default: -1 }
   },
   data () {
     return {

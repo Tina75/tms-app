@@ -2,7 +2,7 @@
   <div class="media">
     <div class="media_hd">
       <slot name="image">
-        <img :src="icon" class="media_thumb" alt="" />
+        <img :src="icon" class="media_thumb" alt="" >
       </slot>
     </div>
     <div class="media_bd">
@@ -119,4 +119,3 @@ export default {
   }
 }
 </script>
-

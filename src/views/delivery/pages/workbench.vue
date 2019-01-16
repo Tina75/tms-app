@@ -44,14 +44,14 @@ export default {
   metaInfo: { title: '调度' },
   data () {
     return {
-      startCode: '',
-      endCode: '',
+      startCode: -1,
+      endCode: -1,
       checkAll: false
     }
   },
 
   computed: {
-    ...mapGetters(['DispatchList']),
+    ...mapGetters('delivery', ['DispatchList']),
     options() {
       return {
         pullDownRefresh: true,
@@ -90,7 +90,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getDispatch', 'clearDispatch', 'dispatchOrder']),
+    ...mapActions('delivery', ['getDispatch', 'clearDispatch', 'dispatchOrder']),
     refresh() {
       this.clearDispatch()
       this.getDispatch().then(() => { this.checkAll = false })
