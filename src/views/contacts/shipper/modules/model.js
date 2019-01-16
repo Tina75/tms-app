@@ -85,7 +85,7 @@ export class CargoDetail {
     if (server.id) {
       return {
         ...server,
-        dimension: {
+        dimension: { // immutability
           ...server.dimension
         },
         cargoCost: server.cargoCost / 100 // 后端是分,前端是元
@@ -97,7 +97,7 @@ export class CargoDetail {
   static toServer(form) {
     return {
       ...form,
-      dimension: {
+      dimension: { // immutability
         ...form.dimension
       },
       cargoCost: form.cargoCost * 100 // 后端是分,前端是元

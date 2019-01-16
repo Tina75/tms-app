@@ -99,8 +99,10 @@ export default {
     ...mapMutations(moudleName, ['setCargoDetail']),
     viewDimension() {
       const dimension = this.form.dimension
-      if (dimension.length || dimension.width || dimension.height) {
-        return `${dimension.length}*${dimension.width}*${dimension.height}`
+      if (dimension) {
+        if (dimension.length || dimension.width || dimension.height) {
+          return `${dimension.length}*${dimension.width}*${dimension.height}`
+        }
       }
       return ''
     },
