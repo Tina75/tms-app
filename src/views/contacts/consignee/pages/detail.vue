@@ -99,16 +99,18 @@ export default {
       this.$router.push({ name: 'contacts-consignee-modify', query: { consigneeId: this.consigneeDetail.id } })
     },
     del () {
-      const data = {
-        id: this.consigneeDetail.id
-      }
-      try {
-        this.removeConsignee(data)
-      } catch (e) {
-        console.log(e)
-      } finally {
-        this.$router.back()
-      }
+      window.alert('确定删除？', () => {
+        const data = {
+          id: this.consigneeDetail.id
+        }
+        try {
+          this.removeConsignee(data)
+        } catch (e) {
+          console.log(e)
+        } finally {
+          this.$router.back()
+        }
+      })
     }
   }
 }

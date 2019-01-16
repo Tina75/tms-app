@@ -23,7 +23,6 @@
         <form-item
           v-model="form.phone"
           :show-required-toast="false"
-          type="number"
           prop="phone"
           label="联系电话"
           placeholder="请输入手机号或座机号"
@@ -57,7 +56,7 @@
         />
       </div>
     </form-group>
-    <LoadingButton class="cube-bottom-button" :loading="submiting" @click="submit" />
+    <LoadingButton class="cube-bottom-button" :loading="submiting" action="保存" @click="submit"/>
   </div>
 </template>
 <script>
