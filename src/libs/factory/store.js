@@ -8,7 +8,7 @@ class InfinateList {
   list = []
   hasNext = true
   nextPage = 1
-  pageSize = 10
+  pageSize = 12
 }
 /**
  * 参考: contacts/shipper/pages/index

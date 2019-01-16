@@ -30,7 +30,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['DispatchList'])
+    ...mapGetters('delivery', ['DispatchList'])
   },
 
   created () {
@@ -38,7 +38,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getDispatch', 'clearDispatch']),
+    ...mapActions('delivery', ['getDispatch', 'clearDispatch']),
     refresh() {
       this.clearDispatch()
       this.getDispatch()
