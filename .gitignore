@@ -2,6 +2,8 @@
 node_modules
 /dist
 /public/dll
+/public/cube
+/public/cube-ui
 
 # local env files
 .env.local
