@@ -37,7 +37,7 @@ export default [
     path: '/contacts/shipper/detail',
     name: 'contacts-shipper-detail',
     meta: {
-      noNeedRefresh: ['contacts-shipper-modify']
+      noNeedRefresh: ['contacts-shipper-modify', 'contacts-shipper-address', 'contacts-shipper-cargo']
     },
     component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/detail.vue')
   },
@@ -45,9 +45,6 @@ export default [
     // 编辑发货方
     path: '/contacts/shipper/modify',
     name: 'contacts-shipper-modify',
-    meta: {
-      noNeedRefresh: []
-    },
     component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/modify.vue')
   },
   {
@@ -55,7 +52,7 @@ export default [
     path: '/contacts/shipper/address',
     name: 'contacts-shipper-address',
     meta: {
-      noNeedRefresh: []
+      noNeedRefresh: ['contacts-address']
     },
     component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/address.vue')
   },
@@ -64,7 +61,7 @@ export default [
     path: '/contacts/shipper/cargo',
     name: 'contacts-shipper-cargo',
     meta: {
-      noNeedRefresh: []
+      noNeedRefresh: ['contacts-shipper-cargo-modify']
     },
     component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/cargo.vue')
   },
@@ -72,9 +69,6 @@ export default [
     // 编辑发货方常发货
     path: '/contacts/shipper/cargo/modify',
     name: 'contacts-shipper-cargo-modify',
-    meta: {
-      noNeedRefresh: []
-    },
     component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/cargo-modify.vue')
   },
   // -------------收货方------------------

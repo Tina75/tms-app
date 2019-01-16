@@ -27,7 +27,7 @@
       class="cube-mt-15"
       label="发货地址"
       left-icon="icon-ico_location"
-      :right-title="viewData.addressCnt"
+      :right-title="viewData.addressList&&viewData.addressList.length"
       @click="$router.push({name: 'contacts-shipper-address', query:{consignerId: viewData.id}})"
     />
 
@@ -35,7 +35,7 @@
       class="cube-mt-15"
       label="常发货物"
       left-icon="icon-ico_location"
-      :right-title="viewData.cargoCnt"
+      :right-title="viewData.cargoList&&viewData.cargoList.length"
       @click="$router.push({name: 'contacts-shipper-cargo', query:{consignerId: viewData.id}})"
     />
 

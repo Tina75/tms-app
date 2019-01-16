@@ -5,7 +5,7 @@
         <cube-checkbox v-model="orderOften" class="footer-item-select-radio">保存为常发订单</cube-checkbox>
       </div>
       <a class="footer-item-total"
-         @click.prevent="showDetail = true">
+         @click.prevent="showDetail = !showDetail">
         <span class="total-tip">费用合计：</span>
         <money-label :money="total" />
         <icon-font class="total-detail" name="icon-ico_up" />
@@ -20,23 +20,17 @@
         primary>立即发运</cube-button>
     </div>
 
-    <div v-show="showDetail" class="footer-detail-box">
-      <div class="detail-box">
-        <div class="detail-data">
-          <p>费用合计明细</p>
-          <ul>
-            <li><span>运输费：</span>{{ freightFee }}元</li>
-            <li><span>装货费：</span>{{ feeInfo.loadFee | numberFormat }}元</li>
-            <li><span>卸货费：</span>{{ feeInfo.unloadFee | numberFormat }}元</li>
-            <li><span>提货费：</span>{{ feeInfo.pickupFee | numberFormat }}元</li>
-            <li><span>保险费：</span>{{ feeInfo.insuranceFee | numberFormat }}元</li>
-            <li><span>其他费：</span>{{ feeInfo.otherFee | numberFormat }}元</li>
-          </ul>
-        </div>
-        <cube-button
-          class="detail-button"
-          primary
-          @click="showDetail = false">确定</cube-button>
+    <div class="detail-box" v-show="showDetail">
+      <div class="detail-data">
+        <p>费用合计明细</p>
+        <ul>
+          <li><span>运输费：</span>{{ freightFee }}元</li>
+          <li><span>装货费：</span>{{ feeInfo.loadFee | numberFormat }}元</li>
+          <li><span>卸货费：</span>{{ feeInfo.unloadFee | numberFormat }}元</li>
+          <li><span>提货费：</span>{{ feeInfo.pickupFee | numberFormat }}元</li>
+          <li><span>保险费：</span>{{ feeInfo.insuranceFee | numberFormat }}元</li>
+          <li><span>其他费：</span>{{ feeInfo.otherFee | numberFormat }}元</li>
+        </ul>
       </div>
     </div>
   </footer>
@@ -136,45 +130,38 @@ export default {
         &:first-child
           background #27C4D3
 
-  .footer-detail-box
+  .detail-box
     position fixed
     left 0
     right 0
     top 0
-    bottom 0
+    bottom 88px
     background rgba(0,0,0,.4)
 
-    .detail-box
-      position fixed
+    .detail-data
+      position absolute
       bottom 0
       left 0
       right 0
       background #ffffff
+      padding 25px 16px
 
-      .detail-button
-        height 44px
-        padding 0
-        border-radius 0
+      p
+        margin-bottom 10px
+        color #333333
+        font-weight bold
 
-      .detail-data
-        padding 25px 16px
-
-        p
-          margin-bottom 10px
-          color #333333
+      ul
+        display flex
+        flex-wrap wrap
+        li
+          flex none
+          width 33.333333%
+          margin-top 15px
+          font-size 14px
           font-weight bold
-
-        ul
-          display flex
-          flex-wrap wrap
-          li
-            flex none
-            width 33.333333%
-            margin-top 15px
-            font-size 14px
-            font-weight bold
-            span
-              font-size 12px
-              color #999999
-              font-weight normal
+          span
+            font-size 12px
+            color #999999
+            font-weight normal
 </style>

@@ -130,18 +130,18 @@
         <p class="share-title">分享到</p>
         <div>
           <ul>
-            <li @click="sharePath">
+            <li @click="sharePath('1')">
               <icon-font
                 name="icon-weixin"
                 :size="44"/>
               <div class="title">微信好友</div>
             </li>
-            <li>
+            <li @click="sharePath('2')">
               <svg class="icon closeImg" aria-hidden="true" style="font-size: 44px;">
                 <use xlink:href="#icon-pengyouquan"/></svg>
               <div class="title">朋友圈</div>
             </li>
-            <li>
+            <li @click="sharePath('4')">
               <icon-font
                 name="icon-qq"
                 :size="44"/>
@@ -176,78 +176,27 @@ export default {
   components: { IconFont, imageList },
   data () {
     return {
-      // first: true,
-      // refresh: false,
-      // loading: false,
-      // finished: false,
       busiIntroducePicList: [],
       busiAdvantcePicList: [],
       wxQrPicList: [],
-      homeBannerList: '',
+      homeBannerList: [],
       companyPhotoList: [],
-      companyInfo: {
-        id: 237,
-        name: 'qwee',
-        cityId: 310100,
-        cityName: '上海市',
-        address: '上海市静安区南京西路1038号梅龙镇广场F3e',
-        logoUrl: '', // 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/2a5dabb2-5fb6-4a19-83f2-65377fe439d9/128895253164.47852.png',
-        contact: '张三',
-        contactPhone: '18550175435',
-        longitud: '121.4630120',
-        latitude: '31.2350950',
-        mapType: 1,
-        companyProfile: '公司简介公司简介公司简介公司简介',
-        shortName: 'asdad',
-        userAddress: '运满满9F',
-        busiContact: [
-          { name: '2222', phone: '12556543255' },
-          { name: '1112', phone: '11556535855' }
-        ],
-        busiIntroduce: '',
-        busiIntroducePic:
-        [ { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg', title: '12323' },
-          { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/939238940611.8259.jpg', title: '22' }
-        ],
-        busiAdvantce: '服务优势   服务优势服务优',
-        busiAdvantcePic:
-        [ { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg', title: '12323' },
-          { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/939238940611.8259.jpg', title: '22' },
-          { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/939238940611.8259.jpg', title: '22' },
-          { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/939238940611.8259.jpg', title: '22' },
-          { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png', title: '2222' }
-        ],
-        wxQrPic:
-        [ { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg', title: '12323' },
-          { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png', title: '2222' },
-          { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png', title: '2222' },
-          { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png', title: '2222' },
-          { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png', title: '2222' },
-          { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png', title: '2222' },
-          { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png', title: '2222' }
-        ],
-        homeBanner: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/1204335750366.4255.png',
-        companyPhoto:
-        [ { url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg', title: '12323' }
-        ]
-      },
       busiContactInit: [],
-      sharFoot: false
+      sharFoot: false,
+      companyInfo: {}
     }
   },
   computed: {
-    ...mapGetters(['companyInfo'])
-  },
-  created () {
-    // this.getCompanyData()
+    ...mapGetters(['companyInfoInit'])
   },
   mounted () {
     bridge.call('ui.setRightButtonAction', { text: '编辑', action: 'action', color: '#666666' },
       // text:按钮标题 action:按钮方法名 color：按钮标题颜色，不传默认白色
-      function(result) {}
+      function(result) {
+        this.$router.push({ name: 'company-edit' })
+      }
     )
-    this.initData()
-    // this.getCompanyData()
+    this.getCompanyData()
   },
   methods: {
     ...mapActions(['getCompanyInfo', 'shareCompanyInfo']),
@@ -256,40 +205,41 @@ export default {
       await this.initData()
     },
     configPhone (phoneNumber) {
+      if (!phoneNumber) return
       if (phoneNumber.length === 11) {
         let phone = phoneNumber.toString()
         return [phone.substr(0, 3), phone.substr(3, 4), phone.substr(7, 4)].join(' ')
       }
     },
     initData () {
+      this.companyInfo = Object.assign(this.companyInfoInit)
       this.busiIntroducePicList = this.initImage(this.companyInfo.busiIntroducePic)
       this.busiAdvantcePicList = this.initImage(this.companyInfo.busiAdvantcePic)
       this.wxQrPicList = this.initImage(this.companyInfo.wxQrPic)
-      this.homeBannerList = this.initImage(this.companyInfo.homeBanner)
+      this.homeBannerList = this.initImage(this.companyInfo.homeBanner, 'homeBanner')
       this.companyPhotoList = this.initImage(this.companyInfo.companyPhoto)
       // 业务联系人
-      if (this.companyInfo.busiContact) this.busiContactInit = this.companyInfo.busiContact
+      if (this.companyInfo.busiContact) this.busiContactInit = JSON.parse(this.companyInfo.busiContact)
     },
-    initImage (imageList) {
-      let imageListInit = []
-      if (Array.isArray(imageList)) {
-        imageListInit = imageList // JSON.parse(imageList)
+    initImage (imageList, homeBanner) {
+      if (!homeBanner && Array.isArray(JSON.parse(imageList))) {
+        return JSON.parse(imageList)
       } else {
-        imageListInit.push({ url: imageList, title: '' })
+        if (imageList) return [{ url: imageList, title: '' }]
+        else return []
       }
-      return imageListInit
     },
     previewPic (imgs, index = 0) {
       this.$router.push({ name: 'image-preview', params: { imgs: [this.companyInfo.logoUrl], index } })
     },
     // 分享
-    sharePath () {
+    sharePath (type) {
       let param = {}
-      param.title = ''
-      param.desc = ''
-      param.url = ''
+      param.title = '运掌柜'
+      param.desc = '运掌柜详情'
+      param.url = 'https://yzg.tms5566.com'
       param.thumburl = ''
-      param.platformType = ''
+      param.platformType = type
       param.log = {}
       bridge.call('navigation.share', { param }, function(result) {
       })

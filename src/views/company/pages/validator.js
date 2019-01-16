@@ -10,6 +10,7 @@ const validator = {
   }
 }
 export const validatePhone = (val) => {
+  if (!val) return
   const value = val.replace(/\s/g, '')
   return validator.phone(value) || validator.telphone(value)
 }
