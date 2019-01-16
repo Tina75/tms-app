@@ -15,17 +15,19 @@
               v-model="inputValue"
               class="box-popup__selected cube-font-16 cube-c-black cube-c-placeholder"
               :placeholder="placeholder"
+              @focus="onFocus"
+              @blur="onBlur"
             >
-            <span class="box-popup__confirm cube-font-weight--m cube-font-18" @click="$emit('confirm', inputValue)">确定</span>
+            <span class="box-popup__confirm cube-font-weight--m cube-font-18" @click="onConfirm">确定</span>
           </div>
           <div class="box-popup__box-wrap">
             <div
               v-for="item in checkboxs"
-              :key="item.name"
+              :key="item.text"
               :class="{'selected': item.selected}"
               class="box-popup__box cube-flex-center"
               @click="toggleItem(item)"
-              v-text="item.name"
+              v-text="item.text"
             />
           </div>
         </div>
@@ -49,40 +51,47 @@ export default {
       type: String,
       default: ''
     },
+    options: {
+      type: Array,
+      default: () => []
+    },
     placeholder: {
       type: String,
       default: ''
+    },
+    split: {
+      type: String,
+      default: ','
     }
   },
   data() {
     return {
-      inputValue: '',
-      data: ['纸箱', '木箱', '铁桶', '纤袋', '麻袋', '木袋']
+      inputValue: ''
     }
   },
   computed: {
     checkboxs() {
-      return this.data.map((item) => ({
-        name: item,
+      return this.options.map((item) => ({
+        text: item,
         selected: this.inputValue.includes(item)
       }))
     }
   },
   watch: {
-    show: 'toggle',
-    value: 'setValue'
+    show: 'toggle'
   },
   methods: {
     toggleItem(item) {
-      const split = ','
+      const split = this.split
       let input = this.inputValue
+      const text = item.text
       if (item.selected) {
-        input = input.replace(new RegExp(`${split}?${item}`, 'g'), '')
+        input = input.replace(new RegExp(`${split}?${text}`, 'g'), '')
         if (input[0] === split) {
           input = input.slice(1)
         }
       } else {
-        input = input + (input ? split : '') + item
+        input = input + (input ? split : '') + text
       }
       item.selected = !item.selected
       this.inputValue = input
@@ -93,6 +102,29 @@ export default {
         this.inputValue = this.value || ''
       }
       this.$emit('show', show)
+    },
+    onConfirm() {
+      this.$emit('confirm', this.inputValue)
+      this.toggle()
+    },
+    // 添加/删除末尾分隔符逻辑
+    onFocus() {
+      const value = this.inputValue
+      const length = value.length
+      const split = this.split
+      const splitIndex = length - split.length
+      if (length && value.lastIndexOf(split) !== splitIndex) {
+        this.inputValue = value + split
+      }
+    },
+    onBlur() {
+      const value = this.inputValue
+      const length = value.length
+      const split = this.split
+      const splitIndex = length - split.length
+      if (length && value.lastIndexOf(split) === splitIndex) {
+        this.inputValue = value.slice(0, splitIndex)
+      }
     }
   }
 }

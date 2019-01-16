@@ -1,23 +1,65 @@
 <template>
-  <div class="" />
+  <transition name="cube-picker-fade">
+    <cube-popup
+      v-show="show"
+      ref="popup"
+      type="my-popup"
+      position="center"
+      :mask-closable="false"
+      @mask-click="toggle()"
+    >
+      <transition name="cube-picker-move">
+        <div v-show="show" class="input-popup">
+          <div class="input-popup__title">包装尺寸(毫米)</div>
+          <input >
+        </div>
+      </transition>
+    </cube-popup>
+  </transition>
 </template>
 
 <script>
 export default {
-  name: '',
-  metaInfo: {
-    title: ''
+  model: {
+    prop: 'show',
+    event: 'show'
   },
-  data () {
-    return {}
+  props: {
+    show: {
+      type: Boolean,
+      default: false
+    }
   },
-  computed: {},
-  methods: {},
-  beforeRouteEnter (to, from, next) {
-    next()
+  data() {
+    return {
+      data: {
+
+      }
+    }
+  },
+  computed: {
+  },
+  watch: {
+    show: 'toggle'
+  },
+  methods: {
+    toggle(show) {
+      this.$refs.popup[show ? 'show' : 'hide']()
+      if (show) {
+        this.inputValue = this.value || ''
+      }
+      this.$emit('show', show)
+    },
+    onConfirm() {
+      this.$emit('confirm', this.inputValue)
+      this.toggle()
+    }
   }
 }
 </script>
 
-<style lang='stylus' >
+<style lang='stylus'>
+.input-popup
+  background #fff
+  width 344px
 </style>

@@ -78,4 +78,6 @@ export class CargoDetail {
   volume = '' // 体积
   remark1 = ''
   remark2 = ''
+
+  static unitTypes= ['纸箱', '木箱', '铁桶', '纤袋', '麻袋', '木袋']
 }
