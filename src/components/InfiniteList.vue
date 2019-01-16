@@ -41,19 +41,21 @@ export default {
     }
   },
   data() {
+    const pullUpOption = {
+      threshold: 0,
+      txt: {
+        more: '加载更多',
+        noMore: '没有更多数据了'
+      }
+    }
     return {
       options: {
         pullDownRefresh: {
           txt: '刷新成功!'
         },
-        pullUpLoad: {
-          threshold: 0,
-          txt: {
-            more: '加载更多',
-            noMore: '没有更多数据了'
-          }
-        }
+        pullUpLoad: pullUpOption
       },
+      pullUpOption,
       loading: false
     }
   },
@@ -111,7 +113,7 @@ export default {
     },
     stopListLoading() {
       let scroll = this.getCubeScroll()
-      scroll.forceUpdate()
+      scroll.forceUpdate(!this.isEnd)
       this.loading = false
       this.$emit('refresh', false)
     }
