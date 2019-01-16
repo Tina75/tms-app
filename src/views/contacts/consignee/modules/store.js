@@ -1,19 +1,45 @@
 import Server from '@/libs/server'
+import cityUtil from '@/libs/city'
+import { ConsigneeDetail } from './model'
 import { InfinateListFactory, DetailFactory } from '@/libs/factory/store'
 
 const store = {
   namespaced: true,
   state: {
     saveConsigner: {}, // 存储所属发货方
-    consigneeDetail: {}
+    consigneeDetail: {},
+    formList: {
+      id: '',
+      consigneeCompanyName: '',
+      consignerId: '',
+      consignerName: '',
+      contact: '',
+      phone: '',
+      remark: '',
+      address: '',
+      cityCode: '',
+      consignerHourseNumber: ''
+    },
+    saveAddress: {
+      address: '',
+      cityCode: '',
+      latitude: '',
+      longitude: '',
+      mapType: 1
+    }
   },
   mutations: {
     saveConsigner: (state, payload = {}) => { state.saveConsigner = payload },
-    setConsigneeDetail: (state, payload = {}) => { state.consigneeDetail = payload }
+    setConsigneeDetail: (state, payload = {}) => { state.consigneeDetail = payload },
+    formList: (state, payload) => { state.formList = payload },
+    saveAddress: (state, payload) => { state.saveAddress = payload }
   },
   actions: {
     saveConsignerInfo: ({ state, commit }, data = {}) => {
       commit('saveConsigner', data)
+    },
+    saveAddressInfo: ({ state, commit }, data = {}) => {
+      commit('saveAddress', data)
     },
     loadConsigneeDetail: ({ commit, rootState }) => {
       Server({
@@ -22,9 +48,28 @@ const store = {
         loading: true,
         params: { id: rootState.route.query.consigneeId }
       }).then((response) => commit('setConsigneeDetail', response.data.data))
+    },
+    clearForm: ({ commit }) => {
+      const data = new ConsigneeDetail()
+      commit('formList', data)
+    },
+    addressAction: ({ state, dispatch }, addressData) => {
+      console.info('addressAction', addressData)
+      return dispatch('saveAddressInfo', {
+        address: addressData.address,
+        cityName: cityUtil.getCityNameArray(addressData.locale).join(''),
+        consignerHourseNumber: addressData.additional,
+        longitude: addressData.lon,
+        latitude: addressData.lat,
+        cityCode: addressData.code,
+        mapType: 1
+      })
     }
   },
-  getters: {}
+  getters: {
+    formList: (state) => state.formList,
+    saveAddress: (state) => state.saveAddress
+  }
 }
 // -----下拉列表-----
 const lists = [
@@ -34,7 +79,6 @@ const lists = [
     url: '/consigner/consignee/list',
     itemParser: (data) => ({
       id: data.id,
-
       name: data.contact + '  ' + data.phone,
       detail: data.cityName ? data.cityName + data.address : data.address,
       phone: data.phone,

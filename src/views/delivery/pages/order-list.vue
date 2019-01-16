@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapGetters , mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'delivery-order-list',
   metaInfo: { title: '订单列表' },

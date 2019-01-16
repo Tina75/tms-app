@@ -2,9 +2,9 @@
   <div class="contacts-driver">
     <InfiniteList
       v-model="loading"
-      :data="driverList.list"
+      :has-data="driverList.list.length"
       :loader="loadDriverList"
-      :is-end="driverList.hasNext"
+      :has-next="driverList.hasNext"
     >
       <ListItem
         v-for="(item, i) in driverList.list"
@@ -18,7 +18,7 @@
       <template slot="empty">
         <NoData
           action="新增熟车司机"
-          message="老板，您还没有记录熟车司机信息 赶快新增一个，方便联系哦～"
+          message="老板，您还没有记录熟车司机信息赶快新增一个，方便联系哦～"
           @btn-click="$router.push({ name: 'contacts-driver-create' })"
         >
           <img

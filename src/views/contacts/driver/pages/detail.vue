@@ -48,7 +48,7 @@
         </div>
       </div>
     </div>
-    <!-- <cube-button
+    <cube-button
       :primary="true"
       @click="goAdd">
       新增
@@ -57,7 +57,12 @@
       :primary="true"
       @click="goEdit">
       修改
-    </cube-button> -->
+    </cube-button>
+    <cube-button
+      :primary="true"
+      @click="del">
+      删除
+    </cube-button>
     <div class="driver-detail_call">
       <cube-button
         :primary="true"
@@ -134,7 +139,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(moudleName, ['loadDriverDetail']),
+    ...mapActions(moudleName, ['loadDriverDetail', 'removeDriver']),
     onPageRefresh() {
       this.loadDriverDetail()
     },
@@ -153,6 +158,12 @@ export default {
           driverId: this.driverDetail.id
         }
       })
+    },
+    del () {
+      const data = {
+        id: this.driverDetail.id
+      }
+      this.removeDriver(data)
     }
   },
   beforeRouteEnter (to, from, next) {

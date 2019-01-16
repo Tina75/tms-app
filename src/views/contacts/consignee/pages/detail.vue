@@ -17,7 +17,7 @@
       <div class="otherCard">
         <div class="title">收货地址</div>
         <div class="address">{{consigneeDetail.cityName}}</div>
-        <div class="address">{{consigneeDetail.address}}</div>
+        <div class="address">{{address}}</div>
       </div>
       <div class="otherCard">
         <div class="title">所属发货方</div>
@@ -41,6 +41,11 @@
       :primary="true"
       @click="goEdit">
       修改
+    </cube-button>
+    <cube-button
+      :primary="true"
+      @click="del">
+      删除
     </cube-button>
     <div class="detail_call">
       <cube-button
@@ -69,10 +74,16 @@ export default {
   },
   components: { IconFont },
   computed: {
-    ...mapState(moudleName, ['consigneeDetail'])
+    ...mapState(moudleName, ['consigneeDetail']),
+    address () {
+      if (this.consigneeDetail.consignerHourseNumber) {
+        return this.consigneeDetail.address + this.consigneeDetail.consignerHourseNumber
+      }
+      return this.consigneeDetail.address
+    }
   },
   methods: {
-    ...mapActions(moudleName, ['loadConsigneeDetail']),
+    ...mapActions(moudleName, ['loadConsigneeDetail', 'removeConsignee']),
     onPageRefresh() {
       this.loadConsigneeDetail()
     },
@@ -86,6 +97,18 @@ export default {
     },
     goEdit () {
       this.$router.push({ name: 'contacts-consignee-modify', query: { consigneeId: this.consigneeDetail.id } })
+    },
+    del () {
+      const data = {
+        id: this.consigneeDetail.id
+      }
+      try {
+        this.removeConsignee(data)
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.$router.back()
+      }
     }
   }
 }
