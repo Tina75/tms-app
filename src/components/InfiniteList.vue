@@ -7,7 +7,7 @@
     @pulling-up="onListPullUp"
   >
     <slot/>
-    <slot v-if="!data.length && !loading" name="empty"/>
+    <slot v-if="!hasData && !loading" name="empty"/>
   </wtf>
 </template>
 
@@ -27,34 +27,41 @@ export default {
       type: Boolean,
       default: false
     },
-    data: {
-      type: Array,
-      default: () => []
-    },
     loader: {
       type: Function,
       default: () => {}
     },
     hasNext: {
-      type: Boolean,
+      type: [Boolean, Number],
       default: true
+    },
+    hasData: {
+      type: [Boolean, Number],
+      default: false
     }
   },
   data() {
     return {
-      options: {
-        pullDownRefresh: {
-          txt: '刷新成功!'
-        },
-        pullUpLoad: {
+      loading: false
+    }
+  },
+  computed: {
+    options() {
+      const pullUpLoad = this.hasData
+        ? {
           threshold: 0,
           txt: {
             more: '上拉加载更多',
             noMore: '没有更多数据了'
           }
         }
-      },
-      loading: false
+        : false
+      return {
+        pullDownRefresh: {
+          txt: '刷新成功!'
+        },
+        pullUpLoad
+      }
     }
   },
   watch: {
@@ -78,7 +85,6 @@ export default {
       return scroll
     },
     onListPullDown() {
-      console.info('onListPullDown')
       this.loadingData(true)
     },
     onListPullUp() {
@@ -118,7 +124,6 @@ export default {
       // forceUpdate根据入参判断是否要重新计算高度和更改文案
       // 当该次请求有新的数据但hasNext为false后 scroll更新了文案但没计算高度 需要自己手动设置下, 不如vant机智好用
       if (!this.hasNext && !isRefresh) {
-        console.info('refresh')
         scroll.refresh()
       }
     }
