@@ -16,7 +16,7 @@
         <div
           slot="right"
           class="contacts-shipper-cargo__item border-left-1px cube-font-14 cube-c-light-grey"
-          @click="modify(item)"
+          @click="modify(item.data)"
           v-text="'修改'"
         />
       </ListItem>
@@ -58,10 +58,8 @@ export default {
       this.loading = true
     },
     modify(item) {
-      if (item) {
-        this.setCargoDetail(item.data)
-      }
-      this.$router.push({ name: 'contacts-shipper-cargo-modify' })
+      this.setCargoDetail(item)
+      this.$router.push({ name: 'contacts-shipper-cargo-modify', query: { consignerId: this.$route.query.consignerId } })
     }
   }
 }
