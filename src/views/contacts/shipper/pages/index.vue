@@ -2,8 +2,8 @@
   <div class="contacts-shipper">
     <InfiniteList
       v-model="loading"
-      :data="contactList.list"
       :loader="loadContactList"
+      :has-data="contactList.list.length"
       :has-next="contactList.hasNext"
     >
       <ListItem

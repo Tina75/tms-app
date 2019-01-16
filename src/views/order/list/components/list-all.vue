@@ -1,50 +1,54 @@
+<!-- 全部 -->
 <template>
-  <cube-scroll
-    :ref="refName"
-    :data="list"
-    :options="options"
-    @pulling-down="onPullingDown"
-    @pulling-up="onPullingUp">
-    <ul >
-      <li v-for="item in list" :key="getUnicKey(item)" >
-        <delivery-list-item :info="item"/>
-      </li>
-    </ul>
-  </cube-scroll>
+  <base-list
+    :ref-name="refKey"
+    :list="AllList"
+    @refresh="refresh"
+    @loadmore="loadmore"
+    @edit-order="editOrderById"
+    @edit-bill ="editBillById"
+    @delete = "deleteById"/>
 </template>
 
 <script>
-import DeliveryListItem from './DeliveryListItem.vue'
+import { mapGetters, mapActions } from 'vuex'
+import BaseList from './BaseList'
 export default {
-  name: 'delivery-list-c',
-  components: { DeliveryListItem },
-  props: {
-    refName: { type: String, default: '' },
-    list: { type: Array, required: true, default: function () { return [] } }
+  name: 'list-all',
+  components: { BaseList },
+  data () {
+    return {
+      refKey: 'all'
+    }
   },
 
   computed: {
-    options() {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
+    ...mapGetters('order/list', ['AllList'])
+  },
+
+  created () {
+    this.refresh()
   },
 
   methods: {
-    onPullingDown() {
-      this.$emit('refresh')
-    },
-    onPullingUp() {
-      this.$emit('loadmore')
-    },
-    getUnicKey(item) {
-      if (!item) return ''
-      return item.id ? item.id : item.waybillId
-    }
+    ...mapActions('order/list', ['getAll', 'clearAll', 'deleteOrder']),
 
+    refresh() {
+      this.clearAll()
+      this.getAll()
+    },
+    loadmore() {
+      this.getAll()
+    },
+    deleteById(id) {
+      this.deleteOrder(id)
+    },
+    editOrderById(id) { // 修改订单
+      this.$router.push({ name: 'order-create', params: { id } })
+    },
+    editBillById(id, type) {
+      // TODO: 提货单和送货单不同
+    }
   }
 }
 

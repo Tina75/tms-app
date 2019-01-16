@@ -37,7 +37,7 @@ instance.interceptors.response.use(
     const endTime = getTime()
     console.info(`response ${endTime.string} `, response)
     if (response.config.loading) window.loading(false)
-    const resultCode = response.data.code
+    const resultCode = Number(response.data.code)
     if (response.config.ignoreCode || resultCode === 10000) {
       return response
     } else {

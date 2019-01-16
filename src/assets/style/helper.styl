@@ -1,6 +1,5 @@
-@require "./assets/style/color.styl"
-@require "./color.styl"
-
+@require './assets/style/color.styl'
+@require './color.styl'
 .cube-c
   &-black
     color #333
@@ -18,52 +17,48 @@
     color $color-dark-grey
   &-light-grey
     color $color-light-grey
-
-for num in (1..10)
-  .cube-ma-{num*5}
-    margin num*5 px
-  .cube-mt-{num*5}
-    margin-top num*5 px
-  .cube-mb-{num*5}
-    margin-bottom num*5 px
-  .cube-mr-{num*5}
-    margin-right num*5 px
-  .cube-ml-{num*5}
-    margin-left num*5 px
-  .cube-pa-{num*5}
-    padding num*5 px
-  .cube-pt-{num*5}
-    padding-top num*5 px
-  .cube-pb-{num*5}
-    padding-bottom num*5 px
-  .cube-pr-{num*5}
-    padding-right num*5 px
-  .cube-pl-{num*5}
-    padding-left num*5 px
-for num in (8..30)
+for num in (1 .. 10)
+  .cube-ma-{num * 5}
+    margin (num * 5)px
+  .cube-mt-{num * 5}
+    margin-top (num * 5)px
+  .cube-mb-{num * 5}
+    margin-bottom (num * 5)px
+  .cube-mr-{num * 5}
+    margin-right (num * 5)px
+  .cube-ml-{num * 5}
+    margin-left (num * 5)px
+  .cube-pa-{num * 5}
+    padding (num * 5)px
+  .cube-pt-{num * 5}
+    padding-top (num * 5)px
+  .cube-pb-{num * 5}
+    padding-bottom (num * 5)px
+  .cube-pr-{num * 5}
+    padding-right (num * 5)px
+  .cube-pl-{num * 5}
+    padding-left (num * 5)px
+for num in (8 .. 30)
   .cube-font-{num}
     font-size num px
-
 .cube-ellipsis
   overflow hidden
   text-overflow ellipsis
   white-space nowrap
   word-wrap normal
-
-//页面及组件
+// 页面及组件
 .page
-  position: absolute
-  z-index: 10
-  top: 0
-  left: 0
-  width: 100%
-  height: 100%
-  background: #efeff4
+  position absolute
+  z-index 10
+  top 0
+  left 0
+  width 100%
+  height 100%
+  background #efeff4
   .wrapper
-    height: 100%
-    overflow-x: hidden
-    overflow-y: auto
-
+    height 100%
+    overflow-x hidden
+    overflow-y auto
 .cube-flex-center
   display flex
   align-items center
@@ -85,3 +80,14 @@ for num in (8..30)
   font-weight 450
 .cube-font-weight
   font-weight bold
+.cube-c-placeholder
+  &:focus
+    outline: none
+  &::-webkit-input-placeholder
+    color #C5C8CE
+  &::-moz-placeholder
+    color #C5C8CE
+  &::-moz-placeholder
+    color #C5C8CE
+  &::-ms-input-placeholder
+    color #C5C8CE

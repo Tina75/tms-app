@@ -10,18 +10,17 @@
       </div>
     </div>
     <div class="list-item__body">
-      <p class="list-item__city">{{info.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{info.endName}}</p>
+      <p class="list-item__city">{{info.startName}} → {{info.endName}}</p>
       <div>
-        <span v-if="info.weight" class="list-item__count">{{info.weight}}吨</span>
-        <span v-if="info.volume" class="list-item__count">{{info.volume}}方</span>
-        <span v-if="info.quantity" class="list-item__count">{{info.quantity}}件</span>
+        <span class="list-item__count">{{info.weight}}吨</span>
+        <span class="list-item__count">{{info.volume}}方</span>
+        <span class="list-item__count">{{info.quantity}}件</span>
       </div>
-      <p v-if="info.consignerName" class="cube-mb-5">{{info.consignerName}}</p>
-      <p v-if="info.carrierName" class="cube-mb-5">{{info.carrierName}}</p>
-      <p v-if="info.id && info.customerOrderNo" class="list-item__number">客户单号：{{info.customerOrderNo}}</p>
+      <p v-if="info.consignerName" class="cube-mt-5">{{info.consignerName}}</p>
+      <p v-if="info.carrierName" class="cube-mt-5">{{info.carrierName}}</p>
+      <p v-if="info.id" class="list-item__number">客户单号：{{info.customerOrderNo}}</p>
       <p v-else class="list-item__number cube-font-12">
-        <span class="send-type">{{info.assignCarType==1?'外转':'自送'}}</span>
-        <span class="cube-font-14">&nbsp;{{info.driverName}}&nbsp;{{info.assistantDriverName}}&nbsp;{{info.carNo}}</span>
+        <span class="send-type">{{info.assignCarType==1?'外转':'自送'}}</span>{{info.driverName}}  {{info.assistantDriverName}}  {{info.carNo}}
       </p>
     </div>
     <div class="list-item__money">
@@ -33,11 +32,8 @@
       </div> -->
       <cube-button v-if="!info.waybillId" class="list-item__btngroup" :outline="true"  :inline="true" primary @click="dispatch(info.id)">调度</cube-button>
       <div v-else class="list-item__btngroup">
-        <div v-if="info.status<3">
-          <cube-button class="btn" :outline="true"  :inline="true" :light="true" @click="sendCar(info.waybillId)">删除</cube-button>
-          <cube-button v-if="info.status==1" class="btn" :outline="true"  :inline="true" primary @click="sendCar(info.waybillId)">派车</cube-button>
-          <cube-button v-if="info.status==2" class="btn" :outline="true"  :inline="true" primary @click="setOff(info.waybillId)">发运</cube-button>
-        </div>
+        <cube-button v-if="info.status==1" class="btn" :outline="true"  :inline="true" primary @click="sendCar(info.waybillId)">派车</cube-button>
+        <cube-button v-if="info.status==2" class="btn" :outline="true"  :inline="true" primary @click="setOff(info.waybillId)">发运</cube-button>
         <div v-if="info.status==3">
           <cube-button v-if="info.status==3" class="btn" :outline="true"  :inline="true" @click="location">位置</cube-button>
           <cube-button v-if="info.status==3" class="btn" :outline="true"  :inline="true" primary @click="arrival(info.waybillId)">到货</cube-button>
@@ -50,7 +46,7 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
-  name: 'delivery-list-item',
+  name: 'order-base-list-item',
   props: {
     info: { type: Object, required: true, default: function () { return {} } }
   },
@@ -106,8 +102,6 @@ export default {
     font-size 14px
     color #666666
     position relative
-    p
-      line-height 20px
     &__time
       height 20px
       line-height 20px
@@ -115,14 +109,13 @@ export default {
     &__time:after
       content ''
       display block
-      border-bottom 1px solid #F3F5F9
+      border-bottom 1px solid #E4E7EC
       margin-top 6px
     &__money:before
       content ''
       display block
-      border-bottom 1px solid #F3F5F9
-      margin-bottom 8px
-      padding-top  2px
+      border-bottom 1px solid #E4E7EC
+      margin-bottom 10px
     &__body
       padding-left 15px
 
@@ -134,7 +127,7 @@ export default {
     &__count
       background #efefef
       display inline-block
-      margin 7px 8px 7px 0
+      margin 5px 8px 5px 0
       border-radius 3px
       padding 3px 5px 2px 5px
       font-size 12px

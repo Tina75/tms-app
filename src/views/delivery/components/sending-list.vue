@@ -17,7 +17,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['SendingList'])
+    ...mapGetters('delivery', ['SendingList'])
   },
 
   created () {
@@ -25,7 +25,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getSending', 'clearSending']),
+    ...mapActions('delivery', ['getSending', 'clearSending']),
     refresh() {
       this.clearSending()
       this.getSending()
