@@ -1,10 +1,10 @@
 <template>
-  <div class="contacts-consignee">
+  <div class="order-create-consignee">
     <InfiniteList
       v-model="loading"
-      :data="consigneeList.list"
+      :has-data="consigneeList.list.length"
       :loader="loadConsigneeList"
-      :is-end="consigneeList.hasNext"
+      :has-next="consigneeList.hasNext"
     >
       <ListItem
         v-for="(item, i) in consigneeList.list"
@@ -34,12 +34,12 @@
 import ListItem from '@/views/contacts/components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
-import { mapActions, mapState } from 'vuex'
-const moudleName = 'contacts/consignee'
+import { mapState, mapMutations, mapActions } from 'vuex'
+
 export default {
   name: 'ContactsConsigneeList',
   metaInfo: {
-    title: '收货方'
+    title: '选择收货方'
   },
   components: { ListItem, NoData, InfiniteList },
   data() {
@@ -47,30 +47,30 @@ export default {
       loading: false
     }
   },
-  computed: mapState(moudleName, ['consigneeList']),
+  computed: mapState('contacts/consignee', [ 'consigneeList' ]),
   methods: {
-    ...mapActions(moudleName, ['loadConsigneeList']),
-    loader(refresh) {
-      this.loadContactList(refresh)
-    },
-    onPageRefresh() {
-      console.info('onPageRefresh')
-      this.loading = true
-    },
-    onItemPhoneCall(item) {
-      window.location.href = `tel:${item.phone}`
-    },
-    onItemClick(item, index) {
-      this.$router.push({ name: 'contacts-consignee-detail', query: { consigneeId: item.id } })
+    ...mapMutations('order/create', [ 'SET_CONSIGNEE_INFO' ]),
+    ...mapActions('contacts/consignee', [ 'loadConsigneeList' ]),
+
+    loader(refresh) { this.loadConsigneeList(refresh) },
+
+    onPageRefresh() { this.loading = true },
+
+    onItemClick(item) {
+      this.SET_CONSIGNEE_INFO(item)
+      this.$router.back()
     }
   }
 }
 </script>
 
 <style lang='stylus'>
-.contacts-consignee
-  height 100%
-  &__placeholder
-    width 179px
-    height 133px
+  .order-create-consignee
+    height 100%
+    &__placeholder
+      width 179px
+      height 133px
+
+    .contact-item__right-icon
+      display none
 </style>

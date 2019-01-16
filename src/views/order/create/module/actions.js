@@ -1,4 +1,5 @@
 import Server from '@/libs/server'
+import NP from 'number-precision'
 
 export default {
   getOpetator: async () => {
@@ -7,5 +8,57 @@ export default {
       method: 'get'
     })
     return data.data
+  },
+
+  getOftenAddress: async (state, consignerId) => {
+    const { data } = await Server({
+      url: '/consigner/address/list',
+      method: 'get',
+      data: {
+        consignerId,
+        pageNo: 1,
+        pageSize: 10000
+      }
+    })
+    return data.data.list
+  },
+
+  getRuleList: async (state, data) => {
+    const res = await Server({
+      url: '/finance/charge/getRulesByPartner',
+      method: 'get',
+      data
+    })
+    return res.data.data
+  },
+
+  calculateAmount: async ({ commit }, data) => {
+    const res = await Server({
+      url: '/finance/charge/calcWithInfo',
+      method: 'post',
+      data
+    })
+    commit('SET_CALCULATE_AMOUNT', NP.divide(res.data.data.amount, 100))
+  },
+
+  getOftenCargo: async (state, consignerId) => {
+    const { data } = await Server({
+      url: '/consigner/cargo/list',
+      method: 'get',
+      data: {
+        consignerId,
+        pageNo: 1,
+        pageSize: 10000
+      }
+    })
+    return data.data.list
+  },
+
+  createOrder: async (state, data) => {
+    await Server({
+      url: '/order/create',
+      method: 'post',
+      data
+    })
   }
 }

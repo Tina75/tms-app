@@ -48,7 +48,7 @@ export default {
     return {
       isInvoice: false,
       form: {
-        isInvoice: 0,
+        isInvoice: false,
         invoiceRate: '',
         collectionMoney: '',
         remark: ''
@@ -66,7 +66,8 @@ export default {
 
     ensure () {
       const temp = Object.assign({}, this.form)
-      temp.collectionMoney = NP.times(temp.collectionMoney, 100)
+      temp.invoiceRate = temp.invoiceRate ? NP.times(temp.invoiceRate, 100) : temp.invoiceRate
+      temp.collectionMoney = temp.collectionMoney ? NP.times(temp.collectionMoney, 100) : temp.collectionMoney
       this.SET_OTHER_INFO(temp)
       this.$router.back()
     }
@@ -75,13 +76,13 @@ export default {
     next(vm => {
       for (let key in vm.form) {
         if (key === 'isInvoice') vm.form.isInvoice = !!vm.otherInfo.isInvoice
-        else if (key === 'collectionMoney') {
-          if (vm.otherInfo.collectionMoney === undefined) {
-            vm.form.collectionMoney = (vm.otherInfo.collectionMoney === undefined || vm.otherInfo.collectionMoney === '')
-              ? ''
-              : NP.divide(vm.otherInfo.collectionMoney, 100)
-          }
-        } else vm.form[key] = vm.otherInfo[key] === undefined ? '' : vm.otherInfo[key]
+        else if (key === 'collectionMoney' || key === 'invoiceRate') {
+          if (vm.otherInfo[key] === undefined)
+          vm.form[key] = (vm.otherInfo[key] === undefined || vm.otherInfo[key] === '')
+            ? ''
+            : NP.divide(vm.otherInfo[key], 100)
+        }
+        else vm.form[key] = vm.otherInfo[key] === undefined ? '' : vm.otherInfo[key]
       }
     })
   }

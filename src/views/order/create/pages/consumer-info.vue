@@ -25,13 +25,13 @@
             label="发货时间"
             type="click"
             placeholder="请选择"
-            @on-click="pickTimeHandler('delivery')" />
+            @click.native="pickTimeHandler('delivery')" />
           <form-item
             v-model="form.arriveTimeText"
             label="到货时间"
             type="click"
             placeholder="请选择"
-            @on-click="pickTimeHandler('arrive')" />
+            @click.native="pickTimeHandler('arrive')" />
         </div>
       </form>
     </cube-scroll>
