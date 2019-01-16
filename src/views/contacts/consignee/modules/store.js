@@ -1,4 +1,5 @@
 import Server from '@/libs/server'
+import cityUtil from '@/libs/city'
 import { ConsigneeDetail } from './model'
 import { InfinateListFactory, DetailFactory } from '@/libs/factory/store'
 
@@ -43,6 +44,18 @@ const store = {
     clearForm: ({ commit }) => {
       const data = new ConsigneeDetail()
       commit('formList', data)
+    },
+    addressAction: ({ state, dispatch }, addressData) => {
+      console.info('addressAction', addressData)
+      // const cityName = cityUtil.getCityNameArray(addressData.locale).join('')
+      return dispatch('modifyAddress', {
+        address: addressData.address + addressData.additional,
+        longitude: addressData.lon,
+        latitude: addressData.lat,
+        cityCode: addressData.code,
+        mapType: 1
+      })
+      // console.info(data)
     }
   },
   getters: {

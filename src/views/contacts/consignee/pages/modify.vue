@@ -23,7 +23,7 @@
         <form-item
           v-model="form.phone"
           :show-required-toast="false"
-          prop="viewPhone"
+          prop="phone"
           label="联系电话"
           placeholder="请输入手机号或座机号"
           :maxlength="20"
@@ -38,7 +38,7 @@
           :show-required-toast="false"
           label="详细地址"
           :show-arrow="false"
-          @on-click="goToAddress"
+          @on-click="selectAddress"
         />
         <form-item
           v-model="form.consigneeCompanyName"
@@ -82,12 +82,12 @@ export default {
     return {
       formatPhone,
       editPhone,
-      form: {},
+      form: new ConsigneeDetail(),
       showPickCity: false,
       rules: {
         consigner: { required: true },
         contact: { required: true },
-        viewPhone: {
+        phone: {
           required: true,
           type: 'string',
           validatePhone: validatePhone,
@@ -107,7 +107,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions(moudleName, ['saveConsignerInfo', 'modifyConsignee', 'loadConsigneeDetail', 'clearForm']),
+    ...mapActions({
+      saveConsignerInfo: moudleName + '/saveConsignerInfo',
+      modifyConsignee: moudleName + '/modifyConsignee',
+      loadConsigneeDetail: moudleName + '/loadConsigneeDetail',
+      clearForm: moudleName + '/clearForm',
+      resetAddressPage: 'contacts/resetAddressPage'
+    }),
     async onPageRefresh() {
       this.form = this.formList
       this.setSender()
@@ -148,7 +154,24 @@ export default {
       // this.clearForm()
       // this.$router.back()
     },
-    goToAddress () {
+    selectAddress() {
+      const data = {}
+      const item = this.form
+      const config = {
+        title: '详细地址',
+        namespace: moudleName,
+        dispatch: 'addressAction',
+        data
+      }
+      if (item) {
+        data.code = item.cityCode
+        data.address = item.address
+        data.additional = item.consignerHourseNumber
+      } else {
+        data.consigneeId = this.$route.query.consigneeId
+      }
+
+      this.resetAddressPage(config)
       this.$router.push({ name: 'contacts-address' })
     }
   },
