@@ -194,7 +194,12 @@ export default {
       this.$emit('on-blur', this.inputValue)
       this.doValidate()
     },
-    inputFocusHandler () { this.$emit('on-focus', this.inputValue) },
+    inputFocusHandler (e) {
+      this.$emit('on-focus', this.inputValue)
+      if (this.focusOnEnd) {
+        this.$nextTick(() => this.moveToEnd(e.target))
+      }
+    },
     selectChangeHandler (value, index, text) { this.$emit('change', value, index, text) },
     pickerShowHandler () { this.$emit('picker-show') },
     pickerHideHandler () {
@@ -222,6 +227,20 @@ export default {
       const valid = await this.$refs.$validator.validate()
       this.valid = valid
       return valid
+    },
+    moveToEnd(el) {
+      const length = el.value.length
+      if (typeof el.createTextRange !== 'undefined') {
+        const range = el.createTextRange()
+        range.moveStart('character', length)
+        range.collapse(false)
+        range.select()
+      } else if (typeof el.selectionStart === 'number') {
+        el.selectionStart = el.selectionEnd = length
+      }
+      if (this.type === 'text' || this.type === 'number') {
+        el.scrollLeft = 10000 // 尽量大，直接显示到末尾
+      }
     }
   }
 }

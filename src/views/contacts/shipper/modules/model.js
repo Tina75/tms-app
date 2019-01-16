@@ -78,15 +78,6 @@ export class CargoDetail {
   volume = '' // 体积
   remark1 = ''
   remark2 = ''
-}
 
-export class AddressDetail {
-  id = ''
-  address = '' // 详细地址
-  cityName = ''
-  cityCode = ''
-  longitude = ''
-  latitude = ''
-  mapType = '' // 1百度地图；2高德地图
-  consignerHourseNumber = '' // 门牌号
+  static unitTypes= ['纸箱', '木箱', '铁桶', '纤袋', '麻袋', '木袋']
 }

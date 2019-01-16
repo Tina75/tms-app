@@ -16,7 +16,7 @@
         <div
           slot="right"
           class="contacts-shipper-cargo__item border-left-1px cube-font-14 cube-c-light-grey"
-          @click="modify(i)"
+          @click="modify(item)"
           v-text="'修改'"
         />
       </ListItem>
@@ -37,7 +37,7 @@
 import ListItem from '../../components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapMutations } from 'vuex'
 const moudleName = 'contacts/shipper'
 export default {
   name: 'ContactsShipperCargoList',
@@ -53,11 +53,13 @@ export default {
   computed: mapState(moudleName, ['cargoList']),
   methods: {
     ...mapActions(moudleName, ['loadCargoList']),
+    ...mapMutations(moudleName, ['setCargoDetail']),
     onPageRefresh() {
       this.loading = true
     },
-    modify(index) {
-      if (index) {
+    modify(item) {
+      if (item) {
+        this.setCargoDetail(item.data)
       }
       this.$router.push({ name: 'contacts-shipper-cargo-modify' })
     }
