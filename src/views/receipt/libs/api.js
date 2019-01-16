@@ -25,9 +25,10 @@ export const getSatatusNum = () => {
   })
 }
 // 回收返厂
-export const updateReceipt = () => {
+export const updateReceipt = (data) => {
   return Server({
     method: 'post',
-    url: '/order/updateReceiptOrder'
+    url: '/order/updateReceiptOrder',
+    data
   })
 }
