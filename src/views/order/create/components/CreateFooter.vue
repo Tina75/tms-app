@@ -2,7 +2,7 @@
   <footer class="create-footer">
     <div class="footer-item">
       <div class="footer-item-select">
-        <cube-checkbox v-model="saveUsually" class="footer-item-select-radio">保存为常发订单</cube-checkbox>
+        <cube-checkbox v-model="orderOften" class="footer-item-select-radio">保存为常发订单</cube-checkbox>
       </div>
       <a class="footer-item-total"
          @click.prevent="showDetail = true">
@@ -25,12 +25,12 @@
         <div class="detail-data">
           <p>费用合计明细</p>
           <ul>
-            <li><span>运输费：</span>{{ transportFee || 0 }}元</li>
-            <li><span>装货费：</span>{{ feeInfo.uploadFee || 0 }}元</li>
-            <li><span>卸货费：</span>{{ feeInfo.unloadFee || 0 }}元</li>
-            <li><span>提货费：</span>{{ feeInfo.pickupFee || 0 }}元</li>
-            <li><span>保险费：</span>{{ feeInfo.ensuranceFee || 0 }}元</li>
-            <li><span>其他费：</span>{{ feeInfo.otherFee || 0 }}元</li>
+            <li><span>运输费：</span>{{ freightFee }}元</li>
+            <li><span>装货费：</span>{{ feeInfo.loadFee | numberFormat }}元</li>
+            <li><span>卸货费：</span>{{ feeInfo.unloadFee | numberFormat }}元</li>
+            <li><span>提货费：</span>{{ feeInfo.pickupFee | numberFormat }}元</li>
+            <li><span>保险费：</span>{{ feeInfo.insuranceFee | numberFormat }}元</li>
+            <li><span>其他费：</span>{{ feeInfo.otherFee | numberFormat }}元</li>
           </ul>
         </div>
         <cube-button
@@ -44,35 +44,42 @@
 
 <script>
 import MoneyLabel from '../../components/MoneyLabel'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import NP from 'number-precision'
 
 export default {
   name: 'CreateFooter',
   components: { MoneyLabel },
+  filters: {
+    numberFormat (number) { return NP.divide(number || 0, 100) }
+  },
   data () {
     return {
-      saveUsually: false,
       showDetail: false
     }
   },
   computed: {
     ...mapGetters('order/create', [
       'feeInfo',
-      'transportFee'
+      'freightFee'
     ]),
+    orderOften: {
+      get: mapGetters('order/create', [ 'orderOften' ]).orderOften,
+      set: function (val) { this.SET_OFTEN_ORDER(val) }
+    },
     total () {
       return NP.plus(
-        this.feeInfo.pickupFee || 0,
-        this.feeInfo.uploadFee || 0,
-        this.feeInfo.unloadFee || 0,
-        this.feeInfo.ensuranceFee || 0,
-        this.feeInfo.otherFee || 0,
-        this.transportFee || 0
+        NP.divide(this.feeInfo.pickupFee || 0, 100),
+        NP.divide(this.feeInfo.loadFee || 0, 100),
+        NP.divide(this.feeInfo.unloadFee || 0, 100),
+        NP.divide(this.feeInfo.insuranceFee || 0, 100),
+        NP.divide(this.feeInfo.otherFee || 0, 100),
+        this.freightFee || 0
       )
     }
   },
   methods: {
+    ...mapMutations('order/create', [ 'SET_OFTEN_ORDER' ]),
     saveOrder () {
       this.$emit('on-save-order')
     }

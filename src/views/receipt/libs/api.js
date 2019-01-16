@@ -17,3 +17,10 @@ export const initDetail = (shipperOrderId) => {
     }
   })
 }
+
+export const getSatatusNum = () => {
+  return Server({
+    method: 'get',
+    url: '/order/getReceiptOrderNumByStatus'
+  })
+}

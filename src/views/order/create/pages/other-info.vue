@@ -39,6 +39,7 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import { FormGroup, FormItem } from '@/components/Form'
+import NP from 'number-precision'
 
 export default {
   metaInfo: { title: '其他信息' },
@@ -55,9 +56,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order/create', [
-      'otherInfo'
-    ])
+    ...mapGetters('order/create', [ 'otherInfo' ])
   },
   watch: {
     isInvoice (val) { this.form.isInvoice = Number(val) }
@@ -66,14 +65,22 @@ export default {
     ...mapMutations('order/create', [ 'SET_OTHER_INFO' ]),
 
     ensure () {
-      this.SET_OTHER_INFO(Object.assign({}, this.form))
+      const temp = Object.assign({}, this.form)
+      temp.collectionMoney = NP.times(temp.collectionMoney, 100)
+      this.SET_OTHER_INFO(temp)
       this.$router.back()
     }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
       for (let key in vm.form) {
-        if (key === 'isInvoice') vm.form[key] = !!vm.otherInfo[key]
+        if (key === 'isInvoice') vm.form.isInvoice = !!vm.otherInfo.isInvoice
+        else if (key === 'collectionMoney') {
+          if (vm.otherInfo.collectionMoney === undefined)
+          vm.form.collectionMoney = (vm.otherInfo.collectionMoney === undefined || vm.otherInfo.collectionMoney === '')
+            ? ''
+            : NP.divide(vm.otherInfo.collectionMoney, 100)
+        }
         else vm.form[key] = vm.otherInfo[key] === undefined ? '' : vm.otherInfo[key]
       }
     })
