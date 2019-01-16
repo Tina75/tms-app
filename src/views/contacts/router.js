@@ -20,9 +20,6 @@ export default [
     // 修改/编辑地址
     path: '/contacts/address',
     name: 'contacts-address',
-    meta: {
-      noNeedRefresh: []
-    },
     component: () => import(/* webpackChunkName: "contacts-common" */ './common/address.vue')
   },
   // -------发货方-----------

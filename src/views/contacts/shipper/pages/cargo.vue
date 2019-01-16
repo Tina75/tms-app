@@ -1,6 +1,6 @@
 <template>
   <div class="contacts-shipper-cargo">
-    <InfiniteList v-model="loading" :data="cargoList.list" :loader="loadCargoList" :is-end="cargoList.hasNext">
+    <InfiniteList v-model="loading" :data="cargoList.list" :loader="loadCargoList" :has-next="cargoList.hasNext">
       <ListItem
         v-for="(item, i) in cargoList.list"
         :key="item.id"

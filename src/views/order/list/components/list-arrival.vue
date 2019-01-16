@@ -1,50 +1,46 @@
+<!-- 全部 -->
 <template>
-  <cube-scroll
-    :ref="refName"
-    :data="list"
-    :options="options"
-    @pulling-down="onPullingDown"
-    @pulling-up="onPullingUp">
-    <ul >
-      <li v-for="item in list" :key="getUnicKey(item)" >
-        <delivery-list-item :info="item"/>
-      </li>
-    </ul>
-  </cube-scroll>
+  <base-list
+    :ref-name="refKey"
+    :list="ArrivalList"
+    @refresh="refresh"
+    @loadmore="loadmore"
+  />
 </template>
 
 <script>
-import DeliveryListItem from './DeliveryListItem.vue'
+import { mapGetters, mapActions } from 'vuex'
+import BaseList from './BaseList'
 export default {
-  name: 'delivery-list-c',
-  components: { DeliveryListItem },
-  props: {
-    refName: { type: String, default: '' },
-    list: { type: Array, required: true, default: function () { return [] } }
+  name: 'list-arrival',
+  components: { BaseList },
+  data () {
+    return {
+      refKey: 'arrival'
+    }
   },
 
   computed: {
-    options() {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
+    ...mapGetters('order/list', ['ArrivalList'])
+  },
+
+  created () {
+    this.refresh()
   },
 
   methods: {
-    onPullingDown() {
-      this.$emit('refresh')
-    },
-    onPullingUp() {
-      this.$emit('loadmore')
-    },
-    getUnicKey(item) {
-      if (!item) return ''
-      return item.id ? item.id : item.waybillId
-    }
+    ...mapActions('order/list', ['getArrival', 'clearArrival']),
 
+    refresh() {
+      this.clearArrival()
+      this.getArrival()
+    },
+    loadmore() {
+      this.getArrival()
+    },
+    editBillById(id, type) {
+      // TODO: 提货单和送货单不同
+    }
   }
 }
 
