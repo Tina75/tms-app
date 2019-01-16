@@ -16,7 +16,7 @@
         <div
           slot="right"
           class="contacts-shipper-address__item border-left-1px cube-font-14 cube-c-light-grey"
-          @click.native="modify(item)"
+          @click="modify(item)"
           v-text="'修改'"
         />
       </ListItem>

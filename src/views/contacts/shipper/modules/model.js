@@ -79,14 +79,3 @@ export class CargoDetail {
   remark1 = ''
   remark2 = ''
 }
-
-export class AddressDetail {
-  id = ''
-  address = '' // 详细地址
-  cityName = ''
-  cityCode = ''
-  longitude = ''
-  latitude = ''
-  mapType = '' // 1百度地图；2高德地图
-  consignerHourseNumber = '' // 门牌号
-}
