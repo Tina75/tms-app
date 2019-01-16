@@ -1,5 +1,5 @@
 import Server from '@/libs/server'
-
+// 列表
 export const initList = (data) => {
   return Server({
     method: 'post',
@@ -7,6 +7,7 @@ export const initList = (data) => {
     data
   })
 }
+// 详情
 export const initDetail = (shipperOrderId) => {
   return Server({
     method: 'get',
@@ -16,21 +17,21 @@ export const initDetail = (shipperOrderId) => {
     }
   })
 }
-
-export const refuse = (id) => {
+// 接受
+export const receipt = (id) => {
   return Server({
     method: 'POST',
-    url: '/busconnector/shipper/reject',
+    url: '/busconnector/shipper/accept',
     data: {
       shipperOrderIds: [Number(id)]
     }
   })
 }
-
-export const receipt = (id) => {
+// 拒绝
+export const refuse = (id) => {
   return Server({
     method: 'POST',
-    url: '/busconnector/shipper/accept',
+    url: '/busconnector/shipper/reject',
     data: {
       shipperOrderIds: [Number(id)]
     }

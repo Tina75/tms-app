@@ -12,17 +12,11 @@
         <cube-tab-panel v-for="(item) in tabs" :key="item.label" :label="item.label">
           <cube-scroll
             ref="scroll"
-            :data="cardList"
+            :data="item.data"
             :options="scrollOptions"
-            @pulling-down="onPullingDown"
-            @pulling-up="onPullingUp">
-            <CardList :ref="item.key" :status="item.acceptStatus" @change="(data) => { dataChange(item.key, data) }"/>
-            <!-- <Card
-              v-for="(el, index) in cardList"
-              :key="index"
-              :data="el"
-              @card-action="handleClick"
-              @click.native="toDetail(el.shipperOrderId)"/> -->
+            @pulling-down="onPullingDown(item.key)"
+            @pulling-up="onPullingUp(item.key)">
+            <CardList :ref="item.key" :status="item.receiptStatus" @change="(data) => { dataChange(item.key, data) }"/>
           </cube-scroll>
         </cube-tab-panel>
       </cube-tab-panels>
@@ -31,7 +25,6 @@
 </template>
 <script>
 import CardList from '../components/CardList'
-import * as Api from '../libs/api'
 export default {
   name: 'receipt',
   metaInfo: {
@@ -75,7 +68,6 @@ export default {
           data: []
         }
       ],
-      cardList: [],
       scrollOptions: {
         pullDownRefresh: true,
         pullUpLoad: true,
@@ -87,40 +79,20 @@ export default {
       }
     }
   },
-  mounted () {
-    this.initList()
-  },
   methods: {
-    initList () {
-      Api.initList(this.keywords)
-        .then(response => {
-          this.cardList = response.data.data.list
-        })
+    onPullingDown (ref) {
+      this.$refs[ref][0].refresh()
     },
-    onPullingDown () {
-      this.initList()
+    onPullingUp (ref) {
+      this.$refs[ref][0].load()
     },
-    onPullingUp () {
-      this.keywords.pageNo += 1
-      Api.initList(this.keywords)
-        .then(response => {
-          this.cardList = this.cardList.concat(response.data.data.list)
-        })
-    },
-    toDetail (id) {
-      // 路由跳转
-      this.$router.push({
-        params: { id },
-        name: 'receipt-detail'
+    dataChange (key, data) {
+      this.tabs.map(el => {
+        if (el.key === key) {
+          el.data = data
+        }
       })
-    },
-    handleClick () {
-
-    },
-    // 接受
-    recept () {},
-    // 拒绝
-    refuse () {}
+    }
   }
 }
 </script>
