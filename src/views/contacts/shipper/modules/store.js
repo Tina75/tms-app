@@ -14,25 +14,25 @@ const store = {
   },
   actions: {
     // 交给common/address页面处理的action
-    addressAction: ({ state, dispatch }, addressData) => {
-      console.info('addressAction', addressData)
-      return dispatch('modifyAddress', {
+    addressAction: ({ state, dispatch }, addressData) =>
+      dispatch('modifyAddress', {
+        cityName: cityUtil.getCityNameArray(addressData.locale).join(''),
+        address: addressData.address,
         id: addressData.id,
         consignerId: addressData.consignerId,
-        address: addressData.address,
         longitude: addressData.lon,
         latitude: addressData.lat,
-        cityName: cityUtil.getCityNameArray(addressData.locale).join(''),
         cityCode: addressData.code,
         consignerHourseNumber: addressData.additional,
         mapType: 1
-      })
-    },
+      }),
+
     // 同步业务员
     syncButtOperator: ({ state, commit }) =>
       Server({ method: 'get', url: '/permission/buttOperator' }).then((response) =>
         commit('setOperator', response.data.data)
       ),
+
     loadContactDetail: ({ rootState, commit }) =>
       Server({
         method: 'get',
@@ -74,6 +74,10 @@ const lists = [
     // 常发货物
     key: 'cargo',
     useQuery: true,
+    itemParser: (data) => ({
+      id: data.id,
+      data
+    }),
     url: '/consigner/cargo/list'
   }
 ]

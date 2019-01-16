@@ -103,7 +103,7 @@ export function DetailFactory(store = new Store(), { api, key }) {
 
   safeSet(store.state, NAME.state, {})
 
-  safeSet(store.mutations, NAME.setMutation, (state, data) => (state[NAME.state] = data))
+  safeSet(store.mutations, NAME.setMutation, (state, data = {}) => (state[NAME.state] = data))
 
   if (api.create && api.update) {
     safeSet(store.actions, NAME.modifyAction, ({ state, commit }, data) => {
