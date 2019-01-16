@@ -66,7 +66,6 @@ export default {
       this.loading = true
     },
     modify(item) {
-      debugger
       const data = {}
       const config = {
         title: item ? '修改发货地址' : '新增发货地址',
