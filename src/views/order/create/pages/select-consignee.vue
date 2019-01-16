@@ -3,7 +3,7 @@
     <InfiniteList
       v-model="loading"
       :data="consigneeList.list.length"
-      :loader="loader"
+      :loader="loadConsigneeList"
       :is-end="consigneeList.hasNext"
     >
       <ListItem
