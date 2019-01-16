@@ -31,7 +31,7 @@ export default [
   },
   {
     path: '/order/fee-info',
-    name: 'order-fee-info', // 详细地址
+    name: 'order-fee-info', // 其他费用
     component: () => import(/* webpackChunkName: "order" */ './create/pages/fee-info.vue')
   },
   {
@@ -41,12 +41,13 @@ export default [
   },
   {
     path: '/order/other-info',
-    name: 'order-other-info', // 客户单号及其他
+    name: 'order-other-info', // 其他信息
     component: () => import(/* webpackChunkName: "order" */ './create/pages/other-info.vue')
   },
   {
     path: '/order/select-consignee',
-    name: 'order-select-consignee', // 客户单号及其他
+    name: 'order-select-consignee', // 选择收货人
+    meta: { noNeedRefresh: [] },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/select-consignee.vue')
   },
   {

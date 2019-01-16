@@ -9,21 +9,23 @@ const state = {
     consignerContact: '',
     consignerPhone: '',
     start: '',
-    consignerAddressText: '',
     consignerAddress: '',
+    consignerAddressText: '', //
+    consignerAddressLocale: [], //
     consignerHourseNumber: '',
-    consignerAddressLongitude: '39.9110666857',
-    consignerAddressLatitude: '116.4136103013',
-    consumerInfo: '',
+    consignerAddressLongitude: '',
+    consignerAddressLatitude: '',
+    consumerInfo: '', //
 
     consigneeContact: '',
     consigneePhone: '',
     end: '',
-    consigneeAddressText: '',
     consigneeAddress: '',
+    consigneeAddressText: '', //
+    consigneeAddressLocale: [], //
     consigneeHourseNumber: '',
-    consigneeAddressLongitude: '32.0647517242',
-    consigneeAddressLatitude: '118.8029140176',
+    consigneeAddressLongitude: '',
+    consigneeAddressLatitude: '',
     consigneeCompanyName: '',
 
     orderCargoList: '',
@@ -35,8 +37,8 @@ const state = {
     mileage: '',
     freightFee: '',
 
-    otherFee: '',
-    otherInfo: '',
+    otherFee: '', //
+    otherInfo: '', //
 
     isSaveOrderTemplate: 0,
     consignerAddressMapType: 1,
@@ -53,7 +55,13 @@ const state = {
   // 常发货物
   cargoOften: null,
   // 当前编辑的地址类型
-  currentArrdessType: ''
+  currentArrdessType: '',
+  // 地址是否改变
+  addressChanged: false,
+  // 选择的收货人信息
+  consigneeInfo: null,
+  // 计费规则计算金额
+  calculatedAmount: null
 }
 
 export default {
