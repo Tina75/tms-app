@@ -26,8 +26,8 @@
         </div>
       </div>
       <div v-if="status[data.acceptStatus].name == '待接收'" class="right">
-        <a class="btn btn-active" @click.stop="recept">接受</a>
-        <a class="btn" style="margin-right: 8px" @click.stop="refuse">拒绝</a>
+        <cube-button :outline="true" :inline="true" primary @click.stop="recept">接受</cube-button>
+        <cube-button :outline="true" :inline="true" primary @click.stop="refuse">拒绝</cube-button>
       </div>
     </div>
   </div>
