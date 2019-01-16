@@ -3,7 +3,6 @@
   <delivery-list
     :ref-name="refKey"
     :list="SendList"
-    :force-update="forceUpdate"
     @refresh="refresh"
     @loadmore="loadmore"
   />
@@ -22,7 +21,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['SendList'])
+    ...mapGetters('delivery', ['SendList'])
   },
 
   created () {
@@ -30,7 +29,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getSend', 'clearSend']),
+    ...mapActions('delivery', ['getSend', 'clearSend']),
 
     refresh() {
       this.clearSend()

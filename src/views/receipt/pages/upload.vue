@@ -1,16 +1,14 @@
 <template>
-  <div>
-    <cube-scroll class="scroll-box">
-      <form-item v-model="form.value" label="上传图片"/>
-      <Upload/>
-    </cube-scroll>
+  <div class="receipt-upload">
+    <form-item v-model="form.value" label="上传图片"/>
+    <Upload/>
   </div>
 </template>
 <script>
 import Upload from '@/components/Upload'
 import { FormItem } from '@/components/Form'
 export default {
-  name: 'recept-upload',
+  name: 'receipt-upload',
   metaInfo: {
     title: '回单上传'
   },

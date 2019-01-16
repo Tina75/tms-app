@@ -119,7 +119,7 @@ import Cargo from '@/views/upstream/components/Cargo'
 import VueClipboard from 'vue-clipboard2'
 import Vue from 'vue'
 import { rateGet, money, mile } from '@/views/upstream/libs'
-import * as API from '@/views/upstream/libs/api'
+import * as API from '../libs/api'
 Vue.use(VueClipboard)
 
 export default {
@@ -155,16 +155,6 @@ export default {
     initDetail () {
       API.initDetail(this.id).then(response => {
         this.detail = response.data.data
-      })
-    },
-    refuse () {
-      API.refuse(this.id).then(response => {
-        this.initDetail()
-      })
-    },
-    receipt () {
-      API.receipt(this.id).then(response => {
-        this.initDetail()
       })
     },
     copyBtn (e) {

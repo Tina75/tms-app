@@ -5,7 +5,7 @@
     </div>
     <div class="consignee-info">
       <div class="city">
-        {{data.departureCityName}} - {{data.destinationCityName}}
+        {{data.startName}} - {{data.endName}}
       </div>
       <div class="cargos">
         <div class="cargo-infos">{{data.weight || 0}}吨</div>
@@ -21,21 +21,23 @@
     </div>
     <div class="footer">
       <div class="left">
-        <div class="settlement">月结</div>
-        <div class="fee">
-          3500/元
+        <div class="leftBox">
+          <div class="settlement">月结</div>
+          <div class="fee">
+            {{data.totalFee}}/元
+          </div>
+        </div>
+        <div class="receiptBox">
+          <div class="settlement">回单</div>
+          <span class="fee">{{data.receiptCount}}</span>份
         </div>
       </div>
-      <div class="left">
-        <div class="settlement">回单</div>
-        <span class="fee">1</span>份
+      <div class="right">
+        <cube-button v-if="data.receiptOrder.receiptStatus === 0 && data.status === 40" :outline="true" :inline="true" primary @click.stop="handleClick('receipt')">回收</cube-button>
+        <cube-button v-if="data.receiptOrder.receiptStatus === 1" :outline="true" :inline="true" primary @click.stop="handleClick('backFactory')">返厂</cube-button>
+        <cube-button v-if="data.receiptOrder.receiptStatus > 0 && !data.receiptOrder.receiptUrl.length" :outline="true" :inline="true" primary @click.stop="handleClick('uploadPic')">上传回单</cube-button>
+        <cube-button v-if="data.receiptOrder.receiptStatus > 0 && data.receiptOrder.receiptUrl.length" :outline="true" :inline="true" primary @click.stop="handleClick('updatePic')">修改回单</cube-button>
       </div>
-      <!-- <div class="right">
-        <a class="btn btn-active">回收</a>
-        <a class="btn" style="margin-right: 8px">上传回单</a>
-        <a class="btn" style="margin-right: 8px">修改回单</a>
-        <a class="btn" style="margin-right: 8px">返厂</a>
-      </div> -->
     </div>
   </div>
 </template>
@@ -51,27 +53,9 @@ export default {
       default: () => {}
     }
   },
-  data () {
-    return {
-    }
-  },
   methods: {
-    showAlert() {
-      this.dialog = this.$createDialog({
-        type: 'prompt',
-        title: '回收',
-        prompt: {
-          value: '',
-          placeholder: '请输入回收人'
-        },
-        onConfirm: (e, promptValue) => {
-          this.$createToast({
-            type: 'warn',
-            time: 1000,
-            txt: `Prompt value: ${promptValue || ''}`
-          }).show()
-        }
-      }).show()
+    handleClick (type) {
+      this.$emit('card-action', type, this.data.id)
     }
   }
 }
@@ -116,6 +100,11 @@ export default {
   padding 8px 0
   .left
     width 50%
+    display flex
+    .leftBox
+      flex 1
+    .receiptBox
+      width 50px
     .settlement
       font-size 12px
     .fee

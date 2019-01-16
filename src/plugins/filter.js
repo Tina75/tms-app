@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import Vue from 'vue'
+import City from '@/libs/city'
 
 const URL_HOST = process.env.VUE_APP_IMG_HOST
 
@@ -19,6 +20,15 @@ Vue.filter('moneyFormat', (value, accuracy) => {
 
 Vue.filter('settlementTypeFormat', (value) => {
   const settlement = ['未知', '现付', '到付', '回付', '月结']
-  if (value > -1 && value < 4) return settlement[value]
+  return settlement[value] ? settlement[value] : '未知'
+})
+
+Vue.filter('codeToName', value => {
+  return City.getNameByCode(value)
+})
+
+Vue.filter('orderType', value => {
+  const orderTypes = { '10': '待提货', '20': '待调度', '30': '在途', '40': '已到货', '50': '已回单', '100': '已删除' }
+  if (value) return orderTypes[value]
   else return '未知'
 })
