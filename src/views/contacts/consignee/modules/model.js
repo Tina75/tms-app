@@ -34,6 +34,7 @@ export const editPhone = (value) => {
     return value
   }
 }
+
 export class ConsigneeDetail {
   id = ''
   consigneeCompanyName = '' // 收货人单位

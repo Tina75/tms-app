@@ -23,6 +23,7 @@
         <form-item
           v-model="form.phone"
           :show-required-toast="false"
+          type="number"
           prop="phone"
           label="联系电话"
           placeholder="请输入手机号或座机号"
@@ -158,24 +159,30 @@ export default {
     },
     // 提交
     async submit () {
-      this.submiting = true
-      this.confirmed = true
       // 如果是修改且收货地址没有变更 取详情的地址，变更了取新设置的地址
       const address = Object.assign({}, this.form, { address: this.consigneeDetail.address })
       const data = ConsigneeDetail.toServer(Object.assign({}, address, this.saveAddress))
       console.log('data', data)
-      try {
-        // 表单验证
-        await this.$refs.$form.validate()
-        await this.modifyConsignee(data)
-      } catch (e) {
-        console.log(e)
-      } finally {
-        this.$refreshPage('contacts-consignee', 'contacts-consignee-detail')
-        // 清除表单数据
-        this.clearForm()
-        this.submiting = false
-        this.$router.back()
+      // 表单验证
+      const valid = await this.$refs.$form.validate()
+      if (valid) {
+        console.log('true')
+        try {
+          this.submiting = true
+          this.modifyConsignee(data)
+          this.confirmed = true
+        } catch (e) {
+          console.log(e)
+        } finally {
+          this.$refreshPage('contacts-consignee', 'contacts-consignee-detail')
+          // 清除表单数据
+          this.clearForm()
+          this.form = this.formList
+          this.submiting = false
+          this.$router.back()
+        }
+      } else {
+        window.toast('请填写必填信息')
       }
     },
     // 设置详细地址
@@ -218,6 +225,7 @@ export default {
         icon: 'cubeic-alert',
         onConfirm: leave
       }).show()
+      this.clearForm()
     } else {
       leave()
     }
@@ -230,17 +238,4 @@ export default {
   padding-top 10px
   .form_card
     margin-bottom 15px
-  &_submit
-    width 100%
-    position fixed
-    bottom 0px
-    .cube-btn
-      font-weight 500
-      font-size 17px
-      border-radius 0
-      height 44px
-      line-height 17px
-      padding 0
->>>textarea
-  outline none
 </style>
