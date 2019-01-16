@@ -4,7 +4,7 @@
       v-model="loading"
       :data="consigneeList.list"
       :loader="loadConsigneeList"
-      :is-end="consigneeList.hasNext"
+      :has-next="consigneeList.hasNext"
     >
       <ListItem
         v-for="(item, i) in consigneeList.list"
@@ -17,14 +17,14 @@
       />
       <template slot="empty">
         <NoData
-          action="新增发货方"
-          message="老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～"
-          @btn-click="$router.push({ name: 'contacts-shipper-modify' })"
+          action="新增收货方"
+          message="老板，您还没有记录收货方信息 赶快新增一个，方便联系哦～"
+          @btn-click="$router.push({ name: 'contacts-consignee-modify' })"
         >
           <img
             slot="img"
             class="contacts-consignee__placeholder"
-            src="@/assets/contacts/shipper-list-empty.png"
+            src="@/assets/contacts/consigness-list-empty.png"
           >
         </NoData>
       </template>

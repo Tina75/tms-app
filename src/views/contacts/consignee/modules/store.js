@@ -10,28 +10,36 @@ const store = {
     consigneeDetail: {},
     formList: {
       id: '',
-      address: '',
-      cityCode: '',
-      cityName: '',
       consigneeCompanyName: '',
       consignerId: '',
       consignerName: '',
       contact: '',
+      phone: '',
+      remark: '',
+      address: '',
+      cityCode: '',
+      consignerHourseNumber: ''
+    },
+    saveAddress: {
+      address: '',
+      cityCode: '',
       latitude: '',
       longitude: '',
       mapType: 1,
-      phone: '',
-      remark: ''
     }
   },
   mutations: {
     saveConsigner: (state, payload = {}) => { state.saveConsigner = payload },
     setConsigneeDetail: (state, payload = {}) => { state.consigneeDetail = payload },
-    formList: (state, payload) => { state.formList = payload }
+    formList: (state, payload) => { state.formList = payload },
+    saveAddress: (state, payload) => { state.saveAddress = payload }
   },
   actions: {
     saveConsignerInfo: ({ state, commit }, data = {}) => {
       commit('saveConsigner', data)
+    },
+    saveAddressInfo: ({ state, commit }, data = {}) => {
+      commit('saveAddress', data)
     },
     loadConsigneeDetail: ({ commit, rootState }) => {
       Server({
@@ -47,19 +55,20 @@ const store = {
     },
     addressAction: ({ state, dispatch }, addressData) => {
       console.info('addressAction', addressData)
-      // const cityName = cityUtil.getCityNameArray(addressData.locale).join('')
-      return dispatch('modifyAddress', {
-        address: addressData.address + addressData.additional,
+      return dispatch('saveAddressInfo', {
+        address: addressData.address,
+        cityName: cityUtil.getCityNameArray(addressData.locale).join(''),
+        consignerHourseNumber: addressData.additional,
         longitude: addressData.lon,
         latitude: addressData.lat,
         cityCode: addressData.code,
         mapType: 1
       })
-      // console.info(data)
     }
   },
   getters: {
-    formList: (state) => state.formList
+    formList: (state) => state.formList,
+    saveAddress: (state) => state.saveAddress
   }
 }
 // -----下拉列表-----

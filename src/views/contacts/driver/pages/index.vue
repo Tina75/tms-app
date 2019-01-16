@@ -4,7 +4,7 @@
       v-model="loading"
       :data="driverList.list"
       :loader="loadDriverList"
-      :is-end="driverList.hasNext"
+      :has-next="driverList.hasNext"
     >
       <ListItem
         v-for="(item, i) in driverList.list"

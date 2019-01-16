@@ -96,12 +96,13 @@ export default {
           }
         },
         address: { required: true }
-      }
+      },
+      submiting: false
     }
   },
   computed: {
     ...mapState(moudleName, ['saveConsigner', 'consigneeDetail']),
-    ...mapGetters(moudleName, ['formList']),
+    ...mapGetters(moudleName, ['formList', 'saveAddress']),
     isEdit () {
       return !this.$route.query.consigneeId
     }
@@ -109,14 +110,17 @@ export default {
   methods: {
     ...mapActions({
       saveConsignerInfo: moudleName + '/saveConsignerInfo',
+      saveAddressInfo: moudleName + '/saveAddressInfo',
       modifyConsignee: moudleName + '/modifyConsignee',
       loadConsigneeDetail: moudleName + '/loadConsigneeDetail',
       clearForm: moudleName + '/clearForm',
       resetAddressPage: 'contacts/resetAddressPage'
     }),
     async onPageRefresh() {
+      // 进入页面时刷新列表数据
       this.form = this.formList
       this.setSender()
+      this.setAddress()
       console.log(!this.isEdit)
       if (!this.isEdit) {
         const urlId = +this.$route.query.consigneeId
@@ -126,37 +130,62 @@ export default {
         this.form = ConsigneeDetail.toForm(this.consigneeDetail)
         this.editTel(this.consigneeDetail.phone)
         this.setSender()
+        this.setAddress()
       }
     },
+    // 选择发货人信息
     selectSender () {
       this.$router.push({
         name: 'select-shipper'
       })
     },
+    // 将选择的发货人信息渲染到表单上
     setSender () {
       if (this.saveConsigner.name) {
         this.form.consignerName = this.saveConsigner.name
+        this.form.consignerId = this.saveConsigner.id
       }
     },
+    // 将选择的地址渲染到表单上
+    setAddress () {
+      if (this.saveAddress && this.saveAddress.address) {
+        this.form.address = this.saveAddress.cityName + this.saveAddress.address + this.saveAddress.consignerHourseNumber
+      }
+    },
+    // 新增的时候格式化手机号码
     formatTel (value) {
       this.form.phone = this.formatPhone(value)
     },
+    // 编辑的时候格式化手机号码
     editTel (value) {
       this.form.phone = this.editPhone(value)
     },
+    // 提交
     async submit () {
-      const consignerId = this.saveConsigner.id ? this.saveConsigner.id : this.form.consignerId
-      const data = ConsigneeDetail.toServer(Object.assign({}, { consignerId: consignerId }, this.form))
-      console.log(data)
-      // await this.$refs.$form.validate()
-      // await this.modifyConsignee(data)
-      // this.$refreshPage('contacts-consignee', 'contacts-consignee-detail')
-      // this.clearForm()
-      // this.$router.back()
+      this.submiting = false
+      // 如果是修改且收货地址没有变更 取详情的地址，变更了取新设置的地址
+      const address = Object.assign({}, this.form, { address: this.consigneeDetail.address })
+      const data = ConsigneeDetail.toServer(Object.assign({}, address, this.saveAddress))
+      console.log('data', data)
+      try {
+        // 表单验证
+        await this.$refs.$form.validate()
+        await this.modifyConsignee(data)
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.$refreshPage('contacts-consignee', 'contacts-consignee-detail')
+        // 清除表单数据
+        this.clearForm()
+        this.submiting = false
+        this.$router.back()
+      }
     },
+    // 设置详细地址
     selectAddress() {
       const data = {}
-      const item = this.form
+      // 如果是编辑取详情的地址 新增取空
+      const item = !this.isEdit ? this.consigneeDetail : data
       const config = {
         title: '详细地址',
         namespace: moudleName,
@@ -177,8 +206,10 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     console.log(to)
+    // 当从页面离开不进入选择地址和选择发货方时  清空选择的数据
     if (to.name !== 'select-shipper' && to.name !== 'contacts-address') {
       this.saveConsignerInfo()
+      this.saveAddressInfo()
     }
     next()
   }
