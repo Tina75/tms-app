@@ -49,10 +49,6 @@ export default {
       default: () => {}
     }
   },
-  data () {
-    return {
-    }
-  },
   computed: {
     status () {
       const obj = {}

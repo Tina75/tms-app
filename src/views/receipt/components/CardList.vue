@@ -77,6 +77,21 @@ export default {
     },
     // 回收
     receipt (id) {
+      this.dialog = this.$createDialog({
+        type: 'prompt',
+        title: '回收',
+        prompt: {
+          value: '',
+          placeholder: '请输入回收人'
+        },
+        onConfirm: (e, promptValue) => {
+          this.$createToast({
+            type: 'warn',
+            time: 1000,
+            txt: `Prompt value: ${promptValue || ''}`
+          }).show()
+        }
+      }).show()
     },
     uploadPic (id) {
       this.$router.push({
@@ -91,7 +106,32 @@ export default {
       })
     },
     // 返厂
-    backFactory (id) {
+    backFactory (orderIds) {
+      this.dialog = this.$createDialog({
+        type: 'prompt',
+        title: '返厂',
+        prompt: {
+          value: '',
+          placeholder: '请输入接收人'
+        },
+        onConfirm: (e, promptValue) => {
+          const params = {
+            orderIds,
+            returnName: promptValue,
+            receiptStatus: this.data.receiptStatus,
+            ids: []
+          }
+          API.updateReceipt(params)
+            .then(res => {
+              console.log(res)
+              this.$createToast({
+                type: 'warn',
+                time: 1000,
+                txt: `Prompt value: ${promptValue || ''}`
+              }).show()
+            })
+        }
+      }).show()
     }
   }
 }
