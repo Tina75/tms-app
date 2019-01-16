@@ -106,8 +106,8 @@
       </Panel>
     </div>
     <div class="upstream-footer">
-      <cube-button class="footer-item-btn" @click="refuse">拒绝</cube-button>
-      <cube-button class="footer-item-btn footer-item-primary" @click="receipt">接受</cube-button>
+      <cube-button class="footer-item-btn">拒绝</cube-button>
+      <cube-button class="footer-item-btn footer-item-primary">接受</cube-button>
     </div>
   </div>
 </template>

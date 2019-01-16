@@ -5,7 +5,7 @@
       :key="index"
       :data="el"
       @card-action="handleClick"
-      @click.native="toDetail(el.shipperOrderId)"/>
+      @click.native="toDetail(el.id)"/>
   </div>
 </template>
 <script>
@@ -76,7 +76,7 @@ export default {
       }
     },
     // 回收
-    receipt (id) {
+    receipt (item) {
       this.dialog = this.$createDialog({
         type: 'prompt',
         title: '回收',
@@ -85,28 +85,26 @@ export default {
           placeholder: '请输入回收人'
         },
         onConfirm: (e, promptValue) => {
-          this.$createToast({
-            type: 'warn',
-            time: 1000,
-            txt: `Prompt value: ${promptValue || ''}`
-          }).show()
+          const params = {
+            orderIds: [item.id],
+            recoveryName: promptValue,
+            receiptStatus: item.receiptOrder.receiptStatus,
+            ids: [item.receiptOrder.orderId]
+          }
+          API.updateReceipt(params)
+            .then(res => {
+              this.init()
+              this.$createToast({
+                type: 'warn',
+                time: 1000,
+                txt: '回收成功'
+              }).show()
+            })
         }
       }).show()
     },
-    uploadPic (id) {
-      this.$router.push({
-        params: { id, type: 'add' },
-        name: 'receipt-upload'
-      })
-    },
-    updatePic (id) {
-      this.$router.push({
-        params: { id, type: 'update' },
-        name: 'receipt-upload'
-      })
-    },
     // 返厂
-    backFactory (orderIds) {
+    backFactory (item) {
       this.dialog = this.$createDialog({
         type: 'prompt',
         title: '返厂',
@@ -116,22 +114,34 @@ export default {
         },
         onConfirm: (e, promptValue) => {
           const params = {
-            orderIds,
+            orderIds: [item.id],
             returnName: promptValue,
-            receiptStatus: this.data.receiptStatus,
-            ids: []
+            receiptStatus: item.receiptOrder.receiptStatus,
+            ids: [item.receiptOrder.orderId]
           }
           API.updateReceipt(params)
             .then(res => {
-              console.log(res)
+              this.init()
               this.$createToast({
                 type: 'warn',
                 time: 1000,
-                txt: `Prompt value: ${promptValue || ''}`
+                txt: '返厂成功'
               }).show()
             })
         }
       }).show()
+    },
+    uploadPic (id) {
+      this.$router.push({
+        query: { id, type: 'add' },
+        name: 'receipt-upload'
+      })
+    },
+    updatePic (id) {
+      this.$router.push({
+        query: { id, type: 'update' },
+        name: 'receipt-upload'
+      })
     }
   }
 }

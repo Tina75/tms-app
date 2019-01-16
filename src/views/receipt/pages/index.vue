@@ -3,9 +3,13 @@
     <div class="header">
       <cube-tab-bar
         v-model="selectedLabel"
-        :data="tabs"
         show-slider
-        class="tab-bar"/>
+        class="tab-bar">
+        <cube-tab v-for="(item, index) in tabs" :key="index" :label="item.label" :value="item.label">
+          <p class="tab-label">{{item.label}}</p>
+          <p class="tab-count">{{receiptStatusCnt[item.key]}}</p>
+        </cube-tab>
+      </cube-tab-bar>
     </div>
     <div class="list-bar">
       <cube-tab-panels v-model="selectedLabel">
@@ -25,6 +29,7 @@
 </template>
 <script>
 import CardList from '../components/CardList'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'receipt',
   metaInfo: {
@@ -39,31 +44,31 @@ export default {
       tabs: [
         {
           label: '全部',
-          key: 'all',
+          key: 'total',
           receiptStatus: '',
           data: []
         },
         {
           label: '代签收',
-          key: 'waitReceipt',
+          key: 'waiting_sign',
           receiptStatus: '-1',
           data: []
         },
         {
           label: '待回收',
-          key: 'waitRecycle',
+          key: 'waiting_recovery',
           receiptStatus: '0',
           data: []
         },
         {
           label: '待返厂',
-          key: 'waitBack',
+          key: 'waiting_return_factory',
           receiptStatus: '1',
           data: []
         },
         {
           label: '已返厂',
-          key: 'backedFactory',
+          key: 'already_returned_factory',
           receiptStatus: '2',
           data: []
         }
@@ -79,7 +84,14 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['receiptStatusCnt'])
+  },
+  mounted () {
+    this.getReceiptStatusCnt()
+  },
   methods: {
+    ...mapActions(['getReceiptStatusCnt']),
     onPullingDown (ref) {
       this.$refs[ref][0].refresh()
     },
