@@ -30,6 +30,9 @@ export default {
       state.dispatch.pageNo = ++payload.pageNo
       state.dispatch.list = state.dispatch.list.concat(payload.list)
     },
+    SET_DISPATCH(state, list) {
+      state.dispatch.list = [...list]
+    },
     DISPATCH_CLEAR (state) {
       state.dispatch = { list: [], pageNo: 1 }
     },
@@ -138,14 +141,16 @@ export default {
         window.toast('到货成功')
       })
     },
-    // 调度 or 创建运单
-    dispatchOrder: ({ commit }, data) => {
+    // 调度 and 创建运单
+    dispatchOrder: ({ commit, state }, data) => {
+      const ids = data.orderIds
       return Server({
         url: '/waybill/create',
         method: 'post',
         data
       }).then(({ data }) => {
-        window.toast(data.msg)
+        let list = state.dispatch.list.filter(item => !(ids.includes(item.id)))
+        commit('SET_DISPATCH', list)
       })
     },
     // 获取运单详情
@@ -156,6 +161,15 @@ export default {
           data: { waybillId: id } }
       ).then(({ data }) => {
         commit('WAYBILL_DETAIL', data.data)
+      })
+    },
+    // 删除运单
+    deleteBillById: ({ commit }, ids = []) => {
+      return Server({
+        url: '/waybill/delete',
+        method: 'post',
+        data: { waybillIds: ids }
+      }).then(({ data }) => {
       })
     }
   },

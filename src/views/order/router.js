@@ -2,6 +2,7 @@ import store from '@/store'
 import createModule from './create/module'
 import listModule from './list/store'
 import oftenModule from './often/store'
+import detailModule from './detail/store'
 
 export default [
   {
@@ -62,7 +63,12 @@ export default [
   {
     path: '/order/list',
     name: 'order-list', // 订单列表
-    component: () => import(/* webpackChunkName: "order" */'./list/list.vue')
+    component: () => import(/* webpackChunkName: "order" */'./list/pages/list.vue')
+  },
+  {
+    path: '/order/detail/:id',
+    name: 'order-detail', // 订单列表
+    component: () => import(/* webpackChunkName: "order" */'./detail/pages/detail.vue')
   }
 ]
 
@@ -70,3 +76,4 @@ store.registerModule('order', { namespaced: true })
 store.registerModule(['order', 'create'], createModule)
 store.registerModule(['order', 'list'], listModule)
 store.registerModule(['order', 'often'], oftenModule)
+store.registerModule(['order', 'detail'], detailModule)

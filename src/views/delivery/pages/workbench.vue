@@ -4,30 +4,35 @@
     <dispatch-city
       :start-code.sync="startCode"
       :end-code.sync="endCode" />
-    <cube-scroll
-      ref="scroll"
-      :data="DispatchList"
-      :options="options"
-      class="scroll-wrap"
-      @pulling-down="refresh"
-      @pulling-up="loadmore">
-      <ul>
-        <li v-for="item in DispatchList" :key="item.id" >
-          <workbench-list-item :info="item"/>
-        </li>
-      </ul>
-    </cube-scroll>
-    <div class="footer">
-      <div class="footer-calc">
-        <cube-checkbox v-model="checkAll">全选</cube-checkbox>
-        <span class="cube-c-green">{{totalCount}}</span>单
-        <div style="float:right">
-          合计&nbsp;
-          <div v-if="totalWeight"><span class="cube-c-green">{{totalWeight}}</span>吨&nbsp;</div>
-          <div v-if="totalVolume"><span class="cube-c-green">{{totalVolume}}</span>方&nbsp;</div>
-          <div v-if="totalQuantity"><span class="cube-c-green">{{totalQuantity}}</span>件</div>
+    <div class="list-item">
+      <div class="list-item__time">
+        <span class="cube-ml-15">{{info.createTime||info.createTimeLong | datetimeFormat}}</span>
+        <div class="list-item__flag">
+          <span v-if="info.collectionMoney>0" class="item orange">代</span>
+          <span v-if="info.cashBack>0" class="item red">返</span>
+          <span v-if="info.abnormalLabel==2" class="item blue">异</span>
         </div>
       </div>
+      <div class="list-item__body">
+        <p class="list-item__city">{{info.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{info.endName}}</p>
+        <div>
+          <span v-if="info.weight" class="list-item__count">{{info.weight}}吨</span>
+          <span v-if="info.volume" class="list-item__count">{{info.volume}}方</span>
+          <span v-if="info.quantity" class="list-item__count">{{info.quantity}}件</span>
+        </div>
+        <p v-if="info.consignerName" class="cube-mt-5">{{info.consignerName}}</p>
+        <!-- <p v-if="info.carrierName" class="cube-mt-5">{{info.carrierName}}</p> -->
+        <p v-if="info.id && info.customerOrderNo" class="list-item__number">客户单号：{{info.customerOrderNo}}</p>
+      <!-- <p v-else class="list-item__number cube-font-12">
+        <span class="send-type">{{info.assignCarType==1?'外转':'自送'}}</span>{{info.driverName}}  {{info.assistantDriverName}}  {{info.carNo}}
+      </p> -->
+      </div>
+      <div class="list-item__money">
+        <p class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormat}})</p>
+        <div class="cube-c-yellow cube-mt-5 cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.pickupFee||info.totalFee |moneyFormat}}</span>/元</div>
+      </div>
+    </div>
+    <div class="footer">
       <cube-button class="btn-bottom"  @click="doDispatch">确定</cube-button>
     </div>
   </div>
@@ -37,16 +42,16 @@
 
 import { mapGetters, mapActions } from 'vuex'
 import DispatchCity from '../components/dispach-city'
-import WorkbenchListItem from '../components/ListItemWorkbench.vue'
 export default {
   name: 'delivery-workbench',
-  components: { DispatchCity, WorkbenchListItem },
+  components: { DispatchCity },
   metaInfo: { title: '调度' },
   data () {
     return {
       startCode: -1,
       endCode: -1,
-      checkAll: false
+      checkAll: false,
+      info: {}
     }
   },
 
@@ -58,64 +63,24 @@ export default {
         pullUpLoad: true,
         scrollbar: true
       }
-    },
-    totalWeight() {
-      return this.getCountByKey('weight')
-    },
-    totalVolume() {
-      return this.getCountByKey('volume')
-    },
-    totalQuantity() {
-      return this.getCountByKey('quantity')
-    },
-    totalCount() {
-      return this.DispatchList.filter(item => item.checked === true).length
     }
-  },
-  watch: {
-    checkAll: function(val) {
-      this.DispatchList.forEach(item => { item.checked = val })
-    },
-    DispatchList: function(newList) {
-      if (newList && newList.length) {
-        const firstOne = newList[0]
-        this.startCode = firstOne.start
-        this.endCode = firstOne.end
-      }
-    }
+
   },
 
   created () {
-    this.refresh()
+    this.info = this.$route.params.info
+    this.startCode = this.info.start
+    this.endCode = this.info.end
   },
 
   methods: {
-    ...mapActions('delivery', ['getDispatch', 'clearDispatch', 'dispatchOrder']),
-    refresh() {
-      this.clearDispatch()
-      this.getDispatch().then(() => { this.checkAll = false })
-    },
-    loadmore() {
-      this.getDispatch()
-    },
-    getCountByKey(key) {
-      let checkedList = this.DispatchList.filter(item => item.checked === true)
-      return checkedList.length && checkedList.reduce((obj1, obj2) => {
-        let obj = {}
-        obj[key] = obj1[key] + obj2[key]
-        return obj
-      })[key]
-    },
+    ...mapActions('delivery', ['dispatchOrder']),
+
     doDispatch() {
-      let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)
-      if (!this.startCode) return window.toast('请选择始发地')
-      if (!this.endCode) return window.toast('请选择目的地')
-      if (!ids.length) return window.toast('请至少选择一单')
-      console.log('选中的id有 ' + JSON.stringify(ids))
       const data = {
         start: this.startCode,
         end: this.endCode,
-        orderIds: ids
+        orderIds: [this.info.id]
       }
       this.dispatchOrder(data).then(() => { this.$router.back() })
     }
@@ -145,5 +110,80 @@ export default {
       display inline-block
   .btn-bottom
     height 44px
+.list
+  &-item
+    background white
+    margin-top 15px
+    padding 10px 0
+    font-size 14px
+    color #666666
+    position relative
+    p
+      line-height 20px
+    &__time
+      height 20px
+      line-height 20px
+      position relative
+    &__time:after
+      content ''
+      display block
+      border-bottom 1px solid #F3F5F9
+      margin-top 6px
+    &__money:before
+      content ''
+      display block
+      border-bottom 1px solid #F3F5F9
+      margin-bottom 8px
+      padding-top  10px
+    &__body
+      padding-left 15px
+
+    &__city
+      color #333
+      font-size 18px
+      margin-top 20px
+      font-weight bold
+    &__count
+      background #efefef
+      display inline-block
+      margin 7px 8px 7px 0
+      border-radius 3px
+      padding 3px 5px 2px 5px
+      font-size 12px
+    &__number
+      line-height 25px
+      // margin-bottom 10px
+      .send-type
+        border 1px solid #efefef
+        border-radius 2px
+        padding 1px 5px
+        margin-right 5px
+    &__btngroup
+      position absolute
+      right 15px
+      bottom 15px
+      font-size 14px
+      min-width 50px
+      .btn
+        margin-left 5px
+    &__flag
+      color white
+      height 18px
+      font-size 12px
+      line-height 20px
+      position absolute
+      right 15px
+      top 0
+      .item
+        border-radius 2px
+        display inline-block
+        margin-left 5px
+        padding 0 3px
+      .orange
+        background #FCAF3B
+      .red
+        background #FF8463
+      .blue
+        background #418DF9
 
 </style>

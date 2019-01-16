@@ -29,7 +29,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('delivery', ['getSend', 'clearSend']),
+    ...mapActions('delivery', ['getSend', 'clearSend', 'deleteBillById']),
 
     refresh() {
       this.clearSend()
@@ -38,6 +38,21 @@ export default {
     loadmore() {
       this.getSend()
     }
+
+    // 删除
+    // deleteItem(id) {
+    //   this.$createDialog({
+    //     type: 'confirm',
+    //     icon: 'cubeic-important',
+    //     content: '是否确认删除？',
+    //     onConfirm: () => {
+    //       this.deleteBillById([id]).then(() => {
+    //         const index = this.SendList.findIndex(item => item.waybillId === id)
+    //         this.SendList.splice(index, 1)
+    //       })
+    //     }
+    //   }).show()
+    // }
   }
 }
 

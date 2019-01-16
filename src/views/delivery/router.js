@@ -8,6 +8,11 @@ export default [
     component: () => import(/* webpackChunkName: "delivery" */'./pages/list.vue')
   },
   {
+    path: '/delivery/workbench-multi',
+    name: 'delivery-workbench-multi',
+    component: () => import(/* webpackChunkName: "delivery" */'./pages/workbench-multi.vue')
+  },
+  {
     path: '/delivery/workbench',
     name: 'delivery-workbench',
     component: () => import(/* webpackChunkName: "delivery" */'./pages/workbench.vue')

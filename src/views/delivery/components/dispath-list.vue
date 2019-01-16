@@ -2,9 +2,11 @@
   <delivery-list
     :list="DispatchList"
     @refresh="refresh"
-    @loadmore="loadmore"/>
+    @loadmore="loadmore"
+    @on-dispatch="onDispatch"
+  />
 
-    <!-- <cube-scroll
+  <!-- <cube-scroll
     ref="scroll"
     :data="DispatchList"
     :options="options"
@@ -45,6 +47,9 @@ export default {
     },
     loadmore() {
       this.getDispatch()
+    },
+    onDispatch(info) {
+      this.$router.push({ name: 'delivery-workbench', params: { info } })
     }
   }
 }
