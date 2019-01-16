@@ -73,7 +73,7 @@ export default {
   methods: {
     ...mapActions(moudleName, ['resetAddressPage']),
     onSelectAddress(item) {
-      this.form.address = item.detail
+      this.form.address = item.detail || ''
     },
     async submit() {
       this.submiting = true
@@ -120,6 +120,7 @@ export default {
     const leave = () => {
       this.confirmed = false
       this.resetAddressPage()
+      this.form.address = ''
       next()
     }
     if (this.confirmed) {
