@@ -16,11 +16,11 @@
         <div
           slot="right"
           class="contacts-shipper-cargo__item border-left-1px cube-font-14 cube-c-light-grey"
-          @click="modify(item.data)"
+          @click="modify(i)"
           v-text="'修改'"
         />
       </ListItem>
-
+      <cube-button @click="modify()">a</cube-button>
       <template slot="empty">
         <NoData action="新增常发货物" message="老板，您还没有记录常发货物信息 赶快新增一个，用着方便哦～" @btn-click="modify">
           <img
@@ -38,7 +38,7 @@
 import ListItem from '../../components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
-import { mapActions, mapState, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 const moudleName = 'contacts/shipper'
 export default {
   name: 'ContactsShipperCargoList',
@@ -54,13 +54,11 @@ export default {
   computed: mapState(moudleName, ['cargoList']),
   methods: {
     ...mapActions(moudleName, ['loadCargoList']),
-    ...mapMutations(moudleName, ['setCargoDetail']),
     onPageRefresh() {
       this.loading = true
     },
-    modify(item) {
-      this.setCargoDetail(item)
-      this.$router.push({ name: 'contacts-shipper-cargo-modify', query: { consignerId: this.$route.query.consignerId } })
+    modify(i) {
+      this.$router.push({ name: 'contacts-shipper-cargo-modify', query: { consignerId: this.$route.query.consignerId, index: i } })
     }
   }
 }
