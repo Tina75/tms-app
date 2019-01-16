@@ -16,17 +16,18 @@
             label="对接业务员"
             type="select"
             :options="operators"
-            :show-arrow="false" />
+            :show-arrow="false"
+            @change="saleChangeHandler" />
         </div>
         <div class="form-section">
           <form-item
-            v-model="deliveryTimeText"
+            v-model="form.deliveryTimeText"
             label="发货时间"
             type="click"
             placeholder="请选择"
             @on-click="pickTimeHandler('delivery')" />
           <form-item
-            v-model="arriveTimeText"
+            v-model="form.arriveTimeText"
             label="到货时间"
             type="click"
             placeholder="请选择"
@@ -54,12 +55,13 @@ export default {
         customerOrderNo: '',
         customerWaybillNo: '',
         salesmanId: '',
+        salesmanName: '',
         deliveryTime: '',
-        arriveTime: ''
+        arriveTime: '',
+        deliveryTimeText: '',
+        arriveTimeText: ''
       },
-      timePickerType: '',
-      deliveryTimeText: '',
-      arriveTimeText: ''
+      timePickerType: ''
     }
   },
   computed: {
@@ -107,13 +109,13 @@ export default {
     selectTime (date) {
       if (this.timePickerType === 'delivery') {
         this.form.deliveryTime = date.getTime()
-        this.deliveryTimeText = dayjs(this.form.deliveryTime).format('YYYY-MM-DD HH:mm') + '前'
+        this.form.deliveryTimeText = dayjs(this.form.deliveryTime).format('YYYY-MM-DD HH:mm') + '前'
       } else {
         this.form.arriveTime = date.getTime()
-        this.arriveTimeText = dayjs(this.form.arriveTime).format('YYYY-MM-DD HH:mm') + '前'
+        this.form.arriveTimeText = dayjs(this.form.arriveTime).format('YYYY-MM-DD HH:mm') + '前'
       }
     },
-
+    saleChangeHandler (value, index, text) { this.form.salesmanName = text },
     ensure () {
       this.SET_CONSUMER_INFO(Object.assign({}, this.form))
       this.$router.back()
