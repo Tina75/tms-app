@@ -13,7 +13,7 @@
         :item="item"
         @click="onItemClick"
       />
-      <template slot="empty" v-if="!consigneeList.length">
+      <template v-if="!consigneeList.length" slot="empty">
         <NoData
           action="新增收货方"
           message="老板，您还没有记录收货方信息 赶快新增一个，方便联系哦～"
