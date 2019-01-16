@@ -2,7 +2,7 @@
   <div class="contacts-consignee">
     <InfiniteList
       v-model="loading"
-      :data="consigneeList.list"
+      :has-data="consigneeList.list.length"
       :loader="loadConsigneeList"
       :has-next="consigneeList.hasNext"
     >

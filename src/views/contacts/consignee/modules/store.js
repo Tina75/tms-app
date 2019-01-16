@@ -25,7 +25,7 @@ const store = {
       cityCode: '',
       latitude: '',
       longitude: '',
-      mapType: 1,
+      mapType: 1
     }
   },
   mutations: {

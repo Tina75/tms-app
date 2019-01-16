@@ -49,7 +49,7 @@ export class ConsigneeDetail {
     data = {
       ...data
     }
-    const arr = ['cityName','consignerHourseNumber', 'remark', 'consigneeCompanyName']
+    const arr = ['cityName', 'consignerHourseNumber', 'remark', 'consigneeCompanyName']
     arr.forEach((key) => {
       data[key] = data[key] ? data[key] : ''
     })

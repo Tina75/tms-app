@@ -56,16 +56,11 @@
         />
       </div>
     </form-group>
-    <div class="add_submit">
-      <cube-button
-        :primary="true"
-        @click="submit">
-        确定
-      </cube-button>
-    </div>
+    <LoadingButton class="cube-bottom-button" :loading="submiting" @click="submit" />
   </div>
 </template>
 <script>
+import LoadingButton from '@/components/LoadingButton'
 import { FormGroup, FormItem } from '@/components/Form'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { validatePhone, formatPhone, ConsigneeDetail, editPhone } from '../modules/model'
@@ -77,7 +72,7 @@ export default {
       title: this.isEdit ? '新增收货方' : '编辑收货方'
     }
   },
-  components: { FormItem, FormGroup },
+  components: { FormItem, FormGroup, LoadingButton },
   data() {
     return {
       formatPhone,
@@ -97,7 +92,8 @@ export default {
         },
         address: { required: true }
       },
-      submiting: false
+      submiting: false,
+      confirmed: false
     }
   },
   computed: {
@@ -162,7 +158,8 @@ export default {
     },
     // 提交
     async submit () {
-      this.submiting = false
+      this.submiting = true
+      this.confirmed = true
       // 如果是修改且收货地址没有变更 取详情的地址，变更了取新设置的地址
       const address = Object.assign({}, this.form, { address: this.consigneeDetail.address })
       const data = ConsigneeDetail.toServer(Object.assign({}, address, this.saveAddress))
@@ -207,11 +204,23 @@ export default {
   beforeRouteLeave (to, from, next) {
     console.log(to)
     // 当从页面离开不进入选择地址和选择发货方时  清空选择的数据
-    if (to.name !== 'select-shipper' && to.name !== 'contacts-address') {
+    const leave = () => {
+      this.confirmed = false
       this.saveConsignerInfo()
       this.saveAddressInfo()
+      next()
     }
-    next()
+    if (to.name !== 'select-shipper' && to.name !== 'contacts-address' && !this.confirmed) {
+      this.$createDialog({
+        type: 'confirm',
+        title: '',
+        content: '信息未保存，确认退出吗？',
+        icon: 'cubeic-alert',
+        onConfirm: leave
+      }).show()
+    } else {
+      leave()
+    }
   }
 }
 </script>
