@@ -34,7 +34,7 @@
       <cube-button v-if="!info.waybillId" class="list-item__btngroup" :outline="true"  :inline="true" primary @click="dispatch(info.id)">调度</cube-button>
       <div v-else class="list-item__btngroup">
         <div v-if="info.status<3">
-          <cube-button class="btn" :outline="true"  :inline="true" :light="true" @click="sendCar(info.waybillId)">删除</cube-button>
+          <cube-button class="btn" :outline="true" :inline="true" @click="sendCar(info.waybillId)">删除</cube-button>
           <cube-button v-if="info.status==1" class="btn" :outline="true"  :inline="true" primary @click="sendCar(info.waybillId)">派车</cube-button>
           <cube-button v-if="info.status==2" class="btn" :outline="true"  :inline="true" primary @click="setOff(info.waybillId)">发运</cube-button>
         </div>
