@@ -130,18 +130,18 @@
         <p class="share-title">分享到</p>
         <div>
           <ul>
-            <li @click="sharePath">
+            <li @click="sharePath('1')">
               <icon-font
                 name="icon-weixin"
                 :size="44"/>
               <div class="title">微信好友</div>
             </li>
-            <li>
+            <li @click="sharePath('2')">
               <svg class="icon closeImg" aria-hidden="true" style="font-size: 44px;">
                 <use xlink:href="#icon-pengyouquan"/></svg>
               <div class="title">朋友圈</div>
             </li>
-            <li>
+            <li @click="sharePath('4')">
               <icon-font
                 name="icon-qq"
                 :size="44"/>
@@ -191,7 +191,9 @@ export default {
   mounted () {
     bridge.call('ui.setRightButtonAction', { text: '编辑', action: 'action', color: '#666666' },
       // text:按钮标题 action:按钮方法名 color：按钮标题颜色，不传默认白色
-      function(result) {}
+      function(result) {
+        this.$router.push({ name: 'company-edit' })
+      }
     )
     this.getCompanyData()
   },
@@ -229,13 +231,13 @@ export default {
       this.$router.push({ name: 'image-preview', params: { imgs: [this.companyInfo.logoUrl], index } })
     },
     // 分享
-    sharePath () {
+    sharePath (type) {
       let param = {}
-      param.title = ''
-      param.desc = ''
-      param.url = ''
+      param.title = '运掌柜'
+      param.desc = '运掌柜详情巴拉巴拉'
+      param.url = 'https://yzg.tms5566.com'
       param.thumburl = ''
-      param.platformType = ''
+      param.platformType = type
       param.log = {}
       bridge.call('navigation.share', { param }, function(result) {
       })

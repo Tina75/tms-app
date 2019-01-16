@@ -365,6 +365,7 @@ export default {
       this.addContactBtn = true
     },
     save () {
+      let vm = this
       // 图片校验title是否填写
       if (!this.isEntryPicTitle(this.companyPhotoList) || !this.isEntryPicTitle(this.wxQrPicList)) {
         window.toast('请完善图片标题')
@@ -373,8 +374,9 @@ export default {
       let params = this.saveDataInit()
       this.saveCompanyInfo(params).then(({ data }) => {
         window.toast('保存成功')
+        vm.getCompanyInfo()
         // 跳转页面show.vue
-        this.$router.push({ name: 'company' })
+        vm.$router.push({ name: 'company' })
       })
     },
     saveDataInit () {
