@@ -2,9 +2,9 @@
   <div class="contacts-consignee">
     <InfiniteList
       v-model="loading"
-      :data="senderList.list"
+      :has-data="senderList.list.length"
       :loader="loadSenderList"
-      :is-end="senderList.hasNext"
+      :has-next="senderList.hasNext"
     >
       <ListItem
         v-for="(item, i) in senderList.list"
