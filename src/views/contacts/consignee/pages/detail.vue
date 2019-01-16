@@ -99,18 +99,24 @@ export default {
       this.$router.push({ name: 'contacts-consignee-modify', query: { consigneeId: this.consigneeDetail.id } })
     },
     del () {
-      window.alert('确定删除？', () => {
-        const data = {
-          id: this.consigneeDetail.id
+      this.$createDialog({
+        type: 'confirm',
+        title: '',
+        content: '确定删除？',
+        icon: 'cubeic-alert',
+        onConfirm: () => {
+          const data = {
+            id: this.consigneeDetail.id
+          }
+          try {
+            this.removeConsignee(data)
+          } catch (e) {
+            console.log(e)
+          } finally {
+            this.$router.back()
+          }
         }
-        try {
-          this.removeConsignee(data)
-        } catch (e) {
-          console.log(e)
-        } finally {
-          this.$router.back()
-        }
-      })
+      }).show()
     }
   }
 }
