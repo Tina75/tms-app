@@ -27,7 +27,7 @@ const lists = [
     // 司机
     key: 'driver',
     useQuery: true,
-    url: '/carrier/list?type=2&carrierType=1',
+    url: '/carrier/list?type=2&carrierType=1&order=update_time,desc',
     itemParser: (data) => ({
       id: data.id,
       name: data.carrierName,

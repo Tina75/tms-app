@@ -108,7 +108,7 @@ export default {
       this.toggle()
     },
     // 添加/删除末尾分隔符逻辑
-    onFocus() {
+    onFocus(e) {
       const value = this.inputValue
       const length = value.length
       const split = this.split
@@ -116,6 +116,7 @@ export default {
       if (length && value.lastIndexOf(split) !== splitIndex) {
         this.inputValue = value + split
       }
+      this.$nextTick(() => { e.target.scrollLeft = 100000 })
     },
     onBlur() {
       const value = this.inputValue

@@ -38,7 +38,7 @@
               v-model="form.unit"
               label="包装方式"
               type="click"
-              @on-click="showUnitDialog(index)" />
+              @click.native="showUnitDialog(index)" />
             <form-item
               v-model="form.quantity"
               label="包装数量" />
@@ -48,7 +48,7 @@
               type="click"
               :show-arrow="false"
               placeholder="请输入长*宽*高"
-              @on-click="showSizeDialog(index)" />
+              @click.native="showSizeDialog(index)" />
             <form-item
               v-model="form.cargoNo"
               label="货物编码"
@@ -80,7 +80,7 @@
     <div class="footer">
       <div class="footer-detail">
         <p class="footer-detail-line">
-          <span>总重量：<span class="footer-detail-line-data">{{ total.weightKg }}吨</span> </span>
+          <span>总重量：<span class="footer-detail-line-data">{{ total.weightKg }}公斤</span> </span>
           <span>总体积：<span class="footer-detail-line-data">{{ total.volume }}方</span> </span>
           <span>总数量：<span class="footer-detail-line-data">{{ total.quantity }}</span> </span>
         </p>
@@ -144,14 +144,12 @@ export default {
     ...mapMutations('order/create', [ 'CLEAR_CARGO_OFTEN', 'SET_CARGO_LIST' ]),
     // 初始化货物信息
     initCargoList () {
-      if (!this.orderCargoList.length) this.cargoAdd()
-      else {
-        const tempCargoList = Object.assign([], this.orderCargoList).map(item => {
-          if (item.cargoCost) item.cargoCost = NP.divide(item.cargoCost, 100)
-          return item
-        })
-        this.formList = tempCargoList
-      }
+      const tempCargoList = Object.assign([], this.orderCargoList).map(item => {
+        if (item.cargoCost) item.cargoCost = NP.divide(item.cargoCost, 100)
+        return item
+      })
+      this.formList = tempCargoList
+      if (!this.formList.length) this.cargoAdd()
       this.setChoosedCargo()
     },
     // 提交货物信息
@@ -171,7 +169,11 @@ export default {
     },
     // 添加货物
     cargoAdd (index) {
-      this.formList.push({
+      this.formList.push(this.getEmptyCargo())
+    },
+    // 返回一个空的货物信息
+    getEmptyCargo () {
+      return {
         cargoName: '',
         weightKg: '',
         volume: '',
@@ -187,7 +189,7 @@ export default {
         cargoNo: '',
         remark1: '',
         remark2: ''
-      })
+      }
     },
     // 选择常发货物
     chooseCargoInfo (index) {
@@ -197,7 +199,7 @@ export default {
     // 读取常发货物信息
     setChoosedCargo () {
       if (this.cargoOften) {
-        this.formList.splice(this.cargoIndex, 1, Object.assign({}, this.cargoOften))
+        this.formList.splice(this.cargoIndex, 1, Object.assign(this.getEmptyCargo(), this.cargoOften))
         this.CLEAR_CARGO_OFTEN()
       }
       this.cargoIndex = void 0

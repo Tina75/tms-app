@@ -22,43 +22,43 @@ export class ContactDetail {
 
   // 转化函数
   // 后端接口 => 展示
-  static toView(data, operators = []) {
-    data = {
-      ...data,
-      isInvoice: !!data.isInvoice,
-      invoiceRate: !!data.isInvoice ? +data.invoiceRate * 100 + '%' : ''
+  static toView(server, operators = []) {
+    server = {
+      ...server,
+      isInvoice: !!server.isInvoice,
+      invoiceRate: !!server.isInvoice ? +server.invoiceRate * 100 + '%' : ''
     }
-    if (data.salesmanId) {
-      data.salesmanId = +data.salesmanId
-      const operator = operators.find((item) => +item.id === data.salesmanId)
-      data.operatorName = operator ? operator.name : ''
+    if (server.salesmanId) {
+      server.salesmanId = +server.salesmanId
+      const operator = operators.find((item) => +item.id === server.salesmanId)
+      server.operatorName = operator ? operator.name : ''
     }
     ;['pickUp', 'payType', 'exploiteChannel'].forEach((key) => {
-      const value = +data[key]
+      const value = +server[key]
       const options = ContactDetail[key]
       const option = options.find((item) => item.value === value)
-      data[key] = option ? option.text : ''
+      server[key] = option ? option.text : ''
     })
-    return data
+    return server
   }
   // 后端接口 => from表单格式
-  static toForm(data) {
-    data = { ...data }
+  static toForm(server) {
+    server = { ...server }
     // cube-switch 需要boolean类型 防止报错
-    data.isInvoice = !!data.isInvoice
+    server.isInvoice = !!server.isInvoice
     // 后端是0.xx 前端显示xx%
-    data.invoiceRate = +data.invoiceRate * 100
-    data.salesmanId = data.salesmanId || ''
-    return data
+    server.invoiceRate = +server.invoiceRate * 100
+    server.salesmanId = server.salesmanId || ''
+    return server
   }
 
   // 表单格式 => 后端所需
-  static toServer(data) {
-    data = { ...data }
-    data.isInvoice = data.isInvoice ? 1 : 0
+  static toServer(form) {
+    form = { ...form }
+    form.isInvoice = form.isInvoice ? 1 : 0
     // 后端最大值是1....
-    data.invoiceRate = data.isInvoice ? +data.invoiceRate / 100 : 0
-    return data
+    form.invoiceRate = form.isInvoice ? +form.invoiceRate / 100 : 0
+    return form
   }
 }
 
@@ -79,5 +79,28 @@ export class CargoDetail {
   remark1 = ''
   remark2 = ''
 
-  static unitTypes= ['纸箱', '木箱', '铁桶', '纤袋', '麻袋', '木袋']
+  static unitTypes = ['纸箱', '木箱', '铁桶', '纤袋', '麻袋', '木袋']
+
+  static toForm(server) {
+    if (server.id) {
+      return {
+        ...server,
+        dimension: { // immutability
+          ...server.dimension
+        },
+        cargoCost: server.cargoCost / 100 // 后端是分,前端是元
+      }
+    }
+    return new CargoDetail()
+  }
+
+  static toServer(form) {
+    return {
+      ...form,
+      dimension: { // immutability
+        ...form.dimension
+      },
+      cargoCost: form.cargoCost * 100 // 后端是分,前端是元
+    }
+  }
 }
