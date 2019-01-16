@@ -4,7 +4,7 @@
       v-model="loading"
       :data="addressList.list"
       :loader="loadAddressList"
-      :is-end="!addressList.hasNext"
+      :has-next="addressList.hasNext"
     >
       <ListItem
         v-for="(item, i) in addressList.list"

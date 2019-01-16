@@ -35,9 +35,9 @@ export default {
       type: Function,
       default: () => {}
     },
-    isEnd: {
+    hasNext: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   data() {
@@ -113,7 +113,7 @@ export default {
     },
     stopListLoading() {
       let scroll = this.getCubeScroll()
-      scroll.forceUpdate(!this.isEnd)
+      scroll.forceUpdate(!!this.hasNext)
       this.loading = false
       this.$emit('refresh', false)
     }
