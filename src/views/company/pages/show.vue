@@ -75,7 +75,7 @@
           <div class="hr"/>
           <div class="cardInfo-content">
             <span class="cardTitle">公司简介</span>
-            <p v-if="companyInfo.companyProfile">{{companyInfo.companyProfile}}</p>
+            <pre v-if="companyInfo.companyProfile">{{companyInfo.companyProfile}}</pre>
             <span v-else class="cardContent noneInfo">暂未填写</span>
           </div>
         </div>
@@ -83,7 +83,7 @@
           <div class="cardInfo-content">
             <span class="cardTitle">业务介绍</span>
             <span v-if="!busiIntroducePicList.length" class="cardContent noneInfo">暂未上传</span>
-            <p v-if="companyInfo.busiIntroduce">{{companyInfo.busiIntroduce}}</p>
+            <pre v-if="companyInfo.busiIntroduce">{{companyInfo.busiIntroduce}}</pre>
             <image-list v-if="busiIntroducePicList.length" :upload-photos="busiIntroducePicList"/>
           </div>
           <div class="hr"/>
