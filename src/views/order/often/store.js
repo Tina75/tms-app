@@ -1,39 +1,25 @@
 import Server from '@/libs/server'
+import { InfinateListFactory } from '@/libs/factory/store'
 
-const state = {
-  pageNo: 1,
-  oftenList: []
-}
+const state = {}
 
-const getters = {
-  pageNo: state => state.pageNo,
-  oftenList: state => state.oftenList
-}
+const getters = {}
 
-const mutations = {
-  SET_PAGE_NO: (state, payload) => { state.pageNo = payload },
-  SET_OFTEN_LIST: (state, payload) => {
-    if (state.pageNo === 1) state.oftenList = payload
-    else state.oftenList.concat(payload)
-  }
-}
+const mutations = {}
 
 const actions = {
-  getOftenList: async (state, query) => {
-    // const list = require('./mock').default
-    // state.commit('SET_OFTEN_LIST', list)
-    // return true
-    const { data } = await Server({
-      url: '/ordertemplate/list',
-      method: 'post',
-      loading: true,
-      data: { pageNo: state.pageNo }
-    })
-    const res = data.data
-    state.commit('SET_OFTEN_LIST', res.list)
-    if (res.list.length) state.commit('SET_PAGE_NO', state.pageNo + 1)
-    return !!res.list.length
-  },
+  // getOftenList: async (state, query) => {
+  //   const { data } = await Server({
+  //     url: '/ordertemplate/list',
+  //     method: 'post',
+  //     loading: true,
+  //     data: { pageNo: state.pageNo }
+  //   })
+  //   const res = data.data
+  //   state.commit('SET_OFTEN_LIST', res.list)
+  //   if (res.list.length) state.commit('SET_PAGE_NO', state.pageNo + 1)
+  //   return !!res.list.length
+  // },
 
   deleteOftenOrder: async (state, id) => {
     Server({
@@ -44,10 +30,23 @@ const actions = {
   }
 }
 
-export default {
+const store = {
   namespaced: true,
   state,
   getters,
   mutations,
   actions
 }
+
+const lists = [
+  {
+    // 收货方
+    key: 'often',
+    url: '/ordertemplate/list',
+    method: 'post',
+    itemParser: data => data
+  }
+]
+lists.forEach(InfinateListFactory.bind(null, store))
+
+export default store
