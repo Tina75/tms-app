@@ -41,21 +41,19 @@ export default {
     }
   },
   data() {
-    const pullUpOption = {
-      threshold: 0,
-      txt: {
-        more: '加载更多',
-        noMore: '没有更多数据了'
-      }
-    }
     return {
       options: {
         pullDownRefresh: {
           txt: '刷新成功!'
         },
-        pullUpLoad: pullUpOption
+        pullUpLoad: {
+          threshold: 0,
+          txt: {
+            more: '上拉加载更多',
+            noMore: '没有更多数据了'
+          }
+        }
       },
-      pullUpOption,
       loading: false
     }
   },
@@ -113,9 +111,15 @@ export default {
     },
     stopListLoading() {
       let scroll = this.getCubeScroll()
+      // 重新计算高度和文字
       scroll.forceUpdate(!!this.hasNext)
       this.loading = false
       this.$emit('refresh', false)
+      // forceUpdate根据入参判断是否要重新计算高度和更改文案
+      // 当该次请求有新的数据但hasNext为false后 scroll更新了文案但没计算高度 需要自己手动设置下, 不如vant机智好用
+      if (!this.hasNext) {
+        scroll.refresh()
+      }
     }
   }
 }
