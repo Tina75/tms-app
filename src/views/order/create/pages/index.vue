@@ -195,7 +195,7 @@ export default {
         settlementType: { required: true, type: 'number' },
         pickup: { required: true, type: 'number' },
         receiptCount: { required: true, type: 'number', min: 0 },
-        freightFee: { type: 'number', min: 0 },
+        freightFee: { type: 'number', min: 0 }
       }
     }
   },
@@ -285,10 +285,10 @@ export default {
     },
     async calculateDistance () {
       console.log(111)
-      if (this.orderInfo.consignerAddressLongitude
-       && this.orderInfo.consignerAddressLatitude
-       && this.orderInfo.consigneAddressLongitude
-       && this.orderInfo.consigneAddressLatitude) {
+      if (this.orderInfo.consignerAddressLongitude &&
+       this.orderInfo.consignerAddressLatitude &&
+       this.orderInfo.consigneAddressLongitude &&
+       this.orderInfo.consigneAddressLatitude) {
         const distance = await getDistance(
           { lng: this.orderInfo.consignerAddressLongitude, lat: this.orderInfo.consignerAddressLatitude },
           { lng: this.orderInfo.consigneeAddressLongitude, lat: this.orderInfo.consigneeAddressLatitude }

@@ -21,9 +21,10 @@
           :maxlength="15"
         />
         <form-item
-          :value="viewPhone"
+          v-model="form.phone"
           :show-required-toast="false"
-          prop="viewPhone"
+          type="number"
+          prop="phone"
           label="联系电话"
           placeholder="请输入手机号或座机号"
           :maxlength="20"
@@ -38,7 +39,7 @@
           :show-required-toast="false"
           label="详细地址"
           :show-arrow="false"
-          @on-click="goToAddress"
+          @on-click="selectAddress"
         />
         <form-item
           v-model="form.consigneeCompanyName"
@@ -56,22 +57,13 @@
         />
       </div>
     </form-group>
-    <div class="add_submit">
-      <cube-button
-        :primary="true"
-        @click="submit">
-        确定
-      </cube-button>
-    </div>
-    <CityPicker
-      v-model="showPickCity"
-      @confirm="citySelect"/>
+    <LoadingButton class="cube-bottom-button" :loading="submiting" @click="submit" />
   </div>
 </template>
 <script>
+import LoadingButton from '@/components/LoadingButton'
 import { FormGroup, FormItem } from '@/components/Form'
-import CityPicker from '@/components/CityPicker'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import { validatePhone, formatPhone, ConsigneeDetail, editPhone } from '../modules/model'
 const moudleName = 'contacts/consignee'
 export default {
@@ -81,18 +73,17 @@ export default {
       title: this.isEdit ? '新增收货方' : '编辑收货方'
     }
   },
-  components: { CityPicker, FormItem, FormGroup },
+  components: { FormItem, FormGroup, LoadingButton },
   data() {
     return {
       formatPhone,
       editPhone,
       form: new ConsigneeDetail(),
       showPickCity: false,
-      viewPhone: '',
       rules: {
         consigner: { required: true },
         contact: { required: true },
-        viewPhone: {
+        phone: {
           required: true,
           type: 'string',
           validatePhone: validatePhone,
@@ -101,21 +92,32 @@ export default {
           }
         },
         address: { required: true }
-      }
+      },
+      submiting: false,
+      confirmed: false
     }
   },
   computed: {
     ...mapState(moudleName, ['saveConsigner', 'consigneeDetail']),
+    ...mapGetters(moudleName, ['formList', 'saveAddress']),
     isEdit () {
       return !this.$route.query.consigneeId
     }
   },
   methods: {
-    ...mapActions(moudleName, ['saveConsignerInfo', 'modifyConsignee', 'loadConsigneeDetail']),
+    ...mapActions({
+      saveConsignerInfo: moudleName + '/saveConsignerInfo',
+      saveAddressInfo: moudleName + '/saveAddressInfo',
+      modifyConsignee: moudleName + '/modifyConsignee',
+      loadConsigneeDetail: moudleName + '/loadConsigneeDetail',
+      clearForm: moudleName + '/clearForm',
+      resetAddressPage: 'contacts/resetAddressPage'
+    }),
     async onPageRefresh() {
-      this.form = new ConsigneeDetail()
-      this.viewPhone = ''
+      // 进入页面时刷新列表数据
+      this.form = this.formList
       this.setSender()
+      this.setAddress()
       console.log(!this.isEdit)
       if (!this.isEdit) {
         const urlId = +this.$route.query.consigneeId
@@ -125,51 +127,108 @@ export default {
         this.form = ConsigneeDetail.toForm(this.consigneeDetail)
         this.editTel(this.consigneeDetail.phone)
         this.setSender()
+        this.setAddress()
       }
     },
+    // 选择发货人信息
     selectSender () {
       this.$router.push({
         name: 'select-shipper'
       })
     },
+    // 将选择的发货人信息渲染到表单上
     setSender () {
       if (this.saveConsigner.name) {
         this.form.consignerName = this.saveConsigner.name
+        this.form.consignerId = this.saveConsigner.id
       }
     },
-    citySelect (picker) {
-      console.log(picker)
-      if (picker[0].name === picker[1].name) {
-        this.form.cityName = picker[1].name + picker[2].name
-      } else {
-        this.form.cityName = picker[0].name + picker[1].name + picker[2].name
+    // 将选择的地址渲染到表单上
+    setAddress () {
+      if (this.saveAddress && this.saveAddress.address) {
+        this.form.address = this.saveAddress.cityName + this.saveAddress.address + this.saveAddress.consignerHourseNumber
       }
-      this.form.cityCode = picker[2].code
     },
+    // 新增的时候格式化手机号码
     formatTel (value) {
-      this.viewPhone = this.formatPhone(value)
-      this.form.phone = this.viewPhone.replace(/\s/g, '')
+      this.form.phone = this.formatPhone(value)
     },
+    // 编辑的时候格式化手机号码
     editTel (value) {
-      this.viewPhone = this.editPhone(value)
+      this.form.phone = this.editPhone(value)
     },
+    // 提交
     async submit () {
-      const consignerId = this.saveConsigner.id ? this.saveConsigner.id : this.form.consignerId
-      const data = ConsigneeDetail.toServer(Object.assign({}, { consignerId: consignerId }, this.form))
-      console.log(data)
-      // await this.$refs.$form.validate()
-      // await this.modifyConsignee(data)
+      // 如果是修改且收货地址没有变更 取详情的地址，变更了取新设置的地址
+      const address = Object.assign({}, this.form, { address: this.consigneeDetail.address })
+      const data = ConsigneeDetail.toServer(Object.assign({}, address, this.saveAddress))
+      console.log('data', data)
+      // 表单验证
+      const valid = await this.$refs.$form.validate()
+      if (valid) {
+        console.log('true')
+        try {
+          this.submiting = true
+          this.modifyConsignee(data)
+          this.confirmed = true
+        } catch (e) {
+          console.log(e)
+        } finally {
+          this.$refreshPage('contacts-consignee', 'contacts-consignee-detail')
+          // 清除表单数据
+          this.clearForm()
+          this.form = this.formList
+          this.submiting = false
+          this.$router.back()
+        }
+      } else {
+        window.toast('请填写必填信息')
+      }
     },
-    goToAddress () {
+    // 设置详细地址
+    selectAddress() {
+      const data = {}
+      // 如果是编辑取详情的地址 新增取空
+      const item = !this.isEdit ? this.consigneeDetail : data
+      const config = {
+        title: '详细地址',
+        namespace: moudleName,
+        dispatch: 'addressAction',
+        data
+      }
+      if (item) {
+        data.code = item.cityCode
+        data.address = item.address
+        data.additional = item.consignerHourseNumber
+      } else {
+        data.consigneeId = this.$route.query.consigneeId
+      }
+
+      this.resetAddressPage(config)
       this.$router.push({ name: 'contacts-address' })
     }
   },
   beforeRouteLeave (to, from, next) {
     console.log(to)
-    if (to.name !== 'select-shipper' && to.name !== 'contacts-address') {
+    // 当从页面离开不进入选择地址和选择发货方时  清空选择的数据
+    const leave = () => {
+      this.confirmed = false
       this.saveConsignerInfo()
+      this.saveAddressInfo()
+      next()
     }
-    next()
+    if (to.name !== 'select-shipper' && to.name !== 'contacts-address' && !this.confirmed) {
+      this.$createDialog({
+        type: 'confirm',
+        title: '',
+        content: '信息未保存，确认退出吗？',
+        icon: 'cubeic-alert',
+        onConfirm: leave
+      }).show()
+      this.clearForm()
+    } else {
+      leave()
+    }
   }
 }
 </script>
@@ -179,17 +238,4 @@ export default {
   padding-top 10px
   .form_card
     margin-bottom 15px
-  &_submit
-    width 100%
-    position fixed
-    bottom 0px
-    .cube-btn
-      font-weight 500
-      font-size 17px
-      border-radius 0
-      height 44px
-      line-height 17px
-      padding 0
->>>textarea
-  outline none
 </style>
