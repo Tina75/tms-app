@@ -1,25 +1,27 @@
 <template>
   <div class="media">
-    <div class="media_hd">
-      <slot name="image">
-        <img :src="icon" class="media_thumb" alt="" />
-      </slot>
-    </div>
     <div class="media_bd">
       <h4 class="media_title">
         <slot name="title">
-          <span v-text="title" />
+          <span v-text="item.title" />
+          <span v-if="item.tag" class="truck-tag" v-text="item.tag"/>
         </slot>
       </h4>
       <p class="media_desc">
         <slot name="desc">
-          <span v-text="desc" />
+          <template v-for="(v, i) in item.info">
+            <span v-if="v" :key="i" class="truck-tag-gray" v-text="v" />
+          </template>
         </slot>
+      </p>
+      <p class="media_desc">
+        <span v-text="item.name"/>&nbsp;
+        <span v-text="item.phone"/>
       </p>
     </div>
     <div class="media_ft">
       <slot name="extra">
-        <span v-text="extra"/>
+        <span v-text="item.extra"/>
       </slot>
     </div>
   </div>
@@ -92,11 +94,43 @@
     display -webkit-box
     -webkit-box-orient vertical
     -webkit-line-clamp 2
+.truck-tag
+  display inline-block
+  margin-left 5px
+  font-size 10px
+  line-height 10px
+  text-align center
+  color #00A4BD
+  padding 2px 3px
+  border 1px solid #00A4BD
+  border-radius 1px
+  vertical-align top
+.truck-tag-gray
+  display inline-block
+  font-size 14px
+  line-height 14px
+  text-align center
+  color #333
+  padding 3px 4px
+  border-radius 1px
+  background-color #F8F8F9
+  vertical-align top
+  margin-left 6px
+  &:first-child
+    margin-left 0
+.media_title
+  margin-bottom 17px
+.truck-number
+  margin-bottom 10px
 </style>
 
 <script>
 export default {
   props: {
+    item: {
+      type: Object,
+      default: () => {}
+    },
     icon: {
       type: String,
       default: ''
@@ -119,4 +153,3 @@ export default {
   }
 }
 </script>
-

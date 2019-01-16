@@ -18,7 +18,7 @@
         <NoData
           action="新增承运商"
           message="当前未添加承运商"
-          @btn-click="$router.push({ name: 'contacts-carrier-create' })"
+          @btn-click="$router.push({ name: 'contacts-carrier-modify' })"
         >
           <img
             slot="img"
@@ -52,12 +52,12 @@ export default {
   methods: {
     ...mapActions(moudleName, ['loadContactList']),
     loader(refresh) {
-      if (refresh) {
-        this.syncButtOperator()
-      }
+      // if (refresh) {
+      //   this.syncButtOperator()
+      // }
       this.loadContactList(refresh)
     },
-    onRefreshPage() {
+    onPageRefresh() {
       console.info('onRefreshPage')
       this.loading = true
     },

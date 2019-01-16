@@ -131,7 +131,7 @@ export default [
   },
   /* 承运商详情 */
   {
-    path: '/contacts/carrier/detail/:id',
+    path: '/contacts/carrier/detail',
     name: 'contacts-carrier-detail',
     meta: {
       noNeedRefresh: []

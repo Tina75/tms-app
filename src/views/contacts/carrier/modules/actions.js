@@ -20,12 +20,19 @@ const CONFIG = [
 ]
 
 const ACTIONS = {
-  // loadTruckDetail ({ coomit }, carId) {
-  //   return Server({
-  //     url: '',
-  //     method: ''
-  //   })
-  // }
+  loadCarrierDetail ({ commit }, carrierId) {
+    return Server({
+      url: '/carrier/details/for/company',
+      method: 'get',
+      params: { carrierId }
+    }).then(response => commit('setCarrierDetail', response.data.data.carrierInfo))
+  },
+  loadTruckDetail ({ commit }, carId) {
+    return Server({
+      url: '/carrier/details/for/company',
+      method: 'get'
+    }).then(response => commit('setTruckDetail', response.data.data))
+  }
 }
 // 批量生成actions
 CONFIG.forEach(factory)

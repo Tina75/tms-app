@@ -1,9 +1,11 @@
 import actions from './actions'
 import mutations from './mutations'
 import { InfinateListFactory } from '@/libs/factory/store'
+import { TruckDetail } from '../modules/model'
 
 const state = {
-
+  contact: {},
+  truck: {}
 }
 
 const store = {
@@ -13,13 +15,10 @@ const store = {
   state,
   getters: {
     contactDetail(state, getters, rootState) {
-      const list = state.contactList.list
-      const id = +rootState.route.query.carrierId
-      if (id) {
-        const detail = list.find((item) => item.id === id) || { data: {} }
-        return detail.data
-      }
-      return {}
+      return state.contact
+    },
+    truckDetail(state, getters, rootState) {
+      return state.truck
     }
   }
 }
@@ -27,7 +26,7 @@ const lists = [
   {
     // 承运商
     key: 'contact',
-    url: '/carrier/list',
+    url: '/carrier/list?carrierType=2&type=2',
     itemParser(data) {
       return {
         id: data.id,
@@ -43,11 +42,14 @@ const lists = [
     key: 'truck',
     useQuery: true,
     url: '/carrier/list/car',
+    method: 'post',
     itemParser(data) {
+      data = TruckDetail.toViewItem(data)
       return {
+        title: data.carNO,
+        tag: data.driverType,
+        info: [data.carType, data.carLength],
         name: data.driverName,
-        type: data.carType,
-        size: data.carLength,
         phone: data.driverPhone
       }
     }
