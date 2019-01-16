@@ -84,14 +84,14 @@ export default {
     onListPullUp() {
       this.loadingData()
     },
-    async loadingData(clear) {
+    async loadingData(isRefresh) {
       this.loading = true
       try {
-        await this.loader(clear)
+        await this.loader(isRefresh)
       } catch (e) {
         console.error(e)
       } finally {
-        this.stopListLoading()
+        this.stopListLoading(isRefresh)
       }
     },
     // 问过better-scroll黄轶，莫的直接的api手动控制的刷新下拉动画的
@@ -109,7 +109,7 @@ export default {
         }
       })
     },
-    stopListLoading() {
+    stopListLoading(isRefresh) {
       let scroll = this.getCubeScroll()
       // 重新计算高度和文字
       scroll.forceUpdate(!!this.hasNext)
@@ -117,7 +117,8 @@ export default {
       this.$emit('refresh', false)
       // forceUpdate根据入参判断是否要重新计算高度和更改文案
       // 当该次请求有新的数据但hasNext为false后 scroll更新了文案但没计算高度 需要自己手动设置下, 不如vant机智好用
-      if (!this.hasNext) {
+      if (!this.hasNext && !isRefresh) {
+        console.info('refresh')
         scroll.refresh()
       }
     }
