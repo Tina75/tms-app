@@ -366,11 +366,11 @@ export default {
       this.orderInfo.otherInfo = infos.join('，')
     },
     async calculateDistance () {
-      if (this.addressChanged
-       && this.orderInfo.consignerAddressLongitude
-       && this.orderInfo.consignerAddressLatitude
-       && this.orderInfo.consigneeAddressLongitude
-       && this.orderInfo.consigneeAddressLatitude) {
+      if (this.addressChanged &&
+       this.orderInfo.consignerAddressLongitude &&
+       this.orderInfo.consignerAddressLatitude &&
+       this.orderInfo.consigneeAddressLongitude &&
+       this.orderInfo.consigneeAddressLatitude) {
         this.TRIGGER_ADDRESS_CHANGE(false)
         const distance = await getDistance(
           { lng: this.orderInfo.consignerAddressLongitude, lat: this.orderInfo.consignerAddressLatitude },
@@ -395,7 +395,7 @@ export default {
         {},
         this.orderInfo,
         this.consumerInfo,
-        { orderCargoList: this.orderCargoList},
+        { orderCargoList: this.orderCargoList },
         this.feeInfo,
         this.otherInfo
       )

@@ -4,7 +4,7 @@
     :img="NO_DATA"
     message="暂无计费规则" />
 
-  <cube-scroll class="scroll-box" v-else>
+  <cube-scroll v-else class="scroll-box">
     <ul class="rule-list">
       <li
         v-for="item in ruleList" :key="item.id"

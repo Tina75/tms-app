@@ -1,6 +1,6 @@
 
 <template>
-  <div class="pickup-order-detail" v-if="detail">
+  <div v-if="detail" class="pickup-order-detail">
     <cube-scroll-nav>
       <cube-scroll-nav-panel
         v-for="(item, index) in pageData"
