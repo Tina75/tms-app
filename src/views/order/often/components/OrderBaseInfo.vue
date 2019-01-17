@@ -5,14 +5,20 @@
     </detail-panel-item>
     <detail-panel-item :label="'客户订单号'">
       <p class="remix-content">
-        <span class="border-right-1px">{{ detail.customerOrderNo || '-' }}</span>
-        <a>复制</a>
+        <span>{{ detail.customerOrderNo || '-' }}</span>
+        <a
+          class="border-right-1px"
+          v-if="detail.customerOrderNo"
+          @click.prevent="copy(detail.customerOrderNo)">复制</a>
       </p>
     </detail-panel-item>
     <detail-panel-item :label="'客户运单号'">
       <p class="remix-content">
-        <span class="border-right-1px">{{ detail.customerWaybillNo || '-' }}</span>
-        <a>复制</a>
+        <span>{{ detail.customerWaybillNo || '-' }}</span>
+        <a
+          class="border-right-1px"
+          v-if="detail.customerWaybillNo"
+          @click.prevent="copy(detail.customerWaybillNo)">复制</a>
       </p>
     </detail-panel-item>
     <!-- <detail-panel-item :label="'始发地'">
@@ -22,13 +28,13 @@
       <p>黑龙江哈尔滨市南岗区</p>
     </detail-panel-item> -->
     <detail-panel-item :label="'发货时间'">
-      <p>{{ detail.deliveryTime | datetimeFormat }}</p>
+      <p>{{ detail.deliveryTime | datetimeFormat('YYYY-MM-DD HH:mm', '-') }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'到货时间'">
-      <p>{{ detail.arriveTime | datetimeFormat }}</p>
+      <p>{{ detail.arriveTime | datetimeFormat('YYYY-MM-DD HH:mm', '-') }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'提货方式'">
-      <p>大车直送客户</p>
+      <p>{{ detail.pickup | pickupType }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'回单数量'">
       <p>{{ detail.receiptCount }}份</p>
@@ -40,10 +46,10 @@
       <p>{{ detail.salesmanName }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'是否开票'">
-      <p>是(5%)</p>
+      <p>{{ invoiceRender }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'备注'">
-      <p class="remark">{{ detail.remark }}</p>
+      <p class="remark">{{ detail.remark || '-' }}</p>
     </detail-panel-item>
   </detail-panel>
 </template>
@@ -52,11 +58,32 @@
 import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
+import { pickupType } from '../../js/filters'
+import NP from 'number-precision'
+import Copy from 'vue-clipboard2'
+import Vue from 'vue'
+
+Vue.use(Copy)
 
 export default {
   name: 'pickupInfo',
   components: { detailPanel, detailPanelItem },
-  computed: mapGetters('order/often', [ 'detail' ])
+  filters: { pickupType },
+  computed: {
+    ...mapGetters('order/often', [ 'detail' ]),
+
+    invoiceRender () {
+      if (!this.detail.isInvoice) return '否'
+      else return `是(${NP.times(this.detail.invoiceRate || 0, 100)}%)`
+    }
+  },
+  methods: {
+    copy (text) {
+      this.$copyText(text)
+          .then(() => { window.toast('复制成功') })
+          .catch(() => { window.toast('复制失败') })
+    }
+  }
 }
 </script>
 <style scoped lang="stylus">
@@ -65,8 +92,8 @@ export default {
     span
       flex 1
       text-align: right
-      padding-right: 10px;
     a
+      margin-left 10px
       padding-left: 10px;
       color: #00a4bd;
   .remark

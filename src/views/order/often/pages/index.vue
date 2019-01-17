@@ -67,13 +67,13 @@ import InfiniteList from '@/components/InfiniteList'
 import MoneyLabel from '../../components/MoneyLabel'
 import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-data.png'
-import filters from '../../js/filters'
+import { settlementType, totalFee } from '../../js/filters'
 
 export default {
   name: 'order-often',
   metaInfo: { title: '常发订单' },
   components: { MoneyLabel, NoData, InfiniteList },
-  filters,
+  filters: { settlementType, totalFee },
   data () {
     return {
       NO_DATA,
@@ -86,7 +86,12 @@ export default {
 
     onPageRefresh() { this.loading = true },
 
-    orderAdd (id) {},
+    orderAdd (id) {
+      this.$router.push({
+        name: 'order-one-more',
+        params: { id }
+      })
+    },
 
     async orderDelete (id) {
       if (!confirm('确认需要删除此常发订单？')) return

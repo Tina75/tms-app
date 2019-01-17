@@ -49,7 +49,7 @@
       @select="onSelectAddress" />
     <cube-button
       primary
-      @click="submit">
+      @click.stop="submit">
       确定
     </cube-button>
     <city-picker
@@ -132,11 +132,11 @@ export default {
 
     pickOftenAddress (addressInfo) {
       const { cityCode, latitude, longitude, address, consignerHourseNumber } = addressInfo
-      this.form.cityCode = cityCode
-      this.form.latitude = latitude
-      this.form.longitude = longitude
-      this.form.address = address
-      this.form.extra = consignerHourseNumber
+      this.form.cityCode = cityCode || ''
+      this.form.latitude = latitude || ''
+      this.form.longitude = longitude || ''
+      this.form.address = address || ''
+      this.form.extra = consignerHourseNumber || ''
       this.formartLocale(cityCode)
     },
 
@@ -173,18 +173,20 @@ export default {
       const info = vm.orderInfo
       const form = vm.form
       if (vm.currentArrdessType === 'send') {
-        form.address = info.consignerAddress
-        form.extra = info.consignerHourseNumber
-        form.longitude = info.consignerAddressLongitude
-        form.latitude = info.consignerAddressLatitude
-        form.locale = info.consignerAddressLocale
+        form.cityCode = info.start
+        form.address = info.consignerAddress || ''
+        form.extra = info.consignerHourseNumber || ''
+        form.longitude = info.consignerAddressLongitude || ''
+        form.latitude = info.consignerAddressLatitude || ''
+        form.locale = info.consignerAddressLocale || ''
         vm.fetchAddressData()
       } else {
-        form.address = info.consigneeAddress
-        form.extra = info.consigneeHourseNumber
-        form.longitude = info.consigneeAddressLongitude
-        form.latitude = info.consigneeAddressLatitude
-        form.locale = info.consigneeAddressLocale
+        form.cityCode = info.end
+        form.address = info.consigneeAddress || ''
+        form.extra = info.consigneeHourseNumber || ''
+        form.longitude = info.consigneeAddressLongitude || ''
+        form.latitude = info.consigneeAddressLatitude || ''
+        form.locale = info.consigneeAddressLocale || ''
         vm.formartLocale(info.end)
       }
     })

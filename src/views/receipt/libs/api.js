@@ -21,7 +21,7 @@ export const initDetail = (id) => {
 export const getSatatusNum = () => {
   return Server({
     method: 'get',
-    url: '/order/getReceiptOrderNumByStatus'
+    url: '/order/getAppReceiptOrderNumByStatus'
   })
 }
 // 回收返厂
