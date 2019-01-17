@@ -96,12 +96,13 @@ export default [
     },
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/detail.vue')
   },
-  // 编辑和新增发货方
+  // 编辑和新增收货方
   {
     path: '/contacts/consignee/modify',
     name: 'contacts-consignee-modify',
     meta: {
-      noNeedRefresh: []
+      noNeedRefresh: [],
+      formLeaveConfirm: true
     },
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/modify.vue')
   },

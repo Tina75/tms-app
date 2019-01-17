@@ -91,8 +91,7 @@ export default {
         },
         address: { required: true }
       },
-      submiting: false,
-      confirmed: false
+      submiting: false
     }
   },
   computed: {
@@ -123,12 +122,19 @@ export default {
       }
       this.setSender()
       this.setAddress()
+      this.$formWillLeave((to) => {
+        console.log('离开页面')
+        if (to.name !== 'select-shipper' && to.name !== 'contacts-address') {
+          this.clearForm()
+        }
+        this.saveConsignerInfo()
+        this.saveAddressInfo()
+      })
     },
     // 选择发货人信息
     selectSender () {
-      this.$router.push({
-        name: 'select-shipper'
-      })
+      this.$formWillLeave()
+      this.$router.push({ name: 'select-shipper' })
     },
     // 将选择的发货人信息渲染到表单上
     setSender () {
@@ -164,15 +170,18 @@ export default {
         try {
           this.submiting = true
           this.modifyConsignee(data)
-          this.confirmed = true
         } catch (e) {
           console.log(e)
         } finally {
           window.toast('保存成功')
           this.$refreshPage('contacts-consignee', 'contacts-consignee-detail')
           // 清除表单数据
-          this.clearForm()
           this.submiting = false
+          this.$formWillLeave(() => {
+            this.clearForm()
+            this.saveConsignerInfo()
+            this.saveAddressInfo()
+          })
           this.$router.back()
         }
       } else {
@@ -199,34 +208,12 @@ export default {
       }
 
       this.resetAddressPage(config)
+      this.$formWillLeave()
       this.$router.push({ name: 'contacts-address' })
     },
     setFormList () {
       this.loadFormInfo(this.consigneeDetail)
       this.editTel(this.formList.phone)
-    }
-  },
-  beforeRouteLeave (to, from, next) {
-    // 当从页面离开不进入选择地址和选择发货方时  清空选择的数据
-    const leave = () => {
-      this.confirmed = false
-      this.saveConsignerInfo()
-      this.saveAddressInfo()
-      next()
-    }
-    if (to.name !== 'select-shipper' && to.name !== 'contacts-address' && !this.confirmed) {
-      this.$createDialog({
-        type: 'confirm',
-        title: '',
-        content: '信息未保存，确认退出吗？',
-        icon: 'cubeic-alert',
-        onConfirm: () => {
-          leave()
-          this.clearForm()
-        }
-      }).show()
-    } else {
-      leave()
     }
   }
 }
