@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { setAppTitleBtn } from '@/libs/bridgeUtil'
 import ListItem from '../../components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
@@ -52,12 +53,16 @@ export default {
   computed: mapState(moudleName, ['consigneeList']),
   methods: {
     ...mapActions(moudleName, ['loadConsigneeList']),
-    // loader(refresh) {
-    //   this.loadContactList(refresh)
-    // },
     onPageRefresh() {
       console.info('onPageRefresh')
       this.loading = true
+      setAppTitleBtn({
+        text: '添加',
+        color: '#000000',
+        action: () => {
+          this.$router.push({ name: 'contacts-consignee-modify' })
+        }
+      })
     },
     onItemPhoneCall(item) {
       window.location.href = `tel:${item.phone}`

@@ -158,7 +158,6 @@ export default {
       // 表单验证
       const valid = await this.$refs.$form.validate()
       if (valid) {
-        console.log('true')
         try {
           this.submiting = true
           await this.modifyConsignee(data)
@@ -168,6 +167,7 @@ export default {
         } finally {
           window.toast('保存成功')
           this.$refreshPage('contacts-consignee', 'contacts-consignee-detail')
+          this.clearForm()
           this.submiting = false
           this.$router.back()
         }
