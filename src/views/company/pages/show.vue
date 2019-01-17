@@ -56,7 +56,7 @@
             <span class="cardContent">
               <div
                 v-if="companyInfo.logoUrl"
-                :style="'backgroundImage:url(' + companyInfo.logoUrl + ');background-repeat: no-repeat;background-position-x: center;background-position-y: center;background-size: 100%;'"
+                :style="'backgroundImage:url(' + formartImg(companyInfo.logoUrl) + ');background-repeat: no-repeat;background-position-x: center;background-position-y: center;background-size: 100%;'"
                 class="avatarDiv"
                 @click="previewPic([companyInfo.logoUrl], 0)"/>
               <svg
@@ -123,9 +123,9 @@
       <cube-button
         class="footer-button"
         primary
-        @click="sharFoot = true">分享</cube-button>
+        @click="sharePath">分享</cube-button>
     </div>
-    <div v-show="sharFoot" class="share-foot">
+    <!-- <div v-show="sharFoot" class="share-foot">
       <div class="share-div">
         <p class="share-title">分享到</p>
         <div>
@@ -147,11 +147,6 @@
                 :size="44"/>
               <div class="title">手机QQ</div>
             </li>
-            <!-- <li>
-              <svg class="icon closeImg" aria-hidden="true" style="font-size: 44px;">
-                <use xlink:href="#icon-qqkongjian"/></svg>
-              <div class="title">QQ空间</div>
-            </li> -->
           </ul>
         </div>
         <cube-button
@@ -159,21 +154,21 @@
           light
           @click="sharFoot = false">取消</cube-button>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import IconFont from '@/components/Iconfont'
 import imageList from './image-list'
 import bridge from '@/libs/dsbridge'
+import { FORMAT_IMG } from './validator'
 export default {
   name: 'company',
   metaInfo: {
     title: '我的公司'
   },
-  components: { IconFont, imageList },
+  components: { imageList },
   data () {
     return {
       busiIntroducePicList: [],
@@ -211,6 +206,9 @@ export default {
         return [phone.substr(0, 3), phone.substr(3, 4), phone.substr(7, 4)].join(' ')
       }
     },
+    formartImg (value) {
+      return FORMAT_IMG(value)
+    },
     initData () {
       this.companyInfo = Object.assign(this.companyInfoInit)
       this.busiIntroducePicList = this.initImage(this.companyInfo.busiIntroducePic)
@@ -233,13 +231,13 @@ export default {
       this.$router.push({ name: 'image-preview', params: { imgs: [this.companyInfo.logoUrl], index } })
     },
     // 分享
-    sharePath (type) {
+    sharePath () {
       let param = {}
       param.title = '运掌柜'
       param.desc = '运掌柜详情'
       param.url = 'https://yzg.tms5566.com'
       param.thumburl = ''
-      param.platformType = type
+      param.platformType = ''
       param.log = {}
       bridge.call('navigation.share', { param }, function(result) {
       })
