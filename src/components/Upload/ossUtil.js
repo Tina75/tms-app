@@ -25,10 +25,10 @@ function getOSSAccess (data) {
   return server({
     method: 'post',
     url: 'file/prepareUpload',
-    data: { bizType: 'driver', fileCount: 1, fileSuffix: '' }
+    data: { bizType: 'order', fileCount: 1, fileSuffix: '' }
   })
     .then(({ data }) => {
-      return data
+      return data.data
     })
     .catch((error) => {
       console.error('getOSSAccess', error)

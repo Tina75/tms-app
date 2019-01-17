@@ -30,7 +30,7 @@
 
 <script>
 import CellItem from '../../components/CellItem.vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { ContactDetail } from '../modules/model'
 const moudleName = 'contacts/carrier'
 
@@ -44,13 +44,17 @@ export default {
     return {}
   },
   computed: {
-    ...mapState(moudleName, ['contactList', 'operator']),
     ...mapGetters(moudleName, ['contactDetail']),
     viewData() {
-      return ContactDetail.toView(this.contactDetail, this.operator)
+      return ContactDetail.toView(this.contactDetail)
     }
   },
+  created () {
+    const carrierId = this.$route.query.carrierId
+    this.loadCarrierDetail(carrierId)
+  },
   methods: {
+    ...mapActions(moudleName, ['loadCarrierDetail']),
     phoneCall() {
       window.location.href = `tel:${this.viewData.phone}`
     }
@@ -58,7 +62,7 @@ export default {
 }
 </script>
 
-<style lang='stylus' >
+<style lang='stylus' scoped>
 .carrier-detail
   .cell-item
     background #fff

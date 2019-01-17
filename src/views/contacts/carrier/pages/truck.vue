@@ -1,64 +1,81 @@
 <template>
-  <div class="carrier-truck">
-    <medias>
-      <media v-for="i in 8" :key="i">
-        <div slot="title">
-          <P class="truck-number">苏A888812 <span class="truck-tag">合约车</span></P>
-          <p>
-            <span class="truck-tag-gray">平板</span>
-            <span class="truck-tag-gray">13米</span>
-          </p>
-        </div>
-        <div slot="desc">
-          李大贵 1991899222
-        </div>
-      </media>
-    </medias>
+  <div class="contacts-carrier">
+    <InfiniteList
+      v-model="loading"
+      :has-data="truckList.list.length"
+      :loader="loadTruckList"
+      :has-next="truckList.hasNext"
+    >
+      <TruckCell
+        v-for="(item, i) in truckList.list"
+        :key="item.id"
+        :index="i"
+        :item="item"
+        @phoneCall="onItemPhoneCall"
+        @click="onItemClick"
+      />
+
+      <template slot="empty">
+        <NoData
+          action="新增合作车辆"
+          message="当前未添加合作车辆"
+          @btn-click="$router.push({ name: 'contacts-carrier-truck-modify', query: { carrierId: $route.query.carrierId } })"
+        >
+          <img
+            slot="img"
+            class="contacts-carrier__placeholder"
+            src="@/assets/contacts/shipper-list-empty.png"
+          >
+        </NoData>
+      </template>
+    </InfiniteList>
   </div>
 </template>
 
 <script>
-import { Medias, Media } from '../components'
-
+import InfiniteList from '@/components/InfiniteList'
+import NoData from '@/components/NoData'
+import TruckCell from '../../components/TruckCell'
+import { mapActions, mapState } from 'vuex'
+const moudleName = 'contacts/carrier'
 export default {
-  name: 'CarrierTruck',
-
-  metaInfo: { title: '合作车辆' },
-
-  components: { Medias, Media }
-
+  name: 'ContactsCarrierTruckList',
+  metaInfo: {
+    title: '合作车辆'
+  },
+  components: { NoData, InfiniteList, TruckCell },
+  data() {
+    return {
+      loading: false
+    }
+  },
+  computed: mapState(moudleName, ['truckList']),
+  methods: {
+    ...mapActions(moudleName, ['loadTruckList']),
+    loader(refresh) {
+      // if (refresh) {
+      //   this.syncButtOperator()
+      // }
+      this.loadTruckList(refresh)
+    },
+    onPageRefresh() {
+      console.info('onRefreshPage')
+      this.loading = true
+    },
+    onItemPhoneCall(item) {
+      window.location.href = `tel:${item.phone}`
+    },
+    onItemClick(item, index) {
+      this.$router.push({ name: 'contacts-carrier-truck-detail', query: { carrierId: item.carrierId, carId: item.id } })
+    }
+  }
 }
 </script>
 
-<style lang="stylus" scoped>
-.truck-tag
-  display inline-block
-  font-size 10px
-  line-height 10px
-  text-align center
-  color #00A4BD
-  padding 2px 3px
-  border 1px solid #00A4BD
-  border-radius 1px
-  vertical-align top
-.truck-tag-gray
-  display inline-block
-  font-size 14px
-  line-height 14px
-  text-align center
-  color #333
-  padding 3px 4px
-  border-radius 1px
-  background-color #F8F8F9
-  vertical-align top
-  margin-left 6px
-  &:first-child
-    margin-left 0
->>>.media
-  margin-top 10px
-  padding 15px
->>>.media_title
-  margin-bottom 17px
-.truck-number
-  margin-bottom 10px
+<style lang='stylus'>
+.contacts-carrier
+  height 100%
+  &__placeholder
+    width 179px
+    height 133px
 </style>

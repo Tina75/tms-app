@@ -49,8 +49,7 @@ export default {
         addressDetail: null
       },
       submiting: false,
-      showCityPicker: false,
-      confirmed: false
+      showCityPicker: false
     }
   },
   computed: {
@@ -81,7 +80,6 @@ export default {
     },
     async submit() {
       this.submiting = true
-      this.confirmed = true
       try {
         const dispatchName = this.AddressPage.dispatch
         const namespace = this.AddressPage.namespace
@@ -91,12 +89,8 @@ export default {
         if (dispatchName) {
           await this.$store.dispatch(namespace + dispatchName, storeData)
           this.resetAddressPage()
-        } else {
-          this.resetAddressPage({
-            ...this.AddressPage,
-            data: storeData
-          })
         }
+        this.$formWillLeave()
         this.$router.back()
       } catch (e) {
         console.error(e)
@@ -110,6 +104,11 @@ export default {
     reset() {
       const options = this.AddressPage
       this.form = Address.toForm(options.data)
+      // 注册返回时清空
+      this.$formWillLeave(false, () => {
+        this.showCityPicker = false
+        this.form.address = ''
+      })
       if (options.appButton) {
         // TODO set app
       }
@@ -117,30 +116,6 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(vm => vm.reset())
-  },
-  beforeRouteLeave(to, from, next) {
-    this.showCityPicker = false
-    const leave = () => {
-      if (!this.confirmed) {
-        this.resetAddressPage()
-      } else {
-        this.confirmed = false
-      }
-      // 清理百度列表
-      this.form.address = ''
-      next()
-    }
-    if (this.confirmed) {
-      leave()
-    } else {
-      this.$createDialog({
-        type: 'confirm',
-        title: '',
-        content: '信息未保存，确认退出吗？',
-        icon: 'cubeic-alert',
-        onConfirm: leave
-      }).show()
-    }
   }
 }
 </script>

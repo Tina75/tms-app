@@ -122,9 +122,9 @@
                 </span>
                 <span v-else class="cardContent" @click="addImg">
                   <div
-                    :style="'backgroundImage:url(' + companyInfo.logoUrl + ');background-repeat: no-repeat;background-position-x: center;background-position-y: center;background-size: 100%;'"
+                    :style="'backgroundImage:url(' + formartImg(companyInfo.logoUrl) + ');background-repeat: no-repeat;background-position-x: center;background-position-y: center;background-size: 100%;'"
                     class="avatarDiv"
-                    @click="previewPic([companyInfo.logoUrl],index)"/>
+                    @click="previewPic([companyInfo.logoUrl], index)"/>
                 </span>
               </div>
               <div class="hr"/>
@@ -213,7 +213,8 @@ import Upload from '@/components/Upload'
 import { FormGroup, FormItem } from '@/components/Form'
 import { uploadOSS } from '@/components/Upload/ossUtil'
 import bridge from '@/libs/dsbridge'
-import { validatePhone, CHECK_NAME } from './validator'
+import { validatePhone, CHECK_NAME, FORMAT_IMG } from './validator'
+
 export default {
   name: 'company-edit',
   metaInfo: {
@@ -293,6 +294,9 @@ export default {
     // 联系人电话格式化3
     contactPhoneInputHandler3 (phone) {
       this.phoneFormatter(phone, 'busiContactPhone3')
+    },
+    formartImg (value) {
+      return FORMAT_IMG(value)
     },
     phoneFormatter (phone, field) {
       if (!phone || phone[0] !== '1') return
@@ -424,18 +428,18 @@ export default {
         }
       })
     },
-    phoneTrim (phoneNumber) {
-      return phoneNumber.replace(/\s/g, '')
-    },
     async uploadOSS (baseData) {
-      window.loadingStart()
+      window.loading()
       const img = await uploadOSS(baseData)
       if (img) {
-        this.uploadPhotos.push(img)
+        this.companyInfo.logoUrl = img
       } else {
         window.toast('图片上传失败')
       }
-      window.loadingEnd()
+      window.loading(false)
+    },
+    phoneTrim (phoneNumber) {
+      return phoneNumber.replace(/\s/g, '')
     },
     isEntryPicTitle (picList) {
       let flag = true
