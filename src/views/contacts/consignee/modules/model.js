@@ -46,19 +46,17 @@ export class ConsigneeDetail {
   address = '' // 地址
   cityCode = ''
   consignerHourseNumber = '' // 门牌号
-  static toForm(data) {
-    data = {
-      ...data
-    }
-    const arr = ['cityName', 'consignerHourseNumber', 'remark', 'consigneeCompanyName']
+  static toForm(server) {
+    const data = {}
+    const arr = ['address', 'cityCode', 'consigneeCompanyName', 'consignerHourseNumber', 'consignerId', 'consignerName', 'contact', 'id', 'phone', 'remark']
     arr.forEach((key) => {
-      data[key] = data[key] ? data[key] : ''
+      data[key] = server[key]
+      data.address = server.address + server.consignerHourseNumber
     })
-    data.address = data.cityName + data.address + data.consignerHourseNumber
     return data
   }
   static toServer(data) {
-    const body = {
+    const server = {
       address: data.address,
       consignerId: data.consignerId,
       consigneeCompanyName: data.consigneeCompanyName,
@@ -72,6 +70,6 @@ export class ConsigneeDetail {
       id: data.id,
       cityCode: data.cityCode
     }
-    return body
+    return server
   }
 }

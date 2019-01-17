@@ -21,9 +21,9 @@
             </p>
             <ul class="order-body-info">
               <li class="order-body-info-item">猪饲料</li>
-              <li class="order-body-info-item" v-if="item.weight">{{ item.weight }}吨</li>
-              <li class="order-body-info-item" v-if="item.volume">{{ item.volume }}方</li>
-              <li class="order-body-info-item" v-if="item.quantity">{{ item.quantity }}件</li>
+              <li v-if="item.weight" class="order-body-info-item">{{ item.weight }}吨</li>
+              <li v-if="item.volume" class="order-body-info-item">{{ item.volume }}方</li>
+              <li v-if="item.quantity" class="order-body-info-item">{{ item.quantity }}件</li>
             </ul>
             <p class="order-body-user">
               <span>{{ item.consigneeContact }}</span>

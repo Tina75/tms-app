@@ -86,7 +86,7 @@ export default [
     path: '/contacts/consignee/detail',
     name: 'contacts-consignee-detail',
     meta: {
-      noNeedRefresh: ['contacts-consignee-modify']
+      noNeedRefresh: []
     },
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/detail.vue')
   },

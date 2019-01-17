@@ -3,7 +3,7 @@
     <form-group ref="$form" class="form" :rules="rules">
       <div class="form_card">
         <form-item
-          v-model="form.consignerName"
+          v-model="formList.consignerName"
           :show-required-toast="false"
           readonly
           prop="consigner"
@@ -13,7 +13,7 @@
           @on-icon-click="selectSender"
         />
         <form-item
-          v-model="form.contact"
+          v-model="formList.contact"
           :show-required-toast="false"
           prop="contact"
           label="收货人"
@@ -21,7 +21,7 @@
           :maxlength="15"
         />
         <form-item
-          v-model="form.phone"
+          v-model="formList.phone"
           :show-required-toast="false"
           prop="phone"
           label="联系电话"
@@ -32,7 +32,7 @@
       </div>
       <div class="form_card">
         <form-item
-          v-model="form.address"
+          v-model="formList.address"
           type="click"
           prop="address"
           :show-required-toast="false"
@@ -41,14 +41,14 @@
           @on-click="selectAddress"
         />
         <form-item
-          v-model="form.consigneeCompanyName"
+          v-model="formList.consigneeCompanyName"
           label="收货人单位"
           :maxlength="50"
         />
       </div>
       <div class="form_card">
         <form-item
-          v-model="form.remark"
+          v-model="formList.remark"
           type="textarea"
           label="备注"
           placeholder="请输入(最多输入200字)"
@@ -77,7 +77,6 @@ export default {
     return {
       formatPhone,
       editPhone,
-      form: new ConsigneeDetail(),
       showPickCity: false,
       rules: {
         consigner: { required: true },
@@ -108,26 +107,22 @@ export default {
       saveConsignerInfo: moudleName + '/saveConsignerInfo',
       saveAddressInfo: moudleName + '/saveAddressInfo',
       modifyConsignee: moudleName + '/modifyConsignee',
+      loadFormInfo: moudleName + '/loadFormInfo',
       loadConsigneeDetail: moudleName + '/loadConsigneeDetail',
       clearForm: moudleName + '/clearForm',
       resetAddressPage: 'contacts/resetAddressPage'
     }),
     async onPageRefresh() {
       // 进入页面时刷新列表数据
-      this.form = this.formList
-      this.setSender()
-      this.setAddress()
-      console.log(!this.isEdit)
       if (!this.isEdit) {
         const urlId = +this.$route.query.consigneeId
         if (urlId !== +this.consigneeDetail.id) {
           await this.loadConsigneeDetail()
         }
-        this.form = ConsigneeDetail.toForm(this.consigneeDetail)
-        this.editTel(this.consigneeDetail.phone)
-        this.setSender()
-        this.setAddress()
+        this.setFormList()
       }
+      this.setSender()
+      this.setAddress()
     },
     // 选择发货人信息
     selectSender () {
@@ -138,28 +133,28 @@ export default {
     // 将选择的发货人信息渲染到表单上
     setSender () {
       if (this.saveConsigner.name) {
-        this.form.consignerName = this.saveConsigner.name
-        this.form.consignerId = this.saveConsigner.id
+        this.formList.consignerName = this.saveConsigner.name
+        this.formList.consignerId = this.saveConsigner.id
       }
     },
     // 将选择的地址渲染到表单上
     setAddress () {
       if (this.saveAddress && this.saveAddress.address) {
-        this.form.address = this.saveAddress.cityName + this.saveAddress.address + this.saveAddress.consignerHourseNumber
+        this.formList.address = this.saveAddress.cityName + this.saveAddress.address + this.saveAddress.consignerHourseNumber
       }
     },
     // 新增的时候格式化手机号码
     formatTel (value) {
-      this.form.phone = this.formatPhone(value)
+      this.formList.phone = this.formatPhone(value)
     },
     // 编辑的时候格式化手机号码
     editTel (value) {
-      this.form.phone = this.editPhone(value)
+      this.formList.phone = this.editPhone(value)
     },
     // 提交
     async submit () {
       // 如果是修改且收货地址没有变更 取详情的地址，变更了取新设置的地址
-      const address = Object.assign({}, this.form, { address: this.consigneeDetail.address })
+      const address = Object.assign({}, this.formList, { address: this.consigneeDetail.address })
       const data = ConsigneeDetail.toServer(Object.assign({}, address, this.saveAddress))
       console.log('data', data)
       // 表单验证
@@ -173,10 +168,10 @@ export default {
         } catch (e) {
           console.log(e)
         } finally {
+          window.toast('保存成功')
           this.$refreshPage('contacts-consignee', 'contacts-consignee-detail')
           // 清除表单数据
           this.clearForm()
-          this.form = this.formList
           this.submiting = false
           this.$router.back()
         }
@@ -205,10 +200,13 @@ export default {
 
       this.resetAddressPage(config)
       this.$router.push({ name: 'contacts-address' })
+    },
+    setFormList () {
+      this.loadFormInfo(this.consigneeDetail)
+      this.editTel(this.formList.phone)
     }
   },
   beforeRouteLeave (to, from, next) {
-    console.log(to)
     // 当从页面离开不进入选择地址和选择发货方时  清空选择的数据
     const leave = () => {
       this.confirmed = false
@@ -222,9 +220,11 @@ export default {
         title: '',
         content: '信息未保存，确认退出吗？',
         icon: 'cubeic-alert',
-        onConfirm: leave
+        onConfirm: () => {
+          leave()
+          this.clearForm()
+        }
       }).show()
-      this.clearForm()
     } else {
       leave()
     }
