@@ -11,8 +11,8 @@ export default {
     } else {
       Vue.prototype.$formWillLeave = (submitted = true, cb) => {
         if (typeof submitted === 'function' && !cb) {
-          submitted = true
           cb = submitted
+          submitted = true
         }
         $formState.hasSubmitted = !!submitted
         if (typeof cb === 'function') $formState.willLeave = cb
