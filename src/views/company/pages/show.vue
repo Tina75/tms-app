@@ -56,7 +56,8 @@
             <span class="cardContent">
               <div
                 v-if="companyInfo.logoUrl"
-                :style="'backgroundImage:url(' + formartImg(companyInfo.logoUrl) + ');background-repeat: no-repeat;background-position-x: center;background-position-y: center;background-size: 100%;'"
+                v-imgFormat="companyInfo.logoUrl"
+                :style="'backgroundImage:url(' + companyInfo.logoUrl + ');background-repeat: no-repeat;background-position-x: center;background-position-y: center;background-size: 100%;'"
                 class="avatarDiv"
                 @click="previewPic([companyInfo.logoUrl], 0)"/>
               <svg
@@ -162,7 +163,6 @@
 import { mapActions, mapGetters } from 'vuex'
 import imageList from './image-list'
 import bridge from '@/libs/dsbridge'
-import { FORMAT_IMG } from './validator'
 export default {
   name: 'company',
   metaInfo: {
@@ -205,9 +205,6 @@ export default {
         let phone = phoneNumber.toString()
         return [phone.substr(0, 3), phone.substr(3, 4), phone.substr(7, 4)].join(' ')
       }
-    },
-    formartImg (value) {
-      return FORMAT_IMG(value)
     },
     initData () {
       this.companyInfo = Object.assign(this.companyInfoInit)
