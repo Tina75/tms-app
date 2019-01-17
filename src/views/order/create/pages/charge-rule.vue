@@ -34,10 +34,10 @@
 
 /**
  * 计算结果从 getter order/create calculatedAmount 读取
- * 读取完毕后需要调用 mutation order/create CLEAR_CALCULATED_AMOUNT 清空
+ * 由于运费可修改 所以建议读取完毕后通过 mutation order/create CLEAR_CALCULATED_AMOUNT 清空计算结果
  */
 
-import { mapActions } from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
 import NP from 'number-precision'
 import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-data.png'
@@ -50,14 +50,16 @@ export default {
     return {
       NO_DATA,
       loading: true,
-      ruleList: []
+      ruleList: [],
+      info: this.$route.query.info || this.$route.query
     }
   },
   methods: {
+    ...mapMutations('order/create', [ 'CLEAR_CALCULATED_AMOUNT' ]),
     ...mapActions('order/create', [ 'getRuleList', 'calculateAmount' ]),
 
     async pickRuleAndCalc (item) {
-      let { departure, destination, weight, volume, distance, carType, carLength, cargoInfos } = this.$route.query
+      let { departure, destination, weight, volume, distance, carType, carLength, cargoInfos } = this.info
       let query = { departure, destination, distance, carType, carLength, cargoInfos }
       if (item.ruleType === 1) query.input = NP.divide(weight || 0, 10)
       else query.input = NP.times(volume || 0, 100)
@@ -76,8 +78,9 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(async vm => {
+      vm.CLEAR_CALCULATED_AMOUNT()
       vm.loading = true
-      const { partnerType, partnerId } = vm.$route.query
+      const { partnerType, partnerId } = vm.info
       if (!partnerType || !partnerId) {
         // window.toast('缺少参数')
         // vm.$router.back()

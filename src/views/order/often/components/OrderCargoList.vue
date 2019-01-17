@@ -1,20 +1,43 @@
 <template>
   <detail-panel :title="'货物明细'">
     <ul class="cargo-list">
-      <li class="cargo-item">
-        <p class="cargo-title">可口可乐</p>
-        <p class="cargo-content">2吨 2方 桶装 2件 1000元 小心轻放 这个东西比较贵装卸货的 时候轻拿轻放</p>
+      <li
+        class="cargo-item"
+        v-for="cargo in cargoList" :key="cargo.id">
+        <p class="cargo-title">{{ cargo.cargoName }} {{ `(${cargo.cargoNo})` }}</p>
+        <p class="cargo-content">{{ cargo | cargoDetail }}</p>
       </li>
     </ul>
   </detail-panel>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
+import NP from 'number-precision'
 
 export default {
   name: 'pickupInfo',
-  components: { detailPanel }
+  components: { detailPanel },
+  filters: {
+    cargoDetail (cargo) {
+      const details = []
+      if (cargo.weight) details.push(cargo.weight + '吨')
+      if (cargo.volume) details.push(cargo.volume + '方')
+      if (cargo.quantity) details.push(cargo.quantity + '件')
+      if (cargo.unit) details.push(cargo.unit)
+      if (cargo.cargoCost) details.push(NP.divide(cargo.cargoCost, 100) + '元')
+      if (cargo.remark1) details.push(cargo.remark1)
+      if (cargo.remark2) details.push(cargo.remark2)
+      return details.join(' ')
+    }
+  },
+  computed: {
+    ...mapGetters('order/often', [ 'detail' ]),
+    cargoList () {
+      return this.detail.orderCargoTemplateList
+    }
+  }
 }
 </script>
 <style scoped lang="stylus">

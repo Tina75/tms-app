@@ -15,6 +15,10 @@ let $formState = {
   hasSubmitted: false,
   willLeave: () => {}
 }
+/**
+ * submitted 表单提交状态 默认true
+ * cb 对应状态页面离开时的回调，接收 to from 作为参数
+ */
 Vue.prototype.$formWillLeave = (submitted = true, cb) => {
   $formState.hasSubmitted = !!submitted
   if (typeof cb === 'function') $formState.willLeave = cb
