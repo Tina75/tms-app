@@ -32,7 +32,7 @@ export const openNewPage = (config = {}, callback = () => {}) => {
       bridge.call('navigation.openSchema', { url }, callback)
     } else {
       console.warn('openWebview', url, id)
-      bridge.call('webview.open', { url, id }, callback)
+      bridge.call('webviews.open', { url, id }, callback)
     }
   }
 }
@@ -44,7 +44,7 @@ export const closeWindow = (config = {}) => {
   if (typeof id === 'undefined') {
     bridge.call('ui.closeWindow', others, () => {})
   } else {
-    bridge.call('webview.close', { id }, () => {})
+    bridge.call('webviews.close', { id }, () => {})
   }
 }
 
