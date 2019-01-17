@@ -6,10 +6,10 @@ export class ContactDetail {
   payType = '' // 支付方式 1：现付 2：到付 3：回单付 4：月结
   remark = '' // 备注
   isInvoice = false // 是否开票
-  invoiceRate = 0 // 开票税率
+  invoiceRate = '' // 开票税率
   salesmanId = '' // 对接业务员
   pickUp = '' // 提货方式
-  exploiteChannel = '' // 开括渠道
+  exploiteChannel = 1 // 开括渠道
   // 值和展示内容的印射
   static pickUp = [{ text: '小车上门自提', value: 1 }, { text: '大车直接送货', value: 2 }]
   static payType = [
@@ -68,9 +68,9 @@ export class CargoDetail {
   unit = '' // 包装
   dimension = {
     // 包装尺寸
-    length: 0,
-    width: 0,
-    height: 0
+    length: '',
+    width: '',
+    height: ''
   }
   weight = '' // 重量
   volume = '' // 体积
@@ -82,8 +82,8 @@ export class CargoDetail {
   static toForm(server) {
     if (server && server.id) {
       const form = fillEmpty(server)
-      form.dimension = fillEmpty(server.dimension || { length: 0, width: 0, height: 0 })
-      form.cargoCost = server.cargoCost / 100 || 0
+      form.dimension = fillEmpty(server.dimension || { length: '', width: '', height: '' })
+      form.cargoCost = server.cargoCost / 100 || ''
       return form
     }
     return new CargoDetail()

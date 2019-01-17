@@ -8,19 +8,22 @@
         <span v-text="viewData.phone"/>
       </div>
     </div>
-    <div v-if="infoList.length" class="shipper-detail__info border-bottom-1px cube-mt-15">
-      <div
-        v-for="(item, i) in infoList"
-        :key="i"
-        class="shipper-detail__info-item border-right-1px"
-      >
-        <span class="cube-font-15 cube-c-black cube-font-weight--m" v-text="item.value"/>
-        <span class="cube-font-14 cube-c-light-grey" v-text="item.text"/>
+
+    <div class="cube-mt-15">
+      <div v-if="infoList.length" class="shipper-detail__info">
+        <div
+          v-for="(item, i) in infoList"
+          :key="i"
+          class="shipper-detail__info-item border-right-1px"
+        >
+          <span class="cube-font-15 cube-c-black cube-font-weight--m" v-text="item.value"/>
+          <span class="cube-font-14 cube-c-light-grey" v-text="item.text"/>
+        </div>
       </div>
-    </div>
-    <div v-if="viewData.remark" class="shipper-detail__remark cube-font-15">
-      <div class="cube-c-black cube-mb-15" v-text="'备注'"/>
-      <p class="cube-c-grey" v-text="viewData.remark"/>
+      <div v-if="viewData.remark" class="shipper-detail__remark border-top-1px cube-font-15">
+        <div class="cube-c-black cube-mb-15" v-text="'备注'"/>
+        <p class="cube-c-grey" v-text="viewData.remark"/>
+      </div>
     </div>
 
     <CellItem
@@ -47,10 +50,10 @@
 </template>
 
 <script>
-import CellItem from '../../components/CellItem.vue'
-import { mapState, mapActions } from 'vuex'
-import { ContactDetail } from '../modules/model'
-const moudleName = 'contacts/shipper'
+import CellItem from '../../components/CellItem.vue';
+import { mapState, mapActions } from 'vuex';
+import { ContactDetail } from '../modules/model';
+const moudleName = 'contacts/shipper';
 const ListConfig = [
   { text: '结算方式', key: 'payType' },
   { text: '提货方式', key: 'pickUp' },
@@ -64,13 +67,12 @@ export default {
   },
   components: { CellItem },
   data() {
-    return {}
+    return {
+      viewData: {}
+    }
   },
   computed: {
     ...mapState(moudleName, ['contactDetail', 'operator']),
-    viewData() {
-      return ContactDetail.toView(this.contactDetail, this.operator)
-    },
     infoList() {
       const detail = this.viewData
       if (detail) {
@@ -91,8 +93,10 @@ export default {
   },
   methods: {
     ...mapActions(moudleName, ['loadContactDetail', 'removeContact']),
-    onPageRefresh() {
-      this.loadContactDetail()
+    async onPageRefresh() {
+      this.viewData = {}
+      await this.loadContactDetail()
+      this.viewData = ContactDetail.toView(this.contactDetail, this.operator)
     },
     phoneCall() {
       window.location.href = `tel:${this.viewData.phone}`
