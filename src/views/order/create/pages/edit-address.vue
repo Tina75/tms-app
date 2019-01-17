@@ -60,7 +60,6 @@
 <script>
 import yddArea from 'ydd_area'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import { Address } from '@/views/contacts/common/model'
 import cityUtil from '@/libs/city'
 import CityPicker from '@/components/CityPicker'
 import FormGroup from '@/components/Form/FormGroup'
@@ -137,13 +136,13 @@ export default {
       this.form.longitude = longitude || ''
       this.form.address = address || ''
       this.form.extra = consignerHourseNumber || ''
-      this.formartLocale(cityCode)
+      this.formartLocale()
     },
 
-    formartLocale (cityCode) {
-      if (!cityCode) return
-      const codes = [ Number(cityCode) ]
-      const cityInfos = yddArea.getParentByCode(cityCode)
+    formartLocale () {
+      if (!this.form.cityCode) return
+      const codes = [ Number(this.form.cityCode) ]
+      const cityInfos = yddArea.getParentByCode(this.form.cityCode)
       codes.unshift(Number(cityInfos.code))
       if (Number(cityInfos.parent) !== 0) codes.unshift(Number(cityInfos.parent))
       this.form.locale = codes.map(code => {
@@ -191,8 +190,8 @@ export default {
         form.longitude = info.consigneeAddressLongitude || ''
         form.latitude = info.consigneeAddressLatitude || ''
         form.locale = info.consigneeAddressLocale || ''
-        vm.formartLocale(info.end)
       }
+      vm.formartLocale()
     })
   }
 }

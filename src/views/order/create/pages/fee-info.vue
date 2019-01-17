@@ -76,9 +76,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order/create', [
-      'feeInfo'
-    ]),
+    ...mapGetters('order/create', [ 'feeInfo' ]),
     total () {
       return NP.plus(this.form.pickupFee, this.form.loadFee, this.form.unloadFee, this.form.insuranceFee, this.form.otherFee)
     }
@@ -98,6 +96,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
+      console.log(vm.feeInfo)
       for (let key in vm.form) {
         vm.form[key] = vm.feeInfo[key] === undefined || vm.feeInfo[key] === '' ? '' : NP.divide(vm.feeInfo[key], 100)
       }

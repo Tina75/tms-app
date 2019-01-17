@@ -7,19 +7,28 @@ export default [
   {
     path: '/order/create',
     name: 'order-create', // 受理下单
-    meta: { formLeaveConfirm: true },
+    meta: {
+      mode: 'create',
+      formLeaveConfirm: true
+    },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
   },
   {
     path: '/order/create/:id',
     name: 'order-one-more', // 再来一单
-    meta: { formLeaveConfirm: true },
+    meta: {
+      mode: 'oneMore',
+      formLeaveConfirm: true
+    },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
   },
   {
     path: '/order/edit/:id',
     name: 'order-edit', // 订单编辑
-    meta: { formLeaveConfirm: true },
+    meta: {
+      mode: 'edit',
+      formLeaveConfirm: true
+    },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
   },
   {

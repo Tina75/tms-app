@@ -60,5 +60,23 @@ export default {
       method: 'post',
       data
     })
+  },
+
+  updateOrder: async (state, data) => {
+    await Server({
+      url: '/order/update',
+      method: 'post',
+      data
+    })
+  },
+
+  fetchOrderInfo: async (state, id) => {
+    console.log(id)
+    const { data } = await Server({
+      url: '/order/detail',
+      method: 'get',
+      data: { id }
+    })
+    return data.data
   }
 }

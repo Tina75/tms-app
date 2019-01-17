@@ -16,12 +16,12 @@ export default {
         }
         $formState.hasSubmitted = !!submitted
         if (typeof cb === 'function') $formState.willLeave = cb
+        else $formState.willLeave = () => {}
       }
     }
   },
   onEnter() {
     $formState.hasSubmitted = false
-    $formState.willLeave = () => {}
   },
   onLeave(to, from, next) {
     const { formLeaveConfirm } = from.meta
@@ -37,6 +37,7 @@ export default {
       icon: 'cubeic-alert',
       onConfirm: () => {
         $formState.willLeave(to, from)
+        $formState.willLeave = () => {}
         next()
       }
     }).show()

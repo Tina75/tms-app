@@ -1,7 +1,7 @@
 <template>
   <footer class="create-footer">
     <div class="footer-item">
-      <div class="footer-item-select">
+      <div v-if="mode !== 'edit'" class="footer-item-select">
         <cube-checkbox v-model="orderOften" class="footer-item-select-radio">保存为常发订单</cube-checkbox>
       </div>
       <a class="footer-item-total"
@@ -16,6 +16,7 @@
         class="footer-item-button"
         @click="saveOrder">保存</cube-button>
       <cube-button
+        v-if="mode !== 'edit'"
         class="footer-item-button"
         primary>立即发运</cube-button>
     </div>
@@ -49,6 +50,7 @@ export default {
   },
   data () {
     return {
+      mode: this.$route.meta.mode,
       showDetail: false
     }
   },

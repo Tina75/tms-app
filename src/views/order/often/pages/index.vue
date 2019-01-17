@@ -6,7 +6,7 @@
       :loader="loadOftenList"
       :has-next="oftenList.hasNext"
     >
-      <ul class="order-list" v-if="oftenList.list.length">
+      <ul v-if="oftenList.list.length" class="order-list">
         <li
           v-for="(item, index) in oftenList.list"
           :key="index" class="order-list-item"
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import InfiniteList from '@/components/InfiniteList'
 import MoneyLabel from '../../components/MoneyLabel'
 import NoData from '@/components/NoData'

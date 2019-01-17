@@ -35,7 +35,7 @@ const state = {
     receiptCount: 1,
 
     mileage: '',
-    freightFee: '',
+    freightFee: '', // --
 
     otherFee: '', //
     otherInfo: '', //
