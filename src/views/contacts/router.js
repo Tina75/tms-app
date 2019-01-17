@@ -17,7 +17,7 @@ requireContext.keys().forEach((filePath) => {
 export default [
   // -------公共页面---------
   {
-    // 修改/编辑地址
+    // 修改/编辑地址 action.resetAddressPage(options)
     path: '/contacts/address',
     name: 'contacts-address',
     meta: {
@@ -36,7 +36,7 @@ export default [
     component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/index.vue')
   },
   {
-    // 发货方详情
+    // 发货方详情 ?consignerId
     path: '/contacts/shipper/detail',
     name: 'contacts-shipper-detail',
     meta: {
@@ -45,9 +45,12 @@ export default [
     component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/detail.vue')
   },
   {
-    // 编辑发货方
+    // 编辑发货方 ?consignerId
     path: '/contacts/shipper/modify',
     name: 'contacts-shipper-modify',
+    meta: {
+      formLeaveConfirm: true
+    },
     component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/modify.vue')
   },
   {
@@ -69,7 +72,7 @@ export default [
     component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/cargo.vue')
   },
   {
-    // 编辑发货方常发货
+    // 编辑发货方常发货 ?consignerId && id 货物id
     path: '/contacts/shipper/cargo/modify',
     name: 'contacts-shipper-cargo-modify',
     meta: {

@@ -93,7 +93,7 @@
         v-model="valid"
         :model="inputValue"
         :rules="rule"
-        :message="rule.message || {}" />
+        :messages="rule.message || {}" />
     </div>
 
   </div>

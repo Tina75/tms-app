@@ -1,53 +1,53 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10">
-    <FromGroup :rules="rules">
-      <FormItem v-model="form.name" label="发货人名称" maxlength="20" prop="require"/>
-      <FormItem v-model="form.contact" label="联系人" maxlength="15" prop="require"/>
+    <FromGroup ref="form" :rules="rules">
+      <FormItem v-model="form.name" maxlength="20" label="发货人名称" prop="name"/>
+      <FormItem v-model="form.contact" maxlength="15" label="联系人" prop="contact"/>
       <FormItem
         v-model="form.phone"
-        label="联系人电话"
         :bottom-line="false"
         class="cube-mb-15"
-        prop="require"
+        label="联系人电话"
+        prop="phone"
       />
       <FormItem
         v-model="form.pickUp"
+        :options="options.pickUp"
+        type="select"
         label="提货方式"
         placeholder="请选择"
-        type="select"
-        :options="options.pickUp"
       />
       <FormItem
         v-model="form.payType"
+        :options="options.payType"
+        type="select"
         label="支付方式"
         placeholder="请选择"
-        type="select"
-        :options="options.payType"
       />
       <FormItem v-model="form.isInvoice" label="是否开票" type="switch"/>
       <FormItem
         v-if="form.isInvoice"
         v-model="form.invoiceRate"
-        label="开票税率(%)"
-        required
-        maxlength="2"
         type="number"
+        prop="invoiceRate"
+        required
+        label="开票税率(%)"
       />
       <FormItem
         v-model="form.salesmanId"
-        label="对接业务员"
-        placeholder="请选择"
         :type="operatorSelectType"
         :options="operatorOptions"
+        label="对接业务员"
+        placeholder="请选择"
       />
       <FormItem
         v-model="form.exploiteChannel"
-        label="开拓渠道"
-        placeholder="请选择"
-        class="cube-mb-15"
-        type="select"
         :bottom-line="false"
         :options="options.exploiteChannel"
+        class="cube-mb-15"
+        type="select"
+        label="开拓渠道"
+        placeholder="请选择"
       />
       <FormItem v-model="form.remark" maxlength="200" type="textarea" label="备注"/>
     </FromGroup>
@@ -59,6 +59,7 @@ import { mapActions, mapState } from 'vuex'
 import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
+import { contactRule } from '../modules/rules'
 import { ContactDetail } from '../modules/model'
 const moudleName = 'contacts/shipper'
 export default {
@@ -78,11 +79,7 @@ export default {
         exploiteChannel: ContactDetail.exploiteChannel
       },
       operatorSelectType: 'select',
-      rules: {
-        require: {
-          required: true
-        }
-      },
+      rules: contactRule,
       submiting: false
     }
   },
@@ -104,8 +101,13 @@ export default {
     async submit() {
       this.submiting = true
       try {
+        if (!(await this.$refs.form.validate())) {
+          return
+        }
         await this.modifyContact(ContactDetail.toServer(this.form))
         this.$refreshPage('contacts-shipper', 'contacts-shipper-detail')
+        this.$formWillLeave()
+        this.$router.back()
       } catch (e) {
         console.error(e)
       } finally {
@@ -113,7 +115,7 @@ export default {
         this.$router.back()
       }
     },
-    async onPageRefresh() {
+    async setForm() {
       this.form = new ContactDetail()
       this.loadOperators()
       if (!this.isCreate) {
@@ -139,6 +141,9 @@ export default {
         }
       }
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => vm.setForm())
   }
 }
 </script>

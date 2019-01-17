@@ -38,10 +38,10 @@
         <div class="item-footer">
           <div class="order-cost">
             <p class="cost-label">应收费用（{{settlementTypeMap[item.settlementType]}}）</p>
-            <p class="cost-money">{{item.totalFee}}<span>/元</span></p>
+            <p class="cost-money">{{item.totalFee|moneyFormat(4)}}<span>/元</span></p>
           </div>
           <div class="order-btns">
-            <a @click="dispatch(item)">调度</a>
+            <a @click="dispatch(item, index)">调度</a>
           </div>
         </div>
       </li>
@@ -57,7 +57,7 @@ export default {
   name: 'DispatchingList',
   components: { IconFont },
   computed: {
-    ...mapGetters(['dispatchingData', 'settlementTypeMap']),
+    ...mapGetters('pickup', ['dispatchingData', 'settlementTypeMap']),
     options () {
       return {
         pullDownRefresh: {
@@ -72,17 +72,46 @@ export default {
     this.getDispatching()
   },
   methods: {
-    ...mapActions(['setPageStart', 'getDispatching']),
+    ...mapActions('pickup', ['setPageStart', 'getDispatching', 'createPickup', 'removeOrder', 'getPickupCount']),
     /** 下拉刷新 */
     async onPullingDown () {
-      this.setPageStart('dispatchingData')
-      this.getDispatching()
+      await this.setPageStart('dispatchingData')
+      await this.getDispatching()
     },
     /** 上拉加载 */
     async onPullingUp () {
       this.getDispatching()
     },
-    dispatch (data) {}
+    dispatch (data, index) {
+      const _this = this
+      this.$createDialog({
+        type: 'confirm',
+        title: '提示',
+        content: '是否确认做提货调度，创建提货单',
+        confirmBtn: {
+          text: '是',
+          active: true,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        cancelBtn: {
+          text: '否',
+          active: false,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        async onConfirm () {
+          await _this.createPickup([data.id])
+          await _this.removeOrder(index)
+          await _this.getPickupCount(index)
+          _this.$createToast({
+            type: 'warn',
+            time: 1000,
+            txt: '创建成功'
+          }).show()
+        }
+      }).show()
+    }
   }
 }
 </script>
@@ -118,6 +147,8 @@ export default {
         font-size: 18px;
         color: #333333;
         font-weight: bold
+      .icon-line
+        margin: -5px 5px 0;
     .order-stat
       margin-bottom: 10px;
       span
