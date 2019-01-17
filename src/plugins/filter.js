@@ -34,9 +34,8 @@ Vue.filter('orderType', value => {
   else return '未知'
 })
 
-Vue.directive('imgFormat', {
-  bind: function (el, binding) {
-    if (binding.value.indexOf('aliyuncs.com') > 0) return
-    el.style.backgroundImage = 'url(' + `${URL_HOST}${binding.value}?x-oss-process=image/resize,m_fill,h_220,w_220` + ')'
-  }
+Vue.directive('imgFormat', function (el, binding) {
+  if (!binding.value) return
+  if (binding.value.indexOf('aliyuncs.com') > 0) return
+  el.style.backgroundImage = 'url(' + `${URL_HOST}${binding.value}?x-oss-process=image/resize,m_fill,h_220,w_220` + ')'
 })
