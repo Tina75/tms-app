@@ -27,11 +27,13 @@ const ACTIONS = {
       params: { carrierId }
     }).then(response => commit('setCarrierDetail', response.data.data.carrierInfo))
   },
-  loadTruckDetail ({ commit }, carId) {
-    return Server({
-      url: '/carrier/details/for/company',
-      method: 'get'
-    }).then(response => commit('setTruckDetail', response.data.data))
+  loadTruckDetail ({ state, commit }, carId) {
+    const truckList = state.truckList.list
+    truckList.map(item => {
+      if (item.id === carId) {
+        commit('setTruckDetail', item.origin)
+      }
+    })
   }
 }
 // 批量生成actions

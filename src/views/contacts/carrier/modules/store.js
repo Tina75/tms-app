@@ -45,13 +45,19 @@ const lists = [
     method: 'post',
     itemParser(data) {
       data = TruckDetail.toViewItem(data)
-      return {
+      let res = {
+        origin: data,
+        id: data.id,
+        carrierId: data.carrierId,
         title: data.carNO,
         tag: data.driverType,
-        info: [data.carType, data.carLength],
-        name: data.driverName,
+        info: [],
+        detail: data.driverName + '  ' + data.driverPhone,
         phone: data.driverPhone
       }
+      data.carType && res.info.push(data.carType)
+      data.carLength && res.info.push(data.carLength)
+      return res
     }
   }
 ]

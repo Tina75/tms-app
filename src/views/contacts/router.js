@@ -138,7 +138,7 @@ export default [
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */ './carrier/pages/truck-create.vue')
+    component: () => import(/* webpackChunkName: "contacts" */ './driver/pages/modify.vue')
   },
   /* 承运商 */
   {

@@ -6,7 +6,7 @@
       :loader="loadTruckList"
       :has-next="truckList.hasNext"
     >
-      <Media
+      <TruckCell
         v-for="(item, i) in truckList.list"
         :key="item.id"
         :index="i"
@@ -14,6 +14,7 @@
         @phoneCall="onItemPhoneCall"
         @click="onItemClick"
       />
+
       <template slot="empty">
         <NoData
           action="新增合作车辆"
@@ -32,10 +33,9 @@
 </template>
 
 <script>
-// import ListItem from '../../components/ListItem'
-import Media from '../components/media'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
+import TruckCell from '../../components/TruckCell'
 import { mapActions, mapState } from 'vuex'
 const moudleName = 'contacts/carrier'
 export default {
@@ -43,7 +43,7 @@ export default {
   metaInfo: {
     title: '合作车辆'
   },
-  components: { NoData, InfiniteList, Media },
+  components: { NoData, InfiniteList, TruckCell },
   data() {
     return {
       loading: false
@@ -66,7 +66,7 @@ export default {
       window.location.href = `tel:${item.phone}`
     },
     onItemClick(item, index) {
-      this.$router.push({ name: 'contacts-carrier-truck-detail', query: { carrierId: item.id } })
+      this.$router.push({ name: 'contacts-carrier-truck-detail', query: { carrierId: item.carrierId, carId: item.id } })
     }
   }
 }

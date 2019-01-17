@@ -113,9 +113,29 @@ export class TruckDetail {
     data = { ...data }
     ;['carType', 'driverType', 'carLength'].forEach((key) => {
       const value = +data[key]
-      const options = ContactDetail[key]
-      const option = options.find((item) => item.value === value)
-      data[key] = option ? option.text : ''
+      if (value) {
+        const options = TruckDetail[key]
+        const option = options.find((item) => item.value === value)
+        data[key] = option ? option.text : ''
+      }
+    })
+    return data
+  }
+
+  static toView(data) {
+    data = {
+      ...data,
+      shippingVolume: data.shippingVolume ? data.shippingVolume + '方' : '',
+      shippingWeight: data.shippingWeight ? data.shippingWeight + '吨' : ''
+    }
+    const mapType = ['carType', 'payType', 'carLength']
+    mapType.forEach((key) => {
+      const value = +data[key]
+      if (value) {
+        const options = TruckDetail[key]
+        const option = options.find((item) => item.value === value)
+        data[key] = option ? option.text : ''
+      }
     })
     return data
   }
