@@ -91,9 +91,7 @@ export default {
       window.location.href = `tel:${this.consigneeDetail.phone}`
     },
     goAdd () {
-      this.$router.push({
-        name: 'contacts-consignee-modify'
-      })
+      this.$router.push({ name: 'contacts-consignee-modify' })
     },
     goEdit () {
       this.$router.push({ name: 'contacts-consignee-modify', query: { consigneeId: this.consigneeDetail.id } })
