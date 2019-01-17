@@ -25,7 +25,7 @@
         <NoData action="新增发货地址" message="老板，您还没有记录发货地址信息 赶快新增一个，用着方便哦～" @btn-click="modify">
           <img
             slot="img"
-            class="contacts-shipper__placeholder"
+            class="empty-list-image"
             src="@/assets/contacts/address-list-empty.png"
           >
         </NoData>
@@ -94,9 +94,6 @@ export default {
 <style lang='stylus'>
 .contacts-shipper-address
   height 100%
-  &__placeholder
-    width 179px
-    height 133px
   &__item
     padding 8px 0 8px 10px
     margin-left 10px

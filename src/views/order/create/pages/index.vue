@@ -151,7 +151,7 @@ import CreateFooter from '../components/CreateFooter'
 import { FormGroup, FormItem, FormTitle } from '@/components/Form'
 import { SETTLEMENT_TYPE, PICKUP_TYPE } from '../../js/constant'
 import NP from 'number-precision'
-import getDistance from '../../js/getDistance'
+import { getDistance } from '@/libs/util'
 
 const IMAGES = {
   ACCEPT: require('../assets/accept.png'),

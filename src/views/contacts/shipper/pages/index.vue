@@ -22,7 +22,7 @@
         >
           <img
             slot="img"
-            class="contacts-shipper__placeholder"
+            class="empty-list-image"
             src="@/assets/contacts/shipper-list-empty.png"
           >
         </NoData>
@@ -74,7 +74,4 @@ export default {
 <style lang='stylus'>
 .contacts-shipper
   height 100%
-  &__placeholder
-    width 179px
-    height 133px
 </style>

@@ -2,9 +2,9 @@
   <div class="order-create-consignee">
     <InfiniteList
       v-model="loading"
-      :data="consigneeList.list"
-      :loader="loader"
-      :is-end="consigneeList.hasNext"
+      :has-data="consigneeList.list.length"
+      :loader="loadConsigneeList"
+      :has-next="consigneeList.hasNext"
     >
       <ListItem
         v-for="(item, i) in consigneeList.list"
@@ -13,7 +13,7 @@
         :item="item"
         @click="onItemClick"
       />
-      <template v-if="!consigneeList.length" slot="empty">
+      <template slot="empty">
         <NoData
           action="新增收货方"
           message="老板，您还没有记录收货方信息 赶快新增一个，方便联系哦～"

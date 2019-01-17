@@ -53,6 +53,7 @@ export default [
   {
     path: '/order/often',
     name: 'order-often', // 常发订单
+    meta: { noNeedRefresh: [] },
     component: () => import(/* webpackChunkName: "order" */ './often/pages/index.vue')
   },
   {

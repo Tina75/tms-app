@@ -95,17 +95,19 @@ export default {
     }
   },
   computed: {
-    ...mapState(moudleName, ['cargoDetail']),
+    ...mapState(moudleName, ['cargoList']),
     ...mapMutations(moudleName, ['setCargoDetail']),
     viewDimension() {
       const dimension = this.form.dimension
-      if (dimension.length || dimension.width || dimension.height) {
-        return `${dimension.length}*${dimension.width}*${dimension.height}`
+      if (dimension) {
+        if (dimension.length || dimension.width || dimension.height) {
+          return `${dimension.length}*${dimension.width}*${dimension.height}`
+        }
       }
       return ''
     },
     isCreate() {
-      return !this.form.id
+      return typeof this.$route.query.index === 'undefined'
     }
   },
   methods: {
@@ -126,7 +128,12 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    next(vm => (vm.form = CargoDetail.toForm(vm.cargoDetail)))
+    next(vm => {
+      const list = vm.cargoList.list
+      const index = vm.$route.query.index
+      const listItem = list[index]
+      vm.form = CargoDetail.toForm(listItem ? listItem.data : {})
+    })
   }
 }
 </script>

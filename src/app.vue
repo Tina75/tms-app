@@ -69,7 +69,9 @@ html,body
   vertical-align: -0.15em;
   fill: currentColor;
   overflow: hidden;
-
+.empty-list-image
+  width 179px
+  height 133px
   // .page
   //   position: absolute
   //   z-index: 10
