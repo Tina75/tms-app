@@ -2,7 +2,7 @@ import NP from 'number-precision'
 
 export default {
   // 设置开单配置
-  SET_ORDER_CONFIG: (state, payload) => { console.log(payload); state.orderConfig = payload },
+  SET_ORDER_CONFIG: (state, payload) => { state.orderConfig = payload },
   // 设置订单信息
   SET_ORDER_INFO: (state, payload) => {
     resetFields(payload)

@@ -3,7 +3,7 @@ import NP from 'number-precision'
 
 export default {
   async orderInfoInit () {
-    if (!this.orderConfig) {
+    if (JSON.stringify(this.orderConfig) === '{}') {
       try {
         window.loading(true)
         await this.fetchOrderConfig()
