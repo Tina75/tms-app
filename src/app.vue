@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="cube-default-background">
     <keep-alive>
       <router-view />
     </keep-alive>
@@ -59,8 +59,8 @@ html,body
   // text-align center
   color #2c3e50
   font-size 14px
+  min-height 100%
   height 100%
-  background #F3F3F3
   *
     box-sizing border-box
 .icon

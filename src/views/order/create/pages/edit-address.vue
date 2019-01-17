@@ -1,9 +1,9 @@
 <template>
   <div class="contacts-address">
     <form-group
-      class="border-bottom-1px"
       ref="$form"
-      v-model="form">
+      v-model="form"
+      class="border-bottom-1px">
       <form-item
         :value="localeView"
         label="所在地区"
@@ -26,8 +26,8 @@
 
       <ul class="address-often-list list">
         <li
-          class="list-item"
-          v-for="item in oftenAddresses" :key="item.id"
+          v-for="item in oftenAddresses"
+          :key="item.id" class="list-item"
           @click="pickOftenAddress(item)">
           <div class="item-icon">
             <icon-font name="icon-ico_location" size="20" color="#ffffff" />
@@ -211,6 +211,5 @@ export default {
 
   .address-often-list
     flex 1
-
 
 </style>

@@ -77,12 +77,12 @@ export default {
       for (let key in vm.form) {
         if (key === 'isInvoice') vm.form.isInvoice = !!vm.otherInfo.isInvoice
         else if (key === 'collectionMoney' || key === 'invoiceRate') {
-          if (vm.otherInfo[key] === undefined)
-          vm.form[key] = (vm.otherInfo[key] === undefined || vm.otherInfo[key] === '')
-            ? ''
-            : NP.divide(vm.otherInfo[key], 100)
-        }
-        else vm.form[key] = vm.otherInfo[key] === undefined ? '' : vm.otherInfo[key]
+          if (vm.otherInfo[key] === undefined) {
+            vm.form[key] = (vm.otherInfo[key] === undefined || vm.otherInfo[key] === '')
+              ? ''
+              : NP.divide(vm.otherInfo[key], 100)
+          }
+        } else vm.form[key] = vm.otherInfo[key] === undefined ? '' : vm.otherInfo[key]
       }
     })
   }

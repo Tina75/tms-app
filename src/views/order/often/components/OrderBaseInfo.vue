@@ -1,18 +1,24 @@
 <template>
   <detail-panel :title="'基本信息'">
     <detail-panel-item :label="'客户名称'">
-      <p>南京可口可乐有限公司</p>
+      <p>{{ detail.consignerName }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'客户订单号'">
       <p class="remix-content">
-        <span class="border-right-1px">12334456789</span>
-        <a>复制</a>
+        <span>{{ detail.customerOrderNo || '-' }}</span>
+        <a
+          class="border-right-1px"
+          v-if="detail.customerOrderNo"
+          @click.prevent="copy(detail.customerOrderNo)">复制</a>
       </p>
     </detail-panel-item>
     <detail-panel-item :label="'客户运单号'">
       <p class="remix-content">
-        <span class="border-right-1px">12334456789</span>
-        <a>复制</a>
+        <span>{{ detail.customerWaybillNo || '-' }}</span>
+        <a
+          class="border-right-1px"
+          v-if="detail.customerWaybillNo"
+          @click.prevent="copy(detail.customerWaybillNo)">复制</a>
       </p>
     </detail-panel-item>
     <!-- <detail-panel-item :label="'始发地'">
@@ -22,52 +28,61 @@
       <p>黑龙江哈尔滨市南岗区</p>
     </detail-panel-item> -->
     <detail-panel-item :label="'发货时间'">
-      <p>2018-12-30 12:00</p>
+      <p>{{ detail.deliveryTime | datetimeFormat('YYYY-MM-DD HH:mm', '-') }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'到货时间'">
-      <p>2018-12-31 12:00</p>
+      <p>{{ detail.arriveTime | datetimeFormat('YYYY-MM-DD HH:mm', '-') }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'提货方式'">
-      <p>大车直送客户</p>
+      <p>{{ detail.pickup | pickupType }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'回单数量'">
-      <p>1份</p>
+      <p>{{ detail.receiptCount }}份</p>
     </detail-panel-item>
     <detail-panel-item :label="'代收货款'">
-      <p>300元</p>
+      <p>{{ detail.collectionMoney | moneyFormat }}元</p>
     </detail-panel-item>
     <detail-panel-item :label="'责任业务员'">
-      <p>张三</p>
+      <p>{{ detail.salesmanName }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'是否开票'">
-      <p>是(5%)</p>
+      <p>{{ invoiceRender }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'备注'">
-      <p class="remark">好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟</p>
+      <p class="remark">{{ detail.remark || '-' }}</p>
     </detail-panel-item>
   </detail-panel>
 </template>
 
 <script>
-// import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
+import { pickupType } from '../../js/filters'
+import NP from 'number-precision'
+import Copy from 'vue-clipboard2'
+import Vue from 'vue'
+
+Vue.use(Copy)
 
 export default {
   name: 'pickupInfo',
   components: { detailPanel, detailPanelItem },
+  filters: { pickupType },
   computed: {
-    // ...mapGetters(['BePickingData']),
-    options () {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
+    ...mapGetters('order/often', [ 'detail' ]),
+
+    invoiceRender () {
+      if (!this.detail.isInvoice) return '否'
+      else return `是(${NP.times(this.detail.invoiceRate || 0, 100)}%)`
     }
   },
   methods: {
-    // ...mapActions(['getBePicking']),
+    copy (text) {
+      this.$copyText(text)
+          .then(() => { window.toast('复制成功') })
+          .catch(() => { window.toast('复制失败') })
+    }
   }
 }
 </script>
@@ -77,8 +92,8 @@ export default {
     span
       flex 1
       text-align: right
-      padding-right: 10px;
     a
+      margin-left 10px
       padding-left: 10px;
       color: #00a4bd;
   .remark

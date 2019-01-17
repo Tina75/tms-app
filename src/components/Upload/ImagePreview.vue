@@ -18,9 +18,19 @@ export default {
       vm.hasBack = false
       let imgsParam = [...to.params.imgs]
       if ((typeof imgsParam) === 'object' && imgsParam.length) {
-        if (imgsParam[0] && imgsParam[0].indexOf('aliyuncs.com') < 0) {
-          imgsParam = imgsParam.map(item => process.env.VUE_APP_IMG_HOST + item + '?x-oss-process=image/resize,m_lfit,w_1000')
-        }
+        let imgsParamInit = []
+        imgsParam.forEach(element => {
+          if (element && element.indexOf('aliyuncs.com') < 0) {
+            element = process.env.VUE_APP_IMG_HOST + element + '?x-oss-process=image/resize,m_lfit,w_1000'
+            imgsParamInit.push(element)
+          } else {
+            imgsParamInit.push(element)
+          }
+        })
+        // if (imgsParam[0] && imgsParam[0].indexOf('aliyuncs.com') < 0) {
+        //   imgsParam = imgsParam.map(item => process.env.VUE_APP_IMG_HOST + item + '?x-oss-process=image/resize,m_lfit,w_1000')
+        // }
+        imgsParam = imgsParamInit
         if (!imgsParam || !imgsParam.length) return
         vm.initialIndex = to.params.index
         vm.preview = vm.$createImagePreview({

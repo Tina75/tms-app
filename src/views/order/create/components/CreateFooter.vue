@@ -20,7 +20,7 @@
         primary>立即发运</cube-button>
     </div>
 
-    <div class="detail-box" v-show="showDetail">
+    <div v-show="showDetail" class="detail-box">
       <div class="detail-data">
         <p>费用合计明细</p>
         <ul>

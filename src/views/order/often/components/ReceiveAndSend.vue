@@ -2,12 +2,12 @@
   <div>
     <detail-panel :title="'发货人'">
       <detail-panel-item :label="'联系人'">
-        <p>刘亦菲</p>
+        <p>{{ detail.consignerContact }}</p>
       </detail-panel-item>
       <detail-panel-item :label="'联系方式'">
         <p class="remix-content">
-          <span class="border-right-1px">18709870987</span>
-          <a href="tel:18709870987">
+          <span class="border-right-1px">{{ detail.consignerPhone }}</span>
+          <a :href="`tel:${detail.consignerPhone}`">
             联系TA
             <icon-font
               class="call-icon"
@@ -18,17 +18,17 @@
         </p>
       </detail-panel-item>
       <detail-panel-item :label="'发货地址'">
-        <p class="address">好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟</p>
+        <p class="address">{{ detail.consignerAddress + detail.consignerHourseNumber }}</p>
       </detail-panel-item>
     </detail-panel>
     <detail-panel :title="'收货人'">
       <detail-panel-item :label="'联系人'">
-        <p>刘亦菲</p>
+        <p>{{ detail.consigneeContact }}</p>
       </detail-panel-item>
       <detail-panel-item :label="'联系方式'">
         <p class="remix-content">
-          <span class="border-right-1px">18709870987</span>
-          <a href="tel:18709870987">
+          <span class="border-right-1px">{{ detail.consigneePhone }}</span>
+          <a :href="`tel:${detail.consigneePhone}`">
             联系TA
             <icon-font
               class="call-icon"
@@ -39,37 +39,24 @@
         </p>
       </detail-panel-item>
       <detail-panel-item :label="'收货地址'">
-        <p class="address">好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟</p>
+        <p class="address">{{ detail.consigneeAddress + detail.consigneeHourseNumber }}</p>
       </detail-panel-item>
       <detail-panel-item :label="'收货人单位'">
-        <p class="address">好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟</p>
+        <p class="address">{{ detail.consigneeCompanyName || '-' }}</p>
       </detail-panel-item>
     </detail-panel>
   </div>
 </template>
 
 <script>
-// import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
-import IconFont from '@/components/Iconfont'
 
 export default {
   name: 'pickupInfo',
-  components: { detailPanel, detailPanelItem, IconFont },
-  computed: {
-    // ...mapGetters(['BePickingData']),
-    options () {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
-  },
-  methods: {
-    // ...mapActions(['getBePicking']),
-  }
+  components: { detailPanel, detailPanelItem },
+  computed: mapGetters('order/often', [ 'detail' ])
 }
 </script>
 <style scoped lang="stylus">

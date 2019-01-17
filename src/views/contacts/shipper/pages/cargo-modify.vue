@@ -1,5 +1,5 @@
 <template>
-  <div class="cube-has-bottom-btn cube-pt-10">
+  <div class="cube-default-background cube-has-bottom-btn cube-pt-10">
     <FromGroup :rules="rules">
       <FormItem
         v-model="form.cargoName"
@@ -107,11 +107,11 @@ export default {
       return ''
     },
     isCreate() {
-      return typeof this.$route.query.index === 'undefined'
+      return typeof this.$route.query.id === 'undefined'
     }
   },
   methods: {
-    ...mapActions(moudleName, ['modifyCargo']),
+    ...mapActions(moudleName, ['modifyCargo', 'removeCargo']),
     async submit() {
       this.submiting = true
       const server = CargoDetail.toServer(this.form)
@@ -119,23 +119,32 @@ export default {
       try {
         await this.modifyCargo(server)
         this.$refreshPage('contacts-shipper-cargo', 'contacts-shipper-detail')
+        this.$formWillLeave()
         this.$router.back()
       } catch (e) {
         console.error(e)
       } finally {
         this.submiting = false
       }
+    },
+    setForm() {
+      const list = this.cargoList.list
+      const id = this.$route.query.id
+      let detailData
+      if (id && list && list.length) {
+        let item = list.find(item => +item.id === +id)
+        if (item) {
+          detailData = item.data
+        }
+      }
+      this.form = CargoDetail.toForm(detailData)
     }
   },
   beforeRouteEnter(to, from, next) {
-    next(vm => {
-      const list = vm.cargoList.list
-      const index = vm.$route.query.index
-      const listItem = list[index]
-      vm.form = CargoDetail.toForm(listItem ? listItem.data : {})
-    })
+    next(vm => vm.setForm())
   }
 }
 </script>
 <style lang='stylus' >
+
 </style>

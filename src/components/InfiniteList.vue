@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { flexValue } from '@/libs/util'
 export default {
   name: 'ContactsShipper',
   model: {
@@ -100,16 +101,16 @@ export default {
         this.stopListLoading(isRefresh)
       }
     },
-    // 问过better-scroll黄轶，莫的直接的api手动控制的刷新下拉动画的
-    // cube基于cube-scroll改造的组件都可以这么玩
     startHackLoading() {
       this.loading = true
+      const pullDownDistance = flexValue(45)
+      console.info('pullDownDistance', pullDownDistance)
       setTimeout(() => {
         let scroll = this.getCubeScroll()
         if (scroll) {
-          scroll.scrollTo(0, 50)
+          scroll.scrollTo(0, pullDownDistance)
           scroll._pullDownHandle()
-          scroll._pullDownScrollHandle({ y: 50 })
+          scroll._pullDownScrollHandle({ y: pullDownDistance })
         } else {
           this.onListPullDown()
         }
