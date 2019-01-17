@@ -52,7 +52,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'pickup',
   computed: {
-    ...mapGetters(['pickedData', 'settlementTypeMap']),
+    ...mapGetters('pickup', ['pickedData', 'settlementTypeMap']),
     options () {
       return {
         pullDownRefresh: {
@@ -67,7 +67,7 @@ export default {
     this.getPicked()
   },
   methods: {
-    ...mapActions(['setPageStart', 'getPicked']),
+    ...mapActions('pickup', ['setPageStart', 'getPicked']),
     /** 下拉刷新 */
     async onPullingDown () {
       this.setPageStart('pickedData')
