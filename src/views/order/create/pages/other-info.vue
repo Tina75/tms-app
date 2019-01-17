@@ -69,6 +69,7 @@ export default {
       temp.invoiceRate = temp.invoiceRate ? NP.times(temp.invoiceRate, 100) : temp.invoiceRate
       temp.collectionMoney = temp.collectionMoney ? NP.times(temp.collectionMoney, 100) : temp.collectionMoney
       this.SET_OTHER_INFO(temp)
+      this.$formWillLeave()
       this.$router.back()
     }
   },
