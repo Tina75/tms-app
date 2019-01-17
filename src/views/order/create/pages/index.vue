@@ -1,8 +1,12 @@
 <template>
   <div class="create-order-page">
-    <cube-scroll class="scroll-box">
+    <cube-scroll class="scroll-box" v-if="orderConfig">
       <cube-button primary @click="$router.push({ name: 'order-often' })">常发订单</cube-button>
-      <form-group ref="$form" v-model="orderInfo" class="form" :rules="rules">
+      <form-group
+        ref="$form"
+        v-model="orderInfo"
+        class="form"
+        :rules="rules">
         <div class="form-section">
           <form-title
             title="发货方信息"
@@ -69,6 +73,7 @@
             type="click"
             @click.native="gotoAddressInfoPage('arrive')" />
           <form-item
+            v-if="orderConfig.consigneeCompanyNameOption"
             v-model="orderInfo.consigneeCompanyName"
             label="收货人单位"
             maxlength="50" />
@@ -108,6 +113,7 @@
 
         <div class="form-section">
           <form-item
+            v-if="orderConfig.mileageOption"
             v-model="orderInfo.mileage"
             type="number"
             label="计费里程(公里)"
@@ -216,7 +222,8 @@ export default {
       'otherInfo', // 其他信息
       'addressChanged',
       'consigneeInfo',
-      'calculatedAmount'
+      'calculatedAmount',
+      'orderConfig'
     ]),
     ...mapState('contacts/consignee', [
       'saveConsigner'

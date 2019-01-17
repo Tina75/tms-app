@@ -34,10 +34,8 @@ export default {
   // 保存订单
   async saveOrder () {
     if (this.loading) return
-    if (!(await this.$refs.$form.validate())) {
-      window.toast('请填写必填信息')
-      return
-    }
+    if (!(await this.$refs.$form.validate())) return window.toast('请填写必填信息')
+
     this.loading = true
     window.loading(true)
     const data = this.getOrderInfo()

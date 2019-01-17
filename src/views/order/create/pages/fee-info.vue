@@ -4,24 +4,28 @@
       <form-group ref="$form" class="form" :rules="rules">
         <div class="form-section">
           <form-item
+            v-if="orderConfig.pickupFeeOption"
             v-model="form.pickupFee"
             prop="pickupFee"
             label="提货费用(元)"
             type="number"
             precision="4" />
           <form-item
+            v-if="orderConfig.loadFeeOption"
             v-model="form.loadFee"
             prop="loadFee"
             label="装货费用(元)"
             type="number"
             precision="4" />
           <form-item
+            v-if="orderConfig.unloadFeeOption"
             v-model="form.unloadFee"
             prop="unloadFee"
             label="卸货费用(元)"
             type="number"
             precision="4" />
           <form-item
+            v-if="orderConfig.insuranceFeeOption"
             v-model="form.insuranceFee"
             prop="insuranceFee"
             label="保险费用(元)"
@@ -30,6 +34,7 @@
         </div>
         <div class="form-section">
           <form-item
+            v-if="orderConfig.otherFeeOption"
             v-model="form.otherFee"
             prop="otherFee"
             label="其它费用(元)"
@@ -76,7 +81,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order/create', [ 'feeInfo' ]),
+    ...mapGetters('order/create', [ 'feeInfo', 'orderConfig' ]),
     total () {
       return NP.plus(this.form.pickupFee, this.form.loadFee, this.form.unloadFee, this.form.insuranceFee, this.form.otherFee)
     }

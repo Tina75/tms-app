@@ -3,6 +3,16 @@ import NP from 'number-precision'
 
 export default {
   async orderInfoInit () {
+    if (!this.orderConfig) {
+      try {
+        window.loading(true)
+        await this.fetchOrderConfig()
+      } catch (err) {
+        //
+      } finally {
+        window.loading(false)
+      }
+    }
     if (this.mode === 'create') return
     this.$formWillLeave(false, () => { this.$refs.$form.reset() })
     if (this.orderInfo.consignerName) return

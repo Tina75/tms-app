@@ -1,4 +1,5 @@
 export default {
+  orderConfig: state => state.orderConfig,
   orderInfo: state => state.orderInfo,
   orderOften: state => !!state.orderInfo.isSaveOrderTemplate,
   feeInfo: state => state.feeInfo,

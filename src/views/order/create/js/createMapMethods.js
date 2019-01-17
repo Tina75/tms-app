@@ -16,7 +16,8 @@ export default {
     'getOpetator',
     'createOrder',
     'updateOrder',
-    'fetchOrderInfo'
+    'fetchOrderInfo',
+    'fetchOrderConfig'
   ]),
   ...mapActions('order/often', [
     'getOftenDetail'
