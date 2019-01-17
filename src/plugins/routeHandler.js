@@ -12,7 +12,12 @@ router.afterEach((to, from) => {
   clearAppTitleBtn()
 })
 
-let enterHandlers = []
+let ENTER_HANDLERS = PLUGINS.reduce((arr, plugin) => {
+  if (plugin.onEnter) {
+    arr.push(plugin.onEnter)
+  }
+  return arr
+}, [])
 const LEAVE_HANDLERS = PLUGINS.reduce((arr, plugin) => {
   if (plugin.onLeave) {
     arr.push(plugin.onLeave)
@@ -25,17 +30,8 @@ Vue.mixin({
   // 若需求要在plugin中阻止next调用,请在onLeave时阻止
   beforeRouteEnter(to, from, next) {
     try {
-      enterHandlers = PLUGINS.reduce((arr, plugin) => {
-        if (plugin.onEnter) {
-          const handler = plugin.onEnter(to, from)
-          if (handler) {
-            arr.push(handler)
-          }
-        }
-        return arr
-      }, [])
-      if (enterHandlers.length) {
-        next((vm) => enterHandlers.forEach((handler) => handler(vm)))
+      if (ENTER_HANDLERS.length) {
+        next((vm) => ENTER_HANDLERS.forEach((handler) => handler(to, from, vm)))
       } else {
         next()
       }
