@@ -33,5 +33,23 @@ Vue.mixin({
     } else {
       next()
     }
+  },
+
+  beforeRouteLeave (to, from, next) {
+    const { formLeaveConfirm } = from.meta
+    if (!formLeaveConfirm) {
+      next()
+      return
+    }
+    this.$createDialog({
+      type: 'confirm',
+      title: '',
+      content: '信息未保存，是否确认离开？',
+      icon: 'cubeic-alert',
+      onConfirm: () => {
+        this.formWillLeave && this.formWillLeave(to, from)
+        next()
+      }
+    }).show()
   }
 })

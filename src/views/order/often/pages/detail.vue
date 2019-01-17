@@ -1,13 +1,13 @@
 
 <template>
-  <div class="pickup-order-detail">
-    <cube-scroll-nav @change="changeHandler">
+  <div class="pickup-order-detail" v-if="detail">
+    <cube-scroll-nav>
       <cube-scroll-nav-panel
         v-for="(item, index) in pageData"
         :key="index"
         :label="item.name">
         <ul>
-          <component :is="item.component"/>
+          <component :is="item.component" />
         </ul>
       </cube-scroll-nav-panel>
     </cube-scroll-nav>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import OrderBaseInfo from '../components/OrderBaseInfo'
 import ReceiveAndSend from '../components/ReceiveAndSend'
 import OrderCargoList from '../components/OrderCargoList'
@@ -26,40 +26,39 @@ import CostDetail from '../components/CostDetail'
 
 export default {
   name: 'order-often-detail',
-  metaInfo: {
-    title: '常发订单详情'
-  },
+  metaInfo: { title: '常发订单详情' },
   components: { OrderBaseInfo, OrderCargoList, CostDetail, ReceiveAndSend },
   data () {
     return {
       pageData: [
-        {
-          name: '基本信息',
-          component: 'OrderBaseInfo'
-        },
-        {
-          name: '收发货人',
-          component: 'ReceiveAndSend'
-        },
-        {
-          name: '货物明细',
-          component: 'OrderCargoList'
-        },
-        {
-          name: '应收费用',
-          component: 'CostDetail'
-        }
-      ]
+        { name: '基本信息', component: 'OrderBaseInfo' },
+        { name: '收发货人', component: 'ReceiveAndSend' },
+        { name: '货物明细', component: 'OrderCargoList' },
+        { name: '应收费用', component: 'CostDetail' }
+      ],
+      orderId: this.$route.params.orderId
     }
   },
-  computed: {
-    ...mapGetters(['pickupDetail'])
-  },
+  computed: mapGetters('order/often', [ 'detail' ]),
   methods: {
-    // ...mapActions(['getNews', 'clearNews']),
-    changeHandler (label) {
-      console.log('changed to:', label)
-    }
+    ...mapMutations('order/often', [ 'SET_DETAIL' ]),
+    ...mapActions('order/often', [ 'getOftenDetail' ])
+  },
+  beforeRouteEnter (to, from, next) {
+    next(async vm => {
+      try {
+        window.loading(true)
+        await vm.getOftenDetail(vm.orderId)
+      } catch (err) {
+        //
+      } finally {
+        window.loading(false)
+      }
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    this.SET_DETAIL(null)
+    next()
   }
 }
 </script>

@@ -10,7 +10,7 @@
         <li
           v-for="(item, index) in oftenList.list"
           :key="index" class="order-list-item"
-          @click="$router.push({ name: 'order-often-detail' })">
+          @click="$router.push({ name: 'order-often-detail', params: { orderId: item.id } })">
           <p class="order-company order-container">{{ item.consignerName }}</p>
 
           <div class="order-body order-container border-top-1px border-bottom-1px">

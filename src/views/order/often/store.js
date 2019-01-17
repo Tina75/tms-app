@@ -1,32 +1,34 @@
 import Server from '@/libs/server'
 import { InfinateListFactory } from '@/libs/factory/store'
 
-const state = {}
+const state = {
+  detail: null
+}
 
-const getters = {}
+const getters = {
+  detail: state => state.detail
+}
 
-const mutations = {}
+const mutations = {
+  SET_DETAIL: (state, payload) => { state.detail = payload }
+}
 
 const actions = {
-  // getOftenList: async (state, query) => {
-  //   const { data } = await Server({
-  //     url: '/ordertemplate/list',
-  //     method: 'post',
-  //     loading: true,
-  //     data: { pageNo: state.pageNo }
-  //   })
-  //   const res = data.data
-  //   state.commit('SET_OFTEN_LIST', res.list)
-  //   if (res.list.length) state.commit('SET_PAGE_NO', state.pageNo + 1)
-  //   return !!res.list.length
-  // },
-
   deleteOftenOrder: async (state, id) => {
     Server({
       url: '/ordertemplate/delete',
       method: 'post',
       data: { id }
     })
+  },
+
+  getOftenDetail: async ({ commit }, id) => {
+    const { data } = await Server({
+      url: '/ordertemplate/detail',
+      method: 'post',
+      data: { id }
+    })
+    commit('SET_DETAIL', data.data)
   }
 }
 

@@ -17,6 +17,7 @@ export default [
   {
     path: '/order/cargo-info',
     name: 'order-cargo-info', // 货物信息
+    meta: { formLeaveConfirm: true },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/cargo-info.vue')
   },
   {
@@ -57,8 +58,8 @@ export default [
     component: () => import(/* webpackChunkName: "order" */ './often/pages/index.vue')
   },
   {
-    path: '/order/often/detail',
-    name: 'order-often-detail', // 常发订单
+    path: '/order/often/detail/:orderId',
+    name: 'order-often-detail', // 常发订单详情
     component: () => import(/* webpackChunkName: "order" */ './often/pages/detail.vue')
   },
   {
