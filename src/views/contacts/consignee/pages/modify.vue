@@ -114,6 +114,7 @@ export default {
     }),
     async onPageRefresh() {
       // 进入页面时刷新列表数据
+      this.$refs.$form.reset()
       if (!this.isEdit) {
         const urlId = +this.$route.query.consigneeId
         if (urlId !== +this.consigneeDetail.id) {
@@ -213,7 +214,6 @@ export default {
     if (to.name !== 'select-shipper' && to.name !== 'contacts-address' && !this.confirmed) {
       this.$createDialog({
         type: 'confirm',
-        title: '',
         content: '信息未保存，确认退出吗？',
         icon: 'cubeic-alert',
         onConfirm: () => {
