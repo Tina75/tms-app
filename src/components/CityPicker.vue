@@ -207,7 +207,7 @@ export default {
   overflow-y auto
   display flex
   flex-direction column
-  z-index 1999
+  z-index 99
   bottom 0
   left 0
   width 100%

@@ -34,7 +34,7 @@
     <CellItem
       class="cube-mt-15"
       label="常发货物"
-      left-icon="icon-ico_location"
+      left-icon="icon-ico_box"
       :right-title="viewData.cargoList&&viewData.cargoList.length"
       @click="$router.push({name: 'contacts-shipper-cargo', query:{consignerId: viewData.id}})"
     />

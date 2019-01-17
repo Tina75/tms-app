@@ -104,11 +104,6 @@ export default {
     reset() {
       const options = this.AddressPage
       this.form = Address.toForm(options.data)
-      // 注册返回时清空
-      this.$formWillLeave(false, () => {
-        this.showCityPicker = false
-        this.form.address = ''
-      })
       if (options.appButton) {
         // TODO set app
       }
@@ -116,6 +111,11 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(vm => vm.reset())
+  },
+  beforeRouteLeave (to, from, next) {
+    this.showCityPicker = false
+    this.form.address = ''
+    next()
   }
 }
 </script>
