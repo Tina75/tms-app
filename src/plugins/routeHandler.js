@@ -1,66 +1,65 @@
 import { clearAppTitleBtn } from '@/libs/bridgeUtil'
 import Vue from 'vue'
 import router from '@/router'
+import PLUGINS from './routerPlugin'
+PLUGINS.forEach((plugin) => {
+  if (plugin.install) {
+    plugin.install(Vue)
+  }
+})
 router.afterEach((to, from) => {
   // 自动清理上一个页面设置的原生按钮
   clearAppTitleBtn()
 })
 
-// -----自定义页面刷新-----
-const REFRESH_MAP = {}
-// 通知下一次到这个页面主动刷新
-Vue.prototype.$refreshPage = (...routeNames) => routeNames.forEach((name) => (REFRESH_MAP[name] = 1))
-// 表单提交状态
-let $formState = {
-  hasSubmitted: false,
-  willLeave: () => {}
-}
-Vue.prototype.$formWillLeave = (submitted = true, cb) => {
-  $formState.hasSubmitted = !!submitted
-  if (typeof cb === 'function') $formState.willLeave = cb
-}
+let enterHandlers = []
+const LEAVE_HANDLERS = PLUGINS.reduce((arr, plugin) => {
+  if (plugin.onLeave) {
+    arr.push(plugin.onLeave)
+  }
+  return arr
+}, [])
+const LEAVE_HANDLER_LENGTH = LEAVE_HANDLERS.length
+
 Vue.mixin({
-  // 路由跳转时根据meta里的noNeedRefresh数组决定是否调用页面实例的onPageRefresh函数
+  // 若需求要在plugin中阻止next调用,请在onLeave时阻止
   beforeRouteEnter(to, from, next) {
-    $formState.hasSubmitted = false
-    $formState.willLeave = () => {}
-    const { noNeedRefresh } = to.meta
-    if (noNeedRefresh) {
-      const fromName = from.name
-      const toName = to.name
-      next((vm) => {
-        try {
-          if (vm.onPageRefresh) {
-            if (!noNeedRefresh.includes(fromName) || REFRESH_MAP[toName]) {
-              vm.onPageRefresh()
-              REFRESH_MAP[toName] = 0
-            }
+    try {
+      enterHandlers = PLUGINS.reduce((arr, plugin) => {
+        if (plugin.onEnter) {
+          const handler = plugin.onEnter(to, from)
+          if (handler) {
+            arr.push(handler)
           }
-        } catch (e) {
-          console.error('error in [plugins/routeHandler]', e)
         }
-      })
-    } else {
+        return arr
+      }, [])
+      if (enterHandlers.length) {
+        next((vm) => enterHandlers.forEach((handler) => handler(vm)))
+      } else {
+        next()
+      }
+    } catch (e) {
+      console.error(e)
+    } finally {
       next()
     }
   },
 
-  beforeRouteLeave (to, from, next) {
-    const { formLeaveConfirm } = from.meta
-    if (!formLeaveConfirm || $formState.hasSubmitted) {
-      $formState.willLeave(to, from)
-      next()
-      return
-    }
-    this.$createDialog({
-      type: 'confirm',
-      title: '',
-      content: '信息未保存，是否确认离开？',
-      icon: 'cubeic-alert',
-      onConfirm: () => {
-        $formState.willLeave(to, from)
-        next()
+  beforeRouteLeave(to, from, next) {
+    if (LEAVE_HANDLER_LENGTH) {
+      let count = 0
+      const nextProxy = () => {
+        count++
+        if (count === LEAVE_HANDLER_LENGTH) {
+          next()
+        }
       }
-    }).show()
+      for (let i = 0, len = LEAVE_HANDLERS.length; i < len; i++) {
+        LEAVE_HANDLERS[i].call(this, to, from, nextProxy)
+      }
+    } else {
+      next()
+    }
   }
 })

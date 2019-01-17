@@ -1,5 +1,5 @@
 <template>
-  <div class="cube-has-bottom-btn cube-pt-10">
+  <div class="cube-default-background cube-has-bottom-btn cube-pt-10">
     <FromGroup :rules="rules">
       <FormItem
         v-model="form.cargoName"
@@ -119,6 +119,7 @@ export default {
       try {
         await this.modifyCargo(server)
         this.$refreshPage('contacts-shipper-cargo', 'contacts-shipper-detail')
+        this.$formWillLeave()
         this.$router.back()
       } catch (e) {
         console.error(e)
@@ -145,4 +146,5 @@ export default {
 }
 </script>
 <style lang='stylus' >
+
 </style>
