@@ -86,5 +86,7 @@ export default {
     flex-direction column
     justify-content space-around
     white-space pre-wrap
-    line-height 1.1
+    line-height 1.1em
+    span
+      min-height 1.1em
 </style>

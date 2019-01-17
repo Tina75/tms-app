@@ -12,7 +12,7 @@
       </cube-scroll-nav-panel>
     </cube-scroll-nav>
     <div class="handle-btns">
-      <a>再来一单</a>
+      <router-link :to="{ name: 'order-one-more', params: { id: detail.id }}">再来一单</router-link>
     </div>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
         { name: '货物明细', component: 'OrderCargoList' },
         { name: '应收费用', component: 'CostDetail' }
       ],
-      orderId: this.$route.params.orderId
+      orderId: ''
     }
   },
   computed: mapGetters('order/often', [ 'detail' ]),
@@ -46,6 +46,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(async vm => {
+      vm.orderId = vm.$route.params.orderId
       try {
         window.loading(true)
         await vm.getOftenDetail(vm.orderId)

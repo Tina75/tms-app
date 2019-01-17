@@ -75,6 +75,7 @@ export default {
   methods: {
     ...mapMutations('order/create', [ 'SET_OFTEN_ORDER' ]),
     saveOrder () {
+      this.showDetail = false
       this.$emit('on-save-order')
     }
   }

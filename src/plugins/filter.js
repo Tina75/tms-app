@@ -33,3 +33,10 @@ Vue.filter('orderType', value => {
   if (value) return orderTypes[value]
   else return '未知'
 })
+
+Vue.directive('imgFormat', {
+  bind: function (el, binding) {
+    if (binding.value.indexOf('aliyuncs.com') > 0) return
+    el.style.backgroundImage = 'url(' + `${URL_HOST}${binding.value}?x-oss-process=image/resize,m_fill,h_220,w_220` + ')'
+  }
+})

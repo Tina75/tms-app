@@ -21,6 +21,7 @@
           v-text="'修改'"
         />
       </ListItem>
+      <cube-button @click="modify()">aaa</cube-button>
       <template slot="empty">
         <NoData action="新增发货地址" message="老板，您还没有记录发货地址信息 赶快新增一个，用着方便哦～" @btn-click="modify">
           <img
