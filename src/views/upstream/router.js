@@ -5,12 +5,12 @@ export default [
   {
     path: '/upstream',
     name: 'upstream',
-    component: () => import(/* webpackChunkName: "回单tab" */'./pages/index.vue')
+    component: () => import(/* webpackChunkName: "upstream" */'./pages/index.vue')
   },
   {
     path: '/upstream/:id',
     name: 'upstream-detail',
-    component: () => import(/* webpackChunkName: "回单tab" */'./pages/detail.vue')
+    component: () => import(/* webpackChunkName: "upstream" */'./pages/detail.vue')
   }
 ]
 
