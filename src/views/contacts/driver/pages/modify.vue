@@ -94,26 +94,26 @@ import { mapActions, mapGetters } from 'vuex'
 import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
-import { TruckDetail } from '../modules/model'
+import { DriverDetail } from '../modules/model'
 import CityPicker from '@/components/CityPicker'
 import Upload from '../../components/Upload'
 import Card from '../../components/Card'
-const moudleName = 'contacts/carrier'
+const moudleName = 'contacts/driver'
 export default {
-  name: 'ModifyContactsCarrierTruck',
+  name: 'ModifyContactsDriver',
   metaInfo() {
     return {
-      title: this.isCreate ? '新增车辆' : '修改车辆'
+      title: this.isCreate ? '新增熟车司机' : '修改熟车司机'
     }
   },
   components: { FormItem, FromGroup, LoadingButton, CityPicker, Upload, Card },
   data() {
     return {
-      model: new TruckDetail(),
+      model: new DriverDetail(),
       options: {
-        carType: TruckDetail.carType,
-        driverType: TruckDetail.driverType,
-        carLength: TruckDetail.carLength
+        carType: DriverDetail.carType,
+        driverType: DriverDetail.driverType,
+        carLength: DriverDetail.carLength
       },
       rules: {
         require: {
@@ -127,18 +127,18 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(moudleName, ['truckDetail']),
+    ...mapGetters(moudleName, ['driverDetail']),
     isCreate() {
       return !this.truckDetail.id
     }
   },
   methods: {
-    ...mapActions(moudleName, ['modifyTruck']),
+    ...mapActions(moudleName, ['modifyDriver']),
     async submit() {
       this.submiting = true
       try {
         this.model.carrierId = this.$route.query.carrierId
-        await this.modifyTruck(TruckDetail.toServer(this.model))
+        await this.modifyDriver(DriverDetail.toServer(this.model))
         this.afterSubmit()
       } catch (e) {
         console.error(e)
@@ -149,16 +149,16 @@ export default {
 
     onRefreshPage() {
       this.model = this.isCreate
-        ? new TruckDetail()
-        : TruckDetail.toFrom(this.TruckDetail)
+        ? new DriverDetail()
+        : DriverDetail.toFrom(this.DriverDetail)
     },
 
     /* 提交成功后续操作 */
     afterSubmit () {
-      this.$refreshPage('contacts-carrier-truck', 'contacts-carrier-truck-detail')
+      this.$refreshPage('contacts-driver', 'contacts-driver-detail')
       this.$createToast({
         time: 1500,
-        txt: this.isCreate ? '新增车辆成功' : '修改车辆成功'
+        txt: this.isCreate ? '新增熟车司机成功' : '修改熟车司机成功'
       }).show()
       this.$router.back()
     },

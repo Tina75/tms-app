@@ -6,7 +6,7 @@
         :key="index"
         class="image-item">
         <img
-          :src="item.url"
+          :src="item.url | imgUrlFormat"
           alt="图片加载失败"
           class="pic-item"
           @click="previewPic(uploadPhotoList,index)">
@@ -19,7 +19,6 @@
 <script>
 export default {
   name: 'upload',
-  metaInfo: { title: 'upload' },
   props: {
     uploadPhotos: {
       type: Array,

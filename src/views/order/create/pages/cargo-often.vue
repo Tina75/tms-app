@@ -4,7 +4,7 @@
     :img="NO_DATA"
     message="暂无常发货物" />
 
-  <cube-scroll class="scroll-box" v-else>
+  <cube-scroll v-else class="scroll-box">
     <ul class="list">
       <li
         v-for="item in cargoList" :key="item.id"
@@ -52,7 +52,7 @@ export default {
     pickCargo (item) {
       const cargo = Object.assign({}, item)
       cargo.cargoCost = NP.divide(cargo.cargoCost || 0, 100)
-      cargo.size =  [ item.dimension.length || '-', item.dimension.width || '-', item.dimension.height || '-' ].join('x')
+      cargo.size = [ item.dimension.length || '-', item.dimension.width || '-', item.dimension.height || '-' ].join('x')
       this.SET_CARGO_OFTEN(cargo)
       this.$router.back()
     }

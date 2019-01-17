@@ -1,3 +1,5 @@
+
+const URL_HOST = process.env.VUE_APP_IMG_HOST
 const validator = {
   // 手机号码
   phone (value) {
@@ -17,4 +19,9 @@ export const validatePhone = (val) => {
 
 export const CHECK_NAME = function (val) {
   return /^.{2,25}$/.test(val)
+}
+
+export const FORMAT_IMG = function (value) {
+  if (value.indexOf('aliyuncs.com') > 0) return value
+  return value ? `${URL_HOST}${value}?x-oss-process=image/resize,m_fill,h_220,w_220` : ' '
 }
