@@ -62,37 +62,18 @@
 </template>
 
 <script>
-import NP from 'number-precision'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import InfiniteList from '@/components/InfiniteList'
 import MoneyLabel from '../../components/MoneyLabel'
 import NoData from '@/components/NoData'
-import { SETTLEMENT_TYPE } from '../../js/constant'
 import NO_DATA from '@/assets/img-no-data.png'
+import filters from '../../js/filters'
 
 export default {
   name: 'order-often',
   metaInfo: { title: '常发订单' },
   components: { MoneyLabel, NoData, InfiniteList },
-  filters: {
-    settlementType (type) {
-      for (let i in SETTLEMENT_TYPE) {
-        if (type === SETTLEMENT_TYPE[i].value) return SETTLEMENT_TYPE[i].text
-      }
-    },
-    totalFee (order) {
-      return NP.divide(
-        NP.plus(
-          order.freightFee || 0,
-          order.loadFee || 0,
-          order.unloadFee || 0,
-          order.insuranceFee || 0,
-          order.otherFee || 0,
-          order.pickupFee || 0
-        ), 100
-      )
-    }
-  },
+  filters,
   data () {
     return {
       NO_DATA,

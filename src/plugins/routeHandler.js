@@ -37,7 +37,7 @@ Vue.mixin({
 
   beforeRouteLeave (to, from, next) {
     const { formLeaveConfirm } = from.meta
-    if (!formLeaveConfirm) {
+    if (!formLeaveConfirm || this.formHasSubmitted) {
       next()
       return
     }
