@@ -1,55 +1,45 @@
 <template>
   <detail-panel :title="'应收费用'">
     <detail-panel-item :label="'计费里程'">
-      <p>1000公里</p>
+      <p>{{ detail.mileage }}公里</p>
     </detail-panel-item>
     <detail-panel-item :label="'运输费用'">
-      <p>1000元</p>
+      <p>{{ detail.freightFee | moneyFormat }}元</p>
     </detail-panel-item>
     <detail-panel-item :label="'提货费用'">
-      <p>1000元</p>
+      <p>{{ detail.pickupFee | moneyFormat }}元</p>
     </detail-panel-item>
     <detail-panel-item :label="'装货费用'">
-      <p>1000元</p>
+      <p>{{ detail.loadFee | moneyFormat }}元</p>
     </detail-panel-item>
     <detail-panel-item :label="'卸货费用'">
-      <p>1000元</p>
+      <p>{{ detail.unloadFee | moneyFormat }}元</p>
     </detail-panel-item>
     <detail-panel-item :label="'保险费用'">
-      <p>1000元</p>
+      <p>{{ detail.insuranceFee | moneyFormat }}元</p>
     </detail-panel-item>
     <detail-panel-item :label="'其他费用'">
-      <p>1000元</p>
+      <p>{{ detail.otherFee | moneyFormat }}元</p>
     </detail-panel-item>
     <div class="total-cost">
       <label>合计</label>
-      <span>6000元</span>
-      <i>月结</i>
+      <span>{{ detail | totalFee }}元</span>
+      <i>{{ detail.settlementType | settlementType}}</i>
     </div>
   </detail-panel>
 </template>
 
 <script>
-// import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
+import { settlementType, totalFee } from '../../js/filters'
 
 export default {
   name: 'pickupInfo',
   components: { detailPanel, detailPanelItem },
-  computed: {
-    // ...mapGetters(['BePickingData']),
-    options () {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
-  },
-  methods: {
-    // ...mapActions(['getBePicking']),
-  }
+  filters: { settlementType, totalFee },
+  computed: mapGetters('order/often', [ 'detail' ])
 }
 </script>
 <style scoped lang="stylus">

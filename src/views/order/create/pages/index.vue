@@ -2,7 +2,7 @@
   <div class="create-order-page">
     <cube-scroll class="scroll-box">
       <cube-button primary @click="$router.push({ name: 'order-often' })">常发订单</cube-button>
-      <form-group ref="$form" class="form" :rules="rules">
+      <form-group ref="$form" class="form" v-model="orderInfo" :rules="rules">
         <div class="form-section">
           <form-title
             title="发货方信息"
@@ -200,8 +200,12 @@ export default {
     }
   },
   computed: {
+    orderInfo: {
+      get: mapGetters('order/create', [ 'orderInfo' ]).orderInfo,
+      set: function (val) { this.SET_ORDER_INFO(val) }
+    },
     ...mapGetters('order/create', [
-      'orderInfo', // 订单基本信息
+
       'consumerInfo', // 客户单号及其他
       'orderCargoList', // 货物信息
       'feeInfo', // 费用信息
@@ -214,6 +218,7 @@ export default {
   },
   methods: {
     ...mapMutations('order/create', [
+      'SET_ORDER_INFO',
       'SET_CONSUMER_INFO',
       'SET_OTHER_INFO',
       'SET_ADDRESS_TYPE',
@@ -384,13 +389,8 @@ export default {
       this.orderInfo.freightFee = this.calculatedAmount || ''
       this.CLEAR_CALCULATED_AMOUNT()
     },
-
-    // 保存订单
-    async saveOrder () {
-      if (this.loading) return
-      if (!(await this.$refs.$form.validate())) return
-      this.loading = true
-      window.loading(true)
+    // 获取订单聚合信息
+    getOrderInfo () {
       const data = Object.assign(
         {},
         this.orderInfo,
@@ -401,6 +401,7 @@ export default {
       )
       data.consignerPhone = data.consignerPhone.replace(/\s/g, '')
       data.consigneePhone = data.consigneePhone.replace(/\s/g, '')
+      data.freightFee = NP.times(data.freightFee, 100)
 
       const deleteFileds = [
         'consigneeAddressLocale',
@@ -413,9 +414,25 @@ export default {
       ]
       deleteFileds.forEach(field => { delete data[field] })
       for (let key in data) { if (data[key] === '') delete data[key] }
+      return data
+    },
+
+    // 保存订单
+    async saveOrder () {
+      this.$refs.$form.reset()
+      return
+      if (this.loading) return
+      if (!(await this.$refs.$form.validate())) {
+        window.toast('请填写必填信息')
+        return
+      }
+      this.loading = true
+      window.loading(true)
+      const data = this.getOrderInfo()
       try {
         await this.createOrder(data)
-        window.toast('订单保存成功')
+        window.toast('保存成功')
+        setTimeout(() => { window.location.reload }, 2000)
       } catch (err) {
         //
       } finally {
