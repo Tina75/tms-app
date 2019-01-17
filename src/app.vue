@@ -59,7 +59,7 @@ html,body
   // text-align center
   color #2c3e50
   font-size 14px
-  height 100%
+  min-height 100%
   background #F3F3F3
   *
     box-sizing border-box

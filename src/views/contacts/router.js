@@ -69,6 +69,9 @@ export default [
     // 编辑发货方常发货
     path: '/contacts/shipper/cargo/modify',
     name: 'contacts-shipper-cargo-modify',
+    meta: {
+      formLeaveConfirm: true
+    },
     component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/cargo-modify.vue')
   },
   // -------------收货方------------------

@@ -90,7 +90,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(moudleName, ['loadContactDetail']),
+    ...mapActions(moudleName, ['loadContactDetail', 'removeContact']),
     onPageRefresh() {
       this.loadContactDetail()
     },
