@@ -52,12 +52,10 @@ export default {
   computed: mapState(moudleName, ['senderList']),
   methods: {
     ...mapActions(moudleName, ['loadSenderList', 'saveConsignerInfo']),
-    loader(refresh) {
-      this.loadSenderList(refresh)
-    },
     onPageRefresh() {
       console.info('onPageRefresh')
       this.loading = true
+      // this.saveConsignerInfo()
     },
     async onItemClick(item) {
       console.log(item.data)
