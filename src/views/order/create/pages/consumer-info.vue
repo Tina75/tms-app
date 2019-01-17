@@ -118,6 +118,7 @@ export default {
     saleChangeHandler (value, index, text) { this.form.salesmanName = text },
     ensure () {
       this.SET_CONSUMER_INFO(Object.assign({}, this.form))
+      this.$formWillLeave()
       this.$router.back()
     }
   },

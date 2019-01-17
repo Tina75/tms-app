@@ -6,7 +6,7 @@
       :loader="loadOftenList"
       :has-next="oftenList.hasNext"
     >
-      <ul class="order-list">
+      <ul class="order-list" v-if="oftenList.list.length">
         <li
           v-for="(item, index) in oftenList.list"
           :key="index" class="order-list-item"
@@ -20,7 +20,7 @@
               <span>{{ item.endName || item.consigneeAddress }}</span>
             </p>
             <ul class="order-body-info">
-              <li class="order-body-info-item">猪饲料</li>
+              <li class="order-body-info-item">{{ item.cargoNames }}</li>
               <li v-if="item.weight" class="order-body-info-item">{{ item.weight }}吨</li>
               <li v-if="item.volume" class="order-body-info-item">{{ item.volume }}方</li>
               <li v-if="item.quantity" class="order-body-info-item">{{ item.quantity }}件</li>

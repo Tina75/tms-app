@@ -47,7 +47,7 @@
             :class="inputClickClass"
             :style="(inputValue !== undefined && inputValue !== '') ? 'line-height: 1.5; color: #666666' : 'color: #C5C8CE'"
             @click="inputClickHandler">
-            {{ inputValue || inputPlaceHolder }}
+            {{ inputValue !== undefined && inputValue !== '' ? inputValue : inputPlaceHolder }}
           </div>
 
           <!-- 开关按钮 type = switch -->

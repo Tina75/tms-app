@@ -15,7 +15,7 @@
             autofocus
             maxlength="20"
             click-icon="icon-ico_custerm"
-            @on-icon-click="selectConsigner" />
+            @on-icon-click="gotoConsignerPage" />
           <form-item
             v-model="orderInfo.consignerContact"
             prop="consignerContact"
@@ -34,13 +34,13 @@
             placeholder="请输入"
             :show-arrow="false"
             type="click"
-            @click.native="editAddress('send')" />
+            @click.native="gotoAddressInfoPage('send')" />
           <form-item
             v-model="orderInfo.consumerInfo"
             label="客户单号及其他"
             type="click"
             ellipsis
-            @click.native="$router.push({ name: 'order-consumer-info' })" />
+            @click.native="gotoConsumerInfoPage" />
         </div>
 
         <div class="form-section">
@@ -53,7 +53,7 @@
             label="收货人"
             maxlength="15"
             click-icon="icon-ico_custerm"
-            @on-icon-click="selectConsignee" />
+            @on-icon-click="gotoConsigneePage" />
           <form-item
             v-model="orderInfo.consigneePhone"
             prop="consigneePhone"
@@ -67,7 +67,7 @@
             placeholder="请输入"
             :show-arrow="false"
             type="click"
-            @click.native="editAddress('arrive')" />
+            @click.native="gotoAddressInfoPage('arrive')" />
           <form-item
             v-model="orderInfo.consigneeCompanyName"
             label="收货人单位"
@@ -83,7 +83,7 @@
             type="click"
             placeholder="请输入"
             ellipsis
-            @click.native="$router.push({ name: 'order-cargo-info' })" />
+            @click.native="gotoCargoInfoPage" />
         </div>
 
         <div class="form-section">
@@ -118,7 +118,7 @@
             type="number"
             label="运输费用(元)"
             click-icon="icon-ico_rule"
-            @on-icon-click="selectChargeRule" />
+            @on-icon-click="gotoChargeRulePage" />
         </div>
 
         <div class="form-section">
@@ -128,14 +128,14 @@
             :label-image="IMAGES.MONEY"
             ellipsis
             type="click"
-            @click.native="$router.push({ name: 'order-fee-info' })" />
+            @click.native="gotoFeeInfoPage" />
           <form-item
             v-model="orderInfo.otherInfo"
             label="其他信息"
             :label-image="IMAGES.OTHER"
             ellipsis
             type="click"
-            @click.native="$router.push({ name: 'order-other-info' })" />
+            @click.native="gotoOtherInfoPage" />
         </div>
       </form-group>
     </cube-scroll>
@@ -205,7 +205,6 @@ export default {
       set: function (val) { this.SET_ORDER_INFO(val) }
     },
     ...mapGetters('order/create', [
-
       'consumerInfo', // 客户单号及其他
       'orderCargoList', // 货物信息
       'feeInfo', // 费用信息
@@ -227,6 +226,73 @@ export default {
       'CLEAR_CALCULATED_AMOUNT'
     ]),
     ...mapActions('order/create', [ 'getOpetator', 'createOrder' ]),
+
+    // 进入客户单号及其他信息
+    gotoConsumerInfoPage () {
+      this.$formWillLeave()
+      this.$router.push({ name: 'order-consumer-info' })
+    },
+    // 进入其他信息页面
+    gotoOtherInfoPage () {
+      this.$formWillLeave()
+      this.$router.push({ name: 'order-other-info' })
+    },
+    gotoFeeInfoPage () {
+      this.$formWillLeave()
+      this.$router.push({ name: 'order-fee-info' })
+    },
+    // 进入货物信息页面
+    gotoCargoInfoPage () {
+      this.$formWillLeave()
+      this.$router.push({ name: 'order-cargo-info' })
+    },
+    // 进入编辑地址页面
+    gotoAddressInfoPage (type) {
+      this.SET_ADDRESS_TYPE(type)
+      this.$formWillLeave()
+      this.$router.push({ name: 'order-edit-address' })
+    },
+    // 进入发货人列表
+    gotoConsignerPage () {
+      this.$formWillLeave()
+      this.$router.push({ name: 'select-shipper' })
+    },
+    // 进入收货人列表
+    gotoConsigneePage () {
+      this.$formWillLeave()
+      this.$router.push({ name: 'order-select-consignee' })
+    },
+    // 进入计费规则列表
+    gotoChargeRulePage () {
+      // if (!this.saveConsigner.id) {
+      //   window.toast('请通过通讯录选择发货方')
+      //   return
+      // }
+      const order = this.orderInfo
+      let query = { partnerType: 1, partnerId: this.saveConsigner.id }
+      query.departure = String(order.start)
+      query.destination = String(order.end)
+      query.distance = NP.times((order.mileage || 0), 1000)
+      const { weight, volume, cargoInfos } = this.orderCargoList.reduce((last, item) => {
+        return {
+          weight: NP.plus(last.weight, item.weightKg || 0),
+          volume: NP.plus(last.volume, item.volume || 0),
+          cargoInfos: last.cargoInfos.concat({ key: item.cargoName, value: Number(item.quantity) })
+        }
+      }, {
+        weight: 0,
+        volume: 0,
+        cargoInfos: []
+      })
+      query.weight = weight
+      query.volume = volume
+      query.cargoInfos = cargoInfos
+      this.$formWillLeave()
+      this.$router.push({
+        name: 'order-charge-rule',
+        query
+      })
+    },
 
     // 设置选择后的发货人信息
     async setConsigner () {
@@ -260,10 +326,6 @@ export default {
         }
       }
     },
-    // 进入发货人列表
-    selectConsigner () {
-      this.$router.push({ name: 'select-shipper' })
-    },
     // 设置选择后的收货人信息
     setConsignee () {
       if (!this.consigneeInfo) return
@@ -279,45 +341,6 @@ export default {
       info.consigneeAddressLatitude = consignee.latitude || ''
       info.consigneeAddressText = info.consigneeAddress + info.consignerHourseNumber
       this.SET_CONSIGNEE_INFO(null)
-    },
-    // 进入收货人列表
-    selectConsignee () {
-      this.$router.push({ name: 'order-select-consignee' })
-    },
-    // 进入计费规则列表
-    selectChargeRule () {
-      // if (!this.saveConsigner.id) {
-      //   window.toast('请通过通讯录选择发货方')
-      //   return
-      // }
-      const order = this.orderInfo
-      let query = { partnerType: 1, partnerId: this.saveConsigner.id }
-      query.departure = String(order.start)
-      query.destination = String(order.end)
-      query.distance = NP.times((order.mileage || 0), 1000)
-      const { weight, volume, cargoInfos } = this.orderCargoList.reduce((last, item) => {
-        return {
-          weight: NP.plus(last.weight, item.weightKg || 0),
-          volume: NP.plus(last.volume, item.volume || 0),
-          cargoInfos: last.cargoInfos.concat({ key: item.cargoName, value: Number(item.quantity) })
-        }
-      }, {
-        weight: 0,
-        volume: 0,
-        cargoInfos: []
-      })
-      query.weight = weight
-      query.volume = volume
-      query.cargoInfos = cargoInfos
-      this.$router.push({
-        name: 'order-charge-rule',
-        query
-      })
-    },
-    // 进入编辑地址页面
-    editAddress (type) {
-      this.SET_ADDRESS_TYPE(type)
-      this.$router.push({ name: 'order-edit-address' })
     },
     // 联系电话格式化
     consignerPhoneInputHandler (phone) {
@@ -349,6 +372,7 @@ export default {
         this.orderInfo[field] = phoneArr.join(' ')
       })
     },
+
     // 二级页面信息回显
     showConsumerInfo () {
       let infos = []
@@ -389,6 +413,7 @@ export default {
       this.orderInfo.freightFee = this.calculatedAmount || ''
       this.CLEAR_CALCULATED_AMOUNT()
     },
+    
     // 获取订单聚合信息
     getOrderInfo () {
       const data = Object.assign(
@@ -419,8 +444,6 @@ export default {
 
     // 保存订单
     async saveOrder () {
-      this.$refs.$form.reset()
-      return
       if (this.loading) return
       if (!(await this.$refs.$form.validate())) {
         window.toast('请填写必填信息')
