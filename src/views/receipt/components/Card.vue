@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     handleClick (type) {
-      this.$emit('card-action', type, this.data.id)
+      this.$emit('card-action', type, this.data)
     }
   }
 }

@@ -1,17 +1,17 @@
 <template>
   <detail-panel :title="'基本信息'">
     <detail-panel-item :label="'客户名称'">
-      <p>南京可口可乐有限公司</p>
+      <p>{{ detail.consignerName }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'客户订单号'">
       <p class="remix-content">
-        <span class="border-right-1px">12334456789</span>
+        <span class="border-right-1px">{{ detail.customerOrderNo || '-' }}</span>
         <a>复制</a>
       </p>
     </detail-panel-item>
     <detail-panel-item :label="'客户运单号'">
       <p class="remix-content">
-        <span class="border-right-1px">12334456789</span>
+        <span class="border-right-1px">{{ detail.customerWaybillNo || '-' }}</span>
         <a>复制</a>
       </p>
     </detail-panel-item>
@@ -22,53 +22,41 @@
       <p>黑龙江哈尔滨市南岗区</p>
     </detail-panel-item> -->
     <detail-panel-item :label="'发货时间'">
-      <p>2018-12-30 12:00</p>
+      <p>{{ detail.deliveryTime | datetimeFormat }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'到货时间'">
-      <p>2018-12-31 12:00</p>
+      <p>{{ detail.arriveTime | datetimeFormat }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'提货方式'">
       <p>大车直送客户</p>
     </detail-panel-item>
     <detail-panel-item :label="'回单数量'">
-      <p>1份</p>
+      <p>{{ detail.receiptCount }}份</p>
     </detail-panel-item>
     <detail-panel-item :label="'代收货款'">
-      <p>300元</p>
+      <p>{{ detail.collectionMoney | moneyFormat }}元</p>
     </detail-panel-item>
     <detail-panel-item :label="'责任业务员'">
-      <p>张三</p>
+      <p>{{ detail.salesmanName }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'是否开票'">
       <p>是(5%)</p>
     </detail-panel-item>
     <detail-panel-item :label="'备注'">
-      <p class="remark">好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟好嗨哟</p>
+      <p class="remark">{{ detail.remark }}</p>
     </detail-panel-item>
   </detail-panel>
 </template>
 
 <script>
-// import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
 
 export default {
   name: 'pickupInfo',
   components: { detailPanel, detailPanelItem },
-  computed: {
-    // ...mapGetters(['BePickingData']),
-    options () {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
-  },
-  methods: {
-    // ...mapActions(['getBePicking']),
-  }
+  computed: mapGetters('order/often', [ 'detail' ])
 }
 </script>
 <style scoped lang="stylus">

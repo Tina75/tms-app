@@ -73,9 +73,10 @@ export const getDistance = (startPoint, endPoint) => {
     const end = new window.BMap.Point(endPoint.lng, endPoint.lat)
     const route = new window.BMap.DrivingRoute(start, {
       policy: window.BMAP_DRIVING_POLICY_LEAST_DISTANCE, // 距离最短路线
-      onSearchComplete: res => {
+      onSearchComplete: (res) => {
         const plan = res.getPlan(0)
-        if (plan) { // 如果线路存在则获取距离
+        if (plan) {
+          // 如果线路存在则获取距离
           distance = plan.getDistance(false)
         }
         resolve(distance)
@@ -83,4 +84,16 @@ export const getDistance = (startPoint, endPoint) => {
     })
     route.search(start, end)
   })
+}
+
+// 懒注册
+let getClientWidth = () => {
+  let clientWidth = document.documentElement.clientWidth
+  window.addEventListener('resize', () => (clientWidth = document.documentElement.clientWidth))
+  getClientWidth = () => clientWidth
+  return clientWidth
+}
+// 转化一些js控制的值, 按照iphone6的宽度自适应比例
+export const flexValue = (num) => {
+  return (num * getClientWidth()) / 375
 }

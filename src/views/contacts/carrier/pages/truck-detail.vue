@@ -1,70 +1,112 @@
 <template>
-  <div class="carrier-detail cube-has-bottom-btn">
-    <div class="carrier-detail__header">
+  <div class="truck-detail">
+    <div class="truck-detail_info cube-mb-15">
       <div class="avatar">
         <IconFont
-          name="icon-ico_send"
+          name="icon-ico_truck1"
           :size="40"
           class="avatar_icon"
         />
       </div>
       <div class="truck">
-        <span class="cube-font-18" v-text="viewData.name"/>
-        <div class="cube-font-14">
-          <span class="cube-mr-10" v-text="viewData.contact"/>
-          <span v-text="viewData.phone"/>
-        </div>
+        <h2>{{truckDetail.driverName}} <span>{{truckDetail.carNO}}</span></h2>
+        <p>{{truckDetail.driverPhone}}</p>
       </div>
     </div>
-    <div v-if="infoList.length" class="carrier-detail__info border-bottom-1px">
+    <div v-if="infoList.length" class="truck-detail__info">
       <div
         v-for="(item, i) in infoList"
         :key="i"
-        class="carrier-detail__info-item border-right-1px"
+        class="truck-detail__info-item"
+        :class="{'border-bottom-1px': i <= 3, 'border-left-1px': i !== 0 && i !== 4}"
       >
-        <span class="cube-font-15 cube-c-black" v-text="item.value"/>
-        <span class="cube-font-14 cube-c-light-grey" v-text="item.text"/>
+        <div class="cube-font-15 cube-c-black cube-font-weight--m" v-text="item.value"/>
+        <div class="cube-font-14 cube-c-light-grey cube-mt-10" v-text="item.text"/>
       </div>
     </div>
-    <div v-if="viewData.remark" class="carrier-detail__remark cube-font-15">
-      <div class="cube-c-black cube-mb-15" v-text="'备注'"/>
-      <p class="cube-c-grey" v-text="viewData.remark"/>
+    <div v-if="regularLine.length" class="truck-detail_line cube-mt-15">
+      <div class="routes">
+        <h2 class="cube-c-grey-dark cube-font-16">常跑路线</h2>
+        <div class="cube-c-grey cube-pl-15 cube-pr-15 cube-font-15">
+          <p v-for="(item, index) in regularLine" :key="index" class="cube-mb-15">
+            <span>{{item.en}}</span>
+            <IconFont name="icon-line" color="#9DA1B0" class="route-line cube-ml-20 cube-mr-20"/>
+            <span>{{item.sn}}</span>
+          </p>
+        </div>
+      </div>
+      <div v-if="photoList.length" class="identImg border-top-1px">
+        <h2 class="cube-c-grey-dark cube-font-16">证件照片</h2>
+        <div class="imgs">
+          <img v-for="(item, index) in photoList" :key="index" :src="item" alt="">
+        </div>
+      </div>
+      <div v-if="viewData.remark" class="remark border-top-1px">
+        <h2 class="cube-c-grey-dark cube-font-16">备注</h2>
+        <div class="cube-pa-15 cube-font-15 cube-c-grey">
+          {{viewData.remark}}
+        </div>
+      </div>
     </div>
-
-    <cube-button class="cube-bottom-button" :primary="true" @click="phoneCall">
-      <i class="iconfont icon-ico_call"/>
-      拨打电话
+    <!-- <cube-button
+      :primary="true"
+      @click="goAdd">
+      新增
     </cube-button>
+    <cube-button
+      :primary="true"
+      @click="goEdit">
+      修改
+    </cube-button> -->
+    <div class="truck-detail_call">
+      <cube-button
+        :primary="true"
+        @click="callPhone">
+        <span class="phone">
+          <IconFont
+            name="icon-ico_call"
+            size="24"
+          />
+        </span>
+        <span>拨打电话</span>
+      </cube-button>
+    </div>
   </div>
 </template>
-
 <script>
-import CellItem from '../../components/CellItem.vue'
 import IconFont from '@/components/Iconfont'
-
-import { mapState, mapGetters } from 'vuex'
-import { ContactDetail } from '../modules/model'
-const moudleName = 'contacts/carrier'
+import { mapGetters, mapActions } from 'vuex'
+import { TruckDetail } from '../modules/model.js'
+// import { setAppTitleBtn } from '@/libs/bridgeUtil'
 const ListConfig = [
-  { text: '结算方式', key: 'payType' },
-  { text: '提货方式', key: 'pickUp' },
-  { text: '开票税率', key: 'invoiceRate' },
-  { text: '业务员', key: 'operatorName' }
+  { text: '载重', key: 'shippingWeight' },
+  { text: '净空', key: 'shippingVolume' },
+  { text: '车型', key: 'carType' },
+  { text: '车长', key: 'carLength' },
+  { text: '品牌', key: 'carBrand' },
+  { text: '结算方式', key: 'payType' }
 ]
+const moudleName = 'contacts/carrier'
 export default {
-  name: 'ContactsShipperDetail',
+  name: 'TruckDetail',
   metaInfo: {
     title: ''
   },
-  components: { CellItem },
-  data() {
-    return {}
-  },
+  components: { IconFont },
   computed: {
-    ...mapState(moudleName, ['contactList', 'operator']),
-    ...mapGetters(moudleName, ['contactDetail']),
+    ...mapGetters(moudleName, ['truckDetail']),
     viewData() {
-      return ContactDetail.toView(this.contactDetail, this.operator)
+      return TruckDetail.toView(this.truckDetail)
+    },
+    photoList () {
+      const detail = this.viewData
+      if (detail) {
+        const arr = []
+        detail.drivePhoto && arr.push(detail.drivePhoto)
+        detail.travelPhoto && arr.push(detail.travelPhoto)
+        return arr
+      }
+      return []
     },
     infoList() {
       const detail = this.viewData
@@ -82,53 +124,149 @@ export default {
         }, [])
       }
       return []
+    },
+    regularLine () {
+      const detail = this.viewData
+      if (detail && detail.regularLine) {
+        return JSON.parse(this.viewData.regularLine)
+      }
+      return []
     }
   },
   methods: {
-    phoneCall() {
-      window.location.href = `tel:${this.viewData.phone}`
+    ...mapActions(moudleName, ['loadTruckDetail']),
+    onPageRefresh() {
+      const carId = this.$route.query.carId
+      this.loadTruckDetail(carId)
+    },
+    callPhone () {
+      window.location.href = `tel: ${this.truckDetail.driverPhone}`
+    },
+    goAdd () {
+      this.$router.push({
+        name: 'contacts-carrier-truck-modify',
+        query: {
+          carrierId: this.truckDetail.carrierId
+        }
+      })
+    },
+    goEdit () {
+      this.$router.push({
+        name: 'contacts-carrier-truck-modify',
+        query: {
+          carrierId: this.truckDetail.carrierId,
+          carId: this.truckDetail.id
+        }
+      })
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+    })
   }
 }
 </script>
-
-<style lang='stylus' >
-.carrier-detail
-  .cell-item
-    background #fff
-  &__header
+<style lang="stylus" scoped>
+.truck-detail
+  height 100%
+  padding-bottom 44px
+  box-sizing border-box
+  overflow-y auto
+  &_info
+    width 100%
+    height 110px
+    padding 20px 16px
+    box-sizing border-box
+    background-color #ffffff
     display flex
-    align-items center
-    background #3A424B
     .avatar
       width 70px
       height 70px
-      margin 0 10px 0 16px
-      background-color rgba(0,0,0,0.2238)
+      background-color #E4E7EC
       text-align center
       line-height 70px
       border-radius 50%
+      &_icon
+        background: #FFFFFF
+        -webkit-background-clip: text
+        color: transparent
     .truck
-      flex 1
-      display flex
-      flex-direction column
-      justify-content space-between
-      padding 20px 15px
-      height 90px
-      color #fff
-  &__remark
-    padding 16px 15px
-    min-height 100px
-    background #fff
+      padding 10px 0px
+      margin-left 9px
+      color #333333
+      span
+        display inline-block
+        margin-left 10px
+        background-color #FCA950
+        padding 0px 5px
+        font-size 12px
+        color  #FFFFFF
+      h2
+        font-size 18px
+        font-weight 500
+        line-height 18px
+      p
+        font-size 14px
+        line-height 14px
+        margin-top 15px
+        color #666666
   &__info
-    height 86px
-    padding 23px 0 13px
+    padding 10px 15px 0px 15px
+    // height 160px
+    // box-sizing border-box
     display flex
     background #fff
+    flex-wrap wrap
+    line-height 18px
+    >>>.border-left-1px:before
+      height 190%
+      top 13px
     &-item
-      flex 1
-      display flex
-      flex-direction column
-      align-items center
-      justify-content space-around
+      width 85px
+      padding 13px 0px
+      text-align center
+  &_line
+    background-color #ffffff
+    padding 15px 0
+    .routes
+      line-height 16px
+      h2
+        font-weight 500
+        padding 15px 15px
+      .route-line
+        vertical-align top
+        font-weight 100
+    .identImg
+      h2
+        font-weight 500
+        padding 24px 15px 0px 15px
+      .imgs
+        display flex
+        justify-content space-between
+        padding 15px
+        img
+          width 160px
+          height 90px
+          vertical-align middle
+    .remark
+      h2
+        font-weight 500
+        padding 24px 15px 0px 15px
+      div
+        line-height 24px
+  &_call
+    width 100%
+    position fixed
+    bottom 0px
+    .cube-btn
+      font-weight 500
+      font-size 17px
+      border-radius 0
+      height 44px
+      padding 10px 0px
+      line-height 24px
+      .phone
+        margin-right 5px
+        position relative
+        top -2px
 </style>
