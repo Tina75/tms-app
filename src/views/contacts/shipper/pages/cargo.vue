@@ -16,7 +16,7 @@
         <div
           slot="right"
           class="contacts-shipper-cargo__item border-left-1px cube-font-14 cube-c-light-grey"
-          @click="modify(i)"
+          @click="modify(item)"
           v-text="'修改'"
         />
       </ListItem>
@@ -57,8 +57,12 @@ export default {
     onPageRefresh() {
       this.loading = true
     },
-    modify(i) {
-      this.$router.push({ name: 'contacts-shipper-cargo-modify', query: { consignerId: this.$route.query.consignerId, index: i } })
+    modify(item) {
+      const query = {
+        consignerId: this.$route.query.consignerId,
+        id: item ? item.id : undefined
+      }
+      this.$router.push({ name: 'contacts-shipper-cargo-modify', query })
     }
   }
 }
