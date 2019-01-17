@@ -97,14 +97,14 @@ export default {
       })
     },
     async uploadOSS (baseData) {
-      // window.loadingStart()
+      window.loading()
       const img = await uploadOSS(baseData)
       if (img) {
         this.uploadPhotos.push({ url: img, title: '' })
       } else {
         window.toast('图片上传失败')
       }
-      // window.loadingEnd()
+      window.loading(false)
     },
     deletePic (i) {
       this.uploadPhotos.splice(i, 1)

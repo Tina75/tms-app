@@ -424,18 +424,16 @@ export default {
         }
       })
     },
-    phoneTrim (phoneNumber) {
-      return phoneNumber.replace(/\s/g, '')
-    },
     async uploadOSS (baseData) {
-      window.loadingStart()
       const img = await uploadOSS(baseData)
       if (img) {
-        this.uploadPhotos.push(img)
+        this.companyInfo.logoUrl = img
       } else {
         window.toast('图片上传失败')
       }
-      window.loadingEnd()
+    },
+    phoneTrim (phoneNumber) {
+      return phoneNumber.replace(/\s/g, '')
     },
     isEntryPicTitle (picList) {
       let flag = true
