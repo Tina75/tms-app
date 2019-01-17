@@ -23,42 +23,40 @@ export class ContactDetail {
   // 转化函数
   // 后端接口 => 展示
   static toView(server, operators = []) {
-    server = {
-      ...server,
-      isInvoice: !!server.isInvoice,
-      invoiceRate: !!server.isInvoice ? +server.invoiceRate * 100 + '%' : ''
-    }
-    if (server.salesmanId) {
-      server.salesmanId = +server.salesmanId
-      const operator = operators.find((item) => +item.id === server.salesmanId)
-      server.operatorName = operator ? operator.name : ''
+    const view = fillEmpty(server)
+    view.isInvoice = !!view.isInvoice
+    view.invoiceRate = !!view.isInvoice ? +view.invoiceRate * 100 + '%' : ''
+    if (view.salesmanId) {
+      view.salesmanId = +view.salesmanId
+      const operator = operators.find((item) => +item.id === view.salesmanId)
+      view.operatorName = operator ? operator.name : ''
     }
     ;['pickUp', 'payType', 'exploiteChannel'].forEach((key) => {
-      const value = +server[key]
+      const value = +view[key]
       const options = ContactDetail[key]
       const option = options.find((item) => item.value === value)
-      server[key] = option ? option.text : ''
+      view[key] = option ? option.text : ''
     })
-    return server
+    return view
   }
   // 后端接口 => from表单格式
   static toForm(server) {
-    server = { ...server }
+    const form = fillEmpty(server)
     // cube-switch 需要boolean类型 防止报错
-    server.isInvoice = !!server.isInvoice
+    form.isInvoice = !!form.isInvoice
     // 后端是0.xx 前端显示xx%
-    server.invoiceRate = +server.invoiceRate * 100
-    server.salesmanId = server.salesmanId || ''
-    return server
+    form.invoiceRate = +form.invoiceRate * 100
+    form.salesmanId = form.salesmanId || ''
+    return form
   }
 
   // 表单格式 => 后端所需
   static toServer(form) {
-    form = { ...form }
-    form.isInvoice = form.isInvoice ? 1 : 0
+    const server = filterEmpty(form)
+    server.isInvoice = server.isInvoice ? 1 : 0
     // 后端最大值是1....
-    form.invoiceRate = form.isInvoice ? +form.invoiceRate / 100 : 0
-    return form
+    server.invoiceRate = server.isInvoice ? +server.invoiceRate / 100 : 0
+    return server
   }
 }
 
@@ -83,26 +81,46 @@ export class CargoDetail {
 
   static toForm(server) {
     if (server && server.id) {
-      return {
-        ...server,
-        dimension: {
-          // immutability
-          ...server.dimension
-        },
-        cargoCost: server.cargoCost / 100 // 后端是分,前端是元
-      }
+      const form = fillEmpty(server)
+      form.dimension = fillEmpty(server.dimension || { length: 0, width: 0, height: 0 })
+      form.cargoCost = server.cargoCost / 100 || 0
+      return form
     }
     return new CargoDetail()
   }
 
   static toServer(form = {}) {
-    return {
-      ...form,
-      dimension: {
-        // immutability
-        ...form.dimension
-      },
-      cargoCost: form.cargoCost * 100 // 后端是分,前端是元
+    const server = filterEmpty(form)
+    if (server.cargoCost) {
+      server.cargoCost = form.cargoCost * 100 // 后端是分,前端是元
+    }
+    const dimension = server.dimension
+    if (dimension && dimension.height && dimension.width && dimension.width) {
+      server.dimension = {
+        ...dimension
+      }
+    } else {
+      delete server.dimension
+    }
+
+    return filterEmpty(server)
+  }
+}
+
+function fillEmpty(obj) {
+  const data = {}
+  for (let [key, value] of Object.entries(obj)) {
+    data[key] = (value !== 0 || value !== false) && !value ? '' : value
+  }
+  return data
+}
+
+function filterEmpty(obj) {
+  const data = {}
+  for (let [key, value] of Object.entries(obj)) {
+    if (value) {
+      data[key] = value
     }
   }
+  return data
 }

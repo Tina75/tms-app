@@ -5,7 +5,6 @@
         ref="scroll"
         :data="dispatchingData.list"
         :options="options"
-        @pulling-down="onPullingDown"
         @pulling-up="onPullingUp">
         <ul class="order-wrapper">
           <li
@@ -13,20 +12,24 @@
             :key="index"
             class="order-item">
             <div class="item-header border-bottom-1px">
-              <span class="check-icon checked">
+              <span :class="{'checked': chosenList.indexOf(item.id) >= 0}" class="check-icon" @click="chooseCurrentSwitch(item.id)">
                 <icon-font
+                  v-if="chosenList.indexOf(item.id) >= 0"
                   name="icon-xuanzhong"
                   :size="20"
                   color="#00A4BD"/>
               </span>
-              <span>{{item.createTime}}</span>
+              <span>{{item.createTime|datetimeFormat}}</span>
               <i v-if="item.collectionMoney" class="order-tip">代</i>
             </div>
             <div class="item-content border-bottom-1px">
               <p class="order-route">
-                <span>{{item.start}}</span>
-                <i/>
-                <span>{{item.end}}</span>
+                <span>{{item.startName}}</span>
+                <icon-font
+                  name="icon-line"
+                  :size="20"
+                  color="#333333"/>
+                <span>{{item.endName}}</span>
               </p>
               <p class="order-stat">
                 <span v-if="item.weight">{{item.weight}}吨</span>
@@ -36,13 +39,13 @@
               <p class="order-custom">
                 {{item.consignerName}}
               </p>
-              <p class="order-custom">
+              <p v-if="item.customerOrderNo" class="order-custom">
                 客户单号：{{item.customerOrderNo}}
               </p>
             </div>
             <div class="item-footer">
               <div class="order-cost">
-                <p class="cost-label">应收费用（{{item.settlementType}}）</p>
+                <p class="cost-label">应收费用（{{settlementTypeMap[item.settlementType]}}）</p>
                 <p class="cost-money">{{item.totalFee}}<span>/元</span></p>
               </div>
             </div>
@@ -51,10 +54,11 @@
       </cube-scroll>
     </div>
     <div class="select-block">
-      <div class="select-stat">
+      <div class="select-stat border-top-1px">
         <p class="select-all">
-          <span class="check-icon checked">
+          <span :class="{'checked': chosenAll}" class="check-icon" @click="chooseAllSwitch">
             <icon-font
+              v-if="chosenAll"
               name="icon-xuanzhong"
               :size="20"
               color="#00A4BD"/>
@@ -64,12 +68,12 @@
         </p>
         <p class="total-stat">
           <span class="text">合计</span>
-          <span class="label"><i>{{totelWeight}}</i>吨</span>
-          <span class="label"><i>{{totalVolumn}}</i>方</span>
-          <span class="label"><i>{{totalQuanity}}</i>件</span>
+          <span class="label"><i>{{chosenStat.weight}}</i>吨</span>
+          <span class="label"><i>{{chosenStat.volume}}</i>方</span>
+          <span class="label"><i>{{chosenStat.quantity}}</i>件</span>
         </p>
       </div>
-      <div class="confirm-btn">确认</div>
+      <div class="confirm-btn" @click="batchDispatch">确认</div>
     </div>
   </div>
 </template>
@@ -77,44 +81,94 @@
 <script>
 import IconFont from '@/components/Iconfont'
 import { mapGetters, mapActions } from 'vuex'
+import NP from 'number-precision'
 
 export default {
   name: 'DispatchingList',
   components: { IconFont },
   data () {
     return {
+      chosenAll: false,
       chosenList: [],
-      totelWeight: 10,
-      totalVolumn: 10,
-      totalQuanity: 10
+      chosenStat: {
+        weight: 0,
+        volume: 0,
+        quantity: 0
+      }
     }
   },
   computed: {
-    ...mapGetters(['dispatchingData']),
+    ...mapGetters('pickup', ['dispatchingData', 'settlementTypeMap']),
     options () {
       return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
+        pullUpLoad: this.dispatchingData.next,
         scrollbar: true
       }
     }
   },
   methods: {
-    ...mapActions(['getDispatching']),
-    /** 下拉刷新 */
-    async onPullingDown () {
-      this.getDispatching()
-    },
+    ...mapActions('pickup', ['setPageStart', 'getDispatching', 'createPickup']),
     /** 上拉加载 */
     async onPullingUp () {
-      this.getDispatching()
+      await this.getDispatching()
+      if (this.chosenAll) {
+        this.chosenList = this.dispatchingData.list.map(item => item.id)
+      }
+      this.setStat()
     },
-    clickHandler () {},
-    changeHandler () {}
+    chooseAllSwitch () {
+      if (this.chosenAll) {
+        this.chosenList = []
+      } else {
+        this.chosenList = this.dispatchingData.list.map(item => item.id)
+      }
+      this.chosenAll = !this.chosenAll
+      this.setStat()
+    },
+    chooseCurrentSwitch (id) {
+      let index = this.chosenList.indexOf(id)
+      if (index >= 0) {
+        this.chosenList.splice(index, 1)
+      } else {
+        this.chosenList.push(id)
+      }
+      this.setStat()
+    },
+    setStat () {
+      let weight = 0
+      let volume = 0
+      let quantity = 0
+      this.dispatchingData.list.forEach(item => {
+        if (this.chosenList.indexOf(item.id) >= 0) {
+          weight = NP.plus(weight, item.weight)
+          volume = NP.plus(volume, item.volume)
+          quantity = NP.plus(quantity, item.quantity)
+        }
+      })
+      this.chosenStat = {
+        weight: weight,
+        volume: volume,
+        quantity: quantity
+      }
+    },
+    async batchDispatch () {
+      await this.createPickup(this.chosenList)
+      await this.setPageStart('dispatchingData')
+      await this.getDispatching()
+      this.$router.back()
+    }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      // vm.getDispatching()
+      vm.chosenStat = {
+        weight: 0,
+        volume: 0,
+        quantity: 0
+      }
+      vm.chosenList = []
+      if (!vm.dispatchingData.list.length) {
+        vm.getDispatching()
+      }
     })
   }
 }
@@ -172,6 +226,8 @@ export default {
             font-size: 18px;
             color: #333333;
             font-weight: bold
+          .icon-line
+            margin: -5px 5px 0;
         .order-stat
           margin-bottom: 10px;
           span
@@ -226,10 +282,9 @@ export default {
               border-color: #999999;
   .select-block
     .select-stat
-      height: 44px
+      height: 88px
       background-color: #fff;
       padding-left: 15px;
-      display: flex
       p
         display: block
         vertical-align: middle

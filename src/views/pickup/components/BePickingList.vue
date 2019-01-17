@@ -12,7 +12,7 @@
         class="order-item">
         <div class="item-header border-bottom-1px">
           <span>{{item.createTime|datetimeFormat}}</span>
-          <i v-if="item.collectionMoney">1</i>
+          <i v-if="item.abnormalLabel === 2">异</i>
         </div>
         <div class="item-content border-bottom-1px">
           <p class="order-route">
@@ -23,22 +23,27 @@
             <span v-if="item.volume">{{item.volume}}方</span>
             <span v-if="item.quantity">{{item.quantity}}件</span>
           </p>
-          <p v-if="item.assignCarType === 1" class="order-custom">
-            {{item.carrierName}}
-          </p>
-          <p class="order-custom">
-            <i class="assign-type">{{item.assignCarType === 2 ? '自送' : '外转'}}</i>
-            <span>{{item.driverName}}</span>
-            <span>{{item.carNo}}</span>
-          </p>
+          <template v-if="assignStatus(item)">
+            <p v-if="item.assignCarType === 1" class="order-custom">
+              {{item.carrierName}}
+            </p>
+            <p class="order-custom">
+              <i class="assign-type">{{item.assignCarType === 2 ? '自送' : '外转'}}</i>
+              <span>{{item.driverName}}</span>
+              <span>{{item.carNo}}</span>
+            </p>
+          </template>
         </div>
         <div class="item-footer">
           <div class="order-cost">
-            <p class="cost-label">应收费用（{{settlementTypeMap[item.settlementType]}}）</p>
-            <p class="cost-money">{{item.totalFee}}<span>/元</span></p>
+            <template v-if="assignStatus(item)">
+              <p class="cost-label">应收费用（{{settlementTypeMap[item.settlementType]}}）</p>
+              <p class="cost-money">{{item.totalFee}}<span>/元</span></p>
+            </template>
           </div>
           <div class="order-btns">
-            <a>调度</a>
+            <a v-if="assignStatus(item)">提货</a>
+            <a v-else @click="assign(item)">派车</a>
           </div>
         </div>
       </li>
@@ -52,7 +57,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'BePickingList',
   computed: {
-    ...mapGetters(['bePickingData', 'settlementTypeMap']),
+    ...mapGetters('pickup', ['bePickingData', 'settlementTypeMap']),
     options () {
       return {
         pullDownRefresh: {
@@ -67,15 +72,26 @@ export default {
     this.getBePicking()
   },
   methods: {
-    ...mapActions(['setPageStart', 'getBePicking']),
+    ...mapActions('pickup', ['setPageStart', 'getBePicking']),
     /** 下拉刷新 */
     async onPullingDown () {
-      this.setPageStart('bePickingData')
-      this.getBePicking()
+      await this.setPageStart('bePickingData')
+      await this.getBePicking()
     },
     /** 上拉加载 */
     async onPullingUp () {
       this.getBePicking()
+    },
+    assignStatus (item) {
+      return (item.assignCarType === 1 && item.carrierName) || (item.assignCarType === 2 && item.carNo)
+    },
+    assign (item) {
+      this.$router.push({
+        name: 'pickup-assign',
+        params: {
+          id: item.pickUpId
+        }
+      })
     }
   }
 }

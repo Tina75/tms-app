@@ -54,10 +54,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['tabCount'])
+    ...mapGetters('pickup', ['tabCount'])
   },
   methods: {
-    ...mapActions(['getPickupCount'])
+    ...mapActions('pickup', ['getPickupCount'])
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {

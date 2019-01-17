@@ -20,7 +20,6 @@
           v-text="'修改'"
         />
       </ListItem>
-      <cube-button @click="modify()">a</cube-button>
       <template slot="empty">
         <NoData action="新增常发货物" message="老板，您还没有记录常发货物信息 赶快新增一个，用着方便哦～" @btn-click="modify">
           <img

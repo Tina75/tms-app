@@ -80,7 +80,7 @@ const lists = [
     itemParser: (data) => ({
       id: data.id,
       name: data.cargoName,
-      detail: `${data.weight ? data.weight + '吨' : ''}  ${data.volume ? data.volume + '方' : ''}  ${data.unit}`,
+      detail: `${data.weight ? data.weight + '吨' : ''}  ${data.volume ? data.volume + '方' : ''}  ${data.unit || ''}`,
       data
     }),
     url: '/consigner/cargo/list'

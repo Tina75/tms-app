@@ -33,7 +33,7 @@ export default [
     component: () => import(/* webpackChunkName: "pickup" */'./pages/edit.vue')
   },
   {
-    path: '/pickup/assign',
+    path: '/pickup/assign/:id',
     name: 'pickup-assign',
     component: () => import(/* webpackChunkName: "pickup" */'./pages/assign.vue')
   },

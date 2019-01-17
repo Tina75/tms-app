@@ -161,7 +161,7 @@ export default {
         return item
       })
       this.SET_CARGO_LIST(tempCargoList)
-      this.$formWillLeave(true, () => { console.log(111) })
+      this.$formWillLeave()
       this.$router.back()
     },
     // 删除货物
@@ -194,6 +194,7 @@ export default {
     },
     // 选择常发货物
     chooseCargoInfo (index) {
+      this.$formWillLeave()
       this.cargoIndex = index
       this.$router.push({ name: 'order-cargo-often' })
     },
@@ -304,7 +305,6 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.initCargoList()
-      vm.$formWillLeave(false, () => { console.log(222) })
     })
   }
 }
