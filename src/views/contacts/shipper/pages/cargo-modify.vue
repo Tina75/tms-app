@@ -95,7 +95,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(moudleName, ['cargoDetail']),
+    ...mapState(moudleName, ['cargoList']),
     ...mapMutations(moudleName, ['setCargoDetail']),
     viewDimension() {
       const dimension = this.form.dimension
@@ -107,11 +107,11 @@ export default {
       return ''
     },
     isCreate() {
-      return !this.form.id
+      return typeof this.$route.query.id === 'undefined'
     }
   },
   methods: {
-    ...mapActions(moudleName, ['modifyCargo']),
+    ...mapActions(moudleName, ['modifyCargo', 'removeCargo']),
     async submit() {
       this.submiting = true
       const server = CargoDetail.toServer(this.form)
@@ -125,10 +125,22 @@ export default {
       } finally {
         this.submiting = false
       }
+    },
+    setForm() {
+      const list = this.cargoList.list
+      const id = this.$route.query.id
+      let detailData
+      if (id && list && list.length) {
+        let item = list.find(item => +item.id === +id)
+        if (item) {
+          detailData = item.data
+        }
+      }
+      this.form = CargoDetail.toForm(detailData)
     }
   },
   beforeRouteEnter(to, from, next) {
-    next(vm => (vm.form = CargoDetail.toForm(vm.cargoDetail)))
+    next(vm => vm.setForm())
   }
 }
 </script>

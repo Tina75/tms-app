@@ -69,6 +69,9 @@ export default [
     // 编辑发货方常发货
     path: '/contacts/shipper/cargo/modify',
     name: 'contacts-shipper-cargo-modify',
+    meta: {
+      formLeaveConfirm: true
+    },
     component: () => import(/* webpackChunkName: "contacts-shipper" */ './shipper/pages/cargo-modify.vue')
   },
   // -------------收货方------------------
@@ -132,7 +135,7 @@ export default [
     meta: {
       noNeedRefresh: []
     },
-    component: () => import(/* webpackChunkName: "contacts" */ './carrier/pages/truck-create.vue')
+    component: () => import(/* webpackChunkName: "contacts" */ './driver/pages/modify.vue')
   },
   /* 承运商 */
   {
@@ -154,7 +157,7 @@ export default [
   },
   /* 承运商详情 */
   {
-    path: '/contacts/carrier/detail/:id',
+    path: '/contacts/carrier/detail',
     name: 'contacts-carrier-detail',
     meta: {
       noNeedRefresh: []

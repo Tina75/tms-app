@@ -3,9 +3,13 @@
     <div class="header">
       <cube-tab-bar
         v-model="selectedLabel"
-        :data="tabs"
         show-slider
-        class="tab-bar"/>
+        class="tab-bar">
+        <cube-tab v-for="(item, index) in tabs" :key="index" :label="item.label" :value="item.label">
+          <p class="tab-label">{{item.label}}</p>
+          <p class="tab-count">{{statusCnt[item.key]}}</p>
+        </cube-tab>
+      </cube-tab-bar>
     </div>
     <div class="list-bar">
       <cube-tab-panels v-model="selectedLabel">
@@ -25,6 +29,7 @@
 </template>
 <script>
 import CardList from '../components/CardList'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'upstream',
   metaInfo: {
@@ -45,19 +50,19 @@ export default {
         },
         {
           label: '待接收',
-          key: 'wait',
+          key: 'waitAccept',
           acceptStatus: '0',
           data: []
         },
         {
           label: '已接收',
-          key: 'received',
+          key: 'accepted',
           acceptStatus: '1',
           data: []
         },
         {
           label: '已拒绝',
-          key: 'refused',
+          key: 'rejected',
           acceptStatus: '2',
           data: []
         }
@@ -69,7 +74,14 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['statusCnt'])
+  },
+  mounted () {
+    this.getUpstreamStatusCnt()
+  },
   methods: {
+    ...mapActions(['getUpstreamStatusCnt']),
     onPullingDown (ref) {
       this.$refs[ref][0].refresh()
     },

@@ -82,10 +82,11 @@ export class CargoDetail {
   static unitTypes = ['纸箱', '木箱', '铁桶', '纤袋', '麻袋', '木袋']
 
   static toForm(server) {
-    if (server.id) {
+    if (server && server.id) {
       return {
         ...server,
-        dimension: { // immutability
+        dimension: {
+          // immutability
           ...server.dimension
         },
         cargoCost: server.cargoCost / 100 // 后端是分,前端是元
@@ -94,10 +95,11 @@ export class CargoDetail {
     return new CargoDetail()
   }
 
-  static toServer(form) {
+  static toServer(form = {}) {
     return {
       ...form,
-      dimension: { // immutability
+      dimension: {
+        // immutability
         ...form.dimension
       },
       cargoCost: form.cargoCost * 100 // 后端是分,前端是元

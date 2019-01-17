@@ -10,7 +10,7 @@
         <li
           v-for="(item, index) in oftenList.list"
           :key="index" class="order-list-item"
-          @click="$router.push({ name: 'order-often-detail' })">
+          @click="$router.push({ name: 'order-often-detail', params: { orderId: item.id } })">
           <p class="order-company order-container">{{ item.consignerName }}</p>
 
           <div class="order-body order-container border-top-1px border-bottom-1px">
@@ -21,9 +21,9 @@
             </p>
             <ul class="order-body-info">
               <li class="order-body-info-item">猪饲料</li>
-              <li class="order-body-info-item" v-if="item.weight">{{ item.weight }}吨</li>
-              <li class="order-body-info-item" v-if="item.volume">{{ item.volume }}方</li>
-              <li class="order-body-info-item" v-if="item.quantity">{{ item.quantity }}件</li>
+              <li v-if="item.weight" class="order-body-info-item">{{ item.weight }}吨</li>
+              <li v-if="item.volume" class="order-body-info-item">{{ item.volume }}方</li>
+              <li v-if="item.quantity" class="order-body-info-item">{{ item.quantity }}件</li>
             </ul>
             <p class="order-body-user">
               <span>{{ item.consigneeContact }}</span>
@@ -62,37 +62,18 @@
 </template>
 
 <script>
-import NP from 'number-precision'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import InfiniteList from '@/components/InfiniteList'
 import MoneyLabel from '../../components/MoneyLabel'
 import NoData from '@/components/NoData'
-import { SETTLEMENT_TYPE } from '../../js/constant'
 import NO_DATA from '@/assets/img-no-data.png'
+import filters from '../../js/filters'
 
 export default {
   name: 'order-often',
   metaInfo: { title: '常发订单' },
   components: { MoneyLabel, NoData, InfiniteList },
-  filters: {
-    settlementType (type) {
-      for (let i in SETTLEMENT_TYPE) {
-        if (type === SETTLEMENT_TYPE[i].value) return SETTLEMENT_TYPE[i].text
-      }
-    },
-    totalFee (order) {
-      return NP.divide(
-        NP.plus(
-          order.freightFee || 0,
-          order.loadFee || 0,
-          order.unloadFee || 0,
-          order.insuranceFee || 0,
-          order.otherFee || 0,
-          order.pickupFee || 0
-        ), 100
-      )
-    }
-  },
+  filters,
   data () {
     return {
       NO_DATA,
