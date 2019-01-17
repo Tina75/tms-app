@@ -5,20 +5,20 @@
     </detail-panel-item>
     <detail-panel-item :label="'客户订单号'">
       <p class="remix-content">
-        <span class="border-right-1px">{{ detail.customerOrderNo || '-' }}</span>
+        <span>{{ detail.customerOrderNo || '-' }}</span>
         <a
-          v-clipboard:copy.prevent="detail.customerOrderNo"
-          v-clipboard:success.prevent="copyToast('success')"
-          v-clipboard:error.prevent="copyToast('error')">复制</a>
+          class="border-right-1px"
+          v-if="detail.customerOrderNo"
+          @click.prevent="copy(detail.customerOrderNo)">复制</a>
       </p>
     </detail-panel-item>
     <detail-panel-item :label="'客户运单号'">
       <p class="remix-content">
-        <span class="border-right-1px">{{ detail.customerWaybillNo || '-' }}</span>
+        <span>{{ detail.customerWaybillNo || '-' }}</span>
         <a
-          v-clipboard.click.prevent:copy="detail.customerWaybillNo"
-          v-clipboard.click:success="copyToast('success')"
-          v-clipboard.click:error="copyToast('error')">复制</a>
+          class="border-right-1px"
+          v-if="detail.customerWaybillNo"
+          @click.prevent="copy(detail.customerWaybillNo)">复制</a>
       </p>
     </detail-panel-item>
     <!-- <detail-panel-item :label="'始发地'">
@@ -78,9 +78,10 @@ export default {
     }
   },
   methods: {
-    copyToast (type) {
-      if (type === 'success') window.toast('复制成功')
-      else window.toast('复制失败')
+    copy (text) {
+      this.$copyText(text)
+          .then(() => { window.toast('复制成功') })
+          .catch(() => { window.toast('复制失败') })
     }
   }
 }
@@ -91,8 +92,8 @@ export default {
     span
       flex 1
       text-align: right
-      padding-right: 10px;
     a
+      margin-left 10px
       padding-left: 10px;
       color: #00a4bd;
   .remark
