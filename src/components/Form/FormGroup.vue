@@ -31,12 +31,15 @@ export default {
     }
   },
   methods: {
+    getAllItems () {
+      return this.$children.filter(item => item.$options._componentTag === 'form-item')
+    },
     reset () {
+      this.getAllItems().map(item => { item.setValid() })
       if (this.model) this.$emit('input', this.model)
     },
     async validate () {
-      const formItems = this.$children.filter(item => item.$options._componentTag === 'form-item')
-      const valids = await Promise.all(formItems.map(item => item.doValidate()))
+      const valids = await Promise.all(this.getAllItems().map(item => item.doValidate()))
       return valids.every(valid => valid === true)
     }
   }
