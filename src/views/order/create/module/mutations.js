@@ -20,16 +20,12 @@ export default {
   // 设置费用信息
   SET_FEE_INFO: (state, payload) => {
     state.feeInfo = payload
-    state.orderInfo.otherFee = NP.divide(
-      NP.plus(
-        payload.pickupFee || 0,
-        payload.loadFee || 0,
-        payload.unloadFee || 0,
-        payload.insuranceFee || 0,
-        payload.otherFee || 0
-      ),
-      100
-    )
+    const fees = [ payload.pickupFee, payload.loadFee, payload.unloadFee, payload.insuranceFee, payload.otherFee ]
+    const totalFee = fees.reduce((last, fee) => {
+      if (last === fee) return last
+      return NP.plus(last || 0, fee || 0)
+    }, '')
+    state.orderInfo.otherFee = totalFee === '' ? '' : NP.divide(totalFee, 100)
   },
   // 设置其他信息
   SET_OTHER_INFO: (state, payload) => { state.otherInfo = Object.assign(state.otherInfo, payload) },

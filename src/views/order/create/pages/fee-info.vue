@@ -92,13 +92,14 @@ export default {
         if (temp[key]) temp[key] = NP.times(temp[key], 100)
       }
       this.SET_FEE_INFO(temp)
+      this.$formWillLeave()
       this.$router.back()
     }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
       for (let key in vm.form) {
-        vm.form[key] = vm.feeInfo[key] === undefined ? '' : NP.divide(vm.feeInfo[key], 100)
+        vm.form[key] = vm.feeInfo[key] === undefined || vm.feeInfo[key] === '' ? '' : NP.divide(vm.feeInfo[key], 100)
       }
     })
   }

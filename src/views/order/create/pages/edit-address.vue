@@ -165,6 +165,10 @@ export default {
 
     async submit () {
       this.SET_ADDRESS_INFO(Object.assign({}, this.form))
+      this.$formWillLeave(() => {
+        this.showCityPicker = false
+        this.$refs.$form.reset()
+      })
       this.$router.back()
     }
   },
@@ -190,10 +194,6 @@ export default {
         vm.formartLocale(info.end)
       }
     })
-  },
-  beforeRouteLeave (to, from, next) {
-    this.$refs.$form.reset()
-    next()
   }
 }
 </script>
