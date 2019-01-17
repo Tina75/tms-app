@@ -88,7 +88,7 @@
       </div>
 
       <cube-validator
-        v-if="rule"
+        v-if="rule && !resetValidator"
         ref="$validator"
         v-model="valid"
         :model="inputValue"
@@ -121,8 +121,8 @@ export default {
     return {
       inputValue: this.value,
       picker: null,
-
-      valid: void 0,
+      valid: true,
+      resetValidator: false,
       rule: null
     }
   },
@@ -185,6 +185,7 @@ export default {
   },
   created () {
     this.rulesParser()
+    // console.log(this.value, this.label, this.prop)
   },
   methods: {
     iconClickHandler () { if (!this.inputDisabled) this.$emit('on-icon-click') },
@@ -227,6 +228,11 @@ export default {
       const valid = await this.$refs.$validator.validate()
       this.valid = valid
       return valid
+    },
+    setValid () {
+      this.valid = true
+      this.resetValidator = true
+      this.$nextTick(() => { this.resetValidator = false })
     },
     moveToEnd(el) {
       const length = el.value.length

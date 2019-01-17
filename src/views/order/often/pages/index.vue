@@ -86,7 +86,12 @@ export default {
 
     onPageRefresh() { this.loading = true },
 
-    orderAdd (id) {},
+    orderAdd (id) {
+      this.$router.push({
+        name: 'order-one-more',
+        params: { id }
+      })
+    },
 
     async orderDelete (id) {
       if (!confirm('确认需要删除此常发订单？')) return

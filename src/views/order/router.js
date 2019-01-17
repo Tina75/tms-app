@@ -10,6 +10,16 @@ export default [
     component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
   },
   {
+    path: '/order/create/:id',
+    name: 'order-one-more', // 再来一单
+    component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
+  },
+  {
+    path: '/order/edit/:id',
+    name: 'order-edit', // 订单编辑
+    component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
+  },
+  {
     path: '/order/charge-rule',
     name: 'order-charge-rule', // 计费规则
     component: () => import(/* webpackChunkName: "order" */ './create/pages/charge-rule.vue')
