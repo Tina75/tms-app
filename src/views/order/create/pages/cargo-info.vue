@@ -146,6 +146,7 @@ export default {
     initCargoList () {
       const tempCargoList = Object.assign([], this.orderCargoList).map(item => {
         if (item.cargoCost) item.cargoCost = NP.divide(item.cargoCost, 100)
+        if (item.size === undefined) item.size = [ item.dimension.length || '-', item.dimension.width || '-', item.dimension.height || '-' ].join('x')
         return item
       })
       this.formList = tempCargoList

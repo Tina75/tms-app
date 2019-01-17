@@ -65,9 +65,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order/create', [
-      'consumerInfo'
-    ])
+    ...mapGetters('order/create', [ 'consumerInfo' ])
   },
   methods: {
     ...mapMutations('order/create', [ 'SET_CONSUMER_INFO' ]),
@@ -124,6 +122,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(async vm => {
+      console.log(vm.consumerInfo)
       for (let key in vm.form) {
         vm.form[key] = vm.consumerInfo[key] === undefined ? '' : vm.consumerInfo[key]
       }
