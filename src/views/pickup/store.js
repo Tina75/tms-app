@@ -2,6 +2,7 @@ import server from '@/libs/server'
 export default {
   namespaced: true,
   state: {
+    namespaced: true,
     dispatchingData: {
       list: [],
       next: true,

@@ -1,41 +1,44 @@
 <template>
   <div class="shipper-detail cube-has-bottom-btn">
     <div class="shipper-detail__header">
-      <span class="cube-font-18" v-text="viewData.name"/>
-      <div class="cube-font-14">
-        <i class="cubeic-person cube-mr-10"/>
+      <span class="cube-font-20 cube-font-weight--m" v-text="viewData.name"/>
+      <div class="cube-font-14 cube-c-grey">
+        <i class="cube-c-orange cubeic-person cube-mr-10"/>
         <span class="cube-mr-10" v-text="viewData.contact"/>
         <span v-text="viewData.phone"/>
       </div>
     </div>
-    <div v-if="infoList.length" class="shipper-detail__info border-bottom-1px">
-      <div
-        v-for="(item, i) in infoList"
-        :key="i"
-        class="shipper-detail__info-item border-right-1px"
-      >
-        <span class="cube-font-15 cube-c-black" v-text="item.value"/>
-        <span class="cube-font-14 cube-c-light-grey" v-text="item.text"/>
+
+    <div class="cube-mt-15">
+      <div v-if="infoList.length" class="shipper-detail__info">
+        <div
+          v-for="(item, i) in infoList"
+          :key="i"
+          class="shipper-detail__info-item border-right-1px"
+        >
+          <span class="cube-font-15 cube-c-black cube-font-weight--m" v-text="item.value"/>
+          <span class="cube-font-14 cube-c-light-grey" v-text="item.text"/>
+        </div>
       </div>
-    </div>
-    <div v-if="viewData.remark" class="shipper-detail__remark cube-font-15">
-      <div class="cube-c-black cube-mb-15" v-text="'备注'"/>
-      <p class="cube-c-grey" v-text="viewData.remark"/>
+      <div v-if="viewData.remark" class="shipper-detail__remark border-top-1px cube-font-15">
+        <div class="cube-c-black cube-mb-15" v-text="'备注'"/>
+        <p class="cube-c-grey" v-text="viewData.remark"/>
+      </div>
     </div>
 
     <CellItem
       class="cube-mt-15"
       label="发货地址"
       left-icon="icon-ico_location"
-      :right-title="viewData.addressCnt"
+      :right-title="viewData.addressList&&viewData.addressList.length"
       @click="$router.push({name: 'contacts-shipper-address', query:{consignerId: viewData.id}})"
     />
 
     <CellItem
       class="cube-mt-15"
       label="常发货物"
-      left-icon="icon-ico_location"
-      :right-title="viewData.cargoCnt"
+      left-icon="icon-ico_box"
+      :right-title="viewData.cargoList&&viewData.cargoList.length"
       @click="$router.push({name: 'contacts-shipper-cargo', query:{consignerId: viewData.id}})"
     />
 
@@ -47,10 +50,10 @@
 </template>
 
 <script>
-import CellItem from '../../components/CellItem.vue'
-import { mapState, mapGetters, mapActions } from 'vuex'
-import { ContactDetail } from '../modules/model'
-const moudleName = 'contacts/shipper'
+import CellItem from '../../components/CellItem.vue';
+import { mapState, mapActions } from 'vuex';
+import { ContactDetail } from '../modules/model';
+const moudleName = 'contacts/shipper';
 const ListConfig = [
   { text: '结算方式', key: 'payType' },
   { text: '提货方式', key: 'pickUp' },
@@ -64,13 +67,12 @@ export default {
   },
   components: { CellItem },
   data() {
-    return {}
+    return {
+      viewData: {}
+    }
   },
   computed: {
     ...mapState(moudleName, ['contactDetail', 'operator']),
-    viewData() {
-      return ContactDetail.toView(this.contactDetail, this.operator)
-    },
     infoList() {
       const detail = this.viewData
       if (detail) {
@@ -90,9 +92,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(moudleName, ['loadContactDetail']),
-    onPageRefresh() {
-      this.loadContactDetail()
+    ...mapActions(moudleName, ['loadContactDetail', 'removeContact']),
+    async onPageRefresh() {
+      this.viewData = {}
+      await this.loadContactDetail()
+      this.viewData = ContactDetail.toView(this.contactDetail, this.operator)
     },
     phoneCall() {
       window.location.href = `tel:${this.viewData.phone}`
@@ -109,10 +113,10 @@ export default {
     display flex
     flex-direction column
     justify-content space-between
-    padding 20px 15px
-    height 90px
-    color #fff
-    background #3A424B
+    padding 20px 15px 30px
+    height 100px
+    box-sizing border-box
+    background #fff
   &__remark
     padding 16px 15px
     min-height 100px

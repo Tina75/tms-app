@@ -1,7 +1,7 @@
 <template>
   <div class="tab-card">
     <div class="tab-card-title">
-      <div class="create-time">2018-10-1 12:00</div>
+      <div class="create-time">{{data.createTime | datetimeFormat}}</div>
       <div v-if="status[data.acceptStatus]" :class="status[data.acceptStatus].color" class="order-status right">{{status[data.acceptStatus].name}}</div>
     </div>
     <div class="consignee-info">
@@ -9,10 +9,10 @@
         {{data.departureCityName}} - {{data.destinationCityName}}
       </div>
       <div class="cargos">
-        <div class="cargo-infos">花棉袄</div>
-        <div class="cargo-infos">{{data.weight}}吨</div>
-        <div class="cargo-infos">{{data.volume}}16方</div>
-        <div class="cargo-infos">{{data.cargoCnt}}件</div>
+        <!-- <div class="cargo-infos">花棉袄</div> -->
+        <div class="cargo-infos">{{data.weight || 0}}吨</div>
+        <div class="cargo-infos">{{data.volume || 0}}方</div>
+        <div class="cargo-infos">{{data.cargoCnt || 0}}件</div>
       </div>
       <div class="company">
         {{data.consignerAddress}} {{data.consignerContact}}
@@ -20,33 +20,33 @@
     </div>
     <div class="footer">
       <div class="left">
-        <div class="settlement">月结</div>
+        <div class="settlement">{{data.settlementTypeDesc}}</div>
         <div class="fee">
-          3500/元
+          {{data.totalFee | money}}/元
         </div>
       </div>
-      <div class="right">
-        <a class="btn btn-active">接受</a>
-        <a class="btn" style="margin-right: 8px">拒绝</a>
+      <div v-if="status[data.acceptStatus].name == '待接收'" class="right">
+        <cube-button :outline="true" :inline="true" primary @click.stop="recept">接受</cube-button>
+        <cube-button :outline="true" :inline="true" primary @click.stop="refuse">拒绝</cube-button>
       </div>
     </div>
   </div>
 </template>
 <script>
 import ORDER_STATUS from '../constant/ORDER_STATUS'
+import { money } from '../libs'
 export default {
   name: 'tab-card',
   metaInfo: {
     title: 'tab-card'
   },
+  filters: {
+    money
+  },
   props: {
     data: {
       type: Object,
       default: () => {}
-    }
-  },
-  data () {
-    return {
     }
   },
   computed: {
@@ -62,6 +62,14 @@ export default {
     }
   },
   methods: {
+    recept () {
+      this.$emit('card-action', 'recept', this.data.shipperOrderId)
+      return false
+    },
+    refuse () {
+      this.$emit('card-action', 'refuse', this.data.shipperOrderId)
+      return false
+    }
   }
 }
 </script>
@@ -71,7 +79,7 @@ export default {
   margin-top 15px
   padding 0 15px
 .tab-card-title
-  padding 10px
+  padding 10px 10px 10px 0
   .create-time
     font-size 14px
     line-height 20px

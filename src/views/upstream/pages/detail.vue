@@ -1,7 +1,6 @@
 <template>
   <div class="upstream-detail">
-    <Title>上游来单详情</Title>
-    <StatusBar status="已接收" time="2018-12-1 08:00"/>
+    <StatusBar :status="detail.acceptStatus" :time="detail.createTime"/>
     <!-- 基本信息 -->
     <div class="upstream-panel">
       <Panel title="基本信息">
@@ -10,11 +9,23 @@
         </FormItem>
         <FormItem label="客户订单号">
           {{detail.customerOrderNo}}
-          <span slot="right" class="act-btn">复制</span>
+          <span
+            v-if="detail.customerOrderNo"
+            slot="right"
+            v-clipboard:copy="detail.customerOrderNo"
+            v-clipboard:success="copyBtn"
+            v-clipboard:error="onError"
+            class="act-btn">复制</span>
         </FormItem>
         <FormItem label="客户运单号">
           {{detail.waybillNo}}
-          <span slot="right" class="act-btn">复制</span>
+          <span
+            v-if="detail.waybillNo"
+            slot="right"
+            v-clipboard:copy="detail.waybillNo"
+            v-clipboard:success="copyBtn"
+            v-clipboard:error="onError"
+            class="act-btn">复制</span>
         </FormItem>
         <FormItem label="发货时间">
           {{detail.deliveryTime}}
@@ -23,7 +34,7 @@
           {{detail.arriveTime}}
         </FormItem>
         <FormItem label="提货方式">
-          {{pickupType[detail.pickTypeDesc]}}
+          {{detail.pickTypeDesc}}
         </FormItem>
         <FormItem label="回单数量">
           {{detail.receiptCount}}份
@@ -35,7 +46,7 @@
           {{detail.handlerUserName}}
         </FormItem>
         <FormItem label="是否开票">
-          {{detail.isInvoice == 1 ? '是' : '否'}}
+          {{detail.isInvoice == 1 ? `是（${detail.invoiceRate | rateGet}%）` : '否'}}
         </FormItem>
         <FormItem label="备注">
           {{detail.remark}}
@@ -75,53 +86,53 @@
       <!-- 应收费用 -->
       <Panel title="应收费用">
         <FormItem label="计费里程">
-          {{detail.mileage}}公里
+          {{detail.mileage | mile}}公里
         </FormItem>
         <FormItem label="运输费用">
-          {{detail.freightFee}}元
-        </FormItem>
-        <FormItem label="提货费用">
-          {{detail.pickFee}}元
+          {{detail.freightFee | money}}元
         </FormItem>
         <FormItem label="装货费用">
-          {{detail.loadFee}}元
+          {{detail.loadFee | money}}元
         </FormItem>
         <FormItem label="卸货费用">
-          {{detail.unloadFee}}元
-        </FormItem>
-        <FormItem label="保险费用">
-          {{detail.insureFee}}元
+          {{detail.unloadFee | money}}元
         </FormItem>
         <FormItem label="其他费用">
-          {{detail.otherFee}}元
+          {{detail.otherFee | money}}元
         </FormItem>
         <div class="total-fee">
-          合计<span>{{detail.totalFee}}元</span> {{settlementType[detail.settlementTypeDesc]}}
+          合计<span>{{detail.totalFee | money}}元</span> {{detail.settlementTypeDesc}}
         </div>
       </Panel>
     </div>
     <div class="upstream-footer">
-      <cube-button class="footer-item-btn">拒绝</cube-button>
-      <cube-button class="footer-item-btn footer-item-primary">接受</cube-button>
+      <cube-button class="footer-item-btn" @click="refuse">拒绝</cube-button>
+      <cube-button class="footer-item-btn footer-item-primary" @click="receipt">接受</cube-button>
     </div>
   </div>
 </template>
 <script>
-import Server from '@/libs/server'
-import Title from '../components/Title'
 import Panel from '../components/Panel'
 import FormItem from '../components/FormItem'
 import StatusBar from '../components/StatusBar'
 import Cargo from '../components/Cargo'
-import PICKUP from '../constant/PICKUP'
-import SETTLEMENT from '../constant/SETTLEMENT'
+import VueClipboard from 'vue-clipboard2'
+import Vue from 'vue'
+import { rateGet, money, mile } from '../libs'
+import * as API from '../libs/api'
+Vue.use(VueClipboard)
+
 export default {
   name: 'upstream-detail',
   metaInfo: {
     title: 'upstream-detail'
   },
+  filters: {
+    rateGet,
+    money,
+    mile
+  },
   components: {
-    Title,
     Panel,
     FormItem,
     StatusBar,
@@ -135,20 +146,6 @@ export default {
   computed: {
     id () {
       return this.$route.params.id
-    },
-    pickupType () {
-      const res = {}
-      PICKUP.map(el => {
-        res[el.value] = el.name
-      })
-      return res
-    },
-    settlementType () {
-      const res = {}
-      SETTLEMENT.map(el => {
-        res[el.value] = el.name
-      })
-      return res
     }
   },
   mounted () {
@@ -156,16 +153,25 @@ export default {
   },
   methods: {
     initDetail () {
-      Server({
-        mock: true,
-        method: 'get',
-        url: '/busconnector/shipper/detail',
-        params: {
-          shipperOrderId: this.id
-        }
-      }).then(response => {
+      API.initDetail(this.id).then(response => {
         this.detail = response.data.data
       })
+    },
+    refuse () {
+      API.refuse(this.id).then(response => {
+        this.initDetail()
+      })
+    },
+    receipt () {
+      API.receipt(this.id).then(response => {
+        this.initDetail()
+      })
+    },
+    copyBtn (e) {
+      alert('复制成功')
+    },
+    onError (e) {
+      alert('复制失败，请使用Ctrl-C手动复制')
     }
   }
 }

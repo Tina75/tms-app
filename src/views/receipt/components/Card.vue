@@ -1,18 +1,16 @@
 <template>
   <div class="tab-card">
     <div class="tab-card-title">
-      <div class="create-time">2018-10-1 12:00</div>
-      <!-- <div v-if="status[data.acceptStatus]" :class="status[data.acceptStatus].color" class="order-status right">{{status[data.acceptStatus].name}}</div> -->
+      <div class="create-time">{{data.createTime | datetimeFormat}}</div>
     </div>
     <div class="consignee-info">
       <div class="city">
-        {{data.departureCityName}} - {{data.destinationCityName}}
+        {{data.startName}} - {{data.endName}}
       </div>
       <div class="cargos">
-        <div class="cargo-infos">花棉袄</div>
-        <div class="cargo-infos">{{data.weight}}吨</div>
-        <div class="cargo-infos">{{data.volume}}16方</div>
-        <div class="cargo-infos">{{data.cargoCnt}}件</div>
+        <div class="cargo-infos">{{data.weight || 0}}吨</div>
+        <div class="cargo-infos">{{data.volume || 0}}方</div>
+        <div class="cargo-infos">{{data.cargoCnt || 0}}件</div>
       </div>
       <div class="company">
         {{data.consignerAddress}} {{data.consignerContact}}
@@ -23,24 +21,27 @@
     </div>
     <div class="footer">
       <div class="left">
-        <div class="settlement">月结</div>
-        <div class="fee">
-          3500/元
+        <div class="leftBox">
+          <div class="settlement">月结</div>
+          <div class="fee">
+            {{data.totalFee}}/元
+          </div>
+        </div>
+        <div class="receiptBox">
+          <div class="settlement">回单</div>
+          <span class="fee">{{data.receiptCount}}</span>份
         </div>
       </div>
-      <div class="left">
-        <div class="settlement">回单</div>
-        <span class="fee">1</span>份
+      <div class="right">
+        <cube-button v-if="data.receiptOrder.receiptStatus === 0 && data.status === 40" :outline="true" :inline="true" primary @click.stop="handleClick('receipt')">回收</cube-button>
+        <cube-button v-if="data.receiptOrder.receiptStatus === 1" :outline="true" :inline="true" primary @click.stop="handleClick('backFactory')">返厂</cube-button>
+        <cube-button v-if="data.receiptOrder.receiptStatus > 0 && !data.receiptOrder.receiptUrl.length" :outline="true" :inline="true" primary @click.stop="handleClick('uploadPic')">上传回单</cube-button>
+        <cube-button v-if="data.receiptOrder.receiptStatus > 0 && data.receiptOrder.receiptUrl.length" :outline="true" :inline="true" primary @click.stop="handleClick('updatePic')">修改回单</cube-button>
       </div>
-      <!-- <div class="right">
-        <a class="btn btn-active">回收</a>
-        <a class="btn" style="margin-right: 8px">拒绝</a>
-      </div> -->
     </div>
   </div>
 </template>
 <script>
-import ORDER_STATUS from '@/views/upstream/constant/ORDER_STATUS'
 export default {
   name: 'tab-card',
   metaInfo: {
@@ -52,23 +53,10 @@ export default {
       default: () => {}
     }
   },
-  data () {
-    return {
-    }
-  },
-  computed: {
-    status () {
-      const obj = {}
-      ORDER_STATUS.forEach(el => {
-        obj[el.value] = {
-          name: el.name,
-          color: el.color
-        }
-      })
-      return obj
-    }
-  },
   methods: {
+    handleClick (type) {
+      this.$emit('card-action', type, this.data)
+    }
   }
 }
 </script>
@@ -78,20 +66,12 @@ export default {
   margin-top 15px
   padding 0 15px
 .tab-card-title
-  padding 10px
+  padding 10px 10px 10px 0
   .create-time
     font-size 14px
     line-height 20px
     color #666
     display inline-block
-  .order-status
-    font-size 12px
-    line-height 16px
-    margin-top 2px
-    display inline-block
-    width 45px
-    text-align center
-    color #fff
 .consignee-info
   padding-bottom 15px
   .city
@@ -120,6 +100,11 @@ export default {
   padding 8px 0
   .left
     width 50%
+    display flex
+    .leftBox
+      flex 1
+    .receiptBox
+      width 50px
     .settlement
       font-size 12px
     .fee

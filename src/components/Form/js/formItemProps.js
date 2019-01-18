@@ -41,6 +41,11 @@ export default {
     type: String,
     default: ''
   },
+  // 数值精度
+  precision: {
+    type: [ Number, String ],
+    default: 0
+  },
   // 当form item右侧存在一个单独的点击图标时传入该值，同时提供on-icon-click作为事件处理回调
   clickIcon: {
     type: String,
@@ -48,6 +53,11 @@ export default {
   },
   // 自动聚焦
   autofocus: {
+    type: Boolean,
+    default: false
+  },
+  // 焦点在末尾
+  focusOnEnd: {
     type: Boolean,
     default: false
   },

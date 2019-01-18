@@ -2,13 +2,14 @@
   <div class="contacts-shipper-address">
     <InfiniteList
       v-model="loading"
-      :data="addressList.list"
       :loader="loadAddressList"
-      :is-end="addressList.hasNext"
+      :has-data="addressList.list.length"
+      :has-next="addressList.hasNext"
     >
       <ListItem
         v-for="(item, i) in addressList.list"
         :key="item.id"
+        :nowrap="false"
         :index="i"
         :item="item"
         icon="icon-ico_location"
@@ -16,7 +17,7 @@
         <div
           slot="right"
           class="contacts-shipper-address__item border-left-1px cube-font-14 cube-c-light-grey"
-          @click="modify(i)"
+          @click="modify(item)"
           v-text="'修改'"
         />
       </ListItem>
@@ -24,7 +25,7 @@
         <NoData action="新增发货地址" message="老板，您还没有记录发货地址信息 赶快新增一个，用着方便哦～" @btn-click="modify">
           <img
             slot="img"
-            class="contacts-shipper__placeholder"
+            class="empty-list-image"
             src="@/assets/contacts/address-list-empty.png"
           >
         </NoData>
@@ -57,14 +58,34 @@ export default {
     loadBMap()
   },
   methods: {
-    ...mapActions(moudleName, ['loadAddressList']),
+    ...mapActions({
+      loadAddressList: moudleName + '/loadAddressList',
+      removeAddress: moudleName + '/removeAddress',
+      resetAddressPage: 'contacts/resetAddressPage'
+    }),
     onPageRefresh() {
       this.loading = true
     },
-    modify(index) {
-      if (index) {
+    modify(item) {
+      const data = {}
+      const config = {
+        title: item ? '修改发货地址' : '新增发货地址',
+        namespace: moudleName,
+        dispatch: 'addressAction',
+        data
       }
-      this.$router.push({ name: 'contacts-shipper-address-modify' })
+      if (item) {
+        item = item.data
+        data.id = item.id
+        data.code = item.cityCode
+        data.address = item.address
+        data.additional = item.consignerHourseNumber
+      } else {
+        data.consignerId = this.$route.query.consignerId
+      }
+
+      this.resetAddressPage(config)
+      this.$router.push({ name: 'contacts-address' })
     }
   }
 }
@@ -73,9 +94,6 @@ export default {
 <style lang='stylus'>
 .contacts-shipper-address
   height 100%
-  &__placeholder
-    width 179px
-    height 133px
   &__item
     padding 8px 0 8px 10px
     margin-left 10px

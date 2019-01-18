@@ -1,6 +1,6 @@
 <template>
   <i
-    class="icon iconfont"
+    class="iconfont"
     :class="fontClass"
     :style="styles" />
 </template>
@@ -41,6 +41,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  .icon
+  .iconfont
     vertical-align middle
 </style>

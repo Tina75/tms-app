@@ -1,98 +1,110 @@
 <template>
-  <div class="receipt-order">
+  <div class="receipt page">
     <div class="header">
-      <Title>回单管理</Title>
       <cube-tab-bar
         v-model="selectedLabel"
-        :data="tabs"
         show-slider
-        class="tab-bar"
-        @click="clickHandler"
-        @change="changeHandler"/>
+        class="tab-bar">
+        <cube-tab v-for="(item, index) in tabs" :key="index" :label="item.label" :value="item.label">
+          <p class="tab-label">{{item.label}}</p>
+          <p class="tab-count">{{receiptStatusCnt[item.key]}}</p>
+        </cube-tab>
+      </cube-tab-bar>
     </div>
     <div class="list-bar">
-      <Card
-        v-for="(el, index) in cardList"
-        :key="index"
-        :data="el"
-        @click.native="toDetail(el.shipperOrderId)"/>
+      <cube-tab-panels v-model="selectedLabel">
+        <cube-tab-panel v-for="(item) in tabs" :key="item.label" :label="item.label">
+          <cube-scroll
+            ref="scroll"
+            :data="item.data"
+            :options="scrollOptions"
+            @pulling-down="onPullingDown(item.key)"
+            @pulling-up="onPullingUp(item.key)">
+            <CardList :ref="item.key" :status="item.receiptStatus" @change="(data) => { dataChange(item.key, data) }"/>
+          </cube-scroll>
+        </cube-tab-panel>
+      </cube-tab-panels>
     </div>
   </div>
 </template>
 <script>
-import Title from '@/views/upstream/components/Title'
-import Card from '../components/Card'
-import Server from '@/libs/server'
-import router from '@/router'
+import CardList from '../components/CardList'
+import { mapGetters, mapActions } from 'vuex'
 export default {
-  name: 'receipt-order',
+  name: 'receipt',
   metaInfo: {
-    title: 'receiptOrder'
+    title: 'receipt'
   },
   components: {
-    Title,
-    Card
+    CardList
   },
   data () {
     return {
-      selectedLabel: '代签收',
+      selectedLabel: '全部',
       tabs: [
         {
-          label: '代签收'
+          label: '全部',
+          key: 'total',
+          receiptStatus: '',
+          data: []
         },
         {
-          label: '待回收'
+          label: '代签收',
+          key: 'waiting_sign',
+          receiptStatus: '-1',
+          data: []
         },
         {
-          label: '待反厂'
+          label: '待回收',
+          key: 'waiting_recovery',
+          receiptStatus: '0',
+          data: []
         },
         {
-          label: '已反厂'
+          label: '待返厂',
+          key: 'waiting_return_factory',
+          receiptStatus: '1',
+          data: []
+        },
+        {
+          label: '已返厂',
+          key: 'already_returned_factory',
+          receiptStatus: '2',
+          data: []
         }
       ],
-      cardList: [],
+      scrollOptions: {
+        pullDownRefresh: true,
+        pullUpLoad: true,
+        directionLockThreshold: 0
+      },
       keywords: {
-        pageNo: 0,
+        pageNo: 1,
         pageSize: 10
       }
     }
   },
+  computed: {
+    ...mapGetters(['receiptStatusCnt'])
+  },
   mounted () {
-    this.initList()
+    this.getReceiptStatusCnt()
   },
   methods: {
-    initList () {
-      Server({
-        mock: true,
-        method: 'post',
-        url: '/busconnector/shipper/list',
-        params: this.keywords
-      }).then(response => {
-        console.log(response)
-        this.cardList = response.data.data.list
+    ...mapActions(['getReceiptStatusCnt']),
+    onPullingDown (ref) {
+      this.$refs[ref][0].refresh()
+    },
+    onPullingUp (ref) {
+      this.$refs[ref][0].load()
+    },
+    dataChange (key, data) {
+      this.tabs.map(el => {
+        if (el.key === key) {
+          el.data = data
+        }
       })
-    },
-    clickHandler (label) {
-    },
-    changeHandler (label) {
-    },
-    toDetail (id) {
-      // 路由跳转
-      router.push({
-        params: {
-          id
-        },
-        name: 'upstream-detail'
-      })
-    },
-    changePage (current) {
-      debugger
-      this.selectedLabel = this.tabs[current]
-    },
-    // 接受
-    recept () {},
-    // 拒绝
-    refuse () {}
+    }
   }
 }
 </script>
@@ -103,4 +115,16 @@ export default {
   background white
   height 50px
   font-size 15px
+.list-bar
+    height calc(100% - 50px)
+    overflow-y auto
+</style>
+<style lang="stylus">
+.receipt
+  .cube-tab-panels-group
+    height 100%
+  .cube-tab-panels
+    height 100%
+  .cube-tab-panel
+    height 100%
 </style>

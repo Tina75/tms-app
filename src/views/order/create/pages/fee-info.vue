@@ -1,17 +1,47 @@
 <template>
   <div class="scroll-list-wrap">
     <cube-scroll class="scroll-box">
-      <form>
+      <form-group ref="$form" class="form" :rules="rules">
         <div class="form-section">
-          <form-item v-model="form.pickupFee" label="提货费用(元)" type="number" />
-          <form-item v-model="form.uploadFee" label="装货费用(元)" type="number" />
-          <form-item v-model="form.unloadFee" label="卸货费用(元)" type="number" />
-          <form-item v-model="form.ensuranceFee" label="保险费用(元)" type="number" />
+          <form-item
+            v-if="orderConfig.pickupFeeOption"
+            v-model="form.pickupFee"
+            prop="pickupFee"
+            label="提货费用(元)"
+            type="number"
+            precision="4" />
+          <form-item
+            v-if="orderConfig.loadFeeOption"
+            v-model="form.loadFee"
+            prop="loadFee"
+            label="装货费用(元)"
+            type="number"
+            precision="4" />
+          <form-item
+            v-if="orderConfig.unloadFeeOption"
+            v-model="form.unloadFee"
+            prop="unloadFee"
+            label="卸货费用(元)"
+            type="number"
+            precision="4" />
+          <form-item
+            v-if="orderConfig.insuranceFeeOption"
+            v-model="form.insuranceFee"
+            prop="insuranceFee"
+            label="保险费用(元)"
+            type="number"
+            precision="4" />
         </div>
         <div class="form-section">
-          <form-item v-model="form.otherFee" label="其它费用(元)" type="number" />
+          <form-item
+            v-if="orderConfig.otherFeeOption"
+            v-model="form.otherFee"
+            prop="otherFee"
+            label="其它费用(元)"
+            type="number"
+            precision="4" />
         </div>
-      </form>
+      </form-group>
     </cube-scroll>
 
     <div class="footer">
@@ -24,43 +54,56 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import MoneyLabel from '../../components/MoneyLabel'
-import { FormItem } from '@/components/Form'
+import { FormGroup, FormItem } from '@/components/Form'
 import NP from 'number-precision'
 
 export default {
   metaInfo: { title: '费用信息' },
-  components: { FormItem, MoneyLabel },
+  components: { FormGroup, FormItem, MoneyLabel },
   data () {
+    const FEE_RULE = { type: 'number', min: 0 }
+
     return {
       form: {
         pickupFee: '',
-        uploadFee: '',
+        loadFee: '',
         unloadFee: '',
-        ensuranceFee: '',
+        insuranceFee: '',
         otherFee: ''
+      },
+      rules: {
+        pickupFee: FEE_RULE,
+        loadFee: FEE_RULE,
+        unloadFee: FEE_RULE,
+        insuranceFee: FEE_RULE,
+        otherFee: FEE_RULE
       }
     }
   },
   computed: {
-    ...mapGetters('order/create', [
-      'feeInfo'
-    ]),
+    ...mapGetters('order/create', [ 'feeInfo', 'orderConfig' ]),
     total () {
-      return NP.plus(this.form.pickupFee, this.form.uploadFee, this.form.unloadFee, this.form.ensuranceFee, this.form.otherFee)
+      return NP.plus(this.form.pickupFee, this.form.loadFee, this.form.unloadFee, this.form.insuranceFee, this.form.otherFee)
     }
   },
   methods: {
     ...mapMutations('order/create', [ 'SET_FEE_INFO' ]),
 
     ensure () {
-      this.SET_FEE_INFO(Object.assign({}, this.form))
+      const temp = Object.assign({}, this.form)
+      for (let key in temp) {
+        if (temp[key]) temp[key] = NP.times(temp[key], 100)
+      }
+      this.SET_FEE_INFO(temp)
+      this.$formWillLeave()
       this.$router.back()
     }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
+      console.log(vm.feeInfo)
       for (let key in vm.form) {
-        vm.form[key] = vm.feeInfo[key] === undefined ? '' : vm.feeInfo[key]
+        vm.form[key] = vm.feeInfo[key] === undefined || vm.feeInfo[key] === '' ? '' : NP.divide(vm.feeInfo[key], 100)
       }
     })
   }
@@ -69,7 +112,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  form
+  .form
     margin-top 10px
   .form-section
     margin-bottom 15px

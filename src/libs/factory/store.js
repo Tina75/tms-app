@@ -8,7 +8,6 @@ class InfinateList {
   list = []
   hasNext = true
   nextPage = 1
-  pageSize = 10
 }
 /**
  * 参考: contacts/shipper/pages/index
@@ -20,6 +19,7 @@ class InfinateList {
  *  useParam?: 将route的param加入请求
  *  itemParser?: 有则遍历List转化后再存入state
  *  nameMap?: 键别名设置
+ *  pageSize?: 默认15
  * }
  * 后端返回格式为如下格式时规范化无限列表的store生成工厂
  * pageNo
@@ -32,7 +32,7 @@ class InfinateList {
 
 export function InfinateListFactory(
   store = new Store(),
-  { key, url, itemParser, useQuery, useParam, method = 'get', nameMap = { data: 'list' } } = {}
+  { key, url, itemParser, useQuery, useParam, pageSize, method = 'get', nameMap = { data: 'list' } } = {}
 ) {
   method = method.toLowerCase()
   const name = key[0].toUpperCase() + key.slice(1)
@@ -74,7 +74,7 @@ export function InfinateListFactory(
     if (needSend) {
       let data = {
         pageNo,
-        pageSize: list.pageSize,
+        pageSize: pageSize || 15,
         ...(useParam ? rootState.route.params : {}),
         ...(useQuery ? rootState.route.query : {})
       }
@@ -96,28 +96,35 @@ export function DetailFactory(store = new Store(), { api, key }) {
   const name = key[0].toUpperCase() + key.slice(1)
   const NAME = {
     state: `${key}Detail`,
+    setMutation: `set${name}Detail`,
     modifyAction: `modify${name}`,
     removeAction: `remove${name}`
   }
 
   safeSet(store.state, NAME.state, {})
 
-  safeSet(store.actions, NAME.modifyAction, ({ state, commit }, data) => {
-    const isCreate = !data.id
-    return Server({
-      method: 'post',
-      url: isCreate ? api.create : api.update,
-      data
-    })
-  })
+  safeSet(store.mutations, NAME.setMutation, (state, data = {}) => (state[NAME.state] = data))
 
-  safeSet(store.actions, NAME.removeAction, ({ state, commit }, data) => {
-    return Server({
-      method: 'delete',
-      url: api.remove,
-      data
+  if (api.create && api.update) {
+    safeSet(store.actions, NAME.modifyAction, ({ state, commit }, data) => {
+      const isCreate = !data.id
+      return Server({
+        method: 'post',
+        url: isCreate ? api.create : api.update,
+        data
+      })
     })
-  })
+  }
+
+  if (api.remove) {
+    safeSet(store.actions, NAME.removeAction, ({ state, commit }, data) => {
+      return Server({
+        method: 'delete',
+        url: api.remove,
+        params: data
+      })
+    })
+  }
 
   return store
 }

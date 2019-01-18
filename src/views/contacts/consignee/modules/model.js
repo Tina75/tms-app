@@ -34,44 +34,40 @@ export const editPhone = (value) => {
     return value
   }
 }
+
 export class ConsigneeDetail {
-  // id = ''
-  longitude = '' // 经度
-  latitude =  '' // 纬度
-  mapType = 1
-  address = '' // 收货详细地址
+  id = ''
   consigneeCompanyName = '' // 收货人单位
-  consigner = '' // 发货方名称
+  consignerName = '' // 发货方名称
+  consignerId = ''
   contact = '' // 收货联系人
-  cityName = '' // 收货地址
   phone = '' // 收货人联系方式
   remark = '' // 备注
+  address = '' // 地址
   cityCode = ''
+  consignerHourseNumber = '' // 门牌号
   static toForm(data) {
-    return {
-      address: data.address,
-      consigneeCompanyName: data.consigneeCompanyName,
-      consigner: data.consignerHourseNumber,
-      contact: data.contact,
-      cityName: data.cityName,
-      phone: data.phone,
-      remark: data.remark,
-      longitude: data.longitude,
-      latitude: data.latitude,
-      id: data.id,
-      cityCode: data.cityCode
+    data = {
+      ...data
     }
+    const arr = ['cityName', 'consignerHourseNumber', 'remark', 'consigneeCompanyName']
+    arr.forEach((key) => {
+      data[key] = data[key] ? data[key] : ''
+    })
+    data.address = data.cityName + data.address + data.consignerHourseNumber
+    return data
   }
   static toServer(data) {
     const body = {
       address: data.address,
       consignerId: data.consignerId,
       consigneeCompanyName: data.consigneeCompanyName,
+      consignerHourseNumber: data.consignerHourseNumber,
       contact: data.contact,
       latitude: data.latitude,
       longitude: data.longitude,
       mapType: data.mapType,
-      phone: data.phone,
+      phone: data.phone.replace(/\s/g, ''),
       remark: data.remark,
       id: data.id,
       cityCode: data.cityCode

@@ -207,14 +207,14 @@ export default {
   overflow-y auto
   display flex
   flex-direction column
-  z-index 1999
+  z-index 99
   bottom 0
   left 0
   width 100%
   height 100%
   transform translateY(100%)
   transition transform 0.3s
-  >>>>.border-right-1px
+  .border-right-1px:after
     transform-origin 0 0
   &.active
     transform translateY(0)

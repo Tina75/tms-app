@@ -1,6 +1,11 @@
 <template>
   <div class="contacts-shipper-cargo">
-    <InfiniteList v-model="loading" :data="cargoList.list" :loader="loadCargoList" :is-end="cargoList.hasNext">
+    <InfiniteList
+      v-model="loading"
+      :loader="loadCargoList"
+      :has-data="cargoList.list.length"
+      :has-next="cargoList.hasNext"
+    >
       <ListItem
         v-for="(item, i) in cargoList.list"
         :key="item.id"
@@ -11,7 +16,7 @@
         <div
           slot="right"
           class="contacts-shipper-cargo__item border-left-1px cube-font-14 cube-c-light-grey"
-          @click="modify(i)"
+          @click="modify(item)"
           v-text="'修改'"
         />
       </ListItem>
@@ -19,7 +24,7 @@
         <NoData action="新增常发货物" message="老板，您还没有记录常发货物信息 赶快新增一个，用着方便哦～" @btn-click="modify">
           <img
             slot="img"
-            class="contacts-shipper__placeholder"
+            class="empty-list-image"
             src="@/assets/contacts/cargo-list-empty.png"
           >
         </NoData>
@@ -51,11 +56,12 @@ export default {
     onPageRefresh() {
       this.loading = true
     },
-    modify(index) {
-      if (index) {
-
+    modify(item) {
+      const query = {
+        consignerId: this.$route.query.consignerId,
+        id: item ? item.id : undefined
       }
-      this.$router.push({ name: 'contacts-shipper-cargo-modify' })
+      this.$router.push({ name: 'contacts-shipper-cargo-modify', query })
     }
   }
 }
@@ -64,9 +70,6 @@ export default {
 <style lang='stylus'>
 .contacts-shipper-cargo
   height 100%
-  &__placeholder
-    width 179px
-    height 133px
   &__item
     padding 8px 0 8px 10px
     margin-left 10px

@@ -13,11 +13,11 @@
             :size="20"/>
         </span>
         <img
-          :src="item.url"
+          :src="item.url | imgUrlFormat"
           alt="图片加载失败"
           class="pic-item"
           @click="previewPic(uploadPhotoList,index)">
-        <cube-input v-if="inputShow" v-model="item.title" :maxlength="maxlength"/>
+        <cube-input v-if="inputShow" v-model="item.title" :maxlength="maxlength" />
       </li>
       <li
         v-show="uploadPhotos && uploadPhotos.length < maxCount"
@@ -73,6 +73,14 @@ export default {
       })
     }
   },
+  mounted () {
+    if (this.uploadPhotos.length) {
+      this.uploadPhotoList = []
+      this.uploadPhotos.forEach(element => {
+        this.uploadPhotoList.push(element.url)
+      })
+    }
+  },
   methods: {
     addImg () {
       const vm = this
@@ -89,14 +97,14 @@ export default {
       })
     },
     async uploadOSS (baseData) {
-      window.loadingStart()
+      window.loading()
       const img = await uploadOSS(baseData)
       if (img) {
-        this.uploadPhotos.push(img)
+        this.uploadPhotos.push({ url: img, title: '' })
       } else {
         window.toast('图片上传失败')
       }
-      window.loadingEnd()
+      window.loading(false)
     },
     deletePic (i) {
       this.uploadPhotos.splice(i, 1)

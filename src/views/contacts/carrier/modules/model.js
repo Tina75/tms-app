@@ -17,14 +17,7 @@ export class ContactDetail {
   static toView(data, operators = []) {
     data = {
       ...data
-      // isInvoice: !!data.isInvoice,
-      // invoiceRate: !!data.isInvoice ? +data.invoiceRate + '%' : ''
     }
-    // if (data.salesmanId) {
-    //   data.salesmanId = +data.salesmanId
-    //   const operator = operators.find((item) => +item.id === data.salesmanId)
-    //   data.operatorName = operator ? operator.name : ''
-    // }
     ;['payType'].forEach((key) => {
       const value = +data[key]
       const options = ContactDetail[key]
@@ -34,43 +27,19 @@ export class ContactDetail {
     return data
   }
   // 后端接口 => from表单格式
-  static toFrom(data) {
+  static toForm(data) {
     data = { ...data }
-    // cube-switch 需要boolean类型 防止报错
-    data.isInvoice = !!data.isInvoice
-    // 后端是0.xx 前端显示xx%
-    data.invoiceRate = +data.invoiceRate
     return data
   }
 
   // 表单格式 => 后端所需
   static toServer(data) {
     data = { ...data }
-    data.isInvoice = data.isInvoice ? 1 : 0
-    data.invoiceRate = data.isInvoice ? data.invoiceRate : 0
     return data
   }
 }
 
-export class CargoDetail {
-  id = '' // 货物id
-  cargoName = '' // 货物名称
-  cargoNo = '' // 货物编号
-  cargoCost = 0 // 货物价值，单位：分
-  unit = '' // 包装
-  dimension = {
-    // 包装尺寸
-    length: 0,
-    width: 0,
-    height: 0
-  }
-  weight = 0 // 重量
-  volume = 0 // 体积
-  remark1 = ''
-  remark2 = ''
-}
-
-export class Truck {
+export class TruckDetail {
   id = ''
   carNO = ''
   carType = ''
@@ -79,6 +48,15 @@ export class Truck {
   shippingVolume = ''
   driverId = ''
   carrierId = ''
+  purchDate = ''
+  carBrand = ''
+  travelPhoto = ''
+  drivePhoto = ''
+  regularLine = ''
+  driverName = ''
+  driverPhone = ''
+  driverType = ''
+  remark = ''
 
   static carType = [
     { text: '平板', value: 1 },
@@ -117,4 +95,48 @@ export class Truck {
     { text: '16米', value: 16 },
     { text: '17.5米', value: 17 }
   ]
+
+  // 后端接口 => from表单格式
+  static toFrom(data) {
+    data = { ...data }
+    return data
+  }
+
+  // 表单格式 => 后端所需
+  static toServer(data) {
+    data = { ...data }
+    return data
+  }
+
+  // truckList(item => viewItem)
+  static toViewItem(data) {
+    data = { ...data }
+    ;['carType', 'driverType', 'carLength'].forEach((key) => {
+      const value = +data[key]
+      if (value) {
+        const options = TruckDetail[key]
+        const option = options.find((item) => item.value === value)
+        data[key] = option ? option.text : ''
+      }
+    })
+    return data
+  }
+
+  static toView(data) {
+    data = {
+      ...data,
+      shippingVolume: data.shippingVolume ? data.shippingVolume + '方' : '',
+      shippingWeight: data.shippingWeight ? data.shippingWeight + '吨' : ''
+    }
+    const mapType = ['carType', 'payType', 'carLength']
+    mapType.forEach((key) => {
+      const value = +data[key]
+      if (value) {
+        const options = TruckDetail[key]
+        const option = options.find((item) => item.value === value)
+        data[key] = option ? option.text : ''
+      }
+    })
+    return data
+  }
 }

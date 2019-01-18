@@ -1,55 +1,54 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10">
-    <FromGroup :rules="rules">
-      <FormItem v-model="model.name" label="发货人名称" maxlength="20" prop="require"/>
-      <FormItem v-model="model.contact" label="联系人" maxlength="15" prop="require"/>
+    <FromGroup ref="form" :rules="rules">
+      <FormItem v-model="form.name" label="发货人名称" prop="name"/>
+      <FormItem v-model="form.contact" label="联系人" prop="contact"/>
       <FormItem
-        v-model="model.phone"
-        label="联系人电话"
+        v-model="form.phone"
         :bottom-line="false"
         class="cube-mb-15"
-        prop="require"
+        label="联系人电话"
+        prop="phone"
       />
       <FormItem
-        v-model="model.pickUp"
+        v-model="form.pickUp"
+        :options="options.pickUp"
+        type="select"
         label="提货方式"
         placeholder="请选择"
-        type="select"
-        :options="options.pickUp"
       />
       <FormItem
-        v-model="model.payType"
+        v-model="form.payType"
+        :options="options.payType"
+        type="select"
         label="支付方式"
         placeholder="请选择"
-        type="select"
-        :options="options.payType"
       />
-      <FormItem v-model="model.isInvoice" label="是否开票" type="switch"/>
+      <FormItem v-model="form.isInvoice" label="是否开票" type="switch"/>
       <FormItem
-        v-if="model.isInvoice"
-        v-model="model.invoiceRate"
-        label="开票税率(%)"
+        v-if="form.isInvoice"
+        v-model="form.invoiceRate"
+        prop="invoiceRate"
         required
-        maxlength="2"
-        type="number"
+        label="开票税率(%)"
       />
       <FormItem
-        v-model="model.salesmanId"
-        label="对接业务员"
-        placeholder="请选择"
+        v-model="form.salesmanId"
         :type="operatorSelectType"
         :options="operatorOptions"
+        label="对接业务员"
+        placeholder="请选择"
       />
       <FormItem
-        v-model="model.exploiteChannel"
-        label="开拓渠道"
-        placeholder="请选择"
-        class="cube-mb-15"
-        type="select"
+        v-model="form.exploiteChannel"
         :bottom-line="false"
         :options="options.exploiteChannel"
+        class="cube-mb-15"
+        type="select"
+        label="开拓渠道"
+        placeholder="请选择"
       />
-      <FormItem v-model="model.remark" maxlength="200" type="textarea" label="备注"/>
+      <FormItem v-model="form.remark" maxlength="200" type="textarea" label="备注" prop="remark"/>
     </FromGroup>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
   </div>
@@ -59,6 +58,7 @@ import { mapActions, mapState } from 'vuex'
 import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
+import { contactRule } from '../modules/rules'
 import { ContactDetail } from '../modules/model'
 const moudleName = 'contacts/shipper'
 export default {
@@ -71,18 +71,14 @@ export default {
   components: { FormItem, FromGroup, LoadingButton },
   data() {
     return {
-      model: new ContactDetail(),
+      form: new ContactDetail(),
       options: {
         pickUp: ContactDetail.pickUp,
         payType: ContactDetail.payType,
         exploiteChannel: ContactDetail.exploiteChannel
       },
       operatorSelectType: 'select',
-      rules: {
-        require: {
-          required: true
-        }
-      },
+      rules: contactRule,
       submiting: false
     }
   },
@@ -92,7 +88,7 @@ export default {
       return this.operator.map(item => ({ value: item.id, text: item.name }))
     },
     isCreate() {
-      return !this.$route.query.consignerId
+      return typeof this.$route.query.consignerId === 'undefined'
     }
   },
   methods: {
@@ -102,25 +98,35 @@ export default {
       'loadContactDetail'
     ]),
     async submit() {
-      this.submiting = true
       try {
-        await this.modifyContact(ContactDetail.toServer(this.model))
+        this.submiting = true
+        if (!(await this.$refs.form.validate())) {
+          return window.toast('请输入必填信息')
+        }
+        await this.modifyContact(ContactDetail.toServer(this.form))
         this.$refreshPage('contacts-shipper', 'contacts-shipper-detail')
+        this.$formWillLeave()
+        window.toast('保存成功')
+        this.$router.back()
       } catch (e) {
         console.error(e)
       } finally {
         this.submiting = false
       }
     },
-    async onPageRefresh() {
-      this.model = new ContactDetail()
+    async setForm() {
       this.loadOperators()
       if (!this.isCreate) {
+        // 编辑操作, 判断store中的值是否是目标, 不是则拉新的
         const urlId = +this.$route.query.consignerId
         if (urlId !== +this.contactDetail.id) {
           await this.loadContactDetail()
+          // 更新了detail的则要刷新detail页
+          this.$refreshPage('contacts-shipper-detail')
         }
-        this.model = ContactDetail.toFrom(this.contactDetail)
+        this.form = ContactDetail.toForm(this.contactDetail)
+      } else {
+        this.form = new ContactDetail()
       }
     },
     async loadOperators() {
@@ -135,6 +141,9 @@ export default {
         }
       }
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => vm.setForm())
   }
 }
 </script>

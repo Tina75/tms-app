@@ -34,7 +34,7 @@
             :class="inputAlignment"
             :options="options"
             :placeholder="inputPlaceHolder"
-            :title="inputPlaceHolder"
+            :title="label"
             :disabled="inputDisabled"
             @change="selectChangeHandler"
             @picker-show="pickerShowHandler"
@@ -47,7 +47,7 @@
             :class="inputClickClass"
             :style="(inputValue !== undefined && inputValue !== '') ? 'line-height: 1.5; color: #666666' : 'color: #C5C8CE'"
             @click="inputClickHandler">
-            {{ inputValue || inputPlaceHolder }}
+            {{ inputValue !== undefined && inputValue !== '' ? inputValue : inputPlaceHolder }}
           </div>
 
           <!-- 开关按钮 type = switch -->
@@ -88,12 +88,12 @@
       </div>
 
       <cube-validator
-        v-if="rule"
+        v-if="rule && !resetValidator"
         ref="$validator"
         v-model="valid"
         :model="inputValue"
         :rules="rule"
-        :message="rule.message || {}" />
+        :messages="rule.message || {}" />
     </div>
 
   </div>
@@ -104,6 +104,7 @@
 import Vue from 'vue'
 import { Validator } from 'cube-ui'
 import props from './js/formItemProps'
+import precision from './js/precision'
 
 Vue.use(Validator)
 
@@ -120,8 +121,8 @@ export default {
     return {
       inputValue: this.value,
       picker: null,
-
-      valid: void 0,
+      valid: true,
+      resetValidator: false,
       rule: null
     }
   },
@@ -162,12 +163,29 @@ export default {
   watch: {
     value (val) { this.inputValue = val },
     inputValue (newVal, oldVal) {
-      if (this.type === 'number' && isNaN(Number(newVal))) this.$nextTick(() => { this.inputValue = oldVal })
+      if (this.type === 'number') {
+        if (isNaN(Number(newVal))) {
+          this.$nextTick(() => {
+            this.inputValue = ''
+            this.inputEmit()
+          })
+          return
+        }
+        const value = precision(newVal, Number(this.precision))
+        if (String(value) !== newVal) {
+          this.$nextTick(() => {
+            this.inputValue = value
+            this.inputEmit()
+          })
+          return
+        }
+      }
       this.inputEmit()
     }
   },
   created () {
     this.rulesParser()
+    if (this.value === undefined || this.value === null) console.log(this.value, this.label, this.prop)
   },
   methods: {
     iconClickHandler () { if (!this.inputDisabled) this.$emit('on-icon-click') },
@@ -177,7 +195,12 @@ export default {
       this.$emit('on-blur', this.inputValue)
       this.doValidate()
     },
-    inputFocusHandler () { this.$emit('on-focus', this.inputValue) },
+    inputFocusHandler (e) {
+      this.$emit('on-focus', this.inputValue)
+      if (this.focusOnEnd) {
+        this.$nextTick(() => this.moveToEnd(e.target))
+      }
+    },
     selectChangeHandler (value, index, text) { this.$emit('change', value, index, text) },
     pickerShowHandler () { this.$emit('picker-show') },
     pickerHideHandler () {
@@ -205,6 +228,25 @@ export default {
       const valid = await this.$refs.$validator.validate()
       this.valid = valid
       return valid
+    },
+    setValid () {
+      this.valid = true
+      this.resetValidator = true
+      this.$nextTick(() => { this.resetValidator = false })
+    },
+    moveToEnd(el) {
+      const length = el.value.length
+      if (typeof el.createTextRange !== 'undefined') {
+        const range = el.createTextRange()
+        range.moveStart('character', length)
+        range.collapse(false)
+        range.select()
+      } else if (typeof el.selectionStart === 'number') {
+        el.selectionStart = el.selectionEnd = length
+      }
+      if (this.type === 'text' || this.type === 'number') {
+        el.scrollLeft = 10000 // 尽量大，直接显示到末尾
+      }
     }
   }
 }

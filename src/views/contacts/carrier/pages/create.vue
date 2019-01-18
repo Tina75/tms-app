@@ -23,7 +23,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
@@ -73,7 +73,7 @@ export default {
     onRefreshPage() {
       this.model = this.isCreate
         ? new ContactDetail()
-        : ContactDetail.toFrom(this.contactDetail)
+        : ContactDetail.toForm(this.contactDetail)
     }
   }
 }

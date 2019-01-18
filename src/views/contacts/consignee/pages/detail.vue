@@ -17,11 +17,11 @@
       <div class="otherCard">
         <div class="title">收货地址</div>
         <div class="address">{{consigneeDetail.cityName}}</div>
-        <div class="address">{{consigneeDetail.address}}</div>
+        <div class="address">{{address}}</div>
       </div>
       <div class="otherCard">
         <div class="title">所属发货方</div>
-        <div class="address">{{consigneeDetail.consignerHourseNumber}}</div>
+        <div class="address">{{consigneeDetail.consignerName}}</div>
       </div>
       <div class="otherCard">
         <div class="title">收货人单位</div>
@@ -42,6 +42,11 @@
       @click="goEdit">
       修改
     </cube-button>
+    <cube-button
+      :primary="true"
+      @click="del">
+      删除
+    </cube-button>
     <div class="detail_call">
       <cube-button
         :primary="true"
@@ -59,7 +64,7 @@
 </template>
 <script>
 import IconFont from '@/components/Iconfont'
-import { mapGetters } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 // import { setAppTitleBtn } from '@/libs/bridgeUtil'
 const moudleName = 'contacts/consignee'
 export default {
@@ -69,9 +74,19 @@ export default {
   },
   components: { IconFont },
   computed: {
-    ...mapGetters(moudleName, ['consigneeDetail'])
+    ...mapState(moudleName, ['consigneeDetail']),
+    address () {
+      if (this.consigneeDetail.consignerHourseNumber) {
+        return this.consigneeDetail.address + this.consigneeDetail.consignerHourseNumber
+      }
+      return this.consigneeDetail.address
+    }
   },
   methods: {
+    ...mapActions(moudleName, ['loadConsigneeDetail', 'removeConsignee']),
+    onPageRefresh() {
+      this.loadConsigneeDetail()
+    },
     callPhone () {
       window.location.href = `tel:${this.consigneeDetail.phone}`
     },
@@ -82,6 +97,18 @@ export default {
     },
     goEdit () {
       this.$router.push({ name: 'contacts-consignee-modify', query: { consigneeId: this.consigneeDetail.id } })
+    },
+    del () {
+      const data = {
+        id: this.consigneeDetail.id
+      }
+      try {
+        this.removeConsignee(data)
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.$router.back()
+      }
     }
   }
 }
@@ -97,23 +124,23 @@ export default {
     height 110px
     padding 20px 16px
     box-sizing border-box
-    background-color #3A424B
+    background-color #FFFFFF
     display flex
     .avatar
       width 70px
       height 70px
-      background-color rgba(0,0,0,0.2238)
+      background-color #E4E7EC
       text-align center
       line-height 70px
       border-radius 50%
       &_icon
-        background: linear-gradient(180deg,rgba(113,124,135,1) 0%,rgba(58,66,75,1) 100%)
+        background: #FFFFFF
         -webkit-background-clip: text
         color: transparent
     .consignor
       padding 10px 0px
       margin-left 9px
-      color #ffffff
+      color #333333
       h2
         font-size 18px
         font-weight 500
@@ -122,8 +149,9 @@ export default {
         font-size 14px
         line-height 14px
         margin-top 15px
+        color #666666
   &_other
-    margin-top 10px
+    margin-top 15px
     .otherCard
       background-color #ffffff
       padding 24px 15px 15px

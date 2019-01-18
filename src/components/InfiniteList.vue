@@ -7,11 +7,12 @@
     @pulling-up="onListPullUp"
   >
     <slot/>
-    <slot v-if="!data.length && !loading" name="empty"/>
+    <slot v-if="!hasData && !loading" name="empty"/>
   </wtf>
 </template>
 
 <script>
+import { flexValue } from '@/libs/util'
 export default {
   name: 'ContactsShipper',
   model: {
@@ -27,34 +28,41 @@ export default {
       type: Boolean,
       default: false
     },
-    data: {
-      type: Array,
-      default: () => []
-    },
     loader: {
       type: Function,
       default: () => {}
     },
-    isEnd: {
-      type: Boolean,
+    hasNext: {
+      type: [Boolean, Number],
+      default: true
+    },
+    hasData: {
+      type: [Boolean, Number],
       default: false
     }
   },
   data() {
     return {
-      options: {
-        pullDownRefresh: {
-          txt: '刷新成功!'
-        },
-        pullUpLoad: {
+      loading: false
+    }
+  },
+  computed: {
+    options() {
+      const pullUpLoad = this.hasData
+        ? {
           threshold: 0,
           txt: {
-            more: '加载更多',
+            more: '上拉加载更多',
             noMore: '没有更多数据了'
           }
         }
-      },
-      loading: false
+        : false
+      return {
+        pullDownRefresh: {
+          txt: '刷新成功!'
+        },
+        pullUpLoad
+      }
     }
   },
   watch: {
@@ -78,42 +86,47 @@ export default {
       return scroll
     },
     onListPullDown() {
-      console.info('onListPullDown')
       this.loadingData(true)
     },
     onListPullUp() {
       this.loadingData()
     },
-    async loadingData(clear) {
+    async loadingData(isRefresh) {
       this.loading = true
       try {
-        await this.loader(clear)
+        await this.loader(isRefresh)
       } catch (e) {
         console.error(e)
       } finally {
-        this.stopListLoading()
+        this.stopListLoading(isRefresh)
       }
     },
-    // 问过better-scroll黄轶，莫的直接的api手动控制的刷新下拉动画的
-    // cube基于cube-scroll改造的组件都可以这么玩
     startHackLoading() {
       this.loading = true
+      const pullDownDistance = flexValue(45)
+      console.info('pullDownDistance', pullDownDistance)
       setTimeout(() => {
         let scroll = this.getCubeScroll()
         if (scroll) {
-          scroll.scrollTo(0, 50)
+          scroll.scrollTo(0, pullDownDistance)
           scroll._pullDownHandle()
-          scroll._pullDownScrollHandle({ y: 50 })
+          scroll._pullDownScrollHandle({ y: pullDownDistance })
         } else {
           this.onListPullDown()
         }
       })
     },
-    stopListLoading() {
+    stopListLoading(isRefresh) {
       let scroll = this.getCubeScroll()
-      scroll.forceUpdate()
+      // 重新计算高度和文字
+      scroll.forceUpdate(!!this.hasNext)
       this.loading = false
       this.$emit('refresh', false)
+      // forceUpdate根据入参判断是否要重新计算高度和更改文案
+      // 当该次请求有新的数据但hasNext为false后 scroll更新了文案但没计算高度 需要自己手动设置下, 不如vant机智好用
+      if (!this.hasNext && !isRefresh) {
+        scroll.refresh()
+      }
     }
   }
 }

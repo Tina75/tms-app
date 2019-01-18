@@ -1,33 +1,29 @@
 <template>
   <div class="often-list-page">
-    <no-data
-      v-if="!loading && !oftenList.length"
-      :img="NO_DATA"
-      message="暂无常发订单<br />请在开单时保存为常发订单" />
-
-    <cube-scroll
-      v-else
-      ref="$scroll"
-      :options="options"
-      @pulling-down="pullDownHandler"
-      @pulling-up="fetchData">
-      <ul class="order-list">
+    <infinite-list
+      v-model="loading"
+      :has-data="oftenList.list.length"
+      :loader="loadOftenList"
+      :has-next="oftenList.hasNext"
+    >
+      <ul v-if="oftenList.list.length" class="order-list">
         <li
-          class="order-list-item"
-          v-for="(item, index) in oftenList" :key="index"
-          @click="$router.push({ name: 'order-often-detail' })">
+          v-for="(item, index) in oftenList.list"
+          :key="index" class="order-list-item"
+          @click="$router.push({ name: 'order-often-detail', params: { orderId: item.id } })">
           <p class="order-company order-container">{{ item.consignerName }}</p>
 
           <div class="order-body order-container border-top-1px border-bottom-1px">
             <p class="order-body-cities">
-              {{ item.startName }}
+              <span>{{ item.startName || item.consignerAddress }}</span>
               <icon-font name="icon-line" size="20" />
-              {{ item.endName }}
+              <span>{{ item.endName || item.consigneeAddress }}</span>
             </p>
             <ul class="order-body-info">
-              <li class="order-body-info-item">猪饲料</li>
-              <li class="order-body-info-item">20吨</li>
-              <li class="order-body-info-item">37件</li>
+              <li class="order-body-info-item">{{ item.cargoNames }}</li>
+              <li v-if="item.weight" class="order-body-info-item">{{ item.weight }}吨</li>
+              <li v-if="item.volume" class="order-body-info-item">{{ item.volume }}方</li>
+              <li v-if="item.quantity" class="order-body-info-item">{{ item.quantity }}件</li>
             </ul>
             <p class="order-body-user">
               <span>{{ item.consigneeContact }}</span>
@@ -54,90 +50,54 @@
           </div>
         </li>
       </ul>
-    </cube-scroll>
+
+      <template slot="empty">
+        <no-data
+          :img="NO_DATA"
+          message="暂无常发订单<br />请在开单时保存为常发订单" />
+      </template>
+
+    </infinite-list>
   </div>
 </template>
 
 <script>
-import NP from 'number-precision'
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+import InfiniteList from '@/components/InfiniteList'
 import MoneyLabel from '../../components/MoneyLabel'
 import NoData from '@/components/NoData'
-import { SETTLEMENT_TYPE } from '../../js/constant'
 import NO_DATA from '@/assets/img-no-data.png'
+import { settlementType, totalFee } from '../../js/filters'
 
 export default {
   name: 'order-often',
   metaInfo: { title: '常发订单' },
+  components: { MoneyLabel, NoData, InfiniteList },
+  filters: { settlementType, totalFee },
   data () {
     return {
       NO_DATA,
-      loading: true,
-      noMore: false
+      loading: false
     }
   },
-  components: { MoneyLabel, NoData },
-  computed: {
-    ...mapGetters('order/often', [ 'pageNo', 'oftenList' ]),
-
-    options() {
-      return {
-        pullDownRefresh: { txt: '刷新成功' },
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
-  },
-  filters: {
-    settlementType (type) {
-      for (let i in SETTLEMENT_TYPE) {
-        if (type === SETTLEMENT_TYPE[i].value) return SETTLEMENT_TYPE[i].text
-      }
-    },
-    totalFee (order) {
-      return NP.divide(
-        NP.plus(
-          order.freightFee || 0,
-          order.loadFee || 0,
-          order.unloadFee || 0,
-          order.insuranceFee || 0,
-          order.otherFee || 0,
-          order.pickupFee || 0
-        ), 100
-      )
-    }
-  },
+  computed: mapState('order/often', [ 'oftenList' ]),
   methods: {
-    ...mapMutations('order/often', [ 'SET_PAGE_NO' ]),
-    ...mapActions('order/often', [ 'getOftenList' ]),
+    ...mapActions('order/often', [ 'loadOftenList', 'deleteOftenOrder' ]),
 
-    async fetchData () {
-      if (this.noMore) return
-      this.loading = true
-      try {
-        const hasList = await this.getOftenList()
-        this.noMore = !hasList
-        if (!hasList) window.toast('没有更多数据')
-      } catch (err) {
-        //
-      } finally {
-        this.$refs.$scroll.forceUpdate()
-        this.loading = false
-      }
+    onPageRefresh() { this.loading = true },
+
+    orderAdd (id) {
+      this.$router.push({
+        name: 'order-one-more',
+        params: { id }
+      })
     },
 
-    orderAdd (id) {},
-    orderDelete (id) {},
-
-    pullDownHandler () {
-      this.SET_PAGE_NO(0)
-      this.fetchData()
+    async orderDelete (id) {
+      if (!confirm('确认需要删除此常发订单？')) return
+      await this.deleteOftenOrder(id)
+      window.toast('删除成功')
     }
-  },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.fetchData()
-    })
   }
 }
 </script>
@@ -189,10 +149,21 @@ export default {
     padding-top 14px
     padding-bottom 14px
     &-cities
+      display flex
       font-size 18px
       font-weight bold
       i
-        margin 0 10px
+        flex none
+        width 40px
+        text-align center
+      span
+        flex none
+        max-width calc(50% - 20px)
+        white-space nowrap
+        text-overflow ellipsis
+        overflow hidden
+        font-size 18px
+        font-weight bold
     &-info
       margin 10px 0
       &-item
@@ -206,6 +177,9 @@ export default {
       font-size 12px
       color #666666
       line-height 1.5
+      white-space nowrap
+      text-overflow ellipsis
+      overflow hidden
       span
         margin-right 12px
 </style>

@@ -7,10 +7,10 @@ export const SETTLEMENT_TYPE = [
 
 export const PICKUP_TYPE = [
   { value: 1, text: '小车上门提货' },
-  { value: 2, text: '大车直接送货' }
+  { value: 2, text: '大车直送客户' }
 ]
 
-export const PACKAGE_TYPE = [
+export const UNIT_TYPE = [
   { value: 1, text: '纸箱' },
   { value: 2, text: '木箱' },
   { value: 3, text: '铁桶' },
