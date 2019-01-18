@@ -62,7 +62,7 @@
 </template>
 <script>
 import yddArea from 'ydd_area'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import cityUtil from '@/libs/city'
 import CityPicker from '@/components/CityPicker'
 import FormGroup from '@/components/Form/FormGroup'
