@@ -51,7 +51,8 @@ export class ConsigneeDetail {
     const arr = ['address', 'cityCode', 'consigneeCompanyName', 'consignerHourseNumber', 'consignerId', 'consignerName', 'contact', 'id', 'phone', 'remark']
     arr.forEach((key) => {
       data[key] = server[key]
-      data.address = server.address + server.consignerHourseNumber
+      data.cityCode = data.cityCode ? data.cityCode : ''
+      data.address = server.consignerHourseNumber ? server.address + server.consignerHourseNumber : server.address
     })
     return data
   }

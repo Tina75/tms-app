@@ -47,6 +47,9 @@
       @click="del">
       删除
     </cube-button>
+    <cube-button @click="upLoad">
+      上传
+    </cube-button>
     <div class="detail_call">
       <cube-button
         :primary="true"

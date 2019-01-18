@@ -112,15 +112,18 @@ export default {
       clearForm: moudleName + '/clearForm',
       resetAddressPage: 'contacts/resetAddressPage'
     }),
-    async onPageRefresh() {
+    async initForm(from) {
       // 进入页面时刷新列表数据
       this.$refs.$form.reset()
       if (!this.isEdit) {
         const urlId = +this.$route.query.consigneeId
         if (urlId !== +this.consigneeDetail.id) {
           await this.loadConsigneeDetail()
+          this.$refreshPage('contacts-consignee-detail')
         }
-        this.setFormList()
+        if (from.name !== 'select-shipper' && from.name !== 'contacts-address') {
+          this.setFormList()
+        }
       }
       this.setSender()
       this.setAddress()
@@ -202,6 +205,9 @@ export default {
       this.loadFormInfo(this.consigneeDetail)
       this.editTel(this.formList.phone)
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => vm.initForm(from))
   },
   beforeRouteLeave (to, from, next) {
     // 当从页面离开不进入选择地址和选择发货方时  清空选择的数据
