@@ -58,11 +58,13 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(async vm => {
       vm.cargoList = []
+      console.log(vm.consignerId)
       if (!vm.consignerId) return
       vm.loading = true
       window.loading(true)
+      console.log(111)
       try {
-        vm.cargoList = await vm.getOftenCargo(vm.saveConsigner.id)
+        vm.cargoList = await vm.getOftenCargo(vm.consignerId)
       } catch (err) {
         //
       } finally {
