@@ -11,7 +11,7 @@
     "deploy_beta": "npm run build_all && vue-cli-service build --mode beta && node upload -e beta",
     "deploy_dev": "npm run build_all && vue-cli-service build --mode dev && node upload -e dev",
     "deploy_prod": "npm run build_all && vue-cli-service build --mode prod",
-    "dev": "vue-cli-service serve"
+    "dev": "vue-cli-service serve --mode dev"
   },
   "dependencies": {
     "ali-oss": "^6.0.2",

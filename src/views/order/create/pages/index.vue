@@ -147,7 +147,7 @@
     </cube-scroll>
 
     <create-footer
-      @on-save-order="saveOrder"/>
+      @on-save-order="submitOrderInfo"/>
   </div>
 </template>
 
@@ -216,6 +216,7 @@ export default {
       set: function (val) { this.SET_ORDER_INFO(val) }
     },
     ...mapGetters('order/create', [
+      'consignerId',
       'consumerInfo', // 客户单号及其他
       'orderCargoList', // 货物信息
       'feeInfo', // 费用信息
@@ -223,7 +224,8 @@ export default {
       'addressChanged',
       'consigneeInfo',
       'calculatedAmount',
-      'orderConfig'
+      'orderConfig',
+      'orderNeedReset'
     ]),
     ...mapState('contacts/consignee', [
       'saveConsigner'
@@ -239,10 +241,11 @@ export default {
 
   beforeRouteEnter (to, from, next) {
     next(async vm => {
+      if (vm.orderNeedReset) return window.location.reload()
       vm.mode = vm.$route.meta.mode
       vm.id = vm.$route.params.id
       await vm.orderInfoInit()
-      vm.setConsigner()
+      await vm.setConsigner()
       vm.setConsignee()
       vm.showConsumerInfo()
       vm.showCargoList()

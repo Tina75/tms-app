@@ -62,7 +62,7 @@
 </template>
 <script>
 import yddArea from 'ydd_area'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import cityUtil from '@/libs/city'
 import CityPicker from '@/components/CityPicker'
 import FormGroup from '@/components/Form/FormGroup'
@@ -100,8 +100,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('contacts/consignee', [ 'saveConsigner' ]),
-    ...mapGetters('order/create', [ 'currentArrdessType', 'orderInfo', 'orderConfig' ]),
+    ...mapGetters('order/create', [ 'currentArrdessType', 'orderInfo', 'orderConfig', 'consignerId' ]),
 
     showOftenList () { return this.currentArrdessType === 'send' && !this.form.address && this.oftenAddresses.length },
     showAddressList () { return !!this.form.address },
@@ -168,8 +167,8 @@ export default {
     },
 
     async fetchAddressData () {
-      if (!this.saveConsigner.id) return
-      this.oftenAddresses = await this.getOftenAddress(this.saveConsigner.id)
+      if (!this.consignerId) return
+      this.oftenAddresses = await this.getOftenAddress(this.consignerId)
     },
 
     async submit () {

@@ -1,6 +1,8 @@
 export default {
   orderConfig: state => state.orderConfig,
+  orderNeedReset: state => state.orderNeedReset,
   orderInfo: state => state.orderInfo,
+  consignerId: state => state.consignerId,
   orderOften: state => !!state.orderInfo.isSaveOrderTemplate,
   feeInfo: state => state.feeInfo,
   otherInfo: state => state.otherInfo,

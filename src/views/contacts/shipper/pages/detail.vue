@@ -50,10 +50,10 @@
 </template>
 
 <script>
-import CellItem from '../../components/CellItem.vue';
-import { mapState, mapActions } from 'vuex';
-import { ContactDetail } from '../modules/model';
-const moudleName = 'contacts/shipper';
+import CellItem from '../../components/CellItem.vue'
+import { mapState, mapActions } from 'vuex'
+import { ContactDetail } from '../modules/model'
+const moudleName = 'contacts/shipper'
 const ListConfig = [
   { text: '结算方式', key: 'payType' },
   { text: '提货方式', key: 'pickUp' },

@@ -118,7 +118,11 @@
       methods: {
         // 进入对应页面
         intoPage: function(val) {
-          dsBridge.call('webviews.open', { url: env + 'tms-app/#/' + val, id: 'work' }, function() {})
+          dsBridge.call(
+            'webviews.open',
+            { url: encodeURI(env + 'tms-app/#/' + val), id: 'work' }, 
+            function() {}
+          )
         },
         // 查找权限
         find: function(val) {

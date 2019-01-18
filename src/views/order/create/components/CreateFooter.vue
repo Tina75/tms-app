@@ -18,7 +18,8 @@
       <cube-button
         v-if="mode !== 'edit'"
         class="footer-item-button"
-        primary>立即发运</cube-button>
+        primary
+        @click="saveOrder(true)">立即发运</cube-button>
     </div>
 
     <div v-show="showDetail" class="detail-box">
@@ -76,9 +77,9 @@ export default {
   },
   methods: {
     ...mapMutations('order/create', [ 'SET_OFTEN_ORDER' ]),
-    saveOrder () {
+    saveOrder (isDirectShip) {
       this.showDetail = false
-      this.$emit('on-save-order')
+      this.$emit('on-save-order', isDirectShip)
     }
   }
 }
