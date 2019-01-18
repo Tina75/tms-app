@@ -1,83 +1,62 @@
 <template>
   <div class="truck-detail">
-    <div class="truck-detail_info cube-mb-15">
-      <div class="avatar">
-        <IconFont
-          name="icon-ico_truck1"
-          :size="40"
-          class="avatar_icon"
-        />
+    <div class="truck-detail__header cube-mb-15">
+      <div class="cube-font-18">
+        <span v-text="viewData.carNo"/>
+        <span v-if="viewData.driverType" class="truck-tag" v-text="viewData.driverType" />
       </div>
-      <div class="truck">
-        <h2>{{truckDetail.driverName}} <span>{{truckDetail.carNO}}</span></h2>
-        <p>{{truckDetail.driverPhone}}</p>
+      <div class="cube-font-14">
+        <i class="cubeic-person cube-mr-10" style="color: #FCA950"/>
+        <span class="cube-mr-10" v-text="viewData.driverName"/>
+        <span v-text="viewData.phone"/>
       </div>
     </div>
-    <div v-if="infoList.length" class="truck-detail__info">
+
+    <div v-if="infoList.length" class="shipper-detail__info border-bottom-1px cube-mt-15">
       <div
         v-for="(item, i) in infoList"
         :key="i"
-        class="truck-detail__info-item"
-        :class="{'border-bottom-1px': i <= 3, 'border-left-1px': i !== 0 && i !== 4}"
+        class="shipper-detail__info-item border-right-1px"
       >
-        <div class="cube-font-15 cube-c-black cube-font-weight--m" v-text="item.value"/>
-        <div class="cube-font-14 cube-c-light-grey cube-mt-10" v-text="item.text"/>
+        <span class="cube-font-15 cube-c-black cube-font-weight--m" v-text="item.value"/>
+        <span class="cube-font-14 cube-c-light-grey" v-text="item.text"/>
       </div>
     </div>
-    <div v-if="regularLine.length" class="truck-detail_line cube-mt-15">
-      <div class="routes">
-        <h2 class="cube-c-grey-dark cube-font-16">常跑路线</h2>
-        <div class="cube-c-grey cube-pl-15 cube-pr-15 cube-font-15">
-          <p v-for="(item, index) in regularLine" :key="index" class="cube-mb-15">
-            <span>{{item.en}}</span>
-            <IconFont name="icon-line" color="#9DA1B0" class="route-line cube-ml-20 cube-mr-20"/>
-            <span>{{item.sn}}</span>
-          </p>
-        </div>
-      </div>
-      <div v-if="photoList.length" class="identImg border-top-1px">
-        <h2 class="cube-c-grey-dark cube-font-16">证件照片</h2>
-        <div class="imgs">
-          <img v-for="(item, index) in photoList" :key="index" :src="item" alt="">
-        </div>
-      </div>
-      <div v-if="viewData.remark" class="remark border-top-1px">
-        <h2 class="cube-c-grey-dark cube-font-16">备注</h2>
-        <div class="cube-pa-15 cube-font-15 cube-c-grey">
-          {{viewData.remark}}
-        </div>
+
+    <div v-if="regularLine.length" class="truck-detail__remark cube-font-15 cube-mt-15 border-bottom-1px">
+      <div class="cube-c-black cube-mb-15" v-text="'常跑线路'"/>
+      <div class="cube-c-grey cube-pl-15 cube-pr-15 cube-font-15">
+        <p v-for="(item, index) in regularLine" :key="index" class="cube-mb-15">
+          <span>{{item.en}}</span>
+          <IconFont name="icon-line" color="#9DA1B0" class="route-line cube-ml-20 cube-mr-20"/>
+          <span>{{item.sn}}</span>
+        </p>
       </div>
     </div>
-    <!-- <cube-button
-      :primary="true"
-      @click="goAdd">
-      新增
+    <div v-if="photoList.length" class="truck-detail__remark cube-font-15 cube-mt-15">
+      <div class="cube-c-black cube-mb-15" v-text="'证件照片'"/>
+      <div class="imgs">
+        <img v-for="(item, index) in photoList" :key="index" :src="item" alt="">
+      </div>
+    </div>
+
+    <div v-if="viewData.remark" class="truck-detail__remark cube-font-15 cube-mt-15">
+      <div class="cube-c-black cube-mb-15" v-text="'备注'"/>
+      <p class="cube-c-grey" v-text="viewData.remark"/>
+    </div>
+
+    <cube-button class="cube-bottom-button" :primary="true" @click="phoneCall">
+      <i class="iconfont icon-ico_call"/>
+      拨打电话
     </cube-button>
-    <cube-button
-      :primary="true"
-      @click="goEdit">
-      修改
-    </cube-button> -->
-    <div class="truck-detail_call">
-      <cube-button
-        :primary="true"
-        @click="callPhone">
-        <span class="phone">
-          <IconFont
-            name="icon-ico_call"
-            size="24"
-          />
-        </span>
-        <span>拨打电话</span>
-      </cube-button>
-    </div>
   </div>
 </template>
 <script>
 import IconFont from '@/components/Iconfont'
 import { mapGetters, mapActions } from 'vuex'
 import { TruckDetail } from '../modules/model.js'
-// import { setAppTitleBtn } from '@/libs/bridgeUtil'
+const moudleName = 'contacts/carrier'
+
 const ListConfig = [
   { text: '载重', key: 'shippingWeight' },
   { text: '净空', key: 'shippingVolume' },
@@ -86,18 +65,21 @@ const ListConfig = [
   { text: '品牌', key: 'carBrand' },
   { text: '结算方式', key: 'payType' }
 ]
-const moudleName = 'contacts/carrier'
+
 export default {
   name: 'TruckDetail',
-  metaInfo: {
-    title: ''
-  },
+
+  metaInfo: { title: '' },
+
   components: { IconFont },
+
   computed: {
     ...mapGetters(moudleName, ['truckDetail']),
+
     viewData() {
       return TruckDetail.toView(this.truckDetail)
     },
+
     photoList () {
       const detail = this.viewData
       if (detail) {
@@ -108,6 +90,7 @@ export default {
       }
       return []
     },
+
     infoList() {
       const detail = this.viewData
       if (detail) {
@@ -125,6 +108,7 @@ export default {
       }
       return []
     },
+
     regularLine () {
       const detail = this.viewData
       if (detail && detail.regularLine) {
@@ -133,140 +117,79 @@ export default {
       return []
     }
   },
+
   methods: {
-    ...mapActions(moudleName, ['loadTruckDetail']),
+    ...mapActions(moudleName, ['loadTruckDetail', 'removeTruck']),
+
     onPageRefresh() {
       const carId = this.$route.query.carId
       this.loadTruckDetail(carId)
     },
-    callPhone () {
+
+    phoneCall () {
       window.location.href = `tel: ${this.truckDetail.driverPhone}`
-    },
-    goAdd () {
-      this.$router.push({
-        name: 'contacts-carrier-truck-modify',
-        query: {
-          carrierId: this.truckDetail.carrierId
-        }
-      })
-    },
-    goEdit () {
-      this.$router.push({
-        name: 'contacts-carrier-truck-modify',
-        query: {
-          carrierId: this.truckDetail.carrierId,
-          carId: this.truckDetail.id
-        }
-      })
     }
-  },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-    })
+
+    // goAdd () {
+    //   this.$router.push({
+    //     name: 'contacts-carrier-truck-modify',
+    //     query: {
+    //       carrierId: this.truckDetail.carrierId
+    //     }
+    //   })
+    // },
+
+    // goEdit () {
+    //   this.$router.push({
+    //     name: 'contacts-carrier-truck-modify',
+    //     query: {
+    //       carrierId: this.truckDetail.carrierId,
+    //       carId: this.truckDetail.id
+    //     }
+    //   })
+    // }
   }
 }
 </script>
+
 <style lang="stylus" scoped>
+.truck-tag
+  display inline-block
+  margin-left 5px
+  font-size 10px
+  line-height 10px
+  text-align center
+  color #00A4BD
+  padding 2px 3px
+  border 1px solid #00A4BD
+  border-radius 1px
+  vertical-align top
 .truck-detail
   height 100%
   padding-bottom 44px
   box-sizing border-box
   overflow-y auto
-  &_info
-    width 100%
-    height 110px
-    padding 20px 16px
-    box-sizing border-box
-    background-color #ffffff
+  &__header
     display flex
-    .avatar
-      width 70px
-      height 70px
-      background-color #E4E7EC
-      text-align center
-      line-height 70px
-      border-radius 50%
-      &_icon
-        background: #FFFFFF
-        -webkit-background-clip: text
-        color: transparent
-    .truck
-      padding 10px 0px
-      margin-left 9px
-      color #333333
-      span
-        display inline-block
-        margin-left 10px
-        background-color #FCA950
-        padding 0px 5px
-        font-size 12px
-        color  #FFFFFF
-      h2
-        font-size 18px
-        font-weight 500
-        line-height 18px
-      p
-        font-size 14px
-        line-height 14px
-        margin-top 15px
-        color #666666
+    flex-direction column
+    justify-content space-between
+    padding 20px 15px
+    height 90px
+    color #333333
+    background #ffffff
+  &__remark
+    padding 16px 15px
+    min-height 100px
+    background #ffffff
   &__info
-    padding 10px 15px 0px 15px
-    // height 160px
-    // box-sizing border-box
+    height 86px
+    padding 23px 0 13px
     display flex
     background #fff
-    flex-wrap wrap
-    line-height 18px
-    >>>.border-left-1px:before
-      height 190%
-      top 13px
     &-item
-      width 85px
-      padding 13px 0px
-      text-align center
-  &_line
-    background-color #ffffff
-    padding 15px 0
-    .routes
-      line-height 16px
-      h2
-        font-weight 500
-        padding 15px 15px
-      .route-line
-        vertical-align top
-        font-weight 100
-    .identImg
-      h2
-        font-weight 500
-        padding 24px 15px 0px 15px
-      .imgs
-        display flex
-        justify-content space-between
-        padding 15px
-        img
-          width 160px
-          height 90px
-          vertical-align middle
-    .remark
-      h2
-        font-weight 500
-        padding 24px 15px 0px 15px
-      div
-        line-height 24px
-  &_call
-    width 100%
-    position fixed
-    bottom 0px
-    .cube-btn
-      font-weight 500
-      font-size 17px
-      border-radius 0
-      height 44px
-      padding 10px 0px
-      line-height 24px
-      .phone
-        margin-right 5px
-        position relative
-        top -2px
+      flex 1
+      display flex
+      flex-direction column
+      align-items center
+      justify-content space-around
 </style>

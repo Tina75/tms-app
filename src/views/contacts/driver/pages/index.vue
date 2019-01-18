@@ -19,7 +19,7 @@
         <NoData
           action="新增熟车司机"
           message="老板，您还没有记录熟车司机信息赶快新增一个，方便联系哦～"
-          @btn-click="$router.push({ name: 'contacts-driver-create' })"
+          @btn-click="$router.push({ name: 'contacts-driver-modify' })"
         >
           <img
             slot="img"
