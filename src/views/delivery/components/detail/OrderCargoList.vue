@@ -2,13 +2,13 @@
   <detail-panel :title="'货物明细'">
     <div class="order-list">
       <ul>
-        <li v-for="item in CargoList" :key="item.id" class="order-item">
-          <!-- <div class="order-no">
-            <span>D9384834783748374</span>
+        <li v-for="order in CargoListSet" :key="order.orderNo" class="order-item">
+          <div class="order-no">
+            <span>{{order.orderNo}}</span>
             <a>复制</a>
-          </div> -->
+          </div>
           <ul>
-            <li class="cargo-item">
+            <li v-for="item in order.cargoList" :key="item.cargoId" class="cargo-item">
               <p class="cargo-title">{{item.cargoName}} <span v-if="item.cargoNo">({{item.cargoNo}})</span> </p>
               <p class="cargo-content">
                 <span v-if="item.weight">{{item.weight}}吨&nbsp;</span>
@@ -32,10 +32,10 @@ import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 
 export default {
-  name: 'pickupInfo',
+  name: 'delivery-order-cargo-list',
   components: { detailPanel },
   computed: {
-    ...mapGetters('order/detail', ['CargoList']),
+    ...mapGetters('delivery', ['CargoListSet']),
     options () {
       return {
         pullDownRefresh: true,
@@ -53,7 +53,7 @@ export default {
   .order-list
     padding: 15px 15px 0 0
     .order-item
-      margin-bottom: 15px;
+      margin-bottom: 15px
       padding: 15px 10px 0
       background-color: #F9F9F9
       .order-no
@@ -66,7 +66,7 @@ export default {
           color: #00A4BD;
           font-size: 15px;
       .cargo-item
-        padding: 0px 0 10px
+        padding: 15px 0 10px
         &:not(:last-child)
           border-bottom 1px dashed #C8C8C8
         .cargo-title
