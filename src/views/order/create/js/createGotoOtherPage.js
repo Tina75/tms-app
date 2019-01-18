@@ -1,39 +1,40 @@
 import NP from 'number-precision'
+import { setAppTitleBtn, clearAppTitleBtn } from '@/libs/bridgeUtil'
 
 export default {
   // 进入客户单号及其他信息
   gotoConsumerInfoPage () {
-    this.$formWillLeave()
+    this.formCanLeave()
     this.$router.push({ name: 'order-consumer-info' })
   },
   // 进入其他信息页面
   gotoOtherInfoPage () {
-    this.$formWillLeave()
+    this.formCanLeave()
     this.$router.push({ name: 'order-other-info' })
   },
   gotoFeeInfoPage () {
-    this.$formWillLeave()
+    this.formCanLeave()
     this.$router.push({ name: 'order-fee-info' })
   },
   // 进入货物信息页面
   gotoCargoInfoPage () {
-    this.$formWillLeave()
+    this.formCanLeave()
     this.$router.push({ name: 'order-cargo-info' })
   },
   // 进入编辑地址页面
   gotoAddressInfoPage (type) {
     this.SET_ADDRESS_TYPE(type)
-    this.$formWillLeave()
+    this.formCanLeave()
     this.$router.push({ name: 'order-edit-address' })
   },
   // 进入发货人列表
   gotoConsignerPage () {
-    this.$formWillLeave()
-    this.$router.push({ name: 'select-shipper' })
+    this.formCanLeave()
+    this.$router.push({ name: 'order-select-consigner' })
   },
   // 进入收货人列表
   gotoConsigneePage () {
-    this.$formWillLeave()
+    this.formCanLeave()
     this.$router.push({ name: 'order-select-consignee' })
   },
   // 进入计费规则列表
@@ -61,10 +62,41 @@ export default {
     query.weight = weight
     query.volume = volume
     query.cargoInfos = cargoInfos
-    this.$formWillLeave()
+    this.formCanLeave()
     this.$router.push({
       name: 'order-charge-rule',
       query
+    })
+  },
+  // 设置导航栏按钮
+  setTitleButtons () {
+    if (this.mode !== 'create') return
+    setAppTitleBtn({
+      text: '返回',
+      position: 'left',
+      action: () => {
+        this.$createDialog({
+          type: 'confirm',
+          title: '',
+          content: '信息未保存，是否确认离开？',
+          icon: 'cubeic-alert',
+          onConfirm: () => {
+            this.$router.back()
+          }
+        }).show()
+      }
+    })
+    setAppTitleBtn({
+      text: '常发订单',
+      action: () => { this.$router.push({ name: 'order-often' }) }
+    })
+  },
+  // 即将离开表单页
+  formCanLeave () {
+    this.$formWillLeave(true, () => {
+      if (this.mode !== 'create') return
+      clearAppTitleBtn()
+      clearAppTitleBtn(true)
     })
   }
 }

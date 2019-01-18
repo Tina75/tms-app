@@ -4,6 +4,7 @@ import NP from 'number-precision'
 export default {
   // 设置选择后的发货人信息
   async setConsigner () {
+    console.log('-------', this.saveConsigner)
     if (!this.saveConsigner.id) return
     let consigner = this.saveConsigner
     let consignerAddress
@@ -105,18 +106,18 @@ export default {
     if (this.consumerInfo.salesmanName) infos.push(this.consumerInfo.salesmanName)
     if (this.consumerInfo.deliveryTimeText) infos.push(this.consumerInfo.deliveryTimeText)
     if (this.consumerInfo.arriveTimeText) infos.push(this.consumerInfo.arriveTimeText)
-    this.orderInfo.consumerInfo = infos.join('，')
+    this.orderInfo.consumerInfo = infos.join(',')
   },
   showCargoList () {
     let infos = this.orderCargoList.map(item => item.cargoName)
-    this.orderInfo.orderCargoList = infos.join('，')
+    this.orderInfo.orderCargoList = infos.join(',')
   },
   showOtherInfo () {
     let infos = []
     if (this.otherInfo.isInvoice) infos.push(`开票税率${NP.times(this.otherInfo.invoiceRate, 100) || 0}%`)
     if (this.otherInfo.collectionMoney) infos.push(NP.divide(this.otherInfo.collectionMoney, 100) + '元')
     if (this.otherInfo.remark) infos.push(this.otherInfo.remark)
-    this.orderInfo.otherInfo = infos.join('，')
+    this.orderInfo.otherInfo = infos.join(',')
   },
   async calculateDistance () {
     if (this.addressChanged &&

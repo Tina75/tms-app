@@ -1,7 +1,7 @@
 <template>
   <div class="create-order-page">
     <cube-scroll class="scroll-box">
-      <cube-button primary @click="$router.push({ name: 'order-often' })">常发订单</cube-button>
+      <!-- <cube-button primary @click="$router.push({ name: 'order-often' })">常发订单</cube-button> -->
       <form-group
         ref="$form"
         v-model="orderInfo"
@@ -244,6 +244,7 @@ export default {
       if (vm.orderNeedReset) return window.location.reload()
       vm.mode = vm.$route.meta.mode
       vm.id = vm.$route.params.id
+      vm.setTitleButtons()
       await vm.orderInfoInit()
       await vm.setConsigner()
       vm.setConsignee()
