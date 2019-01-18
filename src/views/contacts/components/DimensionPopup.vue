@@ -11,18 +11,19 @@
       <transition name="cube-picker-move">
         <div v-show="show" class="dimension-popup">
           <div class="dimension-popup__title cube-c-black cube-font-18 cube-font-weight--m">包装尺寸(毫米)</div>
-          <div class="dimension-popup__group cube-pb-10">
+          <div class="dimension-popup__group">
             <input
               v-for="item in options"
               :key="item.key"
               v-model="item.value"
-              type="text"
+              type="number"
               class="dimension-popup__input cube-c-placeholder"
               :placeholder="item.placeholder"
+              @input="checkValid"
             >
           </div>
-          <div v-if="invalid" class="cube-validator-msg-def">支持输入数字和1位小数</div>
-          <div class="dimension-popup__btns cube-pt-20">
+          <div class="cube-validator-msg-def"> {{!valid ? '支持输入数字和1位小数' : ''}}</div>
+          <div class="dimension-popup__btns">
             <a class="cube-dialog-btn border-top-1px" @click="toggle()">取消</a>
             <a
               class="cube-dialog-btn border-top-1px cube-dialog-btn_highlight"
@@ -56,7 +57,7 @@ export default {
   },
   data() {
     return {
-      invalid: false,
+      valid: true,
       options: [
         {
           key: 'length',
@@ -98,15 +99,14 @@ export default {
         this.inputValue = this.value || ''
       }
       this.$emit('show', show)
-      this.invalid = false
+      this.valid = true
     },
     onConfirm() {
-      this.checkValid()
-      if (!this.invalid) {
+      if (this.valid) {
         this.$emit(
           'confirm',
           this.options.reduce((result, item) => {
-            result[item.key] = +item.value
+            result[item.key] = item.value === '' ? '' : +item.value
             return result
           }, {})
         )
@@ -114,8 +114,8 @@ export default {
       }
     },
     checkValid() {
-      this.invalid = this.options.every(item => {
-        return !pattern.test(item.value) && item
+      this.valid = this.options.every(item => {
+        return pattern.test(item.value) || !item.value
       })
     }
   }
@@ -128,6 +128,10 @@ export default {
   width 344px
   .cube-validator-msg-def
     text-align center
+    padding 10px 0
+    height 40px
+    vertical-align middle
+    font-size 14px
   &__title
     text-align center
     padding 30px 0
@@ -137,6 +141,7 @@ export default {
     justify-content space-around
     width 100%
   &__input
+    -webkit-appearance none
     border 1px solid #DCDEE2
     width 100px
     height 44px

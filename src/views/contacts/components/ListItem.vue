@@ -8,7 +8,7 @@
     </div>
     <div class="contact-item__content cube-ml-15 cube-ellipsis" :class="{'cube-ellipsis':nowrap}">
       <slot>
-        <span class="cube-c-black cube-font-17" v-text="item.name"/>
+        <span class="cube-c-black cube-font-17 cube-ellipsis" v-text="item.name"/>
         <p
           v-if="isList"
           class="cube-c-light-grey cube-font-14 cube-mt-5"

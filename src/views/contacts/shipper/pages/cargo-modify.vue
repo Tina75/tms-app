@@ -8,8 +8,8 @@
         maxlength="20"
         prop="name"
       />
-      <FormItem v-model="form.cargoNo" label="货物编号" prop="number"/>
-      <FormItem v-model="form.cargoCost" label="货值(元)" prop="price"/>
+      <FormItem v-model="form.cargoNo" label="货物编号" prop="number" maxlength="20"/>
+      <FormItem v-model="form.cargoCost" label="货值(元)" type="number"  prop="price"/>
       <FormItem
         v-model="form.unit"
         label="包装方式"
@@ -24,8 +24,8 @@
         placeholder="请输入长*宽*高"
         @on-click="showDismensionInput = true"
       />
-      <FormItem v-model="form.weight" label="重量(公斤)" prop="weight"/>
-      <FormItem v-model="form.volume" label="体积(方)" class="cube-mb-15" prop="volume" />
+      <FormItem v-model="form.weight" label="重量(公斤)" type="number" prop="weight"/>
+      <FormItem v-model="form.volume" label="体积(方)" type="number" class="cube-mb-15" prop="volume" />
       <FormItem
         v-model="form.remark1"
         label="备注1"
@@ -69,6 +69,8 @@ import FormItem from '@/components/Form/FormItem'
 import CheckboxPopup from '../../components/CheckboxPopup'
 import DimensionPopup from '../../components/DimensionPopup'
 const moudleName = 'contacts/shipper'
+
+const isNum = v => typeof v === 'number'
 export default {
   name: 'ModifyContactsShipperCargo',
   metaInfo() {
@@ -99,8 +101,8 @@ export default {
     viewDimension() {
       const dimension = this.form.dimension
       if (dimension) {
-        if (dimension.length || dimension.width || dimension.height) {
-          return `${dimension.length}*${dimension.width}*${dimension.height}`
+        if (isNum(dimension.length) || isNum(dimension.width) || isNum(dimension.height)) {
+          return `${+dimension.length}*${+dimension.width}*${+dimension.height}`
         }
       }
       return ''
@@ -114,14 +116,18 @@ export default {
     async submit() {
       try {
         this.submiting = true
+        if (!this.form.cargoName) {
+          return window.toast('请填写货物名称')
+        }
         if (!(await this.$refs.form.validate())) {
-          return window.toast('请输入必填信息')
+          return
         }
         const server = CargoDetail.toServer(this.form)
         server.consignerId = this.$route.query.consignerId
         await this.modifyCargo(server)
         this.$refreshPage('contacts-shipper-cargo', 'contacts-shipper-detail')
         this.$formWillLeave()
+        window.toast('保存成功')
         this.$router.back()
       } catch (e) {
         console.error(e)

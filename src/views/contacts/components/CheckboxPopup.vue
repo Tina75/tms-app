@@ -115,7 +115,7 @@ export default {
       if (show) {
         this.inputValue = this.value || ''
         this.valid = true
-        this.$refs.inputEl.focus()
+        // this.$refs.inputEl.focus()
       }
       this.$emit('show', show)
     },
@@ -175,6 +175,7 @@ export default {
   &__selected
     flex 1
     padding 14px 12px
+    -webkit-appearance none
   &__box-wrap
     display flex
     padding 0 12px 20px
