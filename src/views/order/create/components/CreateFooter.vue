@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import MoneyLabel from '../../components/MoneyLabel'
+import MoneyLabel from '../components/MoneyLabel'
 import { mapGetters, mapMutations } from 'vuex'
 import NP from 'number-precision'
 

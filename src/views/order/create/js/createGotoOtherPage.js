@@ -69,7 +69,7 @@ export default {
     })
   },
   // 设置导航栏按钮
-  setTitleButtons () {
+  async setTitleButtons () {
     if (this.mode !== 'create') return
     setAppTitleBtn({
       text: '返回',
@@ -86,6 +86,8 @@ export default {
         }).show()
       }
     })
+    if (!this.oftenPermission) await this.getOftenPermission()
+    if (this.oftenPermission.indexOf(100400) === -1) return
     setAppTitleBtn({
       text: '常发订单',
       action: () => { this.$router.push({ name: 'order-often' }) }

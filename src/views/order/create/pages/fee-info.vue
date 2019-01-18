@@ -53,7 +53,7 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import MoneyLabel from '../../components/MoneyLabel'
+import MoneyLabel from '../components/MoneyLabel'
 import { FormGroup, FormItem } from '@/components/Form'
 import NP from 'number-precision'
 
