@@ -4,51 +4,68 @@ import NP from 'number-precision'
 export default {
   // 设置选择后的发货人信息
   async setConsigner () {
-    if (this.saveConsigner.id) {
-      const info = this.orderInfo
-      const consigner = this.saveConsigner
-      info.consignerName = consigner.name || ''
-      info.consignerContact = consigner.contact || ''
-      info.consignerPhone = consigner.phone || ''
+    if (!this.saveConsigner.id) return
+    let consigner = this.saveConsigner
+    let consignerAddress
+    if (this.saveConsigner.id !== this.consignerId) {
+      this.SET_CONSIGNER_ID(this.saveConsigner.id)
+      consigner = await this.getConsignerData(this.consignerId)
+      if (consigner.addressList.length) consignerAddress = consigner.addressList[0]
+      if (consigner.consigneeList.length) this.SET_CONSIGNEE_INFO(consigner.consigneeList[0])
+    }
+    const info = this.orderInfo
+    info.consignerName = consigner.name || ''
+    info.consignerContact = consigner.contact || ''
+    info.consignerPhone = consigner.phone || ''
+    info.settlementType = consigner.payType || ''
+    info.pickup = consigner.pickUp || ''
+    if (consignerAddress) {
+      info.start = consignerAddress.cityCode || ''
+      info.consignerAddress = consignerAddress.address || ''
+      info.consignerHourseNumber = consignerAddress.consignerHourseNumber
+      info.consignerAddressLongitude = consignerAddress.longitude || ''
+      info.consignerAddressLatitude = consignerAddress.latitude || ''
+      info.consignerAddressText = info.consignerAddress + info.consignerHourseNumber
+    } else {
       info.consignerHourseNumber = consigner.consignerHourseNumber || ''
-      info.settlementType = consigner.payType || ''
-      info.pickup = consigner.pickUp || ''
-      this.SET_OTHER_INFO({
-        isInvoice: consigner.isInvoice || 0,
-        invoiceRate: consigner.invoiceRate === null ? '' : consigner.invoiceRate,
-        remark: consigner.remark
-      })
-      this.showOtherInfo()
-      if (consigner.salesmanId) {
-        const sales = await this.getOpetator()
-        for (let i = 0; i < sales.length; i++) {
-          if (sales[i].id === consigner.salesmanId) {
-            this.SET_CONSUMER_INFO({
-              salesmanId: consigner.salesmanId,
-              salesmanName: sales[i].name
-            })
-            break
-          }
+    }
+    this.TRIGGER_ADDRESS_CHANGE(true)
+    this.SET_OTHER_INFO({
+      isInvoice: consigner.isInvoice || 0,
+      invoiceRate: consigner.invoiceRate === null ? '' : consigner.invoiceRate,
+      remark: consigner.remark
+    })
+    this.showOtherInfo()
+    if (consigner.salesmanId) {
+      const sales = await this.getOpetator()
+      for (let i = 0; i < sales.length; i++) {
+        if (sales[i].id === consigner.salesmanId) {
+          this.SET_CONSUMER_INFO({
+            salesmanId: consigner.salesmanId,
+            salesmanName: sales[i].name
+          })
+          break
         }
-        this.showConsumerInfo()
       }
+      this.showConsumerInfo()
     }
   },
   // 设置选择后的收货人信息
   setConsignee () {
     if (!this.consigneeInfo) return
     const info = this.orderInfo
-    const consignee = this.consigneeInfo.data
+    const consignee = this.consigneeInfo
     info.consigneeContact = consignee.contact || ''
     info.consigneePhone = consignee.phone || ''
     info.consigneeCompanyName = consignee.consigneeCompanyName || ''
     info.end = consignee.cityCode || ''
     info.consigneeAddress = consignee.address || ''
-    info.consignerHourseNumber = consignee.consignerHourseNumber || ''
+    info.consigneeHourseNumber = consignee.consigneeHourseNumber || ''
     info.consigneeAddressLongitude = consignee.longitude || ''
     info.consigneeAddressLatitude = consignee.latitude || ''
-    info.consigneeAddressText = info.consigneeAddress + info.consignerHourseNumber
+    info.consigneeAddressText = info.consigneeAddress + info.consigneeHourseNumber
     this.SET_CONSIGNEE_INFO(null)
+    this.TRIGGER_ADDRESS_CHANGE(true)
   },
   // 联系电话格式化
   consignerPhoneInputHandler (phone) {

@@ -3,6 +3,8 @@ import NP from 'number-precision'
 export default {
   // 设置开单配置
   SET_ORDER_CONFIG: (state, payload) => { state.orderConfig = payload },
+  // 设置是否需要重置订单信息
+  SET_ORDER_RESET: (state, payload) => { state.orderNeedReset = payload },
   // 设置订单信息
   SET_ORDER_INFO: (state, payload) => {
     resetFields(payload)
@@ -10,6 +12,7 @@ export default {
       state.orderInfo[key] = payload[key]
     }
     if (payload.consignerName === '') {
+      state.consignerId = void 0
       state.orderCargoList = []
       state.consumerInfo = {}
       state.feeInfo = {}
@@ -18,8 +21,9 @@ export default {
       state.currentArrdessType = ''
       state.addressChanged = false
     }
-    // debugger
   },
+  // 设置发货人id
+  SET_CONSIGNER_ID: (state, payload) => { state.consignerId = payload },
   // 设置常发订单
   SET_OFTEN_ORDER: (state, payload) => {
     state.orderInfo.isSaveOrderTemplate = Number(payload)
