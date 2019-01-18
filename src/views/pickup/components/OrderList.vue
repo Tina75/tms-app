@@ -1,33 +1,24 @@
 <template>
   <detail-panel :title="'货物明细'">
-    <a slot="title-btn">编辑</a>
+    <a slot="title-btn" class="cargo-edit">编辑</a>
     <div class="order-list">
       <ul>
-        <li class="order-item">
+        <li v-for="(item, index) in pickupCargoDetail" :key="index" class="order-item">
           <div class="order-no">
-            <span>D9384834783748374</span>
-            <a>复制</a>
+            <span>{{item.orderNo}}</span>
+            <a v-clipboard:copy="item.orderNo" v-clipboard:success="onNoCopy">复制</a>
           </div>
           <ul>
-            <li class="cargo-item">
-              <p class="cargo-title">可口可乐</p>
-              <p class="cargo-content">2吨 2方 桶装 2件 1000元 小心轻放 这个东西比较贵装卸货的 时候轻拿轻放</p>
-            </li>
-            <li class="cargo-item">
-              <p class="cargo-title">可口可乐</p>
-              <p class="cargo-content">2吨 2方 桶装 2件 1000元 小心轻放 这个东西比较贵装卸货的 时候轻拿轻放</p>
-            </li>
-          </ul>
-        </li>
-        <li class="order-item">
-          <div class="order-no">
-            <span>D9384834783748374</span>
-            <a>复制</a>
-          </div>
-          <ul>
-            <li class="cargo-item">
-              <p class="cargo-title">可口可乐</p>
-              <p class="cargo-content">2吨 2方 桶装 2件 1000元 小心轻放 这个东西比较贵装卸货的 时候轻拿轻放</p>
+            <li v-for="(el, no) in item.cargoList" :key="no" class="cargo-item">
+              <p class="cargo-title">{{el.cargoName}}</p>
+              <p class="cargo-content">
+                <span v-if="el.weight">{{el.weight}}吨 </span>
+                <span v-if="el.volume">{{el.volume}}方 </span>
+                <span v-if="el.quantity">{{el.quantity}}件 </span>
+                <span v-if="el.cargoCost">{{el.cargoCost}}吨 </span>
+                <span v-if="el.remark1">{{el.remark1}}吨 </span>
+                <span v-if="el.remark2">{{el.remark2}}吨 </span>
+              </p>
             </li>
           </ul>
         </li>
@@ -37,28 +28,28 @@
 </template>
 
 <script>
-// import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 
 export default {
   name: 'order-list',
   components: { detailPanel },
   computed: {
-    // ...mapGetters(['BePickingData']),
-    options () {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
+    ...mapGetters('pickup', ['pickupCargoDetail'])
   },
   methods: {
-    // ...mapActions(['getBePicking']),
+    onNoCopy () {
+      window.toast('复制成功')
+    }
   }
 }
 </script>
 <style scoped lang="stylus">
+  .cargo-edit
+    float: right
+    padding-right: 25px;
+    color: #00A4BD;
+    font-size: 15px;
   .order-list
     padding: 15px 15px 0 0
     .order-item

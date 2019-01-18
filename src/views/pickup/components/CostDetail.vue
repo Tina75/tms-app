@@ -1,36 +1,36 @@
 <template>
-  <detail-panel :title="'应收费用'">
-    <detail-panel-item :label="'运输费用'">
-      <p>1000元</p>
+  <detail-panel v-if="pickupDetail.totalFee" :title="'应收费用'">
+    <detail-panel-item v-if="pickupDetail.freightFee" :label="pickupDetail.assignCarType === 1 ? '运输费用' : '油费'">
+      <p>{{pickupDetail.freightFee|moneyFormat}}元</p>
     </detail-panel-item>
-    <detail-panel-item :label="'油费'">
-      <p>1000元</p>
+    <detail-panel-item v-if="pickupDetail.loadFee" :label="'装货费用'">
+      <p>{{pickupDetail.loadFee|moneyFormat}}元</p>
     </detail-panel-item>
-    <detail-panel-item :label="'提货费用'">
-      <p>1000元</p>
+    <detail-panel-item v-if="pickupDetail.unloadFee" :label="'卸货费用'">
+      <p>{{pickupDetail.unloadFee|moneyFormat}}元</p>
     </detail-panel-item>
-    <detail-panel-item :label="'装货费用'">
-      <p>1000元</p>
+    <detail-panel-item v-if="pickupDetail.insuranceFee" :label="'保险费用'">
+      <p>{{pickupDetail.insuranceFee|moneyFormat}}元</p>
     </detail-panel-item>
-    <detail-panel-item :label="'卸货费用'">
-      <p>1000元</p>
+    <detail-panel-item v-if="pickupDetail.otherFee" :label="'其他费用'">
+      <p>{{pickupDetail.otherFee|moneyFormat}}元</p>
     </detail-panel-item>
-    <detail-panel-item :label="'保险费用'">
-      <p>1000元</p>
+    <detail-panel-item v-if="pickupDetail.cashAmount" :label="'到付现金'">
+      <p>{{pickupDetail.cashAmount|moneyFormat}}元</p>
     </detail-panel-item>
-    <detail-panel-item :label="'其他费用'">
-      <p>1000元</p>
+    <detail-panel-item v-if="pickupDetail.fuelCardAmount" :label="'到付油卡'">
+      <p>{{pickupDetail.fuelCardAmount|moneyFormat}}元</p>
     </detail-panel-item>
     <div class="total-cost">
       <label>合计</label>
-      <span>6000元</span>
-      <i>月结</i>
+      <span>{{pickupDetail.totalFee|moneyFormat}}元</span>
+      <i v-if="pickupDetail.assignCarType === 1">{{settlementTypeMap[pickupDetail.settlementType]}}</i>
     </div>
   </detail-panel>
 </template>
 
 <script>
-// import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
 
@@ -38,14 +38,7 @@ export default {
   name: 'pickupInfo',
   components: { detailPanel, detailPanelItem },
   computed: {
-    // ...mapGetters(['BePickingData']),
-    options () {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
+    ...mapGetters('pickup', ['pickupDetail', 'settlementTypeMap'])
   },
   methods: {
     // ...mapActions(['getBePicking']),

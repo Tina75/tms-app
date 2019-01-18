@@ -2,8 +2,8 @@
   <div class="pickup-detail">
     <cube-scroll-nav @change="changeHandler">
       <div slot="prepend" class="status-block">
-        <h2>已提货</h2>
-        <p>2019-01-01 12:00</p>
+        <h2>{{statusMap[pickupDetail.status]}}</h2>
+        <p>{{pickupDetail.createTime|datetimeFormat}}</p>
       </div>
       <cube-scroll-nav-panel
         v-for="(item, index) in pageData"
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import PickupInfo from '../components/PickupInfo'
 import OrderList from '../components/OrderList'
 import CostDetail from '../components/CostDetail'
@@ -48,16 +48,27 @@ export default {
           name: '应收费用',
           component: 'CostDetail'
         }
-      ]
+      ],
+      statusMap: {
+        1: '待提货',
+        2: '提货中',
+        3: '已提货'
+      }
     }
   },
   computed: {
-    ...mapGetters(['pickupDetail'])
+    ...mapGetters('pickup', ['pickupDetail'])
   },
   methods: {
+    ...mapActions('pickup', ['getPickupDetail']),
     changeHandler (label) {
       console.log('changed to:', label)
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.getPickupDetail(to.params.id)
+    })
   }
 }
 </script>
