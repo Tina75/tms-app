@@ -34,7 +34,7 @@
       <cube-button v-if="!info.waybillId" class="list-item__btngroup" :outline="true"  :inline="true" primary @click="dispatch(info.id)">调度</cube-button>
       <div v-else class="list-item__btngroup">
         <div v-if="info.status<3">
-          <cube-button class="btn" :outline="true"  :inline="true" :light="true" @click="sendCar(info.waybillId)">删除</cube-button>
+          <cube-button class="btn" :outline="true" :inline="true" @click="deleteBill">删除</cube-button>
           <cube-button v-if="info.status==1" class="btn" :outline="true"  :inline="true" primary @click="sendCar(info.waybillId)">派车</cube-button>
           <cube-button v-if="info.status==2" class="btn" :outline="true"  :inline="true" primary @click="setOff(info.waybillId)">发运</cube-button>
         </div>
@@ -57,28 +57,36 @@ export default {
 
   methods: {
     ...mapActions(['doSetOff', 'doArrival']),
+    // 调度
     dispatch() {
       this.$router.push({ name: 'delivery-workbench' })
     },
+    // 派车
     sendCar() {
       this.$router.push({ name: 'delivery-send-car' })
     },
-    setOff() {
-      // 发运
+    // 发运
+    setOff(id) {
       this.showDialog('是否发运？', () => {
-        this.doSetOff([this.info.waybillId])
+        this.doSetOff([id])
       })
     },
-    arrival() {
-      // 到货
+    // 到货
+    arrival(id) {
       this.showDialog('是否确认到货？', () => {
-        this.doArrival([this.info.waybillId])
+        this.doArrival([id])
       })
     },
+
     location() {
       // TODO: 等小熊
       window.toast('等小熊')
     },
+
+    deleteBill() {
+      this.$emit('deleteItem', this.info.waybillId)
+    },
+
     showDialog(msg, fn) {
       this.$createDialog({
         type: 'confirm',

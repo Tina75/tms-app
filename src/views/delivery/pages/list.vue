@@ -21,10 +21,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import DispatchList from '../components/dispath-list.vue'
-import SendList from '../components/send-list'
-import SendingList from '../components/sending-list'
-import ArrivalList from '../components/arrival-list'
+import DispatchList from '../components/list/dispath-list.vue'
+import SendList from '../components/list/send-list'
+import SendingList from '../components/list/sending-list'
+import ArrivalList from '../components/list/arrival-list'
 export default {
   name: 'delivery-list',
   metaInfo: { title: '送货管理' },
