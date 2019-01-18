@@ -5,10 +5,10 @@
         v-model="form.cargoName"
         label="货物名称"
         class="cube-mb-15"
-        maxlength="20"
         prop="name"
+        :maxlength="rules.name.max"
       />
-      <FormItem v-model="form.cargoNo" label="货物编号" prop="number" maxlength="20"/>
+      <FormItem v-model="form.cargoNo" label="货物编号" prop="number" :maxlength="rules.number.max"/>
       <FormItem v-model="form.cargoCost" label="货值(元)" type="number"  prop="price"/>
       <FormItem
         v-model="form.unit"
@@ -29,19 +29,19 @@
       <FormItem
         v-model="form.remark1"
         label="备注1"
-        maxlength="200"
-        placeholder="请输入（最多输入200字）"
+        placeholder="请输入（最多输入100字）"
         type="textarea"
         class="cube-mb-15"
         prop="remark"
+        :maxlength="rules.remark.max"
       />
       <FormItem
         v-model="form.remark2"
         label="备注2"
-        maxlength="200"
-        placeholder="请输入（最多输入200字）"
+        placeholder="请输入（最多输入100字）"
         type="textarea"
         prop="remark"
+        :maxlength="rules.remark.max"
       />
     </FromGroup>
     <CheckboxPopup

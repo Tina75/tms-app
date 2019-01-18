@@ -1,8 +1,8 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10">
     <FromGroup ref="form" :rules="rules">
-      <FormItem v-model="form.name" label="发货人名称" prop="name"/>
-      <FormItem v-model="form.contact" label="联系人" prop="contact"/>
+      <FormItem v-model="form.name" label="发货人名称" prop="name" :maxlength="rules.name.max"/>
+      <FormItem v-model="form.contact" label="联系人" prop="contact" :maxlength="rules.contact.max"/>
       <FormItem
         v-model="form.phone"
         :bottom-line="false"
@@ -50,7 +50,7 @@
         label="开拓渠道"
         placeholder="请选择"
       />
-      <FormItem v-model="form.remark" maxlength="200" type="textarea" label="备注" prop="remark"/>
+      <FormItem v-model="form.remark" type="textarea" label="备注" prop="remark" :maxlength="rules.remark.max"/>
     </FromGroup>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
   </div>

@@ -36,10 +36,10 @@ export const contactRule = {
 export const cargoRule = {
   name: {
     required: true,
-    max: 20
+    max: 200
   },
   number: {
-    max: 20
+    max: 200
   },
   price: {
     pattern: /^(\d+(\.\d{1,4})?$)$/,
@@ -60,6 +60,6 @@ export const cargoRule = {
     }
   },
   remark: {
-    max: 200
+    max: 100
   }
 }
