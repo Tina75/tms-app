@@ -160,16 +160,24 @@ export default {
       })
     },
     del () {
-      const data = {
-        carrierId: this.$route.query.driverId
-      }
-      try {
-        this.removeDriver(data)
-      } catch (e) {
-        console.log(e)
-      } finally {
-        this.$router.back()
-      }
+      this.$createDialog({
+        type: 'confirm',
+        title: '',
+        content: '请确认是否需要删除该信息?',
+        icon: 'cubeic-alert',
+        onConfirm: () => {
+          const data = {
+            carrierId: this.$route.query.driverId
+          }
+          try {
+            this.removeDriver(data)
+          } catch (e) {
+            console.log(e)
+          } finally {
+            this.$router.back()
+          }
+        }
+      }).show()
     }
   },
   beforeRouteEnter (to, from, next) {

@@ -114,6 +114,7 @@ export default {
         console.error(e)
       } finally {
         this.submiting = false
+        this.$router.back()
       }
     },
     async setForm() {

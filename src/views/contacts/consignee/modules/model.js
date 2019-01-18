@@ -1,3 +1,4 @@
+import bridge from '@/libs/dsbridge'
 const validator = {
   // 手机号码
   phone (value) {
@@ -34,6 +35,9 @@ export const editPhone = (value) => {
     return value
   }
 }
+export const setRightButton = () => {
+  bridge.register('consignee', () => {this.$router.push({ name: 'contacts-consignee-modify'})})
+}
 
 export class ConsigneeDetail {
   id = ''
@@ -46,19 +50,18 @@ export class ConsigneeDetail {
   address = '' // 地址
   cityCode = ''
   consignerHourseNumber = '' // 门牌号
-  static toForm(data) {
-    data = {
-      ...data
-    }
-    const arr = ['cityName', 'consignerHourseNumber', 'remark', 'consigneeCompanyName']
+  static toForm(server) {
+    const data = {}
+    const arr = ['address', 'cityCode', 'consigneeCompanyName', 'consignerHourseNumber', 'consignerId', 'consignerName', 'contact', 'id', 'phone', 'remark']
     arr.forEach((key) => {
-      data[key] = data[key] ? data[key] : ''
+      data[key] = server[key]
+      data.cityCode = data.cityCode ? data.cityCode : ''
+      data.address = server.consignerHourseNumber ? server.address + server.consignerHourseNumber : server.address
     })
-    data.address = data.cityName + data.address + data.consignerHourseNumber
     return data
   }
   static toServer(data) {
-    const body = {
+    const server = {
       address: data.address,
       consignerId: data.consignerId,
       consigneeCompanyName: data.consigneeCompanyName,
@@ -72,6 +75,6 @@ export class ConsigneeDetail {
       id: data.id,
       cityCode: data.cityCode
     }
-    return body
+    return server
   }
 }
