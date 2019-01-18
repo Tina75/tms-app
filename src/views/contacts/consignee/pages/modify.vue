@@ -158,7 +158,9 @@ export default {
     async submit () {
       // 如果是修改且收货地址没有变更 取详情的地址，变更了取新设置的地址
       const address = Object.assign({}, this.formList, { address: this.consigneeDetail.address })
-      const data = ConsigneeDetail.toServer(Object.assign({}, address, this.saveAddress))
+      const data = this.saveAddress
+        ? ConsigneeDetail.toServer(Object.assign({}, address, this.saveAddress))
+        : ConsigneeDetail.toServer(Object.assign({}, address))
       console.log('data', data)
       // 表单验证
       const valid = await this.$refs.$form.validate()
