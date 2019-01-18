@@ -57,7 +57,7 @@ export default {
     onPageRefresh() { this.loading = true },
 
     onItemClick(item) {
-      this.SET_CONSIGNEE_INFO(item)
+      this.SET_CONSIGNEE_INFO(item.data)
       this.$router.back()
     }
   }
