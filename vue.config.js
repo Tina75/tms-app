@@ -1,6 +1,7 @@
 const webpack = require('webpack')
-const useBundleAnalyzer = false // 是否开启打包分析
+const useBundleAnalyzer = true // 是否开启打包分析
 const proxyUrl = 'https://dev.tms5566.com/dolphin-app'
+let i = 0
 const config = {
   publicPath: './',
   assetsDir: 'static',
@@ -58,6 +59,11 @@ const config = {
           city: {
             test: /[\\/]node_modules[\\/]ydd_area/,
             name: 'ydd_area',
+            chunks: 'all'
+          },
+          components: {
+            test: /[\\/]src[\\/]components[\\/]/,
+            name: 'common_components',
             chunks: 'all'
           }
         }

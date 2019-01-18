@@ -9,7 +9,8 @@
       <ul v-if="oftenList.list.length" class="order-list">
         <li
           v-for="(item, index) in oftenList.list"
-          :key="index" class="order-list-item"
+          :key="index"
+          class="order-list-item"
           @click="$router.push({ name: 'order-often-detail', params: { orderId: item.id } })">
           <p class="order-company order-container">{{ item.consignerName }}</p>
 
@@ -35,14 +36,18 @@
           </div>
 
           <div class="order-footer order-container">
-            <money-label :money="item | totalFee" />
-            <span class="order-footer-settlement">{{ item.settlementType | settlementType }}</span>
+            <div class="order-footer-info">
+              <p class="info-settlement">{{ item.settlementType | settlementType }}</p>
+              <p class="info-money">{{ item | totalFee }}<span>/元</span></p>
+            </div>
             <div class="order-footer-button">
               <cube-button
+                v-if="oftenPermission.indexOf(100402) > -1"
                 class="order-footer-button-item order-footer-button-delete"
                 inline light outline
                 @click.stop="orderDelete(item.id)">删除</cube-button>
               <cube-button
+                v-if="oftenPermission.indexOf(100401) > -1"
                 class="order-footer-button-item order-footer-button-add"
                 inline light outline
                 @click.stop="orderAdd(item.id)">再来一单</cube-button>
@@ -64,7 +69,6 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import InfiniteList from '@/components/InfiniteList'
-import MoneyLabel from '../../components/MoneyLabel'
 import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-data.png'
 import { settlementType, totalFee } from '../../js/filters'
@@ -72,7 +76,7 @@ import { settlementType, totalFee } from '../../js/filters'
 export default {
   name: 'order-often',
   metaInfo: { title: '常发订单' },
-  components: { MoneyLabel, NoData, InfiniteList },
+  components: { NoData, InfiniteList },
   filters: { settlementType, totalFee },
   data () {
     return {
@@ -80,7 +84,10 @@ export default {
       loading: false
     }
   },
-  computed: mapState('order/often', [ 'oftenList' ]),
+  computed: {
+    ...mapState('order/often', [ 'oftenList' ]),
+    ...mapState('order/create', [ 'oftenPermission' ])
+  },
   methods: {
     ...mapActions('order/often', [ 'loadOftenList', 'deleteOftenOrder' ]),
 
@@ -119,15 +126,23 @@ export default {
     line-height 33px
 
   .order-footer
-    height 49px
-    line-height 49px
+    display flex
+    align-items center
+    height 59px
 
-    &-settlement
-      font-size 12px
-      color #666666
-      margin-left  10px
+    &-info
+      flex 1
+      .info-settlement
+        margin-bottom 5px
+        font-size 12px
+        color #333333
+      .info-money
+        font-size 20px
+        color #FA8C15
+        span
+          font-size 14px
     &-button
-      float right
+      flex none
       &-item
         width 70px
         height 30px

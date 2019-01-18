@@ -1,6 +1,9 @@
 <template>
   <div class="detail-panel">
-    <p class="panel-title border-bottom-1px">{{title}}</p>
+    <p class="panel-title border-bottom-1px">
+      {{title}}
+      <slot name="title-btn"/>
+    </p>
     <slot/>
   </div>
 </template>

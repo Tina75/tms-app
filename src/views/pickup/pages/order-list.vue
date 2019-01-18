@@ -1,5 +1,5 @@
 <template>
-  <div class="example-index"/>
+  <div class="pickup-order-list"/>
 </template>
 
 <script>
@@ -7,10 +7,10 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: 'NewsIndex',
+  name: 'pickup-order-list',
   // components: { ContentLoaderList },
   metaInfo: {
-    title: 'HackNews'
+    title: '订单信息'
   },
   data () {
     return {

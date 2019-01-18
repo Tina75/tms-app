@@ -69,7 +69,7 @@ export default {
       } else {
         this.formCanLeave()
         if (data.pickup === 1) this.$router.push({ name: 'pickup-assign', params: { id: 0 }, query: { type: 'direct' } }) // 提货派车
-        else this.$router.push({ name: 'delivery-send-car', query: { type: 'direct' } }) // 送货派车
+        else this.$router.push({ name: 'delivery-send-car', params: { id: 0 }, query: { type: 'direct' } }) // 送货派车
       }
     } catch (err) {
       //

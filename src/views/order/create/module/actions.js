@@ -135,5 +135,20 @@ export default {
     })
     orderShipInfo = null
     commit('SET_ORDER_RESET', true)
+  },
+
+  getOftenPermission: async ({ commit }) => {
+    const { data } = await Server({
+      url: '/set/userInfo',
+      method: 'get'
+    })
+    const permissions = data.data.permission
+    let temp = []
+    if (permissions.indexOf('100400') > -1) {
+      temp.push(100400) // 常发订单
+      if (permissions.indexOf('100401') > -1) temp.push(100401) // 再来一单
+      if (permissions.indexOf('100402') > -1) temp.push(100402) // 删除
+    }
+    commit('SET_OFTEN_PERMISSION', temp)
   }
 }
