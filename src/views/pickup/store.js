@@ -207,7 +207,7 @@ export default {
         resolve()
       })
     },
-    getPickupDetailForAssign: ({ state, commit }, id) => {
+    getPickupDetailForForm: ({ state, commit }, id) => {
       return new Promise((resolve, reject) => {
         server({
           method: 'post',
@@ -260,7 +260,7 @@ export default {
         })
       })
     },
-    assign: ({ state, commit, dispatch }, data) => {
+    assign: ({ state, commit }, data) => {
       return new Promise((resolve, reject) => {
         server({
           method: 'post',
@@ -284,6 +284,20 @@ export default {
           if (index >= 0) {
             state.bePickingData.list.splice(index, 1, response.data.data.loadbill)
           }
+        })
+      })
+    },
+    pickupEdit: ({ state, commit }, data) => {
+      return new Promise((resolve, reject) => {
+        server({
+          method: 'post',
+          url: 'load/bill/update',
+          data: {
+            loadbill: data,
+            cargoList: []
+          }
+        }).then(() => {
+          resolve()
         })
       })
     }
