@@ -40,6 +40,9 @@ export default {
       state.send.pageNo = ++payload.pageNo
       state.send.list = state.send.list.concat(payload.waybillList)
     },
+    SET_SEND_LIST(state, list) {
+      state.send.list = [...list]
+    },
     SEND_CLEAR (state) {
       state.send = { list: [], pageNo: 1 }
     },
@@ -116,6 +119,16 @@ export default {
       })
     },
     clearArrival: ({ commit }) => { commit('ARRIVAL_CLEAR') },
+    // 派车
+    doSendCar: ({ commit, state }, info) => {
+      return Server({
+        url: '/waybill/assign/vehicle',
+        method: 'post',
+        data: info
+      }).then(() => {
+        // 派车成功，刷新列表
+      })
+    },
     // 发运
     doSetOff: ({ commit, state }, waybillIds = []) => {
       Server({
@@ -179,9 +192,9 @@ export default {
     SendList: state => state.send.list,
     SendingList: state => state.sending.list,
     ArrivalList: state => state.arrival.list,
-    WaybillDetail: state => state.waybillDetail,
+    WaybillDetail: state => state.waybillDetail || {},
     Waybill: state => state.waybillDetail.waybill || {},
-    CargoList: state => state.waybillDetail.cargoList || {},
+    CargoList: state => state.waybillDetail.cargoList || [],
     OrderList: state => state.waybillDetail.orderList,
     TabCount: state => ({
       dispatch: state.tabCount.waitDispatchCnt,

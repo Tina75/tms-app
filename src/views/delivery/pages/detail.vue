@@ -70,7 +70,7 @@ export default {
       return (info.assignCarType === 1 && info.carrierName) || (info.assignCarType === 2 && info.carNo)
     },
     sendCar(id) {
-
+      this.$router.push({ name: 'delivery-send-car', params: { id } })
     },
     location(id) {
 
