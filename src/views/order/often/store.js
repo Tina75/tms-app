@@ -29,6 +29,7 @@ const actions = {
       data: { id }
     })
     commit('SET_DETAIL', data.data)
+    return data.data
   }
 }
 

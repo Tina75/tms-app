@@ -3,8 +3,10 @@
     <form-group
       ref="$form"
       v-model="form"
+      :rules="rules"
       class="border-bottom-1px">
       <form-item
+        v-if="showCityOption"
         :value="localeView"
         label="所在地区"
         type="click"
@@ -12,6 +14,7 @@
         @click.native="showCityPicker = true" />
       <form-item
         v-model="form.address"
+        prop="address"
         label="详细地址"
         placeholder="请输入详细地址"
         clearable />
@@ -59,8 +62,7 @@
 </template>
 <script>
 import yddArea from 'ydd_area'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import { Address } from '@/views/contacts/common/model'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import cityUtil from '@/libs/city'
 import CityPicker from '@/components/CityPicker'
 import FormGroup from '@/components/Form/FormGroup'
@@ -90,17 +92,23 @@ export default {
         extra: '',
         cityCode: ''
       },
+      rules: {
+        address: { required: true, type: 'string' }
+      },
       oftenAddresses: [],
       showCityPicker: false
     }
   },
   computed: {
-    ...mapState('contacts/consignee', [ 'saveConsigner' ]),
-    ...mapGetters('order/create', [ 'currentArrdessType', 'orderInfo' ]),
+    ...mapGetters('order/create', [ 'currentArrdessType', 'orderInfo', 'orderConfig', 'consignerId' ]),
 
     showOftenList () { return this.currentArrdessType === 'send' && !this.form.address && this.oftenAddresses.length },
     showAddressList () { return !!this.form.address },
     localeView () { return cityUtil.getCityNameArray(this.form.locale).join('/') },
+    showCityOption () {
+      if (this.currentArrdessType === 'send') return !!this.orderConfig.startCityOption
+      else return !!this.orderConfig.endCityOption
+    },
 
     limitCityGeo () {
       const data = this.form.locale
@@ -137,13 +145,13 @@ export default {
       this.form.longitude = longitude || ''
       this.form.address = address || ''
       this.form.extra = consignerHourseNumber || ''
-      this.formartLocale(cityCode)
+      this.formartLocale()
     },
 
-    formartLocale (cityCode) {
-      if (!cityCode) return
-      const codes = [ Number(cityCode) ]
-      const cityInfos = yddArea.getParentByCode(cityCode)
+    formartLocale () {
+      if (!this.form.cityCode) return
+      const codes = [ Number(this.form.cityCode) ]
+      const cityInfos = yddArea.getParentByCode(this.form.cityCode)
       codes.unshift(Number(cityInfos.code))
       if (Number(cityInfos.parent) !== 0) codes.unshift(Number(cityInfos.parent))
       this.form.locale = codes.map(code => {
@@ -159,11 +167,13 @@ export default {
     },
 
     async fetchAddressData () {
-      if (!this.saveConsigner.id) return
-      this.oftenAddresses = await this.getOftenAddress(this.saveConsigner.id)
+      if (!this.consignerId) return
+      this.oftenAddresses = await this.getOftenAddress(this.consignerId)
     },
 
     async submit () {
+      console.log(await this.$refs.$form.validate())
+      if (!(await this.$refs.$form.validate())) return window.toast('请填写详细地址')
       this.SET_ADDRESS_INFO(Object.assign({}, this.form))
       this.$formWillLeave(() => {
         this.showCityPicker = false
@@ -191,8 +201,8 @@ export default {
         form.longitude = info.consigneeAddressLongitude || ''
         form.latitude = info.consigneeAddressLatitude || ''
         form.locale = info.consigneeAddressLocale || ''
-        vm.formartLocale(info.end)
       }
+      vm.formartLocale()
     })
   }
 }

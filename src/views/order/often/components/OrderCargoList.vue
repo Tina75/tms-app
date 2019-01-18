@@ -2,8 +2,8 @@
   <detail-panel :title="'货物明细'">
     <ul class="cargo-list">
       <li
-        class="cargo-item"
-        v-for="cargo in cargoList" :key="cargo.id">
+        v-for="cargo in cargoList"
+        :key="cargo.id" class="cargo-item">
         <p class="cargo-title">{{ cargo.cargoName }} {{ `(${cargo.cargoNo})` }}</p>
         <p class="cargo-content">{{ cargo | cargoDetail }}</p>
       </li>

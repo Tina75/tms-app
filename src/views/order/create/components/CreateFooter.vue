@@ -1,7 +1,7 @@
 <template>
   <footer class="create-footer">
     <div class="footer-item">
-      <div class="footer-item-select">
+      <div v-if="mode !== 'edit'" class="footer-item-select">
         <cube-checkbox v-model="orderOften" class="footer-item-select-radio">保存为常发订单</cube-checkbox>
       </div>
       <a class="footer-item-total"
@@ -16,8 +16,10 @@
         class="footer-item-button"
         @click="saveOrder">保存</cube-button>
       <cube-button
+        v-if="mode !== 'edit'"
         class="footer-item-button"
-        primary>立即发运</cube-button>
+        primary
+        @click="saveOrder(true)">立即发运</cube-button>
     </div>
 
     <div v-show="showDetail" class="detail-box">
@@ -49,6 +51,7 @@ export default {
   },
   data () {
     return {
+      mode: this.$route.meta.mode,
       showDetail: false
     }
   },
@@ -74,9 +77,9 @@ export default {
   },
   methods: {
     ...mapMutations('order/create', [ 'SET_OFTEN_ORDER' ]),
-    saveOrder () {
+    saveOrder (isDirectShip) {
       this.showDetail = false
-      this.$emit('on-save-order')
+      this.$emit('on-save-order', isDirectShip)
     }
   }
 }

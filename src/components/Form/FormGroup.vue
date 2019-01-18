@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     getAllItems () {
-      return this.$children.filter(item => item.$options._componentTag === 'FormItem')
+      return this.$children.filter(item => ['form-item', 'FormItem'].indexOf(item.$options._componentTag) > -1)
     },
     reset () {
       this.getAllItems().map(item => { item.setValid() })

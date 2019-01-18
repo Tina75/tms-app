@@ -1,24 +1,36 @@
 import NP from 'number-precision'
 
 export default {
-  // 清除订单信息
-  CLEAR_ORDER_INFO: state => {
-    for (let key in state.orderInfo) {
-      state.orderInfo[key] = ''
-    }
-  },
+  // 设置开单配置
+  SET_ORDER_CONFIG: (state, payload) => { state.orderConfig = payload },
+  // 设置是否需要重置订单信息
+  SET_ORDER_RESET: (state, payload) => { state.orderNeedReset = payload },
   // 设置订单信息
   SET_ORDER_INFO: (state, payload) => {
+    resetFields(payload)
     for (let key in state.orderInfo) {
       state.orderInfo[key] = payload[key]
     }
+    if (payload.consignerName === '') {
+      state.consignerId = void 0
+      state.orderCargoList = []
+      state.consumerInfo = {}
+      state.feeInfo = {}
+      state.otherInfo = {}
+      state.cargoOften = state.consigneeInfo = state.calculatedAmount = null
+      state.currentArrdessType = ''
+      state.addressChanged = false
+    }
   },
+  // 设置发货人id
+  SET_CONSIGNER_ID: (state, payload) => { state.consignerId = payload },
   // 设置常发订单
   SET_OFTEN_ORDER: (state, payload) => {
     state.orderInfo.isSaveOrderTemplate = Number(payload)
   },
   // 设置费用信息
   SET_FEE_INFO: (state, payload) => {
+    resetFields(payload)
     state.feeInfo = payload
     const fees = [ payload.pickupFee, payload.loadFee, payload.unloadFee, payload.insuranceFee, payload.otherFee ]
     const totalFee = fees.reduce((last, fee) => {
@@ -28,20 +40,36 @@ export default {
     state.orderInfo.otherFee = totalFee === '' ? '' : NP.divide(totalFee, 100)
   },
   // 设置其他信息
-  SET_OTHER_INFO: (state, payload) => { state.otherInfo = Object.assign(state.otherInfo, payload) },
+  SET_OTHER_INFO: (state, payload) => {
+    resetFields(payload)
+    state.otherInfo = Object.assign(state.otherInfo, payload)
+  },
   // 设置客户订单号等信息
-  SET_CONSUMER_INFO: (state, payload) => { state.consumerInfo = Object.assign(state.consumerInfo, payload) },
+  SET_CONSUMER_INFO: (state, payload) => {
+    resetFields(payload)
+    state.consumerInfo = Object.assign(state.consumerInfo, payload)
+  },
   // 设置常发货物
-  SET_CARGO_OFTEN: (state, payload) => { state.cargoOften = payload },
+  SET_CARGO_OFTEN: (state, payload) => {
+    resetFields(payload)
+    state.cargoOften = payload
+  },
   // 清空常发货物
   CLEAR_CARGO_OFTEN: (state, payload) => { state.cargoOften = null },
   // 设置货物信息
-  SET_CARGO_LIST: (state, payload) => { state.orderCargoList = payload },
+  SET_CARGO_LIST: (state, payload) => {
+    payload.forEach(item => { resetFields(item) })
+    state.orderCargoList = payload
+  },
   // 设置当前编辑地址类型
-  SET_ADDRESS_TYPE: (state, payload) => { state.currentArrdessType = payload },
+  SET_ADDRESS_TYPE: (state, payload) => {
+    resetFields(payload)
+    state.currentArrdessType = payload
+  },
   // 设置已经选择的地址信息
   SET_ADDRESS_INFO: (state, payload) => {
     if (!state.currentArrdessType) return
+    resetFields(payload)
     const info = state.orderInfo
     if (state.currentArrdessType === 'send') {
       info.start = payload.cityCode
@@ -65,9 +93,18 @@ export default {
   },
   TRIGGER_ADDRESS_CHANGE: (state, payload) => { state.addressChanged = payload },
   // 设置选择的收货人信息
-  SET_CONSIGNEE_INFO: (state, payload) => { state.consigneeInfo = payload },
+  SET_CONSIGNEE_INFO: (state, payload) => {
+    resetFields(payload)
+    state.consigneeInfo = payload
+  },
   // 设置计费规矩金额
   SET_CALCULATE_AMOUNT: (state, payload) => { state.calculatedAmount = payload },
   // 清空计费规则计算金额结果
   CLEAR_CALCULATED_AMOUNT: state => { state.calculatedAmount = void 0 }
+}
+
+function resetFields (object) {
+  for (let key in object) {
+    if (object[key] === undefined || object[key] === null) object[key] = ''
+  }
 }

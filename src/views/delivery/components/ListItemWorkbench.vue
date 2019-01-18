@@ -12,18 +12,18 @@
       </cube-checkbox>
     </div>
     <div class="list-item__body">
-      <p class="list-item__city">{{info.startName}} → {{info.endName}}</p>
+      <p class="list-item__city">{{info.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{info.endName}}</p>
       <div>
-        <span class="list-item__count">{{info.weight}}吨</span>
-        <span class="list-item__count">{{info.volume}}方</span>
-        <span class="list-item__count">{{info.quantity}}件</span>
+        <span v-if="info.weight" class="list-item__count">{{info.weight}}吨</span>
+        <span v-if="info.volume" class="list-item__count">{{info.volume}}方</span>
+        <span v-if="info.quantity" class="list-item__count">{{info.quantity}}件</span>
       </div>
       <p v-if="info.consignerName" class="cube-mt-5">{{info.consignerName}}</p>
       <!-- <p v-if="info.carrierName" class="cube-mt-5">{{info.carrierName}}</p> -->
-      <p v-if="info.id" class="list-item__number">客户单号：{{info.customerOrderNo}}</p>
-      <!-- <p v-else class="list-item__number cube-font-12">
+      <p v-if="info.id && info.customerOrderNo" class="list-item__number">客户单号：{{info.customerOrderNo}}</p>
+      <p v-if="(info.assignCarType === 1 && info.carrierName) || (info.assignCarType === 2 && info.carNo)" class="list-item__number cube-font-12">
         <span class="send-type">{{info.assignCarType==1?'外转':'自送'}}</span>{{info.driverName}}  {{info.assistantDriverName}}  {{info.carNo}}
-      </p> -->
+      </p>
     </div>
     <div class="list-item__money">
       <p class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormat}})</p>

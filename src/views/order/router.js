@@ -2,24 +2,34 @@ import store from '@/store'
 import createModule from './create/module'
 import listModule from './list/store'
 import oftenModule from './often/store'
+import detailModule from './detail/store'
 
 export default [
   {
     path: '/order/create',
     name: 'order-create', // 受理下单
-    meta: { formLeaveConfirm: true },
+    meta: {
+      mode: 'create',
+      formLeaveConfirm: true
+    },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
   },
   {
     path: '/order/create/:id',
     name: 'order-one-more', // 再来一单
-    meta: { formLeaveConfirm: true },
+    meta: {
+      mode: 'oneMore',
+      formLeaveConfirm: true
+    },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
   },
   {
     path: '/order/edit/:id',
     name: 'order-edit', // 订单编辑
-    meta: { formLeaveConfirm: true },
+    meta: {
+      mode: 'edit',
+      formLeaveConfirm: true
+    },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
   },
   {
@@ -82,7 +92,12 @@ export default [
   {
     path: '/order/list',
     name: 'order-list', // 订单列表
-    component: () => import(/* webpackChunkName: "order" */'./list/list.vue')
+    component: () => import(/* webpackChunkName: "order" */'./list/pages/list.vue')
+  },
+  {
+    path: '/order/detail/:id',
+    name: 'order-detail', // 订单列表
+    component: () => import(/* webpackChunkName: "order" */'./detail/pages/detail.vue')
   }
 ]
 
@@ -90,3 +105,4 @@ store.registerModule('order', { namespaced: true })
 store.registerModule(['order', 'create'], createModule)
 store.registerModule(['order', 'list'], listModule)
 store.registerModule(['order', 'often'], oftenModule)
+store.registerModule(['order', 'detail'], detailModule)
