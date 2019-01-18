@@ -28,7 +28,7 @@ export default [
     component: () => import(/* webpackChunkName: "pickup" */'./pages/detail.vue')
   },
   {
-    path: '/pickup/edit',
+    path: '/pickup/edit/:id',
     name: 'pickup-edit',
     component: () => import(/* webpackChunkName: "pickup" */'./pages/edit.vue')
   },
