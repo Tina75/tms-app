@@ -33,11 +33,11 @@
 </template>
 
 <script>
-import { setAppTitleBtn } from '@/libs/bridgeUtil'
 import ListItem from '../../components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import { mapActions, mapState } from 'vuex'
+import { setAppRightBtn, setAppTitleBtn } from '@/libs/bridgeUtil'
 const moudleName = 'contacts/consignee'
 export default {
   name: 'ContactsConsigneeList',
@@ -56,9 +56,26 @@ export default {
     onPageRefresh() {
       console.info('onPageRefresh')
       this.loading = true
+      setAppRightBtn([
+        {
+          text: '添加',
+          iconType: 'add',
+          action: () => {
+            this.$router.push({ name: 'contacts-consignee-modify' })
+          }
+        },
+        {
+          text: '修改',
+          iconType: 'edit',
+          action: () => {
+            this.$router.push({ name: 'contacts-consignee-modify' })
+          }
+        }
+      ])
       setAppTitleBtn({
-        text: '添加',
-        color: '#000000',
+        position: 'left',
+        text: 'back',
+        iconType: 'back',
         action: () => {
           this.$router.push({ name: 'contacts-consignee-modify' })
         }

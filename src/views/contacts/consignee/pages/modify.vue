@@ -30,7 +30,7 @@
           @input="formatTel"
         />
       </div>
-      <div class="form_card">
+      <div class="consignee-modify_form__card">
         <form-item
           v-model="formList.address"
           type="click"
@@ -46,7 +46,7 @@
           :maxlength="50"
         />
       </div>
-      <div class="form_card">
+      <div class="consignee-modify_form__card">
         <form-item
           v-model="formList.remark"
           type="textarea"

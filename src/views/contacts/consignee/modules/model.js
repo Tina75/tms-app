@@ -1,3 +1,4 @@
+import bridge from '@/libs/dsbridge'
 const validator = {
   // 手机号码
   phone (value) {
@@ -33,6 +34,9 @@ export const editPhone = (value) => {
   } else {
     return value
   }
+}
+export const setRightButton = () => {
+  bridge.register('consignee', () => {this.$router.push({ name: 'contacts-consignee-modify'})})
 }
 
 export class ConsigneeDetail {

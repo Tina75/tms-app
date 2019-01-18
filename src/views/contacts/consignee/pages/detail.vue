@@ -47,9 +47,6 @@
       @click="del">
       删除
     </cube-button>
-    <cube-button @click="upLoad">
-      上传
-    </cube-button>
     <div class="consignee-detail_call">
       <cube-button
         :primary="true"
@@ -68,9 +65,7 @@
 <script>
 import IconFont from '@/components/Iconfont'
 import { mapState, mapActions } from 'vuex'
-import { uploadOSS } from '@/libs/ossUtil'
-// import { setAppTitleBtn } from '@/libs/bridgeUtil'
-import add from '../../../../assets/contacts/ico-add.png'
+// import { setAppRightBtn } from '@/libs/bridgeUtil'
 const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeDetail',
@@ -100,9 +95,6 @@ export default {
     },
     goEdit () {
       this.$router.push({ name: 'contacts-consignee-modify', query: { consigneeId: this.consigneeDetail.id } })
-    },
-    upLoad () {
-      uploadOSS(add)
     },
     del () {
       this.$createDialog({
