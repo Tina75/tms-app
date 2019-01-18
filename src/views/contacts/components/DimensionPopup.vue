@@ -142,6 +142,8 @@ export default {
     height 44px
     text-align center
     font-size 16px
+    padding 0
+    margin 0
   &__btns
     display flex
 </style>
