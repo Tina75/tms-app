@@ -3,6 +3,7 @@ import mutations from './mutations'
 import actions from './actions'
 
 const state = {
+  orderConfig: {},
   // 订单信息
   orderInfo: {
     consignerName: '',
@@ -35,7 +36,7 @@ const state = {
     receiptCount: 1,
 
     mileage: '',
-    freightFee: '',
+    freightFee: '', // --
 
     otherFee: '', //
     otherInfo: '', //

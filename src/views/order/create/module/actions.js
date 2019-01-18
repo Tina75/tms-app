@@ -60,5 +60,35 @@ export default {
       method: 'post',
       data
     })
+  },
+
+  updateOrder: async (state, data) => {
+    await Server({
+      url: '/order/update',
+      method: 'post',
+      data
+    })
+  },
+
+  fetchOrderInfo: async (state, id) => {
+    const { data } = await Server({
+      url: '/order/detail',
+      method: 'get',
+      data: { id }
+    })
+    return data.data
+  },
+
+  fetchOrderConfig: async ({ commit }) => {
+    const { data } = await Server({
+      url: '/set/commonSettingInfo',
+      method: 'get'
+    })
+    if (data.data && data.data.tmsSetConfigDto) {
+      for (let key in data.data.tmsSetConfigDto) {
+        if (data.data.tmsSetConfigDto[key] === 2) data.data.tmsSetConfigDto[key] = 0
+      }
+      commit('SET_ORDER_CONFIG', data.data.tmsSetConfigDto)
+    }
   }
 }

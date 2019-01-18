@@ -4,14 +4,17 @@
       <form>
         <div class="form-section">
           <form-item
+            v-if="orderConfig.customerOrderNoOption"
             v-model="form.customerOrderNo"
             label="客户订单号"
             maxlength="30" />
           <form-item
+            v-if="orderConfig.customerWaybillNoOption"
             v-model="form.customerWaybillNo"
             label="客户运单号"
             maxlength="30" />
           <form-item
+            v-if="orderConfig.salesmanIdOption"
             v-model="form.salesmanId"
             label="对接业务员"
             type="select"
@@ -21,12 +24,14 @@
         </div>
         <div class="form-section">
           <form-item
+            v-if="orderConfig.deliveryTimeOption"
             v-model="form.deliveryTimeText"
             label="发货时间"
             type="click"
             placeholder="请选择"
             @click.native="pickTimeHandler('delivery')" />
           <form-item
+            v-if="orderConfig.arriveTimeOption"
             v-model="form.arriveTimeText"
             label="到货时间"
             type="click"
@@ -65,9 +70,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order/create', [
-      'consumerInfo'
-    ])
+    ...mapGetters('order/create', [ 'consumerInfo', 'orderConfig' ])
   },
   methods: {
     ...mapMutations('order/create', [ 'SET_CONSUMER_INFO' ]),
@@ -124,6 +127,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(async vm => {
+      console.log(vm.consumerInfo)
       for (let key in vm.form) {
         vm.form[key] = vm.consumerInfo[key] === undefined ? '' : vm.consumerInfo[key]
       }

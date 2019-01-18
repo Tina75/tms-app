@@ -66,7 +66,7 @@ export default {
 
     ensure () {
       const temp = Object.assign({}, this.form)
-      temp.invoiceRate = temp.invoiceRate ? NP.times(temp.invoiceRate, 100) : temp.invoiceRate
+      temp.invoiceRate = temp.invoiceRate ? NP.divide(temp.invoiceRate, 100) : temp.invoiceRate
       temp.collectionMoney = temp.collectionMoney ? NP.times(temp.collectionMoney, 100) : temp.collectionMoney
       this.SET_OTHER_INFO(temp)
       this.$formWillLeave()
@@ -76,14 +76,18 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       for (let key in vm.form) {
-        if (key === 'isInvoice') vm.form.isInvoice = !!vm.otherInfo.isInvoice
-        else if (key === 'collectionMoney' || key === 'invoiceRate') {
-          if (vm.otherInfo[key] === undefined) {
-            vm.form[key] = (vm.otherInfo[key] === undefined || vm.otherInfo[key] === '')
-              ? ''
-              : NP.divide(vm.otherInfo[key], 100)
-          }
+        console.log(vm.otherInfo)
+        if (key === 'isInvoice') vm.isInvoice = vm.form.isInvoice = !!vm.otherInfo.isInvoice
+        else if (key === 'invoiceRate') {
+          vm.form.invoiceRate = (vm.otherInfo.invoiceRate === undefined || vm.otherInfo.invoiceRate === '')
+            ? ''
+            : NP.times(vm.otherInfo.invoiceRate, 100)
+        } else if (key === 'collectionMoney') {
+          vm.form.collectionMoney = (vm.otherInfo.collectionMoney === undefined || vm.otherInfo.collectionMoney === '')
+            ? ''
+            : NP.divide(vm.otherInfo.collectionMoney, 100)
         } else vm.form[key] = vm.otherInfo[key] === undefined ? '' : vm.otherInfo[key]
+        console.log(vm.form)
       }
     })
   }

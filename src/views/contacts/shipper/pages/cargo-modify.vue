@@ -1,15 +1,15 @@
 <template>
   <div class="cube-default-background cube-has-bottom-btn cube-pt-10">
-    <FromGroup :rules="rules">
+    <FromGroup ref="form" :rules="rules">
       <FormItem
         v-model="form.cargoName"
         label="货物名称"
         class="cube-mb-15"
         maxlength="20"
-        prop="require"
+        prop="name"
       />
-      <FormItem v-model="form.cargoNo" label="货物编号"/>
-      <FormItem v-model="form.cargoCost" label="货值(元)" type="number"/>
+      <FormItem v-model="form.cargoNo" label="货物编号" prop="number"/>
+      <FormItem v-model="form.cargoCost" label="货值(元)" prop="price"/>
       <FormItem
         v-model="form.unit"
         label="包装方式"
@@ -24,8 +24,8 @@
         placeholder="请输入长*宽*高"
         @on-click="showDismensionInput = true"
       />
-      <FormItem v-model="form.weight" label="重量(公斤)" type="number"/>
-      <FormItem v-model="form.volume" label="体积(方)" maxlength="6" type="number" class="cube-mb-15"/>
+      <FormItem v-model="form.weight" label="重量(公斤)" prop="weight"/>
+      <FormItem v-model="form.volume" label="体积(方)" class="cube-mb-15" prop="volume" />
       <FormItem
         v-model="form.remark1"
         label="备注1"
@@ -33,6 +33,7 @@
         placeholder="请输入（最多输入200字）"
         type="textarea"
         class="cube-mb-15"
+        prop="remark"
       />
       <FormItem
         v-model="form.remark2"
@@ -40,6 +41,7 @@
         maxlength="200"
         placeholder="请输入（最多输入200字）"
         type="textarea"
+        prop="remark"
       />
     </FromGroup>
     <CheckboxPopup
@@ -59,12 +61,13 @@
 </template>
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
+import { CargoDetail } from '../modules/model'
+import { cargoRule } from '../modules/rules'
 import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
 import CheckboxPopup from '../../components/CheckboxPopup'
 import DimensionPopup from '../../components/DimensionPopup'
-import { CargoDetail } from '../modules/model'
 const moudleName = 'contacts/shipper'
 export default {
   name: 'ModifyContactsShipperCargo',
@@ -84,11 +87,7 @@ export default {
     return {
       form: new CargoDetail(),
       unitTypes: CargoDetail.unitTypes,
-      rules: {
-        require: {
-          required: true
-        }
-      },
+      rules: cargoRule,
       submiting: false,
       showPackageType: false,
       showDismensionInput: false
@@ -113,10 +112,13 @@ export default {
   methods: {
     ...mapActions(moudleName, ['modifyCargo', 'removeCargo']),
     async submit() {
-      this.submiting = true
-      const server = CargoDetail.toServer(this.form)
-      server.consignerId = this.$route.query.consignerId
       try {
+        this.submiting = true
+        if (!(await this.$refs.form.validate())) {
+          return window.toast('请输入必填信息')
+        }
+        const server = CargoDetail.toServer(this.form)
+        server.consignerId = this.$route.query.consignerId
         await this.modifyCargo(server)
         this.$refreshPage('contacts-shipper-cargo', 'contacts-shipper-detail')
         this.$formWillLeave()
@@ -138,6 +140,7 @@ export default {
         }
       }
       this.form = CargoDetail.toForm(detailData)
+      console.info(this.form)
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -146,5 +149,4 @@ export default {
 }
 </script>
 <style lang='stylus' >
-
 </style>

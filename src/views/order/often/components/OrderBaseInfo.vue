@@ -7,8 +7,8 @@
       <p class="remix-content">
         <span>{{ detail.customerOrderNo || '-' }}</span>
         <a
-          class="border-right-1px"
           v-if="detail.customerOrderNo"
+          class="border-right-1px"
           @click.prevent="copy(detail.customerOrderNo)">复制</a>
       </p>
     </detail-panel-item>
@@ -16,8 +16,8 @@
       <p class="remix-content">
         <span>{{ detail.customerWaybillNo || '-' }}</span>
         <a
-          class="border-right-1px"
           v-if="detail.customerWaybillNo"
+          class="border-right-1px"
           @click.prevent="copy(detail.customerWaybillNo)">复制</a>
       </p>
     </detail-panel-item>
@@ -80,8 +80,8 @@ export default {
   methods: {
     copy (text) {
       this.$copyText(text)
-          .then(() => { window.toast('复制成功') })
-          .catch(() => { window.toast('复制失败') })
+        .then(() => { window.toast('复制成功') })
+        .catch(() => { window.toast('复制失败') })
     }
   }
 }

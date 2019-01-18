@@ -9,7 +9,7 @@
     <div class="contact-item__content cube-ml-15 cube-ellipsis" :class="{'cube-ellipsis':nowrap}">
       <slot>
         <span class="cube-c-black cube-font-17" v-text="item.name"/>
-        <span class="cube-c-light-grey cube-font-14" :class="{'cube-ellipsis':nowrap}" v-text="item.detail"/>
+        <span class="cube-c-light-grey cube-font-14 cube-mt-5" :class="{'cube-ellipsis':nowrap}" v-text="item.detail"/>
       </slot>
     </div>
     <slot name="right">
@@ -89,6 +89,4 @@ export default {
     span
       line-height 1.1em
       min-height 1.1em
-      &:last-of-type
-        margin-top 2px
 </style>

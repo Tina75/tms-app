@@ -21,28 +21,39 @@
               click-icon="icon-ico_boxx"
               @on-icon-click="chooseCargoInfo(index)" />
             <form-item
+              v-if="orderConfig.weightTonOption"
+              v-model="form.weight"
+              label="重量(吨)"
+              type="number" />
+            <form-item
+              v-if="orderConfig.weightKgOption"
               v-model="form.weightKg"
               label="重量(公斤)"
               type="number" />
             <form-item
+              v-if="orderConfig.volumeOption"
               v-model="form.volume"
               label="体积(方)"
               type="number"
               precision="6" />
             <form-item
+              v-if="orderConfig.cargoCostOption"
               v-model="form.cargoCost"
               label="货值(元)"
               type="number"
               precision="4" />
             <form-item
+              v-if="orderConfig.unitOption"
               v-model="form.unit"
               label="包装方式"
               type="click"
               @click.native="showUnitDialog(index)" />
             <form-item
+              v-if="orderConfig.quantityOption"
               v-model="form.quantity"
               label="包装数量" />
             <form-item
+              v-if="orderConfig.dimensionOption"
               v-model="form.size"
               label="包装尺寸(毫米)"
               type="click"
@@ -50,21 +61,38 @@
               placeholder="请输入长*宽*高"
               @click.native="showSizeDialog(index)" />
             <form-item
+              v-if="orderConfig.cargoNoOption"
               v-model="form.cargoNo"
               label="货物编码"
               maxlength="200" />
             <form-item
+              v-if="orderConfig.remark1Option"
               v-model="form.remark1"
               label="备注1"
               placeholder="请输入(最多输入200字)"
               type="textarea"
               maxlength="200" />
             <form-item
+              v-if="orderConfig.remark2Option"
               v-model="form.remark2"
               label="备注2"
               placeholder="请输入(最多输入200字)"
               type="textarea"
               maxlength="200" />
+            <!-- <form-item
+              v-if="orderConfig.remark3Option"
+              v-model="form.remark3"
+              label="备注3"
+              placeholder="请输入(最多输入200字)"
+              type="textarea"
+              maxlength="200" />
+            <form-item
+              v-if="orderConfig.remark4Option"
+              v-model="form.remark4"
+              label="备注4"
+              placeholder="请输入(最多输入200字)"
+              type="textarea"
+              maxlength="200" /> -->
           </div>
         </form-group>
         <cube-button
@@ -80,11 +108,12 @@
     <div class="footer">
       <div class="footer-detail">
         <p class="footer-detail-line">
-          <span>总重量：<span class="footer-detail-line-data">{{ total.weightKg }}公斤</span> </span>
-          <span>总体积：<span class="footer-detail-line-data">{{ total.volume }}方</span> </span>
-          <span>总数量：<span class="footer-detail-line-data">{{ total.quantity }}</span> </span>
+          <span v-if="orderConfig.weightTonOption">总重量：<span class="footer-detail-line-data">{{ total.weight }}吨</span> </span>
+          <span v-if="orderConfig.weightKgOption">总重量：<span class="footer-detail-line-data">{{ total.weightKg }}公斤</span> </span>
+          <span v-if="orderConfig.volumeOption">总体积：<span class="footer-detail-line-data">{{ total.volume }}方</span> </span>
+          <span v-if="orderConfig.quantityOption">总数量：<span class="footer-detail-line-data">{{ total.quantity }}</span> </span>
         </p>
-        <p class="footer-detail-line">总货值：<span class="footer-detail-line-data">{{ total.cargoCost }}元</span></p>
+        <p class="footer-detail-line" v-if="orderConfig.cargoCostOption">总货值：<span class="footer-detail-line-data">{{ total.cargoCost }}元</span></p>
       </div>
       <cube-button
         class="footer-button"
@@ -117,22 +146,25 @@ export default {
       unit: '',
       rules: {
         cargoName: { required: true, type: 'string' },
+        weight: { type: 'number', min: 0 },
         weightKg: { type: 'number', min: 0 }
       }
     }
   },
   computed: {
-    ...mapGetters('order/create', [ 'cargoOften', 'orderCargoList' ]),
+    ...mapGetters('order/create', [ 'cargoOften', 'orderCargoList', 'orderConfig' ]),
 
     total () {
       return this.formList.reduce((last, item) => {
         return {
+          weight: NP.plus(item.weight || 0, last.weight),
           weightKg: NP.plus(item.weightKg || 0, last.weightKg),
           volume: NP.plus(item.volume || 0, last.volume),
           quantity: NP.plus(item.quantity || 0, last.quantity),
           cargoCost: NP.plus(item.cargoCost || 0, last.cargoCost)
         }
       }, {
+        weight: 0,
         weightKg: 0,
         volume: 0,
         quantity: 0,
@@ -146,6 +178,7 @@ export default {
     initCargoList () {
       const tempCargoList = Object.assign([], this.orderCargoList).map(item => {
         if (item.cargoCost) item.cargoCost = NP.divide(item.cargoCost, 100)
+        if (item.size === undefined) item.size = [ item.dimension.length || '-', item.dimension.width || '-', item.dimension.height || '-' ].join('x')
         return item
       })
       this.formList = tempCargoList
@@ -176,6 +209,7 @@ export default {
     getEmptyCargo () {
       return {
         cargoName: '',
+        weight: '',
         weightKg: '',
         volume: '',
         cargoCost: '',
@@ -190,6 +224,8 @@ export default {
         cargoNo: '',
         remark1: '',
         remark2: ''
+        // remark3: '',
+        // remark4: ''
       }
     },
     // 选择常发货物

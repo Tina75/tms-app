@@ -1,8 +1,8 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10">
     <FromGroup ref="form" :rules="rules">
-      <FormItem v-model="form.name" maxlength="20" label="发货人名称" prop="name"/>
-      <FormItem v-model="form.contact" maxlength="15" label="联系人" prop="contact"/>
+      <FormItem v-model="form.name" label="发货人名称" prop="name"/>
+      <FormItem v-model="form.contact" label="联系人" prop="contact"/>
       <FormItem
         v-model="form.phone"
         :bottom-line="false"
@@ -28,7 +28,6 @@
       <FormItem
         v-if="form.isInvoice"
         v-model="form.invoiceRate"
-        type="number"
         prop="invoiceRate"
         required
         label="开票税率(%)"
@@ -49,7 +48,7 @@
         label="开拓渠道"
         placeholder="请选择"
       />
-      <FormItem v-model="form.remark" maxlength="200" type="textarea" label="备注"/>
+      <FormItem v-model="form.remark" maxlength="200" type="textarea" label="备注" prop="remark"/>
     </FromGroup>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
   </div>
@@ -99,14 +98,15 @@ export default {
       'loadContactDetail'
     ]),
     async submit() {
-      this.submiting = true
       try {
+        this.submiting = true
         if (!(await this.$refs.form.validate())) {
-          return
+          return window.toast('请输入必填信息')
         }
         await this.modifyContact(ContactDetail.toServer(this.form))
         this.$refreshPage('contacts-shipper', 'contacts-shipper-detail')
         this.$formWillLeave()
+        window.toast('保存成功')
         this.$router.back()
       } catch (e) {
         console.error(e)
@@ -116,7 +116,6 @@ export default {
       }
     },
     async setForm() {
-      this.form = new ContactDetail()
       this.loadOperators()
       if (!this.isCreate) {
         // 编辑操作, 判断store中的值是否是目标, 不是则拉新的
@@ -127,6 +126,8 @@ export default {
           this.$refreshPage('contacts-shipper-detail')
         }
         this.form = ContactDetail.toForm(this.contactDetail)
+      } else {
+        this.form = new ContactDetail()
       }
     },
     async loadOperators() {
