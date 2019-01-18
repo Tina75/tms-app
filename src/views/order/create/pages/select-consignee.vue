@@ -11,6 +11,7 @@
         :key="item.id"
         :index="i"
         :item="item"
+        :use-name-icon="true"
         @click="onItemClick"
       />
       <template slot="empty">

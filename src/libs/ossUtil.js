@@ -28,7 +28,7 @@ function getOSSAccess (data) {
     data: { bizType: 'driver', fileCount: 1, fileSuffix: '' }
   })
     .then(({ data }) => {
-      return data
+      return data.data
     })
     .catch((error) => {
       console.error('getOSSAccess', error)

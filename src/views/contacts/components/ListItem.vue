@@ -16,7 +16,7 @@
         >
           <span v-for="(content, i) in list" :key="i" class="cube-mr-10" v-text="content"/>
         </p>
-        <span v-else class="cube-c-light-grey cube-font-14 cube-mt-5" v-text="item.detail||''"/>
+        <span v-else class="cube-c-light-grey cube-font-14 cube-mt-5" :class="{'cube-ellipsis':nowrap}" v-text="item.detail||''"/>
       </slot>
     </div>
     <slot name="right">

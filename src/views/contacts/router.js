@@ -95,11 +95,11 @@ export default [
     path: '/contacts/consignee/detail',
     name: 'contacts-consignee-detail',
     meta: {
-      noNeedRefresh: ['contacts-consignee-modify']
+      noNeedRefresh: []
     },
     component: () => import(/* webpackChunkName: "contacts" */ './consignee/pages/detail.vue')
   },
-  // 编辑和新增发货方
+  // 编辑和新增收货方
   {
     path: '/contacts/consignee/modify',
     name: 'contacts-consignee-modify',
