@@ -24,32 +24,33 @@
         placeholder="请输入楼号-门牌号"
         clearable />
     </form-group>
-    <template v-if="showOftenList">
-      <p class="address-list-title">常用地址</p>
+    <div class="contacts-address-list">
+      <template v-if="showOftenList">
+        <p class="address-list-title">常用地址</p>
+        <ul class="address-often-list list">
+          <li
+            v-for="item in oftenAddresses"
+            :key="item.id" class="list-item"
+            @click="pickOftenAddress(item)">
+            <div class="item-icon">
+              <icon-font name="icon-ico_location" size="20" color="#ffffff" />
+            </div>
 
-      <ul class="address-often-list list">
-        <li
-          v-for="item in oftenAddresses"
-          :key="item.id" class="list-item"
-          @click="pickOftenAddress(item)">
-          <div class="item-icon">
-            <icon-font name="icon-ico_location" size="20" color="#ffffff" />
-          </div>
-
-          <div class="item-info border-bottom-1px">
-            <p class="item-info-title">{{ item.cityName || '' }}</p>
-            <p class="item-info-data">
-              {{ item.address }}
-            </p>
-          </div>
-        </li>
-      </ul>
-    </template>
-    <bmap-address-list
-      v-show="showAddressList"
-      :city="limitCityGeo"
-      :search="form.address"
-      @select="onSelectAddress" />
+            <div class="item-info border-bottom-1px">
+              <p class="item-info-title">{{ item.cityName || '' }}</p>
+              <p class="item-info-data">
+                {{ item.address }}
+              </p>
+            </div>
+          </li>
+        </ul>
+      </template>
+      <bmap-address-list
+        v-show="showAddressList"
+        :city="limitCityGeo"
+        :search="form.address"
+        @select="onSelectAddress" />
+    </div>
     <cube-button
       primary
       @click.stop="submit">
@@ -215,6 +216,10 @@ export default {
     display flex
     flex-direction column
     background #fff
+    &-list
+      flex 1
+      height 100%
+      overflow-y auto
 
   .address-list-title
     padding 0 15px

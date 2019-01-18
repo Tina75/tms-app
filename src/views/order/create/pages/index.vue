@@ -1,7 +1,7 @@
 <template>
   <div class="create-order-page">
     <cube-scroll class="scroll-box">
-      <cube-button primary @click="$router.push({ name: 'order-often' })">常发订单</cube-button>
+      <!-- <cube-button primary @click="$router.push({ name: 'order-often' })">常发订单</cube-button> -->
       <form-group
         ref="$form"
         v-model="orderInfo"
@@ -158,7 +158,7 @@ import { FormGroup, FormItem, FormTitle } from '@/components/Form'
 import { SETTLEMENT_TYPE, PICKUP_TYPE } from '../../js/constant'
 import mapMethods from '../js/createMapMethods'
 import gotoOtherPages from '../js/createGotoOtherPage'
-import showDatas from '../js/createShowDatas'
+import showData from '../js/createShowData'
 import orderSubmit from '../js/createSubmit'
 import createInit from '../js/createInit'
 
@@ -213,7 +213,10 @@ export default {
   computed: {
     orderInfo: {
       get: mapGetters('order/create', [ 'orderInfo' ]).orderInfo,
-      set: function (val) { this.SET_ORDER_INFO(val) }
+      set: function (val) {
+        this.saveConsignerInfo()
+        this.RESET_ORDER(val)
+      }
     },
     ...mapGetters('order/create', [
       'consignerId',
@@ -225,7 +228,8 @@ export default {
       'consigneeInfo',
       'calculatedAmount',
       'orderConfig',
-      'orderNeedReset'
+      'orderNeedReset',
+      'oftenPermission'
     ]),
     ...mapState('contacts/consignee', [
       'saveConsigner'
@@ -234,16 +238,17 @@ export default {
   methods: {
     ...mapMethods,
     ...gotoOtherPages,
-    ...showDatas,
+    ...showData,
     ...orderSubmit,
     ...createInit
   },
 
   beforeRouteEnter (to, from, next) {
     next(async vm => {
-      if (vm.orderNeedReset) return window.location.reload()
+      if (vm.orderNeedReset) this.$refs.$form.reset()
       vm.mode = vm.$route.meta.mode
       vm.id = vm.$route.params.id
+      vm.setTitleButtons()
       await vm.orderInfoInit()
       await vm.setConsigner()
       vm.setConsignee()

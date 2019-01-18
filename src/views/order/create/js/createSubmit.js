@@ -31,10 +31,6 @@ export default {
     return data
   },
 
-  async checkShipRights () {
-
-  },
-
   // 开单或编辑保存
   async saveOrder (data) {
     try {
@@ -47,14 +43,9 @@ export default {
         await this.updateOrder(data)
         window.toast('修改成功')
       }
-      if (this.mode === 'create') setTimeout(() => { window.location.reload() }, 2000)
-      else {
-        this.$formWillLeave()
-        setTimeout(() => {
-          this.$refs.$form.reset()
-          this.$router.back()
-        }, 2000)
-      }
+      this.$formWillLeave()
+      this.$refs.$form.reset()
+      if (this.mode !== 'create') this.$router.back()
     } catch (err) {
       //
     } finally {
@@ -65,7 +56,7 @@ export default {
 
   async saveAndShipOrder (data) {
     try {
-      if ((await this.checkShipRights(data))) {
+      if (!(await this.checkDirectShipRights(data))) {
         this.$createDialog({
           type: 'alert',
           content: `您的账号没有${data.pickup === 1 ? '提货' : '送货'}管理的权限，请联系管理员配置权限。`
@@ -73,7 +64,7 @@ export default {
       } else {
         this.$formWillLeave()
         if (data.pickup === 1) this.$router.push({ name: 'pickup-assign', params: { id: 0 }, query: { type: 'direct' } }) // 提货派车
-        else this.$router.push({ name: 'delivery-send-car', query: { type: 'direct' } }) // 送货派车
+        else this.$router.push({ name: 'delivery-send-car', params: { id: 0 }, query: { type: 'direct' } }) // 送货派车
       }
     } catch (err) {
       //

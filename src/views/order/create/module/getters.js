@@ -1,5 +1,6 @@
 export default {
   orderConfig: state => state.orderConfig,
+  oftenPermission: state => state.oftenPermission,
   orderNeedReset: state => state.orderNeedReset,
   orderInfo: state => state.orderInfo,
   consignerId: state => state.consignerId,

@@ -8,18 +8,7 @@ const store = {
   state: {
     saveConsigner: {}, // 存储所属发货方
     consigneeDetail: {},
-    formList: {
-      id: '',
-      consigneeCompanyName: '',
-      consignerId: '',
-      consignerName: '',
-      contact: '',
-      phone: '',
-      remark: '',
-      address: '',
-      cityCode: '',
-      consignerHourseNumber: ''
-    },
+    formList: new ConsigneeDetail(),
     saveAddress: {
       address: '',
       cityCode: '',
@@ -48,6 +37,9 @@ const store = {
         loading: true,
         params: { id: rootState.route.query.consigneeId }
       }).then((response) => commit('setConsigneeDetail', response.data.data))
+    },
+    loadFormInfo: ({ commit }, data) => {
+      commit('formList', ConsigneeDetail.toForm(data))
     },
     clearForm: ({ commit }) => {
       const data = new ConsigneeDetail()
