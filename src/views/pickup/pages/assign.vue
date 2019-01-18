@@ -446,7 +446,7 @@ export default {
         settlementType: {
           type: 'select',
           modelKey: 'settlementType',
-          label: '支付方式',
+          label: '结算方式',
           props: {
             options: [
               {

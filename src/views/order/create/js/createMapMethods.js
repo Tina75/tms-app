@@ -22,7 +22,8 @@ export default {
     'updateOrder',
     'fetchOrderInfo',
     'fetchOrderConfig',
-    'checkDirectShipRights'
+    'checkDirectShipRights',
+    'getOftenPermission'
   ]),
   ...mapActions('order/often', [
     'getOftenDetail'

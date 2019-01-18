@@ -11,7 +11,7 @@
         </ul>
       </cube-scroll-nav-panel>
     </cube-scroll-nav>
-    <div class="handle-btns">
+    <div v-if="oftenPermission.indexOf(100401) > -1" class="handle-btns">
       <router-link :to="{ name: 'order-one-more', params: { id: detail.id }}">再来一单</router-link>
     </div>
   </div>
@@ -39,7 +39,10 @@ export default {
       orderId: ''
     }
   },
-  computed: mapGetters('order/often', [ 'detail' ]),
+  computed: {
+    ...mapGetters('order/often', [ 'detail' ]),
+    ...mapGetters('order/create', [ 'oftenPermission' ])
+  },
   methods: {
     ...mapMutations('order/often', [ 'SET_DETAIL' ]),
     ...mapActions('order/often', [ 'getOftenDetail' ])

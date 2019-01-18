@@ -3,6 +3,7 @@ import NP from 'number-precision'
 export default {
   // 设置开单配置
   SET_ORDER_CONFIG: (state, payload) => { state.orderConfig = payload },
+  SET_OFTEN_PERMISSION: (state, payload) => { state.oftenPermission = payload },
   // 设置是否需要重置订单信息
   SET_ORDER_RESET: (state, payload) => { state.orderNeedReset = payload },
   // 设置订单信息
