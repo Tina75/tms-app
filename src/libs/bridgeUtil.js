@@ -12,7 +12,7 @@ export const getUserInfo = reuse(() => {
       userInfo = require('./login.json')
     } catch (e) {
       userInfo = {
-        Authorization: 'Bearer 23de5d21cfc94119f58761d3dfc0147a1547517824703',
+        Authorization: 'Bearer b1180ca221dcec2b3e7201e9eaa8ed451547461313506',
         ClientInfo: '2240563ecfa80fe26c4eb4dd4f6053037db4eee8/yzgdriver/1.0.0/ios'
       }
     }
@@ -32,7 +32,7 @@ export const openNewPage = (config = {}, callback = () => {}) => {
       bridge.call('navigation.openSchema', { url }, callback)
     } else {
       console.warn('openWebview', url, id)
-      bridge.call('webviews.open', { url, id }, callback)
+      bridge.call('webviews.open', { url: encodeURI(url), id }, callback)
     }
   }
 }
