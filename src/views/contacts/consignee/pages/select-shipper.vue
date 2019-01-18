@@ -1,5 +1,5 @@
 <template>
-  <div class="contacts-consignee">
+  <div class="contacts-select_shipper">
     <InfiniteList
       v-model="loading"
       :has-data="senderList.list.length"
@@ -23,7 +23,7 @@
         >
           <img
             slot="img"
-            class="contacts-consignee__placeholder"
+            class="contacts-select_shipper__placeholder"
             src="@/assets/contacts/shipper-list-empty.png"
           >
         </NoData>
@@ -67,7 +67,7 @@ export default {
 </script>
 
 <style lang='stylus'>
-.contacts-consignee
+.contacts-select_shipper
   height 100%
   &__placeholder
     width 179px

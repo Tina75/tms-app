@@ -1,7 +1,7 @@
 <template>
-  <div class="add">
+  <div class="consignee-modify">
     <form-group ref="$form" class="form" :rules="rules">
-      <div class="form_card">
+      <div class="consignee-modify_form__card">
         <form-item
           v-model="formList.consignerName"
           :show-required-toast="false"
@@ -233,10 +233,10 @@ export default {
   }
 }
 </script>
-<style lang="stylus" scoped>
-.add
+<style lang="stylus">
+.consignee-modify
   height 100%
   padding-top 10px
-  .form_card
+  &_form__card
     margin-bottom 15px
 </style>
