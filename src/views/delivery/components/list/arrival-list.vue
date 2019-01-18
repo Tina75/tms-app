@@ -1,50 +1,42 @@
 <template>
-  <cube-scroll
-    :ref="refName"
-    :data="list"
-    :options="options"
-    @pulling-down="onPullingDown"
-    @pulling-up="onPullingUp">
-    <ul >
-      <li v-for="item in list" :key="getUnicKey(item)" >
-        <delivery-list-item :info="item"/>
-      </li>
-    </ul>
-  </cube-scroll>
+  <delivery-list
+    :list="ArrivalList"
+    @refresh="refresh"
+    @loadmore="loadmore"
+    @on-item-click="onItemClick"/>
 </template>
 
 <script>
-import DeliveryListItem from './DeliveryListItem.vue'
+import { mapGetters, mapActions } from 'vuex'
+import DeliveryList from './DeliveryList'
 export default {
-  name: 'delivery-list-c',
-  components: { DeliveryListItem },
-  props: {
-    refName: { type: String, default: '' },
-    list: { type: Array, required: true, default: function () { return [] } }
+  name: 'arrival-list',
+  components: { DeliveryList },
+  data () {
+    return {
+    }
   },
 
   computed: {
-    options() {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
+    ...mapGetters('delivery', ['ArrivalList'])
+  },
+
+  created () {
+    this.refresh()
   },
 
   methods: {
-    onPullingDown() {
-      this.$emit('refresh')
+    ...mapActions('delivery', ['getArrival', 'clearArrival']),
+    refresh() {
+      this.clearArrival()
+      this.getArrival()
     },
-    onPullingUp() {
-      this.$emit('loadmore')
+    loadmore() {
+      this.getArrival()
     },
-    getUnicKey(item) {
-      if (!item) return ''
-      return item.id ? item.id : item.waybillId
+    onItemClick(id) {
+      this.$router.push({ name: 'delivery-detail', params: { id } })
     }
-
   }
 }
 

@@ -20,11 +20,11 @@
 </template>
 
 <script>
-import ListAll from './components/list-all'
-import ListPickup from './components/list-pickup'
-import ListDelivery from './components/list-delivery'
-import ListSending from './components/list-sending'
-import ListArrival from './components/list-arrival'
+import ListAll from '../components/list-all'
+import ListPickup from '../components/list-pickup'
+import ListDelivery from '../components/list-delivery'
+import ListSending from '../components/list-sending'
+import ListArrival from '../components/list-arrival'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'order-list',
