@@ -54,7 +54,7 @@ let appBtn = {
 // 设置标题栏按钮
 export const setAppTitleBtn = option => {
   const { action, position, ...config } = option
-  if ('function' === typeof action) {
+  if (typeof action === 'function') {
     let isLeft = position === 'left'
     let protocol = isLeft ? 'ui.setLeftButtonAction' : (appBtn.right = 1 && 'ui.setRightButtonAction')
     config.action = isLeft ? 'appLeftBtn_H5' : 'appRightBtn_H5'
