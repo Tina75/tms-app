@@ -25,6 +25,7 @@ export default {
     margin-bottom: 15px;
     .panel-title
       height: 50px
+      font-weight bold
       line-height: 50px;
       color: #333333
       font-size: 16px;

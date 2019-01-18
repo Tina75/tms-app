@@ -4,6 +4,7 @@
     @refresh="refresh"
     @loadmore="loadmore"
     @on-dispatch="onDispatch"
+    @on-item-click="onItemClick"
   />
 
   <!-- <cube-scroll
@@ -26,10 +27,6 @@ import DeliveryList from './DeliveryList'
 export default {
   name: 'dispatch-list',
   components: { DeliveryList },
-  data () {
-    return {
-    }
-  },
 
   computed: {
     ...mapGetters('delivery', ['DispatchList'])
@@ -50,6 +47,9 @@ export default {
     },
     onDispatch(info) {
       this.$router.push({ name: 'delivery-workbench', params: { info } })
+    },
+    onItemClick(id) {
+      this.$router.push({ name: 'order-detail', params: { id } })
     }
   }
 }

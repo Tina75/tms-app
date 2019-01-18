@@ -24,8 +24,14 @@ export default [
   },
   {
     path: '/delivery/order-list/:id',
-    name: 'delivery-order-list',
+    name: 'delivery-order-list', // 运单中的订单列表
     component: () => import(/* webpackChunkName: "delivery" */'./pages/order-list.vue')
+  },
+  {
+    path: '/delivery/detail/:id',
+    name: 'delivery-detail',
+    component: () => import(/* webpackChunkName: "delivery" */'./pages/detail.vue')
+
   }
 ]
 

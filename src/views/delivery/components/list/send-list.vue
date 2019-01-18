@@ -1,23 +1,28 @@
+<!-- 待派车列表 -->
 <template>
   <delivery-list
-    :list="ArrivalList"
+    :ref-name="refKey"
+    :list="SendList"
     @refresh="refresh"
-    @loadmore="loadmore"/>
+    @loadmore="loadmore"
+    @on-item-click="onItemClick"
+  />
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import DeliveryList from './DeliveryList'
 export default {
-  name: 'arrival-list',
+  name: 'send-list',
   components: { DeliveryList },
   data () {
     return {
+      refKey: 'send'
     }
   },
 
   computed: {
-    ...mapGetters('delivery', ['ArrivalList'])
+    ...mapGetters('delivery', ['SendList'])
   },
 
   created () {
@@ -25,14 +30,33 @@ export default {
   },
 
   methods: {
-    ...mapActions('delivery', ['getArrival', 'clearArrival']),
+    ...mapActions('delivery', ['getSend', 'clearSend', 'deleteBillById']),
+
     refresh() {
-      this.clearArrival()
-      this.getArrival()
+      this.clearSend()
+      this.getSend()
     },
     loadmore() {
-      this.getArrival()
+      this.getSend()
+    },
+    onItemClick(id) {
+      this.$router.push({ name: 'delivery-detail', params: { id } })
     }
+
+    // 删除
+    // deleteItem(id) {
+    //   this.$createDialog({
+    //     type: 'confirm',
+    //     icon: 'cubeic-important',
+    //     content: '是否确认删除？',
+    //     onConfirm: () => {
+    //       this.deleteBillById([id]).then(() => {
+    //         const index = this.SendList.findIndex(item => item.waybillId === id)
+    //         this.SendList.splice(index, 1)
+    //       })
+    //     }
+    //   }).show()
+    // }
   }
 }
 

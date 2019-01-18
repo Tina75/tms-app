@@ -155,12 +155,13 @@ export default {
     },
     // 获取运单详情
     getWaybillDetail: ({ commit }, id) => {
-      Server(
+      return Server(
         { url: '/waybill/details',
           method: 'post',
           data: { waybillId: id } }
       ).then(({ data }) => {
         commit('WAYBILL_DETAIL', data.data)
+        return data.data
       })
     },
     // 删除运单
@@ -179,7 +180,9 @@ export default {
     SendingList: state => state.sending.list,
     ArrivalList: state => state.arrival.list,
     WaybillDetail: state => state.waybillDetail,
-    WaybillOrderList: state => state.waybillDetail.orderList,
+    Waybill: state => state.waybillDetail.waybill || {},
+    CargoList: state => state.waybillDetail.cargoList || {},
+    OrderList: state => state.waybillDetail.orderList,
     TabCount: state => ({
       dispatch: state.tabCount.waitDispatchCnt,
       send: state.tabCount.waitSendCarCnt,
