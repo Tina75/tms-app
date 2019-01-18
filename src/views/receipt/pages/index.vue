@@ -115,6 +115,21 @@ export default {
   background white
   height 50px
   font-size 15px
+  .tab-label
+    margin-top: 5px
+    font-size: 13px;
+    line-height: 18px;
+    color: #333333;
+    margin-bottom: 5px;
+  .tab-count
+    font-size: 13px;
+    line-height: 18px;
+    min-height 18px
+    color: #666666;
+    margin-bottom: 5px;
+  .cube-tab_active
+    .tab-label, .tab-count
+      color: #00A4BD;
 .list-bar
     height calc(100% - 50px)
     overflow-y auto

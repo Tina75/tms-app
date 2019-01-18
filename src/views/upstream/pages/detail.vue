@@ -46,7 +46,7 @@
           {{detail.handlerUserName}}
         </FormItem>
         <FormItem label="是否开票">
-          {{detail.isInvoice == 1 ? `是（${detail.invoiceRate | rateGet}%）` : '否'}}
+          {{detail.isInvoice == 1 ? `是（${detail.invoiceRate | rate}%）` : '否'}}
         </FormItem>
         <FormItem label="备注">
           {{detail.remark}}
@@ -105,7 +105,7 @@
         </div>
       </Panel>
     </div>
-    <div class="upstream-footer">
+    <div v-if="orderStatus(detail.acceptStatus) === '待接收'" class="upstream-footer">
       <cube-button class="footer-item-btn" @click="refuse">拒绝</cube-button>
       <cube-button class="footer-item-btn footer-item-primary" @click="receipt">接受</cube-button>
     </div>
@@ -118,7 +118,7 @@ import StatusBar from '../components/StatusBar'
 import Cargo from '../components/Cargo'
 import VueClipboard from 'vue-clipboard2'
 import Vue from 'vue'
-import { rateGet, money, mile } from '../libs'
+import { getRate, getMoney, getMile, orderStatus } from '../libs'
 import * as API from '../libs/api'
 Vue.use(VueClipboard)
 
@@ -128,9 +128,9 @@ export default {
     title: 'upstream-detail'
   },
   filters: {
-    rateGet,
-    money,
-    mile
+    rate: getRate,
+    money: getMoney,
+    mile: getMile
   },
   components: {
     Panel,
@@ -148,8 +148,10 @@ export default {
       return this.$route.params.id
     }
   },
-  mounted () {
-    this.initDetail()
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.initDetail()
+    })
   },
   methods: {
     initDetail () {
@@ -172,6 +174,9 @@ export default {
     },
     onError (e) {
       alert('复制失败，请使用Ctrl-C手动复制')
+    },
+    orderStatus (val) {
+      return orderStatus(val)
     }
   }
 }

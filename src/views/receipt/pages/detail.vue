@@ -46,7 +46,7 @@
           {{detail.handlerUserName}}
         </FormItem>
         <FormItem label="是否开票">
-          {{detail.isInvoice == 1 ? `是（${detail.invoiceRate | rateGet}%）` : '否'}}
+          {{detail.isInvoice == 1 ? `是（${rate(detail.invoiceRate)}%）` : '否'}}
         </FormItem>
         <FormItem label="备注">
           {{detail.remark}}
@@ -106,8 +106,10 @@
       </Panel>
     </div>
     <div class="upstream-footer">
-      <cube-button class="footer-item-btn">拒绝</cube-button>
-      <cube-button class="footer-item-btn footer-item-primary">接受</cube-button>
+      <cube-button v-if="detail.receiptOrder.receiptStatus === 0 && detail.status === 40" class="footer-item-btn" @click="receipt">回收</cube-button>
+      <cube-button v-if="detail.receiptOrder.receiptStatus === 1" class="footer-item-btn" @click="backFactory">返厂</cube-button>
+      <cube-button v-if="detail.receiptOrder.receiptStatus > 0 && !detail.receiptOrder.receiptUrl.length" class="footer-item-btn  footer-item-primary" @click="uploadPic">上传回单</cube-button>
+      <cube-button v-if="detail.receiptOrder.receiptStatus > 0 && detail.receiptOrder.receiptUrl.length" class="footer-item-btn footer-item-primary" @click="updatePic">修改回单</cube-button>
     </div>
   </div>
 </template>
@@ -118,7 +120,7 @@ import StatusBar from '@/views/upstream/components/StatusBar'
 import Cargo from '@/views/upstream/components/Cargo'
 import VueClipboard from 'vue-clipboard2'
 import Vue from 'vue'
-import { rateGet, money, mile } from '@/views/upstream/libs'
+import { getRate, getMoney, getMile } from '@/views/upstream/libs'
 import * as API from '../libs/api'
 Vue.use(VueClipboard)
 
@@ -128,9 +130,8 @@ export default {
     title: 'upstream-detail'
   },
   filters: {
-    rateGet,
-    money,
-    mile
+    money: getMoney,
+    mile: getMile
   },
   components: {
     Panel,
@@ -148,8 +149,10 @@ export default {
       return this.$route.params.id
     }
   },
-  mounted () {
-    this.initDetail()
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.initDetail()
+    })
   },
   methods: {
     initDetail () {
@@ -162,6 +165,79 @@ export default {
     },
     onError (e) {
       alert('复制失败，请使用Ctrl-C手动复制')
+    },
+    rate (val) {
+      return getRate(val)
+    },
+    // 回收
+    receipt () {
+      const item = this.detail
+      this.dialog = this.$createDialog({
+        type: 'prompt',
+        title: '回收',
+        prompt: {
+          value: '',
+          placeholder: '请输入回收人'
+        },
+        onConfirm: (e, promptValue) => {
+          const params = {
+            orderIds: [item.id],
+            recoveryName: promptValue,
+            receiptStatus: item.receiptOrder.receiptStatus,
+            ids: [item.receiptOrder.orderId]
+          }
+          API.updateReceipt(params)
+            .then(res => {
+              this.$createToast({
+                type: 'warn',
+                time: 1000,
+                txt: '回收成功'
+              }).show()
+            })
+        }
+      }).show()
+    },
+    // 返厂
+    backFactory () {
+      const item = this.detail
+      this.dialog = this.$createDialog({
+        type: 'prompt',
+        title: '返厂',
+        prompt: {
+          value: '',
+          placeholder: '请输入接收人'
+        },
+        onConfirm: (e, promptValue) => {
+          const params = {
+            orderIds: [item.id],
+            returnName: promptValue,
+            receiptStatus: item.receiptOrder.receiptStatus,
+            ids: [item.receiptOrder.orderId]
+          }
+          API.updateReceipt(params)
+            .then(res => {
+              this.$createToast({
+                type: 'warn',
+                time: 1000,
+                txt: '返厂成功'
+              }).show()
+            })
+        }
+      }).show()
+    },
+    uploadPic () {
+      const id = this.detail.receiptOrder.id
+      this.$router.push({
+        query: { id, type: 'add' },
+        name: 'receipt-upload'
+      })
+    },
+    updatePic () {
+      const id = this.detail.receiptOrder.id
+      this.$router.push({
+        query: { id, type: 'update', orderId: this.detail.id },
+        name: 'receipt-upload'
+      })
     }
   }
 }

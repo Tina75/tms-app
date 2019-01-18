@@ -1,13 +1,20 @@
-export const rateGet = (rate = 0) => {
+export const setRate = (rate = 0) => {
+  return rate / 100
+}
+export const getRate = (rate = 0) => {
   return rate * 100
 }
-
-export const money = (value = 0) => {
+export const setMoney = (value = 0) => {
   return value * 100
 }
-
-export const mile = (value = 0) => {
+export const getMoney = (value = 0) => {
+  return value / 100
+}
+export const setMile = (value = 0) => {
   return value * 1000
+}
+export const getMile = (value = 0) => {
+  return value / 1000
 }
 
 export const orderStatus = (value) => {
