@@ -32,21 +32,6 @@
         <div class="consignee-detail_address">{{consigneeDetail.remark}}</div>
       </div>
     </div>
-    <cube-button
-      :primary="true"
-      @click="goAdd">
-      新增
-    </cube-button>
-    <cube-button
-      :primary="true"
-      @click="goEdit">
-      修改
-    </cube-button>
-    <cube-button
-      :primary="true"
-      @click="del">
-      删除
-    </cube-button>
     <div class="consignee-detail_call">
       <cube-button
         :primary="true"
@@ -65,7 +50,7 @@
 <script>
 import IconFont from '@/components/Iconfont'
 import { mapState, mapActions } from 'vuex'
-// import { setAppRightBtn } from '@/libs/bridgeUtil'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeDetail',
@@ -86,35 +71,44 @@ export default {
     ...mapActions(moudleName, ['loadConsigneeDetail', 'removeConsignee']),
     onPageRefresh() {
       this.loadConsigneeDetail()
+      this.setButton()
     },
     callPhone () {
       window.location.href = `tel:${this.consigneeDetail.phone}`
     },
-    goAdd () {
-      this.$router.push({ name: 'contacts-consignee-modify' })
-    },
-    goEdit () {
-      this.$router.push({ name: 'contacts-consignee-modify', query: { consigneeId: this.consigneeDetail.id } })
-    },
-    del () {
-      this.$createDialog({
-        type: 'confirm',
-        title: '',
-        content: '确定删除？',
-        icon: 'cubeic-alert',
-        onConfirm: () => {
-          const data = {
-            id: this.consigneeDetail.id
+    setButton() {
+      setAppRightBtn([
+        {
+          text: '删除',
+          iconType: 'delete',
+          action: () => {
+            this.$createDialog({
+              type: 'confirm',
+              content: '确定删除？',
+              icon: 'cubeic-alert',
+              onConfirm: () => {
+                const data = {
+                  id: this.consigneeDetail.id
+                }
+                try {
+                  this.removeConsignee(data)
+                } catch (e) {
+                  console.log(e)
+                } finally {
+                  this.$router.back()
+                }
+              }
+            }).show()
           }
-          try {
-            this.removeConsignee(data)
-          } catch (e) {
-            console.log(e)
-          } finally {
-            this.$router.back()
+        },
+        {
+          text: '修改',
+          iconType: 'edit',
+          action: () => {
+            this.$router.push({ name: 'contacts-consignee-modify', query: { consigneeId: this.consigneeDetail.id } })
           }
         }
-      }).show()
+      ])
     }
   }
 }

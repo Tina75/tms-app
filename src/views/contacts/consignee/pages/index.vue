@@ -37,7 +37,7 @@ import ListItem from '../../components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import { mapActions, mapState } from 'vuex'
-import { setAppRightBtn, setAppTitleBtn } from '@/libs/bridgeUtil'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 const moudleName = 'contacts/consignee'
 export default {
   name: 'ContactsConsigneeList',
@@ -63,23 +63,8 @@ export default {
           action: () => {
             this.$router.push({ name: 'contacts-consignee-modify' })
           }
-        },
-        {
-          text: '修改',
-          iconType: 'edit',
-          action: () => {
-            this.$router.push({ name: 'contacts-consignee-modify' })
-          }
         }
       ])
-      setAppTitleBtn({
-        position: 'left',
-        text: 'back',
-        iconType: 'back',
-        action: () => {
-          this.$router.push({ name: 'contacts-consignee-modify' })
-        }
-      })
     },
     onItemPhoneCall(item) {
       window.location.href = `tel:${item.phone}`

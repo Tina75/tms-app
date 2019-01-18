@@ -215,6 +215,7 @@ import { FormGroup, FormItem } from '@/components/Form'
 import { uploadOSS } from '@/components/Upload/ossUtil'
 import bridge from '@/libs/dsbridge'
 import { validatePhone, CHECK_NAME } from './validator'
+import { setAppTitleBtn } from '@/libs/bridgeUtil'
 
 export default {
   name: 'company-edit',
@@ -273,9 +274,20 @@ export default {
   },
   mounted () {
     this.getCompanyData()
+    this.onPageRefresh()
   },
   methods: {
     ...mapActions(['getCompanyInfo', 'saveCompanyInfo']),
+    onPageRefresh() {
+      setAppTitleBtn({
+        position: 'left',
+        text: 'back',
+        iconType: 'back',
+        action: () => {
+          this.$router.push({ name: 'company' })
+        }
+      })
+    },
     async getCompanyData () {
       await this.getCompanyInfo()
       await this.initData()
