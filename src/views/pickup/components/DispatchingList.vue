@@ -57,7 +57,7 @@ export default {
   name: 'DispatchingList',
   components: { IconFont },
   computed: {
-    ...mapGetters('pickup', ['dispatchingData', 'settlementTypeMap']),
+    ...mapGetters('pickup', ['dispatchingData', 'orderSettlementTypeMap']),
     options () {
       return {
         pullDownRefresh: {
