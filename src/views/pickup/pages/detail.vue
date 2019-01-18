@@ -24,7 +24,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import PickupInfo from '../components/PickupInfo'
-import OrderCargoList from '../components/OrderCargoList'
+import OrderList from '../components/OrderList'
 import CostDetail from '../components/CostDetail'
 
 export default {
@@ -32,7 +32,7 @@ export default {
   metaInfo: {
     title: '提货管理详情'
   },
-  components: { PickupInfo, OrderCargoList, CostDetail },
+  components: { PickupInfo, OrderList, CostDetail },
   data () {
     return {
       pageData: [
@@ -42,7 +42,7 @@ export default {
         },
         {
           name: '货物明细',
-          component: 'OrderCargoList'
+          component: 'OrderList'
         },
         {
           name: '应收费用',
@@ -55,7 +55,6 @@ export default {
     ...mapGetters(['pickupDetail'])
   },
   methods: {
-    // ...mapActions(['getNews', 'clearNews']),
     changeHandler (label) {
       console.log('changed to:', label)
     }
