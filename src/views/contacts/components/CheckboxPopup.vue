@@ -115,6 +115,7 @@ export default {
       if (show) {
         this.inputValue = this.value || ''
         this.valid = true
+        this.$refs.inputEl.focus()
       }
       this.$emit('show', show)
     },
@@ -170,7 +171,7 @@ export default {
     line-height 22px
   &__confirm
     color #00A4BD
-    padding 14px 10px
+    padding 14px 20px 14px 10px
   &__selected
     flex 1
     padding 14px 12px
