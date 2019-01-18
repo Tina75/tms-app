@@ -8,6 +8,11 @@ export default [
     component: () => import(/* webpackChunkName: "delivery" */'./pages/list.vue')
   },
   {
+    path: '/delivery/workbench-multi',
+    name: 'delivery-workbench-multi',
+    component: () => import(/* webpackChunkName: "delivery" */'./pages/workbench-multi.vue')
+  },
+  {
     path: '/delivery/workbench',
     name: 'delivery-workbench',
     component: () => import(/* webpackChunkName: "delivery" */'./pages/workbench.vue')
@@ -19,8 +24,14 @@ export default [
   },
   {
     path: '/delivery/order-list/:id',
-    name: 'delivery-order-list',
+    name: 'delivery-order-list', // 运单中的订单列表
     component: () => import(/* webpackChunkName: "delivery" */'./pages/order-list.vue')
+  },
+  {
+    path: '/delivery/detail/:id',
+    name: 'delivery-detail',
+    component: () => import(/* webpackChunkName: "delivery" */'./pages/detail.vue')
+
   }
 ]
 

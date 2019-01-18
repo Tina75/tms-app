@@ -1,19 +1,9 @@
 <template>
-  <div class="cube-has-bottom-btn cube-pt-10 truck-create">
+  <div class="cube-has-bottom-btn cube-pt-10 driver-create">
     <FromGroup :rules="rules" >
-      <FormItem v-model="model.carNO" label="车牌号" maxlength="20" prop="require"/>
       <FormItem v-model="model.driverName" label="司机姓名" maxlength="15" prop="require"/>
       <FormItem v-model="model.driverPhone" label="手机号" maxlength="15" prop="require"/>
-      <FormItem
-        v-model="model.driverType"
-        label="合作方式"
-        placeholder="请选择"
-        type="select"
-        class="cube-mb-15"
-        :bottom-line="false"
-        :options="options.driverType"
-        prop="require"
-      />
+      <FormItem v-model="model.carNO" label="车牌号" maxlength="20" class="cube-mb-15" prop="require"/>
 
       <FormItem
         v-model="model.carType"
@@ -22,28 +12,11 @@
         type="select"
         :options="options.carType"
       />
-      <FormItem
-        v-model="model.carLength"
-        label="车长"
-        placeholder="请选择"
-        type="select"
-        :options="options.carLength"
-      />
       <FormItem v-model="model.shippingWeight" label="载重（吨）" maxlength="15"/>
       <FormItem v-model="model.shippingVolume" label="净空（方）" maxlength="15"/>
       <FormItem v-model="model.driverPhone" label="品牌" maxlength="15"/>
 
-      <FormItem
-        v-model="purchDate"
-        label="购买日期"
-        placeholder="请选择"
-        type="click"
-        class="cube-mb-15"
-        :bottom-line="false"
-        @on-click="showDatePicker"
-      />
-
-      <card class="cube-mb-15" title="常跑线路">
+      <!-- <card class="cube-mb-15" title="常跑线路">
         <form-item
           v-model="model.regularLine"
           type="click"
@@ -72,7 +45,7 @@
           placeholder="请选择目的地城市"
           @on-click="showPickCity = true"
         />
-      </card>
+      </card> -->
 
       <card class="cube-mb-15" title="证件上传">
         <div class="uploadWrap">
@@ -90,7 +63,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
@@ -127,9 +100,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(moudleName, ['driverDetail']),
+    ...mapState(moudleName, ['driverDetail']),
     isCreate() {
-      return !this.truckDetail.id
+      return !this.driverDetail.id
     }
   },
   methods: {
@@ -138,7 +111,8 @@ export default {
       this.submiting = true
       try {
         this.model.carrierId = this.$route.query.carrierId
-        await this.modifyDriver(DriverDetail.toServer(this.model))
+        // await this.modifyDriver(DriverDetail.toServer(this.model))
+        await this.modifyDriver({ ...this.model })
         this.afterSubmit()
       } catch (e) {
         console.error(e)
@@ -190,7 +164,7 @@ export default {
 }
 </script>
 <style lang='stylus' scoped>
-.truck-create
+.driver-create
   height auto
   min-height 100%
   background #efeff4

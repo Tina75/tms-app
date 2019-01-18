@@ -77,6 +77,7 @@ export default {
         loadFee: '',
         unloadFee: '',
         insuranceFee: '',
+        otherFee: '',
         totalFee: '',
         settlementType: 1,
         payType: 2,
@@ -532,7 +533,8 @@ export default {
     ...mapGetters('pickup', ['carrierNameList', 'backupDriverList'])
   },
   methods: {
-    ...mapActions('pickup', ['getPickupDetailForAssign', 'getCarrierNameList', 'getSelfCarList', 'getSelfDriverList', 'assign', 'reloadCurrentPickup']),
+    ...mapActions('pickup', ['getPickupDetailForForm', 'getCarrierNameList', 'getSelfCarList', 'getSelfDriverList', 'assign', 'reloadCurrentPickup']),
+    ...mapActions('order/create', ['sendDirectly']),
     validateHandler(result) {
       this.validity = result.validity
       this.valid = result.valid
@@ -544,6 +546,7 @@ export default {
     async submitAssign () {
       let isValid = await this.$refs['assign-form'].validate()
       if (isValid) {
+        const id = this.$route.query.type ? await this.sendDirectly() : this.$route.params.id
         await this.assign({
           carrierName: this.model.carrierName,
           driverName: this.model.assignCarType === 1 ? this.model.carrierDriverName : this.model.selfDriverName.split('-')[0],
@@ -556,34 +559,33 @@ export default {
           unloadFee: NP.times(this.model.unloadFee, 100),
           otherFee: NP.times(this.model.otherFee, 100),
           insuranceFee: NP.times(this.model.insuranceFee, 100),
-          settlementType: this.model.settlementType,
-          settlementPayInfo: [{
+          settlementType: this.model.assignCarType === 1 ? this.model.settlementType : '',
+          settlementPayInfo: this.model.assignCarType === 1 ? [{
             payType: this.model.payType,
             fuelCardAmount: NP.times(this.model.fuelCardAmount, 100),
             cashAmount: NP.times(this.model.cashAmount, 100)
-          }],
-          pickUpId: this.$route.params.id,
+          }] : [],
+          pickUpId: id,
           assignCarType: this.model.assignCarType,
-          assistantDriverName: this.model.selfAssistantDriverName.split('-')[0],
-          assistantDriverPhone: this.model.selfAssistantDriverName.split('-')[1],
+          assistantDriverName: this.model.assignCarType === 1 ? '' : this.model.selfAssistantDriverName.split('-')[0],
+          assistantDriverPhone: this.model.assignCarType === 1 ? '' : this.model.selfAssistantDriverName.split('-')[1],
           allocationStrategy: this.model.allocationStrategy,
           remark: this.model.remark
         })
-        await this.reloadCurrentPickup(this.$route.params.id)
+        await this.reloadCurrentPickup(id)
         this.$router.back()
       }
     }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.getPickupDetailForAssign(to.params.id).then(data => {
+      vm.getPickupDetailForForm(to.params.id).then(data => {
         vm.model.freightFee = NP.divide(data.freightFee, 100)
         vm.model.insuranceFee = NP.divide(data.insuranceFee, 100)
         vm.model.loadFee = NP.divide(data.loadFee, 100)
         vm.model.unloadFee = NP.divide(data.unloadFee, 100)
         vm.model.otherFee = NP.divide(data.otherFee, 100)
         vm.model.totalFee = NP.divide(data.totalFee, 100)
-        vm.model.freightFee = NP.divide(data.freightFee, 100)
         vm.model.settlementType = data.settlementType
         vm.model.payType = data.settlementPayInfo.length ? data.settlementPayInfo[0].payType : 2
         vm.model.cashAmount = data.settlementPayInfo.length ? NP.divide(data.settlementPayInfo[0].cashAmount, 100) : ''
@@ -677,6 +679,7 @@ export default {
             display: flex
             justify-content:flex-end
           input
+            font-size: 15px;
             text-align: right
           &.cube-validator
             display: block
@@ -699,6 +702,7 @@ export default {
           display: flex
           align-items center
           span
+            font-size: 15px;
             display: inline-block
             margin-top: 5px;
           .cube-select-icon

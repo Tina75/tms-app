@@ -46,7 +46,6 @@ const lists = [
     itemParser(data) {
       data = TruckDetail.toViewItem(data)
       let res = {
-        origin: data,
         id: data.id,
         carrierId: data.carrierId,
         title: data.carNO,
