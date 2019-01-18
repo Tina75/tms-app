@@ -163,6 +163,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import imageList from './image-list'
 import bridge from '@/libs/dsbridge'
+import { setAppRightBtn, setAppTitleBtn } from '@/libs/bridgeUtil'
 export default {
   name: 'company',
   metaInfo: {
@@ -190,16 +191,27 @@ export default {
   mounted () {
     // 分享地址
     this.basePath = process.env.VUE_APP_SHARE
-    bridge.call('ui.setRightButtonAction', { text: '编辑', action: 'action', color: '#666666' },
-      // text:按钮标题 action:按钮方法名 color：按钮标题颜色，不传默认白色
-      function(result) {
-        this.$router.push({ name: 'company-edit' })
-      }
-    )
     this.getCompanyData()
+    this.onPageRefresh()
   },
   methods: {
     ...mapActions(['getCompanyInfo', 'shareCompanyInfo']),
+    onPageRefresh() {
+      setAppRightBtn([
+        {
+          text: '修改',
+          iconType: 'edit',
+          action: () => {
+            this.$router.push({ name: 'company-edit' })
+          }
+        }
+      ])
+      setAppTitleBtn({
+        position: 'left',
+        text: 'back',
+        iconType: 'back'
+      })
+    },
     async getCompanyData () {
       await this.getCompanyInfo()
       await this.initData()
