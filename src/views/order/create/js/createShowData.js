@@ -23,7 +23,7 @@ export default {
     if (consignerAddress) {
       info.start = consignerAddress.cityCode || ''
       info.consignerAddress = consignerAddress.address || ''
-      info.consignerHourseNumber = consignerAddress.consignerHourseNumber
+      info.consignerHourseNumber = consignerAddress.consignerHourseNumber || ''
       info.consignerAddressLongitude = consignerAddress.longitude || ''
       info.consignerAddressLatitude = consignerAddress.latitude || ''
       info.consignerAddressText = info.consignerAddress + info.consignerHourseNumber

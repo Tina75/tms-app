@@ -4,31 +4,29 @@
     :img="NO_DATA"
     message="暂无常发货物" />
 
-  <cube-scroll v-else class="scroll-box">
-    <ul class="list">
-      <li
-        v-for="item in cargoList" :key="item.id"
-        class="list-item"
-        @click="pickCargo(item)">
-        <div class="item-icon">
-          <icon-font name="icon-ico_thing" size="20" color="#ffffff" />
-        </div>
+  <ul class="list" v-else>
+    <li
+      v-for="item in cargoList" :key="item.id"
+      class="list-item"
+      @click="pickCargo(item)">
+      <div class="item-icon">
+        <icon-font name="icon-ico_thing" size="20" color="#ffffff" />
+      </div>
 
-        <div class="item-info border-bottom-1px">
-          <p class="item-info-title">{{ item.cargoName }}</p>
-          <p class="item-info-data">
-            <span v-if="item.weight">{{ item.weight }}吨</span>
-            <span v-if="item.volume">{{ item.volume }}方</span>
-            <span v-if="item.unit">{{ item.unit }}</span>
-          </p>
-        </div>
-      </li>
-    </ul>
-  </cube-scroll>
+      <div class="item-info border-bottom-1px">
+        <p class="item-info-title">{{ item.cargoName }}</p>
+        <p class="item-info-data">
+          <span v-if="item.weight">{{ item.weight }}吨</span>
+          <span v-if="item.volume">{{ item.volume }}方</span>
+          <span v-if="item.unit">{{ item.unit }}</span>
+        </p>
+      </div>
+    </li>
+  </ul>
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-data.png'
 import NP from 'number-precision'
@@ -40,11 +38,11 @@ export default {
   data () {
     return {
       NO_DATA,
-      loading: true,
+      loading: false,
       cargoList: []
     }
   },
-  computed: mapState('contacts/consignee', [ 'saveConsigner' ]),
+  computed: mapGetters('order/create', [ 'consignerId' ]),
   methods: {
     ...mapMutations('order/create', [ 'SET_CARGO_OFTEN' ]),
     ...mapActions('order/create', [ 'getOftenCargo' ]),
@@ -59,11 +57,9 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(async vm => {
+      vm.cargoList = []
+      if (!vm.consignerId) return
       vm.loading = true
-      if (!vm.saveConsigner.id) {
-        vm.loading = false
-        return
-      }
       window.loading(true)
       try {
         vm.cargoList = await vm.getOftenCargo(vm.saveConsigner.id)
