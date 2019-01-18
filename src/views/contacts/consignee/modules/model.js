@@ -36,7 +36,7 @@ export const editPhone = (value) => {
   }
 }
 export const setRightButton = () => {
-  bridge.register('consignee', () => {this.$router.push({ name: 'contacts-consignee-modify'})})
+  bridge.register('consignee', () => { this.$router.push({ name: 'contacts-consignee-modify' }) })
 }
 
 export class ConsigneeDetail {

@@ -30,7 +30,12 @@ export default {
       PickedList: 0
     },
     pickupDetail: {},
+    pickupCargoDetail: [],
     settlementTypeMap: {
+      1: '按单结',
+      2: '月结'
+    },
+    orderSettlementTypeMap: {
       1: '现付',
       2: '到付',
       3: '回付',
@@ -99,8 +104,12 @@ export default {
       state.pickedData.pageNo = data.pageNo
       state.pickedData.next = data.hasNext
     },
-    getBackupDriverList (state, data) {
-      state.backupDriverList = data
+    getPickupDetail (state, data) {
+      state.pickupDetail = data.loadbill
+      const noArray = [...(new Set(data.cargoList.map(item => item.orderNo)))]
+      state.pickupCargoDetail = noArray.map(no => {
+        return { orderNo: no, cargoList: data.cargoList.filter(item => item.orderNo === no) }
+      })
     }
   },
   actions: {
@@ -294,10 +303,23 @@ export default {
           method: 'post',
           url: 'load/bill/update',
           data: {
-            loadbill: data,
-            cargoList: []
+            loadbill: data
           }
         }).then(() => {
+          resolve()
+        })
+      })
+    },
+    getPickupDetail: ({ state, commit }, id) => {
+      return new Promise((resolve, reject) => {
+        server({
+          method: 'post',
+          url: 'load/bill/details',
+          data: {
+            pickUpId: id
+          }
+        }).then((response) => {
+          commit('getPickupDetail', response.data.data)
           resolve()
         })
       })
@@ -306,6 +328,7 @@ export default {
   getters: {
     tabCount: (state) => state.tabCount,
     settlementTypeMap: (state) => state.settlementTypeMap,
+    orderSettlementTypeMap: (state) => state.orderSettlementTypeMap,
     dispatchingData: (state) => state.dispatchingData,
     bePickingData: (state) => state.bePickingData,
     pickingData: (state) => state.pickingData,
@@ -313,6 +336,9 @@ export default {
     chosenList: (state) => state.chosenList,
     chosenStat: (state) => state.chosenStat,
     pickupDetail: (state) => state.pickupDetail,
-    backupDriverList: (state) => state.backupDriverList
+    pickupCargoDetail: (state) => state.pickupCargoDetail,
+    backupDriverList: (state) => state.backupDriverList,
+    carTypeMap: (state) => state.carTypeMap,
+    carLengthMap: (state) => state.carLengthMap
   }
 }
