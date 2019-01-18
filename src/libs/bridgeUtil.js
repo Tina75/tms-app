@@ -32,7 +32,7 @@ export const openNewPage = (config = {}, callback = () => {}) => {
       bridge.call('navigation.openSchema', { url }, callback)
     } else {
       console.warn('openWebview', url, id)
-      bridge.call('webviews.open', { url, id }, callback)
+      bridge.call('webviews.open', { url: encodeURI(url), id }, callback)
     }
   }
 }
