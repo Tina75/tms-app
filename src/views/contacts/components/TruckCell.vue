@@ -1,6 +1,6 @@
 <template>
-  <div class="contact-item cube-mb-15 cube-ellipsis" @click="$emit('click', item, index)">
-    <div class="contact-item__content cube-ellipsis">
+  <div class="truck-item cube-mb-15 cube-ellipsis" @click="$emit('click', item, index)">
+    <div class="truck-item__content cube-ellipsis">
       <slot>
         <span class="cube-c-black cube-font-17">
           <span v-text="item.title"/>
@@ -15,7 +15,7 @@
     <slot name="right">
       <i
         v-if="rightIcon"
-        class="contact-item__right-icon"
+        class="truck-item__right-icon"
         :class="rightIcon"
         @click.stop="$emit('phoneCall', item, index)"
       />
@@ -52,7 +52,7 @@ export default {
 </script>
 
 <style lang='stylus' >
-.contact-item
+.truck-item
   display flex
   background #fff
   align-items center
