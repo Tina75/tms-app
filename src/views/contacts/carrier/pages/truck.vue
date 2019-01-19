@@ -37,6 +37,7 @@ import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import TruckCell from '../../components/TruckCell'
 import { mapActions, mapState } from 'vuex'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 const moudleName = 'contacts/carrier'
 export default {
   name: 'ContactsCarrierTruckList',
@@ -53,20 +54,32 @@ export default {
   methods: {
     ...mapActions(moudleName, ['loadTruckList']),
     loader(refresh) {
-      // if (refresh) {
-      //   this.syncButtOperator()
-      // }
       this.loadTruckList(refresh)
     },
     onPageRefresh() {
       console.info('onRefreshPage')
       this.loading = true
+      setAppRightBtn([
+        {
+          text: '添加',
+          iconType: 'add',
+          action: () => {
+            this.$router.push({
+              name: 'contacts-carrier-truck-modify',
+              query: { carrierId: this.$route.query.carrierId }
+            })
+          }
+        }
+      ])
     },
     onItemPhoneCall(item) {
       window.location.href = `tel:${item.phone}`
     },
     onItemClick(item, index) {
-      this.$router.push({ name: 'contacts-carrier-truck-detail', query: { carrierId: item.carrierId, carId: item.id } })
+      this.$router.push({
+        name: 'contacts-carrier-truck-detail',
+        query: { carrierId: item.carrierId, carId: item.id }
+      })
     }
   }
 }

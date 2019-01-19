@@ -26,7 +26,7 @@ export class ContactDetail {
     })
     return data
   }
-  // 后端接口 => from表单格式
+  // 后端接口 => form表单格式
   static toForm(data) {
     data = { ...data }
     return data
@@ -41,7 +41,7 @@ export class ContactDetail {
 
 export class TruckDetail {
   id = ''
-  carNO = ''
+  carNo = ''
   carType = ''
   shippingWeight = ''
   carLength = ''
@@ -72,8 +72,10 @@ export class TruckDetail {
   ]
 
   static driverType = [
-    { text: '合约司机 ', value: 1 },
-    { text: '临时司机 ', value: 2 }
+    { text: '合作车', value: 1 },
+    { text: '临时车', value: 2 },
+    { text: '自有车', value: 3 },
+    { text: '挂靠车', value: 4 }
   ]
 
   static carLength = [
@@ -96,22 +98,28 @@ export class TruckDetail {
     { text: '17.5米', value: 17 }
   ]
 
-  // 后端接口 => from表单格式
-  static toFrom(data) {
-    data = { ...data }
-    return data
+  static toForm(server) {
+    if (server && server.id) {
+      const form = fillEmpty(server)
+      return form
+    }
+    return new TruckDetail()
   }
 
   // 表单格式 => 后端所需
-  static toServer(data) {
-    data = { ...data }
-    return data
+  static toServer(form) {
+    const server = filterEmpty(form)
+    server.carNO = form.carNo
+    if (form.id) {
+      server.carId = form.id
+    }
+    return server
   }
 
   // truckList(item => viewItem)
   static toViewItem(data) {
     data = { ...data }
-    ;['carType', 'driverType', 'carLength'].forEach((key) => {
+    ;['carType', 'payType', 'carLength', 'driverType'].forEach((key) => {
       const value = +data[key]
       if (value) {
         const options = TruckDetail[key]
@@ -126,9 +134,10 @@ export class TruckDetail {
     data = {
       ...data,
       shippingVolume: data.shippingVolume ? data.shippingVolume + '方' : '',
-      shippingWeight: data.shippingWeight ? data.shippingWeight + '吨' : ''
+      shippingWeight: data.shippingWeight ? data.shippingWeight + '吨' : '',
+      purchDate: data.purchDate ? new Date(data.purchDate).toISOString().split('T')[0] : ''
     }
-    const mapType = ['carType', 'payType', 'carLength']
+    const mapType = ['carType', 'payType', 'carLength', 'driverType']
     mapType.forEach((key) => {
       const value = +data[key]
       if (value) {
@@ -139,4 +148,24 @@ export class TruckDetail {
     })
     return data
   }
+}
+
+function fillEmpty(obj) {
+  const data = {}
+  for (let [key, value] of Object.entries(obj)) {
+    data[key] = (value !== 0 || value !== false) && !value ? '' : value
+  }
+  return data
+}
+
+function filterEmpty(obj) {
+  const data = {}
+  for (let [key, value] of Object.entries(obj)) {
+    if (value) {
+      data[key] = value
+    } else {
+      data[key] = ''
+    }
+  }
+  return data
 }

@@ -1,16 +1,20 @@
 <template>
   <div class="pickup-track">
-    <baidu-map class="bm-view" :center="locationList[0]" :zoom="5" ak="EkPR9YNO4Ez9LW301kyTGCyTfQ5cweIz">
+    <baidu-map class="bm-view" :center="locationDetail.locationList[active]" :zoom="12" ak="EkPR9YNO4Ez9LW301kyTGCyTfQ5cweIz">
       <bm-overlay
+        v-if="locationDetail.locationList.length"
         pane="markerPane"
         :class="{terminal: true}"
         @draw="startDraw"/>
       <bm-overlay
+        v-if="locationDetail.locationList.length > 1"
         pane="markerPane"
         :class="{terminal: true}"
         @draw="endDraw"/>
-      <bm-polyline :path="locationList" stroke-color="#00a4bd" :stroke-opacity="0.5" :stroke-weight="2"/>
+      <bm-polyline :path="locationDetail.locationList" stroke-color="#00a4bd" :stroke-opacity="0.5" :stroke-weight="2"/>
       <bm-overlay
+        v-if="locationDetail.locationList.length"
+        ref="track-locate"
         pane="labelPane"
         :class="{active: true}"
         @draw="activeDraw">
@@ -22,46 +26,50 @@
               color="#ffffff"/>
           </div>
           <div class="driver-text">
-            <p class="truck-no">苏AD88DAD</p>
-            <p class="driver-name">秦天师</p>
+            <p class="truck-no">{{locationDetail.truckNo}}</p>
+            <!--<p class="driver-name">{{locationDetail.truckNo}}</p>-->
           </div>
         </div>
       </bm-overlay>
     </baidu-map>
     <div class="track-mask" :class="{'opacity': !pulled}"/>
-    <div id="track-list" class="track-list" :class="{'pulled': pulled}">
+    <div v-if="locationDetail.addressList.length" id="track-list" class="track-list" :class="{'pulled': pulled}">
       <div class="popup-switch">
         <i :class="pulled ? 'icon-collapse' : 'icon-expand'" @click="pullSwitch"/>
       </div>
-      <div v-show="!pulled" class="location-item">
-        <div class="location-time strong">
-          <p class="date">{{addressList[0].date}}</p>
-          <p class="time">{{addressList[0].time}}</p>
+      <div v-show="!pulled" class="location-item strong">
+        <div class="location-time">
+          <p class="date">{{locationDetail.addressList[active].date}}</p>
+          <p class="time">{{locationDetail.addressList[active].time}}</p>
         </div>
-        <p class="location-icon strong">
+        <p class="location-icon">
           <icon-font
-            :name="iconMap[addressList[0].positionType]"
+            :name="iconMap[locationDetail.addressList[active].positionType]"
             :size="25"
             color="#00A4BD"/>
         </p>
-        <p class="location-address strong">{{addressList[0].address}}</p>
+        <p class="location-address">{{locationDetail.addressList[active].address}}</p>
       </div>
       <div v-if="pulled" class="address-list">
         <cube-scroll
           ref="scroll"
-          :data="addressList">
-          <li v-for="(item, index) in addressList" :key="index" class="location-item">
-            <div class="location-time" :class="{'strong': item.id === active}">
+          :data="locationDetail.addressList">
+          <li
+            v-for="(item, index) in locationDetail.addressList"
+            :key="index" class="location-item"
+            :class="{'strong': item.index === active}"
+            @click="relocate(index)">
+            <div class="location-time">
               <p class="date">{{item.date}}</p>
               <p class="time">{{item.time}}</p>
             </div>
-            <p class="location-icon" :class="{'strong': item.id === active}">
+            <p class="location-icon">
               <icon-font
                 :name="iconMap[item.positionType]"
                 :size="20"
-                :color="item.id === active ? '#00A4BD' : '#C5C8CE'"/>
+                :color="item.index === active ? '#00A4BD' : '#C5C8CE'"/>
             </p>
-            <p class="location-address" :class="{'strong': item.id === active}">
+            <p class="location-address">
               {{item.address}}
             </p>
           </li>
@@ -86,31 +94,8 @@ export default {
   components: { BaiduMap, BmOverlay, BmPolyline, IconFont },
   data () {
     return {
-      active: 1,
+      active: 0,
       pulled: false,
-      locationList: [
-        { lng: 116.404, lat: 39.915 },
-        { lng: 116.405, lat: 38.915 },
-        { lng: 116.406, lat: 37.915 },
-        { lng: 116.407, lat: 36.915 },
-        { lng: 116.408, lat: 35.915 },
-        { lng: 116.409, lat: 34.915 },
-        { lng: 116.410, lat: 33.915 },
-        { lng: 116.411, lat: 32.915 }
-      ],
-      addressList: [
-        { id: 1, date: '01-13', time: '14:00', address: '江苏省南京市秦淮区通服大厦海底 捞火锅', positionType: 1 },
-        { id: 2, date: '01-13', time: '14:00', address: '江苏省南京市秦淮区通服大厦海底 捞火锅', positionType: 2 },
-        { id: 3, date: '01-13', time: '14:00', address: '江苏省南京市秦淮区通服大厦海底 捞火锅', positionType: 3 },
-        { id: 4, date: '01-13', time: '14:00', address: '江苏省南京市秦淮区通服大厦海底 捞火锅', positionType: 1 },
-        { id: 5, date: '01-13', time: '14:00', address: '江苏省南京市秦淮区通服大厦海底 捞火锅', positionType: 2 },
-        { id: 6, date: '01-13', time: '14:00', address: '江苏省南京市秦淮区通服大厦海底 捞火锅', positionType: 3 },
-        { id: 7, date: '01-13', time: '14:00', address: '江苏省南京市秦淮区通服大厦海底 捞火锅', positionType: 1 },
-        { id: 8, date: '01-13', time: '14:00', address: '江苏省南京市秦淮区通服大厦海底 捞火锅', positionType: 2 },
-        { id: 9, date: '01-13', time: '14:00', address: '江苏省南京市秦淮区通服大厦海底 捞火锅', positionType: 3 },
-        { id: 10, date: '01-13', time: '14:00', address: '江苏省南京市秦淮区通服大厦海底 捞火锅', positionType: 1 },
-        { id: 11, date: '01-13', time: '14:00', address: '江苏省南京市秦淮区通服大厦海底 捞火锅', positionType: 2 }
-      ],
       iconMap: {
         1: 'icon-beidoudingwei',
         2: 'icon-sijidingwei',
@@ -128,17 +113,17 @@ export default {
   methods: {
     ...mapActions('pickup', ['getPickupLocation', 'getWaybillLocation']),
     startDraw ({ el, BMap, map }) {
-      const pixel = map.pointToOverlayPixel(this.locationList[0])
+      const pixel = map.pointToOverlayPixel(this.locationDetail.locationList[0])
       el.style.left = pixel.x + 'px'
       el.style.top = pixel.y + 'px'
     },
     endDraw ({ el, BMap, map }) {
-      const pixel = map.pointToOverlayPixel(this.locationList[this.locationList.length - 1])
+      const pixel = map.pointToOverlayPixel(this.locationDetail.locationList[this.locationDetail.locationList.length - 1])
       el.style.left = pixel.x + 'px'
       el.style.top = pixel.y + 'px'
     },
     activeDraw ({ el, BMap, map }) {
-      const pixel = map.pointToOverlayPixel(this.locationList[0])
+      const pixel = map.pointToOverlayPixel(this.locationDetail.locationList[this.active])
       el.style.left = pixel.x + 'px'
       el.style.top = pixel.y + 'px'
     },
@@ -159,13 +144,18 @@ export default {
         }, 150)
         return false
       }
+    },
+    relocate (index) {
+      this.pulled = false
+      this.active = index
+      this.$refs['track-locate'].reload()
     }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      if (to.query.type === 1) {
+      if (to.query.type === '1') {
         vm.getPickupLocation(to.params.id)
-      } else if (to.query.type === 2) {
+      } else if (to.query.type === '2') {
         vm.getWaybillLocation(to.params.id)
       }
     })
@@ -279,9 +269,6 @@ export default {
         .time
           font-size: 12px;
           line-height: 20px;
-        &.strong
-          .date
-            color: #333333;
       .location-icon
         width: 30px;
         height: 30px;
@@ -290,14 +277,18 @@ export default {
         border: 1px solid #C5C8CE
         text-align: center
         line-height: 30px;
-        &.strong
-          border-color: #00a4bd;
       .location-address
         flex: 1
         font-size: 13px;
         line-height: 18px;
         color: #666666
-        &.strong
+      &.strong
+        .location-time
+          .date
+            color: #333333;
+        .location-icon
+          border-color: #00a4bd
+        .location-address
           font-weight: bold
           font-size: 15px;
           line-height: 21px

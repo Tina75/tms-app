@@ -9,7 +9,8 @@
       <li
         v-for="(item, index) in pickingData.list"
         :key="index"
-        class="order-item">
+        class="order-item"
+        @click="toDetail(item, index)">
         <div class="item-header border-bottom-1px">
           <span>{{item.createTime|datetimeFormat}}</span>
           <i v-if="item.collectionMoney">3</i>
@@ -35,10 +36,11 @@
         <div class="item-footer">
           <div class="order-cost">
             <p class="cost-label">应收费用（{{settlementTypeMap[item.settlementType]}}）</p>
-            <p class="cost-money">{{item.totalFee}}<span>/元</span></p>
+            <p class="cost-money">{{item.totalFee|moneyFormat}}<span>/元</span></p>
           </div>
           <div class="order-btns">
-            <a>调度</a>
+            <a class="grey" @click.stop="locate(item, index)">位置</a>
+            <a @click.stop="arrive(item, index)">到货</a>
           </div>
         </div>
       </li>
@@ -67,7 +69,7 @@ export default {
     this.getPicking()
   },
   methods: {
-    ...mapActions('pickup', ['setPageStart', 'getPicking']),
+    ...mapActions('pickup', ['setPageStart', 'getPicking', 'arriveBill', 'removePicking']),
     /** 下拉刷新 */
     async onPullingDown () {
       this.setPageStart('pickingData')
@@ -76,6 +78,58 @@ export default {
     /** 上拉加载 */
     async onPullingUp () {
       this.getPicking()
+    },
+    locate (item) {
+      this.$router.push({
+        name: 'pickup-track',
+        params: {
+          id: item.pickUpId
+        },
+        query: {
+          type: 1
+        }
+      })
+    },
+    arrive (data, index) {
+      const _this = this
+      this.$createDialog({
+        type: 'confirm',
+        title: '提示',
+        content: '是否确认到货？',
+        confirmBtn: {
+          text: '是',
+          active: true,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        cancelBtn: {
+          text: '否',
+          active: false,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        async onConfirm () {
+          await _this.arriveBill(data.pickupId)
+          await _this.removePicking(index)
+          await _this.getPickupCount(index)
+          _this.$createToast({
+            type: 'warn',
+            time: 1000,
+            txt: '到货成功'
+          }).show()
+        }
+      }).show()
+    },
+    toDetail (item, index) {
+      this.$router.push({
+        name: 'pickup-detail',
+        params: {
+          id: item.pickUpId
+        },
+        query: {
+          index: index
+        }
+      })
     }
   },
   beforeRouteEnter (to, from, next) {

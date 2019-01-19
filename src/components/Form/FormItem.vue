@@ -191,7 +191,6 @@ export default {
   },
   created () {
     this.rulesParser()
-    if (this.value === undefined || this.value === null) console.log(this.value, this.label, this.prop)
   },
   methods: {
     iconClickHandler () { if (!this.inputDisabled) this.$emit('on-icon-click') },

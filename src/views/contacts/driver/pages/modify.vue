@@ -14,7 +14,7 @@
       />
       <FormItem v-model="model.shippingWeight" label="载重（吨）" maxlength="15"/>
       <FormItem v-model="model.shippingVolume" label="净空（方）" maxlength="15"/>
-      <FormItem v-model="model.driverPhone" label="品牌" maxlength="15"/>
+      <FormItem v-model="model.carBrand" label="品牌" maxlength="15"/>
 
       <!-- <card class="cube-mb-15" title="常跑线路">
         <form-item
@@ -47,12 +47,12 @@
         />
       </card> -->
 
-      <card class="cube-mb-15" title="证件上传">
+      <!-- <card class="cube-mb-15" title="证件上传">
         <div class="uploadWrap">
           <upload v-model="model.drivePhoto" label="点击上传行驶证"/>
           <upload v-model="model.travelPhoto" label="点击上传道路运输证"/>
         </div>
-      </card>
+      </card> -->
 
       <FormItem v-model="model.remark" maxlength="200" type="textarea" label="备注"/>
     </FromGroup>
@@ -70,7 +70,6 @@ import FormItem from '@/components/Form/FormItem'
 import { DriverDetail } from '../modules/model'
 import CityPicker from '@/components/CityPicker'
 import Upload from '../../components/Upload'
-import Card from '../../components/Card'
 const moudleName = 'contacts/driver'
 export default {
   name: 'ModifyContactsDriver',
@@ -79,7 +78,7 @@ export default {
       title: this.isCreate ? '新增熟车司机' : '修改熟车司机'
     }
   },
-  components: { FormItem, FromGroup, LoadingButton, CityPicker, Upload, Card },
+  components: { FormItem, FromGroup, LoadingButton, CityPicker, Upload },
   data() {
     return {
       model: new DriverDetail(),
@@ -102,7 +101,7 @@ export default {
   computed: {
     ...mapState(moudleName, ['driverDetail']),
     isCreate() {
-      return !this.driverDetail.id
+      return !this.driverDetail.driverId
     }
   },
   methods: {
@@ -121,10 +120,10 @@ export default {
       }
     },
 
-    onRefreshPage() {
+    onPageRefresh() {
       this.model = this.isCreate
         ? new DriverDetail()
-        : DriverDetail.toFrom(this.DriverDetail)
+        : DriverDetail.toForm(this.driverDetail)
     },
 
     /* 提交成功后续操作 */

@@ -31,10 +31,10 @@ export default {
       setOrderBaseInfo(orderInfo, this)
       // 设置客户单号及其他信息
       setConsumerInfo(orderInfo, this)
-      // 设置货物信息
-      this.SET_CARGO_LIST(cargoList)
       // 设置金额信息
       this.SET_FEE_INFO(getFields(orderInfo, [ 'pickupFee', 'loadFee', 'unloadFee', 'insuranceFee', 'otherFee' ]))
+      // 设置货物信息
+      this.SET_CARGO_LIST(cargoList)
       // 设置其他信息
       this.SET_OTHER_INFO(getFields(orderInfo, [ 'isInvoice', 'invoiceRate', 'collectionMoney', 'remark' ]))
     } catch (err) {
@@ -47,7 +47,7 @@ export default {
 
 function getFields (order, keys) {
   let info = {}
-  keys.forEach(key => { info[key] = order[key] })
+  keys.forEach(key => { info[key] = order[key] || '' })
   return info
 }
 
@@ -89,7 +89,7 @@ function setOrderBaseInfo (orderInfo, context) {
 
 function setConsumerInfo (orderInfo, context) {
   let consumerInfo = getFields(orderInfo, [ 'customerOrderNo', 'customerWaybillNo', 'salesmanId', 'salesmanName', 'deliveryTime', 'arriveTime' ])
-  consumerInfo.deliveryTimeText = dayjs(consumerInfo.deliveryTime).format('YYYY-MM-DD HH:mm') + '前'
-  consumerInfo.arriveTimeText = dayjs(consumerInfo.arriveTimeText).format('YYYY-MM-DD HH:mm') + '前'
+  if (consumerInfo.deliveryTime) consumerInfo.deliveryTimeText = dayjs(consumerInfo.deliveryTime).format('YYYY-MM-DD HH:mm') + '前'
+  if (consumerInfo.arriveTime) consumerInfo.arriveTimeText = dayjs(consumerInfo.arriveTime).format('YYYY-MM-DD HH:mm') + '前'
   context.SET_CONSUMER_INFO(consumerInfo)
 }

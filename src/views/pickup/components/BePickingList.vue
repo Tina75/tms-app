@@ -9,7 +9,8 @@
       <li
         v-for="(item, index) in bePickingData.list"
         :key="index"
-        class="order-item">
+        class="order-item"
+        @click="toDetail(item, index)">
         <div class="item-header border-bottom-1px">
           <span>{{item.createTime|datetimeFormat}}</span>
           <i v-if="item.abnormalLabel === 2">异</i>
@@ -38,12 +39,12 @@
           <div class="order-cost">
             <template v-if="assignStatus(item)">
               <p class="cost-label">应收费用（{{settlementTypeMap[item.settlementType]}}）</p>
-              <p class="cost-money">{{item.totalFee}}<span>/元</span></p>
+              <p class="cost-money">{{item.totalFee|moneyFormat}}<span>/元</span></p>
             </template>
           </div>
           <div class="order-btns">
-            <a v-if="assignStatus(item)">提货</a>
-            <a v-else @click="assign(item)">派车</a>
+            <a v-if="assignStatus(item)" @click.stop="pickup(item, index)">提货</a>
+            <a v-else @click.stop="assign(item, index)">派车</a>
           </div>
         </div>
       </li>
@@ -72,7 +73,7 @@ export default {
     this.getBePicking()
   },
   methods: {
-    ...mapActions('pickup', ['setPageStart', 'getBePicking']),
+    ...mapActions('pickup', ['setPageStart', 'getBePicking', 'pickupBill', 'removeBePicking']),
     /** 下拉刷新 */
     async onPullingDown () {
       await this.setPageStart('bePickingData')
@@ -90,6 +91,47 @@ export default {
         name: 'pickup-assign',
         params: {
           id: item.pickUpId
+        }
+      })
+    },
+    pickup (data, index) {
+      const _this = this
+      this.$createDialog({
+        type: 'confirm',
+        title: '提示',
+        content: '提货后将不能修改提货单，是否提货？',
+        confirmBtn: {
+          text: '是',
+          active: true,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        cancelBtn: {
+          text: '否',
+          active: false,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        async onConfirm () {
+          await _this.pickupBill(data.pickupId)
+          await _this.removeBePicking(index)
+          await _this.getPickupCount(index)
+          _this.$createToast({
+            type: 'warn',
+            time: 1000,
+            txt: '提货成功'
+          }).show()
+        }
+      }).show()
+    },
+    toDetail (item, index) {
+      this.$router.push({
+        name: 'pickup-detail',
+        params: {
+          id: item.pickUpId
+        },
+        query: {
+          index: index
         }
       })
     }

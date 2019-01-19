@@ -1,6 +1,6 @@
 <template>
   <detail-panel :title="'货物明细'">
-    <a slot="title-btn" class="cargo-edit">编辑</a>
+    <a slot="title-btn" class="cargo-edit" @click="toEditOrders">编辑</a>
     <div class="order-list">
       <ul>
         <li v-for="(item, index) in pickupCargoDetail" :key="index" class="order-item">
@@ -35,11 +35,19 @@ export default {
   name: 'order-list',
   components: { detailPanel },
   computed: {
-    ...mapGetters('pickup', ['pickupCargoDetail'])
+    ...mapGetters('pickup', ['pickupDetail', 'pickupCargoDetail'])
   },
   methods: {
     onNoCopy () {
       window.toast('复制成功')
+    },
+    toEditOrders () {
+      this.$router.push({
+        name: 'pickup-order-list',
+        params: {
+          id: this.pickupDetail.pickUpId
+        }
+      })
     }
   }
 }
