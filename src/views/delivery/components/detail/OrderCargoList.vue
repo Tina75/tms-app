@@ -5,7 +5,7 @@
         <li v-for="order in CargoListSet" :key="order.orderNo" class="order-item">
           <div class="order-no">
             <span>{{order.orderNo}}</span>
-            <a>复制</a>
+            <a v-clipboard:copy="order.orderNo" v-clipboard:success="copySuccess">复制</a>
           </div>
           <ul>
             <li v-for="item in order.cargoList" :key="item.cargoId" class="cargo-item">
@@ -28,8 +28,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 
 export default {
   name: 'delivery-order-cargo-list',
@@ -45,7 +48,9 @@ export default {
     }
   },
   methods: {
-    // ...mapActions(['getBePicking']),
+    copySuccess() {
+      window.toast('复制成功')
+    }
   }
 }
 </script>

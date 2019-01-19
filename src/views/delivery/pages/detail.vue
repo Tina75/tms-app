@@ -86,7 +86,7 @@ export default {
       this.$router.push({ name: 'delivery-send-car', params: { id } })
     },
     location(id) {
-
+      this.$router.push({ name: 'pickup-track', params: { id }, query: { type: 2 } })
     },
     setOff(id) {
       this.$createDialog({

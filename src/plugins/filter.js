@@ -30,7 +30,7 @@ Vue.filter('moneyFormat', function (value, num = 2) {
   // } else {
   //   return 0
   // }
-  if (!value) return ''
+  if (!value) return '0'
   return NP.divide(value, Math.pow(10, num))
 })
 

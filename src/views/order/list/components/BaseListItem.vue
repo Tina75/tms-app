@@ -71,9 +71,8 @@ export default {
         this.doArrival([this.info.waybillId])
       })
     },
-    location() {
-      // TODO: 等小熊
-      window.toast('等小熊')
+    location(id) {
+      this.$router.push({ name: 'pickup-track', params: { id }, query: { type: 2 } })
     },
     showDialog(msg, fn) {
       this.$createDialog({

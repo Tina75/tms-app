@@ -3,13 +3,13 @@
     <detail-panel-item v-if="Waybill.waybillNo" :label="'运单号'">
       <p class="remix-content">
         <span class="border-right-1px">{{Waybill.waybillNo}}</span>
-        <a>复制</a>
+        <a v-clipboard:copy="Waybill.waybillNo" v-clipboard:success="copySuccess">复制</a>
       </p>
     </detail-panel-item>
     <detail-panel-item v-if="Waybill.carrierWaybillNo" :label="'承运商运单号'">
       <p class="remix-content">
         <span class="border-right-1px">{{Waybill.carrierWaybillNo}}</span>
-        <a v-clipboard:copy="Waybill.carrierWaybillNo" v-clipboard:success="test">复制</a>
+        <a v-clipboard:copy="Waybill.carrierWaybillNo" v-clipboard:success="copySuccess">复制</a>
       </p>
     </detail-panel-item>
     <detail-panel-item v-if="Waybill.startName" :label="'始发地'">
@@ -76,8 +76,8 @@ export default {
     call(tel) {
       window.location.href = `tel:${tel}`
     },
-    test() {
-      window.toast('success')
+    copySuccess() {
+      window.toast('复制成功')
     }
   }
 }
