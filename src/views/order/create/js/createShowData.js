@@ -4,7 +4,6 @@ import NP from 'number-precision'
 export default {
   // 设置选择后的发货人信息
   async setConsigner () {
-    console.log('-------', this.saveConsigner)
     if (!this.saveConsigner.id) return
     let consigner = this.saveConsigner
     let consignerAddress
