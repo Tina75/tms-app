@@ -245,7 +245,8 @@ export default {
       this.$router.push({ name: 'image-preview', params: { imgs: [this.companyInfo.logoUrl], index } })
     },
     formatImag (value) {
-      if (value.indexOf('aliyuncs.com') > 0) return value
+      if (!value) return ''
+      if (value.indexOf('aliyuncs.com') > 0) return 'https://' + value
       return value ? `${process.env.VUE_APP_IMG_HOST}${value}?x-oss-process=image/resize` : ' '
     },
     // 分享
