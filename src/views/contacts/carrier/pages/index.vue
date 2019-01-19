@@ -35,6 +35,7 @@
 import ListItem from '../../components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 import { mapActions, mapState } from 'vuex'
 const moudleName = 'contacts/carrier'
 export default {
@@ -52,14 +53,20 @@ export default {
   methods: {
     ...mapActions(moudleName, ['loadContactList']),
     loader(refresh) {
-      // if (refresh) {
-      //   this.syncButtOperator()
-      // }
       this.loadContactList(refresh)
     },
     onPageRefresh() {
       console.info('onRefreshPage')
       this.loading = true
+      setAppRightBtn([
+        {
+          text: '添加',
+          iconType: 'add',
+          action: () => {
+            this.$router.push({ name: 'contacts-carrier-modify' })
+          }
+        }
+      ])
     },
     onItemPhoneCall(item) {
       window.location.href = `tel:${item.phone}`

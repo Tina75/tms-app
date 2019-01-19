@@ -1,9 +1,9 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10 truck-create">
-    <FromGroup :rules="rules" >
-      <FormItem v-model="model.carNO" label="车牌号" maxlength="20" prop="require"/>
-      <FormItem v-model="model.driverName" label="司机姓名" maxlength="15" prop="require"/>
-      <FormItem v-model="model.driverPhone" label="手机号" maxlength="15" prop="require"/>
+    <FromGroup ref="form" :rules="rules" >
+      <FormItem v-model="model.carNo" label="车牌号" prop="carNO"/>
+      <FormItem v-model="model.driverName" label="司机姓名" maxlength="rules.driverName.max" prop="driverName"/>
+      <FormItem v-model="model.driverPhone" label="手机号" prop="driverPhone"/>
       <FormItem
         v-model="model.driverType"
         label="合作方式"
@@ -12,7 +12,7 @@
         class="cube-mb-15"
         :bottom-line="false"
         :options="options.driverType"
-        prop="require"
+        prop="driverType"
       />
 
       <FormItem
@@ -21,6 +21,7 @@
         placeholder="请选择"
         type="select"
         :options="options.carType"
+        prop="carType"
       />
       <FormItem
         v-model="model.carLength"
@@ -28,10 +29,11 @@
         placeholder="请选择"
         type="select"
         :options="options.carLength"
+        prop="carLength"
       />
       <FormItem v-model="model.shippingWeight" label="载重（吨）" maxlength="15"/>
       <FormItem v-model="model.shippingVolume" label="净空（方）" maxlength="15"/>
-      <FormItem v-model="model.driverPhone" label="品牌" maxlength="15"/>
+      <FormItem v-model="model.carBrand" label="品牌" maxlength="15"/>
 
       <FormItem
         v-model="purchDate"
@@ -44,49 +46,21 @@
       />
 
       <card class="cube-mb-15" title="常跑线路">
-        <form-item
-          v-model="model.regularLine"
-          type="click"
-          label="出发地1"
-          placeholder="请选择出发地城市"
-          @on-click="showPickCity = true"
-        />
-        <form-item
-          v-model="model.regularLine"
-          type="click"
-          label="目的地1"
-          placeholder="请选择目的地城市"
-          @on-click="showPickCity = true"
-        />
-        <form-item
-          v-model="model.regularLine"
-          type="click"
-          label="出发地2"
-          placeholder="请选择出发地城市"
-          @on-click="showPickCity = true"
-        />
-        <form-item
-          v-model="model.regularLine"
-          type="click"
-          label="目的地2"
-          placeholder="请选择目的地城市"
-          @on-click="showPickCity = true"
-        />
+        <transport-line v-model="regularLine1" :label="['出发地1', '目的地1']"/>
+        <transport-line v-model="regularLine2" :label="['出发地2', '目的地2']"/>
       </card>
 
       <card class="cube-mb-15" title="证件上传">
         <div class="uploadWrap">
-          <upload v-model="drivePhoto" label="点击上传行驶证"/>
-          <upload v-model="travelPhoto" label="点击上传道路运输证"/>
+          <upload v-model="model.drivePhoto" label="点击上传行驶证"/>
+          <upload v-model="model.travelPhoto" label="点击上传道路运输证"/>
         </div>
       </card>
 
-      <FormItem v-model="model.remark" maxlength="200" type="textarea" label="备注"/>
+      <FormItem v-model="model.remark" maxlength="rules.remark.max" type="textarea" label="备注"/>
     </FromGroup>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
-    <CityPicker
-      v-model="showPickCity"
-      @confirm="citySelect"/>
+
   </div>
 </template>
 <script>
@@ -95,9 +69,10 @@ import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
 import { TruckDetail } from '../modules/model'
-import CityPicker from '@/components/CityPicker'
 import Upload from '../../components/Upload'
 import Card from '../../components/Card'
+import TransportLine from '../../components/TransportLine'
+import { truckRule } from '../modules/rules'
 const moudleName = 'contacts/carrier'
 export default {
   name: 'ModifyContactsCarrierTruck',
@@ -106,39 +81,41 @@ export default {
       title: this.isCreate ? '新增车辆' : '修改车辆'
     }
   },
-  components: { FormItem, FromGroup, LoadingButton, CityPicker, Upload, Card },
+  components: { FormItem, FromGroup, LoadingButton, Upload, Card, TransportLine },
   data() {
     return {
       model: new TruckDetail(),
-      drivePhoto: [],
-      travelPhoto: [],
       options: {
         carType: TruckDetail.carType,
         driverType: TruckDetail.driverType,
         carLength: TruckDetail.carLength
       },
-      rules: {
-        require: {
-          required: true
-        }
-      },
+      rules: truckRule,
       submiting: false,
       purchDate: '', // 生产日期
-      showPickCity: false,
-      regularLine: [] // 常发线路
+      regularLine1: '', // 常发线路1
+      regularLine2: '' // 常发线路2
     }
   },
   computed: {
     ...mapGetters(moudleName, ['truckDetail']),
     isCreate() {
-      return !this.truckDetail.id
+      return typeof this.$route.query.carId === 'undefined'
+    },
+    regularLine () {
+      const res = [this.regularLine1, this.regularLine2]
+      return JSON.stringify(res)
     }
   },
   methods: {
-    ...mapActions(moudleName, ['modifyTruck']),
+    ...mapActions(moudleName, ['loadTruckDetail', 'modifyTruck']),
     async submit() {
-      this.submiting = true
       try {
+        this.submiting = true
+        if (!(await this.$refs.form.validate())) {
+          return window.toast('请输入必填信息')
+        }
+        this.model.regularLine = this.regularLine
         this.model.carrierId = this.$route.query.carrierId
         await this.modifyTruck(TruckDetail.toServer(this.model))
         this.afterSubmit()
@@ -149,20 +126,48 @@ export default {
       }
     },
 
-    onRefreshPage() {
-      this.model = this.isCreate
-        ? new TruckDetail()
-        : TruckDetail.toFrom(this.TruckDetail)
-    },
-
     /* 提交成功后续操作 */
     afterSubmit () {
       this.$refreshPage('contacts-carrier-truck', 'contacts-carrier-truck-detail')
-      this.$createToast({
-        time: 1500,
-        txt: this.isCreate ? '新增车辆成功' : '修改车辆成功'
-      }).show()
+      this.$formWillLeave()
+      window.toast(this.isCreate ? '新增车辆成功' : '修改车辆成功')
       this.$router.back()
+    },
+
+    async setForm() {
+      if (!this.isCreate) {
+        // 编辑操作, 判断store中的值是否是目标, 不是则拉新的
+        const urlId = +this.$route.query.carId
+        if (urlId !== +this.truckDetail.id) {
+          await this.loadTruckDetail()
+          // 更新了detail的则要刷新detail页
+          this.$refreshPage('contacts-carrier-truck-detail')
+        }
+        if (this.truckDetail.purchDate) {
+          this.purchDate = new Date(this.truckDetail.purchDate).toISOString().split('T')[0]
+        }
+        this.setRegularLine()
+        this.model = TruckDetail.toForm(this.truckDetail)
+      } else {
+        this.model = new TruckDetail()
+      }
+    },
+
+    setRegularLine () {
+      try {
+        const serveData = JSON.parse(this.truckDetail.regularLine)
+        if (Array.isArray(serveData)) {
+          this.regularLine1 = serveData[0] || {}
+          this.regularLine2 = serveData[1] || {}
+        } else {
+          this.regularLine1 = {}
+          this.regularLine2 = {}
+        }
+      } catch (error) {
+        this.regularLine1 = {}
+        this.regularLine2 = {}
+        console.error(error)
+      }
     },
 
     showDatePicker() {
@@ -178,16 +183,10 @@ export default {
         })
       }
       this.datePicker.show()
-    },
-
-    citySelect (city) {
-      // console.log(picker)
-      // if (picker[0].name === picker[1].name) {
-      //   this.formList.address = picker[1].name + picker[2].name
-      // } else {
-      //   this.formList.address = picker[0].name + picker[1].name + picker[2].name
-      // }
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => vm.setForm())
   }
 }
 </script>

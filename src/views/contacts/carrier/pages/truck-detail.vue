@@ -12,35 +12,36 @@
       </div>
     </div>
 
-    <div v-if="infoList.length" class="shipper-detail__info border-bottom-1px cube-mt-15">
+    <div v-if="infoList.length" class="truck-detail__info border-bottom-1px cube-mt-15">
       <div
         v-for="(item, i) in infoList"
         :key="i"
-        class="shipper-detail__info-item border-right-1px"
+        class="truck-detail__info-item"
+        :class="{'border-bottom-1px': i <= 3, 'border-left-1px': i !== 0 && i !== 4}"
       >
-        <span class="cube-font-15 cube-c-black cube-font-weight--m" v-text="item.value"/>
-        <span class="cube-font-14 cube-c-light-grey" v-text="item.text"/>
+        <div class="cube-font-15 cube-c-black cube-font-weight--m" v-text="item.value"/>
+        <div class="cube-font-14 cube-c-light-grey" v-text="item.text"/>
       </div>
     </div>
 
-    <div v-if="regularLine.length" class="truck-detail__remark cube-font-15 cube-mt-15 border-bottom-1px">
+    <div v-if="regularLine.length" class="truck-detail__card cube-font-15 cube-mt-15 border-bottom-1px">
       <div class="cube-c-black cube-mb-15" v-text="'常跑线路'"/>
-      <div class="cube-c-grey cube-pl-15 cube-pr-15 cube-font-15">
-        <p v-for="(item, index) in regularLine" :key="index" class="cube-mb-15">
+      <div class="cube-c-grey cube-font-15">
+        <p v-for="(item, index) in regularLine" :key="index" class="cube-mb-15 truck-detail__regularLine">
           <span>{{item.en}}</span>
           <IconFont name="icon-line" color="#9DA1B0" class="route-line cube-ml-20 cube-mr-20"/>
           <span>{{item.sn}}</span>
         </p>
       </div>
     </div>
-    <div v-if="photoList.length" class="truck-detail__remark cube-font-15 cube-mt-15">
+    <div v-if="photoList.length" class="truck-detail__card cube-font-15 cube-mt-15">
       <div class="cube-c-black cube-mb-15" v-text="'证件照片'"/>
       <div class="imgs">
         <img v-for="(item, index) in photoList" :key="index" :src="item" alt="">
       </div>
     </div>
 
-    <div v-if="viewData.remark" class="truck-detail__remark cube-font-15 cube-mt-15">
+    <div v-if="viewData.remark" class="truck-detail__card cube-font-15 cube-mt-15">
       <div class="cube-c-black cube-mb-15" v-text="'备注'"/>
       <p class="cube-c-grey" v-text="viewData.remark"/>
     </div>
@@ -55,6 +56,7 @@
 import IconFont from '@/components/Iconfont'
 import { mapGetters, mapActions } from 'vuex'
 import { TruckDetail } from '../modules/model.js'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 const moudleName = 'contacts/carrier'
 
 const ListConfig = [
@@ -63,7 +65,7 @@ const ListConfig = [
   { text: '车型', key: 'carType' },
   { text: '车长', key: 'carLength' },
   { text: '品牌', key: 'carBrand' },
-  { text: '结算方式', key: 'payType' }
+  { text: '购买时间', key: 'purchDate' }
 ]
 
 export default {
@@ -124,30 +126,52 @@ export default {
     onPageRefresh() {
       const carId = this.$route.query.carId
       this.loadTruckDetail(carId)
+      setAppRightBtn([
+        {
+          text: '删除',
+          iconType: 'delete',
+          action: this.removeHandle
+        },
+        {
+          text: '修改',
+          iconType: 'edit',
+          action: () => {
+            this.$router.push({
+              name: 'contacts-carrier-truck-modify',
+              query: {
+                carrierId: this.truckDetail.carrierId,
+                carId: this.truckDetail.id
+              }
+            })
+          }
+        }
+      ])
     },
 
     phoneCall () {
       window.location.href = `tel: ${this.truckDetail.driverPhone}`
+    },
+
+    removeHandle () {
+      this.$createDialog({
+        type: 'confirm',
+        title: '',
+        content: '请确认是否需要删除该信息?',
+        icon: 'cubeic-alert',
+        onConfirm: () => {
+          const data = {
+            carId: this.$route.query.carId
+          }
+          try {
+            this.removeTruck(data)
+          } catch (e) {
+            console.log(e)
+          } finally {
+            this.$router.back()
+          }
+        }
+      }).show()
     }
-
-    // goAdd () {
-    //   this.$router.push({
-    //     name: 'contacts-carrier-truck-modify',
-    //     query: {
-    //       carrierId: this.truckDetail.carrierId
-    //     }
-    //   })
-    // },
-
-    // goEdit () {
-    //   this.$router.push({
-    //     name: 'contacts-carrier-truck-modify',
-    //     query: {
-    //       carrierId: this.truckDetail.carrierId,
-    //       carId: this.truckDetail.id
-    //     }
-    //   })
-    // }
   }
 }
 </script>
@@ -177,19 +201,24 @@ export default {
     height 90px
     color #333333
     background #ffffff
-  &__remark
+  &__card
     padding 16px 15px
     min-height 100px
     background #ffffff
   &__info
-    height 86px
-    padding 23px 0 13px
+    padding 10px 15px 0px 15px
+    flex-wrap wrap
+    line-height 20px
     display flex
     background #fff
+    >>>.border-left-1px:before
+      height 100%
+      top 15px
     &-item
-      flex 1
-      display flex
-      flex-direction column
-      align-items center
-      justify-content space-around
+      width 85px
+      padding 13px 0px
+      text-align center
+  &__regularLine
+    display flex
+    align-items center
 </style>
