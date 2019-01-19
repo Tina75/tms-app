@@ -174,7 +174,7 @@ const VALIDATE_PHONE = /^1[0-9]{10}$/
 const VALIDATE_TEL = /^[(（）)\-02-9][(（）)\-0-9]{1,19}$/
 
 export default {
-  name: 'order-create',
+  name: 'order-edit',
   metaInfo: { title: '手工开单' },
   components: { FormGroup, FormItem, FormTitle, CreateFooter },
   data () {
