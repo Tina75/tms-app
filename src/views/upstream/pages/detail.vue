@@ -86,7 +86,7 @@
           <Cargo v-for="(item, index) in detail.cargoInfos" :key="index" :data="item"/>
         </Panel>
       </cube-scroll-nav-panel>
-      <cube-scroll-nav-panel label="应收费用" style="padding-bottom: 40px">
+      <cube-scroll-nav-panel label="应收费用">
         <Panel title="应收费用">
           <FormItem label="计费里程">
             {{detail.mileage | mile}}公里
@@ -129,7 +129,7 @@ Vue.use(VueClipboard)
 export default {
   name: 'upstream-detail',
   metaInfo: {
-    title: 'upstream-detail'
+    title: '上游来单详情'
   },
   filters: {
     rate: getRate,
@@ -217,8 +217,11 @@ export default {
     font-size 20px
 </style>
 <style lang="stylus">
-.cube-scroll-nav-panel
-  .cube-sticky-ele
-    height 0
-    visibility hidden
+.upstream-detail
+  .cube-scroll-nav-panels
+      padding-bottom 40px
+  .cube-scroll-nav-panel
+    .cube-sticky-ele
+      height 0
+      visibility hidden
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="receipt-detail">
     <cube-scroll-nav>
-      <StatusBar slot="prepend" :status="detail.acceptStatus" :time="detail.createTime"/>
+      <StatusBar slot="prepend" :status="detail.receiptOrder && detail.receiptOrder.receiptStatus" :time="detail.createTime" type="receipt"/>
       <cube-scroll-nav-panel label="基本信息">
         <Panel title="基本信息">
           <FormItem label="客户名称">
@@ -60,7 +60,7 @@
           </FormItem>
           <FormItem label="联系方式">
             {{detail.consignerPhone}}
-            <a slot="right" :href="`tel:${detail.consignerPhone}`" class="act-btn">联系TA</a>
+            <a v-if="detail.consignerPhone" slot="right" :href="`tel:${detail.consignerPhone}`" class="act-btn">联系TA</a>
           </FormItem>
           <FormItem label="发货地址">
             {{detail.consignerAddress}}
@@ -74,38 +74,35 @@
           </FormItem>
           <FormItem label="联系方式">
             {{detail.consigneePhone}}
-            <a slot="right" :href="`tel:${detail.consigneePhone}`" class="act-btn">联系TA</a>
+            <a v-if="detail.consigneePhone" slot="right" :href="`tel:${detail.consigneePhone}`" class="act-btn">联系TA</a>
           </FormItem>
           <FormItem label="收货地址">
             {{detail.consigneeAddress}}
           </FormItem>
         </Panel>
       </cube-scroll-nav-panel>
-      <cube-scroll-nav-panel  label="货物明细">
-        <Panel title="货物明细">
-          <Cargo v-for="(item, index) in detail.cargoInfos" :key="index" :data="item"/>
-        </Panel>
+      <cube-scroll-nav-panel  label="承运商信息">
+        <template v-if="detail.receiptOrder" >
+          <Panel v-for="(item, index) in detail.receiptOrder.carrierInfos" :key="index" title="承运商信息">
+            <FormItem label="承运商">
+              {{item.carrierName}}
+            </FormItem>
+            <FormItem label="司机">
+              {{item.driverName}}
+            </FormItem>
+            <FormItem label="联系方式">
+              {{item.driverPhone}}
+              <a v-if="item.driverPhone" slot="right" :href="`tel:${item.driverPhone}`" class="act-btn">联系TA</a>
+            </FormItem>
+            <FormItem label="车牌号">
+              {{item.carNo}}
+            </FormItem>
+          </Panel>
+        </template>
       </cube-scroll-nav-panel>
-      <cube-scroll-nav-panel  label="应收费用" style="padding-bottom: 40px">
-        <Panel title="应收费用">
-          <FormItem label="计费里程">
-            {{detail.mileage | mile}}公里
-          </FormItem>
-          <FormItem label="运输费用">
-            {{detail.freightFee | money}}元
-          </FormItem>
-          <FormItem label="装货费用">
-            {{detail.loadFee | money}}元
-          </FormItem>
-          <FormItem label="卸货费用">
-            {{detail.unloadFee | money}}元
-          </FormItem>
-          <FormItem label="其他费用">
-            {{detail.otherFee | money}}元
-          </FormItem>
-          <div class="total-fee">
-            合计<span>{{detail.totalFee | money}}元</span> {{detail.settlementTypeDesc}}
-          </div>
+      <cube-scroll-nav-panel v-if="detail.receiptOrder && detail.receiptOrder.receiptUrl.length" label="回单照片">
+        <Panel title="回单照片">
+          <image-list :upload-photos="receiptPicList"/>
         </Panel>
       </cube-scroll-nav-panel>
     </cube-scroll-nav>
@@ -118,20 +115,20 @@
   </div>
 </template>
 <script>
+import Vue from 'vue'
+import * as API from '../libs/api'
 import Panel from '@/views/upstream/components/Panel'
 import FormItem from '@/views/upstream/components/FormItem'
 import StatusBar from '@/views/upstream/components/StatusBar'
-import Cargo from '@/views/upstream/components/Cargo'
 import VueClipboard from 'vue-clipboard2'
-import Vue from 'vue'
 import { getRate, getMoney, getMile } from '@/views/upstream/libs'
-import * as API from '../libs/api'
+import imageList from '@/views/company/pages/image-list'
 Vue.use(VueClipboard)
 
 export default {
-  name: 'upstream-detail',
+  name: 'receipt-detail',
   metaInfo: {
-    title: 'upstream-detail'
+    title: '回单详情'
   },
   filters: {
     money: getMoney,
@@ -141,7 +138,7 @@ export default {
     Panel,
     FormItem,
     StatusBar,
-    Cargo
+    imageList
   },
   data () {
     return {
@@ -151,6 +148,11 @@ export default {
   computed: {
     id () {
       return this.$route.params.id
+    },
+    receiptPicList () {
+      return this.detail.receiptOrder.receiptUrl.map(el => {
+        return { url: el }
+      })
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -199,7 +201,7 @@ export default {
               }).show()
             })
         }
-      }).show()
+      }, false).show()
     },
     // 返厂
     backFactory () {
@@ -227,7 +229,7 @@ export default {
               }).show()
             })
         }
-      }).show()
+      }, false).show()
     },
     uploadPic () {
       const id = this.detail.receiptOrder.id
@@ -278,8 +280,11 @@ export default {
     font-size 20px
 </style>
 <style lang="stylus">
-.cube-scroll-nav-panel
-  .cube-sticky-ele
-    height 0
-    visibility hidden
+.receipt-detail
+  .cube-scroll-nav-panels
+    padding-bottom 40px
+  .cube-scroll-nav-panel
+    .cube-sticky-ele
+      height 0
+      visibility hidden
 </style>

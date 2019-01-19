@@ -77,7 +77,7 @@ export default {
     },
     // 回收
     receipt (item) {
-      this.dialog = this.$createDialog({
+      this.$createDialog({
         type: 'prompt',
         title: '回收',
         prompt: {
@@ -101,7 +101,7 @@ export default {
               }).show()
             })
         }
-      }).show()
+      }, false).show()
     },
     // 返厂
     backFactory (item) {
@@ -129,7 +129,7 @@ export default {
               }).show()
             })
         }
-      }).show()
+      }, false).show()
     },
     uploadPic (item) {
       this.$router.push({
