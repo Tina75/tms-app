@@ -74,10 +74,10 @@ export default {
       console.log('val changed ' + val)
       let btnList = []
       if (this.deleteBtnVisable(this.Detail)) {
-        btnList.push({ text: '', iconType: 'delete', action: () => { this.handleClickDelete(this.Detail) } })
+        btnList.push({ text: '删除', iconType: 'delete', action: () => { this.handleClickDelete(this.Detail) } })
       }
       if (this.editOrderBtnVisable(this.Detail)) {
-        btnList.push({ text: '', iconType: 'edit', action: () => { this.handleClickEditOrder(this.Detail.id) } })
+        btnList.push({ text: '编辑', iconType: 'edit', action: () => { this.handleClickEditOrder(this.Detail.id) } })
       }
       setAppRightBtn(btnList)
     }
@@ -106,7 +106,7 @@ export default {
     },
     handleClickEditOrder(id) {
       console.log(id)
-      this.$router.push({ name: 'order-edit', params: { id } })
+      this.$router.push({ name: 'order-list', params: { id } })
     },
     handleClickEditBill(id) {
       // this.$emit('editBill', id)

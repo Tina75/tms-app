@@ -7,7 +7,7 @@
       <detail-panel-item :label="'联系方式'">
         <p class="remix-content">
           <span class="border-right-1px">{{ detail.consignerPhone }}</span>
-          <a :href="`tel:${detail.consignerPhone}`">
+          <a :href="`tel:${detail.consignerPhone}`" >
             联系TA
             <icon-font
               class="call-icon"

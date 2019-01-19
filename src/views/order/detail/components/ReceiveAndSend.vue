@@ -7,7 +7,7 @@
       <detail-panel-item :label="'联系方式'">
         <p class="remix-content">
           <span class="border-right-1px">{{Detail.consignerPhone}}</span>
-          <a :href="`tel:${Detail.consignerPhone}`">
+          <a @click="call(Detail.consignerPhone)">
             联系TA
             <icon-font
               name="icon-ico_call"
@@ -27,7 +27,7 @@
       <detail-panel-item :label="'联系方式'">
         <p class="remix-content">
           <span class="border-right-1px">{{Detail.consigneePhone}}</span>
-          <a :href="`tel:${Detail.consigneePhone}`">
+          <a @click="call(Detail.consigneePhone)">
             联系TA
             <icon-font
               name="icon-ico_call"
@@ -63,6 +63,9 @@ export default {
     }
   },
   methods: {
+    call(tel) {
+      window.location.href = `tel:${tel}`
+    }
     // ...mapActions(['getBePicking']),
   }
 }
