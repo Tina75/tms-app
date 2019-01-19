@@ -39,7 +39,7 @@
       </div> -->
           <cube-button v-if="!info.waybillId" class="list-item__btngroup" :outline="true"  :inline="true" primary @click.stop="$emit('on-dispatch',info)">调度</cube-button>
           <div v-else class="list-item__btngroup">
-            <div v-if="info.status>10&&info.status<30">
+            <div v-if="info.status==2">
               <!-- <cube-button class="btn" :outline="true" :inline="true" @click="$emit('delete-item', info.waybillId)">删除</cube-button> -->
               <cube-button v-if="!hasSendCar(info)" class="btn" :outline="true"  :inline="true" primary @click.stop="sendCar(info.waybillId)">派车</cube-button>
               <cube-button v-else class="btn" :outline="true"  :inline="true" primary @click.stop="setOff(info.waybillId)">发运</cube-button>
@@ -85,8 +85,8 @@ export default {
       return (info.assignCarType === 1 && info.carrierName) || (info.assignCarType === 2 && info.carNo)
     },
     // 派车
-    sendCar() {
-      this.$router.push({ name: 'delivery-send-car' })
+    sendCar(id) {
+      this.$router.push({ name: 'delivery-send-car', params: { id } })
     },
     // 发运
     setOff(id) {
