@@ -15,8 +15,14 @@
       </cube-scroll-nav-panel>
     </cube-scroll-nav>
     <div class="handle-btns">
-      <a class="light-btn">查看位置</a>
-      <a>确定</a>
+      <template v-if="pickupDetail.status === 1">
+        <a v-if="(pickupDetail.assignCarType === 1 && pickupDetail.carrierName) || (pickupDetail.assignCarType === 2 && pickupDetail.carNo)" @click="pickup">提货</a>
+        <a v-else @click="assign">派车</a>
+      </template>
+      <template v-if="pickupDetail.status === 2">
+        <a class="light-btn" @click="locate">查看位置</a>
+        <a @click="arrive">到货</a>
+      </template>
     </div>
   </div>
 </template>
@@ -60,9 +66,90 @@ export default {
     ...mapGetters('pickup', ['pickupDetail'])
   },
   methods: {
-    ...mapActions('pickup', ['getPickupDetail']),
+    ...mapActions('pickup', ['getPickupDetail', 'arriveBill', 'removePicking', 'pickupBill', 'removeBePicking']),
     changeHandler (label) {
       console.log('changed to:', label)
+    },
+    locate () {
+      this.$router.push({
+        name: 'pickup-track',
+        params: {
+          id: this.pickupDetail.pickUpId
+        },
+        query: {
+          type: 1
+        }
+      })
+    },
+    arrive () {
+      const _this = this
+      this.$createDialog({
+        type: 'confirm',
+        title: '提示',
+        content: '是否确认到货？',
+        confirmBtn: {
+          text: '是',
+          active: true,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        cancelBtn: {
+          text: '否',
+          active: false,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        async onConfirm () {
+          await _this.arriveBill(_this.pickupDetail.pickupId)
+          await _this.removePicking(_this.$route.query.index)
+          await _this.getPickupCount()
+          _this.$createToast({
+            type: 'warn',
+            time: 1000,
+            txt: '到货成功'
+          }).show()
+          _this.$router.back()
+        }
+      }).show()
+    },
+    assign () {
+      this.$router.push({
+        name: 'pickup-assign',
+        params: {
+          id: this.pickupDetail.pickUpId
+        }
+      })
+    },
+    pickup () {
+      const _this = this
+      this.$createDialog({
+        type: 'confirm',
+        title: '提示',
+        content: '提货后将不能修改提货单，是否提货？',
+        confirmBtn: {
+          text: '是',
+          active: true,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        cancelBtn: {
+          text: '否',
+          active: false,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        async onConfirm () {
+          await _this.pickupBill(_this.pickupDetail.pickupId)
+          await _this.removeBePicking(_this.$route.query.index)
+          await _this.getPickupCount()
+          _this.$createToast({
+            type: 'warn',
+            time: 1000,
+            txt: '提货成功'
+          }).show()
+          _this.$router.back()
+        }
+      }).show()
     }
   },
   beforeRouteEnter (to, from, next) {

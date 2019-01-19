@@ -42,8 +42,8 @@
             </template>
           </div>
           <div class="order-btns">
-            <a v-if="assignStatus(item)">提货</a>
-            <a v-else @click="assign(item)">派车</a>
+            <a v-if="assignStatus(item)" @click="pickup(item, index)">提货</a>
+            <a v-else @click="assign(item, index)">派车</a>
           </div>
         </div>
       </li>
@@ -72,7 +72,7 @@ export default {
     this.getBePicking()
   },
   methods: {
-    ...mapActions('pickup', ['setPageStart', 'getBePicking']),
+    ...mapActions('pickup', ['setPageStart', 'getBePicking', 'pickupBill', 'removeBePicking']),
     /** 下拉刷新 */
     async onPullingDown () {
       await this.setPageStart('bePickingData')
@@ -92,6 +92,36 @@ export default {
           id: item.pickUpId
         }
       })
+    },
+    pickup (data, index) {
+      const _this = this
+      this.$createDialog({
+        type: 'confirm',
+        title: '提示',
+        content: '提货后将不能修改提货单，是否提货？',
+        confirmBtn: {
+          text: '是',
+          active: true,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        cancelBtn: {
+          text: '否',
+          active: false,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        async onConfirm () {
+          await _this.pickupBill(data.pickupId)
+          await _this.removeBePicking(index)
+          await _this.getPickupCount(index)
+          _this.$createToast({
+            type: 'warn',
+            time: 1000,
+            txt: '提货成功'
+          }).show()
+        }
+      }).show()
     }
   }
 }

@@ -152,9 +152,14 @@ export default {
       }
     },
     async batchDispatch () {
-      await this.createPickup(this.chosenList)
-      await this.setPageStart('dispatchingData')
-      await this.getDispatching()
+      if (this.$route.params.id) {
+        await this.addBillOrder(this.chosenList)
+        await this.editBillOrders(this.$route.params.id)
+      } else {
+        await this.createPickup(this.chosenList)
+        await this.setPageStart('dispatchingData')
+        await this.getDispatching()
+      }
       this.$router.back()
     }
   },
