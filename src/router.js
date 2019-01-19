@@ -29,7 +29,7 @@ sync(store, router)
 
 router.back = (closeTip) => {
   // 关掉一切提示,直接返回
-  if (closeTip){
+  if (closeTip) {
     // 表单返回提示
     Vue.prototype.$formWillLeave && Vue.prototype.$formWillLeave()
   }

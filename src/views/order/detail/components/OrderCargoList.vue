@@ -3,10 +3,6 @@
     <div class="order-list">
       <ul>
         <li v-for="item in CargoList" :key="item.id" class="order-item">
-          <!-- <div class="order-no">
-            <span>D9384834783748374</span>
-            <a>复制</a>
-          </div> -->
           <ul>
             <li class="cargo-item">
               <p class="cargo-title">{{item.cargoName}} <span v-if="item.cargoNo">({{item.cargoNo}})</span> </p>

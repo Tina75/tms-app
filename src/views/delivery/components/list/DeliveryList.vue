@@ -31,8 +31,9 @@
           </p>
         </div>
         <div class="list-item__money">
-          <p v-if="hasSendCar(info)" class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormat}})</p>
-          <div v-if="hasSendCar(info)" class="cube-c-yellow cube-mt-5 cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.pickupFee||info.totalFee |moneyFormat}}</span>/元</div>
+          <!-- <p v-if="hasSendCar(info)" class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormat}})</p> -->
+          <p v-if="info.totalFee"  class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormat}})</p>
+          <div v-if="info.totalFee"  class="cube-c-yellow cube-mt-5 cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.totalFee |moneyFormat}}</span>/元</div>
           <!-- 状态 10：待提货 20：待调度 30：在途 40：已到货 50：已回单；100被删除到回收站 -->
           <!-- <div class="list-item__btngroup">
         <slot/>
@@ -40,12 +41,12 @@
           <cube-button v-if="!info.waybillId" class="list-item__btngroup" :outline="true"  :inline="true" primary @click.stop="$emit('on-dispatch',info)">调度</cube-button>
           <div v-else class="list-item__btngroup">
             <div v-if="info.status==2">
-              <!-- <cube-button class="btn" :outline="true" :inline="true" @click="$emit('delete-item', info.waybillId)">删除</cube-button> -->
+              <cube-button class="btn" :outline="true" :inline="true" @click.stop="$emit('delete-item', info.waybillId)">删除</cube-button>
               <cube-button v-if="!hasSendCar(info)" class="btn" :outline="true"  :inline="true" primary @click.stop="sendCar(info.waybillId)">派车</cube-button>
               <cube-button v-else class="btn" :outline="true"  :inline="true" primary @click.stop="setOff(info.waybillId)">发运</cube-button>
             </div>
-            <div v-if="info.status==30">
-              <cube-button class="btn" :outline="true"  :inline="true" @click.stop="location">位置</cube-button>
+            <div v-if="info.status==3">
+              <cube-button class="btn" :outline="true"  :inline="true" @click.stop="location(info.waybillId)">位置</cube-button>
               <cube-button  class="btn" :outline="true"  :inline="true" primary @click.stop="arrival(info.waybillId)">到货</cube-button>
             </div>
           </div>
@@ -91,19 +92,18 @@ export default {
     // 发运
     setOff(id) {
       this.showDialog('是否发运？', () => {
-        this.doSetOff([id])
+        this.doSetOff(id)
       })
     },
     // 到货
     arrival(id) {
       this.showDialog('是否确认到货？', () => {
-        this.doArrival([id])
+        this.doArrival(id)
       })
     },
 
-    location() {
-      // TODO: 等小熊
-      window.toast('等小熊')
+    location(id) {
+      this.$router.push({ name: 'pickup-track', params: { id }, query: { type: 2 } })
     },
 
     showDialog(msg, fn) {

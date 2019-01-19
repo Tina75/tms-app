@@ -6,6 +6,7 @@
     @refresh="refresh"
     @loadmore="loadmore"
     @on-item-click="onItemClick"
+    @delete-item="deleteItem"
   />
 </template>
 
@@ -41,22 +42,22 @@ export default {
     },
     onItemClick(id) {
       this.$router.push({ name: 'delivery-detail', params: { id } })
-    }
+    },
 
     // 删除
-    // deleteItem(id) {
-    //   this.$createDialog({
-    //     type: 'confirm',
-    //     icon: 'cubeic-important',
-    //     content: '是否确认删除？',
-    //     onConfirm: () => {
-    //       this.deleteBillById([id]).then(() => {
-    //         const index = this.SendList.findIndex(item => item.waybillId === id)
-    //         this.SendList.splice(index, 1)
-    //       })
-    //     }
-    //   }).show()
-    // }
+    deleteItem(id) {
+      this.$createDialog({
+        type: 'confirm',
+        icon: 'cubeic-important',
+        content: '是否确认删除？',
+        onConfirm: () => {
+          this.deleteBillById(id).then(() => {
+            const index = this.SendList.findIndex(item => item.waybillId === id)
+            this.SendList.splice(index, 1)
+          })
+        }
+      }).show()
+    }
   }
 }
 

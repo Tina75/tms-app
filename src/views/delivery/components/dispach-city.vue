@@ -7,14 +7,14 @@
       </div>
       <div class="city-right">{{startCode | codeToName}}&nbsp;&nbsp;<i class="iconfont yzg-gengduo-huidanzhao"/></div>
     </div>
-    <city-picker :value="startSelVisable" :deep="2" @confirm="confirmStart"/>
+    <city-picker :value="startSelVisable" :deep="3" @confirm="confirmStart"/>
     <div class="city-cell cube-ml-15" @click="endSelVisable = !endSelVisable">
       <div class="city-left">
         <span class="city-icon end-icon">目</span>目的地
       </div>
       <div class="city-right">{{endCode | codeToName}}&nbsp;&nbsp;<i class="iconfont yzg-gengduo-huidanzhao"/></div>
     </div>
-    <city-picker :value="endSelVisable" :deep="2" @confirm="confirmEnd"/>
+    <city-picker :value="endSelVisable" :deep="3" @confirm="confirmEnd"/>
   </div>
 </template>
 

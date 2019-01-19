@@ -67,11 +67,24 @@ export default {
     })
   },
   beforeRouteLeave(to, from, next) {
-    // setAppRightBtn([{ text: '' }])
+    setAppRightBtn([{ text: '', action: () => {} }])
+    next()
   },
   watch: {
     'Detail.status': function(val) {
-      console.log('val changed ' + val)
+      this.initTitleBtns()
+    }
+  },
+  activated() {
+    this.initTitleBtns()
+  },
+
+  methods: {
+    ...mapActions('order/detail', ['getDetail']),
+    changeHandler (label) {
+      console.log('changed to:', label)
+    },
+    initTitleBtns() {
       let btnList = []
       if (this.deleteBtnVisable(this.Detail)) {
         btnList.push({ text: '删除', iconType: 'delete', action: () => { this.handleClickDelete(this.Detail) } })
@@ -80,13 +93,6 @@ export default {
         btnList.push({ text: '编辑', iconType: 'edit', action: () => { this.handleClickEditOrder(this.Detail.id) } })
       }
       setAppRightBtn(btnList)
-    }
-  },
-
-  methods: {
-    ...mapActions('order/detail', ['getDetail']),
-    changeHandler (label) {
-      console.log('changed to:', label)
     },
     handleClickDelete(info) {
       let msg = '确认删除订单？删除之后可以在电脑端订单回收站恢复'
@@ -106,7 +112,7 @@ export default {
     },
     handleClickEditOrder(id) {
       console.log(id)
-      this.$router.push({ name: 'order-list', params: { id } })
+      this.$router.push({ name: 'order-edit', params: { id } })
     },
     handleClickEditBill(id) {
       // this.$emit('editBill', id)

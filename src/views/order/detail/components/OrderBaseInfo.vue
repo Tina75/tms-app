@@ -6,13 +6,13 @@
     <detail-panel-item v-if="Detail.customerOrderNo" :label="'客户订单号'">
       <p class="remix-content">
         <span class="border-right-1px">{{Detail.customerOrderNo}}</span>
-        <a>复制</a>
+        <a v-clipboard:copy="Detail.customerOrderNo" v-clipboard:success="window.toast('复制成功')">复制</a>
       </p>
     </detail-panel-item>
     <detail-panel-item v-if="Detail.waybillNo" :label="'客户运单号'">
       <p class="remix-content">
         <span class="border-right-1px">{{Detail.waybillNo}}</span>
-        <a>复制</a>
+        <a v-clipboard:copy="Detail.waybillNo" v-clipboard:success="window.toast('复制成功')">复制</a>
       </p>
     </detail-panel-item>
     <detail-panel-item v-if="Detail.startName" :label="'始发地'">
@@ -49,9 +49,12 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 
 export default {
   name: 'order-base-info',

@@ -68,19 +68,18 @@ export default {
     // 发运
     setOff(id) {
       this.showDialog('是否发运？', () => {
-        this.doSetOff([id])
+        this.doSetOff(id)
       })
     },
     // 到货
     arrival(id) {
       this.showDialog('是否确认到货？', () => {
-        this.doArrival([id])
+        this.doArrival(id)
       })
     },
 
-    location() {
-      // TODO: 等小熊
-      window.toast('等小熊')
+    location(id) {
+      this.$router.push({ name: 'pickup-track', params: { id }, query: { type: 2 } })
     },
 
     deleteBill() {
