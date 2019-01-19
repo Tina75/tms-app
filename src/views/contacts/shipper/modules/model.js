@@ -77,7 +77,7 @@ export class CargoDetail {
   remark1 = ''
   remark2 = ''
 
-  static unitTypes = ['纸箱', '木箱', '铁桶', '纤袋', '麻袋', '木袋']
+  static unitTypes = ['纸箱', '木箱', '铁桶', '纤袋', '麻袋', '木袋', '托盘']
 
   static toForm(server) {
     if (server && server.id) {

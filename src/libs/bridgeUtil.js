@@ -12,7 +12,7 @@ export const getUserInfo = reuse(() => {
       userInfo = require('./login.json')
     } catch (e) {
       userInfo = {
-        Authorization: 'Bearer 23de5d21cfc94119f58761d3dfc0147a1547517824703',
+        Authorization: 'Bearer b1180ca221dcec2b3e7201e9eaa8ed451547461313506',
         ClientInfo: '2240563ecfa80fe26c4eb4dd4f6053037db4eee8/yzgdriver/1.0.0/ios'
       }
     }
@@ -32,7 +32,7 @@ export const openNewPage = (config = {}, callback = () => {}) => {
       bridge.call('navigation.openSchema', { url }, callback)
     } else {
       console.warn('openWebview', url, id)
-      bridge.call('webviews.open', { url, id }, callback)
+      bridge.call('webviews.open', { url: encodeURI(url), id }, callback)
     }
   }
 }
@@ -52,7 +52,7 @@ let appBtn = {
   right: 0
 }
 // 设置标题栏按钮
-export const setAppTitleBtn = (option) => {
+export const setAppTitleBtn = option => {
   const { action, position, ...config } = option
   if (typeof action === 'function') {
     let isLeft = position === 'left'
@@ -62,6 +62,28 @@ export const setAppTitleBtn = (option) => {
     bridge.register(config.action, action, false)
     console.warn('setAppBtn: ' + protocol, config)
   }
+}
+// 按钮类型
+const type = {
+  add: 'ui/ico-add.png',
+  delete: 'ui/ico-delete.png',
+  edit: 'ui/ico-edit.png'
+}
+// 设置标题栏右边按钮
+export const setAppRightBtn = (options) => {
+  appBtn.right = 1
+  const arr = []
+  options.forEach(option => {
+    const { action, iconType, ...config } = option
+    if (typeof action === 'function') {
+      config.action = iconType
+      bridge.register(iconType, action, false)
+    }
+    config.url = process.env.VUE_APP_IMG_HOST + type[iconType]
+    arr.push(config)
+  })
+  console.warn('setAppBtn: ', arr)
+  bridge.call('ui.setRightButtonAction', { 'list': arr }, () => {})
 }
 
 // 默认清设置过的右侧按钮, 左侧按钮默认是返回键, 应该手动控制清除

@@ -1,4 +1,5 @@
 import NP from 'number-precision'
+import { setAppTitleBtn } from '@/libs/bridgeUtil'
 
 export default {
   // 进入客户单号及其他信息
@@ -29,7 +30,7 @@ export default {
   // 进入发货人列表
   gotoConsignerPage () {
     this.$formWillLeave()
-    this.$router.push({ name: 'select-shipper' })
+    this.$router.push({ name: 'order-select-consigner' })
   },
   // 进入收货人列表
   gotoConsigneePage () {
@@ -47,24 +48,40 @@ export default {
     query.departure = String(order.start)
     query.destination = String(order.end)
     query.distance = NP.times((order.mileage || 0), 1000)
-    const { weight, volume, cargoInfos } = this.orderCargoList.reduce((last, item) => {
+    const { weight, weightKg, volume, cargoInfos } = this.orderCargoList.reduce((last, item) => {
       return {
-        weight: NP.plus(last.weight, item.weightKg || 0),
+        weight: NP.plus(last.weight, item.weight || 0),
+        weightKg: NP.plus(last.weightKg, item.weightKg || 0),
         volume: NP.plus(last.volume, item.volume || 0),
         cargoInfos: last.cargoInfos.concat({ key: item.cargoName, value: Number(item.quantity) })
       }
     }, {
       weight: 0,
+      weightKg: 0,
       volume: 0,
       cargoInfos: []
     })
-    query.weight = weight
+    if (this.orderConfig.weightKgOption) {
+      query.weight = weightKg
+    } else {
+      query.weight = NP.times(weight, 1000)
+    }
     query.volume = volume
     query.cargoInfos = cargoInfos
     this.$formWillLeave()
     this.$router.push({
       name: 'order-charge-rule',
       query
+    })
+  },
+  // 设置导航栏按钮
+  async setTitleButtons () {
+    if (this.mode !== 'create') return
+    if (!this.oftenPermission) await this.getOftenPermission()
+    if (this.oftenPermission.indexOf(100400) === -1) return
+    setAppTitleBtn({
+      text: '常发订单',
+      action: () => { this.$router.push({ name: 'order-often' }) }
     })
   }
 }

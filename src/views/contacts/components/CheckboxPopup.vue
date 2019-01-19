@@ -12,14 +12,19 @@
         <div v-show="show" class="box-popup">
           <div class="box-popup__group border-bottom-1px">
             <input
+              ref="inputEl"
               v-model="inputValue"
               class="box-popup__selected cube-font-16 cube-c-black cube-c-placeholder"
+              :autofocus="true"
               :placeholder="placeholder"
+              :maxlength="maxlength"
+              @keydown="onKeydown"
               @focus="onFocus"
               @blur="onBlur"
             >
             <span class="box-popup__confirm cube-font-weight--m cube-font-18" @click="onConfirm">确定</span>
           </div>
+          <div class="cube-validator-msg-def">{{!valid ? '最多' + maxlength + '个字符' : ' '}}</div>
           <div class="box-popup__box-wrap">
             <div
               v-for="item in checkboxs"
@@ -61,17 +66,22 @@ export default {
     },
     split: {
       type: String,
-      default: ','
+      default: '，'
+    },
+    maxlength: {
+      type: [String, Number],
+      default: 10
     }
   },
   data() {
     return {
-      inputValue: ''
+      inputValue: '',
+      valid: true
     }
   },
   computed: {
     checkboxs() {
-      return this.options.map((item) => ({
+      return this.options.map(item => ({
         text: item,
         selected: this.inputValue.includes(item)
       }))
@@ -93,15 +103,24 @@ export default {
       } else {
         input = input + (input ? split : '') + text
       }
-      item.selected = !item.selected
-      this.inputValue = input
+      this.check(input)
+      if (this.valid) {
+        item.selected = !item.selected
+        this.inputValue = input
+      }
+      this.$refs.inputEl.focus()
     },
     toggle(show) {
       this.$refs.popup[show ? 'show' : 'hide']()
       if (show) {
         this.inputValue = this.value || ''
+        this.valid = true
+        // this.$refs.inputEl.focus()
       }
       this.$emit('show', show)
+    },
+    check(input = this.inputValue) {
+      this.valid = input.length <= 10
     },
     onConfirm() {
       this.$emit('confirm', this.inputValue)
@@ -113,10 +132,13 @@ export default {
       const length = value.length
       const split = this.split
       const splitIndex = length - split.length
-      if (length && value.lastIndexOf(split) !== splitIndex) {
+      if (length && value.lastIndexOf(split) !== splitIndex && value.length < this.maxlength - 1) {
         this.inputValue = value + split
       }
-      this.$nextTick(() => { e.target.scrollLeft = 100000 })
+      // 直接选中末尾
+      this.$nextTick(() => {
+        e.target.scrollLeft = 100000
+      })
     },
     onBlur() {
       const value = this.inputValue
@@ -126,6 +148,9 @@ export default {
       if (length && value.lastIndexOf(split) === splitIndex) {
         this.inputValue = value.slice(0, splitIndex)
       }
+    },
+    onKeydown(event) {
+      this.check(this.inputValue + 'a')
     }
   }
 }
@@ -135,18 +160,25 @@ export default {
 .box-popup
   background #fff
   width 344px
+  .cube-validator-msg-def
+    text-align center
+    height 25px
+    padding-top 5px
+    box-sizing border-box
+    line-height 20px
   &__group
     display flex
     line-height 22px
   &__confirm
     color #00A4BD
-    padding 14px 10px
+    padding 14px 20px 14px 10px
   &__selected
     flex 1
     padding 14px 12px
+    -webkit-appearance none
   &__box-wrap
     display flex
-    padding 15px 12px
+    padding 0 12px 20px
     flex-wrap wrap
   &__box
     width 70px

@@ -11,14 +11,11 @@
         :key="item.id"
         :index="i"
         :item="item"
+        :use-name-icon="true"
         @click="onItemClick"
       />
       <template slot="empty">
-        <NoData
-          action="新增收货方"
-          message="老板，您还没有记录收货方信息 赶快新增一个，方便联系哦～"
-          @btn-click="$router.push({ name: 'contacts-shipper-modify' })"
-        >
+        <NoData message="老板，您还没有记录收货人信息">
           <img
             slot="img"
             class="contacts-consignee__placeholder"
@@ -37,9 +34,9 @@ import NoData from '@/components/NoData'
 import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
-  name: 'ContactsConsigneeList',
+  name: 'select-consignee',
   metaInfo: {
-    title: '选择收货方'
+    title: '选择收货人'
   },
   components: { ListItem, NoData, InfiniteList },
   data() {
@@ -57,7 +54,7 @@ export default {
     onPageRefresh() { this.loading = true },
 
     onItemClick(item) {
-      this.SET_CONSIGNEE_INFO(item)
+      this.SET_CONSIGNEE_INFO(item.data)
       this.$router.back()
     }
   }

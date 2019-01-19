@@ -79,8 +79,13 @@ const lists = [
     useQuery: true,
     itemParser: (data) => ({
       id: data.id,
-      name: data.cargoName,
-      detail: `${data.weight ? data.weight + '吨' : ''}  ${data.volume ? data.volume + '方' : ''}  ${data.unit || ''}`,
+      name: data.cargoName + (data.cargoNo ? `（${data.cargoNo}）` : ''),
+      detail: [
+        data.weight ? `${data.weight}吨` : '',
+        data.volume ? `${data.volume}方` : '',
+        data.unit || '',
+        data.cargoCost > 0 ? `${data.cargoCost / 100}元` : ''
+      ],
       data
     }),
     url: '/consigner/cargo/list'

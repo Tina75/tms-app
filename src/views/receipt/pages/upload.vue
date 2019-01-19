@@ -1,7 +1,7 @@
 <template>
   <div class="receipt-upload">
     <div class="upload-box">
-      <span class="cardTitle">上传回单（{{photoList.length}}/6）</span>
+      <span class="cardTitle">{{isUpdate ? '修改回单' : '上传回单'}}（{{photoList.length}}/6）</span>
       <Upload :upload-photos="photoList" :max-count="6" :input-show="false"/>
     </div>
     <div class="btn-box">
@@ -20,25 +20,42 @@ export default {
   components: { Upload },
   data () {
     return {
-      photoList: [
-        {
-          url: 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/483f7add-d29b-4602-97b4-9caf157649da/515643095740.77606.jpg'
-        }
-      ]
+      photoList: []
     }
   },
   computed: {
     id () {
       return this.$route.query.id
+    },
+    isUpdate () {
+      return this.$route.query.type === 'update'
+    },
+    orderId () {
+      return this.$route.query.orderId
     }
   },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.getUrlList()
+    })
+  },
   methods: {
+    getUrlList () {
+      if (this.isUpdate) {
+        Api.initDetail(this.orderId).then(response => {
+          const data = response.data.data.receiptOrder.receiptUrl
+          this.photoList = data.map(el => {
+            return { url: el }
+          })
+        })
+      }
+    },
     save () {
       const params = {
         id: this.id,
         receiptUrl: this.photoList.map(el => el.url)
       }
-      Api.updateReceipt(params)
+      Api.uploadReceiptPic(params)
         .then(res => {
           this.$router.push({
             name: 'receipt'

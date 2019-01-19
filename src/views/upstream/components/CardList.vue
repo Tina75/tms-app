@@ -11,6 +11,7 @@
 <script>
 import Card from '../components/Card'
 import * as API from '../libs/api'
+import { mapActions } from 'vuex'
 export default {
   name: 'upstream-list',
   components: {
@@ -36,7 +37,9 @@ export default {
     this.init()
   },
   methods: {
+    ...mapActions(['getUpstreamStatusCnt']),
     init () {
+      this.getUpstreamStatusCnt()
       this.keywords.pageNo = 1
       const params = Object.assign({}, this.keywords, { acceptStatus: this.status })
       API.initList(params)
@@ -46,6 +49,7 @@ export default {
         })
     },
     load () {
+      this.getUpstreamStatusCnt()
       this.keywords.pageNo += 1
       const params = Object.assign({}, this.keywords, { acceptStatus: this.status })
       API.initList(params)
@@ -75,6 +79,7 @@ export default {
     recept (id) {
       API.receipt(id)
         .then(() => {
+          window.toast('接收成功')
           this.init()
         })
     },
@@ -82,10 +87,11 @@ export default {
     refuse (id) {
       this.$createDialog({
         type: 'confirm',
-        title: '确认拒绝订单',
+        title: '确认拒绝订单?',
         onConfirm: () => {
           API.refuse(id)
             .then(() => {
+              window.toast('拒绝成功')
               this.init()
             })
         }
