@@ -32,6 +32,7 @@ import { mapGetters, mapActions } from 'vuex'
 import PickupInfo from '../components/PickupInfo'
 import OrderList from '../components/OrderList'
 import CostDetail from '../components/CostDetail'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 
 export default {
   name: 'pickup-detail',
@@ -65,8 +66,64 @@ export default {
   computed: {
     ...mapGetters('pickup', ['pickupDetail'])
   },
+  watch: {
+    'pickupDetail.status': (val) => {
+      if (val === 1) {
+        setAppRightBtn([
+          {
+            text: '编辑',
+            iconType: 'edit',
+            action: () => {
+              this.$router.push({
+                name: 'pickup-edit',
+                params: {
+                  id: this.$route.params.id
+                }
+              })
+            }
+          },
+          {
+            text: '删除',
+            iconType: 'delete',
+            action: () => {
+              const _this = this
+              this.$createDialog({
+                type: 'confirm',
+                title: '提示',
+                content: '确定要删除吗？',
+                confirmBtn: {
+                  text: '是',
+                  active: true,
+                  disabled: false,
+                  href: 'javascript:;'
+                },
+                cancelBtn: {
+                  text: '否',
+                  active: false,
+                  disabled: false,
+                  href: 'javascript:;'
+                },
+                async onConfirm () {
+                  await _this.deleteBill(_this.$route.params.id)
+                  await _this.removePicking(_this.$route.query.index)
+                  _this.$createToast({
+                    type: 'warn',
+                    time: 1000,
+                    txt: '删除成功'
+                  }).show()
+                  _this.$router.back()
+                }
+              }).show()
+            }
+          }
+        ])
+      } else {
+        setAppRightBtn([])
+      }
+    }
+  },
   methods: {
-    ...mapActions('pickup', ['getPickupDetail', 'arriveBill', 'removePicking', 'pickupBill', 'removeBePicking']),
+    ...mapActions('pickup', ['getPickupDetail', 'arriveBill', 'removePicking', 'pickupBill', 'removeBePicking', 'deleteBill']),
     changeHandler (label) {
       console.log('changed to:', label)
     },
@@ -103,12 +160,12 @@ export default {
           await _this.arriveBill(_this.pickupDetail.pickupId)
           await _this.removePicking(_this.$route.query.index)
           await _this.getPickupCount()
+          await _this.getPickupDetail(_this.$route.params.id)
           _this.$createToast({
             type: 'warn',
             time: 1000,
             txt: '到货成功'
           }).show()
-          _this.$router.back()
         }
       }).show()
     },
@@ -142,12 +199,12 @@ export default {
           await _this.pickupBill(_this.pickupDetail.pickupId)
           await _this.removeBePicking(_this.$route.query.index)
           await _this.getPickupCount()
+          await _this.getPickupDetail(_this.$route.params.id)
           _this.$createToast({
             type: 'warn',
             time: 1000,
             txt: '提货成功'
           }).show()
-          _this.$router.back()
         }
       }).show()
     }
@@ -156,6 +213,10 @@ export default {
     next(vm => {
       vm.getPickupDetail(to.params.id)
     })
+  },
+  beforeRouteLeave (to, from, next) {
+    setAppRightBtn([])
+    next()
   }
 }
 </script>

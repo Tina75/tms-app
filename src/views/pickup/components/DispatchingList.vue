@@ -9,7 +9,8 @@
       <li
         v-for="(item, index) in dispatchingData.list"
         :key="index"
-        class="order-item">
+        class="order-item"
+        @click="toDetail(item)">
         <div class="item-header border-bottom-1px">
           <span>{{item.createTime|datetimeFormat}}</span>
           <i v-if="item.collectionMoney">代</i>
@@ -37,11 +38,11 @@
         </div>
         <div class="item-footer">
           <div class="order-cost">
-            <p class="cost-label">应收费用（{{settlementTypeMap[item.settlementType]}}）</p>
-            <p class="cost-money">{{item.totalFee|moneyFormat(4)}}<span>/元</span></p>
+            <p class="cost-label">应收费用（{{orderSettlementTypeMap[item.settlementType]}}）</p>
+            <p class="cost-money">{{item.totalFee|moneyFormat}}<span>/元</span></p>
           </div>
           <div class="order-btns">
-            <a @click="dispatch(item, index)">调度</a>
+            <a @click.stop="dispatch(item, index)">调度</a>
           </div>
         </div>
       </li>
@@ -111,6 +112,14 @@ export default {
           }).show()
         }
       }).show()
+    },
+    toDetail (item) {
+      this.$router.push({
+        name: 'order-detail',
+        params: {
+          id: item.id
+        }
+      })
     }
   }
 }

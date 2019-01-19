@@ -391,9 +391,9 @@ export default {
     getBillOrderList: ({ state, commit }, id) => {
       return new Promise((resolve, reject) => {
         server({
-          method: 'post',
+          method: 'GET',
           url: 'load/bill/get/order',
-          data: {
+          params: {
             id: id
           }
         }).then((response) => {
@@ -458,6 +458,19 @@ export default {
       return new Promise((resolve, reject) => {
         state.pickingData.list.splice(index, 1)
         resolve()
+      })
+    },
+    deleteBill: ({ state, commit }, id) => {
+      return new Promise((resolve, reject) => {
+        server({
+          method: 'delete',
+          url: 'load/bill/delete',
+          data: {
+            pickUpIds: [id]
+          }
+        }).then(() => {
+          resolve()
+        })
       })
     }
   },

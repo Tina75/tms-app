@@ -21,6 +21,7 @@ import BePickingList from '../components/BePickingList'
 import PickingList from '../components/PickingList'
 import PickedList from '../components/PickedList'
 import { mapGetters, mapActions } from 'vuex'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 
 export default {
   name: 'pickup',
@@ -72,8 +73,34 @@ export default {
     },
     currentTab (value) {
       if (value === 'DispatchingList') {
+        setAppRightBtn([
+          {
+            text: '调度',
+            iconType: 'add',
+            action: () => {
+              this.$router.push({
+                name: 'pickup-dispatch'
+              })
+            }
+          }
+        ])
+      } else {
+        setAppRightBtn([])
       }
     }
+  },
+  mounted () {
+    setAppRightBtn([
+      {
+        text: '调度',
+        iconType: 'add',
+        action: () => {
+          this.$router.push({
+            name: 'pickup-dispatch'
+          })
+        }
+      }
+    ])
   },
   methods: {
     ...mapActions('pickup', ['getPickupCount'])
@@ -82,6 +109,10 @@ export default {
     next(vm => {
       vm.getPickupCount()
     })
+  },
+  beforeRouteLeave (to, from, next) {
+    setAppRightBtn([])
+    next()
   }
 }
 </script>

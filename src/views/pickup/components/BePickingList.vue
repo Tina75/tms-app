@@ -9,7 +9,8 @@
       <li
         v-for="(item, index) in bePickingData.list"
         :key="index"
-        class="order-item">
+        class="order-item"
+        @click="toDetail(item, index)">
         <div class="item-header border-bottom-1px">
           <span>{{item.createTime|datetimeFormat}}</span>
           <i v-if="item.abnormalLabel === 2">异</i>
@@ -38,12 +39,12 @@
           <div class="order-cost">
             <template v-if="assignStatus(item)">
               <p class="cost-label">应收费用（{{settlementTypeMap[item.settlementType]}}）</p>
-              <p class="cost-money">{{item.totalFee}}<span>/元</span></p>
+              <p class="cost-money">{{item.totalFee|moneyFormat}}<span>/元</span></p>
             </template>
           </div>
           <div class="order-btns">
-            <a v-if="assignStatus(item)" @click="pickup(item, index)">提货</a>
-            <a v-else @click="assign(item, index)">派车</a>
+            <a v-if="assignStatus(item)" @click.stop="pickup(item, index)">提货</a>
+            <a v-else @click.stop="assign(item, index)">派车</a>
           </div>
         </div>
       </li>
@@ -122,6 +123,17 @@ export default {
           }).show()
         }
       }).show()
+    },
+    toDetail (item, index) {
+      this.$router.push({
+        name: 'pickup-detail',
+        params: {
+          id: item.pickUpId
+        },
+        query: {
+          index: index
+        }
+      })
     }
   }
 }
