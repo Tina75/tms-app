@@ -2,8 +2,8 @@
   <div class="order-detail">
     <cube-scroll-nav @change="changeHandler">
       <div slot="prepend" class="status-block">
-        <h2>已提货</h2>
-        <p>2019-01-01 12:00</p>
+        <h2>{{Detail.status | orderType}}</h2>
+        <p>{{Detail.createTime | datetimeFormat}}</p>
       </div>
       <cube-scroll-nav-panel
         v-for="(item, index) in pageData"
@@ -60,9 +60,10 @@ export default {
   computed: {
     ...mapGetters('order/detail', ['Detail'])
   },
-  mounted() {
-    const id = this.$route.params.id
-    this.getDetail(id)
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.getDetail(to.params.id)
+    })
   },
   methods: {
     ...mapActions('order/detail', ['getDetail']),
