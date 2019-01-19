@@ -15,20 +15,56 @@ export default {
   },
   // 重置订单
   RESET_ORDER: (state, payload) => {
-    resetFields(payload)
+    console.log('reset')
+    if (payload) resetFields(payload)
+    else {
+      payload = {
+        consignerName: '',
+        consignerContact: '',
+        consignerPhone: '',
+        start: '',
+        consignerAddress: '',
+        consignerAddressText: '',
+        consignerAddressLocale: [],
+        consignerHourseNumber: '',
+        consignerAddressLongitude: '',
+        consignerAddressLatitude: '',
+        consumerInfo: '',
+        consigneeContact: '',
+        consigneePhone: '',
+        end: '',
+        consigneeAddress: '',
+        consigneeAddressText: '',
+        consigneeAddressLocale: [],
+        consigneeHourseNumber: '',
+        consigneeAddressLongitude: '',
+        consigneeAddressLatitude: '',
+        consigneeCompanyName: '',
+        orderCargoList: '',
+        settlementType: '',
+        pickup: '',
+        receiptCount: 1,
+        mileage: '',
+        freightFee: '',
+        otherFee: '',
+        otherInfo: '',
+        isSaveOrderTemplate: 0,
+        consignerAddressMapType: 1,
+        consigneeAddressMapType: 1
+      }
+    }
     for (let key in state.orderInfo) {
       state.orderInfo[key] = payload[key]
     }
-    if (payload.consignerName === '') {
-      state.consignerId = void 0
-      state.orderCargoList = []
-      state.consumerInfo = {}
-      state.feeInfo = {}
-      state.otherInfo = {}
-      state.cargoOften = state.consigneeInfo = state.calculatedAmount = null
-      state.currentArrdessType = ''
-      state.addressChanged = false
-    }
+    state.consignerId = void 0
+    state.orderCargoList = []
+    state.consumerInfo = {}
+    state.feeInfo = {}
+    state.otherInfo = {}
+    state.cargoOften = state.consigneeInfo = state.calculatedAmount = null
+    state.currentArrdessType = ''
+    state.addressChanged = false
+    state.orderNeedReset = false
   },
   // 设置发货人id
   SET_CONSIGNER_ID: (state, payload) => { state.consignerId = payload },
