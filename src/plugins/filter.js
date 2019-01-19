@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import Vue from 'vue'
 import City from '@/libs/city'
+import NP from 'number-precision'
 
 const URL_HOST = process.env.VUE_APP_IMG_HOST
 
@@ -18,34 +19,28 @@ Vue.filter('imgUrlFormat', function (value) {
  * 金额格式化
  *  value 金额，以分为单位
  */
-Vue.filter('moneyFormat', function (value, num) {
-  value = value / 100 // 转换为元
-  num = num || 2
-  if (parseFloat(value) > 0) {
-    var str = parseFloat(value).toFixed(num)
-    str = str.split('.')
-    var start = parseFloat(str[0]).toString()
-    return (str[1] === '00') ? (start) : (start + '.' + (str[1] || ''))
-  } else {
-    return 0
-  }
+Vue.filter('moneyFormat', function (value, num = 2) {
+  // value = value / 100 // 转换为元
+  // num = num || 2
+  // if (parseFloat(value) > 0) {
+  //   var str = parseFloat(value).toFixed(num)
+  //   str = str.split('.')
+  //   var start = parseFloat(str[0]).toString()
+  //   return (str[1] === '00') ? (start) : (start + '.' + (str[1] || ''))
+  // } else {
+  //   return 0
+  // }
+  if (!value) return ''
+  return NP.divide(value, Math.pow(10, num))
 })
 
 /**
  * 里程格式化
  *  value 以米为单位
  */
-Vue.filter('mileageFormat', function (value, num) {
-  value = value / 1000 // 转换为km
-  num = num || 3
-  if (parseFloat(value) > 0) {
-    var str = parseFloat(value).toFixed(num)
-    str = str.split('.')
-    var start = parseFloat(str[0]).toString()
-    return (str[1] === '000') ? (start) : (start + '.' + (str[1] || ''))
-  } else {
-    return 0
-  }
+Vue.filter('mileageFormat', function (value, num = 3) {
+  if (!value) return ''
+  return NP.divide(value, Math.pow(10, num))
 })
 
 Vue.filter('settlementTypeFormat', (value) => {

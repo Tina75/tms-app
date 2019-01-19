@@ -14,11 +14,11 @@
         </ul>
       </cube-scroll-nav-panel>
     </cube-scroll-nav>
-    <div class="handle-btns">
-      <cube-button  v-if="deleteBtnVisable(Detail)"  primary @click="handleClickDelete(Detail.id)">删除</cube-button>
-      <cube-button v-if="editOrderBtnVisable(Detail)" class="btn-light" @click="handleClickEditOrder(Detail.id)">编辑</cube-button>
-      <cube-button v-if="editBillBtnVisable(Detail)" @click="handleClickEditBill(Detail.id)">改单</cube-button>
-    </div>
+    <!-- <div class="handle-btns"> -->
+    <!-- <cube-button  v-if="deleteBtnVisable(Detail)"  primary @click="handleClickDelete(Detail.id)">删除</cube-button>
+      <cube-button v-if="editOrderBtnVisable(Detail)" class="btn-light" @click="handleClickEditOrder(Detail.id)">编辑</cube-button> -->
+    <!-- <cube-button v-if="editBillBtnVisable(Detail)" @click="handleClickEditBill(Detail.id)">改单</cube-button> -->
+    <!-- </div> -->
   </div>
 </template>
 
@@ -28,6 +28,7 @@ import OrderBaseInfo from '../components/OrderBaseInfo'
 import ReceiveAndSend from '../components/ReceiveAndSend'
 import OrderCargoList from '../components/OrderCargoList'
 import CostDetail from '../components/CostDetail'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 
 export default {
   name: 'order-detail',
@@ -65,28 +66,53 @@ export default {
       vm.getDetail(to.params.id)
     })
   },
+  beforeRouteLeave(to, from, next) {
+    // setAppRightBtn([{ text: '' }])
+  },
+  watch: {
+    'Detail.status': function(val) {
+      console.log('val changed ' + val)
+      let btnList = []
+      if (this.deleteBtnVisable(this.Detail)) {
+        btnList.push({ text: '', iconType: 'delete', action: () => { this.handleClickDelete(this.Detail) } })
+      }
+      if (this.editOrderBtnVisable(this.Detail)) {
+        btnList.push({ text: '', iconType: 'edit', action: () => { this.handleClickEditOrder(this.Detail.id) } })
+      }
+      setAppRightBtn(btnList)
+    }
+  },
+
   methods: {
     ...mapActions('order/detail', ['getDetail']),
     changeHandler (label) {
       console.log('changed to:', label)
     },
-    handleClickDelete(id) {
+    handleClickDelete(info) {
+      let msg = '确认删除订单？删除之后可以在电脑端订单回收站恢复'
+      if (info.status === 50) { // 已回单
+        msg = '订单删除后，提货单和运单将一并删除，且订单不支持再还原'
+      } else if (info.status === 20 && info.pickup === 1) {
+        msg = '订单删除后，提货单将一并删除，且订单不支持再还原'
+      }
       this.$createDialog({
         type: 'confirm',
         title: '确认删除订单？',
-        content: '删除后可以在电脑端订单回收站恢复',
+        content: msg,
         onConfirm: () => {
-          this.$emit('delete', id)
+          this.$emit('delete', info.id)
         }
       }).show()
     },
     handleClickEditOrder(id) {
-      this.$router.push({ name: 'order-create', params: { id } })
+      console.log(id)
+      this.$router.push({ name: 'order-edit', params: { id } })
     },
     handleClickEditBill(id) {
       // this.$emit('editBill', id)
       // TODO:
     },
+
     deleteBtnVisable(item) {
       let arr = []
       const list = ['1000', '1001', '2000', '2001'] // 见文档
