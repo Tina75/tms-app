@@ -85,7 +85,7 @@ export default {
           }
         ])
       } else {
-        setAppRightBtn([])
+        setAppRightBtn([{ text: '', action: () => {} }])
       }
     }
   },
@@ -111,7 +111,7 @@ export default {
     })
   },
   beforeRouteLeave (to, from, next) {
-    setAppRightBtn([])
+    setAppRightBtn([{ text: '', action: () => {} }])
     next()
   }
 }

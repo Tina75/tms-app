@@ -67,7 +67,7 @@ export default {
     ...mapGetters('pickup', ['pickupDetail'])
   },
   watch: {
-    'pickupDetail.status': (val) => {
+    'pickupDetail.status' (val) {
       if (val === 1) {
         setAppRightBtn([
           {
@@ -105,7 +105,7 @@ export default {
                 },
                 async onConfirm () {
                   await _this.deleteBill(_this.$route.params.id)
-                  await _this.removePicking(_this.$route.query.index)
+                  await _this.removeBePicking(_this.$route.query.index)
                   _this.$createToast({
                     type: 'warn',
                     time: 1000,
@@ -118,12 +118,12 @@ export default {
           }
         ])
       } else {
-        setAppRightBtn([])
+        setAppRightBtn([{ text: '', action: () => {} }])
       }
     }
   },
   methods: {
-    ...mapActions('pickup', ['getPickupDetail', 'arriveBill', 'removePicking', 'pickupBill', 'removeBePicking', 'deleteBill']),
+    ...mapActions('pickup', ['getPickupDetail', 'clearDetail', 'arriveBill', 'removePicking', 'pickupBill', 'removeBePicking', 'deleteBill']),
     changeHandler (label) {
       console.log('changed to:', label)
     },
@@ -157,7 +157,7 @@ export default {
           href: 'javascript:;'
         },
         async onConfirm () {
-          await _this.arriveBill(_this.pickupDetail.pickupId)
+          await _this.arriveBill(_this.pickupDetail.pickUpId)
           await _this.removePicking(_this.$route.query.index)
           await _this.getPickupCount()
           await _this.getPickupDetail(_this.$route.params.id)
@@ -196,7 +196,7 @@ export default {
           href: 'javascript:;'
         },
         async onConfirm () {
-          await _this.pickupBill(_this.pickupDetail.pickupId)
+          await _this.pickupBill(_this.pickupDetail.pickUpId)
           await _this.removeBePicking(_this.$route.query.index)
           await _this.getPickupCount()
           await _this.getPickupDetail(_this.$route.params.id)
@@ -215,7 +215,8 @@ export default {
     })
   },
   beforeRouteLeave (to, from, next) {
-    setAppRightBtn([])
+    this.clearDetail()
+    setAppRightBtn([{ text: '', action: () => {} }])
     next()
   }
 }

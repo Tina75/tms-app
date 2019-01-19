@@ -119,6 +119,10 @@ export default {
         return { orderNo: no, cargoList: data.cargoList.filter(item => item.orderNo === no) }
       })
     },
+    clearDetail (state) {
+      state.pickupDetail = {}
+      state.pickupCargoDetail = []
+    },
     getLocations (state, data) {
       state.locationDetail = {
         truckNo: data.carNo,
@@ -146,6 +150,12 @@ export default {
     },
     addBillOrder (state, ids) {
       state.currentBillOrderIds.push(...ids)
+    },
+    removeBePicking (state, index) {
+      state.bePickingData.list.splice(index, 1)
+    },
+    removePicking (state, index) {
+      state.pickingData.list.splice(index, 1)
     }
   },
   actions: {
@@ -165,7 +175,7 @@ export default {
         state[list] = {
           list: [],
           next: true,
-          pageNo: 1
+          pageNo: 0
         }
         resolve()
       })
@@ -360,6 +370,11 @@ export default {
         })
       })
     },
+    clearDetail: ({ state, commit }, id) => {
+      return new Promise((resolve, reject) => {
+        commit('clearDetail')
+      })
+    },
     getPickupLocation: ({ state, commit }, id) => {
       return new Promise((resolve, reject) => {
         server({
@@ -435,9 +450,9 @@ export default {
         })
       })
     },
-    removeBePicking: ({ state }, index) => {
+    removeBePicking: ({ state, commit }, index) => {
       return new Promise((resolve, reject) => {
-        state.bePickingData.list.splice(index, 1)
+        commit('removeBePicking', index)
         resolve()
       })
     },
@@ -454,9 +469,9 @@ export default {
         })
       })
     },
-    removePicking: ({ state }, index) => {
+    removePicking: ({ state, commit }, index) => {
       return new Promise((resolve, reject) => {
-        state.pickingData.list.splice(index, 1)
+        commit('removePicking', index)
         resolve()
       })
     },

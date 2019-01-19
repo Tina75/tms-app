@@ -70,7 +70,7 @@ export default {
   mounted () {
     setAppRightBtn([
       {
-        text: '',
+        text: '添加',
         iconType: 'add',
         action: () => {
           this.$router.push({
@@ -97,12 +97,12 @@ export default {
     })
   },
   beforeRouteLeave (to, from, next) {
-    setAppRightBtn([])
+    setAppRightBtn([{ text: '', action: () => {} }])
     next()
   }
 }
 </script>
-<style lang="stylus">
+<style lang="stylus" scoped>
   .order-item
     background-color: #ffffff;
     margin-bottom: 15px;
