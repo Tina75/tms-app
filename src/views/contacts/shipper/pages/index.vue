@@ -20,11 +20,7 @@
           message="老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～"
           @btn-click="$router.push({ name: 'contacts-shipper-modify' })"
         >
-          <img
-            slot="img"
-            class="empty-list-image"
-            src="@/assets/contacts/shipper-list-empty.png"
-          >
+          <img slot="img" class="empty-list-image" src="@/assets/contacts/shipper-list-empty.png">
         </NoData>
       </template>
     </InfiniteList>
@@ -32,10 +28,11 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 import ListItem from '../../components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
-import { mapActions, mapState } from 'vuex'
 const moudleName = 'contacts/shipper'
 export default {
   name: 'ContactsShipperList',
@@ -50,7 +47,11 @@ export default {
   },
   computed: mapState(moudleName, ['contactList']),
   methods: {
-    ...mapActions(moudleName, ['loadContactList', 'syncContactDetail', 'syncButtOperator']),
+    ...mapActions(moudleName, [
+      'loadContactList',
+      'syncContactDetail',
+      'syncButtOperator'
+    ]),
     loader(refresh) {
       if (refresh) {
         this.syncButtOperator()
@@ -58,15 +59,30 @@ export default {
       this.loadContactList(refresh)
     },
     onPageRefresh() {
-      console.info('onPageRefresh')
       this.loading = true
     },
     onItemPhoneCall(item) {
       window.location.href = `tel:${item.phone}`
     },
     onItemClick(item, index) {
-      this.$router.push({ name: 'contacts-shipper-detail', query: { consignerId: item.id } })
+      this.$router.push({
+        name: 'contacts-shipper-detail',
+        query: { consignerId: item.id }
+      })
+    },
+    create() {
+      this.$router.push({ name: 'contacts-shipper-modify' })
+    },
+    setBtns() {
+      setAppRightBtn({
+        test: '添加',
+        iconType: 'add',
+        action: this.create.bind(this)
+      })
     }
+  },
+  beforeRouteEnter: (to, from, next) => {
+    next(vm => vm.setBtns())
   }
 }
 </script>

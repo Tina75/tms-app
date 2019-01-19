@@ -1,6 +1,6 @@
 <template>
   <div class="contacts-address">
-    <FromGroup ref="form" :rules="rules" class="border-bottom-1px"  >
+    <FromGroup ref="form" :rules="rules" class="border-bottom-1px">
       <FormItem
         :value="localeView"
         label="所在地区"
@@ -8,7 +8,13 @@
         placeholder="请选择省/市/区"
         @click.native="showCityPicker = true"
       />
-      <FormItem v-model="form.address" label="详细地址" :focus-on-end="true" placeholder="请输入详细地址" prop="address" />
+      <FormItem
+        v-model="form.address"
+        label="详细地址"
+        :focus-on-end="true"
+        placeholder="请输入详细地址"
+        prop="address"
+      />
       <FormItem v-model="form.additional" label="补充地址" placeholder="请输入楼号-门牌号"/>
     </FromGroup>
     <BmapAddressList :city="limitCityGeo" :search="form.address" @select="onSelectAddress"/>
@@ -20,6 +26,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import { Address } from './model'
 import { addressRule } from './rules.js'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 import cityUtil from '@/libs/city'
 import CityPicker from '@/components/CityPicker'
 import LoadingButton from '@/components/LoadingButton'
@@ -70,6 +77,9 @@ export default {
         }
       }
       return ''
+    },
+    namespace() {
+      return this.AddressPage.namespace ? this.AddressPage.namespace + '/' : ''
     }
   },
   methods: {
@@ -87,19 +97,15 @@ export default {
           return window.toast('请填写详细地址')
         }
         const dispatchName = this.AddressPage.dispatch
-        const namespace = this.AddressPage.namespace
-          ? this.AddressPage.namespace + '/'
-          : ''
         const storeData = Address.toStore(this.form, this.AddressPage.data)
         if (dispatchName) {
-          await this.$store.dispatch(namespace + dispatchName, storeData)
+          await this.$store.dispatch(this.namespace + dispatchName, storeData)
           this.resetAddressPage()
         } else {
           console.warn('do you forgot to set the [dispatch] options ?')
         }
-        this.$formWillLeave()
         window.toast('保存成功')
-        this.$router.back()
+        this.$router.back(true)
       } catch (e) {
         console.error(e)
       } finally {
@@ -114,13 +120,30 @@ export default {
       this.form = Address.toForm(options.data)
       if (options.appButton) {
         // TODO set app
+        const namespace = this.AddressPage.namespace
+          ? this.AddressPage.namespace + '/'
+          : ''
+        const action = options.appButton.action
+        const btnOptions = {
+          ...options.appButton,
+          action: this.doAction.bind(this, namespace + action)
+        }
+        setAppRightBtn(btnOptions)
+      }
+    },
+    doAction(name = this.namespace + this.AddressPage.appButton.action) {
+      if (name) {
+        this.$store.dispatch(
+          name,
+          Address.toStore(this.form, this.AddressPage.data)
+        )
       }
     }
   },
   beforeRouteEnter(to, from, next) {
     next(vm => vm.reset())
   },
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave(to, from, next) {
     this.showCityPicker = false
     this.form.address = ''
     next()

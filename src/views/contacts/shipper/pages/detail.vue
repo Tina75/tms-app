@@ -50,9 +50,10 @@
 </template>
 
 <script>
-import CellItem from '../../components/CellItem.vue'
 import { mapState, mapActions } from 'vuex'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 import { ContactDetail } from '../modules/model'
+import CellItem from '../../components/CellItem.vue'
 const moudleName = 'contacts/shipper'
 const ListConfig = [
   { text: '结算方式', key: 'payType' },
@@ -100,7 +101,42 @@ export default {
     },
     phoneCall() {
       window.location.href = `tel:${this.viewData.phone}`
+    },
+    edit() {
+      this.$router.push({
+        name: 'contacts-shipper-modify',
+        query: { consignerId: this.$route.query.consignerId }
+      })
+    },
+    async remove() {
+      await this.removeContact({ id: this.$route.query.consignerId })
+      this.$refreshPage('contacts-shipper')
+      window.toast('删除成功')
+      this.$router.back(true)
+    },
+    setBtns() {
+      setAppRightBtn([
+        {
+          text: '删除',
+          iconType: 'delete',
+          action: () => {
+            window.confirm({
+              content: '确认删除？',
+              icon: 'cubeic-alert',
+              onConfirm: this.remove.bind(this)
+            })
+          }
+        },
+        {
+          text: '修改',
+          iconType: 'edit',
+          action: this.edit.bind(this)
+        }
+      ])
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => vm.setBtns())
   }
 }
 </script>

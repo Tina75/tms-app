@@ -9,7 +9,7 @@
         :maxlength="rules.name.max"
       />
       <FormItem v-model="form.cargoNo" label="货物编号" prop="number" :maxlength="rules.number.max"/>
-      <FormItem v-model="form.cargoCost" label="货值(元)" type="number"  prop="price"/>
+      <FormItem v-model="form.cargoCost" label="货值(元)" type="number" prop="price"/>
       <FormItem
         v-model="form.unit"
         label="包装方式"
@@ -25,7 +25,7 @@
         @on-click="showDismensionInput = true"
       />
       <FormItem v-model="form.weight" label="重量(公斤)" type="number" prop="weight"/>
-      <FormItem v-model="form.volume" label="体积(方)" type="number" class="cube-mb-15" prop="volume" />
+      <FormItem v-model="form.volume" label="体积(方)" type="number" class="cube-mb-15" prop="volume"/>
       <FormItem
         v-model="form.remark1"
         label="备注1"
@@ -63,6 +63,7 @@
 import { mapActions, mapState, mapMutations } from 'vuex'
 import { CargoDetail } from '../modules/model'
 import { cargoRule } from '../modules/rules'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
@@ -101,7 +102,11 @@ export default {
     viewDimension() {
       const dimension = this.form.dimension
       if (dimension) {
-        if (isNum(dimension.length) || isNum(dimension.width) || isNum(dimension.height)) {
+        if (
+          isNum(dimension.length) ||
+          isNum(dimension.width) ||
+          isNum(dimension.height)
+        ) {
           return `${+dimension.length}*${+dimension.width}*${+dimension.height}`
         }
       }
@@ -126,9 +131,8 @@ export default {
         server.consignerId = this.$route.query.consignerId
         await this.modifyCargo(server)
         this.$refreshPage('contacts-shipper-cargo', 'contacts-shipper-detail')
-        this.$formWillLeave()
         window.toast('保存成功')
-        this.$router.back()
+        this.$router.back(true)
       } catch (e) {
         console.error(e)
       } finally {
@@ -146,7 +150,29 @@ export default {
         }
       }
       this.form = CargoDetail.toForm(detailData)
-      console.info(this.form)
+      if (!this.isCreate) {
+        setAppRightBtn({
+          test: '删除',
+          color: '#00A4BD',
+          iconType: 'delete',
+          action: this.removeConfirm.bind(this)
+        })
+      }
+    },
+    async remove() {
+      await this.removeCargo({ id: this.$route.query.consignerId })
+      this.$refreshPage('contacts-shipper')
+      window.toast('删除成功')
+      this.$router.back(true)
+    },
+    removeConfirm() {
+      window
+        .confirm({
+          content: '确认删除？',
+          icon: 'cubeic-alert',
+          onConfirm: this.remove.bind(this)
+        })
+        .show()
     }
   },
   beforeRouteEnter(to, from, next) {

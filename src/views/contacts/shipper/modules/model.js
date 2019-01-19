@@ -45,7 +45,7 @@ export class ContactDetail {
     // cube-switch 需要boolean类型 防止报错
     form.isInvoice = !!form.isInvoice
     // 后端是0.xx 前端显示xx%
-    form.invoiceRate = +form.invoiceRate * 100
+    form.invoiceRate = form.isInvoice ? +form.invoiceRate * 100 : ''
     form.salesmanId = form.salesmanId || ''
     return form
   }
@@ -55,7 +55,7 @@ export class ContactDetail {
     const server = filterEmpty(form)
     server.isInvoice = server.isInvoice ? 1 : 0
     // 后端最大值是1....
-    server.invoiceRate = server.isInvoice ? +server.invoiceRate / 100 : 0
+    server.invoiceRate = server.isInvoice ? +server.invoiceRate / 100 : ''
     return server
   }
 }
@@ -109,7 +109,9 @@ export class CargoDetail {
 
 function fillEmpty(obj) {
   const data = {}
-  for (let [key, value] of Object.entries(obj)) {
+  let value
+  for (let key of Object.keys(obj)) {
+    value = obj[key]
     data[key] = (value !== 0 || value !== false) && !value ? '' : value
   }
   return data
@@ -117,7 +119,9 @@ function fillEmpty(obj) {
 
 function filterEmpty(obj) {
   const data = {}
-  for (let [key, value] of Object.entries(obj)) {
+  let value
+  for (let key of Object.keys(obj)) {
+    value = obj[key]
     if (value) {
       data[key] = value
     }

@@ -52,7 +52,7 @@ let appBtn = {
   right: 0
 }
 // 设置标题栏按钮
-export const setAppTitleBtn = option => {
+export const setAppTitleBtn = (option) => {
   const { action, position, ...config } = option
   if (typeof action === 'function') {
     let isLeft = position === 'left'
@@ -70,20 +70,25 @@ const type = {
   edit: 'ui/ico-edit.png'
 }
 // 设置标题栏右边按钮
-export const setAppRightBtn = (options) => {
+export const setAppRightBtn = (options = []) => {
   appBtn.right = 1
   const arr = []
-  options.forEach(option => {
+  if (!(options instanceof Array)) {
+    options = [options]
+  }
+  options.forEach((option) => {
     const { action, iconType, ...config } = option
     if (typeof action === 'function') {
-      config.action = iconType
-      bridge.register(iconType, action, false)
+      config.action = iconType || 'appRightBtn_H5'
+      bridge.register(config.action, action, false)
     }
-    config.url = process.env.VUE_APP_IMG_HOST + type[iconType]
+    if (iconType){
+      config.url = process.env.VUE_APP_IMG_HOST + type[iconType]
+    }
     arr.push(config)
   })
   console.warn('setAppBtn: ', arr)
-  bridge.call('ui.setRightButtonAction', { 'list': arr }, () => {})
+  bridge.call('ui.setRightButtonAction', { list: arr }, () => {})
 }
 
 // 默认清设置过的右侧按钮, 左侧按钮默认是返回键, 应该手动控制清除

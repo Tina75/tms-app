@@ -27,7 +27,12 @@ let router = new Router({
 // 同步store和路由
 sync(store, router)
 
-router.back = () => {
+router.back = (closeTip) => {
+  // 关掉一切提示,直接返回
+  if (closeTip){
+    // 表单返回提示
+    Vue.prototype.$formWillLeave && Vue.prototype.$formWillLeave()
+  }
   // 覆写router.back关闭整个webview
   if (window.history.length <= 1) {
     closeWindow({ logOut: false })
