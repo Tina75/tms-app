@@ -23,13 +23,15 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-.detail-panel-header
-  color #333
-  font-size 16px
-  line-height 49px
-  border-bottom 1px solid #f3f5f9
 .detail-panel
   background #ffffff
   margin-bottom 15px
   padding-left 15px
+  .detail-panel-header
+    color #333
+    font-size 16px
+    line-height 49px
+  border-bottom 1px solid #f3f5f9
+  .detail-panel-main
+    overflow hidden
 </style>
