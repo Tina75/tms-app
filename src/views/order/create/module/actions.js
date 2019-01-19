@@ -13,7 +13,7 @@ export default {
     return data.data
   },
 
-  getConsignerData: async ({ commit }, id) => {
+  getConsignerData: async (state, id) => {
     const { data } = await Server({
       url: '/consigner/detail',
       method: 'get',

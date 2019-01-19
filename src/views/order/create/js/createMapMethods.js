@@ -13,8 +13,10 @@ export default {
     'SET_ADDRESS_TYPE',
     'TRIGGER_ADDRESS_CHANGE',
     'CLEAR_CALCULATED_AMOUNT',
-    'SET_ORDER_RESET'
+    'SET_ORDER_RESET',
+    'RESET_ORDER'
   ]),
+  ...mapActions('contacts/consignee', [ 'saveConsignerInfo' ]),
   ...mapActions('order/create', [
     'getOpetator',
     'getConsignerData',

@@ -36,7 +36,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   name: 'select-consignee',
   metaInfo: {
-    title: '选择收货方'
+    title: '选择收货人'
   },
   components: { ListItem, NoData, InfiniteList },
   data() {

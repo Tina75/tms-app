@@ -48,21 +48,6 @@
         </div>
       </div>
     </div>
-    <cube-button
-      :primary="true"
-      @click="goAdd">
-      新增
-    </cube-button>
-    <cube-button
-      :primary="true"
-      @click="goEdit">
-      修改
-    </cube-button>
-    <cube-button
-      :primary="true"
-      @click="del">
-      删除
-    </cube-button>
     <div class="driver-detail_call">
       <cube-button
         :primary="true"
@@ -82,7 +67,7 @@
 import IconFont from '@/components/Iconfont'
 import { mapState, mapActions } from 'vuex'
 import { DriverDetail } from '../modules/model.js'
-// import { setAppTitleBtn } from '@/libs/bridgeUtil'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 const ListConfig = [
   { text: '载重', key: 'shippingWeight' },
   { text: '净空', key: 'shippingVolume' },
@@ -142,47 +127,46 @@ export default {
     ...mapActions(moudleName, ['loadDriverDetail', 'removeDriver']),
     onPageRefresh() {
       this.loadDriverDetail()
+      this.setButton()
     },
     callPhone () {
       window.location.href = `tel: ${this.driverDetail.driverPhone}`
     },
-    goAdd () {
-      this.$router.push({
-        name: 'contacts-driver-modify'
-      })
-    },
-    goEdit () {
-      this.$router.push({
-        name: 'contacts-driver-modify',
-        query: {
-          driverId: this.driverDetail.id
-        }
-      })
-    },
-    del () {
-      this.$createDialog({
-        type: 'confirm',
-        title: '',
-        content: '请确认是否需要删除该信息?',
-        icon: 'cubeic-alert',
-        onConfirm: () => {
-          const data = {
-            carrierId: this.$route.query.driverId
+    setButton() {
+      setAppRightBtn([
+        {
+          text: '删除',
+          iconType: 'delete',
+          action: () => {
+            this.$createDialog({
+              type: 'confirm',
+              title: '',
+              content: '请确认是否需要删除该信息?',
+              icon: 'cubeic-alert',
+              onConfirm: () => {
+                const data = {
+                  carrierId: this.$route.query.driverId
+                }
+                try {
+                  this.removeDriver(data)
+                } catch (e) {
+                  console.log(e)
+                } finally {
+                  this.$router.back()
+                }
+              }
+            }).show()
           }
-          try {
-            this.removeDriver(data)
-          } catch (e) {
-            console.log(e)
-          } finally {
-            this.$router.back()
+        },
+        {
+          text: '修改',
+          iconType: 'edit',
+          action: () => {
+            this.$router.push({ name: 'contacts-driver-modify', query: { driverId: this.driverDetail.id } })
           }
         }
-      }).show()
+      ])
     }
-  },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-    })
   }
 }
 </script>
