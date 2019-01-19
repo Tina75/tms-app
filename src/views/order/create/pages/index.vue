@@ -175,7 +175,12 @@ const VALIDATE_TEL = /^[(（）)\-02-9][(（）)\-0-9]{1,19}$/
 
 export default {
   name: 'order-create',
-  metaInfo: { title: '手工开单' },
+  metaInfo () {
+    const title = this.mode === 'edit' ? '编辑订单' : '手工开单'
+    return {
+      title
+    }
+  },
   components: { FormGroup, FormItem, FormTitle, CreateFooter },
   data () {
     const phoneValidate = val => {
