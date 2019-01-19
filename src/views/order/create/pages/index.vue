@@ -240,6 +240,9 @@ export default {
       'saveConsigner'
     ])
   },
+  mounted () {
+    console.log(123)
+  },
   methods: {
     ...mapMethods,
     ...gotoOtherPages,
@@ -250,7 +253,7 @@ export default {
 
   beforeRouteEnter (to, from, next) {
     next(async vm => {
-      if (vm.orderNeedReset) this.$refs.$form.reset()
+      if (vm.orderNeedReset) vm.RESET_ORDER()
       vm.mode = vm.$route.meta.mode
       vm.id = vm.$route.params.id
       vm.setTitleButtons()

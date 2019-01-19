@@ -15,7 +15,7 @@ export default [
     component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
   },
   {
-    path: '/order/create/:id',
+    path: '/order/more/:id',
     name: 'order-one-more', // 再来一单
     meta: {
       mode: 'oneMore',
