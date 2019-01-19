@@ -4,7 +4,7 @@ import { reuse } from './util'
 export const getUserInfo = reuse(() => {
   let userInfo = {}
   if (process.env.NODE_ENV === 'production') {
-    userInfo = bridge.call('user.getUserInfo')
+    userInfo.Authorization = 'Bearer ' + (bridge.call('user.getUserInfo') ? bridge.call('user.getUserInfo').data.token : '')
     userInfo.ClientInfo = bridge.call('user.getClientInfo')
   } else {
     console.warn('Authorization on mock')
@@ -12,7 +12,7 @@ export const getUserInfo = reuse(() => {
       userInfo = require('./login.json')
     } catch (e) {
       userInfo = {
-        Authorization: 'Bearer b1180ca221dcec2b3e7201e9eaa8ed451547461313506',
+        Authorization: 'Bearer 14ea9c099547cc7ca95fa42cff5c3d481547880029952',
         ClientInfo: '2240563ecfa80fe26c4eb4dd4f6053037db4eee8/yzgdriver/1.0.0/ios'
       }
     }
@@ -52,7 +52,7 @@ let appBtn = {
   right: 0
 }
 // 设置标题栏按钮
-export const setAppTitleBtn = option => {
+export const setAppTitleBtn = (option) => {
   const { action, position, ...config } = option
   if (typeof action === 'function') {
     let isLeft = position === 'left'
@@ -70,20 +70,25 @@ const type = {
   edit: 'ui/ico-edit.png'
 }
 // 设置标题栏右边按钮
-export const setAppRightBtn = (options) => {
+export const setAppRightBtn = (options = []) => {
   appBtn.right = 1
   const arr = []
-  options.forEach(option => {
+  if (!(options instanceof Array)) {
+    options = [options]
+  }
+  options.forEach((option) => {
     const { action, iconType, ...config } = option
     if (typeof action === 'function') {
-      config.action = iconType
-      bridge.register(iconType, action, false)
+      config.action = iconType || 'appRightBtn_H5'
+      bridge.register(config.action, action, false)
     }
-    config.url = process.env.VUE_APP_IMG_HOST + type[iconType]
+    if (iconType){
+      config.url = process.env.VUE_APP_IMG_HOST + type[iconType]
+    }
     arr.push(config)
   })
   console.warn('setAppBtn: ', arr)
-  bridge.call('ui.setRightButtonAction', { 'list': arr }, () => {})
+  bridge.call('ui.setRightButtonAction', { list: arr }, () => {})
 }
 
 // 默认清设置过的右侧按钮, 左侧按钮默认是返回键, 应该手动控制清除

@@ -5,7 +5,7 @@
       <Upload :upload-photos="photoList" :max-count="6" :input-show="false"/>
     </div>
     <div class="btn-box">
-      <cube-button primary @click="save">提交</cube-button>
+      <cube-button :disabled="!photoList.length" primary @click="save">提交</cube-button>
     </div>
   </div>
 </template>
@@ -48,6 +48,8 @@ export default {
             return { url: el }
           })
         })
+      } else {
+        this.photoList = []
       }
     },
     save () {

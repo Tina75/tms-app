@@ -1,6 +1,6 @@
 <template>
   <div class="upload">
-    <template v-if="!fileList.length">
+    <template v-if="!file">
       <div class="upload-input" @click="beforeUpload">
         <slot>
           <icon-font name="icon-zengjia" color="#CECECE" :size="30" />
@@ -11,12 +11,9 @@
 
     <template v-else>
       <div
-        v-for="(file, index) in fileList"
-        :key="index"
-        :style="{'background-image': `url(${file.url})`}"
-        class="upload-preview"
-        @click="preview(index)">
-        <span @click="remove(index)">
+        :style="{'background-image': `url(${file})`}"
+        class="upload-preview">
+        <span @click="remove">
           <icon-font name="icon-shanchu-tupian" class="upload-remove" color="red" :size="20"/>
         </span>
       </div>
@@ -36,8 +33,8 @@ export default {
 
   props: {
     value: {
-      type: Array,
-      default: () => []
+      type: String,
+      default: ''
     },
     label: {
       type: String,
@@ -47,15 +44,15 @@ export default {
 
   data () {
     return {
-      fileList: []
+      file: ''
     }
   },
 
   watch: {
     value (newVal) {
-      this.fileList = [ ...newVal ]
+      this.file = newVal
     },
-    fileList (newVal) {
+    file (newVal) {
       this.$emit('input', newVal)
     }
   },
@@ -74,12 +71,10 @@ export default {
       fileList.data.images.map(item => {
         bridge.call('ui.getBase64Picture', { key: item }, async (result) => {
           const base64Picture = 'data:image/jpeg;base64,' + result.data.image
-          console.log(result)
           try {
             const res = await uploadOSS(base64Picture)
             res ? this.uploaded(res) : this.$emit('on-error', res)
           } catch (error) {
-            console.error(error)
             this.$emit('on-error', error)
           }
         })
@@ -87,17 +82,13 @@ export default {
     },
 
     uploaded (result) {
-      this.fileList.push(result)
-      this.$emit('on-success', result)
+      this.file = result.url
+      this.$emit('on-success', result.url)
     },
 
-    remove (index) {
-      this.fileList.splice(index, 1)
-      this.$emit('on-remove', index, this.fileList)
-    },
-
-    preview (start = 0) {
-      this.$emit('on-preview', start, this.fileList)
+    remove () {
+      this.file = ''
+      this.$emit('on-remove', this.file)
     }
   }
 }

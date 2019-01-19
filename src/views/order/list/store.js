@@ -148,7 +148,7 @@ export default {
     },
     getTabCount: ({ commit, state }) => {
       Server({
-        url: '/order/getOrderNumByStatus'
+        url: '/order/getAppOrderNumByStatus'
       }).then(({ data }) => {
         commit('TAB_COUNT', data.data)
       })

@@ -34,10 +34,11 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 import ListItem from '../../components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
-import { mapActions, mapState } from 'vuex'
 const moudleName = 'contacts/shipper'
 export default {
   name: 'ContactsShipperCargoList',
@@ -62,7 +63,17 @@ export default {
         id: item ? item.id : undefined
       }
       this.$router.push({ name: 'contacts-shipper-cargo-modify', query })
+    },
+    setBtns() {
+      setAppRightBtn({
+        test: '添加',
+        iconType: 'add',
+        action: this.modify.bind(this, null)
+      })
     }
+  },
+  beforeRouteEnter: (to, from, next) => {
+    next(vm => vm.setBtns())
   }
 }
 </script>

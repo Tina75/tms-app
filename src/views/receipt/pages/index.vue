@@ -33,7 +33,7 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'receipt',
   metaInfo: {
-    title: 'receipt'
+    title: '回单管理'
   },
   components: {
     CardList

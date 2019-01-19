@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import router from '@/router'
 import Server from '@/libs/server'
 import cityUtil from '@/libs/city'
 import { InfinateListFactory, DetailFactory } from '@/libs/factory/store'
@@ -15,9 +16,8 @@ const store = {
   },
   actions: {
     // 交给common/address页面处理的action
-    addressAction: ({ state, dispatch }, addressData) => {
-      Vue.prototype.$refreshPage('contacts-shipper-address', 'contacts-shipper-detail')
-      dispatch('modifyAddress', {
+    addressAction: async ({ state, dispatch }, addressData) => {
+      await dispatch('modifyAddress', {
         cityName: cityUtil.getCityNameArray(addressData.locale).join(''),
         address: addressData.address,
         id: addressData.id,
@@ -28,8 +28,20 @@ const store = {
         consignerHourseNumber: addressData.additional,
         mapType: 1
       })
+      Vue.prototype.$refreshPage('contacts-shipper-address', 'contacts-shipper-detail')
     },
-
+    addressRemoveAction: async ({ state, dispatch }, addressData) => {
+      window.confirm({
+        content: '确认删除？',
+        icon: 'cubeic-alert',
+        onConfirm: async () => {
+          await dispatch('removeAddress', { id: addressData.id })
+          Vue.prototype.$refreshPage('contacts-shipper-address')
+          window.toast('删除成功')
+          router.back(true)
+        }
+      })
+    },
     // 同步业务员
     syncButtOperator: ({ state, commit }) =>
       Server({ method: 'get', url: '/permission/buttOperator' }).then((response) =>

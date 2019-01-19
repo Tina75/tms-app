@@ -1,9 +1,9 @@
 <template>
   <div id="app" class="cube-default-background">
     <keep-alive>
-      <router-view />
+      <router-view/>
     </keep-alive>
-    <loading :status.sync="loadingStatus" />
+    <loading :status.sync="loadingStatus"/>
   </div>
 </template>
 <script>
@@ -12,14 +12,14 @@ import Loading from '@/components/Loading'
 export default {
   name: 'app',
   components: { Loading },
-  data () {
+  data() {
     return {
       loadingStatus: false
     }
   },
-  created () {
+  created() {
     // 全局toast
-    window.toast = (msg) => {
+    window.toast = msg => {
       this.$createToast({
         time: 2000,
         txt: msg,
@@ -42,15 +42,31 @@ export default {
         }
       }).show()
     }
+    // 全局弹窗
+    window.confirm = ({
+      title = '',
+      icon = 'cubeic-alert',
+      content = '',
+      onConfirm = () => {}
+    } = {}) => {
+      this.$createDialog({
+        type: 'confirm',
+        title,
+        content,
+        icon,
+        onConfirm
+      }).show()
+    }
   }
 }
 </script>
 
 <style lang="stylus">
 @import './assets/font/iconfont.css'
-@import './assets/style/helper.styl';
-html,body
-  height: 100%
+@import './assets/style/helper.styl'
+html,
+body
+  height 100%
   // user-select: all
 #app
   font-family 'Avenir', Helvetica, Arial, sans-serif
@@ -64,30 +80,30 @@ html,body
   *
     box-sizing border-box
 .icon
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.15em;
-  fill: currentColor;
-  overflow: hidden;
+  width 1em
+  height 1em
+  vertical-align -0.15em
+  fill currentColor
+  overflow hidden
 .empty-list-image
   width 179px
   height 133px
   // .page
-  //   position: absolute
-  //   z-index: 10
-  //   top: 0
-  //   left: 0
-  //   width: 100%
-  //   height: 100%
-  //   overflow-x: hidden
-  //   overflow-y: auto
-  //   .list-no-data
-  //     height 50px
-  //     line-height 50px
-  //     text-align center
-  //     color #999
+  // position: absolute
+  // z-index: 10
+  // top: 0
+  // left: 0
+  // width: 100%
+  // height: 100%
+  // overflow-x: hidden
+  // overflow-y: auto
+  // .list-no-data
+  // height 50px
+  // line-height 50px
+  // text-align center
+  // color #999
   // .scroll-list-wrap
-  //   height: 100%
-  //   overflow-x: hidden
-  //   overflow-y: auto
+  // height: 100%
+  // overflow-x: hidden
+  // overflow-y: auto
 </style>

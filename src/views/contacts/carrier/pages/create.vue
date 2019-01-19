@@ -1,12 +1,18 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10">
-    <FromGroup :rules="rules" >
-      <FormItem v-model="model.carrierName" label="承运商名称" maxlength="20" prop="require"/>
-      <FormItem v-model="model.carrierPrincipal" label="负责人" maxlength="15" prop="require"/>
+    <FromGroup ref="form" :rules="rules">
+      <FormItem v-model="model.carrierName" label="承运商名称" maxlength="rules.carrierName.max" prop="carrierName"/>
+      <FormItem v-model="model.carrierPrincipal" label="负责人" maxlength="rules.carrierPrincipal.max" prop="carrierPrincipal"/>
       <FormItem
         v-model="model.carrierPhone"
-        label="联系电话"
-        prop="require"
+        label="负责人号码"
+        maxlength="rules.carrierPhone.max"
+        prop="carrierPhone"
+      />
+      <FormItem
+        v-model="model.customerCarrierPhone"
+        label="客服号码"
+        prop="customerCarrierPhone"
       />
       <FormItem
         v-model="model.payType"
@@ -17,7 +23,7 @@
         :bottom-line="false"
         :options="options.payType"
       />
-      <FormItem v-model="model.remark" maxlength="200" type="textarea" label="备注"/>
+      <FormItem v-model="model.remark" maxlength="rules.remark.max" type="textarea" label="备注"/>
     </FromGroup>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
   </div>
@@ -28,6 +34,7 @@ import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
 import { ContactDetail } from '../modules/model'
+import { contactRule } from '../modules/rules'
 const moudleName = 'contacts/carrier'
 export default {
   name: 'ModifyContactsCarrier',
@@ -43,38 +50,56 @@ export default {
       options: {
         payType: ContactDetail.payType
       },
-      rules: {
-        require: {
-          required: true
-        }
-      },
+      rules: contactRule,
       submiting: false
     }
   },
   computed: {
     ...mapGetters(moudleName, ['contactDetail']),
     isCreate() {
-      return !this.contactDetail.id
+      return typeof this.$route.query.carrierId === 'undefined'
     }
   },
   methods: {
-    ...mapActions(moudleName, ['modifyContact']),
+    ...mapActions(moudleName, ['loadCarrierDetail', 'modifyContact']),
     async submit() {
-      this.submiting = true
       try {
+        this.submiting = true
+        if (!(await this.$refs.form.validate())) {
+          return window.toast('请输入必填信息')
+        }
         await this.modifyContact(ContactDetail.toServer(this.model))
-        this.$refreshPage('contacts-carrier', 'contacts-carrier-detail')
+        this.afterSubmit()
       } catch (e) {
         console.error(e)
       } finally {
         this.submiting = false
       }
     },
-    onRefreshPage() {
-      this.model = this.isCreate
-        ? new ContactDetail()
-        : ContactDetail.toForm(this.contactDetail)
+    /* 提交成功后续操作 */
+    afterSubmit () {
+      this.$refreshPage('contacts-carrier', 'contacts-carrier-detail')
+      this.$formWillLeave()
+      window.toast(this.isCreate ? '新增承运商成功' : '修改承运商成功')
+      this.$router.back()
+    },
+    async setForm() {
+      if (!this.isCreate) {
+        // 编辑操作, 判断store中的值是否是目标, 不是则拉新的
+        const urlId = +this.$route.query.carrier
+        if (urlId !== +this.contactDetail.id) {
+          await this.loadCarrierDetail()
+          // 更新了detail的则要刷新detail页
+          this.$refreshPage('contacts-carrier-detail')
+        }
+        this.model = ContactDetail.toForm(this.contactDetail)
+      } else {
+        this.model = new ContactDetail()
+      }
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => vm.setForm())
   }
 }
 </script>

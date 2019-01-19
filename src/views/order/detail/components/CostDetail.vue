@@ -1,7 +1,7 @@
 <template>
   <detail-panel :title="'应收费用'">
     <detail-panel-item v-if="Detail.mileage" :label="'计费里程'">
-      <p>{{Detail.mileage}}米</p>
+      <p>{{Detail.mileage | mileageFormat}}公里</p>
     </detail-panel-item>
     <detail-panel-item v-if="Detail.freightFee" :label="'运输费用'">
       <p>{{Detail.freightFee | moneyFormat}}元</p>

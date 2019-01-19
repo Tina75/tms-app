@@ -9,6 +9,7 @@
         {{data.departureCityName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{data.destinationCityName}}
       </div>
       <div class="cargos">
+        <div class="cargo-infos">{{cargoName}}</div>
         <div class="cargo-infos">{{data.weight || 0}}吨</div>
         <div class="cargo-infos">{{data.volume || 0}}方</div>
         <div class="cargo-infos">{{data.cargoCnt || 0}}件</div>
@@ -58,6 +59,15 @@ export default {
         }
       })
       return obj
+    },
+    cargoName () {
+      let name = '-'
+      const arr = this.data.cargoInfoDTO
+      if (arr.length) {
+        const cargoNm = arr[0].name
+        name = cargoNm.length > 10 ? `${cargoNm.substr(0, 10)}...` : cargoNm
+      }
+      return name
     }
   },
   methods: {

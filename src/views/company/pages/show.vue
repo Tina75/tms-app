@@ -244,15 +244,20 @@ export default {
     previewPic (imgs, index = 0) {
       this.$router.push({ name: 'image-preview', params: { imgs: [this.companyInfo.logoUrl], index } })
     },
+    formatImag (value) {
+      if (!value) return ''
+      if (value.indexOf('aliyuncs.com') > 0) return 'https://' + value
+      return value ? `${process.env.VUE_APP_IMG_HOST}${value}?x-oss-process=image/resize,m_fill,h_40,w_40` : ' '
+    },
     // 分享
     async sharePath () {
       this.shareOutNo = await this.shareCompanyInfo()
       this.shareUrl = this.basePath + 'company-phone.html?shareOutNo=' + this.shareOutNo
       let param = {}
-      param.title = '运掌柜'
-      param.desc = '运掌柜'
+      param.title = this.companyInfo.shortName ? this.companyInfo.shortName : this.companyInfo.name
+      param.desc = '提供专业可靠物流运输服务，期待携手合作！'
       param.url = this.shareUrl
-      param.thumburl = 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/order/7c1fb48f-6f65-47df-8812-f7b0ee83150e/1444266406125.3496.png'
+      param.thumburl = this.formatImag(this.companyInfo.logoUrl)
       param.platformType = ''
       param.log = {}
       bridge.call('navigation.share', { ...param }, function(result) {

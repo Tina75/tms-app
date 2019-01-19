@@ -23,11 +23,7 @@
       </ListItem>
       <template slot="empty">
         <NoData action="新增发货地址" message="老板，您还没有记录发货地址信息 赶快新增一个，用着方便哦～" @btn-click="modify">
-          <img
-            slot="img"
-            class="empty-list-image"
-            src="@/assets/contacts/address-list-empty.png"
-          >
+          <img slot="img" class="empty-list-image" src="@/assets/contacts/address-list-empty.png">
         </NoData>
       </template>
     </InfiniteList>
@@ -35,11 +31,12 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+import { loadBMap } from '@/libs/util'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 import ListItem from '../../components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
-import { mapActions, mapState } from 'vuex'
-import { loadBMap } from '@/libs/util'
 const moudleName = 'contacts/shipper'
 export default {
   name: 'ContactsShipperCargoList',
@@ -72,6 +69,13 @@ export default {
         title: item ? '修改发货地址' : '新增发货地址',
         namespace: moudleName,
         dispatch: 'addressAction',
+        appButton: item
+          ? {
+            test: '删除',
+            color: '#00A4BD',
+            action: 'addressRemoveAction'
+          }
+          : null,
         data
       }
       if (item) {
@@ -86,7 +90,17 @@ export default {
 
       this.resetAddressPage(config)
       this.$router.push({ name: 'contacts-address' })
+    },
+    setBtns() {
+      setAppRightBtn({
+        test: '添加',
+        iconType: 'add',
+        action: this.modify.bind(this, null)
+      })
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => vm.setBtns())
   }
 }
 </script>

@@ -60,4 +60,33 @@ export class DriverDetail {
     })
     return data
   }
+
+  // 后端接口 => form表单格式
+  static toForm(server) {
+    const form = fillEmpty(server)
+    // cube-switch 需要boolean类型 防止报错
+    // form.isInvoice = !!form.isInvoice
+    // // 后端是0.xx 前端显示xx%
+    // form.invoiceRate = +form.invoiceRate * 100
+    // form.salesmanId = form.salesmanId || ''
+    return form
+  }
 }
+
+function fillEmpty(obj) {
+  const data = {}
+  for (let [key, value] of Object.entries(obj)) {
+    data[key] = (value !== 0 || value !== false) && !value ? '' : value
+  }
+  return data
+}
+
+// function filterEmpty(obj) {
+//   const data = {}
+//   for (let [key, value] of Object.entries(obj)) {
+//     if (value) {
+//       data[key] = value
+//     }
+//   }
+//   return data
+// }

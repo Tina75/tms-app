@@ -1,5 +1,5 @@
 const webpack = require('webpack')
-const useBundleAnalyzer = true // 是否开启打包分析
+const useBundleAnalyzer = false // 是否开启打包分析
 const proxyUrl = 'https://dev.tms5566.com/dolphin-app'
 let i = 0
 const config = {
