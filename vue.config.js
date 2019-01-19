@@ -1,5 +1,5 @@
 const webpack = require('webpack')
-const useBundleAnalyzer = true // 是否开启打包分析
+const useBundleAnalyzer = false // 是否开启打包分析
 const proxyUrl = 'https://dev.tms5566.com/dolphin-app'
 let i = 0
 const config = {
@@ -72,11 +72,11 @@ const config = {
   }
 }
 
-// const webpackConfig = config.configureWebpack
-// // 打包分析
-// if (useBundleAnalyzer) {
-//   webpackConfig.plugins = webpackConfig.plugins || []
-//   const Util = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-//   webpackConfig.plugins.push(new Util())
-// }
+const webpackConfig = config.configureWebpack
+// 打包分析
+if (useBundleAnalyzer) {
+  webpackConfig.plugins = webpackConfig.plugins || []
+  const Util = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+  webpackConfig.plugins.push(new Util())
+}
 module.exports = config
