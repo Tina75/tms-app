@@ -20,18 +20,19 @@ const CONFIG = [
 ]
 
 const ACTIONS = {
-  loadCarrierDetail ({ commit }, carrierId) {
+  loadCarrierDetail ({ rootState, commit }) {
     return Server({
       url: '/carrier/details/for/company',
       method: 'get',
-      params: { carrierId }
+      params: { carrierId: rootState.route.query.carrierId }
     }).then(response => commit('setCarrierDetail', response.data.data.carrierInfo))
   },
-  loadTruckDetail ({ state, commit }, carId) {
+  loadTruckDetail ({ rootState, commit }) {
     return Server({
       url: '/ownerCar/queryCarDetail',
       method: 'get',
-      params: { carId }
+      loding: true,
+      params: { carId: rootState.route.query.carId }
     }).then(response => commit('setTruckDetail', response.data.data))
   }
 }

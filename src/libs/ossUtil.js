@@ -13,7 +13,9 @@ export async function uploadOSS (base64Data) {
       endpoint: ossTokenDTO.endpoint,
       bucket: ossTokenDTO.bucketName
     })
-    url = await uploadBase64Img(client, ossKeys[0], base64Data)
+    window.requestAnimationFrame(async () => {
+      url = await uploadBase64Img(client, ossKeys[0], base64Data)
+    })
   } catch (e) {
     console.error(e)
   }
