@@ -3,7 +3,7 @@
     <detail-panel-item :label="'客户名称'">
       <p>{{ detail.consignerName }}</p>
     </detail-panel-item>
-    <detail-panel-item :label="'客户订单号'">
+    <!-- <detail-panel-item :label="'客户订单号'">
       <p class="remix-content">
         <span>{{ detail.customerOrderNo || '-' }}</span>
         <a
@@ -20,7 +20,7 @@
           class="border-right-1px"
           @click.prevent="copy(detail.customerWaybillNo)">复制</a>
       </p>
-    </detail-panel-item>
+    </detail-panel-item> -->
     <!-- <detail-panel-item :label="'始发地'">
       <p>广东省深圳市宝安区</p>
     </detail-panel-item>
@@ -60,10 +60,10 @@ import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
 import { pickupType } from '../../js/filters'
 import NP from 'number-precision'
-import Copy from 'vue-clipboard2'
+// import Copy from 'vue-clipboard2'
 import Vue from 'vue'
 
-Vue.use(Copy)
+// Vue.use(Copy)
 
 export default {
   name: 'pickupInfo',
@@ -76,14 +76,14 @@ export default {
       if (!this.detail.isInvoice) return '否'
       else return `是(${NP.times(this.detail.invoiceRate || 0, 100)}%)`
     }
-  },
-  methods: {
-    copy (text) {
-      this.$copyText(text)
-        .then(() => { window.toast('复制成功') })
-        .catch(() => { window.toast('复制失败') })
-    }
   }
+  // methods: {
+  //   copy (text) {
+  //     this.$copyText(text)
+  //       .then(() => { window.toast('复制成功') })
+  //       .catch(() => { window.toast('复制失败') })
+  //   }
+  // }
 }
 </script>
 <style scoped lang="stylus">
