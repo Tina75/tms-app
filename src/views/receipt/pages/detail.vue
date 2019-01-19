@@ -86,7 +86,7 @@
           <Cargo v-for="(item, index) in detail.cargoInfos" :key="index" :data="item"/>
         </Panel>
       </cube-scroll-nav-panel>
-      <cube-scroll-nav-panel  label="应收费用" style="padding-bottom: 60px">
+      <cube-scroll-nav-panel  label="应收费用" style="padding-bottom: 40px">
         <Panel title="应收费用">
           <FormItem label="计费里程">
             {{detail.mileage | mile}}公里
@@ -109,7 +109,7 @@
         </Panel>
       </cube-scroll-nav-panel>
     </cube-scroll-nav>
-    <div class="upstream-footer">
+    <div v-if="!!detail.receiptOrder" class="upstream-footer">
       <cube-button v-if="detail.receiptOrder.receiptStatus === 0 && detail.status === 40" class="footer-item-btn" @click="receipt">回收</cube-button>
       <cube-button v-if="detail.receiptOrder.receiptStatus === 1" class="footer-item-btn" @click="backFactory">返厂</cube-button>
       <cube-button v-if="detail.receiptOrder.receiptStatus > 0 && !detail.receiptOrder.receiptUrl.length" class="footer-item-btn  footer-item-primary" @click="uploadPic">上传回单</cube-button>
