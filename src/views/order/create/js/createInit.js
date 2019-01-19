@@ -13,9 +13,11 @@ export default {
         window.loading(false)
       }
     }
-    console.log(this.mode)
+
+    this.$formWillLeave(false, () => {
+      this.$refs.$form.reset()
+    })
     if (this.mode === 'create') return
-    this.$formWillLeave(false, () => { this.$refs.$form.reset() })
     if (this.orderInfo.consignerName) return
     window.loading(true)
     let orderInfo

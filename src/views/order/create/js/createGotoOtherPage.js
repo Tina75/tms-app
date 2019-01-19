@@ -78,7 +78,7 @@ export default {
   async setTitleButtons () {
     if (this.mode !== 'create') return
     if (!this.oftenPermission) await this.getOftenPermission()
-    if (this.oftenPermission.indexOf(100400) === -1) return
+    if (!this.oftenPermission || this.oftenPermission.indexOf(100400) === -1) return
     setAppTitleBtn({
       text: '常发订单',
       action: () => { this.$router.push({ name: 'order-often' }) }
