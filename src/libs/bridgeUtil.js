@@ -4,7 +4,7 @@ import { reuse } from './util'
 export const getUserInfo = reuse(() => {
   let userInfo = {}
   if (process.env.NODE_ENV === 'production') {
-    userInfo = bridge.call('user.getUserInfo') ? bridge.call('user.getUserInfo').data : {}
+    userInfo.Authorization = bridge.call('user.getUserInfo') ? bridge.call('user.getUserInfo').data.token : {}
     userInfo.ClientInfo = bridge.call('user.getClientInfo')
   } else {
     console.warn('Authorization on mock')
@@ -12,15 +12,12 @@ export const getUserInfo = reuse(() => {
       userInfo = require('./login.json')
     } catch (e) {
       userInfo = {
-        Authorization: 'Bearer 14ea9c099547cc7ca95fa42cff5c3d481547791866573',
+        Authorization: 'Bearer 14ea9c099547cc7ca95fa42cff5c3d481547880029952',
         ClientInfo: '2240563ecfa80fe26c4eb4dd4f6053037db4eee8/yzgdriver/1.0.0/ios'
       }
     }
   }
-  return {
-    Authorization: `Bearer ${userInfo.token}`,
-    ClientInfo: userInfo.ClientInfo
-  }
+  return userInfo
 })
 
 // 打开app原生页面

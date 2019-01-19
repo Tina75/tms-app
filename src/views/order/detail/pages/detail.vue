@@ -60,9 +60,10 @@ export default {
   computed: {
     ...mapGetters('order/detail', ['Detail'])
   },
-  mounted() {
-    const id = this.$route.params.id
-    this.getDetail(id)
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.getDetail(to.params.id)
+    })
   },
   methods: {
     ...mapActions('order/detail', ['getDetail']),
