@@ -9,7 +9,7 @@
     <detail-panel-item v-if="Waybill.carrierWaybillNo" :label="'承运商运单号'">
       <p class="remix-content">
         <span class="border-right-1px">{{Waybill.carrierWaybillNo}}</span>
-        <a>复制</a>
+        <a v-clipboard:copy="Waybill.carrierWaybillNo" v-clipboard:success="test">复制</a>
       </p>
     </detail-panel-item>
     <detail-panel-item v-if="Waybill.startName" :label="'始发地'">
@@ -30,7 +30,7 @@
     <detail-panel-item v-if="Waybill.driverPhone" :label="'联系方式'">
       <p class="remix-content">
         <span class="border-right-1px">{{Waybill.driverPhone}}</span>
-        <a>联系TA <i class="iconfont icon-ico_call"/></a>
+        <a @click="call(Waybill.driverPhone)">联系TA <i class="iconfont icon-ico_call"/></a>
       </p>
     </detail-panel-item>
     <detail-panel-item v-if="Waybill.carNo" :label="'车牌号'">
@@ -52,9 +52,12 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 
 export default {
   name: 'delivery-waybill-info',
@@ -67,6 +70,14 @@ export default {
         pullUpLoad: true,
         scrollbar: true
       }
+    }
+  },
+  methods: {
+    call(tel) {
+      window.location.href = `tel:${tel}`
+    },
+    test() {
+      window.toast('success')
     }
   }
 }

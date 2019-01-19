@@ -40,11 +40,11 @@
           <cube-button v-if="!info.waybillId" class="list-item__btngroup" :outline="true"  :inline="true" primary @click.stop="$emit('on-dispatch',info)">调度</cube-button>
           <div v-else class="list-item__btngroup">
             <div v-if="info.status==2">
-              <!-- <cube-button class="btn" :outline="true" :inline="true" @click="$emit('delete-item', info.waybillId)">删除</cube-button> -->
+              <cube-button class="btn" :outline="true" :inline="true" @click.stop="$emit('delete-item', info.waybillId)">删除</cube-button>
               <cube-button v-if="!hasSendCar(info)" class="btn" :outline="true"  :inline="true" primary @click.stop="sendCar(info.waybillId)">派车</cube-button>
               <cube-button v-else class="btn" :outline="true"  :inline="true" primary @click.stop="setOff(info.waybillId)">发运</cube-button>
             </div>
-            <div v-if="info.status==30">
+            <div v-if="info.status==3">
               <cube-button class="btn" :outline="true"  :inline="true" @click.stop="location">位置</cube-button>
               <cube-button  class="btn" :outline="true"  :inline="true" primary @click.stop="arrival(info.waybillId)">到货</cube-button>
             </div>
@@ -91,13 +91,13 @@ export default {
     // 发运
     setOff(id) {
       this.showDialog('是否发运？', () => {
-        this.doSetOff([id])
+        this.doSetOff(id)
       })
     },
     // 到货
     arrival(id) {
       this.showDialog('是否确认到货？', () => {
-        this.doArrival([id])
+        this.doArrival(id)
       })
     },
 

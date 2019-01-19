@@ -2,7 +2,8 @@
   <delivery-list
     :list="SendingList"
     @refresh="refresh"
-    @loadmore="loadmore"/>
+    @loadmore="loadmore"
+    @on-item-click="onItemClick"/>
 </template>
 
 <script>
@@ -11,11 +12,6 @@ import DeliveryList from './DeliveryList.vue'
 export default {
   name: 'sending-list',
   components: { DeliveryList },
-  data () {
-    return {
-    }
-  },
-
   computed: {
     ...mapGetters('delivery', ['SendingList'])
   },
@@ -26,12 +22,18 @@ export default {
 
   methods: {
     ...mapActions('delivery', ['getSending', 'clearSending']),
+
     refresh() {
       this.clearSending()
       this.getSending()
     },
+
     loadmore() {
       this.getSending()
+    },
+
+    onItemClick(id) {
+      this.$router.push({ name: 'delivery-detail', params: { id } })
     }
   }
 }

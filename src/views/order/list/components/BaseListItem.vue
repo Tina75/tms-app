@@ -62,7 +62,7 @@ export default {
     setOff() {
       // 发运
       this.showDialog('是否发运？', () => {
-        this.doSetOff([this.info.waybillId])
+        this.doSetOff(this.info.waybillId)
       })
     },
     arrival() {

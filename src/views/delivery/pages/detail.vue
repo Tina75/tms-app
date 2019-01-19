@@ -36,6 +36,7 @@ import { mapGetters, mapActions } from 'vuex'
 import WaybillInfo from '../components/detail/WaybillInfo'
 import OrderCargoList from '../components/detail/OrderCargoList'
 import CostDetail from '../components/detail/CostDetail'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 
 export default {
   name: 'delivery-detail',
@@ -59,8 +60,20 @@ export default {
       })
     })
   },
+  beforeRouteLeave(to, from, next) {
+    this.clearWaybillDetail()
+    setAppRightBtn([{ text: '', action: () => { } }])
+    next()
+  },
+  watch: {
+    'Waybill.status': function(val) {
+      if (val < 3) {
+        setAppRightBtn([{ text: '删除', iconType: 'delete', action: () => { this.deleteItem(this.Waybill.waybillId) } }])
+      }
+    }
+  },
   methods: {
-    ...mapActions('delivery', ['getWaybillDetail', 'doSetOff', 'doArrival']),
+    ...mapActions('delivery', ['getWaybillDetail', 'doSetOff', 'doArrival', 'clearWaybillDetail']),
     changeHandler (label) {
       console.log('changed to:', label)
     },
@@ -82,7 +95,7 @@ export default {
         content: '是否发运？',
         onConfirm: () => {
           this.doSetOff(id).then(() => {
-            this.getWaybillDetail(id)
+            this.getWaybillDetail([id])
           })
         }
       }).show()
@@ -95,6 +108,21 @@ export default {
         onConfirm: () => {
           this.doArrival(id).then(() => {
             this.getWaybillDetail(id)
+          })
+        }
+      }).show()
+    },
+    // 删除
+    deleteItem(id) {
+      this.$createDialog({
+        type: 'confirm',
+        icon: 'cubeic-important',
+        content: '是否确认删除？',
+        onConfirm: () => {
+          this.deleteBillById(id).then(() => {
+            const index = this.SendList.findIndex(item => item.waybillId === id)
+            this.SendList.splice(index, 1)
+            this.clearWaybillDetail()
           })
         }
       }).show()

@@ -40,6 +40,7 @@ export default {
       state.send.pageNo = ++payload.pageNo
       state.send.list = state.send.list.concat(payload.waybillList)
     },
+
     SET_SEND_LIST(state, list) {
       state.send.list = [...list]
     },
@@ -50,12 +51,18 @@ export default {
       state.sending.pageNo = ++payload.pageNo
       state.sending.list = state.sending.list.concat(payload.waybillList)
     },
+    SET_SENDING_LIST(state, list) {
+      state.sending.list = [...list]
+    },
     SENDING_CLEAR (state) {
       state.sending = { list: [], pageNo: 1 }
     },
     ARRIVAL (state, payload) {
       state.arrival.pageNo = ++payload.pageNo
       state.arrival.list = state.arrival.list.concat(payload.waybillList)
+    },
+    SET_ARRIVAL_LIST(state, list) {
+      state.arrival.list = [...list]
     },
     ARRIVAL_CLEAR (state) {
       state.arrival = { list: [], pageNo: 1 }
@@ -67,6 +74,9 @@ export default {
       state.waybillDetail.cargoListSet = noArray.map(no => {
         return { orderNo: no, cargoList: details.cargoList.filter(item => item.orderNo === no) }
       })
+    },
+    CLEAR_WAYBILL_DETAIL(state) {
+      state.waybillDetail = {}
     },
     TAB_COUNT (state, payload) {
       state.tabCount = { ...payload }
@@ -132,16 +142,20 @@ export default {
         data: info
       }).then(() => {
         // 派车成功，刷新列表
+        let list = state.send.list.filter(item => info.id !== item.id)
+        commit('SET_SEND_LIST', list)
       })
     },
     // 发运
-    doSetOff: ({ commit, state }, waybillIds = []) => {
+    doSetOff: ({ commit, state }, id) => {
       Server({
         url: '/waybill/shipment',
         method: 'post',
-        data: { waybillIds }
+        data: { waybillIds: [id] }
       }).then(({ data }) => {
         window.toast('发运成功')
+        let list = state.send.list.filter(item => id !== item.id)
+        commit('SET_SEND_LIST', list)
       })
     },
     getTabCount: ({ commit, state }) => {
@@ -150,13 +164,15 @@ export default {
       })
     },
     // 到货
-    doArrival: ({ commit, state }, waybillIds = []) => {
+    doArrival: ({ commit, state }, id) => {
       Server({
         url: '/waybill/confirm/arrival',
         method: 'post',
-        data: { waybillIds }
+        data: { waybillIds: [id] }
       }).then(({ data }) => {
         window.toast('到货成功')
+        let list = state.send.list.filter(item => id !== item.id)
+        commit('SET_SENDING_LIST', list)
       })
     },
     // 调度 and 创建运单
@@ -182,12 +198,15 @@ export default {
         return data.data
       })
     },
+    clearWaybillDetail: ({ commit }) => {
+      commit('CLEAR_WAYBILL_DETAIL')
+    },
     // 删除运单
-    deleteBillById: ({ commit }, ids = []) => {
+    deleteBillById: ({ commit }, id) => {
       return Server({
         url: '/waybill/delete',
         method: 'post',
-        data: { waybillIds: ids }
+        data: { waybillIds: [id] }
       }).then(({ data }) => {
       })
     }
