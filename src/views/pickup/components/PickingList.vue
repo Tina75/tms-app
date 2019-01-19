@@ -69,7 +69,7 @@ export default {
     this.getPicking()
   },
   methods: {
-    ...mapActions('pickup', ['setPageStart', 'getPicking', 'arriveBill', 'removePicking']),
+    ...mapActions('pickup', ['setPageStart', 'getPicking', 'arriveBill', 'removePicking', 'getPickupCount']),
     /** 下拉刷新 */
     async onPullingDown () {
       this.setPageStart('pickingData')
@@ -109,14 +109,10 @@ export default {
           href: 'javascript:;'
         },
         async onConfirm () {
-          await _this.arriveBill(data.pickupId)
+          await _this.arriveBill(data.pickUpId)
           await _this.removePicking(index)
-          await _this.getPickupCount(index)
-          _this.$createToast({
-            type: 'warn',
-            time: 1000,
-            txt: '到货成功'
-          }).show()
+          await _this.getPickupCount()
+          window.toast('到货成功')
         }
       }).show()
     },
