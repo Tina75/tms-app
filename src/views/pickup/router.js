@@ -13,9 +13,9 @@ export default [
     component: () => import(/* webpackChunkName: "pickup" */'./pages/dispatch.vue')
   },
   {
-    path: '/pickup/order/detail',
-    name: 'pickup-order-detail',
-    component: () => import(/* webpackChunkName: "pickup" */'./pages/order-detail.vue')
+    path: '/pickup/bill/add/:id',
+    name: 'pickup-bill-add',
+    component: () => import(/* webpackChunkName: "pickup" */'./pages/dispatch.vue')
   },
   {
     path: '/pickup/order/list/:id',

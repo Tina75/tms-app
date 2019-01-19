@@ -570,8 +570,12 @@ export default {
           allocationStrategy: this.model.allocationStrategy,
           remark: this.model.remark
         }
-        this.$route.query.type ? await this.sendDirectly(req) : await this.assign(Object.assign({ pickupId: this.$route.params.id }, req))
-        await this.reloadCurrentPickup(this.$route.params.id)
+        if (this.$route.query.type) {
+          await this.sendDirectly(req)
+        } else {
+          await this.assign(Object.assign({ pickupId: this.$route.params.id }, req))
+          await this.reloadCurrentPickup(this.$route.params.id)
+        }
         this.$router.back()
       }
     }

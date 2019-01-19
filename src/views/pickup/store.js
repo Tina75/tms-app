@@ -1,4 +1,6 @@
 import server from '@/libs/server'
+import dayjs from 'dayjs'
+
 export default {
   namespaced: true,
   state: {
@@ -74,7 +76,12 @@ export default {
       17: '17.5米'
     },
     backupDriverList: [],
-    locationDetail: {}
+    locationDetail: {
+      locationList: [],
+      addressList: []
+    },
+    billOrderList: [],
+    currentBillOrderIds: []
   },
   mutations: {
     getPickupCount (state, data) {
@@ -112,7 +119,43 @@ export default {
         return { orderNo: no, cargoList: data.cargoList.filter(item => item.orderNo === no) }
       })
     },
+    clearDetail (state) {
+      state.pickupDetail = {}
+      state.pickupCargoDetail = []
+    },
     getLocations (state, data) {
+      state.locationDetail = {
+        truckNo: data.carNo,
+        phone: data.points.length ? data.points[0].phone : '',
+        locationList: data.points.map(item => {
+          return { lng: item.longitude, lat: item.latitude }
+        }),
+        addressList: data.points.map((item, index) => {
+          return {
+            index,
+            date: dayjs(Number(item.locateTime)).format('MM-DD'),
+            time: dayjs(Number(item.locateTime)).format('HH:mm'),
+            address: item.location,
+            positionType: item.positionType
+          }
+        })
+      }
+    },
+    getBillOrderList (state, data) {
+      state.billOrderList = data
+      state.currentBillOrderIds = data.map(item => item.id)
+    },
+    removeBillOrder (state, id) {
+      state.currentBillOrderIds.splice(state.currentBillOrderIds.indexOf(id), 1)
+    },
+    addBillOrder (state, ids) {
+      state.currentBillOrderIds.push(...ids)
+    },
+    removeBePicking (state, index) {
+      state.bePickingData.list.splice(index, 1)
+    },
+    removePicking (state, index) {
+      state.pickingData.list.splice(index, 1)
     }
   },
   actions: {
@@ -132,7 +175,7 @@ export default {
         state[list] = {
           list: [],
           next: true,
-          pageNo: 1
+          pageNo: 0
         }
         resolve()
       })
@@ -327,11 +370,16 @@ export default {
         })
       })
     },
+    clearDetail: ({ state, commit }, id) => {
+      return new Promise((resolve, reject) => {
+        commit('clearDetail')
+      })
+    },
     getPickupLocation: ({ state, commit }, id) => {
       return new Promise((resolve, reject) => {
         server({
           method: 'post',
-          url: 'load/bill/location',
+          url: 'load/bill/single/location',
           data: {
             pickUpId: id
           }
@@ -345,12 +393,97 @@ export default {
       return new Promise((resolve, reject) => {
         server({
           method: 'post',
-          url: 'waybill/location',
+          url: 'waybill/single/location',
           data: {
-            pickUpId: id
+            waybillId: id
           }
         }).then((response) => {
           commit('getLocations', response.data.data)
+          resolve()
+        })
+      })
+    },
+    getBillOrderList: ({ state, commit }, id) => {
+      return new Promise((resolve, reject) => {
+        server({
+          method: 'GET',
+          url: 'load/bill/get/order',
+          params: {
+            id: id
+          }
+        }).then((response) => {
+          commit('getBillOrderList', response.data.data)
+          resolve()
+        })
+      })
+    },
+    removeBillOrder: ({ state, commit }, id) => {
+      commit('removeBillOrder', id)
+    },
+    addBillOrder: ({ state, commit }, ids) => {
+      commit('addBillOrder', ids)
+    },
+    editBillOrders: ({ state, commit }, id) => {
+      return new Promise((resolve, reject) => {
+        server({
+          method: 'post',
+          url: 'load/bill/update/order',
+          data: {
+            id: id,
+            orderIds: state.currentBillOrderIds
+          }
+        }).then((response) => {
+          resolve()
+        })
+      })
+    },
+    pickupBill: ({ state, commit }, id) => {
+      return new Promise((resolve, reject) => {
+        server({
+          method: 'post',
+          url: 'load/bill/send/car',
+          data: {
+            pickUpIds: [id]
+          }
+        }).then(() => {
+          resolve()
+        })
+      })
+    },
+    removeBePicking: ({ state, commit }, index) => {
+      return new Promise((resolve, reject) => {
+        commit('removeBePicking', index)
+        resolve()
+      })
+    },
+    arriveBill: ({ state, commit }, id) => {
+      return new Promise((resolve, reject) => {
+        server({
+          method: 'post',
+          url: 'load/bill/confirm/arrival',
+          data: {
+            pickUpIds: [id]
+          }
+        }).then(() => {
+          resolve()
+        })
+      })
+    },
+    removePicking: ({ state, commit }, index) => {
+      return new Promise((resolve, reject) => {
+        commit('removePicking', index)
+        resolve()
+      })
+    },
+    deleteBill: ({ state, commit }, id) => {
+      return new Promise((resolve, reject) => {
+        server({
+          method: 'delete',
+          url: 'load/bill/delete',
+          data: {
+            pickUpIds: [id]
+          }
+        }).then(() => {
           resolve()
         })
       })
@@ -371,6 +504,7 @@ export default {
     backupDriverList: (state) => state.backupDriverList,
     carTypeMap: (state) => state.carTypeMap,
     carLengthMap: (state) => state.carLengthMap,
-    locationDetail: (state) => state.locationDetail
+    locationDetail: (state) => state.locationDetail,
+    billOrderList: (state) => state.billOrderList
   }
 }

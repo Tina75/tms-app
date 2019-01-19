@@ -10,9 +10,7 @@
       </cube-tab>
     </cube-tab-bar>
     <div class="scroll-list-wrap">
-      <keep-alive>
-        <component :is="currentTab"/>
-      </keep-alive>
+      <component :is="currentTab"/>
     </div>
   </div>
 </template>
@@ -23,6 +21,7 @@ import BePickingList from '../components/BePickingList'
 import PickingList from '../components/PickingList'
 import PickedList from '../components/PickedList'
 import { mapGetters, mapActions } from 'vuex'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 
 export default {
   name: 'pickup',
@@ -30,6 +29,12 @@ export default {
     title: '提货管理'
   },
   components: { DispatchingList, BePickingList, PickingList, PickedList },
+  props: {
+    tab: {
+      type: Number,
+      default: 0
+    }
+  },
   data () {
     return {
       currentTab: 'DispatchingList',
@@ -50,11 +55,52 @@ export default {
           label: '已提货',
           value: 'PickedList'
         }
-      ]
+      ],
+      tabMap: {
+        1: 'DispatchingList',
+        2: 'BePickingList',
+        3: 'PickingList',
+        4: 'PickedList'
+      }
     }
   },
   computed: {
     ...mapGetters('pickup', ['tabCount'])
+  },
+  watch: {
+    tab (val) {
+      this.currentTab = this.tabMap[val]
+    },
+    currentTab (value) {
+      if (value === 'DispatchingList') {
+        setAppRightBtn([
+          {
+            text: '调度',
+            iconType: 'add',
+            action: () => {
+              this.$router.push({
+                name: 'pickup-dispatch'
+              })
+            }
+          }
+        ])
+      } else {
+        setAppRightBtn([{ text: '', action: () => {} }])
+      }
+    }
+  },
+  mounted () {
+    setAppRightBtn([
+      {
+        text: '调度',
+        iconType: 'add',
+        action: () => {
+          this.$router.push({
+            name: 'pickup-dispatch'
+          })
+        }
+      }
+    ])
   },
   methods: {
     ...mapActions('pickup', ['getPickupCount'])
@@ -63,6 +109,10 @@ export default {
     next(vm => {
       vm.getPickupCount()
     })
+  },
+  beforeRouteLeave (to, from, next) {
+    setAppRightBtn([{ text: '', action: () => {} }])
+    next()
   }
 }
 </script>

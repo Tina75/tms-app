@@ -9,7 +9,8 @@
       <li
         v-for="(item, index) in pickedData.list"
         :key="index"
-        class="order-item">
+        class="order-item"
+        @click="toDetail(item, index)">
         <div class="item-header border-bottom-1px">
           <span>{{item.createTime|datetimeFormat}}</span>
           <i v-if="item.collectionMoney">2</i>
@@ -35,11 +36,9 @@
         <div class="item-footer">
           <div class="order-cost">
             <p class="cost-label">应收费用（{{settlementTypeMap[item.settlementType]}}）</p>
-            <p class="cost-money">{{item.totalFee}}<span>/元</span></p>
+            <p class="cost-money">{{item.totalFee|moneyFormat}}<span>/元</span></p>
           </div>
-          <div class="order-btns">
-            <a>调度</a>
-          </div>
+          <div class="order-btns"/>
         </div>
       </li>
     </ul>
@@ -76,6 +75,17 @@ export default {
     /** 上拉加载 */
     async onPullingUp () {
       this.getPicked()
+    },
+    toDetail (item, index) {
+      this.$router.push({
+        name: 'pickup-detail',
+        params: {
+          id: item.pickUpId
+        },
+        query: {
+          index: index
+        }
+      })
     }
   }
 }
