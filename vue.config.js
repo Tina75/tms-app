@@ -72,11 +72,11 @@ const config = {
   }
 }
 
-const webpackConfig = config.configureWebpack
-// 打包分析
-if (useBundleAnalyzer) {
-  webpackConfig.plugins = webpackConfig.plugins || []
-  const Util = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-  webpackConfig.plugins.push(new Util())
-}
+// const webpackConfig = config.configureWebpack
+// // 打包分析
+// if (useBundleAnalyzer) {
+//   webpackConfig.plugins = webpackConfig.plugins || []
+//   const Util = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+//   webpackConfig.plugins.push(new Util())
+// }
 module.exports = config
