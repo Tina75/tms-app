@@ -12,6 +12,13 @@ export default {
     for (let key in state.orderInfo) {
       state.orderInfo[key] = payload[key]
     }
+  },
+  // 重置订单
+  RESET_ORDER: (state, payload) => {
+    resetFields(payload)
+    for (let key in state.orderInfo) {
+      state.orderInfo[key] = payload[key]
+    }
     if (payload.consignerName === '') {
       state.consignerId = void 0
       state.orderCargoList = []

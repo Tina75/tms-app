@@ -73,7 +73,8 @@ export default {
       16: '16米',
       17: '17.5米'
     },
-    backupDriverList: []
+    backupDriverList: [],
+    locationDetail: {}
   },
   mutations: {
     getPickupCount (state, data) {
@@ -110,6 +111,8 @@ export default {
       state.pickupCargoDetail = noArray.map(no => {
         return { orderNo: no, cargoList: data.cargoList.filter(item => item.orderNo === no) }
       })
+    },
+    getLocations (state, data) {
     }
   },
   actions: {
@@ -323,6 +326,34 @@ export default {
           resolve()
         })
       })
+    },
+    getPickupLocation: ({ state, commit }, id) => {
+      return new Promise((resolve, reject) => {
+        server({
+          method: 'post',
+          url: 'load/bill/location',
+          data: {
+            pickUpId: id
+          }
+        }).then((response) => {
+          commit('getLocations', response.data.data)
+          resolve()
+        })
+      })
+    },
+    getWaybillLocation: ({ state, commit }, id) => {
+      return new Promise((resolve, reject) => {
+        server({
+          method: 'post',
+          url: 'waybill/location',
+          data: {
+            pickUpId: id
+          }
+        }).then((response) => {
+          commit('getLocations', response.data.data)
+          resolve()
+        })
+      })
     }
   },
   getters: {
@@ -339,6 +370,7 @@ export default {
     pickupCargoDetail: (state) => state.pickupCargoDetail,
     backupDriverList: (state) => state.backupDriverList,
     carTypeMap: (state) => state.carTypeMap,
-    carLengthMap: (state) => state.carLengthMap
+    carLengthMap: (state) => state.carLengthMap,
+    locationDetail: (state) => state.locationDetail
   }
 }

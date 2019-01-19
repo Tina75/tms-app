@@ -32,3 +32,11 @@ export const updateReceipt = (data) => {
     data
   })
 }
+
+export const uploadReceiptPic = (data) => {
+  return Server({
+    method: 'post',
+    url: '/order/updateReceiptOrderPhotoUrl',
+    data
+  })
+}

@@ -1,6 +1,6 @@
 <template>
   <div class="status-bar">
-    <p class="status">{{status | orderStatus}}</p>
+    <p class="status">{{status | orderStatus(type)}}</p>
     <p class="time" >{{time | datetimeFormat}}</p>
   </div>
 </template>
@@ -16,12 +16,17 @@ export default {
   },
   props: {
     status: {
-      type: String,
+      type: [Number, String],
       default: ''
     },
     time: {
       type: Number,
       default: 0
+    },
+    // 区分回单
+    type: {
+      type: String,
+      default: ''
     }
   }
 }

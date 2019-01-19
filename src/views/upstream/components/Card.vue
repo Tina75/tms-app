@@ -6,16 +6,16 @@
     </div>
     <div class="consignee-info">
       <div class="city">
-        {{data.departureCityName}} - {{data.destinationCityName}}
+        {{data.departureCityName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{data.destinationCityName}}
       </div>
       <div class="cargos">
-        <!-- <div class="cargo-infos">花棉袄</div> -->
+        <div class="cargo-infos">{{cargoName}}</div>
         <div class="cargo-infos">{{data.weight || 0}}吨</div>
         <div class="cargo-infos">{{data.volume || 0}}方</div>
         <div class="cargo-infos">{{data.cargoCnt || 0}}件</div>
       </div>
       <div class="company">
-        {{data.consignerAddress}} {{data.consignerContact}}
+        {{data.shipperCompanyName}} {{data.consignerContact}}
       </div>
     </div>
     <div class="footer">
@@ -26,22 +26,22 @@
         </div>
       </div>
       <div v-if="status[data.acceptStatus].name == '待接收'" class="right">
-        <cube-button :outline="true" :inline="true" primary @click.stop="recept">接受</cube-button>
-        <cube-button :outline="true" :inline="true" primary @click.stop="refuse">拒绝</cube-button>
+        <cube-button :outline="true" :inline="true" @click.stop="refuse">拒绝</cube-button>
+        <cube-button :outline="true" :inline="true" primary style="margin-left: 8px" @click.stop="recept">接受</cube-button>
       </div>
     </div>
   </div>
 </template>
 <script>
 import ORDER_STATUS from '../constant/ORDER_STATUS'
-import { money } from '../libs'
+import { getMoney } from '../libs'
 export default {
   name: 'tab-card',
   metaInfo: {
     title: 'tab-card'
   },
   filters: {
-    money
+    money: getMoney
   },
   props: {
     data: {
@@ -59,6 +59,15 @@ export default {
         }
       })
       return obj
+    },
+    cargoName () {
+      let name = '-'
+      const arr = this.data.cargoInfoDTO
+      if (arr.length) {
+        const cargoNm = arr[0].name
+        name = cargoNm.length > 10 ? `${cargoNm.substr(0, 10)}...` : cargoNm
+      }
+      return name
     }
   },
   methods: {
@@ -80,6 +89,7 @@ export default {
   padding 0 15px
 .tab-card-title
   padding 10px 10px 10px 0
+  border-bottom 1px solid #F3F5F9
   .create-time
     font-size 14px
     line-height 20px
@@ -94,10 +104,11 @@ export default {
     text-align center
     color #fff
 .consignee-info
-  padding-bottom 15px
+  padding 15px 0
   .city
     color #333
     font-size 18px
+    font-weight bold
   .cargos
     margin-top 4px
     .cargo-infos

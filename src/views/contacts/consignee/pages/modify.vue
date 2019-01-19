@@ -5,7 +5,8 @@
         <form-item
           v-model="formList.consignerName"
           :show-required-toast="false"
-          readonly
+          type="click"
+          :show-arrow="false"
           prop="consigner"
           label="所属发货方"
           placeholder="请选择所属发货方"
@@ -115,6 +116,8 @@ export default {
     async initForm(from) {
       // 进入页面时刷新列表数据
       this.$refs.$form.reset()
+      this.setSender()
+      this.setAddress()
       if (!this.isEdit) {
         const urlId = +this.$route.query.consigneeId
         if (urlId !== +this.consigneeDetail.id) {
@@ -125,8 +128,6 @@ export default {
           this.setFormList()
         }
       }
-      this.setSender()
-      this.setAddress()
     },
     // 选择发货人信息
     selectSender () {
@@ -157,7 +158,9 @@ export default {
     async submit () {
       // 如果是修改且收货地址没有变更 取详情的地址，变更了取新设置的地址
       const address = Object.assign({}, this.formList, { address: this.consigneeDetail.address })
-      const data = ConsigneeDetail.toServer(Object.assign({}, address, this.saveAddress))
+      const data = this.saveAddress
+        ? ConsigneeDetail.toServer(Object.assign({}, address, this.saveAddress))
+        : ConsigneeDetail.toServer(Object.assign({}, address))
       console.log('data', data)
       // 表单验证
       const valid = await this.$refs.$form.validate()

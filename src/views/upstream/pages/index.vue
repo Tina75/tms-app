@@ -29,11 +29,11 @@
 </template>
 <script>
 import CardList from '../components/CardList'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   name: 'upstream',
   metaInfo: {
-    title: 'upstream'
+    title: '上游来单管理'
   },
   components: {
     CardList
@@ -77,11 +77,7 @@ export default {
   computed: {
     ...mapGetters(['statusCnt'])
   },
-  mounted () {
-    this.getUpstreamStatusCnt()
-  },
   methods: {
-    ...mapActions(['getUpstreamStatusCnt']),
     onPullingDown (ref) {
       this.$refs[ref][0].refresh()
     },
@@ -108,6 +104,21 @@ export default {
     background white
     height 50px
     font-size 15px
+    .tab-label
+      margin-top: 5px;
+      font-size: 13px;
+      line-height: 18px;
+      color: #333333;
+      margin-bottom: 5px;
+    .tab-count
+      font-size: 13px;
+      line-height: 18px;
+      min-height 18px
+      color: #666666;
+      margin-bottom: 5px;
+    .cube-tab_active
+      .tab-label, .tab-count
+        color: #00A4BD;
   .list-bar
     height calc(100% - 50px)
     overflow-y auto

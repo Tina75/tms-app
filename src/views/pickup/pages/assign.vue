@@ -546,8 +546,7 @@ export default {
     async submitAssign () {
       let isValid = await this.$refs['assign-form'].validate()
       if (isValid) {
-        const id = this.$route.query.type ? await this.sendDirectly() : this.$route.params.id
-        await this.assign({
+        let req = {
           carrierName: this.model.carrierName,
           driverName: this.model.assignCarType === 1 ? this.model.carrierDriverName : this.model.selfDriverName.split('-')[0],
           driverPhone: this.model.assignCarType === 1 ? this.model.carrierDriverPhone : this.model.selfDriverName.split('-')[1],
@@ -565,32 +564,34 @@ export default {
             fuelCardAmount: NP.times(this.model.fuelCardAmount, 100),
             cashAmount: NP.times(this.model.cashAmount, 100)
           }] : [],
-          pickUpId: id,
           assignCarType: this.model.assignCarType,
           assistantDriverName: this.model.assignCarType === 1 ? '' : this.model.selfAssistantDriverName.split('-')[0],
           assistantDriverPhone: this.model.assignCarType === 1 ? '' : this.model.selfAssistantDriverName.split('-')[1],
           allocationStrategy: this.model.allocationStrategy,
           remark: this.model.remark
-        })
-        await this.reloadCurrentPickup(id)
+        }
+        this.$route.query.type ? await this.sendDirectly(req) : await this.assign(Object.assign({ pickupId: this.$route.params.id }, req))
+        await this.reloadCurrentPickup(this.$route.params.id)
         this.$router.back()
       }
     }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.getPickupDetailForForm(to.params.id).then(data => {
-        vm.model.freightFee = NP.divide(data.freightFee, 100)
-        vm.model.insuranceFee = NP.divide(data.insuranceFee, 100)
-        vm.model.loadFee = NP.divide(data.loadFee, 100)
-        vm.model.unloadFee = NP.divide(data.unloadFee, 100)
-        vm.model.otherFee = NP.divide(data.otherFee, 100)
-        vm.model.totalFee = NP.divide(data.totalFee, 100)
-        vm.model.settlementType = data.settlementType
-        vm.model.payType = data.settlementPayInfo.length ? data.settlementPayInfo[0].payType : 2
-        vm.model.cashAmount = data.settlementPayInfo.length ? NP.divide(data.settlementPayInfo[0].cashAmount, 100) : ''
-        vm.model.fuelCardAmount = data.settlementPayInfo.length ? NP.divide(data.settlementPayInfo[0].fuelCardAmount, 100) : ''
-      })
+      if (to.params.id) {
+        vm.getPickupDetailForForm(to.params.id).then(data => {
+          vm.model.freightFee = NP.divide(data.freightFee, 100)
+          vm.model.insuranceFee = NP.divide(data.insuranceFee, 100)
+          vm.model.loadFee = NP.divide(data.loadFee, 100)
+          vm.model.unloadFee = NP.divide(data.unloadFee, 100)
+          vm.model.otherFee = NP.divide(data.otherFee, 100)
+          vm.model.totalFee = NP.divide(data.totalFee, 100)
+          vm.model.settlementType = data.settlementType
+          vm.model.payType = data.settlementPayInfo.length ? data.settlementPayInfo[0].payType : 2
+          vm.model.cashAmount = data.settlementPayInfo.length ? NP.divide(data.settlementPayInfo[0].cashAmount, 100) : ''
+          vm.model.fuelCardAmount = data.settlementPayInfo.length ? NP.divide(data.settlementPayInfo[0].fuelCardAmount, 100) : ''
+        })
+      }
       vm.getCarrierNameList().then(list => {
         vm.fields.carrierName.props.options = list
       })

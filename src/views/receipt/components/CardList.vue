@@ -64,20 +64,20 @@ export default {
         name: 'receipt-detail'
       })
     },
-    handleClick (type, id) {
+    handleClick (type, item) {
       if (type === 'receipt') {
-        this.receipt(id)
+        this.receipt(item)
       } else if (type === 'uploadPic') {
-        this.uploadPic(id)
+        this.uploadPic(item)
       } else if (type === 'updatePic') {
-        this.updatePic(id)
+        this.updatePic(item)
       } else if (type === 'backFactory') {
-        this.backFactory(id)
+        this.backFactory(item)
       }
     },
     // 回收
     receipt (item) {
-      this.dialog = this.$createDialog({
+      this.$createDialog({
         type: 'prompt',
         title: '回收',
         prompt: {
@@ -101,7 +101,7 @@ export default {
               }).show()
             })
         }
-      }).show()
+      }, false).show()
     },
     // 返厂
     backFactory (item) {
@@ -129,17 +129,17 @@ export default {
               }).show()
             })
         }
-      }).show()
+      }, false).show()
     },
-    uploadPic (id) {
+    uploadPic (item) {
       this.$router.push({
-        query: { id, type: 'add' },
+        query: { id: item.receiptOrder.id, type: 'add' },
         name: 'receipt-upload'
       })
     },
-    updatePic (id) {
+    updatePic (item) {
       this.$router.push({
-        query: { id, type: 'update' },
+        query: { id: item.receiptOrder.id, type: 'update', orderId: item.id },
         name: 'receipt-upload'
       })
     }
