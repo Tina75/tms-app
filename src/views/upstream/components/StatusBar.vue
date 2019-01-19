@@ -16,7 +16,7 @@ export default {
   },
   props: {
     status: {
-      type: String,
+      type: [Number, String],
       default: ''
     },
     time: {

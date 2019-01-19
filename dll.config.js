@@ -14,7 +14,8 @@ const dlls = [
   'ali-oss',
   'dayjs',
   'number-precision',
-  'vue-clipboard2'
+  'vue-clipboard2',
+  './src/assets/font/iconfont'
 ]
 // const polyfill = ['core-js']
 

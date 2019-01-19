@@ -13,6 +13,7 @@ export const contactRule = {
   phone: {
     required: true,
     custom: (val) => {
+      val = val + ''
       val = val.replace(/\s/g, '')
       return VALIDATE_PHONE.test(val) || VALIDATE_TEL.test(val)
     },
@@ -59,6 +60,6 @@ export const cargoRule = {
     }
   },
   remark: {
-    max: 200
+    max: 100
   }
 }

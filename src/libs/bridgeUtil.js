@@ -4,7 +4,7 @@ import { reuse } from './util'
 export const getUserInfo = reuse(() => {
   let userInfo = {}
   if (process.env.NODE_ENV === 'production') {
-    userInfo = bridge.call('user.getUserInfo')
+    userInfo = bridge.call('user.getUserInfo') ? bridge.call('user.getUserInfo').data : {}
     userInfo.ClientInfo = bridge.call('user.getClientInfo')
   } else {
     console.warn('Authorization on mock')
@@ -17,7 +17,10 @@ export const getUserInfo = reuse(() => {
       }
     }
   }
-  return userInfo
+  return {
+    Authorization: `Bearer ${userInfo.token}`,
+    ClientInfo: userInfo.ClientInfo
+  }
 })
 
 // 打开app原生页面
@@ -32,7 +35,7 @@ export const openNewPage = (config = {}, callback = () => {}) => {
       bridge.call('navigation.openSchema', { url }, callback)
     } else {
       console.warn('openWebview', url, id)
-      bridge.call('webviews.open', { url, id }, callback)
+      bridge.call('webviews.open', { url: encodeURI(url), id }, callback)
     }
   }
 }
@@ -52,7 +55,7 @@ let appBtn = {
   right: 0
 }
 // 设置标题栏按钮
-export const setAppTitleBtn = (option) => {
+export const setAppTitleBtn = option => {
   const { action, position, ...config } = option
   if (typeof action === 'function') {
     let isLeft = position === 'left'
@@ -62,6 +65,28 @@ export const setAppTitleBtn = (option) => {
     bridge.register(config.action, action, false)
     console.warn('setAppBtn: ' + protocol, config)
   }
+}
+// 按钮类型
+const type = {
+  add: 'ui/ico-add.png',
+  delete: 'ui/ico-delete.png',
+  edit: 'ui/ico-edit.png'
+}
+// 设置标题栏右边按钮
+export const setAppRightBtn = (options) => {
+  appBtn.right = 1
+  const arr = []
+  options.forEach(option => {
+    const { action, iconType, ...config } = option
+    if (typeof action === 'function') {
+      config.action = iconType
+      bridge.register(iconType, action, false)
+    }
+    config.url = process.env.VUE_APP_IMG_HOST + type[iconType]
+    arr.push(config)
+  })
+  console.warn('setAppBtn: ', arr)
+  bridge.call('ui.setRightButtonAction', { 'list': arr }, () => {})
 }
 
 // 默认清设置过的右侧按钮, 左侧按钮默认是返回键, 应该手动控制清除

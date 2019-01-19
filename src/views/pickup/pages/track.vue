@@ -17,7 +17,7 @@
         <div class="driver-label">
           <div class="driver-icon">
             <icon-font
-              :name="'icon-driverr'"
+              :name="'icon-ico_driver1'"
               :size="20"
               color="#ffffff"/>
           </div>
@@ -72,7 +72,7 @@
 </template>
 
 <script>
-// import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
 import BmOverlay from 'vue-baidu-map/components/overlays/Overlay.vue'
 import BmPolyline from 'vue-baidu-map/components/overlays/Polyline.vue'
@@ -119,13 +119,14 @@ export default {
     }
   },
   computed: {
-    // ...mapGetters(['News'])
+    ...mapGetters('pickup', ['locationDetail'])
   },
   mounted() {
     document.querySelector('body').addEventListener('click', this.hideLinks, false)
     document.querySelector('body').addEventListener('touchstart', this.hideLinks, false)
   },
   methods: {
+    ...mapActions('pickup', ['getPickupLocation', 'getWaybillLocation']),
     startDraw ({ el, BMap, map }) {
       const pixel = map.pointToOverlayPixel(this.locationList[0])
       el.style.left = pixel.x + 'px'
@@ -159,6 +160,15 @@ export default {
         return false
       }
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if (to.query.type === 1) {
+        vm.getPickupLocation(to.params.id)
+      } else if (to.query.type === 2) {
+        vm.getWaybillLocation(to.params.id)
+      }
+    })
   }
 }
 </script>

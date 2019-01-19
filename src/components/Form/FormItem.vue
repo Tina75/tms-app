@@ -16,6 +16,7 @@
             v-model="inputValue"
             class="form-item-input"
             :class="inputAlignment"
+            :style="invalidStyle"
             :type="inputType"
             :autofocus="autofocus"
             :placeholder="inputPlaceHolder"
@@ -61,6 +62,7 @@
             v-if="type === 'textarea'"
             v-model="inputValue"
             class="form-item-input form-item-textarea"
+            :style="invalidStyle"
             :rows="rows"
             :placeholder="inputPlaceHolder"
             :maxlength="inputMaxLength"
@@ -91,6 +93,7 @@
         v-if="rule && !resetValidator"
         ref="$validator"
         v-model="valid"
+        :class="{ 'validate-message': !valid }"
         :model="inputValue"
         :rules="rule"
         :messages="rule.message || {}" />
@@ -158,6 +161,9 @@ export default {
     },
     textareaShowCounter () {
       return this.type === 'textarea' && this.inputMaxLength !== Infinity && this.inputMaxLength
+    },
+    invalidStyle () {
+      return { color: this.valid ? '#666666' : '#F35851' }
     }
   },
   watch: {
@@ -193,7 +199,7 @@ export default {
     inputBlurHandler () {
       if (this.type === 'click') return
       this.$emit('on-blur', this.inputValue)
-      this.doValidate()
+      // this.doValidate()
     },
     inputFocusHandler (e) {
       this.$emit('on-focus', this.inputValue)
@@ -212,7 +218,7 @@ export default {
         this.inputValue = Number(this.inputValue)
       }
       this.$emit('input', this.inputValue)
-      this.doValidate()
+      // this.doValidate()
     },
 
     rulesParser () {
@@ -368,10 +374,13 @@ export default {
 <style lang="stylus">
   .form-item-box .cube-validator-msg
     padding-right 16px
-    // padding-bottom: 5px; 无值也会有占位
     line-height 20px
     text-align right
     font-size 12px
+    span
+      color #F35851 !important
+  .validate-message .cube-validator-msg
+    padding-bottom 10px
 
   .form-item-input-box
     .cube-select
@@ -384,6 +393,7 @@ export default {
     input
       padding-left 0
       padding-right 0
+      color inherit
 
     .cube-input-clear
       line-height 1.2

@@ -73,6 +73,12 @@ export default [
     component: () => import(/* webpackChunkName: "order" */ './create/pages/other-info.vue')
   },
   {
+    path: '/order/select-consigner',
+    name: 'order-select-consigner', // 选择发货人
+    meta: { noNeedRefresh: [] },
+    component: () => import(/* webpackChunkName: "order" */ './create/pages/select-consigner.vue')
+  },
+  {
     path: '/order/select-consignee',
     name: 'order-select-consignee', // 选择收货人
     meta: { noNeedRefresh: [] },

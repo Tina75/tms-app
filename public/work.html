@@ -9,6 +9,7 @@
   <link rel="dns-prefetch" href="//aliyuncs.com">
   <link rel="dns-prefetch" href="//yzg.tms5566.com">
   <link rel="dns-prefetch" href="//at.alicdn.com">
+  <title>工作</title>
   <script type="text/javascript">
     (function (doc, win) {
       var docEl = doc.documentElement,
@@ -95,7 +96,7 @@
     "use strict";
 
     var env = '';
-    switch (dsBridge.call('user.getUserInfo').env) {
+    switch (dsBridge.call('user.getUserInfo').data.env) {
       case 'dev':
         env = 'https://dev.tms5566.com/'
         break;
@@ -118,7 +119,11 @@
       methods: {
         // 进入对应页面
         intoPage: function(val) {
-          dsBridge.call('webviews.open', { url: env + 'tms-app/#/' + val, id: 'work' }, function() {})
+          dsBridge.call(
+            'webviews.open',
+            { url: encodeURI(env + 'tms-app/#/' + val), id: 'work' }, 
+            function() {}
+          )
         },
         // 查找权限
         find: function(val) {

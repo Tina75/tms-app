@@ -7,18 +7,19 @@
       <a class="footer-item-total"
          @click.prevent="showDetail = !showDetail">
         <span class="total-tip">费用合计：</span>
-        <money-label :money="total" />
-        <icon-font class="total-detail" name="icon-ico_up" />
+        <money-label class="total-money" :money="total" />
+        <icon-font class="total-detail" :class="{ 'rotate': !showDetail }" name="icon-ico_up" />
       </a>
     </div>
     <div class="footer-item">
       <cube-button
         class="footer-item-button"
-        @click="saveOrder">保存</cube-button>
+        @click="saveOrder(false)">保存</cube-button>
       <cube-button
         v-if="mode !== 'edit'"
         class="footer-item-button"
-        primary>立即发运</cube-button>
+        primary
+        @click="saveOrder(true)">立即发运</cube-button>
     </div>
 
     <div v-show="showDetail" class="detail-box">
@@ -38,7 +39,7 @@
 </template>
 
 <script>
-import MoneyLabel from '../../components/MoneyLabel'
+import MoneyLabel from '../components/MoneyLabel'
 import { mapGetters, mapMutations } from 'vuex'
 import NP from 'number-precision'
 
@@ -76,15 +77,18 @@ export default {
   },
   methods: {
     ...mapMutations('order/create', [ 'SET_OFTEN_ORDER' ]),
-    saveOrder () {
+    saveOrder (isDirectShip) {
       this.showDetail = false
-      this.$emit('on-save-order')
+      this.$emit('on-save-order', isDirectShip)
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
+  .rotate
+    transform rotate(180deg)
+
   .create-footer
     position fixed
     bottom 0
@@ -112,6 +116,7 @@ export default {
       &-total
         flex 1
         display block
+        position relative
         margin-right 15px
         font-size 14px
         text-align right
@@ -119,9 +124,16 @@ export default {
 
         .total-tip
           color #333333
+        .total-money
+          margin-right 27px
         .total-detail
-          margin-left 10px
-          vertical-align top
+          position absolute
+          display block
+          right 0
+          top 13px
+          width 17px
+          height 17px
+          line-height 17px
           color #C5C8CE
 
       &-button

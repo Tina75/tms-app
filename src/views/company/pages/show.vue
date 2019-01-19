@@ -163,6 +163,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import imageList from './image-list'
 import bridge from '@/libs/dsbridge'
+import { setAppRightBtn, setAppTitleBtn } from '@/libs/bridgeUtil'
 export default {
   name: 'company',
   metaInfo: {
@@ -178,23 +179,39 @@ export default {
       companyPhotoList: [],
       busiContactInit: [],
       sharFoot: false,
-      companyInfo: {}
+      companyInfo: {},
+      shareUrl: '',
+      basePath: '',
+      shareOutNo: ''
     }
   },
   computed: {
     ...mapGetters(['companyInfoInit'])
   },
   mounted () {
-    bridge.call('ui.setRightButtonAction', { text: '编辑', action: 'action', color: '#666666' },
-      // text:按钮标题 action:按钮方法名 color：按钮标题颜色，不传默认白色
-      function(result) {
-        this.$router.push({ name: 'company-edit' })
-      }
-    )
+    // 分享地址
+    this.basePath = process.env.VUE_APP_SHARE
     this.getCompanyData()
+    this.onPageRefresh()
   },
   methods: {
     ...mapActions(['getCompanyInfo', 'shareCompanyInfo']),
+    onPageRefresh() {
+      setAppRightBtn([
+        {
+          text: '修改',
+          iconType: 'edit',
+          action: () => {
+            this.$router.push({ name: 'company-edit' })
+          }
+        }
+      ])
+      setAppTitleBtn({
+        position: 'left',
+        text: 'back',
+        iconType: 'back'
+      })
+    },
     async getCompanyData () {
       await this.getCompanyInfo()
       await this.initData()
@@ -227,16 +244,22 @@ export default {
     previewPic (imgs, index = 0) {
       this.$router.push({ name: 'image-preview', params: { imgs: [this.companyInfo.logoUrl], index } })
     },
+    formatImag (value) {
+      if (value.indexOf('aliyuncs.com') > 0) return value
+      return value ? `${process.env.VUE_APP_IMG_HOST}${value}?x-oss-process=image/resize` : ' '
+    },
     // 分享
-    sharePath () {
+    async sharePath () {
+      this.shareOutNo = await this.shareCompanyInfo()
+      this.shareUrl = this.basePath + 'company-phone.html?shareOutNo=' + this.shareOutNo
       let param = {}
-      param.title = '运掌柜'
-      param.desc = '运掌柜详情'
-      param.url = 'https://yzg.tms5566.com'
-      param.thumburl = ''
+      param.title = this.companyInfo.shortName ? this.companyInfo.shortName : this.companyInfo.name
+      param.desc = '提供专业可靠物流运输服务，期待携手合作！'
+      param.url = this.shareUrl
+      param.thumburl = this.formatImag(this.companyInfo.logoUrl)
       param.platformType = ''
       param.log = {}
-      bridge.call('navigation.share', { param }, function(result) {
+      bridge.call('navigation.share', { ...param }, function(result) {
       })
     }
   }

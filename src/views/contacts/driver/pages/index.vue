@@ -37,6 +37,7 @@ import ListItem from '../../components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import { mapActions, mapState } from 'vuex'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 const moudleName = 'contacts/driver'
 export default {
   name: 'ContactsDriverList',
@@ -52,12 +53,18 @@ export default {
   computed: mapState(moudleName, ['driverList']),
   methods: {
     ...mapActions(moudleName, ['loadDriverList']),
-    loader(refresh) {
-      this.loadDriverList(refresh)
-    },
     onPageRefresh() {
       console.info('onPageRefresh')
       this.loading = true
+      setAppRightBtn([
+        {
+          text: '添加',
+          iconType: 'add',
+          action: () => {
+            this.$router.push({ name: 'contacts-driver-modify' })
+          }
+        }
+      ])
     },
     onItemPhoneCall(item) {
       window.location.href = `tel:${item.phone}`

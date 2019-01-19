@@ -1,5 +1,5 @@
 <template>
-  <div class="contacts-select_shipper">
+  <div class="contacts-consigner">
     <InfiniteList
       v-model="loading"
       :has-data="senderList.list.length"
@@ -16,14 +16,10 @@
         <i slot="right"/>
       </ListItem>
       <template slot="empty">
-        <NoData
-          action="新增发货方"
-          message="老板，您还没有记录发货方信息 赶快新增一个，方便联系哦～"
-          @btn-click="$router.push({ name: 'contacts-shipper-modify' })"
-        >
+        <NoData message="老板，您还没有记录发货方信息" >
           <img
             slot="img"
-            class="contacts-select_shipper__placeholder"
+            class="contacts-consignee__placeholder"
             src="@/assets/contacts/shipper-list-empty.png"
           >
         </NoData>
@@ -33,13 +29,13 @@
 </template>
 
 <script>
-import ListItem from '../../components/ListItem'
+import ListItem from '@/views/contacts/components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import { mapActions, mapState } from 'vuex'
 const moudleName = 'contacts/consignee'
 export default {
-  name: 'SelectSender',
+  name: 'select-consigner',
   metaInfo: {
     title: '选择发货方'
   },
@@ -52,13 +48,13 @@ export default {
   computed: mapState(moudleName, ['senderList']),
   methods: {
     ...mapActions(moudleName, ['loadSenderList', 'saveConsignerInfo']),
+    loader(refresh) {
+      this.loadSenderList(refresh)
+    },
     onPageRefresh() {
-      console.info('onPageRefresh')
       this.loading = true
-      // this.saveConsignerInfo()
     },
     async onItemClick(item) {
-      console.log(item.data)
       await this.saveConsignerInfo(item.data)
       this.$router.back()
     }
@@ -67,7 +63,7 @@ export default {
 </script>
 
 <style lang='stylus'>
-.contacts-select_shipper
+.contacts-consigner
   height 100%
   &__placeholder
     width 179px

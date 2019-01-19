@@ -1,6 +1,6 @@
 <template>
   <div class="upload">
-    <template v-if="fileList.length">
+    <template v-if="!fileList.length">
       <div class="upload-input" @click="beforeUpload">
         <slot>
           <icon-font name="icon-zengjia" color="#CECECE" :size="30" />
@@ -72,8 +72,9 @@ export default {
 
     uploading (fileList) {
       fileList.data.images.map(item => {
-        bridge.call('ui.getBase64Picture', { key: item }, async (res) => {
-          const base64Picture = 'data:image/jpeg;base64,' + res.data.image
+        bridge.call('ui.getBase64Picture', { key: item }, async (result) => {
+          const base64Picture = 'data:image/jpeg;base64,' + result.data.image
+          console.log(result)
           try {
             const res = await uploadOSS(base64Picture)
             res ? this.uploaded(res) : this.$emit('on-error', res)
@@ -109,6 +110,7 @@ export default {
   flex 1
   margin-left 25px
   border-radius 2px
+  height 90px
   &:first-child
     margin-left 0
   &-input

@@ -3,7 +3,9 @@ import mutations from './mutations'
 import actions from './actions'
 
 const state = {
-  orderConfig: {},
+  orderConfig: {}, // 开单配置
+  oftenPermission: null, // 常发订单权限 100400-常发订单 100401-再来一单 100402-删除
+  orderNeedReset: false,
   // 订单信息
   orderInfo: {
     consignerName: '',
@@ -45,6 +47,8 @@ const state = {
     consignerAddressMapType: 1,
     consigneeAddressMapType: 1
   },
+  // 发货方id
+  consignerId: void 0,
   // 货物信息
   orderCargoList: [],
   // 客户单号及其他信息

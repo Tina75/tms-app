@@ -16,5 +16,6 @@ export const UNIT_TYPE = [
   { value: 3, text: '铁桶' },
   { value: 4, text: '纤袋' },
   { value: 5, text: '麻袋' },
-  { value: 6, text: '木架' }
+  { value: 6, text: '木架' },
+  { value: 7, text: '托盘' }
 ]

@@ -24,32 +24,33 @@
         placeholder="请输入楼号-门牌号"
         clearable />
     </form-group>
-    <template v-if="showOftenList">
-      <p class="address-list-title">常用地址</p>
+    <div class="contacts-address-list">
+      <template v-if="showOftenList">
+        <p class="address-list-title">常用地址</p>
+        <ul class="address-often-list list">
+          <li
+            v-for="item in oftenAddresses"
+            :key="item.id" class="list-item"
+            @click="pickOftenAddress(item)">
+            <div class="item-icon">
+              <icon-font name="icon-ico_location" size="20" color="#ffffff" />
+            </div>
 
-      <ul class="address-often-list list">
-        <li
-          v-for="item in oftenAddresses"
-          :key="item.id" class="list-item"
-          @click="pickOftenAddress(item)">
-          <div class="item-icon">
-            <icon-font name="icon-ico_location" size="20" color="#ffffff" />
-          </div>
-
-          <div class="item-info border-bottom-1px">
-            <p class="item-info-title">{{ item.cityName || '' }}</p>
-            <p class="item-info-data">
-              {{ item.address }}
-            </p>
-          </div>
-        </li>
-      </ul>
-    </template>
-    <bmap-address-list
-      v-show="showAddressList"
-      :city="limitCityGeo"
-      :search="form.address"
-      @select="onSelectAddress" />
+            <div class="item-info border-bottom-1px">
+              <p class="item-info-title">{{ item.cityName || '' }}</p>
+              <p class="item-info-data">
+                {{ item.address }}
+              </p>
+            </div>
+          </li>
+        </ul>
+      </template>
+      <bmap-address-list
+        v-show="showAddressList"
+        :city="limitCityGeo"
+        :search="form.address"
+        @select="onSelectAddress" />
+    </div>
     <cube-button
       primary
       @click.stop="submit">
@@ -62,7 +63,7 @@
 </template>
 <script>
 import yddArea from 'ydd_area'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import cityUtil from '@/libs/city'
 import CityPicker from '@/components/CityPicker'
 import FormGroup from '@/components/Form/FormGroup'
@@ -100,8 +101,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('contacts/consignee', [ 'saveConsigner' ]),
-    ...mapGetters('order/create', [ 'currentArrdessType', 'orderInfo', 'orderConfig' ]),
+    ...mapGetters('order/create', [ 'currentArrdessType', 'orderInfo', 'orderConfig', 'consignerId' ]),
 
     showOftenList () { return this.currentArrdessType === 'send' && !this.form.address && this.oftenAddresses.length },
     showAddressList () { return !!this.form.address },
@@ -168,8 +168,8 @@ export default {
     },
 
     async fetchAddressData () {
-      if (!this.saveConsigner.id) return
-      this.oftenAddresses = await this.getOftenAddress(this.saveConsigner.id)
+      if (!this.consignerId) return
+      this.oftenAddresses = await this.getOftenAddress(this.consignerId)
     },
 
     async submit () {
@@ -216,6 +216,10 @@ export default {
     display flex
     flex-direction column
     background #fff
+    &-list
+      flex 1
+      height 100%
+      overflow-y auto
 
   .address-list-title
     padding 0 15px

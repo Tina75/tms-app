@@ -113,7 +113,7 @@
           <span v-if="orderConfig.volumeOption">总体积：<span class="footer-detail-line-data">{{ total.volume }}方</span> </span>
           <span v-if="orderConfig.quantityOption">总数量：<span class="footer-detail-line-data">{{ total.quantity }}</span> </span>
         </p>
-        <p class="footer-detail-line" v-if="orderConfig.cargoCostOption">总货值：<span class="footer-detail-line-data">{{ total.cargoCost }}元</span></p>
+        <p v-if="orderConfig.cargoCostOption" class="footer-detail-line">总货值：<span class="footer-detail-line-data">{{ total.cargoCost }}元</span></p>
       </div>
       <cube-button
         class="footer-button"

@@ -8,8 +8,15 @@
     </div>
     <div class="contact-item__content cube-ml-15 cube-ellipsis" :class="{'cube-ellipsis':nowrap}">
       <slot>
-        <span class="cube-c-black cube-font-17" v-text="item.name"/>
-        <span class="cube-c-light-grey cube-font-14 cube-mt-5" :class="{'cube-ellipsis':nowrap}" v-text="item.detail"/>
+        <span class="cube-c-black cube-font-17 cube-ellipsis" v-text="item.name"/>
+        <p
+          v-if="isList"
+          class="cube-c-light-grey cube-font-14 cube-mt-5"
+          :class="{'cube-ellipsis':nowrap}"
+        >
+          <span v-for="(content, i) in list" :key="i" class="cube-mr-10" v-text="content"/>
+        </p>
+        <span v-else class="cube-c-light-grey cube-font-14 cube-mt-5" :class="{'cube-ellipsis':nowrap}" v-text="item.detail||''"/>
       </slot>
     </div>
     <slot name="right">
@@ -52,8 +59,14 @@ export default {
     }
   },
   computed: {
+    isList() {
+      return this.item.detail && this.item.detail instanceof Array
+    },
     prefix() {
       return this.item.name ? this.item.name[0] : ''
+    },
+    list() {
+      return this.isList ? this.item.detail.filter(v => !!v) : ''
     }
   }
 }
@@ -86,7 +99,8 @@ export default {
     flex-direction column
     justify-content space-around
     white-space pre-wrap
-    span
+    span,
+    p
       line-height 1.1em
       min-height 1.1em
 </style>
