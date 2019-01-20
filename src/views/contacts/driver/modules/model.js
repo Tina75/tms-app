@@ -4,11 +4,16 @@ export class DriverDetail {
   driverPhone = ''
   carNO = ''
   carType = ''
-  carLength = ''
+  carBrand = ''
   shippingWeight = ''
+  carLength = ''
   shippingVolume = ''
   remark = ''
   payType = ''
+  travelPhoto = ''
+  drivePhoto = ''
+  regularLine = ''
+
   static carType = [
     { text: '平板', value: 1 },
     { text: '高栏', value: 2 },
@@ -44,6 +49,7 @@ export class DriverDetail {
     { text: '按单付', value: 1 },
     { text: '月结', value: 2 }
   ]
+
   static toView(data) {
     data = {
       ...data,
@@ -63,13 +69,20 @@ export class DriverDetail {
 
   // 后端接口 => form表单格式
   static toForm(server) {
-    const form = fillEmpty(server)
-    // cube-switch 需要boolean类型 防止报错
-    // form.isInvoice = !!form.isInvoice
-    // // 后端是0.xx 前端显示xx%
-    // form.invoiceRate = +form.invoiceRate * 100
-    // form.salesmanId = form.salesmanId || ''
-    return form
+    if (server && server.driverId) {
+      const form = fillEmpty(server)
+      return form
+    }
+    return new DriverDetail()
+  }
+
+  // 表单格式 => 后端所需
+  static toServer(form) {
+    const server = filterEmpty(form)
+    if (form.driverId) {
+      server.id = form.driverId
+    }
+    return server
   }
 }
 
@@ -81,12 +94,12 @@ function fillEmpty(obj) {
   return data
 }
 
-// function filterEmpty(obj) {
-//   const data = {}
-//   for (let [key, value] of Object.entries(obj)) {
-//     if (value) {
-//       data[key] = value
-//     }
-//   }
-//   return data
-// }
+function filterEmpty(obj) {
+  const data = {}
+  for (let [key, value] of Object.entries(obj)) {
+    if (value) {
+      data[key] = value
+    }
+  }
+  return data
+}

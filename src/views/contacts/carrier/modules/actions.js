@@ -24,6 +24,7 @@ const ACTIONS = {
     return Server({
       url: '/carrier/details/for/company',
       method: 'get',
+      loding: true,
       params: { carrierId: rootState.route.query.carrierId }
     }).then(response => commit('setCarrierDetail', response.data.data.carrierInfo))
   },
