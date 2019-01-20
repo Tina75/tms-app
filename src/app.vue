@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="cube-default-background">
     <keep-alive>
-      <router-view/>
+      <router-view :key="$route.path" />
     </keep-alive>
     <loading :status.sync="loadingStatus"/>
   </div>

@@ -13,8 +13,11 @@ export default {
         window.loading(false)
       }
     }
+
+    this.$formWillLeave(false, () => {
+      this.$refs.$form.reset()
+    })
     if (this.mode === 'create') return
-    this.$formWillLeave(false, () => { this.$refs.$form.reset() })
     if (this.orderInfo.consignerName) return
     window.loading(true)
     let orderInfo
@@ -76,6 +79,7 @@ function setOrderBaseInfo (orderInfo, context) {
     'consumerInfo',
     'otherFee'
   ])
+  if (orderBaseInfo.mileage) orderBaseInfo.mileage = NP.divide(orderBaseInfo.mileage, 1000)
   orderBaseInfo.consignerAddressText = orderBaseInfo.consignerAddress + (orderBaseInfo.consignerHourseNumber || '')
   orderBaseInfo.consigneeAddressText = orderBaseInfo.consigneeAddress + (orderBaseInfo.consigneeHourseNumber || '')
   orderBaseInfo.consignerAddressLocale = []

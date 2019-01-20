@@ -19,16 +19,15 @@ export default {
     for (let key in state.orderInfo) {
       state.orderInfo[key] = payload[key]
     }
-    if (payload.consignerName === '') {
-      state.consignerId = void 0
-      state.orderCargoList = []
-      state.consumerInfo = {}
-      state.feeInfo = {}
-      state.otherInfo = {}
-      state.cargoOften = state.consigneeInfo = state.calculatedAmount = null
-      state.currentArrdessType = ''
-      state.addressChanged = false
-    }
+    state.consignerId = void 0
+    state.orderCargoList = []
+    state.consumerInfo = {}
+    state.feeInfo = {}
+    state.otherInfo = {}
+    state.cargoOften = state.consigneeInfo = state.calculatedAmount = null
+    state.currentArrdessType = ''
+    state.addressChanged = false
+    state.orderNeedReset = false
   },
   // 设置发货人id
   SET_CONSIGNER_ID: (state, payload) => { state.consignerId = payload },

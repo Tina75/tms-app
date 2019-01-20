@@ -249,19 +249,21 @@ export default {
   },
 
   beforeRouteEnter (to, from, next) {
-    next(async vm => {
-      if (vm.orderNeedReset) this.$refs.$form.reset()
+    next(vm => {
       vm.mode = vm.$route.meta.mode
       vm.id = vm.$route.params.id
       vm.setTitleButtons()
-      await vm.orderInfoInit()
-      await vm.setConsigner()
-      vm.setConsignee()
-      vm.showConsumerInfo()
-      vm.showCargoList()
-      vm.showOtherInfo()
-      vm.showFreightFee()
-      vm.calculateDistance()
+      vm.$nextTick(async () => {
+        if ([ 'order-charge-rule', 'order-cargo-info', 'order-edit-address', 'order-fee-info', 'order-consumer-info', 'order-other-info', 'order-select-consigner', 'order-select-consignee' ].indexOf(from.name) === -1) vm.$refs.$form.reset()
+        await vm.orderInfoInit()
+        await vm.setConsigner()
+        vm.setConsignee()
+        vm.showConsumerInfo()
+        vm.showCargoList()
+        vm.showOtherInfo()
+        vm.showFreightFee()
+        vm.calculateDistance()
+      })
     })
   }
 }

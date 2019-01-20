@@ -13,19 +13,19 @@ const state = {
     consignerPhone: '',
     start: '',
     consignerAddress: '',
-    consignerAddressText: '', //
-    consignerAddressLocale: [], //
+    consignerAddressText: '',
+    consignerAddressLocale: [],
     consignerHourseNumber: '',
     consignerAddressLongitude: '',
     consignerAddressLatitude: '',
-    consumerInfo: '', //
+    consumerInfo: '',
 
     consigneeContact: '',
     consigneePhone: '',
     end: '',
     consigneeAddress: '',
-    consigneeAddressText: '', //
-    consigneeAddressLocale: [], //
+    consigneeAddressText: '',
+    consigneeAddressLocale: [],
     consigneeHourseNumber: '',
     consigneeAddressLongitude: '',
     consigneeAddressLatitude: '',
@@ -38,10 +38,10 @@ const state = {
     receiptCount: 1,
 
     mileage: '',
-    freightFee: '', // --
+    freightFee: '',
 
-    otherFee: '', //
-    otherInfo: '', //
+    otherFee: '',
+    otherInfo: '',
 
     isSaveOrderTemplate: 0,
     consignerAddressMapType: 1,

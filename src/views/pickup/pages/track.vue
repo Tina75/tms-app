@@ -153,9 +153,9 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      if (to.query.type === '1') {
+      if (Number(to.query.type) === 1) {
         vm.getPickupLocation(to.params.id)
-      } else if (to.query.type === '2') {
+      } else if (Number(to.query.type) === 2) {
         vm.getWaybillLocation(to.params.id)
       }
     })

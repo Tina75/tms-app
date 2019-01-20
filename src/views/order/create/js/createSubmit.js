@@ -14,6 +14,7 @@ export default {
     data.consignerPhone = data.consignerPhone.replace(/\s/g, '')
     data.consigneePhone = data.consigneePhone.replace(/\s/g, '')
     data.freightFee = NP.times(data.freightFee, 100)
+    if (data.mileage) data.mileage = NP.times(data.mileage, 1000)
 
     const deleteFileds = [
       'consigneeAddressLocale',

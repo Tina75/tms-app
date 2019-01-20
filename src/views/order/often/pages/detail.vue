@@ -12,7 +12,7 @@
       </cube-scroll-nav-panel>
     </cube-scroll-nav>
     <div v-if="oftenPermission.indexOf(100401) > -1" class="handle-btns">
-      <router-link :to="{ name: 'order-one-more', params: { id: detail.id }}">再来一单</router-link>
+      <a @click.prevent="orderOneMore">再来一单</a>
     </div>
   </div>
 </template>
@@ -45,7 +45,13 @@ export default {
   },
   methods: {
     ...mapMutations('order/often', [ 'SET_DETAIL' ]),
-    ...mapActions('order/often', [ 'getOftenDetail' ])
+    ...mapMutations('order/create', [ 'SET_ORDER_RESET' ]),
+    ...mapActions('order/often', [ 'getOftenDetail' ]),
+
+    orderOneMore () {
+      this.SET_ORDER_RESET(true)
+      this.$router.push({ name: 'order-one-more', params: { id: this.detail.id }})
+    }
   },
   beforeRouteEnter (to, from, next) {
     next(async vm => {

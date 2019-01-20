@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-data.png'
@@ -89,11 +89,13 @@ export default {
     ...mapState('order/create', [ 'oftenPermission' ])
   },
   methods: {
+    ...mapMutations('order/create', [ 'SET_ORDER_RESET' ]),
     ...mapActions('order/often', [ 'loadOftenList', 'deleteOftenOrder' ]),
 
     onPageRefresh() { this.loading = true },
 
     orderAdd (id) {
+      this.SET_ORDER_RESET(true)
       this.$router.push({
         name: 'order-one-more',
         params: { id }
