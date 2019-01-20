@@ -1,0 +1,44 @@
+const VALIDATE_PHONE = /^1[0-9]{10}$/
+const VALIDATE_TEL = /^[(（）)\-02-9][(（）)\-0-9]{1,19}$/
+const VALIDATE_CAR = /(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$)))|(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]{1}$)/
+
+export const driverRule = {
+  carNO: {
+    required: true,
+    custom: (val) => {
+      val = val + ''
+      val = val.replace(/\s/g, '')
+      return VALIDATE_CAR.test(val) || VALIDATE_TEL.test(val)
+    },
+    message: {
+      custom: '请输入车牌号'
+    }
+  },
+  driverName: {
+    required: true,
+    max: 20
+  },
+  driverPhone: {
+    required: true,
+    custom: (val) => {
+      val = val + ''
+      val = val.replace(/\s/g, '')
+      return VALIDATE_PHONE.test(val)
+    },
+    message: {
+      custom: '请输入手机号'
+    }
+  },
+  driverType: {
+    required: true
+  },
+  carType: {
+    required: true
+  },
+  carLength: {
+    required: true
+  },
+  remark: {
+    max: 100
+  }
+}
