@@ -134,6 +134,16 @@ export default {
       })
     },
     clearArrival: ({ commit }) => { commit('ARRIVAL_CLEAR') },
+    // 改单
+    doEditWaybill: ({ commit, state }, info) => {
+      return Server({
+        url: '/waybill/modify',
+        method: 'post',
+        data: { waybill: info }
+      }).then(() => {
+        // 刷新详情
+      })
+    },
     // 派车
     doSendCar: ({ commit, state }, info) => {
       return Server({

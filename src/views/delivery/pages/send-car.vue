@@ -1,15 +1,20 @@
 <template>
   <div class="pickup-assign">
     <div class="edit-form">
+      <dispatch-city
+        v-if="isEditMode"
+        :start-code.sync="start"
+        :end-code.sync="end"
+        class="city"/>
       <cube-form ref="assign-form" :model="model" :options="options" @validate="validateHandler">
         <cube-form-group>
           <cube-form-item :field="fields['assignCarType']"/>
         </cube-form-group>
         <cube-form-group v-if="model.assignCarType === 1">
           <cube-form-item :field="fields['carrierName']"/>
-          <cube-form-item :field="fields['carrierCarNo']"/>
-          <cube-form-item :field="fields['carrierDriverName']"/>
-          <cube-form-item :field="fields['carrierDriverPhone']"/>
+          <cube-form-item :field="fields['carNo']"/>
+          <cube-form-item :field="fields['driverName']"/>
+          <cube-form-item :field="fields['driverPhone']"/>
           <cube-form-item :field="fields['carType']"/>
           <cube-form-item :field="fields['carLength']"/>
           <cube-form-item :field="fields['carrierWaybillNo']"/>
@@ -64,26 +69,31 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import NP from 'number-precision'
+import DispatchCity from '../components/dispach-city'
 
 export default {
   name: 'delivery-send-car',
   metaInfo: {
     title: '派车'
   },
+  components: { DispatchCity },
+
   data () {
     let _this = this
     return {
       validity: {},
       valid: true,
+      start: -1,
+      end: -1,
+      isEditMode: false, // 是否为编辑模式
       model: {
         assignCarType: 1,
-        carNo: '',
         selfDriverName: '',
         selfAssistantDriverName: '',
         carrierName: '',
-        carrierCarNo: '',
-        carrierDriverName: '',
-        carrierDriverPhone: '',
+        carNo: '',
+        driverName: '',
+        driverPhone: '',
         carType: '',
         carLength: '',
         carrierWaybillNo: '',
@@ -142,18 +152,6 @@ export default {
             required: true
           }
         },
-        carNo: {
-          type: 'select',
-          modelKey: 'carNo',
-          label: '车牌号',
-          props: {
-            options: [],
-            placeholder: '请选择（必填）'
-          },
-          rules: {
-            required: true
-          }
-        },
         selfDriverName: {
           type: 'select',
           modelKey: 'selfDriverName',
@@ -202,9 +200,9 @@ export default {
             pattern: '承运商必选'
           }
         },
-        carrierCarNo: {
+        carNo: {
           type: 'input',
-          modelKey: 'carrierCarNo',
+          modelKey: 'carNo',
           label: '车牌号',
           props: {
             placeholder: '请输入'
@@ -217,17 +215,17 @@ export default {
           },
           trigger: 'blur'
         },
-        carrierDriverName: {
+        driverName: {
           type: 'input',
-          modelKey: 'carrierDriverName',
+          modelKey: 'driverName',
           label: '司机姓名',
           props: {
             placeholder: '请输入'
           }
         },
-        carrierDriverPhone: {
+        driverPhone: {
           type: 'input',
-          modelKey: 'carrierDriverPhone',
+          modelKey: 'driverPhone',
           label: '司机手机号',
           props: {
             placeholder: '请输入'
@@ -728,12 +726,13 @@ export default {
       }
     }
   },
+
   computed: {
-    ...mapGetters('pickup', ['carrierNameList', 'backupDriverList']),
+    ...mapGetters('pickup', ['backupDriverList']),
     ...mapGetters('delivery', ['WaybillDetail'])
   },
   methods: {
-    ...mapActions('delivery', ['getWaybillDetail', 'doSendCar', 'getSend']),
+    ...mapActions('delivery', ['getWaybillDetail', 'doSendCar', 'getSend', 'doEditWaybill']),
     ...mapActions('pickup', ['getCarrierNameList', 'getSelfCarList', 'getSelfDriverList']),
     ...mapActions('order/create', ['sendDirectly']),
     validateHandler(result) {
@@ -747,12 +746,14 @@ export default {
     async submitAssign () {
       let isValid = await this.$refs['assign-form'].validate()
       if (isValid) {
-        const id = this.$route.query.type ? await this.sendDirectly() : this.$route.params.id
-        await this.doSendCar({
+        const id = this.$route.query.type ? await this.sendDirectly() : this.$route.params.id // 亮仔
+        const data = {
+          start: this.start,
+          end: this.end,
           carrierName: this.model.carrierName,
-          driverName: this.model.assignCarType === 1 ? this.model.carrierDriverName : this.model.selfDriverName.split('-')[0],
-          driverPhone: this.model.assignCarType === 1 ? this.model.carrierDriverPhone : this.model.selfDriverName.split('-')[1],
-          carNo: this.model.assignCarType === 1 ? this.model.carrierCarNo : this.model.carNo.split('-')[0],
+          driverName: this.model.assignCarType === 1 ? this.model.driverName : this.model.selfDriverName.split('-')[0],
+          driverPhone: this.model.assignCarType === 1 ? this.model.driverPhone : this.model.selfDriverName.split('-')[1],
+          carNo: this.model.assignCarType === 1 ? this.model.carNo : this.model.carNo.split('-')[0],
           carType: this.model.assignCarType === 1 ? this.model.carType : this.model.carNo.split('-')[1],
           carLength: this.model.assignCarType === 1 ? this.model.carLength : this.model.carNo.split('-')[2],
           mileage: NP.times(this.model.mileage, 1000),
@@ -788,31 +789,58 @@ export default {
             }] : [],
           cashBack: NP.times(this.model.cashBack, 100),
           waybillId: id,
+          carrierWaybillNo: this.model.carrierWaybillNo,
           assignCarType: this.model.assignCarType,
           assistantDriverName: this.model.assignCarType === 1 ? '' : this.model.selfAssistantDriverName.split('-')[0],
           assistantDriverPhone: this.model.assignCarType === 1 ? '' : this.model.selfAssistantDriverName.split('-')[1],
           allocationStrategy: this.model.allocationStrategy,
           remark: this.model.remark
-        })
+        }
+        if (this.isEditMode) {
+          await this.doEditWaybill(data)
+        } else { await this.doSendCar(data) }
         this.getSend()
-        this.$router.back()
       }
+      this.$router.back()
     }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.getWaybillDetail(to.params.id).then(data => {
-        if (!data.carNo) return
-        vm.model.freightFee = NP.divide(data.freightFee, 100)
-        vm.model.insuranceFee = NP.divide(data.insuranceFee, 100)
-        vm.model.loadFee = NP.divide(data.loadFee, 100)
-        vm.model.unloadFee = NP.divide(data.unloadFee, 100)
-        vm.model.otherFee = NP.divide(data.otherFee, 100)
-        vm.model.totalFee = NP.divide(data.totalFee, 100)
-        vm.model.settlementType = data.settlementType
-        vm.model.payType = data.settlementPayInfo.length ? data.settlementPayInfo[0].payType : 2
-        vm.model.cashAmount = data.settlementPayInfo.length ? NP.divide(data.settlementPayInfo[0].cashAmount, 100) : ''
-        vm.model.fuelCardAmount = data.settlementPayInfo.length ? NP.divide(data.settlementPayInfo[0].fuelCardAmount, 100) : ''
+      vm.getWaybillDetail(to.params.id).then(({ waybill }) => {
+        if (!waybill.carNo) return
+        vm.isEditMode = true
+
+        vm.start = waybill.start
+        vm.end = waybill.end
+
+        vm.model.assignCarType = waybill.assignCarType
+        vm.model.carrierName = waybill.carrierName
+        vm.model.carNo = waybill.carNo
+        vm.model.driverName = waybill.driverName
+        vm.model.driverPhone = waybill.driverPhone
+        vm.model.carLength = waybill.carLength
+        vm.model.carType = waybill.carType
+        vm.model.carrierWaybillNo = waybill.carrierWaybillNo
+
+        vm.model.mileage = waybill.mileage ? NP.divide(waybill.mileage, 1000) : ''
+        vm.model.freightFee = waybill.freightFee ? NP.divide(waybill.freightFee, 100) : ''
+        vm.model.insuranceFee = waybill.insuranceFee ? NP.divide(waybill.insuranceFee, 100) : ''
+        vm.model.loadFee = waybill.loadFee ? NP.divide(waybill.loadFee, 100) : ''
+        vm.model.unloadFee = waybill.unloadFee ? NP.divide(waybill.unloadFee, 100) : ''
+        vm.model.tollFee = waybill.tollFee ? NP.divide(waybill.tollFee, 100) : ''
+        vm.model.otherFee = waybill.otherFee ? NP.divide(waybill.otherFee, 100) : ''
+        vm.model.infoFee = waybill.infoFe ? NP.divide(waybill.infoFee, 100) : ''
+        vm.model.totalFee = waybill.totalFee ? NP.divide(waybill.totalFee, 100) : ''
+        vm.model.accommodation = waybill.accommodation ? NP.divide(waybill.accommodation, 100) : ''
+        vm.model.settlementType = waybill.settlementType
+        waybill.settlementPayInfo.forEach((item, index) => {
+          vm.model[`cashAmount${index + 1}`] = item ? NP.divide(item.cashAmount, 100) : ''
+          vm.model[`fuelCardAmount${index + 1}`] = item ? NP.divide(item.fuelCardAmount, 100) : ''
+        })
+
+        vm.model.remark = waybill.remark
+
+        vm.model.cashBack = waybill.cashBack ? NP.divide(waybill.cashBack, 100) : ''
       })
       vm.getCarrierNameList().then(list => {
         vm.fields.carrierName.props.options = list
@@ -850,6 +878,9 @@ export default {
       padding-top: 15px;
       flex 1
       overflow auto
+      .city
+        margin-top -15px
+        margin-bottom 15px
       >>> .cube-form
         background-color: #F3F3F3;
         .cube-form-group
