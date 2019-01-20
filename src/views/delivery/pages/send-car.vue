@@ -800,8 +800,8 @@ export default {
           await this.doEditWaybill(data)
         } else { await this.doSendCar(data) }
         this.getSend()
+        this.$router.back()
       }
-      this.$router.back()
     }
   },
   beforeRouteEnter (to, from, next) {

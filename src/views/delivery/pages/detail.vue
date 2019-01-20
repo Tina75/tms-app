@@ -27,7 +27,6 @@
       <cube-button v-if="hasSendCar && Waybill.status==2" primary @click="setOff(Waybill.waybillId)">发运</cube-button>
       <cube-button v-if="Waybill.status==3" class="btn-light" @click="location(Waybill.waybillId)">查看位置</cube-button>
       <cube-button v-if="Waybill.status==3" @click="arrival(Waybill.waybillId)">到货</cube-button>
-      <cube-button v-if="Waybill.status==2" @click="editWaybill(Waybill.waybillId)">编辑</cube-button>
     </div>
   </div>
 </template>
