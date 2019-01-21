@@ -161,13 +161,17 @@ export default {
         font-size 15px
         box-shadow none
       &-delete
-        color #666666
+        color #999999
         &:after
           border-color #DCDEE2
         &:active
           background #F8F8F9
-      &-add:active
-        background #E2FCFC
+      &-add
+        color: #00A4BD
+        &:after
+          border-color #00A4BD
+        &:active
+          background #E2FCFC
 
   .order-body
     padding-top 14px

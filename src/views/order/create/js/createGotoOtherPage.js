@@ -1,5 +1,5 @@
 import NP from 'number-precision'
-import { setAppTitleBtn, openNewPage } from '@/libs/bridgeUtil'
+import { setAppTitleBtn, closeWindow } from '@/libs/bridgeUtil'
 
 export default {
   // 进入客户单号及其他信息
@@ -78,7 +78,7 @@ export default {
   async setTitleButtons () {
     if (this.mode !== 'create') return
     setAppTitleBtn({
-      text: '关闭',
+      text: '返回',
       position: 'left',
       action: () => {
         this.$createDialog({
@@ -87,7 +87,7 @@ export default {
           content: '信息未保存，是否确认离开？',
           icon: 'cubeic-alert',
           onConfirm: () => {
-            this.$router.back()
+            closeWindow({ logOut: false })
           }
         }).show()
       }
@@ -97,7 +97,9 @@ export default {
     setAppTitleBtn({
       text: '常发订单',
       action: () => {
-        openNewPage({ url: window.location.origin + '/#/order/often' })
+        // const { origin, pathname } = window.location
+        // openNewPage({ url: origin + pathname + '#/order/often', id: 'order-often' })
+        this.$router.push({ name: 'order-often' })
       }
     })
   }

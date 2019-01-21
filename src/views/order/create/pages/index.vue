@@ -253,8 +253,8 @@ export default {
     next(vm => {
       vm.mode = vm.$route.meta.mode
       vm.id = vm.$route.params.id
-      vm.setTitleButtons()
       vm.$nextTick(async () => {
+        vm.setTitleButtons()
         if ([ 'order-charge-rule', 'order-cargo-info', 'order-edit-address', 'order-fee-info', 'order-consumer-info', 'order-other-info', 'order-select-consigner', 'order-select-consignee' ].indexOf(from.name) === -1) vm.$refs.$form.reset()
         await vm.orderInfoInit()
         await vm.setConsigner()
