@@ -28,11 +28,13 @@ let router = new Router({
 sync(store, router)
 
 let firstPageKey
-router.beforeEach((to, from, next) => {
-  // 记录一级页面的key
-  if (!firstPageKey) firstPageKey = window.history.state.key
-  next()
-})
+// router.beforeEach((to, from, next) => {
+// //   // 记录一级页面的key
+//   if (!firstPageKey) {
+//     firstPageKey = window.history.state.key
+//   }
+//   next()
+// })
 
 router.back = (closeTip) => {
   // 关掉一切提示,直接返回
