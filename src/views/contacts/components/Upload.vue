@@ -11,7 +11,7 @@
 
     <template v-else>
       <div
-        :style="{'background-image': `url(${file})`}"
+        :style="{'background-image': `url(${imageSrc})`}"
         class="upload-preview">
         <span @click="remove">
           <icon-font name="icon-shanchu-tupian" class="upload-remove" color="red" :size="20"/>
@@ -48,6 +48,13 @@ export default {
     }
   },
 
+  computed: {
+    imageSrc () {
+      // return 'http://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphine/driver/d13cf069-7e1f-4687-ad28-9098ad00dd77/'
+      return process.env.VUE_APP_IMG_HOST + this.file + '?x-oss-process=image/resize,w_160'
+    }
+  },
+
   watch: {
     value (newVal) {
       this.file = newVal
@@ -75,6 +82,7 @@ export default {
             const res = await uploadOSS(base64Picture)
             res ? this.uploaded(res) : this.$emit('on-error', res)
           } catch (error) {
+            console.error(error)
             this.$emit('on-error', error)
           }
         })
@@ -82,8 +90,8 @@ export default {
     },
 
     uploaded (result) {
-      this.file = result.url
-      this.$emit('on-success', result.url)
+      this.file = result
+      this.$emit('on-success', result)
     },
 
     remove () {
@@ -98,10 +106,10 @@ export default {
 <style lang='stylus' scoped>
 .upload
   display inline-block
-  flex 1
   margin-left 25px
   border-radius 2px
   height 90px
+  width 160px
   &:first-child
     margin-left 0
   &-input

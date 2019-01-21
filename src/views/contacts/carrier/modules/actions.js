@@ -58,13 +58,12 @@ function factory({ api, key }) {
     })
   }
 
-  ACTIONS[NAME.removeAction] = ({ state, commit }, id) => {
+  ACTIONS[NAME.removeAction] = ({ state, commit }, data) => {
+    console.log(data)
     return Server({
       method: 'delete',
       url: api.remove,
-      data: {
-        id
-      }
+      params: data
     })
   }
 }
