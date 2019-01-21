@@ -71,7 +71,7 @@ export default {
         dispatch: 'addressAction',
         appButton: item
           ? {
-            test: '删除',
+            text: '删除',
             color: '#00A4BD',
             action: 'addressRemoveAction'
           }

@@ -152,9 +152,8 @@ export default {
       this.form = CargoDetail.toForm(detailData)
       if (!this.isCreate) {
         setAppRightBtn({
-          test: '删除',
+          text: '删除',
           color: '#00A4BD',
-          iconType: 'delete',
           action: this.removeConfirm.bind(this)
         })
       }

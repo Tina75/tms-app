@@ -66,7 +66,7 @@ export default {
     },
     setBtns() {
       setAppRightBtn({
-        test: '添加',
+        text: '添加',
         iconType: 'add',
         action: this.modify.bind(this, null)
       })
