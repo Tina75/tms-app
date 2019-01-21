@@ -4,7 +4,7 @@
     <form-item v-model="form.value" label="目的地"/>
     <form-item v-model="form.value" label="发货方名称"/>
     <form-item v-model="form.value" label="订单号"/>
-    <form-item v-model="form.value" label="客户单号"/>
+    <form-item v-model="form.value" label="客户订单号"/>
     <form-item v-model="form.value" label="承运商"/>
     <form-item v-model="form.value" label="司机"/>
     <form-item v-model="form.value" label="司机手机号"/>
