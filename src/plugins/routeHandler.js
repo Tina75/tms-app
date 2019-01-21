@@ -34,7 +34,6 @@ router.back = (closeTip) => {
 router.afterEach((to, from) => {
   // 自动清理上一个页面设置的原生按钮
   clearAppTitleBtn()
-  console.log(globalHistory)
 })
 /// ------全局劫持-----
 const ENTER_HANDLERS = getHandlerArr(PLUGINS, 'onEnter')
@@ -68,6 +67,7 @@ Vue.mixin({
       for (let i = 0; i < LEAVE_HANDLERS_LENGTH; i++) {
         allow = allow && !!LEAVE_HANDLERS[i].call(this, to, from, nextProxy)
       }
+
       next(allow)
       if (allow && backFlag) globalHistory--
     }

@@ -24,7 +24,8 @@
               v-if="orderConfig.weightTonOption"
               v-model="form.weight"
               label="重量(吨)"
-              type="number" />
+              type="number"
+              precision="3" />
             <form-item
               v-if="orderConfig.weightKgOption"
               v-model="form.weightKg"
