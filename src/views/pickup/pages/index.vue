@@ -76,7 +76,6 @@ export default {
         setAppRightBtn([
           {
             text: '调度',
-            iconType: 'add',
             action: () => {
               this.$router.push({
                 name: 'pickup-dispatch'
