@@ -40,7 +40,7 @@ export default {
   },
   data () {
     return {
-      selectedLabel: '全部',
+      selectedLabel: '',
       tabs: [
         {
           label: '全部',
@@ -85,9 +85,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['receiptStatusCnt'])
+    ...mapGetters(['receiptStatusCnt']),
+    tabIndex () {
+      return this.$route.query.tab || 0
+    }
   },
   mounted () {
+    this.selectedLabel = this.tabs[this.tabIndex].label
     this.getReceiptStatusCnt()
   },
   methods: {
