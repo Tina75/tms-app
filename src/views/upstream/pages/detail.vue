@@ -42,7 +42,7 @@
           <FormItem label="代收货款">
             {{detail.collectionMoney | money}}元
           </FormItem>
-          <FormItem label="责任业务员">
+          <FormItem label="对接业务员">
             {{detail.handlerUserName}}
           </FormItem>
           <FormItem label="是否开票">
@@ -129,7 +129,7 @@ Vue.use(VueClipboard)
 export default {
   name: 'upstream-detail',
   metaInfo: {
-    title: '上游来单详情'
+    title: '订单详情'
   },
   filters: {
     rate: getRate,

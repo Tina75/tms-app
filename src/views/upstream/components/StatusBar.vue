@@ -8,9 +8,6 @@
 import { orderStatus } from '../libs'
 export default {
   name: 'status-bar',
-  metaInfo: {
-    title: 'status-bar'
-  },
   filters: {
     orderStatus
   },

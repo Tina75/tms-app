@@ -44,6 +44,7 @@
         :maxlength="rules.remark.max"
       />
     </FromGroup>
+    <cube-button @click="removeConfirm()">aa</cube-button>
     <CheckboxPopup
       v-model="showPackageType"
       :value="form.unit"
@@ -160,18 +161,16 @@ export default {
     },
     async remove() {
       await this.removeCargo({ id: this.form.id })
-      this.$refreshPage('contacts-shipper')
+      this.$refreshPage('contacts-shipper-cargo')
       window.toast('删除成功')
       this.$router.back(true)
     },
     removeConfirm() {
-      window
-        .confirm({
-          content: '确认删除？',
-          icon: 'cubeic-alert',
-          onConfirm: this.remove.bind(this)
-        })
-        .show()
+      window.confirm({
+        content: '确认删除？',
+        icon: 'cubeic-alert',
+        onConfirm: this.remove.bind(this)
+      })
     }
   },
   beforeRouteEnter(to, from, next) {

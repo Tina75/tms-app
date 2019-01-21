@@ -632,6 +632,7 @@ export default {
       padding-top: 15px;
       flex 1
       overflow auto
+      overflow-scrolling touch
       >>> .cube-form
         background-color: #F3F3F3;
         .cube-form-group
