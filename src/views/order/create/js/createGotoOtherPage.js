@@ -97,7 +97,9 @@ export default {
     setAppTitleBtn({
       text: '常发订单',
       action: () => {
-        openNewPage({ url: window.location.origin + '/#/order/often' })
+        const { origin, pathname } = window.location
+        console.log(origin + pathname + '#/order/often')
+        openNewPage({ url: origin + pathname + '#/order/often' })
       }
     })
   }
