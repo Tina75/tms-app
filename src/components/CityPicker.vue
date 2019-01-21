@@ -23,6 +23,7 @@
         >{{tab}}</div>
       </div>
       <div class="items">
+        <div v-if="areaParent" class="item border-bottom-1px border-right-1px" @click="update" v-text="'全' + areaParent.shortName"/>
         <div
           v-for="(item,i) in items"
           :key="i"
@@ -39,13 +40,13 @@
 import U from '@/libs/city'
 /** 最近最少使用 */
 export class LRU {
-  constructor (max = 10, equal = () => false) {
+  constructor(max = 10, equal = () => false) {
     this.store = []
     this.maxLength = max
     this.equal = equal
   }
 
-  add (item) {
+  add(item) {
     const equal = this.equal.bind(null, item)
     const store = this.store
     const has = store.find(equal)
@@ -83,7 +84,7 @@ export default {
       default: () => []
     }
   },
-  data () {
+  data() {
     return {
       // 当前选中的 省,市,区
       current: [],
@@ -100,20 +101,26 @@ export default {
   },
   computed: {
     // 列表项
-    items () {
+    items() {
       return this.list[this.currentTab].filter(v => v.status !== '-1') // 过滤不可用的...
     },
     // 切换页头
-    tabs () {
+    tabs() {
       const current = this.current
       return ['省', '市', '区']
         .map((v, i) => (current[i] ? current[i].shortName : v))
         .slice(0, this.deep)
+    },
+    areaParent() {
+      if (this.currentTab === AREA) {
+        return this.current[CITY]
+      }
+      return ''
     }
   },
   methods: {
     // 选择切换页
-    choseTab (i) {
+    choseTab(i) {
       // 该页无数据则不让切换
       if (this.list[i].length === 0) {
         return
@@ -134,11 +141,12 @@ export default {
       }
     },
     // 选择了列表项
-    choseItem (item, index = this.currentTab) {
+    choseItem(item, index = this.currentTab) {
+      // 处置特殊项, 遇到匹配的直接结束选择
       if (this.special.indexOf(item.shortName) > -1) {
         let fill = this.deep - this.current.length
         if (fill > 0) {
-          let fillArr = (new Array(fill)).fill(item)
+          let fillArr = new Array(fill).fill(item)
           this.current = this.current.concat(fillArr)
         }
         return this.update()
@@ -173,7 +181,7 @@ export default {
       }
     },
     // 处理选择结果
-    update () {
+    update() {
       const current = this.current
       const i = current.length - 1
       const data = this.current.map(({ name, shortName, code, lat, lon }) => ({
@@ -192,7 +200,7 @@ export default {
       this.hide()
     },
     // 关闭并重置
-    hide () {
+    hide() {
       this.current = []
       this.currentTab = PROVINCE
       this.$emit('input', false)
@@ -269,7 +277,7 @@ export default {
     box-sizing border-box
     display flex
     justify-content space-around
-    border-bottom 1px solid #418DF9
+    border-bottom 1px solid #189cb2
     .tab
       display flex
       align-items center
@@ -283,7 +291,7 @@ export default {
       color #333
       &.active
         color #fff
-        background #418DF9
+        background #189cb2
   .items
     display flex
     flex-wrap wrap
