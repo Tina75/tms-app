@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="transport-line">
+    <i class="transport-line__icon" />
     <form-item
       v-model="from.sn"
       type="click"
@@ -73,18 +74,9 @@ export default {
     },
 
     citySelect (city) {
-      console.log(city)
-      let address
-      let eventData = {}
-
-      if (city[0].name === city[1].name) {
-        address = city[1].name + city[2].name
-      } else {
-        address = city[0].name + city[1].name + city[2].name
-      }
-
+      const address = city.reduce((prev, { name }) => (prev += name), '')
       const res = city.slice(-1)[0]
-
+      let eventData = {}
       if (this.isDestination) {
         eventData = {
           e: res.code,
@@ -106,3 +98,34 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus">
+.transport-line
+  position relative
+  padding-left 20px
+  &__icon
+    position absolute
+    display block
+    left 17px
+    top 22px
+    bottom 22px
+    border-left 1px dashed #E4E7EC
+    &::before
+      content ''
+      position absolute
+      top 0
+      left -3px
+      height 6px
+      width 6px
+      border-radius 100%
+      background #00A4BD
+    &::after
+      content ''
+      position absolute
+      bottom 0
+      left -3px
+      height 6px
+      width 6px
+      border-radius 100%
+      background #252A2F
+</style>

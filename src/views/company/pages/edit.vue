@@ -312,7 +312,7 @@ export default {
         text: 'back',
         iconType: 'back',
         action: () => {
-          if (vm.step > 1) return vm.step - 1
+          if (vm.step > 1) vm.step = --vm.step
           else vm.$router.push({ name: 'company' })
         }
       })

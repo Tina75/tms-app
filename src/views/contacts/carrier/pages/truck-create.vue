@@ -105,7 +105,7 @@ export default {
     regularLine () {
       const res = []
       const line1 = this.regularLine1
-      const line2 = this.regularLine1
+      const line2 = this.regularLine2
       if (line1.s && line1.sn && line1.e && line1.en) { res.push(line1) }
       if (line2.s && line2.sn && line2.e && line2.en) { res.push(line2) }
       return JSON.stringify(res)
@@ -120,9 +120,11 @@ export default {
           return window.toast('请输入必填信息')
         }
         this.model.regularLine = this.regularLine
-        if (!this.validRegularline(this.regularLine)) {
-          return window.toast('请完整填写运输线路')
-        }
+
+        const validLine = this.validRegularline(this.regularLine1, '请完善线路1信息') &&
+          this.validRegularline(this.regularLine2, '请完善线路2信息')
+        if (!validLine) return
+
         this.model.carrierId = this.$route.query.carrierId
         await this.modifyTruck(TruckDetail.toServer(this.model))
         this.afterSubmit()
@@ -142,14 +144,13 @@ export default {
     },
 
     /* 校验运输线路 */
-    validRegularline (lines) {
-      if (!lines || !Array.isArray(lines)) return true
-      let valid = true
-      lines.every(item => {
-        const { s, sn, e, en } = item
-        valid = s && sn && e && en
-        return valid
-      })
+    validRegularline (line, msg) {
+      if (!line) return true
+      const { s, sn, e, en } = line
+      const valid = s && sn && e && en
+      if (!valid) {
+        window.toast(msg)
+      }
       return valid
     },
 

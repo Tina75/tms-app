@@ -7,7 +7,6 @@
         v-model="form.phone"
         :bottom-line="false"
         class="cube-mb-15"
-        type="number"
         label="联系人电话"
         prop="phone"
       />
