@@ -129,7 +129,7 @@ Vue.use(VueClipboard)
 export default {
   name: 'upstream-detail',
   metaInfo: {
-    title: '上游来单详情'
+    title: '订单详情'
   },
   filters: {
     rate: getRate,
