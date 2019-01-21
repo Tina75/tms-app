@@ -95,7 +95,7 @@
   <script type="text/javascript">
     "use strict";
 
-    var env = '';
+    var env = ''; // 环境判断
     switch (dsBridge.call('user.getUserInfo').data.env) {
       case 'dev':
         env = 'https://dev.tms5566.com/'
@@ -154,11 +154,12 @@
   <script type="text/javascript">
     var commonJs = env + 'dll/common.dll.js'
     var cubeJs = env + 'cube/cube-chunk.js'
+    var cubeCss = env + 'cube/css/chunk-vendors.css'
     /** 闲时拉取资源 */
     window.addEventListener('load', () => {
       quicklink({
         origins: true,
-        urls: [commonJs, cubeJs]
+        urls: [commonJs, cubeJs, cubeCss]
       })
     })
   </script>
