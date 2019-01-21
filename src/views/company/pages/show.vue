@@ -163,7 +163,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import imageList from './image-list'
 import bridge from '@/libs/dsbridge'
-import { setAppRightBtn } from '@/libs/bridgeUtil'
+import { setAppRightBtn, setAppTitleBtn, closeWindow } from '@/libs/bridgeUtil'
 export default {
   name: 'company',
   metaInfo: {
@@ -184,6 +184,12 @@ export default {
       basePath: '',
       shareOutNo: ''
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(async vm => {
+      await vm.getCompanyData()
+      await vm.onPageRefresh()
+    })
   },
   computed: {
     ...mapGetters(['companyInfoInit'])
@@ -206,11 +212,14 @@ export default {
           }
         }
       ])
-      // setAppTitleBtn({
-      //   position: 'left',
-      //   text: 'back',
-      //   iconType: 'back'
-      // })
+      setAppTitleBtn({
+        position: 'left',
+        text: 'back',
+        iconType: 'back',
+        action: () => {
+          closeWindow()
+        }
+      })
     },
     async getCompanyData () {
       await this.getCompanyInfo()
