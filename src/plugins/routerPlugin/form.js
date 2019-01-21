@@ -30,6 +30,7 @@ export default {
       next()
       return
     }
+    next(false)
     this.$createDialog({
       type: 'confirm',
       title: '',
