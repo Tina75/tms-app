@@ -96,7 +96,7 @@ export default {
         content: '是否发运？',
         onConfirm: () => {
           this.doSetOff(id).then(() => {
-            this.getWaybillDetail([id])
+            this.getWaybillDetail(id)
           })
         }
       }).show()

@@ -753,10 +753,22 @@ export default {
     ...mapActions('pickup', ['getCarrierNameList', 'getSelfCarList', 'getSelfDriverList']),
     ...mapActions('order/create', ['sendDirectly']),
     validateHandler(result) {
+      console.log('result')
+
       this.validity = result.validity
       this.valid = result.valid
       if (result.valid !== false) {
-        this.model.totalFee = NP.plus(this.model.freightFee, this.model.loadFee, this.model.unloadFee, this.model.otherFee, this.model.insuranceFee, this.model.tollFee, this.model.accommodation) - this.model.infoFee
+        if (this.model.assignCarType === 2) {
+          this.model.totalFee =
+            NP.plus(
+              this.model.freightFee,
+              this.model.loadFee,
+              this.model.unloadFee,
+              this.model.tollFee,
+              this.model.accommodation,
+              this.model.insuranceFee,
+              this.model.otherFee) - this.model.infoFee
+        }
       }
       // console.log('validity', result.validity, result.valid, result.dirty, result.firstInvalidFieldIndex)
     },
@@ -829,11 +841,10 @@ export default {
     next(vm => {
       if (!to.query.type) {
         vm.getWaybillDetail(to.params.id).then(({ waybill }) => {
-          if (!waybill.carNo) return
-          vm.isEditMode = true
-
           vm.start = waybill.start
           vm.end = waybill.end
+          if (!waybill.carNo) return
+          vm.isEditMode = true
 
           vm.model.assignCarType = waybill.assignCarType
           vm.model.carrierName = waybill.carrierName

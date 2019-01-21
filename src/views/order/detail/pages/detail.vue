@@ -28,7 +28,7 @@ import OrderBaseInfo from '../components/OrderBaseInfo'
 import ReceiveAndSend from '../components/ReceiveAndSend'
 import OrderCargoList from '../components/OrderCargoList'
 import CostDetail from '../components/CostDetail'
-import { setAppRightBtn } from '@/libs/bridgeUtil'
+import { setAppRightBtn, setAppTitleBtn } from '@/libs/bridgeUtil'
 
 export default {
   name: 'order-detail',
