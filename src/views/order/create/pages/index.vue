@@ -161,6 +161,7 @@ import gotoOtherPages from '../js/createGotoOtherPage'
 import showData from '../js/createShowData'
 import orderSubmit from '../js/createSubmit'
 import createInit from '../js/createInit'
+import { clearAppTitleBtn } from '@/libs/bridgeUtil'
 
 const IMAGES = {
   ACCEPT: require('../assets/accept.png'),

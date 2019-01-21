@@ -161,6 +161,11 @@ export const appCallRefresh = (callback = () => {}) => {
   bridge.register('onRefreshPage', callback, false)
 }
 
+/** 新开webview */
+export const appOpenWebview = () => {
+
+}
+
 // 拼成url参数
 function parseToStr(data = {}) {
   return Object.keys(data)
