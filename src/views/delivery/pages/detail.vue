@@ -61,14 +61,15 @@ export default {
     })
   },
   beforeRouteLeave(to, from, next) {
-    this.clearWaybillDetail()
     setAppRightBtn([{ text: '', action: () => { } }])
+    this.clearWaybillDetail()
     next()
   },
   watch: {
     'Waybill.status': function(val) {
-      if (val < 3) {
+      if (val === 2) { // 待送货
         setAppRightBtn([{ text: '删除', iconType: 'delete', action: () => { this.deleteItem(this.Waybill.waybillId) } }])
+        setAppRightBtn([{ text: '编辑', iconType: 'edit', action: () => { this.editWaybill(this.Waybill.waybillId) } }])
       }
     }
   },
@@ -126,6 +127,9 @@ export default {
           })
         }
       }).show()
+    },
+    editWaybill(id) {
+      this.$router.push({ name: 'delivery-send-car', params: { id } })
     }
   }
 }

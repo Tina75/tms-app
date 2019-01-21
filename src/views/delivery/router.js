@@ -31,7 +31,11 @@ export default [
     path: '/delivery/detail/:id',
     name: 'delivery-detail',
     component: () => import(/* webpackChunkName: "delivery" */'./pages/detail.vue')
-
+  },
+  {
+    path: '/delivery/add-order/:id',
+    name: 'delivery-add-order',
+    component: () => import(/* webpackChunkName: "delivery" */'./pages/add-order.vue')
   }
 ]
 

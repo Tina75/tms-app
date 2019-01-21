@@ -28,10 +28,10 @@
               class="act-btn">复制</span>
           </FormItem>
           <FormItem label="发货时间">
-            {{detail.deliveryTime}}
+            {{detail.deliveryTime | datetimeFormat}}
           </FormItem>
           <FormItem label="到货时间">
-            {{detail.arriveTime}}
+            {{detail.arriveTime | datetimeFormat}}
           </FormItem>
           <FormItem label="提货方式">
             {{detail.pickTypeDesc}}
@@ -42,7 +42,7 @@
           <FormItem label="代收货款">
             {{detail.collectionMoney}}元
           </FormItem>
-          <FormItem label="责任业务员">
+          <FormItem label="对接业务员">
             {{detail.handlerUserName}}
           </FormItem>
           <FormItem label="是否开票">

@@ -16,7 +16,7 @@
         {{data.consignerAddress}} {{data.consignerContact}}
       </div>
       <div class="company">
-        客户单号：{{data.customerOrderNo}}
+        客户订单号：{{data.customerOrderNo}}
       </div>
     </div>
     <div class="footer">
@@ -35,7 +35,7 @@
       <div class="right">
         <cube-button v-if="data.receiptOrder.receiptStatus === 0 && data.status === 40" :outline="true" :inline="true" primary @click.stop="handleClick('receipt')">回收</cube-button>
         <cube-button v-if="data.receiptOrder.receiptStatus === 1" :outline="true" :inline="true" primary @click.stop="handleClick('backFactory')">返厂</cube-button>
-        <cube-button v-if="data.receiptOrder.receiptStatus > 0 && !data.receiptOrder.receiptUrl.length" :outline="true" :inline="true" primary @click.stop="handleClick('uploadPic')">上传回单</cube-button>
+        <cube-button v-if="data.receiptOrder.receiptStatus > 0 && !data.receiptOrder.receiptUrl.length" :outline="true" :inline="true" primary style="margin-left: 8px" @click.stop="handleClick('uploadPic')">上传回单</cube-button>
         <cube-button v-if="data.receiptOrder.receiptStatus > 0 && data.receiptOrder.receiptUrl.length" :outline="true" :inline="true" primary @click.stop="handleClick('updatePic')">修改回单</cube-button>
       </div>
     </div>
@@ -44,9 +44,6 @@
 <script>
 export default {
   name: 'tab-card',
-  metaInfo: {
-    title: 'tab-card'
-  },
   props: {
     data: {
       type: Object,

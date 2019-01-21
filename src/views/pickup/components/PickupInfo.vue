@@ -102,7 +102,7 @@ export default {
       window.toast('复制成功')
     },
     phoneCall (tel) {
-      bridge.call('ui.phoneCall', { phone: tel })
+      bridge.call('ui.phoneCall', { phone: tel }, function (result) {})
     }
   }
 }

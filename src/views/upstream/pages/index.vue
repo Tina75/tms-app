@@ -33,7 +33,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'upstream',
   metaInfo: {
-    title: '上游来单管理'
+    title: '上游来单'
   },
   components: {
     CardList

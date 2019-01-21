@@ -11,9 +11,6 @@
 <script>
 export default {
   name: 'detail-panel',
-  metaInfo: {
-    title: 'detail-panel'
-  },
   props: {
     title: {
       type: String,

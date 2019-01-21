@@ -10,7 +10,7 @@
             <span v-text="viewData.carrierPhone"/>
           </div>
           <div v-if="viewData.customerCarrierPhone" class="cube-mt-10">
-            <i class="cubeic-person cube-mr-10" style="color: #FCA950"/>
+            <i class="iconfont icon-lianxikefu cube-mr-10"/>
             <span class="cube-mr-10">客服</span>
             <span v-text="viewData.customerCarrierPhone"/>
           </div>
@@ -26,7 +26,7 @@
     <CellItem
       class="cube-mt-15"
       label="合作车辆"
-      left-icon="icon-ico_location"
+      left-icon="icon-ico_driver"
       :right-title="viewData.carCnt"
       @click="$router.push({name: 'contacts-carrier-truck', query:{carrierId: viewData.id}})"
     />
