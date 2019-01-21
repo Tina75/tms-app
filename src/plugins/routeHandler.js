@@ -1,4 +1,4 @@
-import { setAppTitleBtn, clearAppTitleBtn } from '@/libs/bridgeUtil'
+import { setAppTitleBtn, clearAppTitleBtn, closeWindow } from '@/libs/bridgeUtil'
 import Vue from 'vue'
 import router from '@/router'
 import PLUGINS from './routerPlugin'
@@ -8,6 +8,29 @@ PLUGINS.forEach((plugin) => {
     plugin.install(Vue)
   }
 })
+
+let globalHistory = 1
+const push = router.push
+router.push = (...args) => {
+  globalHistory++
+  console.log(history)
+  push.apply(router, args)
+}
+router.back = (closeTip) => {
+  // 关掉一切提示,直接返回
+  if (closeTip) {
+    // 表单返回提示
+    Vue.prototype.$formWillLeave && Vue.prototype.$formWillLeave()
+  }
+  // 覆写router.back关闭整个webview
+  if (globalHistory === 1) {
+    closeWindow({ logOut: false })
+  } else {
+    router.go(-1)
+  }
+}
+window.onpopstate = () => { globalHistory-- }
+
 router.afterEach((to, from) => {
   // 自动清理上一个页面设置的原生按钮
   clearAppTitleBtn()
