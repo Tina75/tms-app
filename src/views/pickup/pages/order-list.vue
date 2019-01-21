@@ -37,7 +37,7 @@
           <div class="item-footer">
             <div class="order-cost">
               <p class="cost-label">应付费用（{{orderSettlementTypeMap[item.settlementType]}}）</p>
-              <p class="cost-money">{{item.totalFee|moneyFormat(4)}}<span>/元</span></p>
+              <p class="cost-money">{{item.totalFee|moneyFormat}}<span>/元</span></p>
             </div>
             <div class="order-btns">
               <a @click="remove(item, index)">移出</a>
@@ -93,6 +93,20 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
+      setAppRightBtn([
+        {
+          text: '添加',
+          iconType: 'add',
+          action: () => {
+            vm.$router.push({
+              name: 'pickup-bill-add',
+              params: {
+                id: to.params.id
+              }
+            })
+          }
+        }
+      ])
       vm.getBillOrderList(to.params.id)
     })
   },
@@ -103,6 +117,8 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+  .pickup-order-list
+    height: 100%
   .order-item
     background-color: #ffffff;
     margin-bottom: 15px;
