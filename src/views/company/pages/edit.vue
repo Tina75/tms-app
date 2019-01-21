@@ -107,6 +107,11 @@
               clearable
               maxlength="50" />
           </div>
+          <bmap-address-list
+            v-show="showAddressList"
+            :city="limitCityGeo"
+            :search="companyInfo.address"
+            @select="onSelectAddress" />
         </div>
         <div v-if="step === 2" key="2">
           <div class="form-section">
@@ -216,13 +221,14 @@ import { uploadOSS } from '@/components/Upload/ossUtil'
 import bridge from '@/libs/dsbridge'
 import { validatePhone, CHECK_NAME } from './validator'
 import { setAppTitleBtn } from '@/libs/bridgeUtil'
+import BmapAddressList from '@/views/contacts/components/BmapAddressList'
 
 export default {
   name: 'company-edit',
   metaInfo: {
     title: '编辑公司'
   },
-  components: { Upload, FormItem, FormGroup },
+  components: { Upload, FormItem, FormGroup, BmapAddressList },
   data () {
     const phoneValidate = validatePhone
     const phoneMessage = { phoneValidate: '手机号格式不正确' }
@@ -270,7 +276,20 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['companyInfoInit'])
+    ...mapGetters(['companyInfoInit']),
+    showAddressList () { return !!this.companyInfo.address },
+    limitCityGeo () {
+      const data = ''
+      const length = data.length
+      if (length) {
+        let deeper = data[length - 1]
+        return {
+          lat: deeper.lat,
+          lon: deeper.lon
+        }
+      }
+      return ''
+    }
   },
   mounted () {
     this.getCompanyData()
@@ -437,6 +456,11 @@ export default {
           })
         }
       })
+    },
+    onSelectAddress (item) {
+      this.companyInfo.address = item.detail + item.name
+      this.companyInfo.latitude = item.data.point.lat
+      this.companyInfo.longitude = item.data.point.lng
     },
     async uploadOSS (baseData) {
       window.loading()
