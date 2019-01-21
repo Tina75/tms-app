@@ -101,17 +101,17 @@
               clearable
               maxlength="50"
               required/>
+            <bmap-address-list
+              v-show="showAddressList"
+              :city="limitCityGeo"
+              :search="companyInfo.address"
+              @select="onSelectAddress" />
             <form-item
               v-model="companyInfo.userAddress"
               label="补充地址"
               clearable
               maxlength="50" />
           </div>
-          <bmap-address-list
-            v-show="showAddressList"
-            :city="limitCityGeo"
-            :search="companyInfo.address"
-            @select="onSelectAddress" />
         </div>
         <div v-if="step === 2" key="2">
           <div class="form-section">
@@ -220,7 +220,7 @@ import { FormGroup, FormItem } from '@/components/Form'
 import { uploadOSS } from '@/components/Upload/ossUtil'
 import bridge from '@/libs/dsbridge'
 import { validatePhone, CHECK_NAME } from './validator'
-import { setAppTitleBtn } from '@/libs/bridgeUtil'
+// import { setAppTitleBtn } from '@/libs/bridgeUtil'
 import BmapAddressList from '@/views/contacts/components/BmapAddressList'
 
 export default {
@@ -297,16 +297,16 @@ export default {
   },
   methods: {
     ...mapActions(['getCompanyInfo', 'saveCompanyInfo']),
-    onPageRefresh() {
-      setAppTitleBtn({
-        position: 'left',
-        text: 'back',
-        iconType: 'back',
-        action: () => {
-          this.$router.push({ name: 'company' })
-        }
-      })
-    },
+    // onPageRefresh() {
+    //   setAppTitleBtn({
+    //     position: 'left',
+    //     text: 'back',
+    //     iconType: 'back',
+    //     action: () => {
+    //       this.$router.push({ name: 'company' })
+    //     }
+    //   })
+    // },
     async getCompanyData () {
       await this.getCompanyInfo()
       await this.initData()
