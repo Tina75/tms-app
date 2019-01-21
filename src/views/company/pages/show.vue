@@ -13,7 +13,8 @@
           <div class="hr"/>
           <div class="cardInfo-content">
             <span class="cardTitle">公司简称</span>
-            <span class="cardContent">{{companyInfo.shortName}}</span>
+            <span v-if="companyInfo.shortName" class="cardContent">{{companyInfo.shortName}}</span>
+            <span v-else class="cardContent noneInfo">暂未填写</span>
           </div>
         </div>
         <div class="cardInfo">
