@@ -33,7 +33,7 @@ import { setAppRightBtn } from '@/libs/bridgeUtil'
 export default {
   name: 'order-detail',
   metaInfo: {
-    title: '提货管理详情'
+    title: '订单详情'
   },
   components: { OrderBaseInfo, OrderCargoList, CostDetail, ReceiveAndSend },
   data () {
