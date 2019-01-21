@@ -37,9 +37,6 @@ import ORDER_STATUS from '../constant/ORDER_STATUS'
 import { getMoney } from '../libs'
 export default {
   name: 'tab-card',
-  metaInfo: {
-    title: 'tab-card'
-  },
   filters: {
     money: getMoney
   },

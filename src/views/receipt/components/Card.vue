@@ -16,7 +16,7 @@
         {{data.consignerAddress}} {{data.consignerContact}}
       </div>
       <div class="company">
-        客户单号：{{data.customerOrderNo}}
+        客户订单号：{{data.customerOrderNo}}
       </div>
     </div>
     <div class="footer">
@@ -44,9 +44,6 @@
 <script>
 export default {
   name: 'tab-card',
-  metaInfo: {
-    title: 'tab-card'
-  },
   props: {
     data: {
       type: Object,
