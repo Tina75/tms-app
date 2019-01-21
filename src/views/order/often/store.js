@@ -47,7 +47,10 @@ const lists = [
     key: 'often',
     url: '/ordertemplate/list',
     method: 'post',
-    itemParser: data => data
+    itemParser: data => {
+      data.cargoNames = data.cargoNames + (data.cargoNames.length > 1 ? '等' : '')
+      return data
+    }
   }
 ]
 lists.forEach(InfinateListFactory.bind(null, store))
