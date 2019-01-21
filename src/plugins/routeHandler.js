@@ -1,7 +1,8 @@
-import { clearAppTitleBtn } from '@/libs/bridgeUtil'
+import { setAppTitleBtn, clearAppTitleBtn } from '@/libs/bridgeUtil'
 import Vue from 'vue'
 import router from '@/router'
 import PLUGINS from './routerPlugin'
+
 PLUGINS.forEach((plugin) => {
   if (plugin.install) {
     plugin.install(Vue)
@@ -21,15 +22,16 @@ Vue.mixin({
   // 若需求要在plugin中阻止next调用,请在onLeave时阻止
   beforeRouteEnter(to, from, next) {
     try {
-      if (ENTER_HANDLERS_LENGTH) {
-        next((vm) => ENTER_HANDLERS.forEach((handler) => handler(to, from, vm)))
-      } else {
-        next()
-      }
+      next((vm) => {
+        setGlobalBack(vm)
+        if (ENTER_HANDLERS_LENGTH) {
+          ENTER_HANDLERS.forEach((handler) => handler(to, from, vm))
+        }
+      })
     } catch (e) {
       console.error(e)
     } finally {
-      next()
+      next((vm) => { setGlobalBack(vm) })
     }
   },
 
@@ -63,4 +65,14 @@ function getHandlerArr(target, key) {
     }
     return arr
   }, [])
+}
+
+function setGlobalBack (vm) {
+  setAppTitleBtn({
+    text: '返回',
+    position: 'left',
+    action: () => {
+      vm.$router.back()
+    }
+  })
 }

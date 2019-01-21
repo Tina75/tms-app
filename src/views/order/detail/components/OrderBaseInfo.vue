@@ -6,13 +6,13 @@
     <detail-panel-item v-if="Detail.customerOrderNo" :label="'客户订单号'">
       <p class="remix-content">
         <span class="border-right-1px">{{Detail.customerOrderNo}}</span>
-        <a v-clipboard:copy="Detail.customerOrderNo" v-clipboard:success="window.toast('复制成功')">复制</a>
+        <a v-clipboard:copy="Detail.customerOrderNo" v-clipboard:success="copySuccess">复制</a>
       </p>
     </detail-panel-item>
     <detail-panel-item v-if="Detail.waybillNo" :label="'客户运单号'">
       <p class="remix-content">
         <span class="border-right-1px">{{Detail.waybillNo}}</span>
-        <a v-clipboard:copy="Detail.waybillNo" v-clipboard:success="window.toast('复制成功')">复制</a>
+        <a v-clipboard:copy="Detail.waybillNo" v-clipboard:success="copySuccess">复制</a>
       </p>
     </detail-panel-item>
     <detail-panel-item v-if="Detail.startName" :label="'始发地'">
@@ -36,7 +36,10 @@
     <detail-panel-item v-if="Detail.collectionMoney" :label="'代收货款'">
       <p>{{Detail.collectionMoney | moneyFormat}}元</p>
     </detail-panel-item>
-    <detail-panel-item v-if="Detail.salesmanName" :label="'责任业务员'">
+    <detail-panel-item v-if="Detail.invoiceAmount" :label="'开票税额'">
+      <p>{{Detail.invoiceAmount | moneyFormat}}元</p>
+    </detail-panel-item>
+    <detail-panel-item v-if="Detail.salesmanName" :label="'对接业务员'">
       <p>{{Detail.salesmanName}}</p>
     </detail-panel-item>
     <detail-panel-item  :label="'是否开票'">
@@ -68,6 +71,9 @@ export default {
         scrollbar: true
       }
     }
+  },
+  methods: {
+    copySuccess() { window.toast('复制成功') }
   }
 }
 </script>

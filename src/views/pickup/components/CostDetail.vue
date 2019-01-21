@@ -1,5 +1,5 @@
 <template>
-  <detail-panel v-if="pickupDetail.totalFee" :title="'应收费用'">
+  <detail-panel v-if="pickupDetail.totalFee" :title="'应付费用'">
     <detail-panel-item v-if="pickupDetail.freightFee" :label="pickupDetail.assignCarType === 1 ? '运输费用' : '油费'">
       <p>{{pickupDetail.freightFee|moneyFormat}}元</p>
     </detail-panel-item>

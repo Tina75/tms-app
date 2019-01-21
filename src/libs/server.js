@@ -4,7 +4,7 @@ import { getUserInfo, openNewPage, closeWindow } from './bridgeUtil'
 var instance = axios.create({
   baseURL: process.env.VUE_APP_HOST, // 在.env.*文件中配置,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 1000,
+  timeout: 10000,
   withCredentials: true,
   loading: false,
   ignoreCode: false,

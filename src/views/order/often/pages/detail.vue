@@ -34,7 +34,7 @@ export default {
         { name: '基本信息', component: 'OrderBaseInfo' },
         { name: '收发货人', component: 'ReceiveAndSend' },
         { name: '货物明细', component: 'OrderCargoList' },
-        { name: '应收费用', component: 'CostDetail' }
+        { name: '应付费用', component: 'CostDetail' }
       ],
       orderId: ''
     }

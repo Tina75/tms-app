@@ -14,7 +14,7 @@ export const getUserInfo = reuse(() => {
       userInfo = require('./login.json')
     } catch (e) {
       userInfo = {
-        Authorization: 'Bearer 14ea9c099547cc7ca95fa42cff5c3d481547880029952',
+        Authorization: 'Bearer 14ea9c099547cc7ca95fa42cff5c3d481548033155302',
         ClientInfo: '2240563ecfa80fe26c4eb4dd4f6053037db4eee8/yzgdriver/1.0.0/ios'
       }
     }
@@ -159,6 +159,11 @@ export const getDeviceLocation = () => {
 /** app通知h5刷新 */
 export const appCallRefresh = (callback = () => {}) => {
   bridge.register('onRefreshPage', callback, false)
+}
+
+/** 新开webview */
+export const appOpenWebview = () => {
+
 }
 
 // 拼成url参数
