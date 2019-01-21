@@ -4,8 +4,10 @@ import { reuse } from './util'
 export const getUserInfo = reuse(() => {
   let userInfo = {}
   if (process.env.NODE_ENV === 'production') {
-    userInfo.Authorization = 'Bearer ' + (bridge.call('user.getUserInfo') ? bridge.call('user.getUserInfo').data.token : '')
-    userInfo.ClientInfo = bridge.call('user.getClientInfo')
+    userInfo.Authorization =
+      'Bearer ' + (bridge.call('user.getUserInfo') ? bridge.call('user.getUserInfo').data.token : '')
+    const info = bridge.call('user.getClientInfo')
+    userInfo.ClientInfo = info ? (info.data ? info.data.ClientInfo : info) : ''
   } else {
     console.warn('Authorization on mock')
     try {

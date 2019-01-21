@@ -16,9 +16,6 @@
 <script>
 export default {
   name: 'form-item',
-  metaInfo: {
-    title: 'form-item'
-  },
   props: {
     label: {
       type: String,

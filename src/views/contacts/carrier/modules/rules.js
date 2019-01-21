@@ -34,7 +34,7 @@ export const contactRule = {
     }
   },
   remark: {
-    max: 200
+    max: 100
   }
 }
 
