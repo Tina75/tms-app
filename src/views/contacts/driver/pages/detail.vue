@@ -92,8 +92,8 @@ export default {
       const detail = this.viewData
       if (detail) {
         const arr = []
-        if (detail.drivePhoto) { arr.push(detail.drivePhoto) }
-        if (detail.travelPhoto) { arr.push(detail.travelPhoto) }
+        if (detail.drivePhoto) { arr.push(process.env.VUE_APP_IMG_HOST + detail.drivePhoto) }
+        if (detail.travelPhoto) { arr.push(process.env.VUE_APP_IMG_HOST + detail.travelPhoto) }
         return arr
       }
       return []
