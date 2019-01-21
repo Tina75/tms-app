@@ -17,7 +17,8 @@
         prop="address"
         label="详细地址"
         placeholder="请输入详细地址"
-        clearable />
+        clearable
+        @on-focus="allowSearch = true" />
       <form-item
         v-model="form.extra"
         label="补充地址"
@@ -48,7 +49,7 @@
       <bmap-address-list
         v-show="showAddressList"
         :city="limitCityGeo"
-        :search="form.address"
+        :search="allowSearch ? form.address : ''"
         @select="onSelectAddress" />
     </div>
     <cube-button
@@ -97,7 +98,8 @@ export default {
         address: { required: true, type: 'string' }
       },
       oftenAddresses: [],
-      showCityPicker: false
+      showCityPicker: false,
+      allowSearch: true
     }
   },
   computed: {
@@ -132,6 +134,7 @@ export default {
       this.form.address = item.detail + item.name
       this.form.latitude = item.data.point.lat
       this.form.longitude = item.data.point.lng
+      this.allowSearch = false
     },
 
     confirmCity (data) {
@@ -175,7 +178,7 @@ export default {
     async submit () {
       console.log(await this.$refs.$form.validate())
       if (!(await this.$refs.$form.validate())) return window.toast('请填写详细地址')
-      this.SET_ADDRESS_INFO(Object.assign({}, this.form))
+      this.SET_ADDRESS_INFO(Object.assign({}, this.form, { cityName: this.localeView.split('/') }))
       this.$formWillLeave(() => {
         this.showCityPicker = false
         this.$refs.$form.reset()

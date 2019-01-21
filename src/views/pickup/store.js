@@ -123,6 +123,9 @@ export default {
       state.pickupDetail = {}
       state.pickupCargoDetail = []
     },
+    getPackupDriverList (state, data) {
+      state.backupDriverList = data
+    },
     getLocations (state, data) {
       state.locationDetail = {
         truckNo: data.carNo,
@@ -172,11 +175,9 @@ export default {
     },
     setPageStart ({ commit, state }, list) {
       return new Promise((resolve, reject) => {
-        state[list] = {
-          list: [],
-          next: true,
-          pageNo: 0
-        }
+        state[list].list = []
+        state[list].next = true
+        state[list].pageNo = 0
         resolve()
       })
     },
@@ -311,7 +312,7 @@ export default {
           method: 'get',
           url: 'ownerCar/listDriverList'
         }).then((response) => {
-          // commit('getbackupDriverList', response.data.data.map(item => `${item.driverName}-${item.driverPhone}`))
+          commit('getPackupDriverList', response.data.data.map(item => `${item.driverName}-${item.driverPhone}`))
           resolve(response.data.data.map(item => `${item.driverName}-${item.driverPhone}`))
         })
       })
@@ -421,9 +422,11 @@ export default {
       commit('removeBillOrder', id)
     },
     addBillOrder: ({ state, commit }, ids) => {
+      console.log('hitAction1')
       commit('addBillOrder', ids)
     },
     editBillOrders: ({ state, commit }, id) => {
+      console.log('hitAction2')
       return new Promise((resolve, reject) => {
         server({
           method: 'post',

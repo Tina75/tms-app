@@ -65,15 +65,17 @@ export default {
       }
     }
   },
-  mounted () {
-    this.getPicking()
+  async mounted () {
+    await this.setPageStart('pickingData')
+    await this.getPicking()
   },
   methods: {
     ...mapActions('pickup', ['setPageStart', 'getPicking', 'arriveBill', 'removePicking', 'getPickupCount']),
     /** 下拉刷新 */
     async onPullingDown () {
-      this.setPageStart('pickingData')
-      this.getPicking()
+      await this.setPageStart('pickingData')
+      await this.getPickupCount()
+      await this.getPicking()
     },
     /** 上拉加载 */
     async onPullingUp () {

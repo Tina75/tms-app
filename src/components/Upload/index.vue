@@ -17,7 +17,7 @@
           alt="图片加载失败"
           class="pic-item"
           @click="previewPic(uploadPhotoList,index)">
-        <cube-input v-if="inputShow" v-model="item.title" :maxlength="maxlength" />
+        <cube-input v-if="inputShow" v-model="item.title" :maxlength="maxlength" :class="item.title ? '' : 'borderInput'" placeholder="+添加标题"/>
       </li>
       <li
         v-show="uploadPhotos && uploadPhotos.length < maxCount"
@@ -41,7 +41,6 @@ import bridge from '@/libs/dsbridge'
 export default {
   name: 'odd-upload',
   components: { IconFont },
-  metaInfo: { title: '图片上传' },
   props: {
     uploadPhotos: {
       type: Array,
@@ -117,6 +116,8 @@ export default {
 
 </script>
 <style lang='stylus' scoped>
+>>>.cube-input-field
+  outline: snow
 .content
   padding-top 15px
   font-size 16px
@@ -153,4 +154,6 @@ export default {
 .image-item
   margin-bottom 50px
   margin-right 15px
+.borderInput
+  border: 1px solid red;
 </style>

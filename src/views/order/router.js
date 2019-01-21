@@ -7,9 +7,10 @@ import detailModule from './detail/store'
 export default [
   {
     path: '/order/create',
-    name: 'order-create', // 受理下单
+    name: 'order-create', // 手工开单
     meta: {
       mode: 'create',
+      title: '手工开单',
       formLeaveConfirm: true
     },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
@@ -19,15 +20,17 @@ export default [
     name: 'order-one-more', // 再来一单
     meta: {
       mode: 'oneMore',
+      title: '再来一单',
       formLeaveConfirm: true
     },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
   },
   {
     path: '/order/edit/:id',
-    name: 'order-edit', // 订单编辑
+    name: 'order-edit', // 编辑订单
     meta: {
       mode: 'edit',
+      title: '编辑订单',
       formLeaveConfirm: true
     },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')

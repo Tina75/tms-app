@@ -69,14 +69,16 @@ export default {
       }
     }
   },
-  mounted () {
-    this.getDispatching()
+  async mounted () {
+    await this.setPageStart('dispatchingData')
+    await this.getDispatching()
   },
   methods: {
     ...mapActions('pickup', ['setPageStart', 'getDispatching', 'createPickup', 'removeOrder', 'getPickupCount']),
     /** 下拉刷新 */
     async onPullingDown () {
       await this.setPageStart('dispatchingData')
+      await this.getPickupCount()
       await this.getDispatching()
     },
     /** 上拉加载 */
@@ -104,7 +106,7 @@ export default {
         async onConfirm () {
           await _this.createPickup([data.id])
           await _this.removeOrder(index)
-          await _this.getPickupCount(index)
+          await _this.getPickupCount()
           _this.$createToast({
             type: 'warn',
             time: 1000,

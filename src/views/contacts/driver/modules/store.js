@@ -11,7 +11,7 @@ const store = {
   },
   actions: {
     loadDriverDetail: ({ commit, rootState }) => {
-      Server({
+      return Server({
         method: 'get',
         url: '/carrier/details/for/driver',
         loading: true,

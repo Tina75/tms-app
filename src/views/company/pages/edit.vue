@@ -100,7 +100,8 @@
               label="公司地址"
               clearable
               maxlength="50"
-              required/>
+              required
+              @input.native="isSelected = false"/>
             <bmap-address-list
               v-show="showAddressList"
               :city="limitCityGeo"
@@ -220,7 +221,7 @@ import { FormGroup, FormItem } from '@/components/Form'
 import { uploadOSS } from '@/components/Upload/ossUtil'
 import bridge from '@/libs/dsbridge'
 import { validatePhone, CHECK_NAME } from './validator'
-// import { setAppTitleBtn } from '@/libs/bridgeUtil'
+import { setAppTitleBtn } from '@/libs/bridgeUtil'
 import BmapAddressList from '@/views/contacts/components/BmapAddressList'
 
 export default {
@@ -239,6 +240,7 @@ export default {
       valid: undefined,
       setpCount: 3,
       step: 1,
+      isSelected: false, // 公司地址是否选择（触发经纬度）
       busiIntroducePicList: [],
       busiAdvantcePicList: [],
       wxQrPicList: [],
@@ -291,22 +293,32 @@ export default {
       return ''
     }
   },
+  beforeRouteEnter (to, from, next) {
+    next(async vm => {
+      await vm.getCompanyData()
+      await vm.onPageRefresh()
+      vm.step = 1
+    })
+  },
   mounted () {
     this.getCompanyData()
     this.onPageRefresh()
+    this.step = 1
   },
   methods: {
     ...mapActions(['getCompanyInfo', 'saveCompanyInfo']),
-    // onPageRefresh() {
-    //   setAppTitleBtn({
-    //     position: 'left',
-    //     text: 'back',
-    //     iconType: 'back',
-    //     action: () => {
-    //       this.$router.push({ name: 'company' })
-    //     }
-    //   })
-    // },
+    onPageRefresh() {
+      let vm = this
+      setAppTitleBtn({
+        position: 'left',
+        text: 'back',
+        iconType: 'back',
+        action: () => {
+          if (vm.step > 1) vm.step = --vm.step
+          else vm.$router.push({ name: 'company' })
+        }
+      })
+    },
     async getCompanyData () {
       await this.getCompanyInfo()
       await this.initData()
@@ -382,6 +394,10 @@ export default {
       }
     },
     async nextSetp () {
+      if (this.step === 1 && this.companyInfo.address && !this.isSelected) {
+        window.toast('详细地址只支持从推荐地址中选择')
+        return
+      }
       if (this.step === 2 &&
          (!this.isEntryPicTitle(this.busiAdvantcePicList) ||
          !this.isEntryPicTitle(this.busiIntroducePicList))) {
@@ -458,6 +474,7 @@ export default {
       })
     },
     onSelectAddress (item) {
+      this.isSelected = true
       this.companyInfo.address = item.detail + item.name
       this.companyInfo.latitude = item.data.point.lat
       this.companyInfo.longitude = item.data.point.lng

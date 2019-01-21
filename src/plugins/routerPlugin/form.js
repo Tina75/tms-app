@@ -27,8 +27,7 @@ export default {
     const { formLeaveConfirm } = from.meta
     if (!formLeaveConfirm || $formState.hasSubmitted) {
       $formState.willLeave(to, from)
-      next()
-      return
+      return true
     }
     this.$createDialog({
       type: 'confirm',

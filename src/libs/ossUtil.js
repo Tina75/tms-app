@@ -3,24 +3,28 @@ import server from './server'
 import './requestAnimationFrame'
 
 /** oss上传文件 */
-export async function uploadOSS (base64Data) {
+export function uploadOSS (base64Data) {
   let url
-  try {
-    let { ossKeys, ossTokenDTO } = await getOSSAccess()
-    const client = new OSS({
-      accessKeyId: ossTokenDTO.stsAccessId,
-      accessKeySecret: ossTokenDTO.stsAccessKey,
-      stsToken: ossTokenDTO.stsToken,
-      endpoint: ossTokenDTO.endpoint,
-      bucket: ossTokenDTO.bucketName
-    })
-    window.requestAnimationFrame(async () => {
-      url = await uploadBase64Img(client, ossKeys[0], base64Data)
-    })
-  } catch (e) {
-    console.error(e)
-  }
-  return url
+  return new Promise(async (resolve, reject) => {
+    try {
+      let { ossKeys, ossTokenDTO } = await getOSSAccess()
+      const client = new OSS({
+        accessKeyId: ossTokenDTO.stsAccessId,
+        accessKeySecret: ossTokenDTO.stsAccessKey,
+        stsToken: ossTokenDTO.stsToken,
+        endpoint: ossTokenDTO.endpoint,
+        bucket: ossTokenDTO.bucketName
+      })
+      window.requestAnimationFrame(async () => {
+        url = await uploadBase64Img(client, ossKeys[0], base64Data)
+        resolve(url)
+      })
+    } catch (e) {
+      console.error(e)
+      reject(e)
+    }
+    // return url
+  })
 }
 
 /** 预上传 获取OSS token */
@@ -49,6 +53,7 @@ function uploadBase64Img (client, path, base) {
     .multipartUpload(path, imgfile)
     .then((res) => {
       console.info('uploadBase64Img', res.name)
+      console.log('aaa:', res)
       return res.name
     })
     .catch((err) => {

@@ -13,7 +13,8 @@
           <div class="hr"/>
           <div class="cardInfo-content">
             <span class="cardTitle">公司简称</span>
-            <span class="cardContent">{{companyInfo.shortName}}</span>
+            <span v-if="companyInfo.shortName" class="cardContent">{{companyInfo.shortName}}</span>
+            <span v-else class="cardContent noneInfo">暂未填写</span>
           </div>
         </div>
         <div class="cardInfo">
@@ -163,7 +164,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import imageList from './image-list'
 import bridge from '@/libs/dsbridge'
-import { setAppRightBtn } from '@/libs/bridgeUtil'
+import { setAppRightBtn, setAppTitleBtn, closeWindow } from '@/libs/bridgeUtil'
 export default {
   name: 'company',
   metaInfo: {
@@ -184,6 +185,12 @@ export default {
       basePath: '',
       shareOutNo: ''
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(async vm => {
+      await vm.getCompanyData()
+      await vm.onPageRefresh()
+    })
   },
   computed: {
     ...mapGetters(['companyInfoInit'])
@@ -206,11 +213,14 @@ export default {
           }
         }
       ])
-      // setAppTitleBtn({
-      //   position: 'left',
-      //   text: 'back',
-      //   iconType: 'back'
-      // })
+      setAppTitleBtn({
+        position: 'left',
+        text: 'back',
+        iconType: 'back',
+        action: () => {
+          closeWindow()
+        }
+      })
     },
     async getCompanyData () {
       await this.getCompanyInfo()

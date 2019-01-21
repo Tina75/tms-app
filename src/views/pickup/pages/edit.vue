@@ -540,7 +540,6 @@ export default {
       if (result.valid !== false) {
         this.model.totalFee = NP.plus(this.model.freightFee, this.model.loadFee, this.model.unloadFee, this.model.otherFee, this.model.insuranceFee)
       }
-      // console.log('validity', result.validity, result.valid, result.dirty, result.firstInvalidFieldIndex)
     },
     async submitEdit () {
       let isValid = await this.$refs['edit-form'].validate()
@@ -699,6 +698,7 @@ export default {
             .cube-validator-msg
               text-align: right
               position relative
+              pointer-events: none
               &:before
                 display: none
               .cube-validator-msg-def

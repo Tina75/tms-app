@@ -71,18 +71,6 @@ export default {
       if (val === 1) {
         setAppRightBtn([
           {
-            text: '编辑',
-            iconType: 'edit',
-            action: () => {
-              this.$router.push({
-                name: 'pickup-edit',
-                params: {
-                  id: this.$route.params.id
-                }
-              })
-            }
-          },
-          {
             text: '删除',
             iconType: 'delete',
             action: () => {
@@ -114,6 +102,18 @@ export default {
                   _this.$router.back()
                 }
               }).show()
+            }
+          },
+          {
+            text: '编辑',
+            iconType: 'edit',
+            action: () => {
+              this.$router.push({
+                name: 'pickup-edit',
+                params: {
+                  id: this.$route.params.id
+                }
+              })
             }
           }
         ])
@@ -230,7 +230,6 @@ export default {
   .cube-scroll-nav
     flex: 1
   .handle-btns
-    height: 45px
     display: flex
     a
       flex: 1
