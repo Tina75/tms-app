@@ -21,6 +21,7 @@ const LEAVE_HANDLERS_LENGTH = LEAVE_HANDLERS.length
 Vue.mixin({
   // 若需求要在plugin中阻止next调用,请在onLeave时阻止
   beforeRouteEnter(to, from, next) {
+    console.log(window.history)
     try {
       next((vm) => {
         setGlobalBack(vm)
