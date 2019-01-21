@@ -100,7 +100,8 @@
               label="公司地址"
               clearable
               maxlength="50"
-              required/>
+              required
+              @input.native="isSelected = false"/>
             <bmap-address-list
               v-show="showAddressList"
               :city="limitCityGeo"
@@ -239,6 +240,7 @@ export default {
       valid: undefined,
       setpCount: 3,
       step: 1,
+      isSelected: false, // 公司地址是否选择（触发经纬度）
       busiIntroducePicList: [],
       busiAdvantcePicList: [],
       wxQrPicList: [],
@@ -312,7 +314,7 @@ export default {
         text: 'back',
         iconType: 'back',
         action: () => {
-          if (vm.step > 1) return vm.step - 1
+          if (vm.step > 1) vm.step = --vm.step
           else vm.$router.push({ name: 'company' })
         }
       })
@@ -392,6 +394,10 @@ export default {
       }
     },
     async nextSetp () {
+      if (this.step === 1 && this.companyInfo.address && !this.isSelected) {
+        window.toast('详细地址只支持从推荐地址中选择')
+        return
+      }
       if (this.step === 2 &&
          (!this.isEntryPicTitle(this.busiAdvantcePicList) ||
          !this.isEntryPicTitle(this.busiIntroducePicList))) {
@@ -468,6 +474,7 @@ export default {
       })
     },
     onSelectAddress (item) {
+      this.isSelected = true
       this.companyInfo.address = item.detail + item.name
       this.companyInfo.latitude = item.data.point.lat
       this.companyInfo.longitude = item.data.point.lng

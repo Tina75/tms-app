@@ -1,7 +1,7 @@
 <template>
   <div class="pickup-assign">
     <div class="edit-form">
-      <cube-form ref="assign-form" :model="model" :options="options" @validate="validateHandler">
+      <cube-form ref="assign-form" :model="model" :options="options" :immediate-validate="false" @validate="validateHandler">
         <cube-form-group>
           <cube-form-item :field="fields['assignCarType']"/>
         </cube-form-group>
@@ -121,6 +121,9 @@ export default {
           },
           rules: {
             required: true
+          },
+          messages: {
+            required: '车牌号必选'
           }
         },
         selfDriverName: {
@@ -139,6 +142,9 @@ export default {
           },
           rules: {
             required: true
+          },
+          messages: {
+            required: '主司机必选'
           }
         },
         selfAssistantDriverName: {
@@ -573,7 +579,7 @@ export default {
         if (this.$route.query.type) {
           await this.sendDirectly(req)
         } else {
-          await this.assign(Object.assign({ pickupId: this.$route.params.id }, req))
+          await this.assign(Object.assign({ pickUpId: this.$route.params.id }, req))
           await this.reloadCurrentPickup(this.$route.params.id)
         }
         this.$router.back()
@@ -694,6 +700,7 @@ export default {
             .cube-validator-msg
               text-align: right
               position relative
+              pointer-events: none
               &:before
                 display: none
               .cube-validator-msg-def
