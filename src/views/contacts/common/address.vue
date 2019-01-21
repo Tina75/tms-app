@@ -14,10 +14,11 @@
         :focus-on-end="true"
         placeholder="请输入详细地址"
         prop="address"
+        @on-focus="allowSearch = true"
       />
       <FormItem v-model="form.additional" label="补充地址" placeholder="请输入楼号-门牌号"/>
     </FromGroup>
-    <BmapAddressList :city="limitCityGeo" :search="form.address" @select="onSelectAddress"/>
+    <BmapAddressList :city="limitCityGeo" :search="searchValue" @select="onSelectAddress"/>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
     <CityPicker v-model="showCityPicker" @confirm="confirmCity"/>
   </div>
@@ -58,7 +59,8 @@ export default {
       },
       rules: addressRule,
       submiting: false,
-      showCityPicker: false
+      showCityPicker: false,
+      allowSearch: true
     }
   },
   computed: {
@@ -80,6 +82,12 @@ export default {
     },
     namespace() {
       return this.AddressPage.namespace ? this.AddressPage.namespace + '/' : ''
+    },
+    searchValue () {
+      if (this.allowSearch) {
+        return this.form.address
+      }
+      return ''
     }
   },
   methods: {
@@ -89,6 +97,7 @@ export default {
       const title = item.name || ''
       this.form.address = detail.includes(title) ? detail : detail + title
       this.form.addressDetail = item.data
+      this.allowSearch = false
     },
     async submit() {
       try {
@@ -119,7 +128,6 @@ export default {
       const options = this.AddressPage
       this.form = Address.toForm(options.data)
       if (options.appButton) {
-        // TODO set app
         const namespace = this.AddressPage.namespace
           ? this.AddressPage.namespace + '/'
           : ''

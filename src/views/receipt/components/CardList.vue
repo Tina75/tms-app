@@ -11,6 +11,7 @@
 <script>
 import Card from '../components/Card'
 import * as API from '../libs/api'
+import { mapActions } from 'vuex'
 export default {
   name: 'upstream-list',
   components: {
@@ -36,7 +37,9 @@ export default {
     this.init()
   },
   methods: {
+    ...mapActions(['getReceiptStatusCnt']),
     init () {
+      this.getReceiptStatusCnt()
       this.keywords.pageNo = 1
       const params = Object.assign({}, this.keywords, { receiptStatus: this.status })
       API.initList(params)
@@ -46,6 +49,7 @@ export default {
         })
     },
     load () {
+      this.getReceiptStatusCnt()
       this.keywords.pageNo += 1
       const params = Object.assign({}, this.keywords, { receiptStatus: this.status })
       API.initList(params)
@@ -88,7 +92,7 @@ export default {
           const params = {
             orderIds: [item.id],
             recoveryName: promptValue,
-            receiptStatus: item.receiptOrder.receiptStatus,
+            receiptStatus: 1,
             ids: [item.receiptOrder.orderId]
           }
           API.updateReceipt(params)
@@ -116,7 +120,7 @@ export default {
           const params = {
             orderIds: [item.id],
             returnName: promptValue,
-            receiptStatus: item.receiptOrder.receiptStatus,
+            receiptStatus: 2,
             ids: [item.receiptOrder.orderId]
           }
           API.updateReceipt(params)

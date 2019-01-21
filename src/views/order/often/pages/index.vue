@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-data.png'
@@ -86,11 +86,13 @@ export default {
   },
   computed: {
     ...mapState('order/often', [ 'oftenList' ]),
-    ...mapState('order/create', [ 'oftenPermission' ])
+    ...mapState('order/create', [ 'oftenPermission' ]),
+    ...mapGetters('order/create', [ 'oftenPermission' ])
   },
   methods: {
     ...mapMutations('order/create', [ 'SET_ORDER_RESET' ]),
     ...mapActions('order/often', [ 'loadOftenList', 'deleteOftenOrder' ]),
+    ...mapActions('order/create', [ 'getOftenPermission' ]),
 
     onPageRefresh() { this.loading = true },
 
@@ -107,6 +109,11 @@ export default {
       await this.deleteOftenOrder(id)
       window.toast('删除成功')
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(async vm => {
+      if (!vm.oftenPermission) await vm.getOftenPermission()
+    })
   }
 }
 </script>
