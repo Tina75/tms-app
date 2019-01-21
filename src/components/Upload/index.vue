@@ -41,7 +41,6 @@ import bridge from '@/libs/dsbridge'
 export default {
   name: 'odd-upload',
   components: { IconFont },
-  metaInfo: { title: '图片上传' },
   props: {
     uploadPhotos: {
       type: Array,
