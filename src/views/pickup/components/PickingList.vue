@@ -73,8 +73,9 @@ export default {
     ...mapActions('pickup', ['setPageStart', 'getPicking', 'arriveBill', 'removePicking', 'getPickupCount']),
     /** 下拉刷新 */
     async onPullingDown () {
-      this.setPageStart('pickingData')
-      this.getPicking()
+      await this.setPageStart('pickingData')
+      await this.getPickupCount()
+      await this.getPicking()
     },
     /** 上拉加载 */
     async onPullingUp () {

@@ -698,6 +698,7 @@ export default {
             .cube-validator-msg
               text-align: right
               position relative
+              pointer-events: none
               &:before
                 display: none
               .cube-validator-msg-def

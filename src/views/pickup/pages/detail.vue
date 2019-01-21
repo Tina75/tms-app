@@ -230,7 +230,6 @@ export default {
   .cube-scroll-nav
     flex: 1
   .handle-btns
-    height: 45px
     display: flex
     a
       flex: 1

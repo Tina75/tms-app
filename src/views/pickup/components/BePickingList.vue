@@ -78,6 +78,7 @@ export default {
     /** 下拉刷新 */
     async onPullingDown () {
       await this.setPageStart('bePickingData')
+      await this.getPickupCount()
       await this.getBePicking()
     },
     /** 上拉加载 */
@@ -116,7 +117,7 @@ export default {
         async onConfirm () {
           await _this.pickupBill(data.pickupId)
           await _this.removeBePicking(index)
-          await _this.getPickupCount(index)
+          await _this.getPickupCount()
           _this.$createToast({
             type: 'warn',
             time: 1000,
