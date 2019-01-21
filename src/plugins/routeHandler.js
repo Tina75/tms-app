@@ -64,6 +64,7 @@ Vue.mixin({
         // 钩子返回值决定是否要让路由通过, 不需要阻拦的请返回true
         allow = allow && !!LEAVE_HANDLERS[i].call(this, to, from, nextProxy)
       }
+
       next(allow)
     }
   }

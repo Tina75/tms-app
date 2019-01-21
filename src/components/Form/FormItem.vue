@@ -143,7 +143,7 @@ export default {
     inputPlaceHolder () {
       let ph
       if (this.placeholder) ph = this.placeholder
-      if (this.type === 'picker') return (ph || '请选择') + (this.inputRequired ? '(必选)' : '')
+      if (this.type === 'select') return (ph || '请选择') + (this.inputRequired ? '(必选)' : '')
       return (ph || '请输入') + (this.inputRequired ? '(必填)' : '')
     },
     inputMaxLength () {

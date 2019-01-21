@@ -1,24 +1,24 @@
 <template>
   <div class="cargo-info-size-dialog">
     <cube-input
-      v-model="length"
+      v-model="inLength"
       class="cargo-info-size-dialog-item"
       type="number"
       placeholder="长"
       autofocus
-      @blur="inputBlurHandler" />
+      @blur="inputBlurHandler('inLength')" />
     <cube-input
-      v-model="width"
+      v-model="inWidth"
       class="cargo-info-size-dialog-item"
       type="number"
       placeholder="宽"
-      @blur="inputBlurHandler" />
+      @blur="inputBlurHandler('inWidth')" />
     <cube-input
-      v-model="height"
+      v-model="inHeight"
       class="cargo-info-size-dialog-item"
       type="number"
       placeholder="高"
-      @blur="inputBlurHandler" />
+      @blur="inputBlurHandler('inHeight')" />
   </div>
 </template>
 
@@ -27,26 +27,47 @@ import precesion from '@/components/Form/js/precision'
 
 export default {
   name: 'SizeInput',
+  props: {
+    length: {
+      type: [Number, String],
+      default: ''
+    },
+    width: {
+      type: [Number, String],
+      default: ''
+    },
+    height: {
+      type: [Number, String],
+      default: ''
+    }
+  },
   data () {
     return {
-      length: '',
-      width: '',
-      height: ''
+      inLength: '',
+      inWidth: '',
+      inHeight: ''
     }
   },
   watch: {
-    length (val) { this.changeHandler(val, 'length') },
-    width (val) { this.changeHandler(val, 'width') },
-    height (val) { this.changeHandler(val, 'height') }
+    inLength (val) { this.changeHandler(val, 'inLength') },
+    inWidth (val) { this.changeHandler(val, 'inWidth') },
+    inHeight (val) { this.changeHandler(val, 'inHeight') }
+  },
+  mounted () {
+    this.inLength = this.length
+    this.inWidth = this.width
+    this.inHeight = this.height
   },
   methods: {
-    inputBlurHandler () {
-      this.$emit('blur', Number(this.length), Number(this.width), Number(this.height))
+    inputBlurHandler (field) {
+      this.$emit('blur', Number(this.inLength), Number(this.inWidth), Number(this.inHeight))
     },
     changeHandler (val, field) {
       if (val === '') {
-        this.$nextTick(() => { this[field] = 0 })
+        this.$nextTick(() => { this[field] = '' })
         return
+      } else {
+        this.$nextTick(() => { this[field] = Number(this[field]) })
       }
       const number = precesion(val, 1)
       if (number !== val) this.$nextTick(() => { this[field] = number })
