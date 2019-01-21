@@ -121,8 +121,8 @@ export default {
         }
         this.model.regularLine = this.regularLine
 
-        const validLine = this.validRegularline(this.regularLine1, '请完善线路1信息')
-          && this.validRegularline(this.regularLine2, '请完善线路2信息')
+        const validLine = this.validRegularline(this.regularLine1, '请完善线路1信息') &&
+          this.validRegularline(this.regularLine2, '请完善线路2信息')
         if (!validLine) return
 
         this.model.carrierId = this.$route.query.carrierId
