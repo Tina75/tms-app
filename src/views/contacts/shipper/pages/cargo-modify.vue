@@ -9,7 +9,7 @@
         :maxlength="rules.name.max"
       />
       <FormItem v-model="form.cargoNo" label="货物编号" prop="number" :maxlength="rules.number.max"/>
-      <FormItem v-model="form.cargoCost" label="货值(元)" type="number" prop="price"/>
+      <FormItem v-model="form.cargoCost" label="货值(元)" type="number" prop="price" precision="4"/>
       <FormItem
         v-model="form.unit"
         label="包装方式"
@@ -25,7 +25,7 @@
         @on-click="showDismensionInput = true"
       />
       <FormItem v-model="form.weight" label="重量(公斤)" type="number" prop="weight"/>
-      <FormItem v-model="form.volume" label="体积(方)" type="number" class="cube-mb-15" prop="volume"/>
+      <FormItem v-model="form.volume" label="体积(方)" type="number" class="cube-mb-15" prop="volume" precision="6"/>
       <FormItem
         v-model="form.remark1"
         label="备注1"
