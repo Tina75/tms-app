@@ -128,7 +128,7 @@ export default {
           return
         }
         const server = CargoDetail.toServer(this.form)
-        server.consignerId = this.$route.query.consignerId
+        server.consignerId = this.form.id
         await this.modifyCargo(server)
         this.$refreshPage('contacts-shipper-cargo', 'contacts-shipper-detail')
         window.toast('保存成功')
