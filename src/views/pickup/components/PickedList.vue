@@ -35,7 +35,7 @@
         </div>
         <div class="item-footer">
           <div class="order-cost">
-            <p class="cost-label">应收费用（{{settlementTypeMap[item.settlementType]}}）</p>
+            <p class="cost-label">应付费用（{{settlementTypeMap[item.settlementType]}}）</p>
             <p class="cost-money">{{item.totalFee|moneyFormat}}<span>/元</span></p>
           </div>
           <div class="order-btns"/>
@@ -62,8 +62,9 @@ export default {
       }
     }
   },
-  mounted () {
-    this.getPicked()
+  async mounted () {
+    await this.setPageStart('pickedData')
+    await this.getPicked()
   },
   methods: {
     ...mapActions('pickup', ['setPageStart', 'getPicked']),

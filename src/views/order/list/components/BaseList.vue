@@ -6,7 +6,7 @@
     @pulling-down="onPullingDown"
     @pulling-up="onPullingUp">
     <ul >
-      <li v-for="item in list" :key="item.id" class="list-item">
+      <li v-for="item in list" :key="item.id" class="list-item" @click="onItemClick(item.id)">
         <div class="list-item__time">
           <span class="cube-ml-15">{{item.createTime | datetimeFormat}}</span>
           <div class="list-item__flag">
@@ -141,6 +141,9 @@ export default {
       arr.push(item.pickupStatus)
       arr.push(item.disassembleStatus)
       return list.includes(arr.join(''))
+    },
+    onItemClick(id) {
+      this.$router.push({ name: 'order-detail', params: { id } })
     }
 
   }

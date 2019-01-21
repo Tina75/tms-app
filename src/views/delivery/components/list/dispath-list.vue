@@ -6,19 +6,6 @@
     @on-dispatch="onDispatch"
     @on-item-click="onItemClick"
   />
-
-  <!-- <cube-scroll
-    ref="scroll"
-    :data="DispatchList"
-    :options="options"
-    @pulling-down="onPullingDown"
-    @pulling-up="onPullingUp">
-    <ul>
-      <li v-for="item in DispatchList" :key="item.id" >
-        <delivery-list-item :info="item"/>
-      </li>
-    </ul>
-  </cube-scroll> -->
 </template>
 
 <script>

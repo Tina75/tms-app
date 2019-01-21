@@ -18,7 +18,7 @@ export default [
     component: () => import(/* webpackChunkName: "delivery" */'./pages/workbench.vue')
   },
   {
-    path: '/delivery/send-car',
+    path: '/delivery/send-car/:id',
     name: 'delivery-send-car',
     component: () => import(/* webpackChunkName: "delivery" */'./pages/send-car.vue')
   },

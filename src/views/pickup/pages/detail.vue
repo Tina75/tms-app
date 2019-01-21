@@ -52,7 +52,7 @@ export default {
           component: 'OrderList'
         },
         {
-          name: '应收费用',
+          name: '应付费用',
           component: 'CostDetail'
         }
       ],
@@ -70,18 +70,6 @@ export default {
     'pickupDetail.status' (val) {
       if (val === 1) {
         setAppRightBtn([
-          {
-            text: '编辑',
-            iconType: 'edit',
-            action: () => {
-              this.$router.push({
-                name: 'pickup-edit',
-                params: {
-                  id: this.$route.params.id
-                }
-              })
-            }
-          },
           {
             text: '删除',
             iconType: 'delete',
@@ -114,6 +102,18 @@ export default {
                   _this.$router.back()
                 }
               }).show()
+            }
+          },
+          {
+            text: '编辑',
+            iconType: 'edit',
+            action: () => {
+              this.$router.push({
+                name: 'pickup-edit',
+                params: {
+                  id: this.$route.params.id
+                }
+              })
             }
           }
         ])
