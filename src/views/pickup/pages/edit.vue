@@ -157,13 +157,9 @@ export default {
           }
         },
         carrierName: {
-          type: 'select',
+          type: 'input',
           modelKey: 'carrierName',
           label: '承运商名称',
-          props: {
-            options: [],
-            placeholder: '请选择'
-          },
           rules: {
             required: true
           },
@@ -594,16 +590,16 @@ export default {
         vm.model.unloadFee = NP.divide(data.unloadFee, 100)
         vm.model.otherFee = NP.divide(data.otherFee, 100)
         vm.model.totalFee = NP.divide(data.totalFee, 100)
-        vm.model.settlementType = data.settlementType
+        vm.model.settlementType = data.settlementType || 1
         vm.model.payType = data.settlementPayInfo.length ? data.settlementPayInfo[0].payType : 2
         vm.model.cashAmount = data.settlementPayInfo.length ? NP.divide(data.settlementPayInfo[0].cashAmount, 100) : ''
         vm.model.fuelCardAmount = data.settlementPayInfo.length ? NP.divide(data.settlementPayInfo[0].fuelCardAmount, 100) : ''
         vm.model.allocationStrategy = data.allocationStrategy
         vm.model.remark = data.remark
       })
-      vm.getCarrierNameList().then(list => {
-        vm.fields.carrierName.props.options = list
-      })
+      // vm.getCarrierNameList().then(list => {
+      //   vm.fields.carrierName.props.options = list
+      // })
       vm.getSelfCarList().then(list => {
         vm.fields.carNo.props.options = list
       })
@@ -706,7 +702,7 @@ export default {
                 top: -15px
                 color: #e64340;
                 font-size: 12px;
-                z-index 101
+                z-index 99
                 right: 0
         .cube-select
           padding-right: 0;

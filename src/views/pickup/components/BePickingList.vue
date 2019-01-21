@@ -69,12 +69,11 @@ export default {
       }
     }
   },
-  async mounted () {
-    await this.setPageStart('bePickingData')
-    await this.getBePicking()
+  mounted () {
+    this.getBePicking()
   },
   methods: {
-    ...mapActions('pickup', ['setPageStart', 'getBePicking', 'pickupBill', 'removeBePicking']),
+    ...mapActions('pickup', ['setPageStart', 'getBePicking', 'getPickupCount', 'pickupBill', 'removeBePicking']),
     /** 下拉刷新 */
     async onPullingDown () {
       await this.setPageStart('bePickingData')
@@ -115,7 +114,7 @@ export default {
           href: 'javascript:;'
         },
         async onConfirm () {
-          await _this.pickupBill(data.pickupId)
+          await _this.pickupBill(data.pickUpId)
           await _this.removeBePicking(index)
           await _this.getPickupCount()
           _this.$createToast({

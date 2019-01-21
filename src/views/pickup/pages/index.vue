@@ -89,7 +89,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('pickup', ['getPickupCount'])
+    ...mapActions('pickup', ['getPickupCount', 'setPageStart'])
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
@@ -105,6 +105,10 @@ export default {
       ])
       vm.getPickupCount()
     })
+    this.setPageStart('dispatchingData')
+    this.setPageStart('bePickingData')
+    this.setPageStart('pickingData')
+    this.setPageStart('pickedData')
   },
   beforeRouteLeave (to, from, next) {
     setAppRightBtn([{ text: '', action: () => {} }])

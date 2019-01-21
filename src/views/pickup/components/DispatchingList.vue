@@ -69,9 +69,8 @@ export default {
       }
     }
   },
-  async mounted () {
-    await this.setPageStart('dispatchingData')
-    await this.getDispatching()
+  mounted () {
+    this.getDispatching()
   },
   methods: {
     ...mapActions('pickup', ['setPageStart', 'getDispatching', 'createPickup', 'removeOrder', 'getPickupCount']),

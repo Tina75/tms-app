@@ -62,12 +62,11 @@ export default {
       }
     }
   },
-  async mounted () {
-    await this.setPageStart('pickedData')
-    await this.getPicked()
+  mounted () {
+    this.getPicked()
   },
   methods: {
-    ...mapActions('pickup', ['setPageStart', 'getPicked']),
+    ...mapActions('pickup', ['setPageStart', 'getPicked', 'getPickupCount']),
     /** 下拉刷新 */
     async onPullingDown () {
       await this.setPageStart('pickedData')

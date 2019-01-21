@@ -123,7 +123,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('pickup', ['getPickupDetail', 'clearDetail', 'arriveBill', 'removePicking', 'pickupBill', 'removeBePicking', 'deleteBill']),
+    ...mapActions('pickup', ['getPickupDetail', 'clearDetail', 'arriveBill', 'removePicking', 'pickupBill', 'removeBePicking', 'deleteBill', 'getPickupCount']),
     changeHandler (label) {
       console.log('changed to:', label)
     },
