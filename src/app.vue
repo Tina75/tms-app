@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="cube-default-background">
     <keep-alive>
-      <router-view :key="$route.path" />
+      <router-view :key="$route.path"/>
     </keep-alive>
     <loading :status.sync="loadingStatus"/>
   </div>
@@ -49,6 +49,13 @@ export default {
       content = '',
       onConfirm = () => {}
     } = {}) => {
+      console.info({
+        type: 'confirm',
+        title,
+        content,
+        icon,
+        onConfirm
+      })
       this.$createDialog({
         type: 'confirm',
         title,
