@@ -220,7 +220,7 @@ import { FormGroup, FormItem } from '@/components/Form'
 import { uploadOSS } from '@/components/Upload/ossUtil'
 import bridge from '@/libs/dsbridge'
 import { validatePhone, CHECK_NAME } from './validator'
-// import { setAppTitleBtn } from '@/libs/bridgeUtil'
+import { setAppTitleBtn } from '@/libs/bridgeUtil'
 import BmapAddressList from '@/views/contacts/components/BmapAddressList'
 
 export default {
@@ -291,22 +291,32 @@ export default {
       return ''
     }
   },
+  beforeRouteEnter (to, from, next) {
+    next(async vm => {
+      await vm.getCompanyData()
+      await vm.onPageRefresh()
+      vm.step = 1
+    })
+  },
   mounted () {
     this.getCompanyData()
     this.onPageRefresh()
+    this.step = 1
   },
   methods: {
     ...mapActions(['getCompanyInfo', 'saveCompanyInfo']),
-    // onPageRefresh() {
-    //   setAppTitleBtn({
-    //     position: 'left',
-    //     text: 'back',
-    //     iconType: 'back',
-    //     action: () => {
-    //       this.$router.push({ name: 'company' })
-    //     }
-    //   })
-    // },
+    onPageRefresh() {
+      let vm = this
+      setAppTitleBtn({
+        position: 'left',
+        text: 'back',
+        iconType: 'back',
+        action: () => {
+          if (vm.step > 1) return vm.step - 1
+          else vm.$router.push({ name: 'company' })
+        }
+      })
+    },
     async getCompanyData () {
       await this.getCompanyInfo()
       await this.initData()
