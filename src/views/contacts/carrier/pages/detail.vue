@@ -72,6 +72,7 @@ export default {
           }
           try {
             this.removeContact(data)
+            this.$refreshPage('contacts-carrier', 'contacts-carrier-detail')
           } catch (e) {
             console.log(e)
           } finally {
@@ -94,7 +95,7 @@ export default {
           text: '修改',
           iconType: 'edit',
           action: () => {
-            this.$router.push({ name: 'contacts-carrier-modify', query: { carrierId: this.carrierDetail.id } })
+            this.$router.push({ name: 'contacts-carrier-modify', query: { carrierId: this.contactDetail.id } })
           }
         }
       ])
