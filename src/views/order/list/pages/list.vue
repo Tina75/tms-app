@@ -6,8 +6,6 @@
       show-slider
       class="tab-bar"
       @change="updateView">
-      <cube-button class="btn-light" @click="$router.back()">返回上一页</cube-button>
-
       <cube-tab v-for="item in tabs" :key="item.label" :label="item.label">
         <p class="tab-label">{{item.label}}</p>
         <p v-if="TabCount" class="tab-count">{{TabCount[item.value]}}</p>

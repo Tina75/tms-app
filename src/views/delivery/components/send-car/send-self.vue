@@ -49,7 +49,7 @@ export default {
     next(vm => {
       vm.getCarrierNameList()
       vm.getSelfDriverList()
-      vm.getSelfCarList().then(list => { vm.fields.carNoOnlySel.props.options = [...list] })
+      vm.getSelfCarList().then(carList => { vm.fields.carNo.props.options = carList })
     })
   },
 

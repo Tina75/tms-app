@@ -906,13 +906,10 @@ export default {
     display: flex
     flex-direction column
     .edit-form
-      overflow-scrolling touch
       padding-top: 15px;
       flex 1
       overflow auto
-      .city
-        margin-top -15px
-        margin-bottom 15px
+      overflow-scrolling touch
       >>> .cube-form
         background-color: #F3F3F3;
         .cube-form-group
@@ -974,6 +971,7 @@ export default {
             .cube-validator-msg
               text-align: right
               position relative
+              pointer-events: none
               &:before
                 display: none
               .cube-validator-msg-def
