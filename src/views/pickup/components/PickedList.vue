@@ -63,6 +63,7 @@ export default {
     }
   },
   mounted () {
+    this.setPageStart('pickedData')
     this.getPicked()
   },
   methods: {

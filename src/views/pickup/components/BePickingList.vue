@@ -70,6 +70,7 @@ export default {
     }
   },
   mounted () {
+    this.setPageStart('bePickingData')
     this.getBePicking()
   },
   methods: {

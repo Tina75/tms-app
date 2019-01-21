@@ -345,96 +345,12 @@ export default {
             placeholder: '请输入'
           }
         },
-        freightFee: {
-          type: 'input',
-          modelKey: 'freightFee',
-          label: '运输费(元)',
-          props: {
-            placeholder: '请输入'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        gasFee: {
-          type: 'input',
-          modelKey: 'freightFee',
-          label: '油费(元)',
-          props: {
-            placeholder: '请输入'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        loadFee: {
-          type: 'input',
-          modelKey: 'loadFee',
-          label: '装货费(元)',
-          props: {
-            placeholder: '请输入'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        unloadFee: {
-          type: 'input',
-          modelKey: 'unloadFee',
-          label: '卸货费(元)',
-          props: {
-            placeholder: '请输入'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        insuranceFee: {
-          type: 'input',
-          modelKey: 'insuranceFee',
-          label: '保险费(元)',
-          props: {
-            placeholder: '请输入'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        otherFee: {
-          type: 'input',
-          modelKey: 'otherFee',
-          label: '其他(元)',
-          props: {
-            placeholder: '请输入'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
+        freightFee: _this.createMoneyField('freightFee', '运输费(元)'),
+        gasFee: _this.createMoneyField('freightFee', '油费(元)'),
+        loadFee: _this.createMoneyField('loadFee', '装货费(元)'),
+        unloadFee: _this.createMoneyField('unloadFee', '卸货费(元)'),
+        insuranceFee: _this.createMoneyField('insuranceFee', '保险费(元)'),
+        otherFee: _this.createMoneyField('otherFee', '其他(元)'),
         totalFee: {
           modelKey: 'totalFee',
           label: '费用合计(元)'
@@ -457,36 +373,8 @@ export default {
             placeholder: '请选择'
           }
         },
-        cashAmount: {
-          type: 'input',
-          modelKey: 'cashAmount',
-          label: '到付现金(元)',
-          props: {
-            placeholder: '请输入'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        fuelCardAmount: {
-          type: 'input',
-          modelKey: 'fuelCardAmount',
-          label: '到付油卡(元)',
-          props: {
-            placeholder: '请输入'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
+        cashAmount: _this.createMoneyField('cashAmount', '到付现金(元)'),
+        fuelCardAmount: _this.createMoneyField('fuelCardAmount', '到付油卡(元)'),
         allocationStrategy: {
           type: 'select',
           modelKey: 'allocationStrategy',
@@ -526,7 +414,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('pickup', ['carrierNameList', 'backupDriverList'])
+    ...mapGetters('pickup', ['backupDriverList'])
   },
   methods: {
     ...mapActions('pickup', ['getPickupDetailForForm', 'getCarrierNameList', 'getSelfCarList', 'getSelfDriverList', 'pickupEdit', 'reloadCurrentPickup']),
@@ -567,6 +455,35 @@ export default {
         })
         await this.reloadCurrentPickup(this.$route.params.id)
         this.$router.back()
+      }
+    },
+    createMoneyField (field, name) {
+      return {
+        type: 'input',
+        modelKey: field,
+        label: name,
+        props: {
+          placeholder: '请输入'
+        },
+        rules: {
+          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
+        },
+        messages: {
+          pattern: '请输入正确的金额'
+        },
+        trigger: 'blur',
+        events: {
+          'focus': () => {
+            if (Number(this.model[field]) === 0) {
+              this.model[field] = ''
+            }
+          },
+          'blur': () => {
+            if (Number(this.model[field]) === 0) {
+              this.model[field] = 0
+            }
+          }
+        }
       }
     }
   },
