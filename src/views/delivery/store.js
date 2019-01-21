@@ -22,8 +22,9 @@ export default {
       pageNo: 1
     },
     waybillDetail: {},
-    tabCount: {}
-
+    tabCount: {},
+    currentBillOrderIds: [],
+    billOrderList: []
   },
   mutations: {
     DISPATCH (state, payload) {
@@ -80,6 +81,16 @@ export default {
     },
     TAB_COUNT (state, payload) {
       state.tabCount = { ...payload }
+    },
+    SET_BILL_ORDERS (state, data) {
+      state.billOrderList = data
+      state.currentBillOrderIds = data.map(item => item.id)
+    },
+    removeBillOrder (state, id) {
+      state.currentBillOrderIds.splice(state.currentBillOrderIds.indexOf(id), 1)
+    },
+    addBillOrder (state, ids) {
+      state.currentBillOrderIds.push(...ids)
     }
   },
   actions: {
@@ -134,6 +145,16 @@ export default {
       })
     },
     clearArrival: ({ commit }) => { commit('ARRIVAL_CLEAR') },
+    // 改单
+    doEditWaybill: ({ commit, state }, info) => {
+      return Server({
+        url: '/waybill/modify',
+        method: 'post',
+        data: { waybill: info }
+      }).then(() => {
+        // 刷新详情
+      })
+    },
     // 派车
     doSendCar: ({ commit, state }, info) => {
       return Server({
@@ -209,6 +230,36 @@ export default {
         data: { waybillIds: [id] }
       }).then(({ data }) => {
       })
+    },
+    // 获取运单中的订单列表
+    getOrderListByWaybillId: ({ commit }, id) => {
+      Server({
+        url: '/waybill/get/order',
+        method: 'get',
+        data: { id }
+      }).then(({ data }) => {
+        commit('SET_BILL_ORDERS', data.data)
+      })
+    },
+    removeBillOrder: ({ state, commit }, id) => {
+      commit('removeBillOrder', id)
+    },
+    addBillOrder: ({ state, commit }, ids) => {
+      commit('addBillOrder', ids)
+    },
+    updatetBillOrders: ({ state, commit }, id) => {
+      return new Promise((resolve, reject) => {
+        Server({
+          method: 'post',
+          url: '/waybill/update/order',
+          data: {
+            id: id,
+            orderIds: state.currentBillOrderIds
+          }
+        }).then((response) => {
+          resolve()
+        })
+      })
     }
   },
   getters: {
@@ -226,6 +277,8 @@ export default {
       send: state.tabCount.waitSendCarCnt,
       sending: state.tabCount.inTransportCnt,
       arrival: state.tabCount.arrivedCnt
-    })
+    }),
+    BillOrderList: state => state.billOrderList,
+    CurrentBillOrderIds: state => state.currentBillOrderIds
   }
 }

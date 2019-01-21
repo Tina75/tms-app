@@ -311,7 +311,7 @@ export default {
           method: 'get',
           url: 'ownerCar/listDriverList'
         }).then((response) => {
-          commit('getBackupDriverList', response.data.data.map(item => `${item.driverName}-${item.driverPhone}`))
+          // commit('getPackupDriverList', response.data.data.map(item => `${item.driverName}-${item.driverPhone}`))
           resolve(response.data.data.map(item => `${item.driverName}-${item.driverPhone}`))
         })
       })
