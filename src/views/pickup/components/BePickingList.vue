@@ -69,8 +69,9 @@ export default {
       }
     }
   },
-  mounted () {
-    this.getBePicking()
+  async mounted () {
+    await this.setPageStart('bePickingData')
+    await this.getBePicking()
   },
   methods: {
     ...mapActions('pickup', ['setPageStart', 'getBePicking', 'pickupBill', 'removeBePicking']),
