@@ -44,9 +44,6 @@
 <script>
 export default {
   name: 'tab-card',
-  metaInfo: {
-    title: 'tab-card'
-  },
   props: {
     data: {
       type: Object,
