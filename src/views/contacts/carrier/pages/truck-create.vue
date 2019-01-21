@@ -103,7 +103,11 @@ export default {
       return typeof this.$route.query.carId === 'undefined'
     },
     regularLine () {
-      const res = [this.regularLine1, this.regularLine2]
+      const res = []
+      const line1 = this.regularLine1
+      const line2 = this.regularLine1
+      if (line1.s && line1.sn && line1.e && line1.en) { res.push(line1) }
+      if (line2.s && line2.sn && line2.e && line2.en) { res.push(line2) }
       return JSON.stringify(res)
     }
   },
@@ -116,6 +120,9 @@ export default {
           return window.toast('请输入必填信息')
         }
         this.model.regularLine = this.regularLine
+        if (!this.validRegularline(this.regularLine)) {
+          return window.toast('请完整填写运输线路')
+        }
         this.model.carrierId = this.$route.query.carrierId
         await this.modifyTruck(TruckDetail.toServer(this.model))
         this.afterSubmit()
@@ -132,6 +139,18 @@ export default {
       this.$formWillLeave()
       window.toast(this.isCreate ? '新增车辆成功' : '修改车辆成功')
       this.$router.back()
+    },
+
+    /* 校验运输线路 */
+    validRegularline (lines) {
+      if (!lines || !Array.isArray(lines)) return true
+      let valid = true
+      lines.every(item => {
+        const { s, sn, e, en } = item
+        valid = s && sn && e && en
+        return valid
+      })
+      return valid
     },
 
     async setForm() {

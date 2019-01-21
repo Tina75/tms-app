@@ -31,6 +31,7 @@
         v-model="form.invoiceRate"
         prop="invoiceRate"
         type="number"
+        precision="2"
         required
         label="开票税率(%)"
       />

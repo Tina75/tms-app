@@ -164,6 +164,7 @@ export default {
           }
           try {
             this.removeTruck(data)
+            this.$refreshPage('contacts-carrier-truck', 'contacts-carrier-truck-detail')
           } catch (e) {
             console.log(e)
           } finally {
