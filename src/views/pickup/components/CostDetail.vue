@@ -25,12 +25,12 @@
       <detail-panel-item :label="'结算方式'">
         <p>{{settlementTypeMap[pickupDetail.settlementType]}}</p>
       </detail-panel-item>
-      <template v-if="pickupDetail.settlementType === 1">
-        <detail-panel-item v-if="pickupDetail.cashAmount" :label="'到付现金'">
-          <p>{{pickupDetail.cashAmount|moneyFormat}}元</p>
+      <template v-if="pickupDetail.settlementPayInfo.length">
+        <detail-panel-item v-if="pickupDetail.settlementPayInfo[0].cashAmount" :label="'到付现金'">
+          <p>{{pickupDetail.settlementPayInfo[0].cashAmount|moneyFormat}}元</p>
         </detail-panel-item>
-        <detail-panel-item v-if="pickupDetail.fuelCardAmount" :label="'到付油卡'">
-          <p>{{pickupDetail.fuelCardAmount|moneyFormat}}元</p>
+        <detail-panel-item v-if="pickupDetail.settlementPayInfo[0].fuelCardAmount" :label="'到付油卡'">
+          <p>{{pickupDetail.settlementPayInfo[0].fuelCardAmount|moneyFormat}}元</p>
         </detail-panel-item>
       </template>
     </detail-panel>
