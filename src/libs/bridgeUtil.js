@@ -4,8 +4,10 @@ import { reuse } from './util'
 export const getUserInfo = reuse(() => {
   let userInfo = {}
   if (process.env.NODE_ENV === 'production') {
-    userInfo.Authorization = 'Bearer ' + (bridge.call('user.getUserInfo') ? bridge.call('user.getUserInfo').data.token : '')
-    userInfo.ClientInfo = bridge.call('user.getClientInfo')
+    userInfo.Authorization =
+      'Bearer ' + (bridge.call('user.getUserInfo') ? bridge.call('user.getUserInfo').data.token : '')
+    const info = bridge.call('user.getClientInfo')
+    userInfo.ClientInfo = info ? (info.data ? info.data.ClientInfo : info) : ''
   } else {
     console.warn('Authorization on mock')
     try {
@@ -82,7 +84,7 @@ export const setAppRightBtn = (options = []) => {
       config.action = iconType || 'appRightBtn_H5'
       bridge.register(config.action, action, false)
     }
-    if (iconType){
+    if (iconType) {
       config.url = process.env.VUE_APP_IMG_HOST + type[iconType]
     }
     arr.push(config)

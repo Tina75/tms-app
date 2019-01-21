@@ -13,11 +13,11 @@
         :index="i"
         :item="item"
         icon="icon-ico_location"
+        @click="modify(item)"
       >
         <div
           slot="right"
           class="contacts-shipper-address__item border-left-1px cube-font-14 cube-c-light-grey"
-          @click="modify(item)"
           v-text="'修改'"
         />
       </ListItem>
@@ -41,7 +41,7 @@ const moudleName = 'contacts/shipper'
 export default {
   name: 'ContactsShipperCargoList',
   metaInfo: {
-    title: '发货方'
+    title: '发货地址'
   },
   components: { ListItem, NoData, InfiniteList },
   data() {

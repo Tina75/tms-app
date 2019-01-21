@@ -159,7 +159,7 @@ export default {
       }
     },
     async remove() {
-      await this.removeCargo({ id: this.$route.query.consignerId })
+      await this.removeCargo({ id: this.form.id })
       this.$refreshPage('contacts-shipper')
       window.toast('删除成功')
       this.$router.back(true)

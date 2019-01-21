@@ -25,6 +25,7 @@ export default {
   },
   onLeave(to, from, next) {
     const { formLeaveConfirm } = from.meta
+    next(false)
     if (!formLeaveConfirm || $formState.hasSubmitted) {
       $formState.willLeave(to, from)
       next()
