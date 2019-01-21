@@ -65,7 +65,8 @@ export default {
       }
     }
   },
-  mounted () {
+  async mounted () {
+    this.setPageStart('pickingData')
     this.getPicking()
   },
   methods: {

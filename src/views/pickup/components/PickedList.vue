@@ -62,7 +62,8 @@ export default {
       }
     }
   },
-  mounted () {
+  async mounted () {
+    this.setPageStart('pickedData')
     this.getPicked()
   },
   methods: {
