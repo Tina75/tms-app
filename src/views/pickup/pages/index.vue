@@ -88,24 +88,21 @@ export default {
       }
     }
   },
-  mounted () {
-    setAppRightBtn([
-      {
-        text: '调度',
-        iconType: 'add',
-        action: () => {
-          this.$router.push({
-            name: 'pickup-dispatch'
-          })
-        }
-      }
-    ])
-  },
   methods: {
     ...mapActions('pickup', ['getPickupCount'])
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
+      setAppRightBtn([
+        {
+          text: '调度',
+          action: () => {
+            vm.$router.push({
+              name: 'pickup-dispatch'
+            })
+          }
+        }
+      ])
       vm.getPickupCount()
     })
   },

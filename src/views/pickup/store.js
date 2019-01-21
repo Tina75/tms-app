@@ -422,9 +422,11 @@ export default {
       commit('removeBillOrder', id)
     },
     addBillOrder: ({ state, commit }, ids) => {
+      console.log('hitAction1')
       commit('addBillOrder', ids)
     },
     editBillOrders: ({ state, commit }, id) => {
+      console.log('hitAction2')
       return new Promise((resolve, reject) => {
         server({
           method: 'post',

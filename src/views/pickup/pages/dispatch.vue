@@ -45,8 +45,8 @@
             </div>
             <div class="item-footer">
               <div class="order-cost">
-                <p class="cost-label">应收费用（{{settlementTypeMap[item.settlementType]}}）</p>
-                <p class="cost-money">{{item.totalFee}}<span>/元</span></p>
+                <p class="cost-label">应收费用（{{orderSettlementTypeMap[item.settlementType]}}）</p>
+                <p class="cost-money">{{item.totalFee|moneyFormat}}<span>/元</span></p>
               </div>
             </div>
           </li>
@@ -98,7 +98,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('pickup', ['dispatchingData', 'settlementTypeMap']),
+    ...mapGetters('pickup', ['dispatchingData', 'orderSettlementTypeMap']),
     options () {
       return {
         pullUpLoad: this.dispatchingData.next,
@@ -107,7 +107,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('pickup', ['setPageStart', 'getDispatching', 'createPickup']),
+    ...mapActions('pickup', ['setPageStart', 'getDispatching', 'createPickup', 'addBillOrder', 'editBillOrders']),
     /** 上拉加载 */
     async onPullingUp () {
       await this.getDispatching()
@@ -152,15 +152,43 @@ export default {
       }
     },
     async batchDispatch () {
-      if (this.$route.params.id) {
-        await this.addBillOrder(this.chosenList)
-        await this.editBillOrders(this.$route.params.id)
-      } else {
-        await this.createPickup(this.chosenList)
-        await this.setPageStart('dispatchingData')
-        await this.getDispatching()
-      }
-      this.$router.back()
+      const _this = this
+      console.log(this.$route.params.id)
+      const confirmText = this.$route.params.id ? '是否确认添加这些订单' : '是否确认做提货调度，创建提货单'
+      this.$createDialog({
+        type: 'confirm',
+        title: '提示',
+        content: confirmText,
+        confirmBtn: {
+          text: '是',
+          active: true,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        cancelBtn: {
+          text: '否',
+          active: false,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        async onConfirm () {
+          if (_this.$route.params.id) {
+            console.log('hitConfirm')
+            await _this.addBillOrder(_this.chosenList)
+            await _this.editBillOrders(_this.$route.params.id)
+          } else {
+            await _this.createPickup(_this.chosenList)
+            await _this.setPageStart('dispatchingData')
+            await _this.getDispatching()
+          }
+          _this.$router.back()
+          _this.$createToast({
+            type: 'warn',
+            time: 1000,
+            txt: '创建成功'
+          }).show()
+        }
+      }).show()
     }
   },
   beforeRouteEnter (to, from, next) {
