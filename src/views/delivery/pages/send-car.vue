@@ -822,42 +822,44 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.getWaybillDetail(to.params.id).then(({ waybill }) => {
-        if (!waybill.carNo) return
-        vm.isEditMode = true
+      if (to.query.type) {
+        vm.getWaybillDetail(to.params.id).then(({ waybill }) => {
+          if (!waybill.carNo) return
+          vm.isEditMode = true
 
-        vm.start = waybill.start
-        vm.end = waybill.end
+          vm.start = waybill.start
+          vm.end = waybill.end
 
-        vm.model.assignCarType = waybill.assignCarType
-        vm.model.carrierName = waybill.carrierName
-        vm.model.carNo = waybill.carNo
-        vm.model.driverName = waybill.driverName
-        vm.model.driverPhone = waybill.driverPhone
-        vm.model.carLength = waybill.carLength
-        vm.model.carType = waybill.carType
-        vm.model.carrierWaybillNo = waybill.carrierWaybillNo
+          vm.model.assignCarType = waybill.assignCarType
+          vm.model.carrierName = waybill.carrierName
+          vm.model.carNo = waybill.carNo
+          vm.model.driverName = waybill.driverName
+          vm.model.driverPhone = waybill.driverPhone
+          vm.model.carLength = waybill.carLength
+          vm.model.carType = waybill.carType
+          vm.model.carrierWaybillNo = waybill.carrierWaybillNo
 
-        vm.model.mileage = waybill.mileage ? NP.divide(waybill.mileage, 1000) : ''
-        vm.model.freightFee = waybill.freightFee ? NP.divide(waybill.freightFee, 100) : ''
-        vm.model.insuranceFee = waybill.insuranceFee ? NP.divide(waybill.insuranceFee, 100) : ''
-        vm.model.loadFee = waybill.loadFee ? NP.divide(waybill.loadFee, 100) : ''
-        vm.model.unloadFee = waybill.unloadFee ? NP.divide(waybill.unloadFee, 100) : ''
-        vm.model.tollFee = waybill.tollFee ? NP.divide(waybill.tollFee, 100) : ''
-        vm.model.otherFee = waybill.otherFee ? NP.divide(waybill.otherFee, 100) : ''
-        vm.model.infoFee = waybill.infoFe ? NP.divide(waybill.infoFee, 100) : ''
-        vm.model.totalFee = waybill.totalFee ? NP.divide(waybill.totalFee, 100) : ''
-        vm.model.accommodation = waybill.accommodation ? NP.divide(waybill.accommodation, 100) : ''
-        vm.model.settlementType = waybill.settlementType
-        waybill.settlementPayInfo.forEach((item, index) => {
-          vm.model[`cashAmount${index + 1}`] = item ? NP.divide(item.cashAmount, 100) : ''
-          vm.model[`fuelCardAmount${index + 1}`] = item ? NP.divide(item.fuelCardAmount, 100) : ''
+          vm.model.mileage = waybill.mileage ? NP.divide(waybill.mileage, 1000) : ''
+          vm.model.freightFee = waybill.freightFee ? NP.divide(waybill.freightFee, 100) : ''
+          vm.model.insuranceFee = waybill.insuranceFee ? NP.divide(waybill.insuranceFee, 100) : ''
+          vm.model.loadFee = waybill.loadFee ? NP.divide(waybill.loadFee, 100) : ''
+          vm.model.unloadFee = waybill.unloadFee ? NP.divide(waybill.unloadFee, 100) : ''
+          vm.model.tollFee = waybill.tollFee ? NP.divide(waybill.tollFee, 100) : ''
+          vm.model.otherFee = waybill.otherFee ? NP.divide(waybill.otherFee, 100) : ''
+          vm.model.infoFee = waybill.infoFe ? NP.divide(waybill.infoFee, 100) : ''
+          vm.model.totalFee = waybill.totalFee ? NP.divide(waybill.totalFee, 100) : ''
+          vm.model.accommodation = waybill.accommodation ? NP.divide(waybill.accommodation, 100) : ''
+          vm.model.settlementType = waybill.settlementType
+          waybill.settlementPayInfo.forEach((item, index) => {
+            vm.model[`cashAmount${index + 1}`] = item ? NP.divide(item.cashAmount, 100) : ''
+            vm.model[`fuelCardAmount${index + 1}`] = item ? NP.divide(item.fuelCardAmount, 100) : ''
+          })
+
+          vm.model.remark = waybill.remark
+
+          vm.model.cashBack = waybill.cashBack ? NP.divide(waybill.cashBack, 100) : ''
         })
-
-        vm.model.remark = waybill.remark
-
-        vm.model.cashBack = waybill.cashBack ? NP.divide(waybill.cashBack, 100) : ''
-      })
+      }
       vm.getCarrierNameList().then(list => {
         vm.fields.carrierName.props.options = list
       })
