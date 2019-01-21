@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { sync } from 'vuex-router-sync'
 import store from '@/store'
-import { closeWindow } from '@/libs/bridgeUtil'
+
 Vue.use(Router)
 let routes = [{
   path: '/',
@@ -26,28 +26,5 @@ let router = new Router({
 
 // 同步store和路由
 sync(store, router)
-
-let firstPageKey = ""
-// router.beforeEach((to, from, next) => {
-// //   // 记录一级页面的key
-//   if (!firstPageKey) {
-//     firstPageKey = window.history.state.key
-//   }
-//   next()
-// })
-
-router.back = (closeTip) => {
-  // 关掉一切提示,直接返回
-  if (closeTip) {
-    // 表单返回提示
-    Vue.prototype.$formWillLeave && Vue.prototype.$formWillLeave()
-  }
-  // 覆写router.back关闭整个webview
-  if (window.history.state&&window.history.state.key === firstPageKey) {
-    closeWindow({ logOut: false })
-  } else {
-    router.go(-1)
-  }
-}
 
 export default router

@@ -16,12 +16,14 @@
         v-model="form.address"
         prop="address"
         label="详细地址"
+        maxlength="100"
         placeholder="请输入详细地址"
         clearable
         @on-focus="allowSearch = true" />
       <form-item
         v-model="form.extra"
         label="补充地址"
+        maxlength="50"
         placeholder="请输入楼号-门牌号"
         clearable />
     </form-group>

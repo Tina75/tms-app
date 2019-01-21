@@ -24,7 +24,8 @@
               v-if="orderConfig.weightTonOption"
               v-model="form.weight"
               label="重量(吨)"
-              type="number" />
+              type="number"
+              precision="3" />
             <form-item
               v-if="orderConfig.weightKgOption"
               v-model="form.weightKg"
@@ -140,8 +141,6 @@ export default {
       formList: [],
       cargoIndex: void 0,
       dialogIndex: void 0,
-      sizeDialog: null,
-      unitDialog: null,
       size: { length: '', width: '', height: '' },
       unit: '',
       rules: {
@@ -245,7 +244,7 @@ export default {
     // 显示填写尺寸对话框
     showSizeDialog (index) {
       this.dialogIndex = index
-      if (!this.sizeDialog) this.initSizeDialog()
+      this.initSizeDialog()
       const temp = this.formList[index]
       this.size.length = temp.dimension.length
       this.size.height = temp.dimension.height
@@ -254,11 +253,12 @@ export default {
     },
     // 初始化填写尺寸对话框
     initSizeDialog () {
+      const temp = this.formList[this.dialogIndex]
+      let sizeInput
       this.sizeDialog = this.$createDialog({
         title: '包装尺寸(毫米)',
         type: 'confirm',
         onConfirm: () => {
-          const temp = this.formList[this.dialogIndex]
           let extra = { volume: temp.volume, size: '' }
           if (!temp.volume) {
             extra.volume = NP.round(
@@ -276,11 +276,16 @@ export default {
       }, createElement => {
         return createElement(SizeInput, {
           slot: 'content',
+          props: {
+            length: temp.dimension.length,
+            width: temp.dimension.width,
+            height: temp.dimension.height
+          },
           on: {
             blur: (length, width, height) => {
-              this.size.length = length
-              this.size.width = width
-              this.size.height = height
+              this.size.length = Number(length)
+              this.size.width = Number(width)
+              this.size.height = Number(height)
             }
           }
         })
@@ -289,7 +294,7 @@ export default {
     // 显示填写包装对话框
     showUnitDialog (index) {
       this.dialogIndex = index
-      if (!this.unitDialog) this.initUnitDialog()
+      this.initUnitDialog()
       const temp = this.formList[index]
       this.unit = temp.unit
       this.unitDialog.show()
