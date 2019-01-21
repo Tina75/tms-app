@@ -875,6 +875,7 @@ export default {
     display: flex
     flex-direction column
     .edit-form
+      overflow-scrolling touch
       padding-top: 15px;
       flex 1
       overflow auto
