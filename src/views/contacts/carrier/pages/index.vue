@@ -11,6 +11,7 @@
         :key="item.id"
         :index="i"
         :item="item"
+        icon="icon-ico-driver"
         @phoneCall="onItemPhoneCall"
         @click="onItemClick"
       />
