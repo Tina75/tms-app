@@ -36,36 +36,40 @@
       <detail-panel-item :label="'车牌号'">
         <p>{{pickupDetail.carNo}}</p>
       </detail-panel-item>
-      <detail-panel-item :label="'主司机'">
-        <p>{{pickupDetail.driverName}}</p>
-      </detail-panel-item>
-      <detail-panel-item :label="'联系方式'">
-        <p class="remix-content">
-          <span class="border-right-1px">{{pickupDetail.driverPhone}}</span>
-          <a @click="phoneCall(pickupDetail.driverPhone)">
-            联系TA
-            <icon-font
-              name="icon-ico_call"
-              :size="18"
-              color="#00A4BD"/>
-          </a>
-        </p>
-      </detail-panel-item>
-      <detail-panel-item v-if="pickupDetail.assistantDriverName" :label="'副司机'">
-        <p>{{pickupDetail.assistantDriverName}}</p>
-      </detail-panel-item>
-      <detail-panel-item v-if="pickupDetail.assistantDriverPhone" :label="'联系方式'">
-        <p class="remix-content">
-          <span class="border-right-1px">{{pickupDetail.assistantDriverPhone}}</span>
-          <a @click="phoneCall(pickupDetail.driverPhone)">
-            联系TA
-            <icon-font
-              name="icon-ico_call"
-              :size="18"
-              color="#00A4BD"/>
-          </a>
-        </p>
-      </detail-panel-item>
+      <template v-if="pickupDetail.driverName">
+        <detail-panel-item :label="'主司机'">
+          <p>{{pickupDetail.driverName}}</p>
+        </detail-panel-item>
+        <detail-panel-item :label="'联系方式'">
+          <p class="remix-content">
+            <span class="border-right-1px">{{pickupDetail.driverPhone}}</span>
+            <a @click="phoneCall(pickupDetail.driverPhone)">
+              联系TA
+              <icon-font
+                name="icon-ico_call"
+                :size="18"
+                color="#00A4BD"/>
+            </a>
+          </p>
+        </detail-panel-item>
+      </template>
+      <template v-if="pickupDetail.assistantDriverName">
+        <detail-panel-item v-if="pickupDetail.assistantDriverName" :label="'副司机'">
+          <p>{{pickupDetail.assistantDriverName}}</p>
+        </detail-panel-item>
+        <detail-panel-item v-if="pickupDetail.assistantDriverPhone" :label="'联系方式'">
+          <p class="remix-content">
+            <span class="border-right-1px">{{pickupDetail.assistantDriverPhone}}</span>
+            <a @click="phoneCall(pickupDetail.driverPhone)">
+              联系TA
+              <icon-font
+                name="icon-ico_call"
+                :size="18"
+                color="#00A4BD"/>
+            </a>
+          </p>
+        </detail-panel-item>
+      </template>
     </template>
     <detail-panel-item :label="'车型'">
       <p>{{carTypeMap[pickupDetail.carType]}}</p>

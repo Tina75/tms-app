@@ -65,9 +65,9 @@ export default {
       }
     }
   },
-  async mounted () {
-    await this.setPageStart('pickingData')
-    await this.getPicking()
+  mounted () {
+    this.setPageStart('pickingData')
+    this.getPicking()
   },
   methods: {
     ...mapActions('pickup', ['setPageStart', 'getPicking', 'arriveBill', 'removePicking', 'getPickupCount']),
