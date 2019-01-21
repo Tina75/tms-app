@@ -143,7 +143,7 @@ export default {
       return list.includes(arr.join(''))
     },
     onItemClick(id) {
-      this.$router.push({ name: 'rder-detail', params: { id } })
+      this.$router.push({ name: 'order-detail', params: { id } })
     }
 
   }
