@@ -66,7 +66,9 @@ export default {
         }
       ],
       scrollOptions: {
-        pullDownRefresh: true,
+        pullDownRefresh: {
+          txt: '刷新成功!'
+        },
         pullUpLoad: true,
         directionLockThreshold: 0
       }

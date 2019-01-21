@@ -16,6 +16,28 @@ export const setMile = (value = 0) => {
 export const getMile = (value = 0) => {
   return value / 1000
 }
+// 上游来单体积
+export const getVolume = (value = 0) => {
+  return value / 100
+}
+// 上游来单重量
+export const getWeight = (value = 0) => {
+  return value / 1000
+}
+export const pickUp = (value) => {
+  let status = ''
+  switch (Number(value)) {
+    case 1:
+      status = '小车上门提货'
+      break
+    case 2:
+      status = '大车直送客户'
+      break
+    default:
+      break
+  }
+  return status
+}
 
 export const orderStatus = (value, type = '') => {
   let status = '-'
@@ -42,7 +64,7 @@ export const orderStatus = (value, type = '') => {
         status = '待接收'
         break
       case 1:
-        status = '已接受'
+        status = '已接收'
         break
       case 2:
         status = '已拒绝'

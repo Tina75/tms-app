@@ -4,19 +4,25 @@
       {{data.name}}
     </div>
     <div class="cargo-info">
-      <span>{{data.weight || 0}}吨</span>
-      <span>{{data.volume || 0}}方</span>
-      <span>{{data.packageUnit || '-'}}</span>
-      <span>{{data.num || 0 }}件</span>
-      <span>{{data.cost || 0 }}元</span>
+      <span v-if="data.weight">{{data.weight | weight}}吨</span>
+      <span v-if="data.volume">{{data.volume | volume}}方</span>
+      <span>{{data.packageUnit}}</span>
+      <span v-if="data.num">{{data.num}}件</span>
+      <span v-if="data.cost">{{data.cost | money}}元</span>
       <span>{{data.remark1}}</span>
       <span>{{data.remark2}}</span>
     </div>
   </div>
 </template>
 <script>
+import { getMoney, getVolume, getWeight } from '../libs'
 export default {
   name: 'cargo-detail',
+  filters: {
+    money: getMoney,
+    volume: getVolume,
+    weight: getWeight
+  },
   props: {
     data: {
       type: Object,
