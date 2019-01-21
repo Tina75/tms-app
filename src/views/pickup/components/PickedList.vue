@@ -62,8 +62,9 @@ export default {
       }
     }
   },
-  mounted () {
-    this.getPicked()
+  async mounted () {
+    await this.setPageStart('pickedData')
+    await this.getPicked()
   },
   methods: {
     ...mapActions('pickup', ['setPageStart', 'getPicked']),

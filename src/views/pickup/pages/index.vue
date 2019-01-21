@@ -76,7 +76,6 @@ export default {
         setAppRightBtn([
           {
             text: '调度',
-            iconType: 'add',
             action: () => {
               this.$router.push({
                 name: 'pickup-dispatch'
@@ -120,8 +119,6 @@ export default {
 .pickup
   height: 100%
   background-color: #EFEFEF;
-  display: flex
-  flex-direction column
   .cube-tab-bar
     background-color: #ffffff;
     height: 60px
@@ -141,6 +138,6 @@ export default {
     .tab-label, .tab-count
       color: #00A4BD;
   .scroll-list-wrap
-    flex: 1
     overflow-y auto
+    height calc(100% - 80px)
 </style>

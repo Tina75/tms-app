@@ -173,13 +173,24 @@ const IMAGES = {
 
 const VALIDATE_PHONE = /^1[0-9]{10}$/
 const VALIDATE_TEL = /^[(（）)\-02-9][(（）)\-0-9]{1,19}$/
+const NO_RESET_PAGE = [
+  'order-charge-rule', // 计费规则
+  'order-cargo-info', // 货物信息
+  'order-edit-address', // 编辑地址
+  'order-fee-info', // 其他费用
+  'order-consumer-info', // 客户信息
+  'order-other-info', // 其他信息
+  'order-select-consigner', // 选择发货人
+  'order-select-consignee', // 选择收货人
+  'pickup-assign', // 提货发运
+  'delivery-send-car' // 送货发运
+]
 
 export default {
   name: 'order-create',
   metaInfo () {
-    const title = this.mode === 'edit' ? '编辑订单' : '手工开单'
     return {
-      title
+      title: this.$route.meta.title
     }
   },
   components: { FormGroup, FormItem, FormTitle, CreateFooter },
@@ -255,8 +266,13 @@ export default {
       vm.id = vm.$route.params.id
       vm.$nextTick(async () => {
         vm.setTitleButtons()
-        if ([ 'order-charge-rule', 'order-cargo-info', 'order-edit-address', 'order-fee-info', 'order-consumer-info', 'order-other-info', 'order-select-consigner', 'order-select-consignee' ].indexOf(from.name) === -1) vm.$refs.$form.reset()
-        await vm.orderInfoInit()
+
+        const fromPage = from.name
+        if (NO_RESET_PAGE.indexOf(fromPage) === -1 || vm.orderNeedReset) vm.$refs.$form.reset()
+        // 发运页面返回的情况不查询订单数据
+        if (fromPage !== 'pickup-assign' && fromPage !== 'delivery-send-car') {
+          await vm.orderInfoInit()
+        }
         await vm.setConsigner()
         vm.setConsignee()
         vm.showConsumerInfo()
