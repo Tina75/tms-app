@@ -2,39 +2,33 @@ import { setAppTitleBtn, clearAppTitleBtn, closeWindow } from '@/libs/bridgeUtil
 import Vue from 'vue'
 import router from '@/router'
 import PLUGINS from './routerPlugin'
-
 PLUGINS.forEach((plugin) => {
   if (plugin.install) {
     plugin.install(Vue)
   }
 })
-
-let globalHistory = 1
-let backFlag = false
-const push = router.push
-router.push = (...args) => {
-  globalHistory++
-  push.apply(router, args)
-}
+// -----hack back------
+let backWorks = false
 router.back = (closeTip) => {
   // 关掉一切提示,直接返回
   if (closeTip) {
     // 表单返回提示
     Vue.prototype.$formWillLeave && Vue.prototype.$formWillLeave()
   }
-  // 覆写router.back关闭整个webview
-  if (globalHistory === 1) {
-    closeWindow({ logOut: false })
-  } else {
-    backFlag = true
-    router.go(-1)
-  }
+  // 无api直接得知当前页是否在栈顶,
+  // 可以通过试着goback后判断hash是否变化来得知是否到达栈顶
+  backWorks = false
+  router.go(-1)
+  setTimeout(() => {
+    if (!backWorks) {
+      closeWindow({ logOut: false })
+    }
+  }, 50)
 }
 
 router.afterEach((to, from) => {
   // 自动清理上一个页面设置的原生按钮
   clearAppTitleBtn()
-  console.log(globalHistory)
 })
 /// ------全局劫持-----
 const ENTER_HANDLERS = getHandlerArr(PLUGINS, 'onEnter')
@@ -58,20 +52,20 @@ Vue.mixin({
   },
 
   beforeRouteLeave(to, from, next) {
+    // hash变化了!
+    backWorks = true
     if (noJudge || !LEAVE_HANDLERS_LENGTH) {
       next()
       noJudge = false
-      if (backFlag) globalHistory--
     } else {
       const nextProxy = countToBack(LEAVE_HANDLERS_LENGTH)
       let allow = true
       for (let i = 0; i < LEAVE_HANDLERS_LENGTH; i++) {
+        // 钩子返回值决定是否要让路由通过, 不需要阻拦的请返回true
         allow = allow && !!LEAVE_HANDLERS[i].call(this, to, from, nextProxy)
       }
       next(allow)
-      if (allow && backFlag) globalHistory--
     }
-    backFlag = false
   }
 })
 
