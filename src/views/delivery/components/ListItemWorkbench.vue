@@ -1,7 +1,7 @@
 <template>
 
   <li class="list-item">
-    <div class="list-item__time">
+    <div class="list-item__time  border-bottom-1px ">
       <cube-checkbox v-model="info.checked" class="list-item__checkbox">
         <span class="cube-ml-15">{{info.createTime||info.createTimeLong | datetimeFormat}}</span>
         <div class="list-item__flag">
@@ -25,7 +25,7 @@
         <span class="send-type">{{info.assignCarType==1?'外转':'自送'}}</span>{{info.driverName}}  {{info.assistantDriverName}}  {{info.carNo}}
       </p>
     </div>
-    <div class="list-item__money">
+    <div class="list-item__money border-top-1px">
       <p class="cube-c-black cube-font-12 cube-ml-15">应付费用({{info.settlementType|settlementTypeFormat}})</p>
       <div class="cube-c-yellow cube-mt-5 cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.pickupFee||info.totalFee |moneyFormat}}</span>/元</div>
     </div>
@@ -59,27 +59,22 @@ export default {
     &__checkbox
       height 20px
     &__time
-      height 20px
-      line-height 20px
       position relative
-    &__time:after
-      content ''
-      display block
-      border-bottom 1px solid #E4E7EC
-      margin-top 6px
-    &__money:before
-      content ''
-      display block
-      border-bottom 1px solid #E4E7EC
-      margin-bottom 10px
+      padding-bottom 10px
+    &__money
+      padding-top 10px
+      margin-top 10px
     &__body
       padding-left 15px
 
     &__city
       color #333
       font-size 18px
-      margin-top 20px
+      margin-top 10px
       font-weight bold
+      white-space  nowrap
+      overflow hidden
+      text-overflow ellipsis
     &__count
       background #efefef
       display inline-block

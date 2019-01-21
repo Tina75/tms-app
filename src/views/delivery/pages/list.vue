@@ -49,11 +49,7 @@ export default {
 
   watch: {
     current (value) {
-      if (value === 'dispatch') {
-        setAppRightBtn([{ text: '调度', action: () => { this.$router.push({ name: 'delivery-workbench-multi' }) } }])
-      } else {
-        setAppRightBtn([{ text: '', action: () => {} }])
-      }
+      this.setRightBtn()
     }
   },
 
@@ -62,16 +58,30 @@ export default {
       const tab = to.query.tab
       if (tab) { vm.selectedLabel = vm.tabs[tab].label }
       vm.getTabCount()
+      vm.setRightBtn()
     })
   },
+
+  beforeRouteLeave(to, from, next) {
+    setAppRightBtn([{ text: '', action: () => {} }])
+    next()
+  },
+
   mounted() {
-    this.updateView(this.selectedLabel)
     setAppRightBtn([{ text: '调度', action: () => { this.$router.push({ name: 'delivery-workbench-multi' }) } }])
+    this.updateView(this.selectedLabel)
   },
   methods: {
     ...mapActions('delivery', ['getTabCount']),
     updateView(label) {
       this.current = this.tabs.find(item => item.label === label).componentName
+    },
+    setRightBtn() {
+      if (this.current === 'dispatch-list') {
+        setAppRightBtn([{ text: '调度', action: () => { this.$router.push({ name: 'delivery-workbench-multi' }) } }])
+      } else {
+        setAppRightBtn([{ text: '', action: () => {} }])
+      }
     }
   }
 }
