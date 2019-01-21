@@ -86,6 +86,7 @@ export default {
       start: -1,
       end: -1,
       isEditMode: false, // 是否为编辑模式
+      allDriverList: [],
       model: {
         assignCarType: 1,
         selfDriverName: '',
@@ -166,7 +167,7 @@ export default {
         },
         selfDriverName: {
           type: 'select',
-          modelKey: 'driverName',
+          modelKey: 'selfDriverName',
           label: '主司机',
           props: {
             options: [],
@@ -175,8 +176,8 @@ export default {
           events: {
             'change': (value) => {
               if (value) {
-                const driverList = [..._this.fields.selfAssistantDriverName.props.options]
-                _this.fields.selfAssistantDriverName.props.options.splice(driverList.indexOf(value), 1)
+                const driverList = [...this.allDriverList]
+                _this.fields.selfAssistantDriverName.props.options = driverList.filter(item => item !== value)
               }
             }
           },
@@ -195,8 +196,8 @@ export default {
           events: {
             'change': (value) => {
               if (value) {
-                const driverList = [..._this.fields.selfDriverName.props.options]
-                _this.fields.selfDriverName.props.options.splice(driverList.indexOf(value), 1)
+                const driverList = [...this.allDriverList]
+                _this.fields.selfDriverName.props.options = driverList.filter(item => item !== value)
               }
             }
           }
@@ -762,6 +763,8 @@ export default {
     async submitAssign () {
       let isValid = await this.$refs['assign-form'].validate()
       if (isValid) {
+        console.log(this.model.assignCarType, this.model.selfDriverName)
+
         const data = {
           start: this.start,
           end: this.end,
@@ -824,7 +827,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      if (to.query.type) {
+      if (!to.query.type) {
         vm.getWaybillDetail(to.params.id).then(({ waybill }) => {
           if (!waybill.carNo) return
           vm.isEditMode = true
@@ -871,6 +874,7 @@ export default {
       vm.getSelfDriverList().then(list => {
         vm.fields.selfDriverName.props.options = list
         vm.fields.selfAssistantDriverName.props.options = list
+        vm.allDriverList = [...list]
       })
     })
   }
