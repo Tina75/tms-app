@@ -46,7 +46,7 @@ export default {
   components: { WaybillInfo, OrderCargoList, CostDetail },
   data () {
     return {
-      pageData: [{ name: '运单信息', component: 'WaybillInfo' }, { name: '货物明细', component: 'OrderCargoList' }, { name: '应收费用', component: 'CostDetail' }],
+      pageData: [{ name: '运单信息', component: 'WaybillInfo' }, { name: '货物明细', component: 'OrderCargoList' }, { name: '应付费用', component: 'CostDetail' }],
       hasSendCar: false
     }
   },

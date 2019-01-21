@@ -39,7 +39,7 @@
     <detail-panel-item v-if="Detail.invoiceAmount" :label="'开票税额'">
       <p>{{Detail.invoiceAmount | moneyFormat}}元</p>
     </detail-panel-item>
-    <detail-panel-item v-if="Detail.salesmanName" :label="'责任业务员'">
+    <detail-panel-item v-if="Detail.salesmanName" :label="'对接业务员'">
       <p>{{Detail.salesmanName}}</p>
     </detail-panel-item>
     <detail-panel-item  :label="'是否开票'">

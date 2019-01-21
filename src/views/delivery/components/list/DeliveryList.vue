@@ -31,7 +31,6 @@
           </p>
         </div>
         <div class="list-item__money">
-          <!-- <p v-if="hasSendCar(info)" class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormat}})</p> -->
           <p v-if="info.totalFee"  class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormat}})</p>
           <div v-if="info.totalFee"  class="cube-c-yellow cube-mt-5 cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.totalFee |moneyFormat}}</span>/元</div>
           <!-- 状态 10：待提货 20：待调度 30：在途 40：已到货 50：已回单；100被删除到回收站 -->

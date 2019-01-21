@@ -1,5 +1,5 @@
 <template>
-  <detail-panel :title="'应收费用'">
+  <detail-panel :title="'应付费用'">
     <detail-panel-item :label="'计费里程'">
       <p>{{ detail.mileage }}公里</p>
     </detail-panel-item>

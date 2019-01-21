@@ -20,7 +20,7 @@
           <cube-form-item :field="fields['carrierWaybillNo']"/>
         </cube-form-group>
         <cube-form-group v-if="model.assignCarType === 2">
-          <cube-form-item :field="fields['carNo']"/>
+          <cube-form-item :field="fields['carNoOnlySel']"/>
           <cube-form-item :field="fields['selfDriverName']"/>
           <cube-form-item :field="fields['selfAssistantDriverName']"/>
         </cube-form-group>
@@ -40,7 +40,7 @@
           </cube-form-item>
           <!-- 结算方式 -->
           <cube-form-item v-if="model.assignCarType === 1" :field="fields['settlementType']"/>
-          <div v-if="model.settlementType === 1">
+          <div v-if="model.assignCarType === 1 && model.settlementType === 1">
             <cube-form-item  :field="fields['fuelCardAmount1']"/>
             <cube-form-item :field="fields['cashAmount1']"/>
             <cube-form-item  :field="fields['fuelCardAmount2']"/>
@@ -152,9 +152,21 @@ export default {
             required: true
           }
         },
+        carNoOnlySel: {
+          type: 'select',
+          modelKey: 'carNo',
+          label: '车牌号',
+          props: {
+            options: [],
+            placeholder: '请选择（必填）'
+          },
+          rules: {
+            required: true
+          }
+        },
         selfDriverName: {
           type: 'select',
-          modelKey: 'selfDriverName',
+          modelKey: 'driverName',
           label: '主司机',
           props: {
             options: [],
@@ -162,8 +174,10 @@ export default {
           },
           events: {
             'change': (value) => {
-              _this.fields.selfAssistantDriverName.props.options = Object.assign([], _this.backupDriverList)
-              _this.fields.selfAssistantDriverName.props.options.splice(_this.backupDriverList.indexOf(value), 1)
+              if (value) {
+                _this.fields.selfAssistantDriverName.props.options = Object.assign([], _this.backupDriverList)
+                _this.fields.selfAssistantDriverName.props.options.splice(_this.backupDriverList.indexOf(value), 1)
+              }
             }
           },
           rules: {
@@ -180,8 +194,10 @@ export default {
           },
           events: {
             'change': (value) => {
-              _this.fields.selfDriverName.props.options = Object.assign([], _this.backupDriverList)
-              _this.fields.selfDriverName.props.options.splice(_this.backupDriverList.indexOf(value), 1)
+              if (value) {
+                _this.fields.selfDriverName.props.options = Object.assign([], _this.backupDriverList)
+                _this.fields.selfDriverName.props.options.splice(_this.backupDriverList.indexOf(value), 1)
+              }
             }
           }
         },
@@ -846,7 +862,7 @@ export default {
         vm.fields.carrierName.props.options = list
       })
       vm.getSelfCarList().then(list => {
-        vm.fields.carNo.props.options = list
+        vm.fields.carNoOnlySel.props.options = list
       })
       vm.getSelfDriverList().then(list => {
         vm.fields.selfDriverName.props.options = list
