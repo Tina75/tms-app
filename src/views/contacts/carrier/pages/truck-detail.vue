@@ -36,8 +36,10 @@
     </div>
     <div v-if="photoList.length" class="truck-detail__card cube-font-15 cube-mt-15">
       <div class="cube-c-black cube-mb-15" v-text="'证件照片'"/>
-      <div class="imgs">
-        <img v-for="(item, index) in photoList" :key="index" :src="item" alt="">
+      <div class="photoWrap">
+        <div v-for="(item, index) in photoList" :key="index" class="photo">
+          <div :style="{'background-image': `url(${item})`}" class="photo-preview"/>
+        </div>
       </div>
     </div>
 
@@ -86,8 +88,8 @@ export default {
       const detail = this.viewData
       if (detail) {
         const arr = []
-        detail.drivePhoto && arr.push(detail.drivePhoto)
-        detail.travelPhoto && arr.push(detail.travelPhoto)
+        detail.drivePhoto && arr.push(process.env.VUE_APP_IMG_HOST + detail.drivePhoto)
+        detail.travelPhoto && arr.push(process.env.VUE_APP_IMG_HOST + detail.travelPhoto)
         return arr
       }
       return []
@@ -164,6 +166,7 @@ export default {
           }
           try {
             this.removeTruck(data)
+            this.$refreshPage('contacts-carrier-truck', 'contacts-carrier-truck-detail')
           } catch (e) {
             console.log(e)
           } finally {
@@ -221,4 +224,18 @@ export default {
   &__regularLine
     display flex
     align-items center
+  .photoWrap
+    display flex
+    .photo
+      margin-left 25px
+      border-radius 2px
+      height 90px
+      width 160px
+      &:first-child
+        margin-left 0
+      &-preview
+        position relative
+        background center no-repeat #F9F9F9
+        background-size cover
+        height 100px
 </style>

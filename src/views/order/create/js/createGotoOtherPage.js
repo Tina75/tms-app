@@ -97,8 +97,6 @@ export default {
     setAppTitleBtn({
       text: '常发订单',
       action: () => {
-        // const { origin, pathname } = window.location
-        // openNewPage({ url: origin + pathname + '#/order/often', id: 'order-often' })
         this.$router.push({ name: 'order-often' })
       }
     })

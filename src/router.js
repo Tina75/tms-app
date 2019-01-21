@@ -27,6 +27,15 @@ let router = new Router({
 // 同步store和路由
 sync(store, router)
 
+let firstPageKey = ""
+// router.beforeEach((to, from, next) => {
+// //   // 记录一级页面的key
+//   if (!firstPageKey) {
+//     firstPageKey = window.history.state.key
+//   }
+//   next()
+// })
+
 router.back = (closeTip) => {
   // 关掉一切提示,直接返回
   if (closeTip) {
@@ -34,10 +43,9 @@ router.back = (closeTip) => {
     Vue.prototype.$formWillLeave && Vue.prototype.$formWillLeave()
   }
   // 覆写router.back关闭整个webview
-  if (window.history.length <= 1) {
+  if (window.history.state&&window.history.state.key === firstPageKey) {
     closeWindow({ logOut: false })
   } else {
-    console.log(window.history)
     router.go(-1)
   }
 }
