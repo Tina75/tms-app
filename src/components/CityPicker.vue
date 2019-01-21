@@ -23,7 +23,7 @@
         >{{tab}}</div>
       </div>
       <div class="items">
-        <div v-if="areaParent" class="item border-bottom-1px border-right-1px" @click="update" v-text="'全' + areaParent.shortName"/>
+        <div v-if="parent" class="item border-bottom-1px border-right-1px" @click="update" v-text="'全' + parent.shortName"/>
         <div
           v-for="(item,i) in items"
           :key="i"
@@ -79,6 +79,10 @@ export default {
       type: Number,
       default: 3
     },
+    min: { // 最低选择深度
+      type: Number,
+      default: 2
+    },
     special: {
       type: Array,
       default: () => []
@@ -111,9 +115,10 @@ export default {
         .map((v, i) => (current[i] ? current[i].shortName : v))
         .slice(0, this.deep)
     },
-    areaParent() {
-      if (this.currentTab === AREA) {
-        return this.current[CITY]
+    parent() {
+      const currentTab = this.currentTab
+      if (currentTab >= this.min && currentTab > PROVINCE) {
+        return this.current[currentTab - 1]
       }
       return ''
     }
@@ -300,4 +305,5 @@ export default {
       height 50px
       line-height 50px
       font-size 16px
+      white-space nowrap
 </style>
