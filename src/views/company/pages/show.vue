@@ -163,7 +163,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import imageList from './image-list'
 import bridge from '@/libs/dsbridge'
-import { setAppRightBtn, setAppTitleBtn } from '@/libs/bridgeUtil'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
 export default {
   name: 'company',
   metaInfo: {
@@ -206,11 +206,11 @@ export default {
           }
         }
       ])
-      setAppTitleBtn({
-        position: 'left',
-        text: 'back',
-        iconType: 'back'
-      })
+      // setAppTitleBtn({
+      //   position: 'left',
+      //   text: 'back',
+      //   iconType: 'back'
+      // })
     },
     async getCompanyData () {
       await this.getCompanyInfo()

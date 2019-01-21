@@ -28,7 +28,7 @@
       </p> -->
       </div>
       <div class="list-item__money">
-        <p class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormat}})</p>
+        <p class="cube-c-black cube-font-12 cube-ml-15">应付费用({{info.settlementType|settlementTypeFormat}})</p>
         <div class="cube-c-yellow cube-mt-5 cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.pickupFee||info.totalFee |moneyFormat}}</span>/元</div>
       </div>
     </div>

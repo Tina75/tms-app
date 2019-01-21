@@ -86,8 +86,8 @@
           <Cargo v-for="(item, index) in detail.cargoInfos" :key="index" :data="item"/>
         </Panel>
       </cube-scroll-nav-panel>
-      <cube-scroll-nav-panel label="应收费用">
-        <Panel title="应收费用">
+      <cube-scroll-nav-panel label="应付费用">
+        <Panel title="应付费用">
           <FormItem label="计费里程">
             {{detail.mileage | mile}}公里
           </FormItem>

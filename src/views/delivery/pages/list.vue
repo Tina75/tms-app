@@ -25,6 +25,8 @@ import DispatchList from '../components/list/dispath-list.vue'
 import SendList from '../components/list/send-list'
 import SendingList from '../components/list/sending-list'
 import ArrivalList from '../components/list/arrival-list'
+import { setAppRightBtn } from '@/libs/bridgeUtil'
+
 export default {
   name: 'delivery-list',
   metaInfo: { title: '送货管理' },
@@ -45,13 +47,26 @@ export default {
     ...mapGetters('delivery', ['TabCount'])
   },
 
-  beforeRouteEnter(from, to, next) {
+  watch: {
+    current (value) {
+      if (value === 'dispatch') {
+        setAppRightBtn([{ text: '调度', action: () => { this.$router.push({ name: 'delivery-workbench-multi' }) } }])
+      } else {
+        setAppRightBtn([{ text: '', action: () => {} }])
+      }
+    }
+  },
+
+  beforeRouteEnter(to, from, next) {
     next(vm => {
+      const tab = to.query.tab
+      if (tab) { vm.selectedLabel = vm.tabs[tab].label }
       vm.getTabCount()
     })
   },
   mounted() {
     this.updateView(this.selectedLabel)
+    setAppRightBtn([{ text: '调度', action: () => { this.$router.push({ name: 'delivery-workbench-multi' }) } }])
   },
   methods: {
     ...mapActions('delivery', ['getTabCount']),

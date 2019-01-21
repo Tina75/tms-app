@@ -42,7 +42,7 @@
     <detail-panel-item :label="'代收货款'">
       <p>{{ detail.collectionMoney | moneyFormat }}元</p>
     </detail-panel-item>
-    <detail-panel-item :label="'责任业务员'">
+    <detail-panel-item :label="'对接业务员'">
       <p>{{ detail.salesmanName }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'是否开票'">
