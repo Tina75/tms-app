@@ -175,8 +175,8 @@ export default {
           events: {
             'change': (value) => {
               if (value) {
-                _this.fields.selfAssistantDriverName.props.options = Object.assign([], _this.backupDriverList)
-                _this.fields.selfAssistantDriverName.props.options.splice(_this.backupDriverList.indexOf(value), 1)
+                const driverList = [..._this.fields.selfAssistantDriverName.props.options]
+                _this.fields.selfAssistantDriverName.props.options.splice(driverList.indexOf(value), 1)
               }
             }
           },
@@ -195,8 +195,8 @@ export default {
           events: {
             'change': (value) => {
               if (value) {
-                _this.fields.selfDriverName.props.options = Object.assign([], _this.backupDriverList)
-                _this.fields.selfDriverName.props.options.splice(_this.backupDriverList.indexOf(value), 1)
+                const driverList = [..._this.fields.selfDriverName.props.options]
+                _this.fields.selfDriverName.props.options.splice(driverList.indexOf(value), 1)
               }
             }
           }
@@ -762,7 +762,6 @@ export default {
     async submitAssign () {
       let isValid = await this.$refs['assign-form'].validate()
       if (isValid) {
-        const id = this.$route.query.type ? await this.sendDirectly() : this.$route.params.id // 亮仔
         const data = {
           start: this.start,
           end: this.end,
@@ -804,7 +803,7 @@ export default {
               cashAmount: NP.times(this.model.cashAmount4, 100)
             }] : [],
           cashBack: NP.times(this.model.cashBack, 100),
-          waybillId: id,
+          waybillId: this.$route.params.id,
           carrierWaybillNo: this.model.carrierWaybillNo,
           assignCarType: this.model.assignCarType,
           assistantDriverName: this.model.assignCarType === 1 ? '' : this.model.selfAssistantDriverName.split('-')[0],
@@ -812,10 +811,13 @@ export default {
           allocationStrategy: this.model.allocationStrategy,
           remark: this.model.remark
         }
-        if (this.isEditMode) {
-          await this.doEditWaybill(data)
-        } else { await this.doSendCar(data) }
-        this.getSend()
+        if (this.$route.query.type) { // 亮仔
+          await this.sendDirectly(data)
+        } else {
+          if (this.isEditMode) { await this.doEditWaybill(data) } else { await this.doSendCar(data) }
+          this.getSend()
+        }
+
         this.$router.back()
       }
     }
