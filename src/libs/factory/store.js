@@ -72,6 +72,9 @@ export function InfinateListFactory(
     const needSend = list.hasNext || needClear
     const pageNo = needClear ? 1 : list.nextPage
     if (needSend) {
+      if (needClear) {
+        commit(NAME.clearMutation)
+      }
       let data = {
         pageNo,
         pageSize: pageSize || 15,
@@ -83,9 +86,6 @@ export function InfinateListFactory(
         url,
         [method === 'get' ? 'params' : 'data']: data
       })
-      if (needClear) {
-        commit(NAME.clearMutation)
-      }
       commit(NAME.addMutation, response.data.data)
     }
   })

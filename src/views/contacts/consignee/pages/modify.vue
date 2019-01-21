@@ -214,6 +214,7 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     // 当从页面离开不进入选择地址和选择发货方时  清空选择的数据
+    next(false)
     const leave = () => {
       this.confirmed = false
       this.saveConsignerInfo()

@@ -24,7 +24,7 @@
     <detail-panel-item v-if="Waybill.otherFee" :label="'其他费用'">
       <p>{{Waybill.otherFee | moneyFormat}}元</p>
     </detail-panel-item>
-    <div v-if="Waybill.settlementPayInfo.length">
+    <div v-if="Waybill.settlementPayInfo&&Waybill.settlementPayInfo.length">
       <detail-panel-item v-for="item in Waybill.settlementPayInfo" :key="item.payType" :label="item.payType | payType">
         <p>
           <span v-if="item.cashAmount">{{item.cashAmount | moneyFormat}}元(现金)</span> &nbsp;

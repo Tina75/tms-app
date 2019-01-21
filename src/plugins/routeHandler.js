@@ -35,6 +35,7 @@ Vue.mixin({
 
   beforeRouteLeave(to, from, next) {
     if (LEAVE_HANDLERS_LENGTH) {
+      next(false)
       const nextProxy = countToGo(LEAVE_HANDLERS_LENGTH, next)
       for (let i = 0; i < LEAVE_HANDLERS_LENGTH; i++) {
         LEAVE_HANDLERS[i].call(this, to, from, nextProxy)

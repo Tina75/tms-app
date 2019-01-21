@@ -17,9 +17,6 @@
 <script>
 export default {
   name: 'cargo-detail',
-  metaInfo: {
-    title: 'cargo-detail'
-  },
   props: {
     data: {
       type: Object,

@@ -28,10 +28,10 @@
               class="act-btn">复制</span>
           </FormItem>
           <FormItem label="发货时间">
-            {{detail.deliveryTime}}
+            {{detail.deliveryTime | datetimeFormat}}
           </FormItem>
           <FormItem label="到货时间">
-            {{detail.arriveTime}}
+            {{detail.arriveTime | datetimeFormat}}
           </FormItem>
           <FormItem label="提货方式">
             {{detail.pickTypeDesc}}
