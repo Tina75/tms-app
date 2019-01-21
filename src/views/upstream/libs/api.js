@@ -17,6 +17,13 @@ export const initDetail = (shipperOrderId) => {
     }
   })
 }
+// 获取数目
+export const getStatusCnt = () => {
+  return Server({
+    method: 'get',
+    url: 'busconnector/shipper/getOrderNumByStatus'
+  })
+}
 // 接受
 export const receipt = (id) => {
   return Server({
@@ -35,11 +42,5 @@ export const refuse = (id) => {
     data: {
       shipperOrderIds: [Number(id)]
     }
-  })
-}
-export const getStatusCnt = () => {
-  return Server({
-    method: 'get',
-    url: 'busconnector/shipper/getOrderNumByStatus'
   })
 }

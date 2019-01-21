@@ -12,7 +12,7 @@
         <div class="cargo-infos">{{cargoName}}</div>
         <div class="cargo-infos">{{data.weight || 0}}吨</div>
         <div class="cargo-infos">{{data.volume || 0}}方</div>
-        <div class="cargo-infos">{{data.cargoCnt || 0}}件</div>
+        <div class="cargo-infos">{{data.quantity || 0}}件</div>
       </div>
       <div class="company">
         {{data.shipperCompanyName}} {{data.consignerContact}}

@@ -16,11 +16,11 @@
         <cube-tab-panel v-for="(item) in tabs" :key="item.label" :label="item.label">
           <cube-scroll
             ref="scroll"
-            :data="item.data"
+            :data="UpstreamList[item.key]"
             :options="scrollOptions"
             @pulling-down="onPullingDown(item.key)"
             @pulling-up="onPullingUp(item.key)">
-            <CardList :ref="item.key" :status="item.acceptStatus" @change="(data) => { dataChange(item.key, data) }"/>
+            <CardList :card-list="UpstreamList[item.key]" :keys="item.key"/>
           </cube-scroll>
         </cube-tab-panel>
       </cube-tab-panels>
@@ -29,7 +29,8 @@
 </template>
 <script>
 import CardList from '../components/CardList'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'upstream',
   metaInfo: {
@@ -40,30 +41,27 @@ export default {
   },
   data () {
     return {
-      selectedLabel: '全部',
+      selectedLabel: '',
+      cache: {},
       tabs: [
         {
           label: '全部',
           key: 'all',
-          acceptStatus: '',
           data: []
         },
         {
           label: '待接收',
           key: 'waitAccept',
-          acceptStatus: '0',
           data: []
         },
         {
           label: '已接收',
           key: 'accepted',
-          acceptStatus: '1',
           data: []
         },
         {
           label: '已拒绝',
           key: 'rejected',
-          acceptStatus: '2',
           data: []
         }
       ],
@@ -75,21 +73,36 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['statusCnt'])
+    ...mapGetters(['statusCnt', 'UpstreamList'])
+  },
+  watch: {
+    selectedLabel (val) {
+      this.tabChange(val)
+    }
+  },
+  mounted () {
+    this.selectedLabel = this.tabs[0].label
+    this.getUpstreamStatusCnt()
   },
   methods: {
-    onPullingDown (ref) {
-      this.$refs[ref][0].refresh()
+    ...mapActions(['getUpstreamStatusCnt', 'initList', 'reFresh', 'loadMore']),
+    onPullingDown (key) {
+      this.reFresh({ key })
     },
-    onPullingUp (ref) {
-      this.$refs[ref][0].load()
+    onPullingUp (key) {
+      this.loadMore({ key })
     },
-    dataChange (key, data) {
+    async tabChange (val) {
+      let key = ''
       this.tabs.map(el => {
-        if (el.key === key) {
-          el.data = data
+        if (el.label === val) {
+          key = el.key
         }
       })
+      if (!this.cache[key]) {
+        await this.initList({ key })
+        // this.cache[key] = true
+      }
     }
   }
 }

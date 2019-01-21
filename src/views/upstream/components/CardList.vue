@@ -18,49 +18,17 @@ export default {
     Card
   },
   props: {
-    status: {
+    keys: {
       type: String,
       default: ''
+    },
+    cardList: {
+      type: Array,
+      default: () => []
     }
-  },
-  data () {
-    return {
-      cardList: [],
-      keywords: {
-        pageNo: 1,
-        pageSize: 10
-      },
-      disabled: false
-    }
-  },
-  mounted () {
-    this.init()
   },
   methods: {
-    ...mapActions(['getUpstreamStatusCnt']),
-    init () {
-      this.getUpstreamStatusCnt()
-      this.keywords.pageNo = 1
-      const params = Object.assign({}, this.keywords, { acceptStatus: this.status })
-      API.initList(params)
-        .then(response => {
-          this.cardList = response.data.data.list
-          this.$emit('change', this.cardList)
-        })
-    },
-    load () {
-      this.getUpstreamStatusCnt()
-      this.keywords.pageNo += 1
-      const params = Object.assign({}, this.keywords, { acceptStatus: this.status })
-      API.initList(params)
-        .then(response => {
-          this.cardList = this.cardList.concat(response.data.data.list)
-          this.$emit('change', this.cardList)
-        })
-    },
-    refresh () {
-      this.init()
-    },
+    ...mapActions(['getUpstreamStatusCnt', 'initList']),
     toDetail (id) {
       // 路由跳转
       this.$router.push({
@@ -80,7 +48,8 @@ export default {
       API.receipt(id)
         .then(() => {
           window.toast('接收成功')
-          this.init()
+          this.getUpstreamStatusCnt()
+          this.initList({ key: this.keys })
         })
     },
     // 拒绝
@@ -92,7 +61,8 @@ export default {
           API.refuse(id)
             .then(() => {
               window.toast('拒绝成功')
-              this.init()
+              this.getUpstreamStatusCnt()
+              this.initList({ key: this.keys })
             })
         }
       }).show()

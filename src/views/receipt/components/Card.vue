@@ -10,7 +10,7 @@
       <div class="cargos">
         <div class="cargo-infos">{{data.weight || 0}}吨</div>
         <div class="cargo-infos">{{data.volume || 0}}方</div>
-        <div class="cargo-infos">{{data.cargoCnt || 0}}件</div>
+        <div class="cargo-infos">{{data.quantity || 0}}件</div>
       </div>
       <div class="company">
         {{data.consignerAddress}} {{data.consignerContact}}
@@ -24,7 +24,7 @@
         <div class="leftBox">
           <div class="settlement">月结</div>
           <div class="fee">
-            {{data.totalFee}}/元
+            {{data.totalFee | money}}/元
           </div>
         </div>
         <div class="receiptBox">
@@ -42,8 +42,12 @@
   </div>
 </template>
 <script>
+import { getMoney } from '@/views/upstream/libs'
 export default {
   name: 'tab-card',
+  filters: {
+    money: getMoney
+  },
   props: {
     data: {
       type: Object,

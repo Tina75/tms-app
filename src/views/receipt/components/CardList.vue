@@ -18,49 +18,17 @@ export default {
     Card
   },
   props: {
-    status: {
+    keys: {
       type: String,
       default: ''
+    },
+    cardList: {
+      type: Array,
+      default: () => []
     }
-  },
-  data () {
-    return {
-      cardList: [],
-      keywords: {
-        pageNo: 1,
-        pageSize: 10
-      },
-      disabled: false
-    }
-  },
-  mounted () {
-    this.init()
   },
   methods: {
-    ...mapActions(['getReceiptStatusCnt']),
-    init () {
-      this.getReceiptStatusCnt()
-      this.keywords.pageNo = 1
-      const params = Object.assign({}, this.keywords, { receiptStatus: this.status })
-      API.initList(params)
-        .then(response => {
-          this.cardList = response.data.data.list
-          this.$emit('change', this.cardList)
-        })
-    },
-    load () {
-      this.getReceiptStatusCnt()
-      this.keywords.pageNo += 1
-      const params = Object.assign({}, this.keywords, { receiptStatus: this.status })
-      API.initList(params)
-        .then(response => {
-          this.cardList = this.cardList.concat(response.data.data.list)
-          this.$emit('change', this.cardList)
-        })
-    },
-    refresh () {
-      this.init()
-    },
+    ...mapActions(['getReceiptStatusCnt', 'initReceiptList']),
     toDetail (id) {
       // 路由跳转
       this.$router.push({
@@ -97,7 +65,8 @@ export default {
           }
           API.updateReceipt(params)
             .then(res => {
-              this.init()
+              this.getReceiptStatusCnt()
+              this.initReceiptList({ key: this.keys })
               this.$createToast({
                 type: 'warn',
                 time: 1000,
@@ -125,7 +94,8 @@ export default {
           }
           API.updateReceipt(params)
             .then(res => {
-              this.init()
+              this.getReceiptStatusCnt()
+              this.initReceiptList({ key: this.keys })
               this.$createToast({
                 type: 'warn',
                 time: 1000,
