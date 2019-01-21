@@ -37,6 +37,7 @@ router.back = (closeTip) => {
   if (window.history.length <= 1) {
     closeWindow({ logOut: false })
   } else {
+    console.log(window.history)
     router.go(-1)
   }
 }
