@@ -44,7 +44,6 @@
         :maxlength="rules.remark.max"
       />
     </FromGroup>
-    <cube-button @click="removeConfirm()">aa</cube-button>
     <CheckboxPopup
       v-model="showPackageType"
       :value="form.unit"
