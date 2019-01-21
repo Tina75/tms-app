@@ -17,43 +17,44 @@ const ENTER_HANDLERS = getHandlerArr(PLUGINS, 'onEnter')
 const ENTER_HANDLERS_LENGTH = ENTER_HANDLERS.length
 const LEAVE_HANDLERS = getHandlerArr(PLUGINS, 'onLeave')
 const LEAVE_HANDLERS_LENGTH = LEAVE_HANDLERS.length
-
+let noJudge = false
 Vue.mixin({
   // 若需求要在plugin中阻止next调用,请在onLeave时阻止
   beforeRouteEnter(to, from, next) {
-    try {
-      next((vm) => {
+    next((vm) => {
+      try {
         setGlobalBack(vm)
         if (ENTER_HANDLERS_LENGTH) {
           ENTER_HANDLERS.forEach((handler) => handler(to, from, vm))
         }
-      })
-    } catch (e) {
-      console.error(e)
-    } finally {
-      next((vm) => { setGlobalBack(vm) })
-    }
+      } catch (e) {
+        console.error(e)
+      }
+    })
   },
 
   beforeRouteLeave(to, from, next) {
-    if (LEAVE_HANDLERS_LENGTH) {
-      next(false)
-      const nextProxy = countToGo(LEAVE_HANDLERS_LENGTH, next)
-      for (let i = 0; i < LEAVE_HANDLERS_LENGTH; i++) {
-        LEAVE_HANDLERS[i].call(this, to, from, nextProxy)
-      }
-    } else {
+    if (noJudge || !LEAVE_HANDLERS_LENGTH) {
       next()
+      noJudge = false
+    } else {
+      const nextProxy = countToBack(LEAVE_HANDLERS_LENGTH)
+      let allow = true
+      for (let i = 0; i < LEAVE_HANDLERS_LENGTH; i++) {
+        allow = allow && !!LEAVE_HANDLERS[i].call(this, to, from, nextProxy)
+      }
+      next(allow)
     }
   }
 })
 
-function countToGo(num, callback) {
+function countToBack(num) {
   let count = 0
   return function() {
     count++
     if (count === num) {
-      callback()
+      noJudge = true
+      router.back()
     }
   }
 }
@@ -67,7 +68,7 @@ function getHandlerArr(target, key) {
   }, [])
 }
 
-function setGlobalBack (vm) {
+function setGlobalBack(vm) {
   setAppTitleBtn({
     text: '返回',
     position: 'left',
