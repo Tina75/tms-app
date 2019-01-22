@@ -42,7 +42,7 @@ export default {
           data: []
         },
         {
-          label: '代签收',
+          label: '待签收',
           key: 'waiting_sign',
           data: []
         },
@@ -141,4 +141,10 @@ export default {
     height 100%
   .cube-tab-panel
     height 100%
+.cube-dialog-title-def
+  font-weight 600
+.cube-input
+  border-color #F9F9F9
+.cube-dialog-btn:first-child
+  color #333
 </style>

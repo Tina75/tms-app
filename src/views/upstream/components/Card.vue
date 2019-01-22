@@ -125,6 +125,7 @@ export default {
     font-size 14px
     margin-top 7px
   .company
+    margin-top 4px
     color #666
     font-size 14px
     line-height 20px
