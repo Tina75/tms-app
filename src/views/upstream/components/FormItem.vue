@@ -40,6 +40,7 @@ export default {
   margin-right 15px
   text-align right
   display flex
+  word-break break-all
   .input-box
     flex 1
   .right-action

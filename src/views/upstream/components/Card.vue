@@ -129,7 +129,7 @@ export default {
     font-size 14px
     line-height 20px
 .footer
-  border-top 1px sold #ccc
+  border-top 1px solid #F3F5F9
   overflow hidden
   padding 8px 0
   .left
@@ -146,6 +146,7 @@ export default {
         font-weight 300
   .right
     margin-top 4px
+    margin-right 2px
     .btn
       display block
       width 54px
