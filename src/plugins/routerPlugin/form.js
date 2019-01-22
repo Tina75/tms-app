@@ -29,6 +29,10 @@ export default {
       $formState.willLeave(to, from)
       return true
     }
+    // 去除键盘弹窗
+    if (document.activeElement){
+      document.activeElement.blur()
+    }
     this.$createDialog({
       type: 'confirm',
       title: '',
