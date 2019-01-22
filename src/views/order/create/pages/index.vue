@@ -201,7 +201,7 @@ export default {
     const phoneMessage = { phoneValidate: '请输入正确的手机号或座机号' }
 
     return {
-      showPage: false,
+      showPage: true, // scroll 组件在数据更新后可能会出现卡顿的情况，所以在确认显示数据以后再显示 scroll
       IMAGES,
       mode: '',
       id: '',
@@ -280,7 +280,8 @@ export default {
         vm.showOtherInfo()
         vm.showFreightFee()
         vm.calculateDistance()
-        vm.showPage = true
+        vm.showPage = false
+        vm.$nextTick(() => { vm.showPage = true })
       })
     })
   }

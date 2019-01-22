@@ -2,7 +2,7 @@
   <div class="scroll-list-wrap">
     <cube-scroll class="scroll-box">
       <form-group :rules="rules">
-        <div class="form-section">
+        <div class="form-section" v-if="orderConfig.isInvoiceOption">
           <form-item
             v-model="isInvoice"
             label="是否开票"
@@ -14,7 +14,7 @@
             type="number"
             precision="2" />
         </div>
-        <div class="form-section">
+        <div class="form-section" v-if="orderConfig.collectionMoneyOption">
           <form-item
             v-model="form.collectionMoney"
             prop="collectionMoney"
@@ -59,9 +59,7 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapGetters('order/create', [ 'otherInfo' ])
-  },
+  computed: mapGetters('order/create', [ 'otherInfo', 'orderConfig' ]),
   watch: {
     isInvoice (val) { this.form.isInvoice = Number(val) }
   },
