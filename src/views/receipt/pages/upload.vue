@@ -59,9 +59,7 @@ export default {
       }
       Api.uploadReceiptPic(params)
         .then(res => {
-          this.$router.push({
-            name: 'receipt'
-          })
+          this.$router.back()
         })
     }
   }
