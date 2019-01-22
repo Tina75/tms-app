@@ -440,7 +440,7 @@ export default {
             type: 'number'
           },
           rules: {
-            pattern: /^((([1-9]\d{0,6})|0)(\.\d{0,1}[1-9])?)?$/
+            pattern: /^((([1-9]\d{0,5})|0)(\.\d{0,1}[1-9])?)?$/
           },
           messages: {
             pattern: '请输入正确的金额公里数'

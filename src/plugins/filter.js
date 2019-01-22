@@ -48,6 +48,11 @@ Vue.filter('settlementTypeFormat', (value) => {
   return settlement[value] ? settlement[value] : '未知'
 })
 
+Vue.filter('settlementTypeFormatForOrder', (value) => {
+  const settlement = ['未知', '现付', '到付', '回付', '月结']
+  return settlement[value] ? settlement[value] : '未知'
+})
+
 Vue.filter('codeToName', value => {
   return City.getNameByCode(value)
 })
