@@ -25,7 +25,7 @@
       <p>{{Waybill.otherFee | moneyFormat}}元</p>
     </detail-panel-item>
     <div v-if="Waybill.settlementPayInfo&&Waybill.settlementPayInfo.length">
-      <div v-for="item in Waybill.settlementPayInfo" :key="item.payType">
+      <div v-for="item in Waybill.settlementPayInfo" :key="item.payType"  >
 
         <detail-panel-item  v-if="item.cashAmount || item.fuelCardAmount"  :label="item.payType | payType">
           <p >

@@ -88,7 +88,7 @@ export default {
       return Server({
         url: '/order/list',
         method: 'post',
-        data: { pageNo: state.all.pageNo, pageSize: 5 }
+        data: { pageNo: state.all.pageNo, pageSize: 5, statusList: [10, 20, 30, 40, 50] }
       }).then(({ data }) => {
         commit('ALL', data.data)
       })
@@ -129,7 +129,7 @@ export default {
       return Server({
         url: '/order/list',
         method: 'post',
-        data: { status: 90, pageNo: state.arrival.pageNo, pageSize: 5 }
+        data: { statusList: [40, 50], pageNo: state.arrival.pageNo, pageSize: 5 }
       }).then(({ data }) => {
         commit('ARRIVAL', data.data)
       })

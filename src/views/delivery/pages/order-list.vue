@@ -76,8 +76,8 @@ export default {
       return (info.assignCarType === 1 && info.carrierName) || (info.assignCarType === 2 && info.carNo)
     },
     async removeItem(orderId) {
-      await this.removeBillOrder(orderId)
       await this.updatetBillOrders(this.waybillId)
+      await this.removeBillOrder(orderId)
     }
   }
 }
