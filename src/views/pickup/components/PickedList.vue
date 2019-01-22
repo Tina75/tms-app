@@ -142,7 +142,7 @@ export default {
         font-size: 12px;
         font-style normal
         line-height: 17px;
-        border: 1px solid #999999;
+        border: 1px solid #efefef;
         margin-right: 10px;
       span
         display: inline-block

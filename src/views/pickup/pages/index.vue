@@ -32,7 +32,7 @@ export default {
   data () {
     const _this = this
     return {
-      currentTab: '',
+      currentTab: 'DispatchingList',
       tabs: [
         {
           label: '待调度',
@@ -113,21 +113,21 @@ export default {
           vm.currentTab = vm.tabMap[to.query.tab]
         } else {
           vm.currentTab = vm.tabMap[1]
+          vm.setPageStart('dispatchingData')
+          vm.getDispatching()
+          setAppRightBtn([
+            {
+              text: '调度',
+              action: () => {
+                vm.$router.push({
+                  name: 'pickup-dispatch'
+                })
+              }
+            }
+          ])
         }
       }
-      setAppRightBtn([
-        {
-          text: '调度',
-          action: () => {
-            vm.$router.push({
-              name: 'pickup-dispatch'
-            })
-          }
-        }
-      ])
       vm.getPickupCount()
-      vm.setPageStart(vm.dataMap[vm.currentTab].data)
-      vm.dataMap[vm.currentTab].action()
     })
   },
   beforeRouteLeave (to, from, next) {
