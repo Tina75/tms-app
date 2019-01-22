@@ -1,6 +1,6 @@
 <template>
   <div class="order-container">
-    <i v-if="Waybill.status===2" class="btn iconfont icon-ico-edite" @click="jumpToOrder(Waybill.waybillId)"/>
+    <span v-if="Waybill.status===2" class="btn-edit" @click="jumpToOrder(Waybill.waybillId)">编辑</span>
     <detail-panel :title="'货物明细'" >
       <div class="order-list">
         <ul>
@@ -59,11 +59,11 @@ export default {
 <style scoped lang="stylus">
 .order-container
   position relative
-  .btn
+  .btn-edit
     position absolute
     right 15px
-    top 10px
-    font-size 18px
+    top 20px
+    font-size 15px
     color  #00a4bd
     z-index 20
   .order-list

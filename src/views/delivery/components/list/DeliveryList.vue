@@ -31,7 +31,7 @@
           </p>
         </div>
         <div class="list-item__money border-top-1px">
-          <p v-if="info.totalFee"  class="cube-c-black cube-font-12 cube-ml-15">应付费用({{info.settlementType|settlementTypeFormat}})</p>
+          <p v-if="info.totalFee"  class="cube-c-black cube-font-12 cube-ml-15">应付费用<span v-if="info.assignCarType===1">({{info.settlementType|settlementTypeFormat}})</span></p>
           <div v-if="info.totalFee"  class="cube-c-yellow  cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.totalFee |moneyFormat}}</span>/元</div>
           <!-- 状态 10：待提货 20：待调度 30：在途 40：已到货 50：已回单；100被删除到回收站 -->
           <div  class="list-item__btngroup">
@@ -42,7 +42,7 @@
             </div>
             <div v-if="info.status==3">
               <cube-button class="btn" outline inline @click.stop="location(info.waybillId)">位置</cube-button>
-              <cube-button  class="btn" outline  inline primary @click.stop="arrival(info.waybillId)">到货</cube-button>
+              <cube-button  class="btn" outline  inline primary @click.stop="$emit('do-arrival',info.waybillId)">到货</cube-button>
             </div>
           </div>
         </div>
@@ -92,9 +92,7 @@ export default {
     },
     // 到货
     arrival(id) {
-      this.showDialog('是否确认到货？', () => {
-        this.doArrival(id)
-      })
+
     },
 
     location(id) {

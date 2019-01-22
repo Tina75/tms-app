@@ -38,7 +38,7 @@
           <cube-form-item v-if="model.assignCarType === 2" :field="fields['accommodation']"/>
           <cube-form-item :field="fields['insuranceFee']"/>
           <cube-form-item :field="fields['otherFee']"/>
-          <cube-form-item :field="fields['infoFee']"/>
+          <cube-form-item v-if="model.assignCarType === 1" :field="fields['infoFee']"/>
           <cube-form-item :field="fields['totalFee']">
             <span class="total-money">{{model.totalFee}}</span>
           </cube-form-item>
@@ -404,7 +404,8 @@ export default {
           modelKey: 'freightFee',
           label: '运输费(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -419,7 +420,8 @@ export default {
           modelKey: 'freightFee',
           label: '油费(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -434,10 +436,11 @@ export default {
           modelKey: 'mileage',
           label: '计费里程(公里)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
+            pattern: /^((([1-9]\d{0,6})|0)(\.\d{0,1}[1-9])?)?$/
           },
           messages: {
             pattern: '请输入正确的金额公里数'
@@ -449,7 +452,8 @@ export default {
           modelKey: 'loadFee',
           label: '装货费(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -464,7 +468,8 @@ export default {
           modelKey: 'unloadFee',
           label: '卸货费(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -479,7 +484,8 @@ export default {
           modelKey: 'tollFee',
           label: '路桥费(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -494,7 +500,8 @@ export default {
           modelKey: 'accommodation',
           label: '住宿费(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -509,7 +516,8 @@ export default {
           modelKey: 'insuranceFee',
           label: '保险费(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -524,7 +532,8 @@ export default {
           modelKey: 'otherFee',
           label: '其他(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -539,7 +548,8 @@ export default {
           modelKey: 'infoFee',
           label: '信息费(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -559,7 +569,8 @@ export default {
           modelKey: 'fuelCardAmount1',
           label: '预付油卡(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -574,7 +585,8 @@ export default {
           modelKey: 'fuelCardAmount2',
           label: '到付油卡(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -589,7 +601,8 @@ export default {
           modelKey: 'fuelCardAmount3',
           label: '回付油卡(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -604,7 +617,8 @@ export default {
           modelKey: 'fuelCardAmount4',
           label: '尾付油卡(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -619,7 +633,8 @@ export default {
           modelKey: 'cashAmount1',
           label: '预付现金(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -634,7 +649,8 @@ export default {
           modelKey: 'cashAmount2',
           label: '到付现金(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -649,7 +665,8 @@ export default {
           modelKey: 'cashAmount3',
           label: '回付现金(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -664,7 +681,8 @@ export default {
           modelKey: 'cashAmount4',
           label: '尾付现金(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -679,7 +697,8 @@ export default {
           modelKey: 'cashBack',
           label: '返现运费(元)',
           props: {
-            placeholder: '请输入'
+            placeholder: '请输入',
+            type: 'number'
           },
           rules: {
             pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
@@ -758,8 +777,6 @@ export default {
     ...mapActions('pickup', ['getCarrierNameList', 'getSelfCarList', 'getSelfDriverList']),
     ...mapActions('order/create', ['sendDirectly']),
     validateHandler(result) {
-      console.log('result')
-
       this.validity = result.validity
       this.valid = result.valid
       // if (result.valid !== false) {
@@ -780,8 +797,6 @@ export default {
     async submitAssign () {
       let isValid = await this.$refs['assign-form'].validate()
       if (isValid) {
-        console.log(this.model.assignCarType, this.model.selfDriverName)
-
         const data = {
           start: this.start,
           end: this.end,
@@ -853,6 +868,8 @@ export default {
         if (waybill.carNo) { vm.isEditMode = true } // 没有车牌号说明未拍过车
 
         vm.model = Object.assign(vm.model, waybill)
+        vm.model.settlementType = waybill.settlementType ? waybill.settlementType : 1
+
         const moneyKeys = ['freightFee', 'loadFee', 'unloadFee', 'tollFee', 'accommodation', 'insuranceFee', 'otherFee', 'infoFee', 'cashBack']
         moneyKeys.forEach(key => { vm.model[key] = waybill[key] ? NP.divide(waybill[key], 100) : '' })
 
