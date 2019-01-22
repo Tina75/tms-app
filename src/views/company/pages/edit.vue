@@ -244,7 +244,7 @@ export default {
       busiIntroducePicList: [],
       busiAdvantcePicList: [],
       wxQrPicList: [],
-      homeBannerList: '',
+      homeBannerList: [],
       companyPhotoList: [],
       contact1: false,
       contact2: false,

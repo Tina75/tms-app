@@ -14,14 +14,8 @@
     <div class="list-bar">
       <cube-tab-panels v-model="selectedLabel">
         <cube-tab-panel v-for="(item) in tabs" :key="item.label" :label="item.label">
-          <cube-scroll
-            ref="scroll"
-            :data="UpstreamList[item.key]"
-            :options="scrollOptions"
-            @pulling-down="onPullingDown(item.key)"
-            @pulling-up="onPullingUp(item.key)">
-            <CardList :card-list="UpstreamList[item.key]" :keys="item.key"/>
-          </cube-scroll>
+          <!-- {{upstreamNext[item.key]}} -->
+          <CardList :card-list="UpstreamList[item.key]" :keys="item.key"/>
         </cube-tab-panel>
       </cube-tab-panels>
     </div>
@@ -64,18 +58,11 @@ export default {
           key: 'rejected',
           data: []
         }
-      ],
-      scrollOptions: {
-        pullDownRefresh: {
-          txt: '刷新成功!'
-        },
-        pullUpLoad: true,
-        directionLockThreshold: 0
-      }
+      ]
     }
   },
   computed: {
-    ...mapGetters(['statusCnt', 'UpstreamList'])
+    ...mapGetters(['statusCnt', 'UpstreamList', 'upstreamNext'])
   },
   watch: {
     selectedLabel (val) {
@@ -87,13 +74,7 @@ export default {
     this.getUpstreamStatusCnt()
   },
   methods: {
-    ...mapActions(['getUpstreamStatusCnt', 'initList', 'reFresh', 'loadMore']),
-    onPullingDown (key) {
-      this.reFresh({ key })
-    },
-    onPullingUp (key) {
-      this.loadMore({ key })
-    },
+    ...mapActions(['getUpstreamStatusCnt', 'initList']),
     async tabChange (val) {
       let key = ''
       this.tabs.map(el => {

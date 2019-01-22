@@ -4,37 +4,37 @@ import { setAppTitleBtn, closeWindow } from '@/libs/bridgeUtil'
 export default {
   // 进入客户单号及其他信息
   gotoConsumerInfoPage () {
-    this.$formWillLeave()
+    this.formCanLeave()
     this.$router.push({ name: 'order-consumer-info' })
   },
   // 进入其他信息页面
   gotoOtherInfoPage () {
-    this.$formWillLeave()
+    this.formCanLeave()
     this.$router.push({ name: 'order-other-info' })
   },
   gotoFeeInfoPage () {
-    this.$formWillLeave()
+    this.formCanLeave()
     this.$router.push({ name: 'order-fee-info' })
   },
   // 进入货物信息页面
   gotoCargoInfoPage () {
-    this.$formWillLeave()
+    this.formCanLeave()
     this.$router.push({ name: 'order-cargo-info' })
   },
   // 进入编辑地址页面
   gotoAddressInfoPage (type) {
     this.SET_ADDRESS_TYPE(type)
-    this.$formWillLeave()
+    this.formCanLeave()
     this.$router.push({ name: 'order-edit-address' })
   },
   // 进入发货人列表
   gotoConsignerPage () {
-    this.$formWillLeave()
+    this.formCanLeave()
     this.$router.push({ name: 'order-select-consigner' })
   },
   // 进入收货人列表
   gotoConsigneePage () {
-    this.$formWillLeave()
+    this.formCanLeave()
     this.$router.push({ name: 'order-select-consignee' })
   },
   // 进入计费规则列表
@@ -68,7 +68,7 @@ export default {
     }
     query.volume = volume
     query.cargoInfos = cargoInfos
-    this.$formWillLeave()
+    this.formCanLeave()
     this.$router.push({
       name: 'order-charge-rule',
       query
@@ -100,5 +100,9 @@ export default {
         this.$router.push({ name: 'order-often' })
       }
     })
+  },
+
+  formCanLeave () {
+    this.$formWillLeave(() => { this.showPage = false })
   }
 }

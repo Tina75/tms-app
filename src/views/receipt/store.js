@@ -14,6 +14,7 @@ export default {
         pageSize: 10,
         receiptStatus: ''
       },
+      next: true,
       data: []
     },
     waiting_sign: {
@@ -22,6 +23,7 @@ export default {
         pageSize: 10,
         receiptStatus: '-1'
       },
+      next: true,
       data: []
     },
     waiting_recovery: {
@@ -30,6 +32,7 @@ export default {
         pageSize: 10,
         receiptStatus: '0'
       },
+      next: true,
       data: []
     },
     waiting_return_factory: {
@@ -38,6 +41,7 @@ export default {
         pageSize: 10,
         receiptStatus: '1'
       },
+      next: true,
       data: []
     },
     already_returned_factory: {
@@ -46,6 +50,7 @@ export default {
         pageSize: 10,
         receiptStatus: '2'
       },
+      next: true,
       data: []
     }
   },
@@ -60,6 +65,9 @@ export default {
     },
     RECEIPT_PAGE_CHANGE(state, payload) {
       state[payload.key].param.pageNo = payload.pageNo
+    },
+    RECEIPT_NEXT_STATUS(state, payload) {
+      state[payload.key].next = payload.status
     }
   },
   actions: {
@@ -81,6 +89,10 @@ export default {
           commit('RECEIPT_LIST_CHANGE', {
             data: oldData.concat(list),
             key: payload
+          })
+          commit('RECEIPT_NEXT_STATUS', {
+            key: payload,
+            status: !!response.data.data.hasNext
           })
         })
     },
@@ -117,6 +129,15 @@ export default {
         waiting_recovery: state.waiting_recovery.data,
         waiting_return_factory: state.waiting_return_factory.data,
         already_returned_factory: state.already_returned_factory.data
+      }
+    },
+    receiptNext (state) {
+      return {
+        total: state.total.next,
+        waiting_sign: state.waiting_sign.next,
+        waiting_recovery: state.waiting_recovery.next,
+        waiting_return_factory: state.waiting_return_factory.next,
+        already_returned_factory: state.already_returned_factory.next
       }
     }
   }

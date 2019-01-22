@@ -1,8 +1,8 @@
 <template>
   <div class="receipt-upload">
     <div class="upload-box">
-      <span class="cardTitle">{{isUpdate ? '修改回单' : '上传回单'}}（{{photoList.length}}/6）</span>
-      <Upload :upload-photos="photoList" :max-count="6" :input-show="false"/>
+      <span class="cardTitle">{{isUpdate ? '修改回单' : '上传回单'}}（{{photoList.length}}/10）</span>
+      <Upload :upload-photos="photoList" :max-count="10" :input-show="false"/>
     </div>
     <div class="btn-box">
       <cube-button :disabled="!photoList.length" primary @click="save">提交</cube-button>
@@ -15,7 +15,7 @@ import * as Api from '../libs/api'
 export default {
   name: 'receipt-upload',
   metaInfo: {
-    title: '回单上传'
+    title: '上传回单'
   },
   components: { Upload },
   data () {
