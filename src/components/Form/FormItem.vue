@@ -198,9 +198,10 @@ export default {
     inputBlurHandler () {
       if (this.type === 'click') return
       this.$emit('on-blur', this.inputValue)
-      // this.doValidate()
+      this.doValidate()
     },
     inputFocusHandler (e) {
+      // console.log(e)
       this.$emit('on-focus', this.inputValue)
       if (this.focusOnEnd) {
         this.$nextTick(() => this.moveToEnd(e.target))
@@ -230,9 +231,8 @@ export default {
     },
     async doValidate () {
       if (!this.rule) return true
-      const valid = await this.$refs.$validator.validate()
-      this.valid = valid
-      return valid
+      this.valid = await this.$refs.$validator.validate()
+      return this.valid
     },
     setValid () {
       this.valid = true

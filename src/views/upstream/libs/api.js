@@ -4,7 +4,8 @@ export const initList = (data) => {
   return Server({
     method: 'post',
     url: '/busconnector/shipper/list',
-    data
+    data,
+    loading: true
   })
 }
 // 详情

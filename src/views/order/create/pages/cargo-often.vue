@@ -4,7 +4,7 @@
     :img="NO_DATA"
     message="暂无常发货物" />
 
-  <ul class="list" v-else>
+  <ul v-else class="list">
     <li
       v-for="item in cargoList" :key="item.id"
       class="list-item"

@@ -14,14 +14,7 @@
     <div class="list-bar">
       <cube-tab-panels v-model="selectedLabel">
         <cube-tab-panel v-for="(item) in tabs" :key="item.label" :label="item.label">
-          <cube-scroll
-            ref="scroll"
-            :data="receiptList[item.key]"
-            :options="scrollOptions"
-            @pulling-down="onPullingDown(item.key)"
-            @pulling-up="onPullingUp(item.key)">
-            <CardList :card-list="receiptList[item.key]" :keys="item.key"/>
-          </cube-scroll>
+          <CardList :card-list="receiptList[item.key]" :keys="item.key"/>
         </cube-tab-panel>
       </cube-tab-panels>
     </div>
@@ -98,13 +91,7 @@ export default {
     this.getReceiptStatusCnt()
   },
   methods: {
-    ...mapActions(['getReceiptStatusCnt', 'initReceiptList', 'receiptReFresh', 'receiptLoadMore']),
-    onPullingDown (key) {
-      this.receiptReFresh({ key })
-    },
-    onPullingUp (key) {
-      this.receiptLoadMore({ key })
-    },
+    ...mapActions(['getReceiptStatusCnt', 'initReceiptList']),
     async tabChange (val) {
       let key = ''
       this.tabs.map(el => {

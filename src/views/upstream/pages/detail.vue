@@ -1,7 +1,7 @@
 <template>
   <div class="upstream-detail">
     <cube-scroll-nav>
-      <StatusBar slot="prepend" :status="detail.acceptStatus" :time="detail.createTime"/>
+      <StatusBar slot="prepend" :status="detail.acceptStatus" :time="detail.updateTime"/>
       <cube-scroll-nav-panel label="基本信息">
         <Panel title="基本信息">
           <FormItem v-if="detail.orderNo" label="订单号">

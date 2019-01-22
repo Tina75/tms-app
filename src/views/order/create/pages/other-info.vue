@@ -1,7 +1,7 @@
 <template>
   <div class="scroll-list-wrap">
     <cube-scroll class="scroll-box">
-      <form-group>
+      <form-group :rules="rules">
         <div class="form-section">
           <form-item
             v-model="isInvoice"
@@ -17,6 +17,7 @@
         <div class="form-section">
           <form-item
             v-model="form.collectionMoney"
+            prop="collectionMoney"
             label="代收货款(元)"
             type="number"
             precision="4" />
@@ -52,6 +53,9 @@ export default {
         invoiceRate: '',
         collectionMoney: '',
         remark: ''
+      },
+      rules: {
+        collectionMoney: { type: 'number', min: 0 }
       }
     }
   },
