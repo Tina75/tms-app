@@ -107,7 +107,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('pickup', ['setPageStart', 'getDispatching', 'createPickup', 'addBillOrder', 'editBillOrders']),
+    ...mapActions('pickup', ['setPageStart', 'getDispatching', 'createPickup', 'addBillOrder', 'editBillOrders', 'setPageStart']),
     /** 上拉加载 */
     async onPullingUp () {
       await this.getDispatching()
@@ -199,9 +199,8 @@ export default {
         quantity: 0
       }
       vm.chosenList = []
-      if (!vm.dispatchingData.list.length) {
-        vm.getDispatching()
-      }
+      vm.setPageStart('dispatchingData')
+      vm.getDispatching()
     })
   }
 }

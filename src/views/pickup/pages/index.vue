@@ -126,6 +126,9 @@ export default {
             }
           ])
         }
+      } else {
+        vm.setPageStart(vm.dataMap[vm.currentTab].data)
+        vm.dataMap[vm.currentTab].action()
       }
       vm.getPickupCount()
     })
