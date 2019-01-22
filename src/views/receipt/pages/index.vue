@@ -16,11 +16,11 @@
         <cube-tab-panel v-for="(item) in tabs" :key="item.label" :label="item.label">
           <cube-scroll
             ref="scroll"
-            :data="item.data"
+            :data="receiptList[item.key]"
             :options="scrollOptions"
             @pulling-down="onPullingDown(item.key)"
             @pulling-up="onPullingUp(item.key)">
-            <CardList :ref="item.key" :status="item.receiptStatus" @change="(data) => { dataChange(item.key, data) }"/>
+            <CardList :card-list="receiptList[item.key]" :keys="item.key"/>
           </cube-scroll>
         </cube-tab-panel>
       </cube-tab-panels>
@@ -41,40 +41,38 @@ export default {
   data () {
     return {
       selectedLabel: '',
+      cache: {},
       tabs: [
         {
           label: '全部',
           key: 'total',
-          receiptStatus: '',
           data: []
         },
         {
           label: '代签收',
           key: 'waiting_sign',
-          receiptStatus: '-1',
           data: []
         },
         {
           label: '待回收',
           key: 'waiting_recovery',
-          receiptStatus: '0',
           data: []
         },
         {
           label: '待返厂',
           key: 'waiting_return_factory',
-          receiptStatus: '1',
           data: []
         },
         {
           label: '已返厂',
           key: 'already_returned_factory',
-          receiptStatus: '2',
           data: []
         }
       ],
       scrollOptions: {
-        pullDownRefresh: true,
+        pullDownRefresh: {
+          txt: '刷新成功!'
+        },
         pullUpLoad: true,
         directionLockThreshold: 0
       },
@@ -85,9 +83,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['receiptStatusCnt']),
+    ...mapGetters(['receiptStatusCnt', 'receiptList']),
     tabIndex () {
       return this.$route.query.tab || 0
+    }
+  },
+  watch: {
+    selectedLabel (val) {
+      this.tabChange(val)
     }
   },
   mounted () {
@@ -95,19 +98,24 @@ export default {
     this.getReceiptStatusCnt()
   },
   methods: {
-    ...mapActions(['getReceiptStatusCnt']),
-    onPullingDown (ref) {
-      this.$refs[ref][0].refresh()
+    ...mapActions(['getReceiptStatusCnt', 'initReceiptList', 'receiptReFresh', 'receiptLoadMore']),
+    onPullingDown (key) {
+      this.receiptReFresh({ key })
     },
-    onPullingUp (ref) {
-      this.$refs[ref][0].load()
+    onPullingUp (key) {
+      this.receiptLoadMore({ key })
     },
-    dataChange (key, data) {
+    async tabChange (val) {
+      let key = ''
       this.tabs.map(el => {
-        if (el.key === key) {
-          el.data = data
+        if (el.label === val) {
+          key = el.key
         }
       })
+      if (!this.cache[key]) {
+        await this.initReceiptList({ key })
+        // this.cache[key] = true
+      }
     }
   }
 }

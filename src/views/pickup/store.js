@@ -150,6 +150,7 @@ export default {
     },
     removeBillOrder (state, id) {
       state.currentBillOrderIds.splice(state.currentBillOrderIds.indexOf(id), 1)
+      state.billOrderList.splice(state.billOrderList.indexOf(id), 1)
     },
     addBillOrder (state, ids) {
       state.currentBillOrderIds.push(...ids)
@@ -337,10 +338,11 @@ export default {
             pickUpId: id
           }
         }).then((response) => {
-          let index = state.bePickingData.list.findIndex(item => item.pickupId === id)
+          let index = state.bePickingData.list.findIndex(item => item.pickUpId === id)
           if (index >= 0) {
             state.bePickingData.list.splice(index, 1, response.data.data.loadbill)
           }
+          resolve()
         })
       })
     },

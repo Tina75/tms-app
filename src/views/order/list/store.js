@@ -39,7 +39,7 @@ export default {
   },
   mutations: {
     ALL (state, payload) {
-      state.all.pageNo = payload.pageNo
+      state.all.pageNo = ++payload.pageNo
       state.all.list = state.all.list.concat(payload.list)
       state.all.total = payload.total
     },
@@ -47,7 +47,7 @@ export default {
       state.all = { list: [], pageNo: 1, total: 1 }
     },
     PICKUP (state, payload) {
-      state.pickup.pageNo = payload.pageNo
+      state.pickup.pageNo = ++payload.pageNo
       state.pickup.list = state.pickup.list.concat(payload.list)
       state.pickup.total = payload.total
     },
@@ -55,7 +55,7 @@ export default {
       state.pickup = { list: [], pageNo: 1, total: 1 }
     },
     DELIVERY (state, payload) {
-      state.delivery.pageNo = payload.pageNo
+      state.delivery.pageNo = ++payload.pageNo
       state.delivery.list = state.delivery.list.concat(payload.list)
       state.delivery.total = payload.total
     },
@@ -63,7 +63,7 @@ export default {
       state.delivery = { list: [], pageNo: 1, total: 1 }
     },
     SENDING (state, payload) {
-      state.sending.pageNo = payload.pageNo
+      state.sending.pageNo = ++payload.pageNo
       state.sending.list = state.sending.list.concat(payload.list)
       state.sending.total = payload.total
     },
@@ -71,7 +71,7 @@ export default {
       state.sending = { list: [], pageNo: 1, total: 1 }
     },
     ARRIVAL (state, payload) {
-      state.arrival.pageNo = payload.pageNo
+      state.arrival.pageNo = ++payload.pageNo
       state.arrival.list = state.arrival.list.concat(payload.list)
       state.arrival.total = payload.total
     },
@@ -88,7 +88,7 @@ export default {
       return Server({
         url: '/order/list',
         method: 'post',
-        data: { pageNo: state.pageNo, pageSize: 5 }
+        data: { pageNo: state.all.pageNo, pageSize: 5, statusList: [10, 20, 30, 40, 50] }
       }).then(({ data }) => {
         commit('ALL', data.data)
       })
@@ -98,7 +98,7 @@ export default {
       return Server({
         url: '/order/list',
         method: 'post',
-        data: { status: 10, pageNo: state.pageNo, pageSize: 5 }
+        data: { status: 10, pageNo: state.pickup.pageNo, pageSize: 5 }
       }).then(({ data }) => {
         commit('PICKUP', data.data)
       })
@@ -109,7 +109,7 @@ export default {
       return Server({
         url: '/order/list',
         method: 'post',
-        data: { status: 20, pageNo: state.pageNo, pageSize: 5 }
+        data: { status: 20, pageNo: state.delivery.pageNo, pageSize: 5 }
       }).then(({ data }) => {
         commit('DELIVERY', data.data)
       })
@@ -119,7 +119,7 @@ export default {
       return Server({
         url: '/order/list',
         method: 'post',
-        data: { status: 30, pageNo: state.pageNo, pageSize: 5 }
+        data: { status: 30, pageNo: state.sending.pageNo, pageSize: 5 }
       }).then(({ data }) => {
         commit('SENDING', data.data)
       })
@@ -129,7 +129,7 @@ export default {
       return Server({
         url: '/order/list',
         method: 'post',
-        data: { status: 40, pageNo: state.pageNo, pageSize: 5 }
+        data: { statusList: [40, 50], pageNo: state.arrival.pageNo, pageSize: 5 }
       }).then(({ data }) => {
         commit('ARRIVAL', data.data)
       })

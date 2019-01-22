@@ -59,7 +59,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     next(vm => {
       vm.waybillId = to.params.id
-      setAppRightBtn([{ text: '添加', iconType: 'add', action: () => { this.$router.push({ name: 'add-order', params: { id: to.params.id } }) } }])
+      setAppRightBtn([{ text: '添加', iconType: 'add', action: () => { vm.$router.push({ name: 'delivery-add-order', params: { id: to.params.id } }) } }])
       // vm.getWaybillDetail(vm.waybillId)
       vm.getOrderListByWaybillId(vm.waybillId)
     })
@@ -76,8 +76,8 @@ export default {
       return (info.assignCarType === 1 && info.carrierName) || (info.assignCarType === 2 && info.carNo)
     },
     async removeItem(orderId) {
-      await this.removeBillOrder(orderId)
       await this.updatetBillOrders(this.waybillId)
+      await this.removeBillOrder(orderId)
     }
   }
 }

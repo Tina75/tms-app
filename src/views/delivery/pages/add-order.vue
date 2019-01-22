@@ -28,7 +28,7 @@
           <div v-if="totalQuantity"><span class="cube-c-green">{{totalQuantity}}</span>件</div>
         </div>
       </div>
-      <cube-button class="btn-bottom"  @click="save">保存</cube-button>
+      <cube-button class="btn-bottom"  @click.stop="save">保存</cube-button>
     </div>
   </div>
 </template>
@@ -92,7 +92,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('delivery', ['getDispatch', 'clearDispatch', 'dispatchOrder', 'addBillOrder']),
+    ...mapActions('delivery', ['getDispatch', 'clearDispatch', 'dispatchOrder', 'addBillOrder', 'updatetBillOrders']),
     refresh() {
       this.clearDispatch()
       this.getDispatch().then(() => { this.checkAll = false })
@@ -109,10 +109,11 @@ export default {
       })[key]
     },
     async save() {
+      window.toast('save')
       let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)
-      await this.addBillOrder(ids)
+      this.addBillOrder(ids)
       await this.updatetBillOrders(this.$route.params.id)
-      this.$route.back()
+      this.$router.back()
     },
     doDispatch() {
       let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)
@@ -133,7 +134,7 @@ export default {
 </script>
 <style lang='stylus' scoped>
 .scroll-wrap
-  padding-bottom 44px
+  margin-bottom 64px
 .footer
   width 100%
   position fixed

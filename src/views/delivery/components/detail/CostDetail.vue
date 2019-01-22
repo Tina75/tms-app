@@ -25,12 +25,15 @@
       <p>{{Waybill.otherFee | moneyFormat}}元</p>
     </detail-panel-item>
     <div v-if="Waybill.settlementPayInfo&&Waybill.settlementPayInfo.length">
-      <detail-panel-item v-for="item in Waybill.settlementPayInfo" :key="item.payType" :label="item.payType | payType">
-        <p>
-          <span v-if="item.cashAmount">{{item.cashAmount | moneyFormat}}元(现金)</span> &nbsp;
-          <span v-if="item.fuelCardAmount" class="fuel-txt">{{item.fuelCardAmount | moneyFormat}}元(油卡)</span>
-        </p>
-      </detail-panel-item>
+      <div v-for="item in Waybill.settlementPayInfo" :key="item.payType"  >
+
+        <detail-panel-item  v-if="item.cashAmount || item.fuelCardAmount"  :label="item.payType | payType">
+          <p >
+            <span v-if="item.cashAmount">{{item.cashAmount | moneyFormat}}元(现金)</span> &nbsp;
+            <span v-if="item.fuelCardAmount" class="fuel-txt">{{item.fuelCardAmount | moneyFormat}}元(油卡)</span>
+          </p>
+        </detail-panel-item>
+      </div>
     </div>
     <div class="total-cost">
       <label>合计</label>

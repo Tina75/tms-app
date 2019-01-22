@@ -2,6 +2,7 @@
   <div class="tab-card">
     <div class="tab-card-title">
       <div class="create-time">{{data.createTime | datetimeFormat}}</div>
+      <div v-if="data.collectionMoney>0" class="order-status right">代</div>
     </div>
     <div class="consignee-info">
       <div class="city">
@@ -10,10 +11,10 @@
       <div class="cargos">
         <div class="cargo-infos">{{data.weight || 0}}吨</div>
         <div class="cargo-infos">{{data.volume || 0}}方</div>
-        <div class="cargo-infos">{{data.cargoCnt || 0}}件</div>
+        <div class="cargo-infos">{{data.quantity || 0}}件</div>
       </div>
       <div class="company">
-        {{data.consignerAddress}} {{data.consignerContact}}
+        {{data.consignerAddress}} {{data.consignerName}}
       </div>
       <div class="company">
         客户订单号：{{data.customerOrderNo}}
@@ -22,9 +23,9 @@
     <div class="footer">
       <div class="left">
         <div class="leftBox">
-          <div class="settlement">月结</div>
+          <div class="settlement">总费用（月结）</div>
           <div class="fee">
-            {{data.totalFee}}/元
+            {{data.totalFee | moneyFormat}}/元
           </div>
         </div>
         <div class="receiptBox">
@@ -42,8 +43,12 @@
   </div>
 </template>
 <script>
+import { getMoney } from '@/views/upstream/libs'
 export default {
   name: 'tab-card',
+  filters: {
+    money: getMoney
+  },
   props: {
     data: {
       type: Object,
@@ -63,12 +68,16 @@ export default {
   margin-top 15px
   padding 0 15px
 .tab-card-title
-  padding 10px 10px 10px 0
+  padding 10px 0
   .create-time
     font-size 14px
     line-height 20px
     color #666
     display inline-block
+  .order-status
+    color #ffffff
+    background #fcaf3b
+    padding 2px
 .consignee-info
   padding-bottom 15px
   .city
@@ -102,6 +111,7 @@ export default {
       flex 1
     .receiptBox
       width 50px
+      margin-left 10px
     .settlement
       font-size 12px
     .fee

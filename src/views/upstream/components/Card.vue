@@ -10,9 +10,9 @@
       </div>
       <div class="cargos">
         <div class="cargo-infos">{{cargoName}}</div>
-        <div class="cargo-infos">{{data.weight || 0}}吨</div>
-        <div class="cargo-infos">{{data.volume || 0}}方</div>
-        <div class="cargo-infos">{{data.cargoCnt || 0}}件</div>
+        <div v-if="data.weight" class="cargo-infos">{{data.weight | weight}}吨</div>
+        <div v-if="data.volume" class="cargo-infos">{{data.volume | volume}}方</div>
+        <div v-if="data.quantity" class="cargo-infos">{{data.quantity}}件</div>
       </div>
       <div class="company">
         {{data.shipperCompanyName}} {{data.consignerContact}}
@@ -22,23 +22,25 @@
       <div class="left">
         <div class="settlement">{{data.settlementTypeDesc}}</div>
         <div class="fee">
-          {{data.totalFee | money}}/元
+          {{data.totalFee | money}}<span>/元</span>
         </div>
       </div>
       <div v-if="status[data.acceptStatus].name == '待接收'" class="right">
         <cube-button :outline="true" :inline="true" @click.stop="refuse">拒绝</cube-button>
-        <cube-button :outline="true" :inline="true" primary style="margin-left: 8px" @click.stop="recept">接受</cube-button>
+        <cube-button :outline="true" :inline="true" primary style="margin-left: 8px" @click.stop="recept">接收</cube-button>
       </div>
     </div>
   </div>
 </template>
 <script>
 import ORDER_STATUS from '../constant/ORDER_STATUS'
-import { getMoney } from '../libs'
+import { getMoney, getVolume, getWeight } from '../libs'
 export default {
   name: 'tab-card',
   filters: {
-    money: getMoney
+    money: getMoney,
+    volume: getVolume,
+    weight: getWeight
   },
   props: {
     data: {
@@ -63,6 +65,9 @@ export default {
       if (arr.length) {
         const cargoNm = arr[0].name
         name = cargoNm.length > 10 ? `${cargoNm.substr(0, 10)}...` : cargoNm
+        if (arr.length > 1) {
+          name += '等'
+        }
       }
       return name
     }
@@ -85,7 +90,7 @@ export default {
   margin-top 15px
   padding 0 15px
 .tab-card-title
-  padding 10px 10px 10px 0
+  padding 10px 0
   border-bottom 1px solid #F3F5F9
   .create-time
     font-size 14px
@@ -135,6 +140,10 @@ export default {
       color #FA8C16
       font-size 20px
       line-height 28px
+      font-weight 600
+      span
+        font-size 14px
+        font-weight 300
   .right
     margin-top 4px
     .btn
@@ -160,4 +169,8 @@ export default {
   background #6c798e
 .green
   background #00c185
+.iconfont
+  margin 0 10px
+button
+  width 54px
 </style>

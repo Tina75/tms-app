@@ -89,7 +89,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('pickup', ['getPickupCount'])
+    ...mapActions('pickup', ['getPickupCount', 'setPageStart'])
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {

@@ -6,7 +6,11 @@
         :start-code.sync="start"
         :end-code.sync="end"
         class="city"/>
-      <cube-form ref="assign-form" :model="model" :options="options" @validate="validateHandler">
+      <cube-form ref="assign-form"
+                 :model="model"
+                 :options="options"
+                 :immediate-validate="false"
+                 @validate="validateHandler">
         <cube-form-group>
           <cube-form-item :field="fields['assignCarType']"/>
         </cube-form-group>
@@ -20,7 +24,7 @@
           <cube-form-item :field="fields['carrierWaybillNo']"/>
         </cube-form-group>
         <cube-form-group v-if="model.assignCarType === 2">
-          <cube-form-item :field="fields['carNoOnlySel']"/>
+          <cube-form-item :field="fields['selCarNo']"/>
           <cube-form-item :field="fields['selfDriverName']"/>
           <cube-form-item :field="fields['selfAssistantDriverName']"/>
         </cube-form-group>
@@ -86,6 +90,7 @@ export default {
       start: -1,
       end: -1,
       isEditMode: false, // 是否为编辑模式
+      allDriverList: [],
       model: {
         assignCarType: 1,
         selfDriverName: '',
@@ -152,7 +157,7 @@ export default {
             required: true
           }
         },
-        carNoOnlySel: {
+        selCarNo: {
           type: 'select',
           modelKey: 'carNo',
           label: '车牌号',
@@ -166,7 +171,7 @@ export default {
         },
         selfDriverName: {
           type: 'select',
-          modelKey: 'driverName',
+          modelKey: 'selfDriverName',
           label: '主司机',
           props: {
             options: [],
@@ -175,8 +180,8 @@ export default {
           events: {
             'change': (value) => {
               if (value) {
-                const driverList = [..._this.fields.selfAssistantDriverName.props.options]
-                _this.fields.selfAssistantDriverName.props.options.splice(driverList.indexOf(value), 1)
+                const driverList = [...this.allDriverList]
+                _this.fields.selfAssistantDriverName.props.options = driverList.filter(item => item !== value)
               }
             }
           },
@@ -195,8 +200,8 @@ export default {
           events: {
             'change': (value) => {
               if (value) {
-                const driverList = [..._this.fields.selfDriverName.props.options]
-                _this.fields.selfDriverName.props.options.splice(driverList.indexOf(value), 1)
+                const driverList = [...this.allDriverList]
+                _this.fields.selfDriverName.props.options = driverList.filter(item => item !== value)
               }
             }
           }
@@ -546,7 +551,8 @@ export default {
         },
         totalFee: {
           modelKey: 'totalFee',
-          label: '费用合计(元)'
+          label: '费用合计(元)',
+          debounce: true
         },
         fuelCardAmount1: {
           type: 'input',
@@ -748,20 +754,34 @@ export default {
     ...mapGetters('delivery', ['WaybillDetail'])
   },
   methods: {
-    ...mapActions('delivery', ['getWaybillDetail', 'doSendCar', 'getSend', 'doEditWaybill']),
+    ...mapActions('delivery', ['getWaybillDetail', 'doSendCar', 'getSend', 'clearSend', 'doEditWaybill']),
     ...mapActions('pickup', ['getCarrierNameList', 'getSelfCarList', 'getSelfDriverList']),
     ...mapActions('order/create', ['sendDirectly']),
     validateHandler(result) {
+      console.log('result')
+
       this.validity = result.validity
       this.valid = result.valid
-      if (result.valid !== false) {
-        this.model.totalFee = NP.plus(this.model.freightFee, this.model.loadFee, this.model.unloadFee, this.model.otherFee, this.model.insuranceFee, this.model.tollFee, this.model.accommodation) - this.model.infoFee
+      // if (result.valid !== false) {
+      if (this.model.assignCarType === 2) {
+        this.model.totalFee =
+            NP.plus(
+              this.model.freightFee,
+              this.model.loadFee,
+              this.model.unloadFee,
+              this.model.tollFee,
+              this.model.accommodation,
+              this.model.insuranceFee,
+              this.model.otherFee) - this.model.infoFee
       }
+      // }
       // console.log('validity', result.validity, result.valid, result.dirty, result.firstInvalidFieldIndex)
     },
     async submitAssign () {
       let isValid = await this.$refs['assign-form'].validate()
       if (isValid) {
+        console.log(this.model.assignCarType, this.model.selfDriverName)
+
         const data = {
           start: this.start,
           end: this.end,
@@ -814,63 +834,55 @@ export default {
         if (this.$route.query.type) { // 亮仔
           await this.sendDirectly(data)
         } else {
-          if (this.isEditMode) { await this.doEditWaybill(data) } else { await this.doSendCar(data) }
-          this.getSend()
+          if (this.isEditMode) {
+            await this.doEditWaybill(data)
+          } else {
+            await this.doSendCar(data)
+          }
+          await this.clearSend()
+          await this.getSend()
         }
 
         this.$router.back()
       }
+    },
+    initWaybillInfo(vm, waybillId) {
+      vm.getWaybillDetail(waybillId).then(({ waybill }) => {
+        vm.start = waybill.start
+        vm.end = waybill.end
+        if (waybill.carNo) { vm.isEditMode = true } // 没有车牌号说明未拍过车
+
+        vm.model = Object.assign(vm.model, waybill)
+        const moneyKeys = ['freightFee', 'loadFee', 'unloadFee', 'tollFee', 'accommodation', 'insuranceFee', 'otherFee', 'infoFee', 'cashBack']
+        moneyKeys.forEach(key => { vm.model[key] = waybill[key] ? NP.divide(waybill[key], 100) : '' })
+
+        vm.model.mileage = waybill.mileage ? NP.divide(waybill.mileage, 1000) : ''
+        waybill.settlementPayInfo.forEach((item, index) => {
+          vm.model[`cashAmount${index + 1}`] = item ? NP.divide(item.cashAmount, 100) : ''
+          vm.model[`fuelCardAmount${index + 1}`] = item ? NP.divide(item.fuelCardAmount, 100) : ''
+        })
+
+        // vm.model.cashBack = waybill.cashBack ? NP.divide(waybill.cashBack, 100) : ''
+      })
     }
+
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      if (to.query.type) {
-        vm.getWaybillDetail(to.params.id).then(({ waybill }) => {
-          if (!waybill.carNo) return
-          vm.isEditMode = true
-
-          vm.start = waybill.start
-          vm.end = waybill.end
-
-          vm.model.assignCarType = waybill.assignCarType
-          vm.model.carrierName = waybill.carrierName
-          vm.model.carNo = waybill.carNo
-          vm.model.driverName = waybill.driverName
-          vm.model.driverPhone = waybill.driverPhone
-          vm.model.carLength = waybill.carLength
-          vm.model.carType = waybill.carType
-          vm.model.carrierWaybillNo = waybill.carrierWaybillNo
-
-          vm.model.mileage = waybill.mileage ? NP.divide(waybill.mileage, 1000) : ''
-          vm.model.freightFee = waybill.freightFee ? NP.divide(waybill.freightFee, 100) : ''
-          vm.model.insuranceFee = waybill.insuranceFee ? NP.divide(waybill.insuranceFee, 100) : ''
-          vm.model.loadFee = waybill.loadFee ? NP.divide(waybill.loadFee, 100) : ''
-          vm.model.unloadFee = waybill.unloadFee ? NP.divide(waybill.unloadFee, 100) : ''
-          vm.model.tollFee = waybill.tollFee ? NP.divide(waybill.tollFee, 100) : ''
-          vm.model.otherFee = waybill.otherFee ? NP.divide(waybill.otherFee, 100) : ''
-          vm.model.infoFee = waybill.infoFe ? NP.divide(waybill.infoFee, 100) : ''
-          vm.model.totalFee = waybill.totalFee ? NP.divide(waybill.totalFee, 100) : ''
-          vm.model.accommodation = waybill.accommodation ? NP.divide(waybill.accommodation, 100) : ''
-          vm.model.settlementType = waybill.settlementType
-          waybill.settlementPayInfo.forEach((item, index) => {
-            vm.model[`cashAmount${index + 1}`] = item ? NP.divide(item.cashAmount, 100) : ''
-            vm.model[`fuelCardAmount${index + 1}`] = item ? NP.divide(item.fuelCardAmount, 100) : ''
-          })
-
-          vm.model.remark = waybill.remark
-
-          vm.model.cashBack = waybill.cashBack ? NP.divide(waybill.cashBack, 100) : ''
-        })
+      const waybillId = to.params.id
+      if (!to.query.type) { // 不是直接派车
+        vm.initWaybillInfo(vm, waybillId)
       }
       vm.getCarrierNameList().then(list => {
         vm.fields.carrierName.props.options = list
       })
       vm.getSelfCarList().then(list => {
-        vm.fields.carNoOnlySel.props.options = list
+        vm.fields.selCarNo.props.options = list
       })
       vm.getSelfDriverList().then(list => {
         vm.fields.selfDriverName.props.options = list
         vm.fields.selfAssistantDriverName.props.options = list
+        vm.allDriverList = [...list]
       })
     })
   }
@@ -895,13 +907,10 @@ export default {
     display: flex
     flex-direction column
     .edit-form
-      overflow-scrolling touch
       padding-top: 15px;
       flex 1
       overflow auto
-      .city
-        margin-top -15px
-        margin-bottom 15px
+      overflow-scrolling touch
       >>> .cube-form
         background-color: #F3F3F3;
         .cube-form-group
@@ -963,6 +972,7 @@ export default {
             .cube-validator-msg
               text-align: right
               position relative
+              pointer-events: none
               &:before
                 display: none
               .cube-validator-msg-def

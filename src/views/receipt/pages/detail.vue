@@ -5,7 +5,17 @@
       <cube-scroll-nav-panel label="基本信息">
         <Panel title="基本信息">
           <FormItem label="客户名称">
-            {{detail.shipperCompanyName}}
+            {{detail.consignerName}}
+          </FormItem>
+          <FormItem label="订单号">
+            {{detail.orderNo}}
+            <span
+              v-if="detail.orderNo"
+              slot="right"
+              v-clipboard:copy="detail.orderNo"
+              v-clipboard:success="copyBtn"
+              v-clipboard:error="onError"
+              class="act-btn">复制</span>
           </FormItem>
           <FormItem label="客户订单号">
             {{detail.customerOrderNo}}
@@ -18,6 +28,16 @@
               class="act-btn">复制</span>
           </FormItem>
           <FormItem label="客户运单号">
+            {{detail.customerWaybillNo}}
+            <span
+              v-if="detail.customerWaybillNo"
+              slot="right"
+              v-clipboard:copy="detail.customerWaybillNo"
+              v-clipboard:success="copyBtn"
+              v-clipboard:error="onError"
+              class="act-btn">复制</span>
+          </FormItem>
+          <FormItem label="运单号">
             {{detail.waybillNo}}
             <span
               v-if="detail.waybillNo"
@@ -27,6 +47,12 @@
               v-clipboard:error="onError"
               class="act-btn">复制</span>
           </FormItem>
+          <FormItem label="始发地">
+            {{detail.startName}}
+          </FormItem>
+          <FormItem label="目的地">
+            {{detail.endName}}
+          </FormItem>
           <FormItem label="发货时间">
             {{detail.deliveryTime | datetimeFormat}}
           </FormItem>
@@ -34,12 +60,12 @@
             {{detail.arriveTime | datetimeFormat}}
           </FormItem>
           <FormItem label="提货方式">
-            {{detail.pickTypeDesc}}
+            {{detail.pickup | pickUp}}
           </FormItem>
           <FormItem label="回单数量">
             {{detail.receiptCount}}份
           </FormItem>
-          <FormItem label="代收货款">
+          <!-- <FormItem label="代收货款">
             {{detail.collectionMoney}}元
           </FormItem>
           <FormItem label="对接业务员">
@@ -47,7 +73,7 @@
           </FormItem>
           <FormItem label="是否开票">
             {{detail.isInvoice == 1 ? `是（${rate(detail.invoiceRate)}%）` : '否'}}
-          </FormItem>
+          </FormItem> -->
           <FormItem label="备注">
             {{detail.remark}}
           </FormItem>
@@ -60,7 +86,7 @@
           </FormItem>
           <FormItem label="联系方式">
             {{detail.consignerPhone}}
-            <a v-if="detail.consignerPhone" slot="right" :href="`tel:${detail.consignerPhone}`" class="act-btn">联系TA</a>
+            <a v-if="detail.consignerPhone" slot="right" :href="`tel:${detail.consignerPhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
           </FormItem>
           <FormItem label="发货地址">
             {{detail.consignerAddress}}
@@ -74,10 +100,13 @@
           </FormItem>
           <FormItem label="联系方式">
             {{detail.consigneePhone}}
-            <a v-if="detail.consigneePhone" slot="right" :href="`tel:${detail.consigneePhone}`" class="act-btn">联系TA</a>
+            <a v-if="detail.consigneePhone" slot="right" :href="`tel:${detail.consigneePhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
           </FormItem>
           <FormItem label="收货地址">
             {{detail.consigneeAddress}}
+          </FormItem>
+          <FormItem label="收货人单位">
+            {{detail.consigneeCompanyName}}
           </FormItem>
         </Panel>
       </cube-scroll-nav-panel>
@@ -92,7 +121,7 @@
             </FormItem>
             <FormItem label="联系方式">
               {{item.driverPhone}}
-              <a v-if="item.driverPhone" slot="right" :href="`tel:${item.driverPhone}`" class="act-btn">联系TA</a>
+              <a v-if="item.driverPhone" slot="right" :href="`tel:${item.driverPhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
             </FormItem>
             <FormItem label="车牌号">
               {{item.carNo}}
@@ -121,7 +150,7 @@ import Panel from '@/views/upstream/components/Panel'
 import FormItem from '@/views/upstream/components/FormItem'
 import StatusBar from '@/views/upstream/components/StatusBar'
 import VueClipboard from 'vue-clipboard2'
-import { getRate, getMoney, getMile } from '@/views/upstream/libs'
+import { getRate, getMoney, getMile, pickUp } from '@/views/upstream/libs'
 import imageList from '@/views/company/pages/image-list'
 Vue.use(VueClipboard)
 
@@ -132,7 +161,8 @@ export default {
   },
   filters: {
     money: getMoney,
-    mile: getMile
+    mile: getMile,
+    pickUp: pickUp
   },
   components: {
     Panel,

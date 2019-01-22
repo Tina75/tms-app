@@ -123,7 +123,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('pickup', ['getPickupDetail', 'clearDetail', 'arriveBill', 'removePicking', 'pickupBill', 'removeBePicking', 'deleteBill']),
+    ...mapActions('pickup', ['getPickupDetail', 'clearDetail', 'arriveBill', 'removePicking', 'pickupBill', 'removeBePicking', 'deleteBill', 'getPickupCount']),
     changeHandler (label) {
       console.log('changed to:', label)
     },
@@ -158,7 +158,7 @@ export default {
         },
         async onConfirm () {
           await _this.arriveBill(_this.pickupDetail.pickUpId)
-          await _this.removePicking(_this.$route.query.index)
+          await _this.removeBePicking(_this.$route.query.index)
           await _this.getPickupCount()
           await _this.getPickupDetail(_this.$route.params.id)
           _this.$createToast({

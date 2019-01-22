@@ -1,6 +1,6 @@
 <template>
   <div class="order-container">
-    <i class="btn iconfont icon-ico-edite" @click="jumpToOrder"/>
+    <i v-if="Waybill.status===2" class="btn iconfont icon-ico-edite" @click="jumpToOrder(Waybill.waybillId)"/>
     <detail-panel :title="'货物明细'" >
       <div class="order-list">
         <ul>
@@ -42,25 +42,16 @@ export default {
   name: 'delivery-order-cargo-list',
   components: { detailPanel },
 
-  data() {
-    return {
-      id: -1
-    }
-  },
   computed: {
     ...mapGetters('delivery', ['CargoListSet', 'Waybill'])
   },
-  watch: {
-    'Waybill.waybillId': function(val) {
-      if (val) this.id = val
-    }
-  },
+
   methods: {
     copySuccess() {
       window.toast('复制成功')
     },
-    jumpToOrder() {
-      this.$router.push({ name: 'delivery-order-list', params: { id: this.id } })
+    jumpToOrder(id) {
+      this.$router.push({ name: 'delivery-order-list', params: { id } })
     }
   }
 }
