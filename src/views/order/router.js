@@ -65,7 +65,7 @@ export default [
   },
   {
     path: '/order/consumer-info',
-    name: 'order-consumer-info', // 客户单号及其他
+    name: 'order-consumer-info', // 客户订单号及其他
     meta: { formLeaveConfirm: true },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/consumer-info.vue')
   },

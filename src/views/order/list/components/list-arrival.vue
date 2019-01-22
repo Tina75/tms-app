@@ -5,6 +5,7 @@
     :list="ArrivalList"
     @refresh="refresh"
     @loadmore="loadmore"
+    @delete = "deleteById"
   />
 </template>
 
@@ -29,7 +30,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('order/list', ['getArrival', 'clearArrival']),
+    ...mapActions('order/list', ['getArrival', 'clearArrival', 'deleteOrder', 'setDeliveryList', 'getTabCount']),
 
     refresh() {
       this.clearArrival()
@@ -40,6 +41,11 @@ export default {
     },
     editBillById(id, type) {
       // TODO: 提货单和送货单不同
+    },
+    async deleteById(id) {
+      await this.deleteOrder(id)
+      await this.setDeliveryList(this.DeliveryList.filter(item => item.id !== id))
+      this.getTabCount()
     }
   }
 }

@@ -46,6 +46,9 @@ export default {
     ALL_CLEAR (state) {
       state.all = { list: [], pageNo: 1, total: 1 }
     },
+    SET_ALL_LIST (state, list) {
+      state.all.list = [...list]
+    },
     PICKUP (state, payload) {
       state.pickup.pageNo = ++payload.pageNo
       state.pickup.list = state.pickup.list.concat(payload.list)
@@ -54,6 +57,9 @@ export default {
     PICKUP_CLEAR (state) {
       state.pickup = { list: [], pageNo: 1, total: 1 }
     },
+    SET_PICKUP_LIST (state, list) {
+      state.pickup.list = [...list]
+    },
     DELIVERY (state, payload) {
       state.delivery.pageNo = ++payload.pageNo
       state.delivery.list = state.delivery.list.concat(payload.list)
@@ -61,6 +67,9 @@ export default {
     },
     DELIVERY_CLEAR (state) {
       state.delivery = { list: [], pageNo: 1, total: 1 }
+    },
+    SET_DELIVERY_LIST (state, list) {
+      state.delivery.list = [...list]
     },
     SENDING (state, payload) {
       state.sending.pageNo = ++payload.pageNo
@@ -78,6 +87,9 @@ export default {
     ARRIVAL_CLEAR (state) {
       state.arrival = { list: [], pageNo: 1, total: 1 }
     },
+    SET_ARRIVAL_LIST (state, list) {
+      state.arrival.list = [...list]
+    },
     TAB_COUNT(state, payload) {
       state.tabCount = { ...payload }
     }
@@ -94,6 +106,8 @@ export default {
       })
     },
     clearAll: ({ commit }) => { commit('ALL_CLEAR') },
+    setAllList: ({ commit }, list) => { commit('SET_ALL_LIST', list) },
+
     getPickup: ({ commit, state }) => {
       return Server({
         url: '/order/list',
@@ -104,6 +118,7 @@ export default {
       })
     },
     clearPickup: ({ commit }) => { commit('PICKUP_CLEAR') },
+    setPickupList: ({ commit }, list) => { commit('SET_PICKUP_LIST', list) },
 
     getDelivery: ({ commit, state }) => {
       return Server({
@@ -115,6 +130,8 @@ export default {
       })
     },
     clearDelivery: ({ commit }) => { commit('DELIVERY_CLEAR') },
+    setDeliveryList: ({ commit }, list) => { commit('SET_DELIVERY_LIST', list) },
+
     getSending: ({ commit, state }) => {
       return Server({
         url: '/order/list',
@@ -135,6 +152,8 @@ export default {
       })
     },
     clearArrival: ({ commit }) => { commit('ARRIVAL_CLEAR') },
+    setArrivalList: ({ commit }, list) => { commit('SET_ARRIVAL_LIST', list) },
+
     // 删除待调度订单
     deleteOrder: ({ commit, state }, id) => {
       Server({

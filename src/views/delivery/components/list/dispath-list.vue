@@ -24,14 +24,14 @@
           </div>
           <p v-if="info.consignerName" class="cube-mb-5">{{info.consignerName}}</p>
           <p v-if="info.carrierName" class="cube-mb-5">{{info.carrierName}}</p>
-          <p v-if="info.id && info.customerOrderNo" class="list-item__number">客户单号：{{info.customerOrderNo}}</p>
+          <p v-if="info.id && info.customerOrderNo" class="list-item__number">客户订单号：{{info.customerOrderNo}}</p>
           <!-- <p v-if="hasSendCar(info)" class="list-item__number cube-font-12 cube-mt-5">
             <span class="send-type">{{info.assignCarType==1?'外转':'自送'}}</span>
             <span class="cube-font-14">&nbsp;{{info.driverName}}&nbsp;{{info.assistantDriverName}}&nbsp;{{info.carNo}}</span>
           </p> -->
         </div>
         <div class="list-item__money border-top-1px">
-          <p v-if="info.totalFee"  class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormat}})</p>
+          <p v-if="info.totalFee"  class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormatForOrder}})</p>
           <div v-if="info.totalFee"  class="cube-c-yellow  cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.totalFee |moneyFormat}}</span>/元</div>
           <!-- 状态 10：待提货 20：待调度 30：在途 40：已到货 50：已回单；100被删除到回收站 -->
           <cube-button

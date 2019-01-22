@@ -20,13 +20,13 @@
       </div>
       <p v-if="info.consignerName" class="cube-mt-5">{{info.consignerName}}</p>
       <!-- <p v-if="info.carrierName" class="cube-mt-5">{{info.carrierName}}</p> -->
-      <p v-if="info.id && info.customerOrderNo" class="list-item__number">客户单号：{{info.customerOrderNo}}</p>
+      <p v-if="info.id && info.customerOrderNo" class="list-item__number">客户订单号：{{info.customerOrderNo}}</p>
       <p v-if="(info.assignCarType === 1 && info.carrierName) || (info.assignCarType === 2 && info.carNo)" class="list-item__number cube-font-12">
         <span class="send-type">{{info.assignCarType==1?'外转':'自送'}}</span>{{info.driverName}}  {{info.assistantDriverName}}  {{info.carNo}}
       </p>
     </div>
     <div class="list-item__money border-top-1px">
-      <p class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormat}})</p>
+      <p class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormatForOrder}})</p>
       <div class="cube-c-yellow cube-mt-5 cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.pickupFee||info.totalFee |moneyFormat}}</span>/元</div>
     </div>
   </li>

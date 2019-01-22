@@ -53,7 +53,7 @@ const state = {
   consignerId: void 0,
   // 货物信息
   orderCargoList: [],
-  // 客户单号及其他信息
+  // 客户订单号及其他信息
   consumerInfo: {},
   // 费用信息
   feeInfo: {},

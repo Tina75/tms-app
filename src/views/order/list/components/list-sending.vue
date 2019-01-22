@@ -29,7 +29,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('order/list', ['getSending', 'clearSending']),
+    ...mapActions('order/list', ['getSending', 'clearSending', 'setPickupList']),
 
     refresh() {
       this.clearSending()
