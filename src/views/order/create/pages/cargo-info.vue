@@ -52,6 +52,7 @@
             <form-item
               v-if="orderConfig.quantityOption"
               v-model="form.quantity"
+              type="number"
               label="包装数量" />
             <form-item
               v-if="orderConfig.dimensionOption"
@@ -146,7 +147,8 @@ export default {
       rules: {
         cargoName: { required: true, type: 'string' },
         weight: { type: 'number', min: 0 },
-        weightKg: { type: 'number', min: 0 }
+        weightKg: { type: 'number', min: 0 },
+        quantity: { type: 'number', min: 1 }
       }
     }
   },
