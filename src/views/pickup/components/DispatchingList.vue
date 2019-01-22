@@ -38,7 +38,7 @@
         </div>
         <div class="item-footer">
           <div class="order-cost">
-            <p class="cost-label">应付费用（{{orderSettlementTypeMap[item.settlementType]}}）</p>
+            <p class="cost-label">应收费用（{{orderSettlementTypeMap[item.settlementType]}}）</p>
             <p class="cost-money">{{item.totalFee|moneyFormat}}<span>/元</span></p>
           </div>
           <div class="order-btns">
