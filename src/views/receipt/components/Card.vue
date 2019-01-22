@@ -23,7 +23,7 @@
     <div class="footer">
       <div class="left">
         <div class="leftBox">
-          <div class="settlement">总费用（月结）</div>
+          <div class="settlement">总费用（{{data.settlementType | settlementTypeFormat}}）</div>
           <div class="fee">
             {{data.totalFee | moneyFormat}}/元
           </div>
@@ -37,7 +37,7 @@
         <cube-button v-if="data.receiptOrder.receiptStatus === 0 && data.status === 40" :outline="true" :inline="true" primary @click.stop="handleClick('receipt')">回收</cube-button>
         <cube-button v-if="data.receiptOrder.receiptStatus === 1" :outline="true" :inline="true" primary @click.stop="handleClick('backFactory')">返厂</cube-button>
         <cube-button v-if="data.receiptOrder.receiptStatus > 0 && !data.receiptOrder.receiptUrl.length" :outline="true" :inline="true" primary style="margin-left: 8px" @click.stop="handleClick('uploadPic')">上传回单</cube-button>
-        <cube-button v-if="data.receiptOrder.receiptStatus > 0 && data.receiptOrder.receiptUrl.length" :outline="true" :inline="true" primary @click.stop="handleClick('updatePic')">修改回单</cube-button>
+        <cube-button v-if="data.receiptOrder.receiptStatus > 0 && data.receiptOrder.receiptUrl.length" :outline="true" :inline="true" primary style="margin-left: 8px" @click.stop="handleClick('updatePic')">修改回单</cube-button>
       </div>
     </div>
   </div>

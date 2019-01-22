@@ -12,7 +12,7 @@
         <div class="cargo-infos">{{cargoName}}</div>
         <div v-if="data.weight" class="cargo-infos">{{data.weight | weight}}吨</div>
         <div v-if="data.volume" class="cargo-infos">{{data.volume | volume}}方</div>
-        <div v-if="data.quantity" class="cargo-infos">{{data.quantity}}件</div>
+        <div v-if="data.quantity" class="cargo-infos">{{data.cargoNum}}件</div>
       </div>
       <div class="company">
         {{data.shipperCompanyName}} {{data.consignerContact}}

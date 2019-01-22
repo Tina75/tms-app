@@ -79,7 +79,7 @@
           </FormItem>
         </Panel>
       </cube-scroll-nav-panel>
-      <cube-scroll-nav-panel label="发货人">
+      <cube-scroll-nav-panel label="收发货人">
         <Panel title="发货人">
           <FormItem label="联系人">
             {{detail.consignerContact}}
@@ -92,8 +92,6 @@
             {{detail.consignerAddress}}
           </FormItem>
         </Panel>
-      </cube-scroll-nav-panel>
-      <cube-scroll-nav-panel  label="收货人">
         <Panel title="收货人">
           <FormItem label="联系人">
             {{detail.consigneeContact}}

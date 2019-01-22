@@ -1,17 +1,22 @@
 <template>
-  <div>
+  <cube-scroll
+    ref="scroll"
+    :data="cardList"
+    :options="options"
+    @pulling-down="onPullingDown()"
+    @pulling-up="onPullingUp()">
     <Card
       v-for="(el, index) in cardList"
       :key="index"
       :data="el"
       @card-action="handleClick"
       @click.native="toDetail(el.shipperOrderId)"/>
-  </div>
+  </cube-scroll>
 </template>
 <script>
 import Card from '../components/Card'
 import * as API from '../libs/api'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'upstream-list',
   components: {
@@ -27,14 +32,31 @@ export default {
       default: () => []
     }
   },
+  computed: {
+    ...mapGetters(['upstreamNext']),
+    options () {
+      return {
+        pullDownRefresh: {
+          txt: '刷新成功'
+        },
+        pullUpLoad: this.upstreamNext[this.keys]
+      }
+    }
+  },
   methods: {
-    ...mapActions(['getUpstreamStatusCnt', 'initList']),
+    ...mapActions(['getUpstreamStatusCnt', 'initList', 'reFresh', 'loadMore']),
     toDetail (id) {
       // 路由跳转
       this.$router.push({
         params: { id },
         name: 'upstream-detail'
       })
+    },
+    onPullingDown () {
+      this.reFresh({ key: this.keys })
+    },
+    onPullingUp () {
+      this.loadMore({ key: this.keys })
     },
     handleClick (type, id) {
       if (type === 'recept') {
