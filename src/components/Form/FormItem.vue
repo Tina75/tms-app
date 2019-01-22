@@ -10,9 +10,9 @@
         <div class="form-item-input-box">
           <cube-loading v-if="type === 'loading'" class="form-item-loading" :size="20" />
 
-          <!-- 输入框 type = text || number  -->
+          <!-- 输入框 type = text || number || phone -->
           <cube-input
-            v-if="type === 'text' || type === 'number'"
+            v-if="inputType"
             v-model="inputValue"
             class="form-item-input"
             :class="inputAlignment"
@@ -131,8 +131,10 @@ export default {
   },
   computed: {
     inputType () {
-      if (this.type === 'number') return 'number'
-      else return 'text'
+      const type = this.type
+      if (type === 'text' || type === 'number') return type
+      if (type === 'phone') return 'text'
+      return ''
     },
     inputRequired () {
       return !!this.rule && !!this.rule.required
@@ -167,24 +169,32 @@ export default {
     }
   },
   watch: {
-    value (val) { this.inputValue = val },
+    value (val) {
+      if (this.type === 'phone' && val && +val[0] === 1) {
+        this.inputValue = (val + '').replace(/(^\d{3}|\d{4}\B)/g, '$1  ').trim()
+      } else {
+        this.inputValue = val
+      }
+    },
     inputValue (newVal, oldVal) {
-      if (this.type === 'number') {
-        if (isNaN(Number(newVal))) {
-          this.$nextTick(() => {
-            this.inputValue = ''
-            this.inputEmit()
-          })
-          return
-        }
-        const value = precision(newVal, Number(this.precision))
-        if (String(value) !== newVal) {
-          this.$nextTick(() => {
-            this.inputValue = value
-            this.inputEmit()
-          })
-          return
-        }
+      switch (this.type) {
+        case 'number':
+          if (isNaN(Number(newVal))) {
+            this.$nextTick(() => {
+              this.inputValue = ''
+              this.inputEmit()
+            })
+            return
+          }
+          const value = precision(newVal, Number(this.precision))
+          if (String(value) !== newVal) {
+            this.$nextTick(() => {
+              this.inputValue = value
+              this.inputEmit()
+            })
+            return
+          }
+          break
       }
       this.inputEmit()
     }
@@ -214,11 +224,16 @@ export default {
       this.doValidate()
     },
     inputEmit () {
-      if (this.type === 'number' && this.inputValue !== '') {
-        this.inputValue = Number(this.inputValue)
+      switch (this.type) {
+        case 'number':
+          if (this.inputValue !== '') {
+            this.inputValue = Number(this.inputValue)
+          }
+          break
+        case 'phone':
+          return this.$emit('input', this.inputValue.replace(/\s/g, ''))
       }
       this.$emit('input', this.inputValue)
-      // this.doValidate()
     },
 
     rulesParser () {

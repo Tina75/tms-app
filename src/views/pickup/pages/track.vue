@@ -110,7 +110,8 @@ export default {
       iconMap: {
         1: 'icon-beidoudingwei',
         2: 'icon-sijidingwei',
-        3: 'icon-shoujidingwei'
+        3: 'icon-shoujidingwei',
+        4: 'icon-sijidingwei'
       }
     }
   },
@@ -165,9 +166,9 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       if (Number(to.query.type) === 1) {
-        vm.getPickupLocation(to.params.id)
+        vm.getPickupLocation(to.params.id).catch(e => { vm.$router.back() })
       } else if (Number(to.query.type) === 2) {
-        vm.getWaybillLocation(to.params.id)
+        vm.getWaybillLocation(to.params.id).catch(e => { vm.$router.back() })
       }
     })
   },
@@ -234,13 +235,10 @@ export default {
       flex: 1
       text-align: left
       .truck-no
-        font-size: 14px;
+        font-size: 15px;
         font-weight: bold
-        line-height: 18px;
+        line-height: 35px;
         letter-spacing: -1px
-      .driver-name
-        font-size: 10px;
-        line-height: 14px;
   .track-mask
     position: fixed
     bottom: 0

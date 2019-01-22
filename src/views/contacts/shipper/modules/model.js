@@ -1,3 +1,5 @@
+
+const isNum = v => typeof v === 'number'
 export class ContactDetail {
   id = ''
   name = ''
@@ -72,8 +74,8 @@ export class CargoDetail {
     width: '',
     height: ''
   }
-  weight = '' // 重量
-  volume = '' // 体积
+  weight = '' // 重量 前端是公斤 后端是吨,需要转化
+  volume = '' // 体积 单位方
   remark1 = ''
   remark2 = ''
 
@@ -84,6 +86,7 @@ export class CargoDetail {
       const form = fillEmpty(server)
       form.dimension = fillEmpty(server.dimension || { length: '', width: '', height: '' })
       form.cargoCost = server.cargoCost / 100 || ''
+      form.weight = +server.weight > 0 ? server.weight * 1000 : '' // 吨转化为公斤
       return form
     }
     return new CargoDetail()
@@ -94,8 +97,11 @@ export class CargoDetail {
     if (server.cargoCost) {
       server.cargoCost = form.cargoCost * 100 // 后端是分,前端是元
     }
+    if (server.weight) {
+      server.weight = server.weight / 1000 // 公斤转化为吨
+    }
     const dimension = server.dimension
-    if (dimension && dimension.height && dimension.width && dimension.width) {
+    if (isNum(dimension.height) || isNum(dimension.width) || isNum(dimension.length)) {
       server.dimension = {
         ...dimension
       }

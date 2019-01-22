@@ -37,7 +37,7 @@
             v-if="orderConfig.otherFeeOption"
             v-model="form.otherFee"
             prop="otherFee"
-            label="其它费用(元)"
+            label="其他费用(元)"
             type="number"
             precision="4" />
         </div>
