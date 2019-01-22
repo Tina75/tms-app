@@ -156,6 +156,10 @@ export default {
     .handle-btns
       height: 45px
       display: flex
+      >>> .cube-btn
+        font-size 17px
+        font-weight 500
+        padding 15px
       a
         flex: 1
         background: #27A3BD;

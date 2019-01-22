@@ -186,14 +186,14 @@ export default {
     },
     // 到货
     doArrival: ({ commit, state }, id) => {
-      Server({
+      return Server({
         url: '/waybill/confirm/arrival',
         method: 'post',
         data: { waybillIds: [id] }
       }).then(({ data }) => {
-        window.toast('到货成功')
-        let list = state.arrival.list.filter(item => item.id !== id)
-        commit('SET_SENDING_LIST', list)
+        // window.toast('到货成功')
+        // let list = state.arrival.list.filter(item => item.id !== id)
+        // commit('SET_SENDING_LIST', list)
       })
     },
     // 调度 and 创建运单

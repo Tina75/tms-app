@@ -32,7 +32,7 @@
           <div class="list-item__money">
             <p v-if="info.totalFee"  class="cube-c-black cube-font-12 cube-ml-15">应付费用({{info.settlementType|settlementTypeFormat}})</p>
             <div v-if="info.totalFee"  class="cube-c-yellow cube-mt-5 cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.totalFee |moneyFormat}}</span>/元</div>
-            <cube-button  class="list-item__btngroup" :outline="true"  :inline="true" primary @click.stop="removeItem(info.id)">移除</cube-button>
+            <cube-button  class="list-item__btngroup" :outline="true"  :inline="true" primary @click.stop="removeItem(info.id)">移出</cube-button>
           </div>
         </li>
       </ul>
