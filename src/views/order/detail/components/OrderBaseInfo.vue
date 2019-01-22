@@ -1,5 +1,8 @@
 <template>
   <detail-panel :title="'基本信息'">
+    <detail-panel-item v-if="Detail.orderNo" :label="'系统订单号'">
+      <p>{{Detail.orderNo}}</p>
+    </detail-panel-item>
     <detail-panel-item v-if="Detail.consignerName" :label="'客户名称'">
       <p>{{Detail.consignerName}}</p>
     </detail-panel-item>
@@ -36,14 +39,14 @@
     <detail-panel-item v-if="Detail.collectionMoney" :label="'代收货款'">
       <p>{{Detail.collectionMoney | moneyFormat}}元</p>
     </detail-panel-item>
-    <detail-panel-item v-if="Detail.invoiceAmount" :label="'开票税额'">
-      <p>{{Detail.invoiceAmount | moneyFormat}}元</p>
-    </detail-panel-item>
     <detail-panel-item v-if="Detail.salesmanName" :label="'对接业务员'">
       <p>{{Detail.salesmanName}}</p>
     </detail-panel-item>
     <detail-panel-item  :label="'是否开票'">
-      <p>{{Detail.isInvoice?'是':'否'}}<span v-if="Detail.isInvoice">({{Detail.invoiceRate}}%)</span></p>
+      <p>{{Detail.isInvoice?'是':'否'}}<span v-if="Detail.isInvoice">({{Detail.invoiceRate*100}}%)</span></p>
+    </detail-panel-item>
+    <detail-panel-item v-if="Detail.invoiceAmount" :label="'开票税额'">
+      <p>{{Detail.invoiceAmount | moneyFormat}}元</p>
     </detail-panel-item>
     <detail-panel-item v-if="Detail.remark" :label="'备注'">
       <p class="remark">{{Detail.remark}}</p>

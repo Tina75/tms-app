@@ -77,6 +77,7 @@ export default {
     },
     backupDriverList: [],
     locationDetail: {
+      got: 0,
       locationList: [],
       addressList: []
     },
@@ -128,6 +129,7 @@ export default {
     },
     getLocations (state, data) {
       state.locationDetail = {
+        got: data.points.length ? 2 : 1,
         truckNo: data.carNo,
         phone: data.points.length ? data.points[0].phone : '',
         locationList: data.points.map(item => {
@@ -144,12 +146,20 @@ export default {
         })
       }
     },
+    clearTracks (state) {
+      state.locationDetail = {
+        got: 0,
+        locationList: [],
+        addressList: []
+      }
+    },
     getBillOrderList (state, data) {
       state.billOrderList = data
       state.currentBillOrderIds = data.map(item => item.id)
     },
     removeBillOrder (state, id) {
       state.currentBillOrderIds.splice(state.currentBillOrderIds.indexOf(id), 1)
+      state.billOrderList.splice(state.billOrderList.indexOf(id), 1)
     },
     addBillOrder (state, ids) {
       state.currentBillOrderIds.push(...ids)
@@ -372,7 +382,7 @@ export default {
         })
       })
     },
-    clearDetail: ({ state, commit }, id) => {
+    clearDetail: ({ state, commit }) => {
       return new Promise((resolve, reject) => {
         commit('clearDetail')
       })
@@ -490,6 +500,11 @@ export default {
         }).then(() => {
           resolve()
         })
+      })
+    },
+    clearTracks: ({ state, commit }) => {
+      return new Promise((resolve, reject) => {
+        commit('clearTracks')
       })
     }
   },

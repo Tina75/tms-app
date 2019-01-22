@@ -96,7 +96,7 @@ export default {
         content: '是否发运？',
         onConfirm: () => {
           this.doSetOff(id).then(() => {
-            this.getWaybillDetail([id])
+            this.getWaybillDetail(id)
           })
         }
       }).show()
@@ -105,7 +105,7 @@ export default {
       this.$createDialog({
         type: 'confirm',
         title: '提示',
-        content: '是否发运？',
+        content: '是否确认到货？',
         onConfirm: () => {
           this.doArrival(id).then(() => {
             this.getWaybillDetail(id)

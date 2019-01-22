@@ -44,7 +44,7 @@ Vue.filter('mileageFormat', function (value, num = 3) {
 })
 
 Vue.filter('settlementTypeFormat', (value) => {
-  const settlement = ['未知', '现付', '到付', '回付', '月结']
+  const settlement = ['未知', '按单结', '按单结', '按单结', '月结']
   return settlement[value] ? settlement[value] : '未知'
 })
 

@@ -1,6 +1,7 @@
 <template>
   <delivery-list
     :list="SendingList"
+    :ref-name="refKey"
     @refresh="refresh"
     @loadmore="loadmore"
     @on-item-click="onItemClick"/>
@@ -12,6 +13,11 @@ import DeliveryList from './DeliveryList.vue'
 export default {
   name: 'sending-list',
   components: { DeliveryList },
+  data () {
+    return {
+      refKey: 'sending'
+    }
+  },
   computed: {
     ...mapGetters('delivery', ['SendingList'])
   },
