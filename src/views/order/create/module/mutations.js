@@ -72,9 +72,10 @@ export default {
   SET_FEE_INFO: (state, payload) => {
     resetFields(payload)
     state.feeInfo = payload
+    console.log(payload)
     const fees = [ payload.pickupFee, payload.loadFee, payload.unloadFee, payload.insuranceFee, payload.otherFee ]
     const totalFee = fees.reduce((last, fee) => {
-      if (last === fee) return last
+      if (fee === '') return last
       return NP.plus(last || 0, fee || 0)
     }, '')
     state.orderInfo.otherFee = totalFee === '' ? '' : NP.divide(totalFee, 100)
