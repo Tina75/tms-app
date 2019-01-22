@@ -109,7 +109,7 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       if (!from.name) {
-        if (to.query.tab) {
+        if (to.query.tab && to.query.tab !== '1') {
           vm.currentTab = vm.tabMap[to.query.tab]
         } else {
           vm.currentTab = vm.tabMap[1]
