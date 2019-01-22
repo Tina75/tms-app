@@ -1,6 +1,6 @@
 <template>
   <detail-panel :title="'货物明细'">
-    <a slot="title-btn" class="cargo-edit" @click="toEditOrders">编辑</a>
+    <a slot="title-btn" v-if="pickupDetail.status === 1" class="cargo-edit" @click="toEditOrders">编辑</a>
     <div class="order-list">
       <ul>
         <li v-for="(item, index) in pickupCargoDetail" :key="index" class="order-item">
@@ -15,9 +15,9 @@
                 <span v-if="el.weight">{{el.weight}}吨 </span>
                 <span v-if="el.volume">{{el.volume}}方 </span>
                 <span v-if="el.quantity">{{el.quantity}}件 </span>
-                <span v-if="el.cargoCost">{{el.cargoCost}}吨 </span>
-                <span v-if="el.remark1">{{el.remark1}}吨 </span>
-                <span v-if="el.remark2">{{el.remark2}}吨 </span>
+                <span v-if="el.cargoCost">{{el.cargoCost}} </span>
+                <span v-if="el.remark1">{{el.remark1}} </span>
+                <span v-if="el.remark2">{{el.remark2}} </span>
               </p>
             </li>
           </ul>

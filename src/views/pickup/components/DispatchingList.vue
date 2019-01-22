@@ -69,10 +69,6 @@ export default {
       }
     }
   },
-  mounted () {
-    this.setPageStart('dispatchingData')
-    this.getDispatching()
-  },
   methods: {
     ...mapActions('pickup', ['setPageStart', 'getDispatching', 'createPickup', 'removeOrder', 'getPickupCount']),
     /** 下拉刷新 */
