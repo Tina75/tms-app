@@ -23,7 +23,7 @@ export default {
   onEnter() {
     $formState.hasSubmitted = false
   },
-  onLeave(to, from, next) {
+  onLeave(to, from, allowLeave) {
     const { formLeaveConfirm } = from.meta
     if (!formLeaveConfirm || $formState.hasSubmitted) {
       $formState.willLeave(to, from)
@@ -37,7 +37,7 @@ export default {
       onConfirm: () => {
         $formState.willLeave(to, from)
         $formState.willLeave = () => {}
-        next()
+        allowLeave()
       }
     }).show()
   }
