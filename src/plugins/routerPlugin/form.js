@@ -30,7 +30,7 @@ export default {
       return true
     }
     // 去除键盘弹窗
-    if (document.activeElement){
+    if (document.activeElement) {
       document.activeElement.blur()
     }
     this.$createDialog({
