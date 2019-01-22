@@ -26,7 +26,7 @@
     </detail-panel-item>
     <div class="total-cost">
       <label>合计</label>
-      <span>{{totalFee | moneyFormat}}元</span>
+      <span>{{Detail.totalFee | moneyFormat}}元</span>
       <i v-if="Detail.settlementType">{{Detail.settlementType | settlementTypeFormat}}</i>
     </div>
   </detail-panel>
@@ -41,10 +41,7 @@ export default {
   name: 'order-cost-detail',
   components: { detailPanel, detailPanelItem },
   computed: {
-    ...mapGetters('order/detail', ['Detail']),
-    totalFee() {
-      return this.Detail.freightFee + this.Detail.loadFee + this.Detail.unloadFee + this.Detail.insuranceFee + this.Detail.otherFee
-    }
+    ...mapGetters('order/detail', ['Detail'])
   }
 }
 </script>

@@ -182,8 +182,12 @@ export default {
   methods: {
     ...mapMutations('order/create', [ 'CLEAR_CARGO_OFTEN', 'SET_CARGO_LIST' ]),
     // 初始化货物信息
-    initCargoList () {
-      const tempCargoList = Object.assign([], this.orderCargoList).map(item => {
+    initCargoList (fromName) {
+      const tempCargoList = Object.assign(
+        [],
+        fromName === 'order-cargo-often'
+          ? this.formList
+          : this.orderCargoList).map(item => {
         if (item.cargoCost) item.cargoCost = NP.divide(item.cargoCost, 100)
         if (item.size === undefined) item.size = [ item.dimension.length || '-', item.dimension.width || '-', item.dimension.height || '-' ].join('x')
         return item
@@ -352,7 +356,7 @@ export default {
 
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.initCargoList()
+      vm.initCargoList(from.name)
       vm.showPage = false
       vm.$nextTick(() => { vm.showPage = true })
     })

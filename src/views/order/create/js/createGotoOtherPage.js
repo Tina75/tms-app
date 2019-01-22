@@ -45,11 +45,11 @@ export default {
     // }
     const order = this.orderInfo
     let query = { partnerType: 1, partnerId: this.saveConsigner.id }
-    if (!(await this.getRuleList(query)).length) {
-      return window.toast('暂无符合的计费规则')
-    }
     query.departure = String(order.start)
     query.destination = String(order.end)
+    if (!query.partnerId || !query.departure || !query.destination || !(await this.getRuleList(query)).length) {
+      return window.toast('暂无符合的计费规则')
+    }
     query.distance = NP.times((order.mileage || 0), 1000)
     const { weight, weightKg, volume, cargoInfos } = this.orderCargoList.reduce((last, item) => {
       return {

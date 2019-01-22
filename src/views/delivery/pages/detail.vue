@@ -23,8 +23,8 @@
     </cube-scroll-nav>
     <div class="handle-btns">
       <!-- 2 待发运、 3 在途、4 已到货 -->
-      <cube-button v-if="!hasSendCar" primary @click="sendCar(Waybill.waybillId)">派车</cube-button>
       <cube-button v-if="hasSendCar && Waybill.status==2" primary @click="setOff(Waybill.waybillId)">发运</cube-button>
+      <cube-button v-if="!hasSendCar&& Waybill.status==2" primary @click="sendCar(Waybill.waybillId)">派车</cube-button>
       <cube-button v-if="Waybill.status==3" class="btn-light" @click="location(Waybill.waybillId)">查看位置</cube-button>
       <cube-button v-if="Waybill.status==3" @click="arrival(Waybill.waybillId)">到货</cube-button>
     </div>
@@ -56,6 +56,8 @@ export default {
   beforeRouteEnter(to, from, next) {
     next(vm => {
       vm.getWaybillDetail(to.params.id).then(({ waybill }) => {
+        console.log('waybill.assignCarType=' + waybill.assignCarType + ' waybill.carNo=' + waybill.carNo)
+
         vm.hasSendCar = (waybill.assignCarType === 1 && waybill.carrierName) || (waybill.assignCarType === 2 && waybill.carNo)
         vm.initTitleBtns(waybill)
       })
@@ -66,12 +68,7 @@ export default {
     this.clearWaybillDetail()
     next()
   },
-  watch: {
-    'Waybill.status': function(val) {
-      if (val === 2) { // 待送货
-      }
-    }
-  },
+
   methods: {
     ...mapActions('delivery', ['getWaybillDetail', 'doSetOff', 'doArrival', 'clearWaybillDetail']),
 
@@ -111,7 +108,7 @@ export default {
       }).show()
     },
     initTitleBtns(waybill) {
-      const btns = []
+      let btns = []
       if (waybill.status === 2) {
         btns.push({ text: '删除', iconType: 'delete', action: () => { this.deleteItem(waybill.waybillId) } })
         if (this.hasSendCar) btns.push({ text: '编辑', iconType: 'edit', action: () => { this.editWaybill(waybill.waybillId) } })
