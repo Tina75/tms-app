@@ -66,14 +66,7 @@ export default {
   name: 'order-base-info',
   components: { detailPanel, detailPanelItem },
   computed: {
-    ...mapGetters('order/detail', ['Detail']),
-    options () {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
+    ...mapGetters('order/detail', ['Detail'])
   },
   methods: {
     copySuccess() { window.toast('复制成功') }

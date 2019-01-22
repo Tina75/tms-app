@@ -56,15 +56,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('delivery', ['DispatchList']),
-    options() {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
-
+    ...mapGetters('delivery', ['DispatchList'])
   },
 
   created () {
@@ -82,7 +74,17 @@ export default {
         end: this.endCode,
         orderIds: [this.info.id]
       }
-      this.dispatchOrder(data).then(() => { this.$router.back() })
+      this.$createDialog({
+        type: 'confirm',
+        icon: 'cubeic-alert',
+        content: '是否确认做提货调度，创建运单',
+        onConfirm: () => {
+          this.dispatchOrder(data).then(() => {
+            window.toast('创建成功')
+            this.$router.back()
+          })
+        }
+      }).show()
     }
   }
 }

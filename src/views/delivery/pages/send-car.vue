@@ -839,7 +839,7 @@ export default {
           } else {
             await this.doSendCar(data)
           }
-          await this.clearSend()
+          await this.clearSend()// 刷新列表
           await this.getSend()
         }
 

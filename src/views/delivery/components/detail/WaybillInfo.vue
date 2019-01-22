@@ -63,14 +63,7 @@ export default {
   name: 'delivery-waybill-info',
   components: { detailPanel, detailPanelItem },
   computed: {
-    ...mapGetters('delivery', ['Waybill']),
-    options () {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
+    ...mapGetters('delivery', ['Waybill'])
   },
   methods: {
     call(tel) {

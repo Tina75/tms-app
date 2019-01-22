@@ -34,7 +34,13 @@
           <p v-if="info.totalFee"  class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormat}})</p>
           <div v-if="info.totalFee"  class="cube-c-yellow  cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.totalFee |moneyFormat}}</span>/元</div>
           <!-- 状态 10：待提货 20：待调度 30：在途 40：已到货 50：已回单；100被删除到回收站 -->
-          <cube-button v-if="!info.waybillId" class="list-item__btngroup" :outline="true"  :inline="true" primary @click.stop="onDispatch(info)">调度</cube-button>
+          <cube-button
+            v-if="!info.waybillId"
+            class="list-item__btngroup"
+            outline
+            inline
+            primary
+            @click.stop="onDispatch(info)">调度</cube-button>
           <!-- <div v-else class="list-item__btngroup">
             <div v-if="info.status==2">
               <cube-button class="btn" :outline="true" :inline="true" @click.stop="$emit('delete-item', info.waybillId)">删除</cube-button>
@@ -65,8 +71,8 @@ export default {
     options() {
       return {
         pullDownRefresh: { pullDownRefresh: 60, stopTime: 1000, txt: '刷新成功' },
-        pullUpLoad: { txt: { noMore: '没有更多数据了', more: '' } },
-        scrollbar: { fade: true }
+        pullUpLoad: true,
+        scrollbar: false
       }
     }
   },
