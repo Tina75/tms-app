@@ -20,6 +20,7 @@
 
 <script>
 import CityPicker from '@/components/CityPicker'
+import { setAppTitleBtn } from '@/libs/bridgeUtil'
 
 export default {
   name: 'delivery-dispach-city',
@@ -33,6 +34,22 @@ export default {
       startSelVisable: false,
       endSelVisable: false
     }
+  },
+  activated() {
+    this.$nextTick(() => {
+      setAppTitleBtn({
+        text: '返回',
+        position: 'left',
+        action: () => {
+          if (this.startSelVisable || this.endSelVisable) {
+            this.startSelVisable = false
+            this.endSelVisable = false
+          } else {
+            this.$router.back()
+          }
+        }
+      })
+    })
   },
 
   methods: {

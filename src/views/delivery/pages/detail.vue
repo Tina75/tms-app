@@ -1,13 +1,13 @@
 <template>
   <div class="order-detail">
-    <div v-if="!hasSendCar" class="cube-scroll-nav">
+    <!-- <div v-if="!hasSendCar" class="cube-scroll-nav">
       <div slot="prepend" class="status-block">
         <h2>{{Waybill.status | billType}}</h2>
         <p>{{Waybill.createTime | datetimeFormat}}</p>
       </div>
       <waybill-info/>
-    </div>
-    <cube-scroll-nav v-else @change="changeHandler">
+    </div> -->
+    <cube-scroll-nav >
       <div slot="prepend" class="status-block">
         <h2>{{Waybill.status | billType}}</h2>
         <p>{{Waybill.createTime | datetimeFormat}}</p>
@@ -57,6 +57,7 @@ export default {
     next(vm => {
       vm.getWaybillDetail(to.params.id).then(({ waybill }) => {
         vm.hasSendCar = (waybill.assignCarType === 1 && waybill.carrierName) || (waybill.assignCarType === 2 && waybill.carNo)
+        vm.initTitleBtns(waybill)
       })
     })
   },
@@ -68,16 +69,12 @@ export default {
   watch: {
     'Waybill.status': function(val) {
       if (val === 2) { // 待送货
-        setAppRightBtn([{ text: '删除', iconType: 'delete', action: () => { this.deleteItem(this.Waybill.waybillId) } }])
-        setAppRightBtn([{ text: '编辑', iconType: 'edit', action: () => { this.editWaybill(this.Waybill.waybillId) } }])
       }
     }
   },
   methods: {
     ...mapActions('delivery', ['getWaybillDetail', 'doSetOff', 'doArrival', 'clearWaybillDetail']),
-    changeHandler (label) {
-      console.log('changed to:', label)
-    },
+
     hasSendCarCheck() {
       const info = this.Waybill
       // 外转且有承运商名称  or 自送且有车牌号
@@ -113,6 +110,14 @@ export default {
         }
       }).show()
     },
+    initTitleBtns(waybill) {
+      const btns = []
+      if (waybill.status === 2) {
+        btns.push({ text: '删除', iconType: 'delete', action: () => { this.deleteItem(waybill.waybillId) } })
+        if (this.hasSendCar) btns.push({ text: '编辑', iconType: 'edit', action: () => { this.editWaybill(waybill.waybillId) } })
+      }
+      setAppRightBtn(btns)
+    },
     // 删除
     deleteItem(id) {
       this.$createDialog({
@@ -143,8 +148,11 @@ export default {
     .cube-scroll-nav
       flex: 1
     .handle-btns
-      max-height: 45px
       display: flex
+      >>> .cube-btn
+        font-size 17px
+        font-weight 500
+        padding 15px
       a
         flex: 1
         background: #27A3BD;

@@ -28,20 +28,10 @@ import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 
 export default {
-  name: 'pickupInfo',
+  name: 'order-cargo-list',
   components: { detailPanel },
   computed: {
-    ...mapGetters('order/detail', ['CargoList']),
-    options () {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
-  },
-  methods: {
-    // ...mapActions(['getBePicking']),
+    ...mapGetters('order/detail', ['CargoList'])
   }
 }
 </script>

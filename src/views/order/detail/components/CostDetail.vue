@@ -42,19 +42,9 @@ export default {
   components: { detailPanel, detailPanelItem },
   computed: {
     ...mapGetters('order/detail', ['Detail']),
-    options () {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    },
     totalFee() {
       return this.Detail.freightFee + this.Detail.loadFee + this.Detail.unloadFee + this.Detail.insuranceFee + this.Detail.otherFee
     }
-  },
-  methods: {
-    // ...mapActions(['getBePicking']),
   }
 }
 </script>
