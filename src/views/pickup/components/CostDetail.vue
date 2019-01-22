@@ -25,7 +25,7 @@
       <detail-panel-item :label="'结算方式'">
         <p>{{settlementTypeMap[pickupDetail.settlementType]}}</p>
       </detail-panel-item>
-      <template v-if="pickupDetail.settlementPayInfo.length">
+      <template v-if="pickupDetail.settlementType === 1 && pickupDetail.settlementPayInfo.length">
         <detail-panel-item v-if="pickupDetail.settlementPayInfo[0].cashAmount" :label="'到付现金'">
           <p>{{pickupDetail.settlementPayInfo[0].cashAmount|moneyFormat}}元</p>
         </detail-panel-item>
