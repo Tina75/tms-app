@@ -156,6 +156,7 @@ export default {
       }
     },
     setForm() {
+      this.$refs.form.reset()
       const list = this.cargoList.list
       const id = this.$route.query.id
       let detailData
