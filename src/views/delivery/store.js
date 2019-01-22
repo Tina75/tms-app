@@ -101,7 +101,7 @@ export default {
         data: {
           status: 20,
           pageNo: state.dispatch.pageNo,
-          pageSize: 3
+          pageSize: 5
         }
       }).then(({ data }) => {
         commit('DISPATCH', data.data)
@@ -115,7 +115,7 @@ export default {
         method: 'post',
         data: { status: 2,
           pageNo: state.send.pageNo,
-          pageSize: 3 }
+          pageSize: 5 }
       }).then(({ data }) => {
         commit('SEND', data.data)
       })
@@ -127,7 +127,7 @@ export default {
         method: 'post',
         data: { status: 3,
           pageNo: state.sending.pageNo,
-          pageSize: 3 }
+          pageSize: 5 }
       }).then(({ data }) => {
         commit('SENDING', data.data)
       })
@@ -139,7 +139,7 @@ export default {
         method: 'post',
         data: { status: 4,
           pageNo: state.arrival.pageNo,
-          pageSize: 3 }
+          pageSize: 5 }
       }).then(({ data }) => {
         commit('ARRIVAL', data.data)
       })
@@ -163,8 +163,8 @@ export default {
         data: info
       }).then(() => {
         // 派车成功，刷新列表
-        let list = state.send.list.filter(item => info.id !== item.id)
-        commit('SET_SEND_LIST', list)
+        // let list = state.send.list.filter(item => info.id !== item.id)
+        // commit('SET_SEND_LIST', list)
       })
     },
     // 发运
