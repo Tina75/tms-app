@@ -23,7 +23,7 @@
     <div class="footer">
       <div class="left">
         <div class="leftBox">
-          <div class="settlement">总费用（{{data.settlementType | settlementTypeFormat}}）</div>
+          <div class="settlement">总费用（{{data.settlementType | settlement}}）</div>
           <div class="fee">
             {{data.totalFee | moneyFormat}}<span>/元</span>
           </div>
@@ -37,7 +37,7 @@
       </div>
       <div class="right">
         <cube-button v-if="data.receiptOrder.receiptStatus === 0 && data.status === 40" :outline="true" :inline="true" primary @click.stop="handleClick('receipt')">回收</cube-button>
-        <cube-button v-if="data.receiptOrder.receiptStatus === 1" :outline="true" :inline="true" primary @click.stop="handleClick('backFactory')">返厂</cube-button>
+        <cube-button v-if="data.receiptOrder.receiptStatus === 1" :outline="true" :inline="true" :primary="!(data.receiptOrder.receiptStatus > 0)" @click.stop="handleClick('backFactory')">返厂</cube-button>
         <cube-button v-if="data.receiptOrder.receiptStatus > 0 && !data.receiptOrder.receiptUrl.length" :outline="true" :inline="true" primary style="margin-left: 8px" @click.stop="handleClick('uploadPic')">上传回单</cube-button>
         <cube-button v-if="data.receiptOrder.receiptStatus > 0 && data.receiptOrder.receiptUrl.length" :outline="true" :inline="true" primary style="margin-left: 8px" @click.stop="handleClick('updatePic')">修改回单</cube-button>
       </div>
@@ -45,11 +45,12 @@
   </div>
 </template>
 <script>
-import { getMoney } from '@/views/upstream/libs'
+import { getMoney, settlement } from '@/views/upstream/libs'
 export default {
   name: 'tab-card',
   filters: {
-    money: getMoney
+    money: getMoney,
+    settlement
   },
   props: {
     data: {
@@ -100,6 +101,7 @@ export default {
     font-size 14px
     margin-top 7px
   .company
+    margin-top 4px
     color #666
     font-size 14px
     line-height 20px
@@ -108,12 +110,12 @@ export default {
   overflow hidden
   padding 8px 0
   .left
-    width 50%
+    min-width 50%
     display flex
     .leftBox
       flex 1
     .receiptBox
-      width 50px
+      min-width 50px
       margin-left 10px
     .settlement
       font-size 12px

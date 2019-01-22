@@ -44,7 +44,7 @@ import NO_DATA from '@/assets/img-no-data.png'
 
 export default {
   name: 'order-charge-rule',
-  metaInfo: { title: '选择计费规则' },
+  metaInfo: { title: '请选择计费规则' },
   components: { NoData },
   data () {
     return {

@@ -354,7 +354,7 @@ export default {
     next(vm => {
       vm.initCargoList()
       vm.showPage = true
-      this.$formWillLeave(false, () => { this.showPage = false })
+      vm.$formWillLeave(false, () => { this.showPage = false })
     })
   }
 }

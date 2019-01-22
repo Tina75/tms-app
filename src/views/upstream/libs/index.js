@@ -38,6 +38,26 @@ export const pickUp = (value) => {
   }
   return status
 }
+export const settlement = (value) => {
+  let status = ''
+  switch (Number(value)) {
+    case 1:
+      status = '现付'
+      break
+    case 2:
+      status = '到付'
+      break
+    case 3:
+      status = '回付'
+      break
+    case 4:
+      status = '月结'
+      break
+    default:
+      break
+  }
+  return status
+}
 
 export const orderStatus = (value, type = '') => {
   let status = '-'
