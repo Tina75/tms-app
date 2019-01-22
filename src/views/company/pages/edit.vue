@@ -101,9 +101,9 @@
               clearable
               maxlength="50"
               required
-              @input.native="isSelected = false"/>
+              @input.native="isSelected = true"/>
             <bmap-address-list
-              v-show="showAddressList"
+              v-show="showAddressList && isSelected"
               :city="limitCityGeo"
               :search="companyInfo.address"
               @select="onSelectAddress" />
@@ -310,9 +310,8 @@ export default {
     onPageRefresh() {
       let vm = this
       setAppTitleBtn({
+        text: '返回',
         position: 'left',
-        text: 'back',
-        iconType: 'back',
         action: () => {
           if (vm.step > 1) vm.step = --vm.step
           else vm.$router.push({ name: 'company' })
@@ -394,7 +393,7 @@ export default {
       }
     },
     async nextSetp () {
-      if (this.step === 1 && this.companyInfo.address && !this.isSelected) {
+      if (this.step === 1 && this.companyInfo.address && this.isSelected) {
         window.toast('详细地址只支持从推荐地址中选择')
         return
       }
@@ -474,7 +473,7 @@ export default {
       })
     },
     onSelectAddress (item) {
-      this.isSelected = true
+      this.isSelected = false
       this.companyInfo.address = item.detail + item.name
       this.companyInfo.latitude = item.data.point.lat
       this.companyInfo.longitude = item.data.point.lng
@@ -514,8 +513,6 @@ export default {
   overflow: -webkit-paged-x;
 >>>.textarea .border-bottom-1px:after
   border none
-.scroll-box
-  height calc(100vh - 45px)
 .form
   margin-bottom 15px
   &-section

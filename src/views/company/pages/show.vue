@@ -214,9 +214,8 @@ export default {
         }
       ])
       setAppTitleBtn({
+        text: '返回',
         position: 'left',
-        text: 'back',
-        iconType: 'back',
         action: () => {
           closeWindow()
         }
