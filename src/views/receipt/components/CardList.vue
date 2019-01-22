@@ -76,7 +76,8 @@ export default {
         title: '回收',
         prompt: {
           value: '',
-          placeholder: '请输入回收人'
+          placeholder: '请输入回收人',
+          maxlength: 15
         },
         onConfirm: (e, promptValue) => {
           const params = {
@@ -105,7 +106,8 @@ export default {
         title: '返厂',
         prompt: {
           value: '',
-          placeholder: '请输入接收人'
+          placeholder: '请输入接收人',
+          maxlength: 15
         },
         onConfirm: (e, promptValue) => {
           const params = {
