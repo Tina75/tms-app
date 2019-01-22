@@ -1,6 +1,6 @@
 <template>
   <div class="scroll-list-wrap">
-    <cube-scroll class="scroll-box">
+    <cube-scroll class="scroll-box" v-if="showPage">
       <div class="cargo-form-box">
         <form-group ref="$form" :rules="rules">
           <div v-for="(form, index) in formList" :key="index" class="form-section">
@@ -139,6 +139,7 @@ export default {
   components: { FormGroup, FormItem, FormTitle },
   data () {
     return {
+      showPage: false,
       CARGO_IMAGE,
       formList: [],
       cargoIndex: void 0,
@@ -196,7 +197,7 @@ export default {
         return item
       })
       this.SET_CARGO_LIST(tempCargoList)
-      this.$formWillLeave()
+      this.$formWillLeave(() => { this.showPage = false })
       this.$router.back()
     },
     // 删除货物
@@ -348,6 +349,8 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.initCargoList()
+      vm.showPage = true
+      this.$formWillLeave(false, () => { this.showPage = false })
     })
   }
 }
