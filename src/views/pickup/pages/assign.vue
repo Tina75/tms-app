@@ -541,7 +541,7 @@ export default {
           vm.model.payType = data.settlementPayInfo.length ? data.settlementPayInfo[0].payType : 2
           vm.model.cashAmount = data.settlementPayInfo.length ? moneyInit(data.settlementPayInfo[0].cashAmount) : ''
           vm.model.fuelCardAmount = data.settlementPayInfo.length ? moneyInit(data.settlementPayInfo[0].fuelCardAmount) : ''
-          vm.model.allocationStrategy = data.orderLength > 1 ? (data.allocationStrategy || vm.UserConfig.waybillStrategy || 1) : null
+          vm.model.allocationStrategy = data.orderLength > 1 ? (data.allocationStrategy || vm.UserConfig.allocationStrategyInfo.waybillStrategy || 1) : null
           vm.model.remark = data.remark
         })
       }
