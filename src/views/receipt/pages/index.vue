@@ -145,6 +145,7 @@ export default {
   font-weight 600
 .cube-input
   border-color #F9F9F9
+  background-color rgba(249,249,249,1)
 .cube-dialog-btn:first-child
   color #333
 </style>

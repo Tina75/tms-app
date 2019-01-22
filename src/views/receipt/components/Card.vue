@@ -6,7 +6,7 @@
     </div>
     <div class="consignee-info">
       <div class="city">
-        {{data.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{data.endName}}
+        {{data.startName}} <i v-if="data.startName && data.endName" class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{data.endName}}
       </div>
       <div class="cargos">
         <div class="cargo-infos">{{data.weight || 0}}吨</div>
@@ -16,8 +16,8 @@
       <div class="company">
         {{data.consignerAddress}} {{data.consignerName}}
       </div>
-      <div class="company">
-        客户订单号：{{data.customerOrderNo}}
+      <div v-if="data.customerOrderNo" class="company">
+        客户单号：{{data.customerOrderNo}}
       </div>
     </div>
     <div class="footer">
