@@ -10,7 +10,7 @@
         <div class="form-item-input-box">
           <cube-loading v-if="type === 'loading'" class="form-item-loading" :size="20" />
 
-          <!-- 输入框 type = text || number || phone || contact -->
+          <!-- 输入框 type = text || number || phone -->
           <cube-input
             v-if="inputType"
             v-model="inputValue"
@@ -133,7 +133,7 @@ export default {
     inputType () {
       const type = this.type
       if (type === 'text' || type === 'number') return type
-      if (type === 'phone' || type === 'contact') return 'number'
+      if (type === 'phone') return 'text'
       return ''
     },
     inputRequired () {
@@ -169,7 +169,13 @@ export default {
     }
   },
   watch: {
-    value (val) { this.inputValue = val },
+    value (val) {
+      if (this.type === 'phone' && val && +val[0] === 1) {
+        this.inputValue = (val + '').replace(/(^\d{3}|\d{4}\B)/g, '$1  ').trim()
+      } else {
+        this.inputValue = val
+      }
+    },
     inputValue (newVal, oldVal) {
       switch (this.type) {
         case 'number':
@@ -188,11 +194,6 @@ export default {
             })
             return
           }
-          break
-        case 'phone':
-
-          break
-        case 'contact':
           break
       }
       this.inputEmit()
@@ -229,6 +230,8 @@ export default {
             this.inputValue = Number(this.inputValue)
           }
           break
+        case 'phone':
+          return this.$emit('input', this.inputValue.replace(/\s/g, ''))
       }
       this.$emit('input', this.inputValue)
     },
