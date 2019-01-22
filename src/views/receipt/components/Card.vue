@@ -9,9 +9,9 @@
         {{data.startName}} <i v-if="data.startName && data.endName" class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{data.endName}}
       </div>
       <div class="cargos">
-        <div class="cargo-infos">{{data.weight || 0}}吨</div>
-        <div class="cargo-infos">{{data.volume || 0}}方</div>
-        <div class="cargo-infos">{{data.quantity || 0}}件</div>
+        <div v-if="data.weight" class="cargo-infos">{{data.weight}}吨</div>
+        <div v-if="data.volume" class="cargo-infos">{{data.volume}}方</div>
+        <div v-if="data.quantity" class="cargo-infos">{{data.quantity}}件</div>
       </div>
       <div class="company">
         {{data.consignerAddress}} {{data.consignerName}}
@@ -72,6 +72,7 @@ export default {
   padding 0 15px
 .tab-card-title
   padding 10px 0
+  border-bottom 1px solid #F3F5F9
   .create-time
     font-size 14px
     line-height 20px
@@ -82,7 +83,7 @@ export default {
     background #fcaf3b
     padding 2px
 .consignee-info
-  padding-bottom 15px
+  padding 15px 0
   .city
     color #333
     font-size 18px
@@ -106,7 +107,7 @@ export default {
     font-size 14px
     line-height 20px
 .footer
-  border-top 1px sold #ccc
+  border-top 1px solid #F3F5F9
   overflow hidden
   padding 8px 0
   .left

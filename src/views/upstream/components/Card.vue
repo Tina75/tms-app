@@ -22,7 +22,7 @@
       <div class="left">
         <div class="settlement">{{data.settlementTypeDesc}}</div>
         <div class="fee">
-          {{data.totalFee | money}}<span>/元</span>
+          {{data.totalFee | moneyFormat}}<span>/元</span>
         </div>
       </div>
       <div v-if="status[data.acceptStatus].name == '待接收'" class="right">
