@@ -266,9 +266,12 @@ export default {
       vm.id = vm.$route.params.id
       vm.$nextTick(async () => {
         vm.setTitleButtons()
-
         const fromPage = from.name
-        if (NO_RESET_PAGE.indexOf(fromPage) === -1 || vm.orderNeedReset) vm.$refs.$form.reset()
+        // console.log(vm.orderNeedReset)
+        if (NO_RESET_PAGE.indexOf(fromPage) === -1 || vm.orderNeedReset) {
+          // console.log(111)
+          vm.$refs.$form.reset()
+        }
         // 发运页面返回的情况不查询订单数据
         if (fromPage !== 'pickup-assign' && fromPage !== 'delivery-send-car') {
           await vm.orderInfoInit()

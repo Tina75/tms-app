@@ -1,7 +1,7 @@
 <template>
   <div class="scroll-list-wrap">
     <cube-scroll class="scroll-box">
-      <form-group :rules="rules">
+      <form-group ref="$form" :rules="rules">
         <div class="form-section" v-if="orderConfig.isInvoiceOption">
           <form-item
             v-model="isInvoice"
@@ -66,7 +66,8 @@ export default {
   methods: {
     ...mapMutations('order/create', [ 'SET_OTHER_INFO' ]),
 
-    ensure () {
+    async ensure () {
+      if (!(await this.$refs.$form.validate())) return
       const temp = Object.assign({}, this.form)
       temp.invoiceRate = temp.invoiceRate ? NP.divide(temp.invoiceRate, 100) : temp.invoiceRate
       temp.collectionMoney = temp.collectionMoney ? NP.times(temp.collectionMoney, 100) : temp.collectionMoney

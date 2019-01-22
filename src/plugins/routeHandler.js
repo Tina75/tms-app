@@ -2,13 +2,13 @@ import { setAppTitleBtn, clearAppTitleBtn, closeWindow } from '@/libs/bridgeUtil
 import Vue from 'vue'
 import router from '@/router'
 import PLUGINS from './routerPlugin'
-console.info('router', router)
 // 运行时的一些判断变量
 const RUNTIME = {
   hashChanged: false, // url的Hash值是否有改变,用以判断返回键是否返回到栈顶
   allowLeave: false, // 页面直接离开,不走钩子判断拦截
   countLeaveHandler: 0, // 记录阻拦页面离开时的拦截器数量，当全部通过后才允许页面离开
-  leaveAction: { // 寄存离开页面操作的动作,在钩子允许离开后重新执行
+  leaveAction: {
+    // 寄存离开页面操作的动作,在钩子允许离开后重新执行
     type: '',
     arguments: []
   }
@@ -39,9 +39,9 @@ router.back = (closeTip) => {
 }
 
 // 拦截并记录页面离开的方式
-['back', 'push', 'replace', 'go', 'forward'].forEach(name => {
+['back', 'push', 'replace', 'go', 'forward'].forEach((name) => {
   let pre = router[name]
-  router[name] = function (){
+  router[name] = function() {
     RUNTIME.leaveAction.type = name
     RUNTIME.leaveAction.arguments = Array.from(arguments)
     pre.apply(router, RUNTIME.leaveAction.arguments)
@@ -104,9 +104,8 @@ function countToLeave(to) {
   return function() {
     count++
     if (count === RUNTIME.countLeaveHandler) {
-      console.info('action', action)
       RUNTIME.allowLeave = true
-      if (router[action.type]){
+      if (router[action.type]) {
         router[action.type].apply(router, action.arguments)
       } else {
         router.back()

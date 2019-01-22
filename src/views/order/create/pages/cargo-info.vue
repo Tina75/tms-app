@@ -142,7 +142,7 @@ export default {
   components: { FormGroup, FormItem, FormTitle },
   data () {
     return {
-      showPage: false,
+      showPage: true,
       CARGO_IMAGE,
       formList: [],
       cargoIndex: void 0,
@@ -353,8 +353,8 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.initCargoList()
-      vm.showPage = true
-      this.$formWillLeave(false, () => { this.showPage = false })
+      vm.showPage = false
+      vm.$nextTick(() => { vm.showPage = true })
     })
   }
 }
