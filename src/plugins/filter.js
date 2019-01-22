@@ -43,6 +43,11 @@ Vue.filter('mileageFormat', function (value, num = 3) {
   return NP.divide(value, Math.pow(10, num))
 })
 
+Vue.filter('phoneFormat', function (value) {
+  if (!value) return ''
+  return value.substring(0, 3) + ' ' + value.substring(3, 7) + ' ' + value.substring(7, 11)
+})
+
 Vue.filter('settlementTypeFormat', (value) => {
   const settlement = ['未知', '按单结', '按单结', '按单结', '月结']
   return settlement[value] ? settlement[value] : '未知'

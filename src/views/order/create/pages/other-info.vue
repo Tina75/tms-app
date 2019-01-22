@@ -2,7 +2,7 @@
   <div class="scroll-list-wrap">
     <cube-scroll class="scroll-box">
       <form-group ref="$form" :rules="rules">
-        <div class="form-section" v-if="orderConfig.isInvoiceOption">
+        <div v-if="orderConfig.isInvoiceOption" class="form-section">
           <form-item
             v-model="isInvoice"
             label="是否开票"
@@ -14,7 +14,7 @@
             type="number"
             precision="2" />
         </div>
-        <div class="form-section" v-if="orderConfig.collectionMoneyOption">
+        <div v-if="orderConfig.collectionMoneyOption" class="form-section">
           <form-item
             v-model="form.collectionMoney"
             prop="collectionMoney"
