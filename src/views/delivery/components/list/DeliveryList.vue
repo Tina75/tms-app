@@ -6,9 +6,9 @@
     @pulling-down="onPullingDown"
     @pulling-up="onPullingUp">
     <ul >
-      <li v-for="info in list" :key="getUnicKey(info)" class="list-item" @click.stop="$emit('on-item-click',getUnicKey(info))">
+      <li v-for="info in list" :key="info.waybillId" class="list-item" @click.stop="$emit('on-item-click',info.waybillId)">
         <div class="list-item__time  border-bottom-1px">
-          <span class="cube-ml-15">{{info.createTime||info.createTimeLong | datetimeFormat}}</span>
+          <span class="cube-ml-15">{{info.createTime | datetimeFormat}}</span>
           <div class="list-item__flag">
             <span v-if="info.collectionMoney>0" class="item orange">代</span>
             <span v-if="info.cashBack>0" class="item red">返</span>
@@ -31,10 +31,9 @@
           </p>
         </div>
         <div class="list-item__money border-top-1px">
-          <p v-if="info.totalFee"  class="cube-c-black cube-font-12 cube-ml-15">{{info.status<10?'应付费用':'应收费用'}}({{info.settlementType|settlementTypeFormat}})</p>
+          <p v-if="info.totalFee"  class="cube-c-black cube-font-12 cube-ml-15">应付费用({{info.settlementType|settlementTypeFormat}})</p>
           <div v-if="info.totalFee"  class="cube-c-yellow  cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.totalFee |moneyFormat}}</span>/元</div>
           <!-- 状态 10：待提货 20：待调度 30：在途 40：已到货 50：已回单；100被删除到回收站 -->
-          <cube-button v-if="!info.waybillId" class="list-item__btngroup" :outline="true"  :inline="true" primary @click.stop="$emit('on-dispatch',info)">调度</cube-button>
           <div v-else class="list-item__btngroup">
             <div v-if="info.status==2">
               <cube-button class="btn" :outline="true" :inline="true" @click.stop="$emit('delete-item', info.waybillId)">删除</cube-button>
@@ -65,9 +64,9 @@ export default {
   computed: {
     options() {
       return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
+        pullDownRefresh: { pullDownRefresh: 60, stopTime: 1000, txt: '刷新成功' },
+        pullUpLoad: { txt: { noMore: '没有更多数据了', more: '' } },
+        scrollbar: { fade: true }
       }
     }
   },
@@ -118,14 +117,17 @@ export default {
 
     onPullingDown() {
       this.$emit('refresh')
+      setTimeout(() => {
+        this.$refs[this.refName].forceUpdate()
+      }, 1000)
     },
     onPullingUp() {
       this.$emit('loadmore')
+      setTimeout(() => {
+        this.$refs[this.refName].forceUpdate()
+      }, 1000)
     },
-    getUnicKey(item) {
-      if (!item) return ''
-      return item.id ? item.id : item.waybillId
-    },
+
     deleteBill(id) {
       this.$emit('delete-item', id)
     }

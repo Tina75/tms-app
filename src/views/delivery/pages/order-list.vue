@@ -59,7 +59,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     next(vm => {
       vm.waybillId = to.params.id
-      setAppRightBtn([{ text: '添加', iconType: 'add', action: () => { this.$router.push({ name: 'add-order', params: { id: to.params.id } }) } }])
+      setAppRightBtn([{ text: '添加', iconType: 'add', action: () => { vm.$router.push({ name: 'delivery-add-order', params: { id: to.params.id } }) } }])
       // vm.getWaybillDetail(vm.waybillId)
       vm.getOrderListByWaybillId(vm.waybillId)
     })

@@ -1,5 +1,6 @@
 <template>
   <delivery-list
+    :ref-name="refKey"
     :list="ArrivalList"
     @refresh="refresh"
     @loadmore="loadmore"
@@ -14,6 +15,7 @@ export default {
   components: { DeliveryList },
   data () {
     return {
+      refKey: 'arrival'
     }
   },
 

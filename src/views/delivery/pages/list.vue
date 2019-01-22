@@ -12,9 +12,7 @@
       </cube-tab>
     </cube-tab-bar>
     <div class="wrapper">
-      <keep-alive>
-        <component :is="current"/>
-      </keep-alive>
+      <component :is="current"/>
     </div>
   </div>
 </template>

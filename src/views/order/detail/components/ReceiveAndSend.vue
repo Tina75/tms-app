@@ -8,36 +8,31 @@
         <p class="remix-content">
           <span class="border-right-1px">{{Detail.consignerPhone}}</span>
           <a @click="call(Detail.consignerPhone)">
-            联系TA
-            <icon-font
-              name="icon-ico_call"
-              :size="18"
-              color="#00A4BD"/>
+            联系TA <i class="iconfont icon-ico_call "/>
           </a>
         </p>
       </detail-panel-item>
       <detail-panel-item :label="'发货地址'">
-        <p class="address">{{Detail.consignerAddress}}</p>
+        <p class="address">{{Detail.consignerAddress+Detail.consignerHourseNumber}}</p>
       </detail-panel-item>
     </detail-panel>
     <detail-panel :title="'收货人'">
-      <detail-panel-item :label="'联系人'">
+      <detail-panel-item v-if="Detail.consigneeContact" :label="'联系人'">
         <p>{{Detail.consigneeContact}}</p>
       </detail-panel-item>
       <detail-panel-item :label="'联系方式'">
         <p class="remix-content">
-          <span class="border-right-1px">{{Detail.consigneePhone}}</span>
+          <span class="border-right-1px">{{Detail.consigneePhone+Detail.consigneeHourseNumber}}</span>
           <a @click="call(Detail.consigneePhone)">
-            联系TA
-            <icon-font
-              name="icon-ico_call"
-              :size="18"
-              color="#00A4BD"/>
+            联系TA <i class="iconfont icon-ico_call "/>
           </a>
         </p>
       </detail-panel-item>
-      <detail-panel-item :label="'发货地址'">
+      <detail-panel-item v-if="Detail.consigneeAddress" :label="'发货地址'">
         <p class="address">{{Detail.consigneeAddress}}</p>
+      </detail-panel-item>
+      <detail-panel-item v-if="Detail.consigneeCompanyName" :label="'收货人单位'">
+        <p class="address">{{Detail.consigneeCompanyName}}</p>
       </detail-panel-item>
     </detail-panel>
   </div>
@@ -47,11 +42,10 @@
 import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
-import IconFont from '@/components/Iconfont'
 
 export default {
   name: 'pickupInfo',
-  components: { detailPanel, detailPanelItem, IconFont },
+  components: { detailPanel, detailPanelItem },
   computed: {
     ...mapGetters('order/detail', ['Detail']),
     options () {

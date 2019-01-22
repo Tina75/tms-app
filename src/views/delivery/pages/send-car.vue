@@ -754,7 +754,7 @@ export default {
     ...mapGetters('delivery', ['WaybillDetail'])
   },
   methods: {
-    ...mapActions('delivery', ['getWaybillDetail', 'doSendCar', 'getSend', 'doEditWaybill']),
+    ...mapActions('delivery', ['getWaybillDetail', 'doSendCar', 'getSend', 'clearSend', 'doEditWaybill']),
     ...mapActions('pickup', ['getCarrierNameList', 'getSelfCarList', 'getSelfDriverList']),
     ...mapActions('order/create', ['sendDirectly']),
     validateHandler(result) {
@@ -839,6 +839,7 @@ export default {
           } else {
             await this.doSendCar(data)
           }
+          await this.clearSend()
           await this.getSend()
         }
 
