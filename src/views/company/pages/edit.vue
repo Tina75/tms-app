@@ -240,7 +240,7 @@ export default {
       valid: undefined,
       setpCount: 3,
       step: 1,
-      isSelected: false, // 公司地址是否选择（触发经纬度）
+      isSelected: true, // 公司地址是否选择（触发经纬度）
       busiIntroducePicList: [],
       busiAdvantcePicList: [],
       wxQrPicList: [],
