@@ -72,6 +72,7 @@ export default {
   padding 0 15px
 .tab-card-title
   padding 10px 0
+  border-bottom 1px solid #F3F5F9
   .create-time
     font-size 14px
     line-height 20px
@@ -82,7 +83,7 @@ export default {
     background #fcaf3b
     padding 2px
 .consignee-info
-  padding-bottom 15px
+  padding 15px 0
   .city
     color #333
     font-size 18px
@@ -106,7 +107,7 @@ export default {
     font-size 14px
     line-height 20px
 .footer
-  border-top 1px sold #ccc
+  border-top 1px solid #F3F5F9
   overflow hidden
   padding 8px 0
   .left
