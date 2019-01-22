@@ -8,6 +8,7 @@
         :bottom-line="false"
         class="cube-mb-15"
         label="联系人电话"
+        type="phone"
         prop="phone"
       />
       <FormItem

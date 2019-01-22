@@ -133,6 +133,7 @@ export default {
     inputType () {
       const type = this.type
       if (type === 'text' || type === 'number') return type
+      if (type === 'phone' || type === 'contact') return 'number'
       return ''
     },
     inputRequired () {
@@ -170,22 +171,29 @@ export default {
   watch: {
     value (val) { this.inputValue = val },
     inputValue (newVal, oldVal) {
-      if (this.type === 'number') {
-        if (isNaN(Number(newVal))) {
-          this.$nextTick(() => {
-            this.inputValue = ''
-            this.inputEmit()
-          })
-          return
-        }
-        const value = precision(newVal, Number(this.precision))
-        if (String(value) !== newVal) {
-          this.$nextTick(() => {
-            this.inputValue = value
-            this.inputEmit()
-          })
-          return
-        }
+      switch (this.type) {
+        case 'number':
+          if (isNaN(Number(newVal))) {
+            this.$nextTick(() => {
+              this.inputValue = ''
+              this.inputEmit()
+            })
+            return
+          }
+          const value = precision(newVal, Number(this.precision))
+          if (String(value) !== newVal) {
+            this.$nextTick(() => {
+              this.inputValue = value
+              this.inputEmit()
+            })
+            return
+          }
+          break
+        case 'phone':
+
+          break
+        case 'contact':
+          break
       }
       this.inputEmit()
     }
@@ -215,11 +223,14 @@ export default {
       this.doValidate()
     },
     inputEmit () {
-      if (this.type === 'number' && this.inputValue !== '') {
-        this.inputValue = Number(this.inputValue)
+      switch (this.type) {
+        case 'number':
+          if (this.inputValue !== '') {
+            this.inputValue = Number(this.inputValue)
+          }
+          break
       }
       this.$emit('input', this.inputValue)
-      // this.doValidate()
     },
 
     rulesParser () {
