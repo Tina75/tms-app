@@ -77,6 +77,7 @@ export default {
     },
     backupDriverList: [],
     locationDetail: {
+      got: 0,
       locationList: [],
       addressList: []
     },
@@ -128,6 +129,7 @@ export default {
     },
     getLocations (state, data) {
       state.locationDetail = {
+        got: data.points.length ? 2 : 1,
         truckNo: data.carNo,
         phone: data.points.length ? data.points[0].phone : '',
         locationList: data.points.map(item => {
@@ -142,6 +144,13 @@ export default {
             positionType: item.positionType
           }
         })
+      }
+    },
+    clearTracks (state) {
+      state.locationDetail = {
+        got: 0,
+        locationList: [],
+        addressList: []
       }
     },
     getBillOrderList (state, data) {
@@ -373,7 +382,7 @@ export default {
         })
       })
     },
-    clearDetail: ({ state, commit }, id) => {
+    clearDetail: ({ state, commit }) => {
       return new Promise((resolve, reject) => {
         commit('clearDetail')
       })
@@ -491,6 +500,11 @@ export default {
         }).then(() => {
           resolve()
         })
+      })
+    },
+    clearTracks: ({ state, commit }) => {
+      return new Promise((resolve, reject) => {
+        commit('clearTracks')
       })
     }
   },
