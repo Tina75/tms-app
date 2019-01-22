@@ -192,7 +192,7 @@ export default {
         data: { waybillIds: [id] }
       }).then(({ data }) => {
         window.toast('到货成功')
-        let list = state.send.list.filter(item => id !== item.id)
+        let list = state.arrival.list.filter(item => item.id !== id)
         commit('SET_SENDING_LIST', list)
       })
     },

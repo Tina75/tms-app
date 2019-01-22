@@ -150,6 +150,7 @@ export default {
     },
     removeBillOrder (state, id) {
       state.currentBillOrderIds.splice(state.currentBillOrderIds.indexOf(id), 1)
+      state.billOrderList.splice(state.billOrderList.indexOf(id), 1)
     },
     addBillOrder (state, ids) {
       state.currentBillOrderIds.push(...ids)

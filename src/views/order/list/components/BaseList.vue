@@ -6,7 +6,7 @@
     @pulling-down="onPullingDown"
     @pulling-up="onPullingUp">
     <ul >
-      <li v-for="item in list" :key="item.id" class="list-item" @click="onItemClick(item.id)">
+      <li v-for="item in list" :key="item.id" class="list-item" @click.stop="onItemClick(item.id)">
         <div class="list-item__time">
           <span class="cube-ml-15">{{item.createTime | datetimeFormat}}</span>
           <div class="list-item__flag">
@@ -17,9 +17,9 @@
           </div>
         </div>
         <div class="list-item__body">
-          <p class="list-item__city">{{item.startName}} → {{item.endName}}</p>
+          <p class="list-item__city">{{item.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{item.endName}}</p>
           <div>
-            <span v-if="item.cargoNames" class="list-item__count">{{item.cargoNames}}</span>
+            <span v-if="item.cargoNames" class="list-item__count">{{item.cargoNames.length>1?item.cargoNames[0]+'等':item.cargoNames[0]}}</span>
             <span v-if="item.weight" class="list-item__count">{{item.weight}}吨</span>
             <span v-if="item.volume" class="list-item__count">{{item.volume}}方</span>
             <span v-if="item.quantity" class="list-item__count">{{item.quantity}}件</span>
@@ -30,16 +30,16 @@
           </div>
         </div>
         <div class="list-item__money">
-          <p class="cube-c-black cube-font-12 cube-ml-15">{{item.settlementType|settlementTypeFormat}}</p>
-          <div class="cube-c-yellow cube-mt-5 cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{item.pickupFee||item.totalFee |moneyFormat}}</span>/元</div>
+          <p v-if="item.settlementType" class="cube-c-black cube-font-12 cube-ml-15">{{item.settlementType|settlementTypeFormat}}</p>
+          <div v-if="item.totalFee" class="cube-c-yellow cube-mt-5 cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{item.totalFee |moneyFormat}}</span>/元</div>
           <!--
             子状态为 待调度,列表展示 “删除”“编辑”按钮，详情页展示“删除”“编辑”“分享”按钮
             子状态为 其它,列表展示“改单”按钮，详情展示“改单”“分享”按钮
           -->
           <div v-if="item.status=='10'" class="list-item__btngroup">
-            <cube-button v-if="deleteBtnVisable(item)" class="btn" :outline="true"  :inline="true" @click="handleClickDelete">删除</cube-button>
-            <cube-button v-if="editOrderBtnVisable(item)" class="btn" :outline="true"  :inline="true" primary @click="handleClickEditOrder">编辑</cube-button>
-            <cube-button v-if="editBillBtnVisable(item)" class="btn" :outline="true" :inline="true" :primary="true" @click="handleClickEditBill">改单</cube-button>
+            <cube-button v-if="deleteBtnVisable(item)" class="btn" :outline="true"  :inline="true" @click.stop="handleClickDelete">删除</cube-button>
+            <cube-button v-if="editOrderBtnVisable(item)" class="btn" :outline="true"  :inline="true" primary @click.stop="handleClickEditOrder">编辑</cube-button>
+            <cube-button v-if="editBillBtnVisable(item)" class="btn" :outline="true" :inline="true" :primary="true" @click.stop="handleClickEditBill">改单</cube-button>
           </div>
 
         </div>
@@ -183,6 +183,10 @@ export default {
       font-size 18px
       margin-top 20px
       font-weight bold
+      overflow hidden
+      text-overflow ellipsis
+      white-space nowrap
+
     &__count
       background #efefef
       display inline-block
