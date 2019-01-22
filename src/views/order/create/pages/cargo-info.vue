@@ -8,7 +8,7 @@
               :image="CARGO_IMAGE"
               :title="'货物' + (index + 1)">
               <span
-                v-if="index"
+                v-if="formList.length > 1"
                 slot="extra"
                 @click="cargoDelete(index)">删除</span>
             </form-title>
@@ -52,6 +52,7 @@
             <form-item
               v-if="orderConfig.quantityOption"
               v-model="form.quantity"
+              prop="quantity"
               type="number"
               label="包装数量" />
             <form-item
@@ -261,18 +262,18 @@ export default {
         title: '包装尺寸(毫米)',
         type: 'confirm',
         onConfirm: () => {
-          let extra = { volume: temp.volume, size: '' }
-          if (!temp.volume) {
-            extra.volume = NP.round(
-              NP.divide(
-                NP.times(this.size.length || 0, this.size.width || 0, this.size.height || 0),
-                1000 * 1000 * 1000
-              ),
-              6
-            )
-          }
-          extra.size = [ this.size.length || '-', this.size.width || '-', this.size.height || '-' ].join('x')
-          this.formList.splice(this.dialogIndex, 1, Object.assign(temp, { dimension: this.size }, extra))
+          // let extra = { volume: temp.volume, size: '' }
+          // if (!temp.volume) {
+          //   extra.volume = NP.round(
+          //     NP.divide(
+          //       NP.times(this.size.length || 0, this.size.width || 0, this.size.height || 0),
+          //       1000 * 1000 * 1000
+          //     ),
+          //     6
+          //   )
+          // }
+          const size = [ this.size.length || '-', this.size.width || '-', this.size.height || '-' ].join('x')
+          this.formList.splice(this.dialogIndex, 1, Object.assign(temp, { dimension: this.size }, { size }))
           this.size.length = this.size.width = this.size.height = ''
         }
       }, createElement => {
@@ -361,7 +362,7 @@ export default {
   .cargo-form-box
     padding-bottom 15px
 
-  form
+  .form-section
     margin-top 15px
     &:first-child
       margin-top 10px
