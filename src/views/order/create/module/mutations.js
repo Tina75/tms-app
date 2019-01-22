@@ -20,6 +20,7 @@ export default {
       consignerContact: '',
       consignerPhone: '',
       start: '',
+      startCityName: '',
       consignerAddress: '',
       consignerAddressText: '',
       consignerAddressLocale: [],
@@ -30,6 +31,7 @@ export default {
       consigneeContact: '',
       consigneePhone: '',
       end: '',
+      endCityName: '',
       consigneeAddress: '',
       consigneeAddressText: '',
       consigneeAddressLocale: [],
@@ -114,20 +116,22 @@ export default {
     const info = state.orderInfo
     if (state.currentArrdessType === 'send') {
       info.start = payload.cityCode
+      info.startCityName = payload.cityName
       info.consignerAddress = payload.address
       info.consignerHourseNumber = payload.extra
       info.consignerAddressLongitude = payload.longitude
       info.consignerAddressLatitude = payload.latitude
       info.consignerAddressLocale = payload.locale
-      info.consignerAddressText = payload.address + payload.extra
+      info.consignerAddressText = payload.cityName + payload.address + payload.extra
     } else {
       info.end = payload.cityCode
+      info.endCityName = payload.cityName
       info.consigneeAddress = payload.address
       info.consigneeHourseNumber = payload.extra
       info.consigneeAddressLongitude = payload.longitude
       info.consigneeAddressLatitude = payload.latitude
       info.consigneeAddressLocale = payload.locale
-      info.consigneeAddressText = payload.address + payload.extra
+      info.consigneeAddressText = payload.cityName + payload.address + payload.extra
     }
     state.currentArrdessType = ''
     state.addressChanged = true

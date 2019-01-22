@@ -1,6 +1,6 @@
 <template>
   <div class="create-order-page">
-    <cube-scroll class="scroll-box" v-if="showPage">
+    <cube-scroll v-if="showPage" class="scroll-box">
       <!-- <cube-button primary @click="$router.push({ name: 'order-often' })">常发订单</cube-button> -->
       <form-group
         ref="$form"
