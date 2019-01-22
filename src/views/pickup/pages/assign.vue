@@ -515,7 +515,7 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       function moneyInit (money) {
-        return money === 0 ? NP.divide(money, 100) : ''
+        return money === 0 ? '' : NP.divide(money, 100)
       }
       if (to.params.id) {
         vm.getPickupDetailForForm(to.params.id).then(data => {
