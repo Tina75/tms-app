@@ -9,9 +9,9 @@
         {{data.startName}} <i v-if="data.startName && data.endName" class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{data.endName}}
       </div>
       <div class="cargos">
-        <div class="cargo-infos">{{data.weight || 0}}吨</div>
-        <div class="cargo-infos">{{data.volume || 0}}方</div>
-        <div class="cargo-infos">{{data.quantity || 0}}件</div>
+        <div v-if="data.weight" class="cargo-infos">{{data.weight}}吨</div>
+        <div v-if="data.volume" class="cargo-infos">{{data.volume}}方</div>
+        <div v-if="data.quantity" class="cargo-infos">{{data.quantity}}件</div>
       </div>
       <div class="company">
         {{data.consignerAddress}} {{data.consignerName}}
