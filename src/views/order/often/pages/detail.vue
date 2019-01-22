@@ -50,7 +50,7 @@ export default {
 
     orderOneMore () {
       this.SET_ORDER_RESET(true)
-      this.$router.push({ name: 'order-one-more', params: { id: this.detail.id }})
+      this.$router.push({ name: 'order-one-more', params: { id: this.detail.id } })
     }
   },
   beforeRouteEnter (to, from, next) {

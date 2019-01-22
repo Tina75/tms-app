@@ -60,10 +60,6 @@ import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
 import { pickupType } from '../../js/filters'
 import NP from 'number-precision'
-// import Copy from 'vue-clipboard2'
-import Vue from 'vue'
-
-// Vue.use(Copy)
 
 export default {
   name: 'pickupInfo',

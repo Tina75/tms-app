@@ -257,7 +257,6 @@ export default {
     // 初始化填写尺寸对话框
     initSizeDialog () {
       const temp = this.formList[this.dialogIndex]
-      let sizeInput
       this.sizeDialog = this.$createDialog({
         title: '包装尺寸(毫米)',
         type: 'confirm',
