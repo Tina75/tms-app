@@ -2,11 +2,16 @@ import { setAppTitleBtn, clearAppTitleBtn, closeWindow } from '@/libs/bridgeUtil
 import Vue from 'vue'
 import router from '@/router'
 import PLUGINS from './routerPlugin'
+console.info('router', router)
 // 运行时的一些判断变量
 const RUNTIME = {
   hashChanged: false, // url的Hash值是否有改变,用以判断返回键是否返回到栈顶
   allowLeave: false, // 页面直接离开,不走钩子判断拦截
-  countLeaveHandler: 0 // 记录阻拦页面离开时的拦截器数量，当全部通过后才允许页面离开
+  countLeaveHandler: 0, // 记录阻拦页面离开时的拦截器数量，当全部通过后才允许页面离开
+  leaveAction: { // 寄存离开页面操作的动作,在钩子允许离开后重新执行
+    type: '',
+    arguments: []
+  }
 }
 // 调用挂载Vue的钩子
 PLUGINS.forEach((plugin) => {
@@ -33,9 +38,21 @@ router.back = (closeTip) => {
   }, 50)
 }
 
+// 拦截并记录页面离开的方式
+['back', 'push', 'replace', 'go', 'forward'].forEach(name => {
+  let pre = router[name]
+  router[name] = function (){
+    RUNTIME.leaveAction.type = name
+    RUNTIME.leaveAction.arguments = Array.from(arguments)
+    pre.apply(router, RUNTIME.leaveAction.arguments)
+  }
+})
+
 router.afterEach((to, from) => {
   // 自动清理上一个页面设置的右侧原生按钮,左侧默认是返回键,需各自自行清理还原
   clearAppTitleBtn()
+  // 每次成功进入一个页面后清空离开记录
+  RUNTIME.leaveAction.type = ''
 })
 /// ------全局劫持-----
 const ENTER_HANDLERS = getHandlerArr(PLUGINS, 'onEnter')
@@ -56,13 +73,12 @@ Vue.mixin({
       }
     })
   },
-
   beforeRouteLeave(to, from, next) {
     let go = true
     // hash变化了!
     RUNTIME.hashChanged = true
     if (!RUNTIME.allowLeave && LEAVE_HANDLERS_LENGTH) {
-      let allowLeave = countToLeave()
+      let allowLeave = countToLeave(to)
       let allows = true
       RUNTIME.countLeaveHandler = 0
       for (let i = 0; i < LEAVE_HANDLERS_LENGTH; i++) {
@@ -82,13 +98,19 @@ Vue.mixin({
   }
 })
 
-function countToLeave() {
+function countToLeave(to) {
   let count = 0
+  let action = RUNTIME.leaveAction
   return function() {
     count++
     if (count === RUNTIME.countLeaveHandler) {
+      console.info('action', action)
       RUNTIME.allowLeave = true
-      router.back()
+      if (router[action.type]){
+        router[action.type].apply(router, action.arguments)
+      } else {
+        router.back()
+      }
     }
   }
 }
