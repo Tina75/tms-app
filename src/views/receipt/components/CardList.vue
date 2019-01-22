@@ -129,13 +129,13 @@ export default {
     },
     uploadPic (item) {
       this.$router.push({
-        query: { id: item.receiptOrder.id, type: 'add' },
+        query: { id: item.receiptOrder.id, type: 'add', tab: this.keys },
         name: 'receipt-upload'
       })
     },
     updatePic (item) {
       this.$router.push({
-        query: { id: item.receiptOrder.id, type: 'update', orderId: item.id },
+        query: { id: item.receiptOrder.id, type: 'update', orderId: item.id, tab: this.keys },
         name: 'receipt-upload'
       })
     }
