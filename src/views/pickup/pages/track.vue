@@ -1,80 +1,90 @@
 <template>
   <div class="pickup-track">
-    <baidu-map class="bm-view" :center="locationDetail.locationList[active]" :zoom="12" ak="EkPR9YNO4Ez9LW301kyTGCyTfQ5cweIz">
-      <bm-overlay
-        v-if="locationDetail.locationList.length"
-        pane="markerPane"
-        :class="{terminal: true}"
-        @draw="startDraw"/>
-      <bm-overlay
-        v-if="locationDetail.locationList.length > 1"
-        pane="markerPane"
-        :class="{terminal: true}"
-        @draw="endDraw"/>
-      <bm-polyline :path="locationDetail.locationList" stroke-color="#00a4bd" :stroke-opacity="0.5" :stroke-weight="2"/>
-      <bm-overlay
-        v-if="locationDetail.locationList.length"
-        ref="track-locate"
-        pane="labelPane"
-        :class="{active: true}"
-        @draw="activeDraw">
-        <div class="driver-label">
-          <div class="driver-icon">
-            <icon-font
-              :name="'icon-ico_driver1'"
-              :size="20"
-              color="#ffffff"/>
-          </div>
-          <div class="driver-text">
-            <p class="truck-no">{{locationDetail.truckNo}}</p>
-            <!--<p class="driver-name">{{locationDetail.truckNo}}</p>-->
-          </div>
-        </div>
-      </bm-overlay>
-    </baidu-map>
-    <div class="track-mask" :class="{'opacity': !pulled}"/>
-    <div v-if="locationDetail.addressList.length" id="track-list" class="track-list" :class="{'pulled': pulled}">
-      <div class="popup-switch">
-        <i :class="pulled ? 'icon-collapse' : 'icon-expand'" @click="pullSwitch"/>
-      </div>
-      <div v-show="!pulled" class="location-item strong">
-        <div class="location-time">
-          <p class="date">{{locationDetail.addressList[active].date}}</p>
-          <p class="time">{{locationDetail.addressList[active].time}}</p>
-        </div>
-        <p class="location-icon">
-          <icon-font
-            :name="iconMap[locationDetail.addressList[active].positionType]"
-            :size="25"
-            color="#00A4BD"/>
-        </p>
-        <p class="location-address">{{locationDetail.addressList[active].address}}</p>
-      </div>
-      <div v-if="pulled" class="address-list">
-        <cube-scroll
-          ref="scroll"
-          :data="locationDetail.addressList">
-          <li
-            v-for="(item, index) in locationDetail.addressList"
-            :key="index" class="location-item"
-            :class="{'strong': item.index === active}"
-            @click="relocate(index)">
-            <div class="location-time">
-              <p class="date">{{item.date}}</p>
-              <p class="time">{{item.time}}</p>
-            </div>
-            <p class="location-icon">
+    <div v-if="locationDetail.got === 2" class="map-container">
+      <baidu-map class="bm-view" :center="locationDetail.locationList[active]" :zoom="12" ak="EkPR9YNO4Ez9LW301kyTGCyTfQ5cweIz">
+        <bm-overlay
+          v-if="locationDetail.locationList.length"
+          pane="markerPane"
+          :class="{terminal: true}"
+          @draw="startDraw"/>
+        <bm-overlay
+          v-if="locationDetail.locationList.length > 1"
+          pane="markerPane"
+          :class="{terminal: true}"
+          @draw="endDraw"/>
+        <bm-polyline :path="locationDetail.locationList" stroke-color="#00a4bd" :stroke-opacity="0.5" :stroke-weight="2"/>
+        <bm-overlay
+          v-if="locationDetail.locationList.length"
+          ref="track-locate"
+          pane="labelPane"
+          :class="{active: true}"
+          @draw="activeDraw">
+          <div class="driver-label">
+            <div class="driver-icon">
               <icon-font
-                :name="iconMap[item.positionType]"
+                :name="'icon-ico_driver1'"
                 :size="20"
-                :color="item.index === active ? '#00A4BD' : '#C5C8CE'"/>
-            </p>
-            <p class="location-address">
-              {{item.address}}
-            </p>
-          </li>
-        </cube-scroll>
+                color="#ffffff"/>
+            </div>
+            <div class="driver-text">
+              <p class="truck-no">{{locationDetail.truckNo}}</p>
+              <!--<p class="driver-name">{{locationDetail.truckNo}}</p>-->
+            </div>
+          </div>
+        </bm-overlay>
+      </baidu-map>
+      <div class="track-mask" :class="{'opacity': !pulled}"/>
+      <div v-if="locationDetail.addressList.length" id="track-list" class="track-list" :class="{'pulled': pulled}">
+        <div class="popup-switch">
+          <i :class="pulled ? 'icon-collapse' : 'icon-expand'" @click="pullSwitch"/>
+        </div>
+        <div v-show="!pulled" class="location-item strong">
+          <div class="location-time">
+            <p class="date">{{locationDetail.addressList[active].date}}</p>
+            <p class="time">{{locationDetail.addressList[active].time}}</p>
+          </div>
+          <p class="location-icon">
+            <icon-font
+              :name="iconMap[locationDetail.addressList[active].positionType]"
+              :size="25"
+              color="#00A4BD"/>
+          </p>
+          <p class="location-address">{{locationDetail.addressList[active].address}}</p>
+        </div>
+        <div v-if="pulled" class="address-list">
+          <cube-scroll
+            ref="scroll"
+            :data="locationDetail.addressList">
+            <li
+              v-for="(item, index) in locationDetail.addressList"
+              :key="index" class="location-item"
+              :class="{'strong': item.index === active}"
+              @click="relocate(index)">
+              <div class="location-time">
+                <p class="date">{{item.date}}</p>
+                <p class="time">{{item.time}}</p>
+              </div>
+              <p class="location-icon">
+                <icon-font
+                  :name="iconMap[item.positionType]"
+                  :size="20"
+                  :color="item.index === active ? '#00A4BD' : '#C5C8CE'"/>
+              </p>
+              <p class="location-address">
+                {{item.address}}
+              </p>
+            </li>
+          </cube-scroll>
+        </div>
       </div>
+    </div>
+    <div v-if="locationDetail.got === 1" class="empty-data">
+      <NoData message="暂无车辆位置信息">
+        <img
+          slot="img"
+          class="empty-data-img"
+          src="../assets/icon-location-empty.png">
+      </NoData>
     </div>
   </div>
 </template>
@@ -85,13 +95,14 @@ import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
 import BmOverlay from 'vue-baidu-map/components/overlays/Overlay.vue'
 import BmPolyline from 'vue-baidu-map/components/overlays/Polyline.vue'
 import IconFont from '@/components/Iconfont'
+import NoData from '@/components/NoData'
 
 export default {
   name: 'pickup-track',
   metaInfo: {
     title: '车辆管理'
   },
-  components: { BaiduMap, BmOverlay, BmPolyline, IconFont },
+  components: { BaiduMap, BmOverlay, BmPolyline, IconFont, NoData },
   data () {
     return {
       active: 0,
@@ -111,7 +122,7 @@ export default {
     document.querySelector('body').addEventListener('touchstart', this.hideLinks, false)
   },
   methods: {
-    ...mapActions('pickup', ['getPickupLocation', 'getWaybillLocation']),
+    ...mapActions('pickup', ['getPickupLocation', 'getWaybillLocation', 'clearTracks']),
     startDraw ({ el, BMap, map }) {
       const pixel = map.pointToOverlayPixel(this.locationDetail.locationList[0])
       el.style.left = pixel.x + 'px'
@@ -159,12 +170,24 @@ export default {
         vm.getWaybillLocation(to.params.id)
       }
     })
+  },
+  beforeRouteLeave (to, from, next) {
+    this.clearTracks()
+    next()
   }
 }
 </script>
 <style lang="stylus" scoped>
 .pickup-track
   height: 100%
+  .map-container
+    height: 100%
+    width: 100%
+  .empty-data
+    height 100%
+    .empty-data-img
+      width 179px
+      height 133px
   .bm-view
     height: 100%
     width: 100%

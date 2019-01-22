@@ -14,6 +14,7 @@ export default {
         pageSize: 10,
         acceptStatus: ''
       },
+      next: true,
       data: []
     },
     waitAccept: {
@@ -22,6 +23,7 @@ export default {
         pageSize: 10,
         acceptStatus: '0'
       },
+      next: true,
       data: []
     },
     accepted: {
@@ -30,6 +32,7 @@ export default {
         pageSize: 10,
         acceptStatus: '1'
       },
+      next: true,
       data: []
     },
     rejected: {
@@ -38,6 +41,7 @@ export default {
         pageSize: 10,
         acceptStatus: '2'
       },
+      next: true,
       data: []
     }
   },
@@ -52,6 +56,9 @@ export default {
     },
     PAGE_CHANGE(state, payload) {
       state[payload.key].param.pageNo = payload.pageNo
+    },
+    NEXT_STATUS(state, payload) {
+      state[payload.key].next = payload.status
     }
   },
   actions: {
@@ -72,6 +79,10 @@ export default {
           commit('LIST_CHANGE', {
             data: oldData.concat(response.data.data.list),
             key: payload
+          })
+          commit('NEXT_STATUS', {
+            key: payload,
+            status: !!response.data.data.hasNext
           })
         })
     },
@@ -109,6 +120,14 @@ export default {
         waitAccept: state.waitAccept.data,
         accepted: state.accepted.data,
         rejected: state.rejected.data
+      }
+    },
+    upstreamNext (state) {
+      return {
+        all: state.all.next,
+        waitAccept: state.waitAccept.next,
+        accepted: state.accepted.next,
+        rejected: state.rejected.next
       }
     }
   }

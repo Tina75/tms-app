@@ -6,7 +6,7 @@
     </div>
     <div class="consignee-info">
       <div class="city">
-        {{data.startName}} - {{data.endName}}
+        {{data.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{data.endName}}
       </div>
       <div class="cargos">
         <div class="cargo-infos">{{data.weight || 0}}吨</div>
@@ -23,21 +23,23 @@
     <div class="footer">
       <div class="left">
         <div class="leftBox">
-          <div class="settlement">总费用（月结）</div>
+          <div class="settlement">总费用（{{data.settlementType | settlementTypeFormat}}）</div>
           <div class="fee">
-            {{data.totalFee | moneyFormat}}/元
+            {{data.totalFee | moneyFormat}}<span>/元</span>
           </div>
         </div>
         <div class="receiptBox">
           <div class="settlement">回单</div>
-          <span class="fee">{{data.receiptCount}}</span>份
+          <div class="fee" style="color: #333">
+            {{data.receiptCount}}<span>份</span>
+          </div>
         </div>
       </div>
       <div class="right">
         <cube-button v-if="data.receiptOrder.receiptStatus === 0 && data.status === 40" :outline="true" :inline="true" primary @click.stop="handleClick('receipt')">回收</cube-button>
         <cube-button v-if="data.receiptOrder.receiptStatus === 1" :outline="true" :inline="true" primary @click.stop="handleClick('backFactory')">返厂</cube-button>
         <cube-button v-if="data.receiptOrder.receiptStatus > 0 && !data.receiptOrder.receiptUrl.length" :outline="true" :inline="true" primary style="margin-left: 8px" @click.stop="handleClick('uploadPic')">上传回单</cube-button>
-        <cube-button v-if="data.receiptOrder.receiptStatus > 0 && data.receiptOrder.receiptUrl.length" :outline="true" :inline="true" primary @click.stop="handleClick('updatePic')">修改回单</cube-button>
+        <cube-button v-if="data.receiptOrder.receiptStatus > 0 && data.receiptOrder.receiptUrl.length" :outline="true" :inline="true" primary style="margin-left: 8px" @click.stop="handleClick('updatePic')">修改回单</cube-button>
       </div>
     </div>
   </div>
@@ -83,6 +85,7 @@ export default {
   .city
     color #333
     font-size 18px
+    font-weight 600
   .cargos
     margin-top 4px
     .cargo-infos
@@ -118,6 +121,10 @@ export default {
       color #FA8C16
       font-size 20px
       line-height 28px
+      font-weight 600
+    span
+      font-size 14px
+      font-weight 300
   .right
     margin-top 4px
     .btn
@@ -143,4 +150,6 @@ export default {
   background #6c798e
 .green
   background #00c185
+.iconfont
+  margin 0 10px
 </style>
