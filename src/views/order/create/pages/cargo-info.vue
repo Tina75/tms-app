@@ -1,6 +1,6 @@
 <template>
   <div class="scroll-list-wrap">
-    <cube-scroll class="scroll-box">
+    <cube-scroll class="scroll-box" v-if="showPage">
       <div class="cargo-form-box">
         <form-group ref="$form" :rules="rules">
           <div v-for="(form, index) in formList" :key="index" class="form-section">
@@ -8,7 +8,7 @@
               :image="CARGO_IMAGE"
               :title="'货物' + (index + 1)">
               <span
-                v-if="index"
+                v-if="formList.length > 1"
                 slot="extra"
                 @click="cargoDelete(index)">删除</span>
             </form-title>
@@ -23,17 +23,20 @@
             <form-item
               v-if="orderConfig.weightTonOption"
               v-model="form.weight"
+              prop="weight"
               label="重量(吨)"
               type="number"
               precision="3" />
             <form-item
               v-if="orderConfig.weightKgOption"
               v-model="form.weightKg"
+              prop="weightKg"
               label="重量(公斤)"
               type="number" />
             <form-item
               v-if="orderConfig.volumeOption"
               v-model="form.volume"
+              prop="volume"
               label="体积(方)"
               type="number"
               precision="6" />
@@ -52,6 +55,8 @@
             <form-item
               v-if="orderConfig.quantityOption"
               v-model="form.quantity"
+              prop="quantity"
+              type="number"
               label="包装数量" />
             <form-item
               v-if="orderConfig.dimensionOption"
@@ -137,6 +142,7 @@ export default {
   components: { FormGroup, FormItem, FormTitle },
   data () {
     return {
+      showPage: false,
       CARGO_IMAGE,
       formList: [],
       cargoIndex: void 0,
@@ -146,7 +152,9 @@ export default {
       rules: {
         cargoName: { required: true, type: 'string' },
         weight: { type: 'number', min: 0 },
-        weightKg: { type: 'number', min: 0 }
+        weightKg: { type: 'number', min: 0 },
+        volume: { type: 'number', min: 0 },
+        quantity: { type: 'number', min: 1 }
       }
     }
   },
@@ -193,7 +201,7 @@ export default {
         return item
       })
       this.SET_CARGO_LIST(tempCargoList)
-      this.$formWillLeave()
+      this.$formWillLeave(() => { this.showPage = false })
       this.$router.back()
     },
     // 删除货物
@@ -254,23 +262,22 @@ export default {
     // 初始化填写尺寸对话框
     initSizeDialog () {
       const temp = this.formList[this.dialogIndex]
-      let sizeInput
       this.sizeDialog = this.$createDialog({
         title: '包装尺寸(毫米)',
         type: 'confirm',
         onConfirm: () => {
-          let extra = { volume: temp.volume, size: '' }
-          if (!temp.volume) {
-            extra.volume = NP.round(
-              NP.divide(
-                NP.times(this.size.length || 0, this.size.width || 0, this.size.height || 0),
-                1000 * 1000 * 1000
-              ),
-              6
-            )
-          }
-          extra.size = [ this.size.length || '-', this.size.width || '-', this.size.height || '-' ].join('x')
-          this.formList.splice(this.dialogIndex, 1, Object.assign(temp, { dimension: this.size }, extra))
+          // let extra = { volume: temp.volume, size: '' }
+          // if (!temp.volume) {
+          //   extra.volume = NP.round(
+          //     NP.divide(
+          //       NP.times(this.size.length || 0, this.size.width || 0, this.size.height || 0),
+          //       1000 * 1000 * 1000
+          //     ),
+          //     6
+          //   )
+          // }
+          const size = [ this.size.length || '-', this.size.width || '-', this.size.height || '-' ].join('x')
+          this.formList.splice(this.dialogIndex, 1, Object.assign(temp, { dimension: this.size }, { size }))
           this.size.length = this.size.width = this.size.height = ''
         }
       }, createElement => {
@@ -346,6 +353,8 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.initCargoList()
+      vm.showPage = true
+      this.$formWillLeave(false, () => { this.showPage = false })
     })
   }
 }
@@ -359,7 +368,7 @@ export default {
   .cargo-form-box
     padding-bottom 15px
 
-  form
+  .form-section
     margin-top 15px
     &:first-child
       margin-top 10px

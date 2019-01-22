@@ -54,9 +54,9 @@ export default {
     ...mapGetters('delivery', ['DispatchList']),
     options() {
       return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
+        pullDownRefresh: { pullDownRefresh: 60, stopTime: 600, txt: '刷新成功' },
+        pullUpLoad: { txt: { noMore: '没有更多数据了', more: '' } },
+        scrollbar: { fade: true }
       }
     },
     totalWeight() {

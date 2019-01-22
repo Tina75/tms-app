@@ -1,6 +1,6 @@
 <template>
   <div class="create-order-page">
-    <cube-scroll class="scroll-box">
+    <cube-scroll class="scroll-box" v-if="showPage">
       <!-- <cube-button primary @click="$router.push({ name: 'order-often' })">常发订单</cube-button> -->
       <form-group
         ref="$form"
@@ -161,7 +161,6 @@ import gotoOtherPages from '../js/createGotoOtherPage'
 import showData from '../js/createShowData'
 import orderSubmit from '../js/createSubmit'
 import createInit from '../js/createInit'
-import { clearAppTitleBtn } from '@/libs/bridgeUtil'
 
 const IMAGES = {
   ACCEPT: require('../assets/accept.png'),
@@ -202,6 +201,7 @@ export default {
     const phoneMessage = { phoneValidate: '请输入正确的手机号或座机号' }
 
     return {
+      showPage: true, // scroll 组件在数据更新后可能会出现卡顿的情况，所以在确认显示数据以后再显示 scroll
       IMAGES,
       mode: '',
       id: '',
@@ -280,6 +280,8 @@ export default {
         vm.showOtherInfo()
         vm.showFreightFee()
         vm.calculateDistance()
+        vm.showPage = false
+        vm.$nextTick(() => { vm.showPage = true })
       })
     })
   }

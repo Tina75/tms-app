@@ -34,15 +34,15 @@
           <p v-if="info.totalFee"  class="cube-c-black cube-font-12 cube-ml-15">应付费用({{info.settlementType|settlementTypeFormat}})</p>
           <div v-if="info.totalFee"  class="cube-c-yellow  cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.totalFee |moneyFormat}}</span>/元</div>
           <!-- 状态 10：待提货 20：待调度 30：在途 40：已到货 50：已回单；100被删除到回收站 -->
-          <div v-else class="list-item__btngroup">
+          <div  class="list-item__btngroup">
             <div v-if="info.status==2">
-              <cube-button class="btn" :outline="true" :inline="true" @click.stop="$emit('delete-item', info.waybillId)">删除</cube-button>
-              <cube-button v-if="!hasSendCar(info)" class="btn" :outline="true"  :inline="true" primary @click.stop="sendCar(info.waybillId)">派车</cube-button>
-              <cube-button v-else class="btn" :outline="true"  :inline="true" primary @click.stop="setOff(info.waybillId)">发运</cube-button>
+              <!-- <cube-button class="btn" outline inline @click.stop="$emit('delete-item', info.waybillId)">删除</cube-button> -->
+              <cube-button v-if="!hasSendCar(info)" class="btn" outline inline primary @click.stop="sendCar(info.waybillId)">派车</cube-button>
+              <cube-button v-else class="btn" outline inline primary @click.stop="setOff(info.waybillId)">发运</cube-button>
             </div>
             <div v-if="info.status==3">
-              <cube-button class="btn" :outline="true"  :inline="true" @click.stop="location(info.waybillId)">位置</cube-button>
-              <cube-button  class="btn" :outline="true"  :inline="true" primary @click.stop="arrival(info.waybillId)">到货</cube-button>
+              <cube-button class="btn" outline inline @click.stop="location(info.waybillId)">位置</cube-button>
+              <cube-button  class="btn" outline  inline primary @click.stop="arrival(info.waybillId)">到货</cube-button>
             </div>
           </div>
         </div>
@@ -64,7 +64,7 @@ export default {
   computed: {
     options() {
       return {
-        pullDownRefresh: { pullDownRefresh: 60, stopTime: 1000, txt: '刷新成功' },
+        pullDownRefresh: { pullDownRefresh: 60, stopTime: 600, txt: '刷新成功' },
         pullUpLoad: { txt: { noMore: '没有更多数据了', more: '' } },
         scrollbar: { fade: true }
       }
