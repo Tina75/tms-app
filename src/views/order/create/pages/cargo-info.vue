@@ -23,17 +23,20 @@
             <form-item
               v-if="orderConfig.weightTonOption"
               v-model="form.weight"
+              prop="weight"
               label="重量(吨)"
               type="number"
               precision="3" />
             <form-item
               v-if="orderConfig.weightKgOption"
               v-model="form.weightKg"
+              prop="weightKg"
               label="重量(公斤)"
               type="number" />
             <form-item
               v-if="orderConfig.volumeOption"
               v-model="form.volume"
+              prop="volume"
               label="体积(方)"
               type="number"
               precision="6" />
@@ -150,6 +153,7 @@ export default {
         cargoName: { required: true, type: 'string' },
         weight: { type: 'number', min: 0 },
         weightKg: { type: 'number', min: 0 },
+        volume: { type: 'number', min: 0 },
         quantity: { type: 'number', min: 1 }
       }
     }

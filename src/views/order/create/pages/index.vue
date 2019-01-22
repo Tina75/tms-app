@@ -1,6 +1,6 @@
 <template>
   <div class="create-order-page">
-    <cube-scroll class="scroll-box">
+    <cube-scroll class="scroll-box" v-if="showPage">
       <!-- <cube-button primary @click="$router.push({ name: 'order-often' })">常发订单</cube-button> -->
       <form-group
         ref="$form"
@@ -201,6 +201,7 @@ export default {
     const phoneMessage = { phoneValidate: '请输入正确的手机号或座机号' }
 
     return {
+      showPage: false,
       IMAGES,
       mode: '',
       id: '',
@@ -279,6 +280,7 @@ export default {
         vm.showOtherInfo()
         vm.showFreightFee()
         vm.calculateDistance()
+        vm.showPage = true
       })
     })
   }
