@@ -14,10 +14,43 @@ export default {
     }
   },
   // 重置订单
-  RESET_ORDER: (state, payload) => {
-    resetFields(payload)
+  RESET_ORDER: state => {
+    const temp = {
+      consignerName: '',
+      consignerContact: '',
+      consignerPhone: '',
+      start: '',
+      consignerAddress: '',
+      consignerAddressText: '',
+      consignerAddressLocale: [],
+      consignerHourseNumber: '',
+      consignerAddressLongitude: '',
+      consignerAddressLatitude: '',
+      consumerInfo: '',
+      consigneeContact: '',
+      consigneePhone: '',
+      end: '',
+      consigneeAddress: '',
+      consigneeAddressText: '',
+      consigneeAddressLocale: [],
+      consigneeHourseNumber: '',
+      consigneeAddressLongitude: '',
+      consigneeAddressLatitude: '',
+      consigneeCompanyName: '',
+      orderCargoList: '',
+      settlementType: '',
+      pickup: '',
+      receiptCount: 1,
+      mileage: '',
+      freightFee: '',
+      otherFee: '',
+      otherInfo: '',
+      isSaveOrderTemplate: 0,
+      consignerAddressMapType: 1,
+      consigneeAddressMapType: 1
+    }
     for (let key in state.orderInfo) {
-      state.orderInfo[key] = payload[key]
+      state.orderInfo[key] = temp[key]
     }
     state.consignerId = void 0
     state.orderCargoList = []
