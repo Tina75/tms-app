@@ -32,7 +32,7 @@ export default {
       }
       // 设置订单基础信息
       setOrderBaseInfo(orderInfo, this)
-      // 设置客户单号及其他信息
+      // 设置客户订单号及其他信息
       setConsumerInfo(orderInfo, this)
       // 设置金额信息
       this.SET_FEE_INFO(getFields(orderInfo, [ 'pickupFee', 'loadFee', 'unloadFee', 'insuranceFee', 'otherFee' ]))

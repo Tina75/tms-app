@@ -54,7 +54,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     next(vm => {
       const tab = to.query.tab
-      if (tab) { vm.selectedLabel = vm.tabs[tab].label }
+      if (tab) { vm.selectedLabel = vm.tabs[tab - 1].label }
       vm.getTabCount()
       vm.setRightBtn()
     })

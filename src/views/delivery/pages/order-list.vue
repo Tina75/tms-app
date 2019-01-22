@@ -23,7 +23,7 @@
             </div>
             <p v-if="info.consignerName" class="cube-mb-5">{{info.consignerName}}</p>
             <p v-if="info.carrierName" class="cube-mb-5">{{info.carrierName}}</p>
-            <p v-if="info.id && info.customerOrderNo" class="list-item__number">客户单号：{{info.customerOrderNo}}</p>
+            <p v-if="info.id && info.customerOrderNo" class="list-item__number">客户订单号：{{info.customerOrderNo}}</p>
             <p v-if="hasSendCar(info)" class="list-item__number cube-font-12">
               <span class="send-type">{{info.assignCarType==1?'外转':'自送'}}</span>
               <span class="cube-font-14">&nbsp;{{info.driverName}}&nbsp;{{info.assistantDriverName}}&nbsp;{{info.carNo}}</span>

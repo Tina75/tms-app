@@ -17,7 +17,7 @@
         {{data.consignerAddress}} {{data.consignerName}}
       </div>
       <div v-if="data.customerOrderNo" class="company">
-        客户单号：{{data.customerOrderNo}}
+        客户订单号：{{data.customerOrderNo}}
       </div>
     </div>
     <div class="footer">

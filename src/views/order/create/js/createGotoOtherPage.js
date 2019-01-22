@@ -2,7 +2,7 @@ import NP from 'number-precision'
 import { setAppTitleBtn, closeWindow } from '@/libs/bridgeUtil'
 
 export default {
-  // 进入客户单号及其他信息
+  // 进入客户订单号及其他信息
   gotoConsumerInfoPage () {
     this.$formWillLeave()
     this.$router.push({ name: 'order-consumer-info' })

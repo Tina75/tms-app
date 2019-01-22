@@ -27,7 +27,7 @@
     <div class="total-cost">
       <label>合计</label>
       <span>{{Detail.totalFee | moneyFormat}}元</span>
-      <i v-if="Detail.settlementType">{{Detail.settlementType | settlementTypeFormat}}</i>
+      <i v-if="Detail.settlementType">{{Detail.settlementType | settlementTypeFormatForOrder}}</i>
     </div>
   </detail-panel>
 </template>

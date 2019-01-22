@@ -41,7 +41,7 @@
             @click.native="gotoAddressInfoPage('send')" />
           <form-item
             v-model="orderInfo.consumerInfo"
-            label="客户单号及其他"
+            label="客户订单号及其他"
             type="click"
             ellipsis
             @click.native="gotoConsumerInfoPage" />
@@ -237,7 +237,7 @@ export default {
     },
     ...mapGetters('order/create', [
       'consignerId',
-      'consumerInfo', // 客户单号及其他
+      'consumerInfo', // 客户订单号及其他
       'orderCargoList', // 货物信息
       'feeInfo', // 费用信息
       'otherInfo', // 其他信息
