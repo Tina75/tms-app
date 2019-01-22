@@ -12,9 +12,7 @@
       </cube-tab>
     </cube-tab-bar>
     <div class="wrapper">
-      <keep-alive>
-        <component :is="current"/>
-      </keep-alive>
+      <component :is="current"/>
     </div>
   </div>
 </template>
@@ -39,7 +37,7 @@ export default {
         { label: '待提货', componentName: 'list-pickup', value: 'pickup' },
         { label: '待送货', componentName: 'list-delivery', value: 'delivery' },
         { label: '在途', componentName: 'list-sending', value: 'sending' },
-        { label: '已到货', componentName: 'list-arrival', value: 'arrival' }
+        { label: '已完成', componentName: 'list-arrival', value: 'arrival' }
       ]
     }
   },

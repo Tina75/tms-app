@@ -3,7 +3,6 @@
     <cube-scroll-nav @change="changeHandler">
       <div slot="prepend" class="status-block">
         <h2>{{Detail.status | orderType}}</h2>
-        <p>{{Detail.createTime | datetimeFormat}}</p>
       </div>
       <cube-scroll-nav-panel
         v-for="(item, index) in pageData"
@@ -171,8 +170,9 @@ export default {
           background #27C4D3
     .status-block
       height: 90px
+      line-height 90px
       background-color: #252A2F
-      padding: 25px 15px
+      padding: 0 15px
       h2
         color: #ffffff;
         font-size: 24px;

@@ -6,9 +6,9 @@
     @pulling-down="onPullingDown"
     @pulling-up="onPullingUp">
     <ul >
-      <li v-for="info in list" :key="getUnicKey(info)" class="list-item" @click.stop="$emit('on-item-click',getUnicKey(info))">
-        <div class="list-item__time">
-          <span class="cube-ml-15">{{info.createTime||info.createTimeLong | datetimeFormat}}</span>
+      <li v-for="info in list" :key="info.waybillId" class="list-item" @click.stop="$emit('on-item-click',info.waybillId)">
+        <div class="list-item__time  border-bottom-1px">
+          <span class="cube-ml-15">{{info.createTime | datetimeFormat}}</span>
           <div class="list-item__flag">
             <span v-if="info.collectionMoney>0" class="item orange">代</span>
             <span v-if="info.cashBack>0" class="item red">返</span>
@@ -25,19 +25,15 @@
           <p v-if="info.consignerName" class="cube-mb-5">{{info.consignerName}}</p>
           <p v-if="info.carrierName" class="cube-mb-5">{{info.carrierName}}</p>
           <p v-if="info.id && info.customerOrderNo" class="list-item__number">客户单号：{{info.customerOrderNo}}</p>
-          <p v-if="hasSendCar(info)" class="list-item__number cube-font-12">
+          <p v-if="hasSendCar(info)" class="list-item__number cube-font-12 cube-mt-5">
             <span class="send-type">{{info.assignCarType==1?'外转':'自送'}}</span>
             <span class="cube-font-14">&nbsp;{{info.driverName}}&nbsp;{{info.assistantDriverName}}&nbsp;{{info.carNo}}</span>
           </p>
         </div>
-        <div class="list-item__money">
-          <p v-if="info.totalFee"  class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormat}})</p>
-          <div v-if="info.totalFee"  class="cube-c-yellow cube-mt-5 cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.totalFee |moneyFormat}}</span>/元</div>
+        <div class="list-item__money border-top-1px">
+          <p v-if="info.totalFee"  class="cube-c-black cube-font-12 cube-ml-15">应付费用({{info.settlementType|settlementTypeFormat}})</p>
+          <div v-if="info.totalFee"  class="cube-c-yellow  cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.totalFee |moneyFormat}}</span>/元</div>
           <!-- 状态 10：待提货 20：待调度 30：在途 40：已到货 50：已回单；100被删除到回收站 -->
-          <!-- <div class="list-item__btngroup">
-        <slot/>
-      </div> -->
-          <cube-button v-if="!info.waybillId" class="list-item__btngroup" :outline="true"  :inline="true" primary @click.stop="$emit('on-dispatch',info)">调度</cube-button>
           <div v-else class="list-item__btngroup">
             <div v-if="info.status==2">
               <cube-button class="btn" :outline="true" :inline="true" @click.stop="$emit('delete-item', info.waybillId)">删除</cube-button>
@@ -68,9 +64,9 @@ export default {
   computed: {
     options() {
       return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
+        pullDownRefresh: { pullDownRefresh: 60, stopTime: 1000, txt: '刷新成功' },
+        pullUpLoad: { txt: { noMore: '没有更多数据了', more: '' } },
+        scrollbar: { fade: true }
       }
     }
   },
@@ -121,14 +117,17 @@ export default {
 
     onPullingDown() {
       this.$emit('refresh')
+      setTimeout(() => {
+        this.$refs[this.refName].forceUpdate()
+      }, 1000)
     },
     onPullingUp() {
       this.$emit('loadmore')
+      setTimeout(() => {
+        this.$refs[this.refName].forceUpdate()
+      }, 1000)
     },
-    getUnicKey(item) {
-      if (!item) return ''
-      return item.id ? item.id : item.waybillId
-    },
+
     deleteBill(id) {
       this.$emit('delete-item', id)
     }
@@ -149,30 +148,26 @@ export default {
     p
       line-height 20px
     &__time
-      height 20px
+      padding-bottom 10px
       line-height 20px
       position relative
-    &__time:after
-      content ''
-      display block
-      border-bottom 1px solid #F3F5F9
-      margin-top 6px
+
     &__money
-      min-height 50px
-    &__money:before
-      content ''
-      display block
-      border-bottom 1px solid #F3F5F9
-      margin-bottom 8px
-      padding-top  10px
+      min-height 45px
+      padding-top 7px
+      margin-top 10px
+
     &__body
       padding-left 15px
 
     &__city
       color #333
       font-size 18px
-      margin-top 20px
+      margin-top 10px
       font-weight bold
+      white-space  nowrap
+      overflow hidden
+      text-overflow ellipsis
     &__count
       background #efefef
       display inline-block
@@ -190,7 +185,7 @@ export default {
     &__btngroup
       position absolute
       right 15px
-      bottom 15px
+      bottom 0
       font-size 14px
       min-width 50px
       .btn
