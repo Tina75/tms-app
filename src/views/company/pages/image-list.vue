@@ -30,6 +30,14 @@ export default {
       uploadPhotoList: []
     }
   },
+  watch: {
+    uploadPhotos (newVal) {
+      this.uploadPhotoList = []
+      newVal.forEach(element => {
+        this.uploadPhotoList.push(element.url)
+      })
+    }
+  },
   mounted () {
     if (this.uploadPhotos.length) {
       this.uploadPhotoList = []
