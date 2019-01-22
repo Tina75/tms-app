@@ -93,7 +93,7 @@ export default {
                 },
                 async onConfirm () {
                   await _this.deleteBill(_this.$route.params.id)
-                  await _this.removeBePicking(_this.$route.query.index)
+                  // await _this.removeBePicking(_this.$route.query.index)
                   _this.$createToast({
                     type: 'warn',
                     time: 1000,
@@ -109,9 +109,12 @@ export default {
             iconType: 'edit',
             action: () => {
               this.$router.push({
-                name: 'pickup-edit',
+                name: 'pickup-assign',
                 params: {
                   id: this.$route.params.id
+                },
+                query: {
+                  isEdit: 1
                 }
               })
             }
@@ -158,8 +161,7 @@ export default {
         },
         async onConfirm () {
           await _this.arriveBill(_this.pickupDetail.pickUpId)
-          await _this.removeBePicking(_this.$route.query.index)
-          await _this.getPickupCount()
+          // await _this.removePicking(_this.$route.query.index)
           await _this.getPickupDetail(_this.$route.params.id)
           _this.$createToast({
             type: 'warn',
@@ -197,8 +199,7 @@ export default {
         },
         async onConfirm () {
           await _this.pickupBill(_this.pickupDetail.pickUpId)
-          await _this.removeBePicking(_this.$route.query.index)
-          await _this.getPickupCount()
+          // await _this.removeBePicking(_this.$route.query.index)
           await _this.getPickupDetail(_this.$route.params.id)
           _this.$createToast({
             type: 'warn',

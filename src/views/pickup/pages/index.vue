@@ -29,15 +29,10 @@ export default {
     title: '提货管理'
   },
   components: { DispatchingList, BePickingList, PickingList, PickedList },
-  props: {
-    tab: {
-      type: Number,
-      default: 0
-    }
-  },
   data () {
+    const _this = this
     return {
-      currentTab: 'DispatchingList',
+      currentTab: '',
       tabs: [
         {
           label: '待调度',
@@ -61,6 +56,24 @@ export default {
         2: 'BePickingList',
         3: 'PickingList',
         4: 'PickedList'
+      },
+      dataMap: {
+        'DispatchingList': {
+          data: 'dispatchingData',
+          action: _this.getDispatching
+        },
+        'BePickingList': {
+          data: 'bePickingData',
+          action: _this.getBePicking
+        },
+        'PickingList': {
+          data: 'pickingData',
+          action: _this.getPicking
+        },
+        'PickedList': {
+          data: 'pickedData',
+          action: _this.getPicked
+        }
       }
     }
   },
@@ -86,13 +99,22 @@ export default {
       } else {
         setAppRightBtn([{ text: '', action: () => {} }])
       }
+      this.setPageStart(this.dataMap[this.currentTab].data)
+      this.dataMap[this.currentTab].action()
     }
   },
   methods: {
-    ...mapActions('pickup', ['getPickupCount', 'setPageStart'])
+    ...mapActions('pickup', ['getPickupCount', 'setPageStart', 'getDispatching', 'getBePicking', 'getPicking', 'getPicked'])
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
+      if (!from.name) {
+        if (to.query.tab) {
+          vm.currentTab = vm.tabMap[to.query.tab]
+        } else {
+          vm.currentTab = vm.tabMap[1]
+        }
+      }
       setAppRightBtn([
         {
           text: '调度',
@@ -104,6 +126,8 @@ export default {
         }
       ])
       vm.getPickupCount()
+      vm.setPageStart(vm.dataMap[vm.currentTab].data)
+      vm.dataMap[vm.currentTab].action()
     })
   },
   beforeRouteLeave (to, from, next) {
