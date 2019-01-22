@@ -35,7 +35,7 @@
         </div>
         <div class="item-footer">
           <div class="order-cost">
-            <p class="cost-label">应付费用（{{settlementTypeMap[item.settlementType]}}）</p>
+            <p class="cost-label">应付费用<template v-if="item.assignCarType === 1">（{{settlementTypeMap[item.settlementType]}}）</template></p>
             <p class="cost-money">{{item.totalFee|moneyFormat}}<span>/元</span></p>
           </div>
           <div class="order-btns"/>
@@ -61,10 +61,6 @@ export default {
         scrollbar: true
       }
     }
-  },
-  mounted () {
-    this.setPageStart('pickedData')
-    this.getPicked()
   },
   methods: {
     ...mapActions('pickup', ['setPageStart', 'getPicked', 'getPickupCount']),

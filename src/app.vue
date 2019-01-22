@@ -8,6 +8,7 @@
 </template>
 <script>
 import Loading from '@/components/Loading'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'app',
@@ -64,6 +65,10 @@ export default {
         onConfirm
       }).show()
     }
+    this.setUserConfig()
+  },
+  methods: {
+    ...mapActions(['setUserConfig'])
   }
 }
 </script>

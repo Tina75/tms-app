@@ -4,7 +4,8 @@
     :ref-name="refKey"
     @refresh="refresh"
     @loadmore="loadmore"
-    @on-item-click="onItemClick"/>
+    @on-item-click="onItemClick"
+    @do-arrival="handleArrival"/>
 </template>
 
 <script>
@@ -27,7 +28,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('delivery', ['getSending', 'clearSending']),
+    ...mapActions('delivery', ['getSending', 'clearSending', 'doArrival']),
 
     refresh() {
       this.clearSending()
@@ -40,6 +41,19 @@ export default {
 
     onItemClick(id) {
       this.$router.push({ name: 'delivery-detail', params: { id } })
+    },
+
+    handleArrival(id) {
+      this.$createDialog({
+        type: 'confirm',
+        icon: 'cubeic-alert',
+        content: '是否确认到货？',
+        onConfirm: () => {
+          this.doArrival(id).then(() => {
+            this.refresh()
+          })
+        }
+      }).show()
     }
   }
 }

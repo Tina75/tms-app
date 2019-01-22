@@ -283,7 +283,7 @@ export default {
             pickUpId: id
           }
         }).then((response) => {
-          resolve(response.data.data.loadbill)
+          resolve({ ...response.data.data.loadbill, orderLength: response.data.data.orderList.length })
         })
       })
     },

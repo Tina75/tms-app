@@ -42,21 +42,21 @@ export const cargoRule = {
     max: 200
   },
   price: {
-    pattern: /^(\d+(\.\d{1,4})?$)$/,
+    pattern: /^(\d{1,9}(\.\d{1,4})?$)$/,
     message: {
-      pattern: '数字,最多支持4位小数'
+      pattern: '数字,最多9位整数,4位小数'
     }
   },
   weight: {
-    pattern: /^\d*$/,
+    pattern: /^\d{0,9}$/,
     message: {
-      pattern: '请输入整数'
+      pattern: '请输入整数, 最多9位'
     }
   },
   volume: {
-    pattern: /^(\d+(\.\d{1,6})?$)$/,
+    pattern: /^(\d{1,6}(\.\d{1,6})?$)$/,
     message: {
-      pattern: '数字,最多支持6位小数'
+      pattern: '数字,最多6位整数,6位小数'
     }
   },
   remark: {

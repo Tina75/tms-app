@@ -101,9 +101,9 @@
               clearable
               maxlength="50"
               required
-              @input.native="isSelected = true"/>
+              @input.native="isSelected = false"/>
             <bmap-address-list
-              v-show="showAddressList && isSelected"
+              v-show="showAddressList && !isSelected"
               :city="limitCityGeo"
               :search="companyInfo.address"
               @select="onSelectAddress" />
@@ -393,7 +393,7 @@ export default {
       }
     },
     async nextSetp () {
-      if (this.step === 1 && this.companyInfo.address && this.isSelected) {
+      if (this.step === 1 && this.companyInfo.address && !this.isSelected) {
         window.toast('详细地址只支持从推荐地址中选择')
         return
       }
@@ -473,7 +473,7 @@ export default {
       })
     },
     onSelectAddress (item) {
-      this.isSelected = false
+      this.isSelected = true
       this.companyInfo.address = item.detail + item.name
       this.companyInfo.latitude = item.data.point.lat
       this.companyInfo.longitude = item.data.point.lng

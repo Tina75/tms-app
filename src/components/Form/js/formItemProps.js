@@ -1,5 +1,5 @@
-// form item type
-const FORM_ITEM_TYPE = [ 'text', 'textarea', 'number', 'switch', 'select', 'click', 'loading' ]
+// form item type, contact同时支持手机和座机, phone 仅验证手机号
+const FORM_ITEM_TYPE = [ 'text', 'textarea', 'number', 'switch', 'select', 'click', 'loading', 'phone', 'contact' ]
 const FORM_ITEM_ALIGN = [ 'left', 'center', 'right' ]
 const itemInArray = (item, array) => array.indexOf(item) > -1
 

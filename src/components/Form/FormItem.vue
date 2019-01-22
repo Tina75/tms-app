@@ -10,9 +10,9 @@
         <div class="form-item-input-box">
           <cube-loading v-if="type === 'loading'" class="form-item-loading" :size="20" />
 
-          <!-- 输入框 type = text || number  -->
+          <!-- 输入框 type = text || number || phone || contact -->
           <cube-input
-            v-if="type === 'text' || type === 'number'"
+            v-if="inputType"
             v-model="inputValue"
             class="form-item-input"
             :class="inputAlignment"
@@ -131,8 +131,9 @@ export default {
   },
   computed: {
     inputType () {
-      if (this.type === 'number') return 'number'
-      else return 'text'
+      const type = this.type
+      if (type === 'text' || type === 'number') return type
+      return ''
     },
     inputRequired () {
       return !!this.rule && !!this.rule.required

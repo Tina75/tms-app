@@ -14,10 +14,43 @@ export default {
     }
   },
   // 重置订单
-  RESET_ORDER: (state, payload) => {
-    resetFields(payload)
+  RESET_ORDER: state => {
+    const temp = {
+      consignerName: '',
+      consignerContact: '',
+      consignerPhone: '',
+      start: '',
+      consignerAddress: '',
+      consignerAddressText: '',
+      consignerAddressLocale: [],
+      consignerHourseNumber: '',
+      consignerAddressLongitude: '',
+      consignerAddressLatitude: '',
+      consumerInfo: '',
+      consigneeContact: '',
+      consigneePhone: '',
+      end: '',
+      consigneeAddress: '',
+      consigneeAddressText: '',
+      consigneeAddressLocale: [],
+      consigneeHourseNumber: '',
+      consigneeAddressLongitude: '',
+      consigneeAddressLatitude: '',
+      consigneeCompanyName: '',
+      orderCargoList: '',
+      settlementType: '',
+      pickup: '',
+      receiptCount: 1,
+      mileage: '',
+      freightFee: '',
+      otherFee: '',
+      otherInfo: '',
+      isSaveOrderTemplate: 0,
+      consignerAddressMapType: 1,
+      consigneeAddressMapType: 1
+    }
     for (let key in state.orderInfo) {
-      state.orderInfo[key] = payload[key]
+      state.orderInfo[key] = temp[key]
     }
     state.consignerId = void 0
     state.orderCargoList = []
@@ -39,9 +72,10 @@ export default {
   SET_FEE_INFO: (state, payload) => {
     resetFields(payload)
     state.feeInfo = payload
+    console.log(payload)
     const fees = [ payload.pickupFee, payload.loadFee, payload.unloadFee, payload.insuranceFee, payload.otherFee ]
     const totalFee = fees.reduce((last, fee) => {
-      if (last === fee) return last
+      if (fee === '') return last
       return NP.plus(last || 0, fee || 0)
     }, '')
     state.orderInfo.otherFee = totalFee === '' ? '' : NP.divide(totalFee, 100)

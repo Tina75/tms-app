@@ -230,9 +230,9 @@ export default {
   computed: {
     orderInfo: {
       get: mapGetters('order/create', [ 'orderInfo' ]).orderInfo,
-      set: function (val) {
+      set: function () {
         this.saveConsignerInfo()
-        this.RESET_ORDER(val)
+        this.RESET_ORDER()
       }
     },
     ...mapGetters('order/create', [
@@ -269,7 +269,6 @@ export default {
         const fromPage = from.name
         // console.log(vm.orderNeedReset)
         if (NO_RESET_PAGE.indexOf(fromPage) === -1 || vm.orderNeedReset) {
-          // console.log(111)
           vm.$refs.$form.reset()
         }
         // 发运页面返回的情况不查询订单数据

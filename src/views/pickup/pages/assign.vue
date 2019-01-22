@@ -1,49 +1,51 @@
 <template>
   <div class="pickup-assign">
-    <div class="edit-form">
-      <cube-form ref="assign-form" :model="model" :options="options" :immediate-validate="false" @validate="validateHandler">
-        <cube-form-group>
-          <cube-form-item :field="fields['assignCarType']"/>
-        </cube-form-group>
-        <cube-form-group v-if="model.assignCarType === 1">
-          <cube-form-item :field="fields['carrierName']"/>
-          <cube-form-item :field="fields['carrierCarNo']"/>
-          <cube-form-item :field="fields['carrierDriverName']"/>
-          <cube-form-item :field="fields['carrierDriverPhone']"/>
-          <cube-form-item :field="fields['carType']"/>
-          <cube-form-item :field="fields['carLength']"/>
-          <cube-form-item :field="fields['carrierWaybillNo']"/>
-        </cube-form-group>
-        <cube-form-group v-if="model.assignCarType === 2">
-          <cube-form-item :field="fields['carNo']"/>
-          <cube-form-item :field="fields['selfDriverName']"/>
-          <cube-form-item :field="fields['selfAssistantDriverName']"/>
-        </cube-form-group>
-        <cube-form-group>
-          <cube-form-item v-if="model.assignCarType === 1" :field="fields['freightFee']"/>
-          <cube-form-item v-if="model.assignCarType === 2" :field="fields['gasFee']"/>
-          <cube-form-item :field="fields['loadFee']"/>
-          <cube-form-item :field="fields['unloadFee']"/>
-          <cube-form-item :field="fields['insuranceFee']"/>
-          <cube-form-item :field="fields['otherFee']"/>
-          <cube-form-item :field="fields['totalFee']">
-            <span class="total-money">{{model.totalFee}}</span>
-          </cube-form-item>
-          <cube-form-item v-if="model.assignCarType === 1" :field="fields['settlementType']"/>
-          <cube-form-item v-if="model.assignCarType === 1 && model.settlementType === 1" :field="fields['fuelCardAmount']"/>
-          <cube-form-item v-if="model.assignCarType === 1 && model.settlementType === 1" :field="fields['cashAmount']"/>
-        </cube-form-group>
-        <cube-form-group>
-          <cube-form-item :field="fields['allocationStrategy']"/>
-        </cube-form-group>
-        <cube-form-group>
-          <cube-form-item :field="fields['remark']"/>
-        </cube-form-group>
-      </cube-form>
-    </div>
-    <div class="confirm-btns">
-      <a @click="submitAssign">确定</a>
-    </div>
+    <cube-scroll>
+      <div class="edit-form">
+        <cube-form ref="assign-form" :model="model" :options="options" :immediate-validate="false" @validate="validateHandler">
+          <cube-form-group>
+            <cube-form-item :field="fields['assignCarType']"/>
+          </cube-form-group>
+          <cube-form-group v-if="model.assignCarType === 1">
+            <cube-form-item :field="fields['carrierName']"/>
+            <cube-form-item :field="fields['carrierCarNo']"/>
+            <cube-form-item :field="fields['carrierDriverName']"/>
+            <cube-form-item :field="fields['carrierDriverPhone']"/>
+            <cube-form-item :field="fields['carType']"/>
+            <cube-form-item :field="fields['carLength']"/>
+            <cube-form-item :field="fields['carrierWaybillNo']"/>
+          </cube-form-group>
+          <cube-form-group v-if="model.assignCarType === 2">
+            <cube-form-item :field="fields['carNo']"/>
+            <cube-form-item :field="fields['selfDriverName']"/>
+            <cube-form-item :field="fields['selfAssistantDriverName']"/>
+          </cube-form-group>
+          <cube-form-group>
+            <cube-form-item v-if="model.assignCarType === 1" :field="fields['freightFee']"/>
+            <cube-form-item v-if="model.assignCarType === 2" :field="fields['gasFee']"/>
+            <cube-form-item :field="fields['loadFee']"/>
+            <cube-form-item :field="fields['unloadFee']"/>
+            <cube-form-item :field="fields['insuranceFee']"/>
+            <cube-form-item :field="fields['otherFee']"/>
+            <cube-form-item :field="fields['totalFee']">
+              <span class="total-money">{{model.totalFee}}</span>
+            </cube-form-item>
+            <cube-form-item v-if="model.assignCarType === 1" :field="fields['settlementType']"/>
+            <cube-form-item v-if="model.assignCarType === 1 && model.settlementType === 1" :field="fields['fuelCardAmount']"/>
+            <cube-form-item v-if="model.assignCarType === 1 && model.settlementType === 1" :field="fields['cashAmount']"/>
+          </cube-form-group>
+          <cube-form-group>
+            <cube-form-item v-if="orderLength > 1" :field="fields['allocationStrategy']"/>
+          </cube-form-group>
+          <cube-form-group>
+            <cube-form-item :field="fields['remark']"/>
+          </cube-form-group>
+        </cube-form>
+      </div>
+      <div class="confirm-btns">
+        <a @click="submitAssign">确定</a>
+      </div>
+    </cube-scroll>
   </div>
 </template>
 
@@ -53,14 +55,17 @@ import NP from 'number-precision'
 
 export default {
   name: 'pickup-assign',
-  metaInfo: {
-    title: '派车'
+  metaInfo () {
+    return {
+      title: this.$route.query.isEdit ? '编辑' : '派车'
+    }
   },
   data () {
     let _this = this
     return {
       validity: {},
       valid: true,
+      orderLength: 0,
       model: {
         assignCarType: 1,
         carNo: '',
@@ -423,10 +428,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('pickup', ['backupDriverList'])
+    ...mapGetters('pickup', ['backupDriverList']),
+    ...mapGetters(['UserConfig'])
   },
   methods: {
-    ...mapActions('pickup', ['getPickupDetailForForm', 'getCarrierNameList', 'getSelfCarList', 'getSelfDriverList', 'assign', 'reloadCurrentPickup']),
+    ...mapActions('pickup', ['getPickupDetailForForm', 'getCarrierNameList', 'getSelfCarList', 'getSelfDriverList', 'assign', 'pickupEdit']),
     ...mapActions('order/create', ['sendDirectly']),
     validateHandler(result) {
       this.validity = result.validity
@@ -466,8 +472,11 @@ export default {
         if (this.$route.query.type) {
           await this.sendDirectly(req)
         } else {
-          await this.assign(Object.assign({ pickUpId: this.$route.params.id }, req))
-          await this.reloadCurrentPickup(this.$route.params.id)
+          if (this.$route.query.isEdit) {
+            await this.pickupEdit({ ...req, pickUpId: this.$route.params.id })
+          } else {
+            await this.assign({ ...req, pickUpId: this.$route.params.id })
+          }
         }
         this.$router.back()
       }
@@ -478,6 +487,7 @@ export default {
         modelKey: field,
         label: name,
         props: {
+          type: 'number',
           placeholder: '请输入'
         },
         rules: {
@@ -504,23 +514,37 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
+      function moneyInit (money) {
+        return money === 0 ? NP.divide(money, 100) : ''
+      }
       if (to.params.id) {
         vm.getPickupDetailForForm(to.params.id).then(data => {
-          vm.model.freightFee = NP.divide(data.freightFee, 100)
-          vm.model.insuranceFee = NP.divide(data.insuranceFee, 100)
-          vm.model.loadFee = NP.divide(data.loadFee, 100)
-          vm.model.unloadFee = NP.divide(data.unloadFee, 100)
-          vm.model.otherFee = NP.divide(data.otherFee, 100)
-          vm.model.totalFee = NP.divide(data.totalFee, 100)
+          vm.orderLength = data.orderLength
+          vm.model.assignCarType = data.assignCarType
+          vm.model.carNo = data.assignCarType === 1 ? '' : `${data.carNo}-${data.carType}-${data.carLength}`
+          vm.model.selfDriverName = data.assignCarType === 1 ? '' : `${data.driverName}-${data.driverPhone}`
+          vm.model.selfAssistantDriverName = data.assignCarType === 1 ? '' : `${data.assistantDriverName}-${data.assistantDriverPhone}`
+          vm.model.carrierName = data.assignCarType === 1 ? data.carrierName : ''
+          vm.model.carrierCarNo = data.assignCarType === 1 ? data.carNo : ''
+          vm.model.carrierDriverName = data.assignCarType === 1 ? data.driverName : ''
+          vm.model.carrierDriverPhone = data.assignCarType === 1 ? data.driverPhone : ''
+          vm.model.carType = data.carType
+          vm.model.carLength = data.carLength
+          vm.model.carrierWaybillNo = data.carrierWaybillNo
+          vm.model.freightFee = moneyInit(data.freightFee)
+          vm.model.insuranceFee = moneyInit(data.insuranceFee)
+          vm.model.loadFee = moneyInit(data.loadFee)
+          vm.model.unloadFee = moneyInit(data.unloadFee)
+          vm.model.otherFee = moneyInit(data.otherFee)
+          vm.model.totalFee = moneyInit(data.totalFee)
           vm.model.settlementType = data.settlementType || 1
           vm.model.payType = data.settlementPayInfo.length ? data.settlementPayInfo[0].payType : 2
-          vm.model.cashAmount = data.settlementPayInfo.length ? NP.divide(data.settlementPayInfo[0].cashAmount, 100) : ''
-          vm.model.fuelCardAmount = data.settlementPayInfo.length ? NP.divide(data.settlementPayInfo[0].fuelCardAmount, 100) : ''
+          vm.model.cashAmount = data.settlementPayInfo.length ? moneyInit(data.settlementPayInfo[0].cashAmount) : ''
+          vm.model.fuelCardAmount = data.settlementPayInfo.length ? moneyInit(data.settlementPayInfo[0].fuelCardAmount) : ''
+          vm.model.allocationStrategy = data.orderLength > 1 ? (data.allocationStrategy || vm.UserConfig.waybillStrategy || 1) : null
+          vm.model.remark = data.remark
         })
       }
-      // vm.getCarrierNameList().then(list => {
-      //   vm.fields.carrierName.props.options = list
-      // })
       vm.getSelfCarList().then(list => {
         vm.fields.carNo.props.options = list
       })
