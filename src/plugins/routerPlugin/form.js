@@ -36,7 +36,7 @@ export default {
     this.$createDialog({
       type: 'confirm',
       title: '',
-      content: '信息未保存，是否确认离开？',
+      content: '信息未保存，确认退出吗？',
       icon: 'cubeic-alert',
       onConfirm: () => {
         $formState.willLeave(to, from)
