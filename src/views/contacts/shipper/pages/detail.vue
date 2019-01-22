@@ -1,7 +1,7 @@
 <template>
   <div class="shipper-detail cube-has-bottom-btn">
     <div class="shipper-detail__header">
-      <span class="cube-font-20 cube-font-weight--m" v-text="viewData.name"/>
+      <span class="cube-font-20 cube-font-weight--m cube-mb-20" v-text="viewData.name"/>
       <div class="cube-font-14 cube-c-grey">
         <i class="cube-c-orange cubeic-person cube-mr-10"/>
         <span class="cube-mr-10" v-text="viewData.contact"/>
@@ -149,8 +149,8 @@ export default {
     display flex
     flex-direction column
     justify-content space-between
-    padding 20px 15px 30px
-    height 100px
+    padding 20px 15px
+    line-height 1.2
     box-sizing border-box
     background #fff
   &__remark
