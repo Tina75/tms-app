@@ -46,12 +46,44 @@ export default {
     ...mapGetters('order/list', ['TabCount'])
   },
 
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      switch (vm.selectedLabel) {
+        case '全部':
+          vm.clearAll()
+          vm.getAll()
+          break
+        case '待送货':
+          vm.clearDelivery()
+          vm.getDelivery()
+          break
+        case '待提货':
+          vm.clearPickup()
+          vm.getPickup()
+          break
+        case '在途':
+          vm.clearSending()
+          vm.getSending()
+          break
+        case '已完成':
+          vm.clearArrival()
+          vm.getArrival()
+          break
+      }
+    })
+  },
+
   mounted() {
     this.updateView(this.selectedLabel)
     this.getTabCount()
   },
   methods: {
-    ...mapActions('order/list', ['getTabCount']),
+    ...mapActions('order/list', ['getTabCount',
+      'getAll', 'clearAll',
+      'getDelivery', 'clearDelivery',
+      'getPickup', 'clearPickup',
+      'getSending', 'clearSending',
+      'getArrival', 'clearArrival']),
     updateView(label) {
       this.current = this.tabs.find(item => item.label === label).componentName
     }

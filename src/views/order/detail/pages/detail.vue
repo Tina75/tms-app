@@ -1,6 +1,6 @@
 <template>
   <div class="order-detail">
-    <cube-scroll-nav @change="changeHandler">
+    <cube-scroll-nav >
       <div slot="prepend" class="status-block">
         <h2>{{Detail.status | orderType}}</h2>
       </div>
@@ -13,11 +13,6 @@
         </ul>
       </cube-scroll-nav-panel>
     </cube-scroll-nav>
-    <!-- <div class="handle-btns"> -->
-    <!-- <cube-button  v-if="deleteBtnVisable(Detail)"  primary @click="handleClickDelete(Detail.id)">删除</cube-button>
-      <cube-button v-if="editOrderBtnVisable(Detail)" class="btn-light" @click="handleClickEditOrder(Detail.id)">编辑</cube-button> -->
-    <!-- <cube-button v-if="editBillBtnVisable(Detail)" @click="handleClickEditBill(Detail.id)">改单</cube-button> -->
-    <!-- </div> -->
   </div>
 </template>
 
@@ -38,22 +33,10 @@ export default {
   data () {
     return {
       pageData: [
-        {
-          name: '基本信息',
-          component: 'OrderBaseInfo'
-        },
-        {
-          name: '收发货人',
-          component: 'ReceiveAndSend'
-        },
-        {
-          name: '货物明细',
-          component: 'OrderCargoList'
-        },
-        {
-          name: '应收费用',
-          component: 'CostDetail'
-        }
+        { name: '基本信息', component: 'OrderBaseInfo' },
+        { name: '收发货人', component: 'ReceiveAndSend' },
+        { name: '货物明细', component: 'OrderCargoList' },
+        { name: '应收费用', component: 'CostDetail' }
       ]
     }
   },
@@ -80,9 +63,6 @@ export default {
 
   methods: {
     ...mapActions('order/detail', ['getDetail']),
-    changeHandler (label) {
-      console.log('changed to:', label)
-    },
     initTitleBtns() {
       let btnList = []
       if (this.deleteBtnVisable(this.Detail)) {
@@ -110,7 +90,6 @@ export default {
       }).show()
     },
     handleClickEditOrder(id) {
-      console.log(id)
       this.$router.push({ name: 'order-edit', params: { id } })
     },
     handleClickEditBill(id) {
