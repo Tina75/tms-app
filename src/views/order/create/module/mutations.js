@@ -75,7 +75,6 @@ export default {
   SET_FEE_INFO: (state, payload) => {
     resetFields(payload)
     state.feeInfo = payload
-    console.log(payload)
     const fees = [ payload.pickupFee, payload.loadFee, payload.unloadFee, payload.insuranceFee, payload.otherFee ]
     const totalFee = fees.reduce((last, fee) => {
       if (fee === '') return last

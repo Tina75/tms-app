@@ -79,7 +79,6 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       for (let key in vm.form) {
-        console.log(vm.otherInfo)
         if (key === 'isInvoice') vm.isInvoice = vm.form.isInvoice = !!vm.otherInfo.isInvoice
         else if (key === 'invoiceRate') {
           vm.form.invoiceRate = (vm.otherInfo.invoiceRate === undefined || vm.otherInfo.invoiceRate === '')
@@ -90,7 +89,6 @@ export default {
             ? ''
             : NP.divide(vm.otherInfo.collectionMoney, 100)
         } else vm.form[key] = vm.otherInfo[key] === undefined ? '' : vm.otherInfo[key]
-        console.log(vm.form)
       }
     })
   }

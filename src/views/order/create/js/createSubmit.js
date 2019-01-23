@@ -23,7 +23,6 @@ export default {
       'consignerAddressText',
       'deliveryTimeText',
       'arriveTimeText',
-      'otherFee',
       'otherInfo',
       'consumerInfo'
     ]
