@@ -51,7 +51,7 @@ export default {
           component: 'OrderCargoList'
         },
         {
-          name: '应付费用',
+          name: '应收费用',
           component: 'CostDetail'
         }
       ]
