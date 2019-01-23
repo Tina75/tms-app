@@ -45,7 +45,7 @@ export const truckRule = {
     custom: (val) => {
       val = val + ''
       val = val.replace(/\s/g, '')
-      return VALIDATE_CAR.test(val) || VALIDATE_TEL.test(val)
+      return VALIDATE_CAR.test(val)
     },
     message: {
       custom: '请输入车牌号'
