@@ -155,11 +155,12 @@ export default {
         {
           text: '修改',
           iconType: 'edit',
-          action: () => {
-            this.$router.push({ name: 'contacts-driver-modify', query: { driverId: this.driverDetail.id } })
-          }
+          action: this.editDriver.bind(this)
         }
       ])
+    },
+    editDriver() {
+      this.$router.push({ name: 'contacts-driver-modify', query: { driverId: this.$route.query.driverId } })
     }
   },
   beforeRouteEnter (to, from, next) {

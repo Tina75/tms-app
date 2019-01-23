@@ -213,7 +213,9 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    next(vm => vm.setForm())
+    next(vm => {
+      vm.setForm()
+    })
   }
 }
 </script>
