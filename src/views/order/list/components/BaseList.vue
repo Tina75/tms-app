@@ -36,8 +36,8 @@
           </div>
         </div>
         <div class="list-item__money border-top-1px">
-          <p v-if="item.settlementType" class="cube-c-black cube-font-12 cube-ml-15">{{item.settlementType|settlementTypeFormatForOrder}}</p>
-          <div v-if="item.totalFee" class="cube-c-yellow cube-mt-5 cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{item.totalFee |moneyFormat}}</span>/元</div>
+          <p  class="cube-c-black cube-font-12 cube-ml-15">{{item.settlementType|settlementTypeFormatForOrder}}</p>
+          <div  class="cube-c-yellow cube-mt-5 cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{item.totalFee |moneyFormat}}</span>/元</div>
           <!--
             子状态为 待调度,列表展示 “删除”“编辑”按钮，详情页展示“删除”“编辑”“分享”按钮
             子状态为 其它,列表展示“改单”按钮，详情展示“改单”“分享”按钮
@@ -190,7 +190,7 @@ export default {
         overflow hidden
         text-overflow ellipsis
         white-space nowrap
-        max-width 140px
+        max-width 150px
     &__count
       background #efefef
       display inline-block

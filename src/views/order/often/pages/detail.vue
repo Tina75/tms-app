@@ -91,6 +91,7 @@ export default {
         line-height: 45px
         font-size: 17px
         color: #ffffff
+        font-weight: bold
         &.light-btn
           background: #32C4D3;
     .status-block
