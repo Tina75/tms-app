@@ -267,7 +267,6 @@ export default {
       vm.$nextTick(async () => {
         vm.setTitleButtons()
         const fromPage = from.name
-        // console.log(vm.orderNeedReset)
         if (NO_RESET_PAGE.indexOf(fromPage) === -1 || vm.orderNeedReset) {
           vm.$refs.$form.reset()
         }

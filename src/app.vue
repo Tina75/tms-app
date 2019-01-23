@@ -100,6 +100,8 @@ body
 .empty-list-image
   width 179px
   height 133px
+.cube-toast-tip 
+  max-height initial
   // .page
   // position: absolute
   // z-index: 10
