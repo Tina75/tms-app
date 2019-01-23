@@ -149,6 +149,9 @@ export default {
       return (ph || '请输入') + (this.inputRequired ? '(必填)' : '')
     },
     inputMaxLength () {
+      if (this.type === 'phone' && +this.value[0] === 1) {
+        return 15
+      }
       const maxlength = Number(this.maxlength)
       if (isNaN(maxlength)) return Infinity
       return maxlength
