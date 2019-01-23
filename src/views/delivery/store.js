@@ -145,14 +145,15 @@ export default {
       })
     },
     clearArrival: ({ commit }) => { commit('ARRIVAL_CLEAR') },
-    // 改单
+    // 编辑运单
     doEditWaybill: ({ commit, state }, info) => {
       return Server({
-        url: '/waybill/modify',
+        url: '/waybill/update',
         method: 'post',
         data: { waybill: info }
       }).then(() => {
         // 刷新详情
+        window.toast('编辑成功')
       })
     },
     // 派车

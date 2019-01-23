@@ -133,7 +133,7 @@ export default {
     ...mapActions('order/create', [ 'getOftenAddress' ]),
 
     onSelectAddress (item) {
-      this.form.address = item.detail + item.name
+      this.form.address = ((item.detail || '') + (item.name || '')).replace(/(.{0,}省){0,1}(.{0,}市){0,1}/, '')
       this.form.latitude = item.data.point.lat
       this.form.longitude = item.data.point.lng
       this.allowSearch = false
@@ -141,6 +141,7 @@ export default {
 
     confirmCity (data) {
       this.form.locale = data
+      if (data[data.length - 1].code !== this.form.cityCode) this.allowSearch = true
       this.form.cityCode = data[data.length - 1].code
     },
 
@@ -180,12 +181,7 @@ export default {
     async submit () {
       console.log(await this.$refs.$form.validate())
       if (!(await this.$refs.$form.validate())) return window.toast('请填写详细地址')
-      console.log(this.localeView.split('/'))
-      let cityArr = this.localeView.split('/')
-      cityArr.pop()
-      let cityName = cityArr.filter(name => this.form.address.indexOf(name) === -1).join('')
-      if (this.form.address.indexOf(cityName) > -1) cityName = ''
-      this.SET_ADDRESS_INFO(Object.assign({}, this.form, { cityName }))
+      this.SET_ADDRESS_INFO(Object.assign({}, this.form, { cityName: this.localeView.split('/').join('') }))
       this.$formWillLeave(() => {
         this.showCityPicker = false
         this.$refs.$form.reset()

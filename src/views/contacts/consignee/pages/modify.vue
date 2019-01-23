@@ -113,7 +113,7 @@ export default {
       clearForm: moudleName + '/clearForm',
       resetAddressPage: 'contacts/resetAddressPage'
     }),
-    async initForm(from) {
+    async initForm(to, from) {
       // 进入页面时刷新列表数据
       this.$refs.$form.reset()
       this.setSender()
@@ -131,6 +131,7 @@ export default {
     },
     // 选择发货人信息
     selectSender () {
+      this.$formWillLeave()
       this.$router.push({ name: 'select-shipper' })
     },
     // 将选择的发货人信息渲染到表单上
@@ -158,7 +159,7 @@ export default {
     async submit () {
       // 如果是修改且收货地址没有变更 取详情的地址，变更了取新设置的地址
       const address = Object.assign({}, this.formList, { address: this.consigneeDetail.address })
-      const data = this.saveAddress
+      const data = this.saveAddress.address
         ? ConsigneeDetail.toServer(Object.assign({}, address, this.saveAddress))
         : ConsigneeDetail.toServer(Object.assign({}, address))
       console.log('data', data)
@@ -168,15 +169,15 @@ export default {
         try {
           this.submiting = true
           await this.modifyConsignee(data)
-          this.confirmed = true
+          this.$refreshPage('contacts-consignee', 'contacts-consignee-detail')
+          this.$formWillLeave()
+          window.toast('保存成功')
+          this.clearForm()
+          this.$router.back()
         } catch (e) {
           console.log(e)
         } finally {
-          window.toast('保存成功')
-          this.$refreshPage('contacts-consignee', 'contacts-consignee-detail')
-          this.clearForm()
           this.submiting = false
-          this.$router.back()
         }
       } else {
         window.toast('请填写必填信息')
@@ -202,6 +203,7 @@ export default {
       }
 
       this.resetAddressPage(config)
+      this.$formWillLeave()
       this.$router.push({ name: 'contacts-address' })
     },
     setFormList () {
@@ -210,30 +212,17 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
-    next(vm => vm.initForm(from))
+    next(vm => {
+      vm.initForm(to, from)
+    })
   },
   beforeRouteLeave (to, from, next) {
-    // 当从页面离开不进入选择地址和选择发货方时  清空选择的数据
-    next(false)
-    const leave = () => {
-      this.confirmed = false
+    if (to.name !== 'select-shipper' && to.name !== 'contacts-address') {
       this.saveConsignerInfo()
       this.saveAddressInfo()
-      next()
+      this.clearForm()
     }
-    if (to.name !== 'select-shipper' && to.name !== 'contacts-address' && !this.confirmed) {
-      this.$createDialog({
-        type: 'confirm',
-        content: '信息未保存，确认退出吗？',
-        icon: 'cubeic-alert',
-        onConfirm: () => {
-          this.clearForm()
-          leave()
-        }
-      }).show()
-    } else {
-      leave()
-    }
+    next()
   }
 }
 </script>

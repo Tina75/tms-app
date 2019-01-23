@@ -56,6 +56,8 @@ export default {
     onPageRefresh() {
       console.info('onPageRefresh')
       this.loading = true
+    },
+    setBtn () {
       setAppRightBtn([
         {
           text: '添加',
@@ -72,6 +74,11 @@ export default {
     onItemClick(item, index) {
       this.$router.push({ name: 'contacts-consignee-detail', query: { consigneeId: item.id } })
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.setBtn()
+    })
   }
 }
 </script>
