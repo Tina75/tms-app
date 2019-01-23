@@ -81,7 +81,7 @@ const lists = [
     itemParser: (data) => ({
       id: data.id,
       name: data.cityName,
-      detail: (data.address+'') + (data.consignerHourseNumber||''),
+      detail: data.address + '' + (data.consignerHourseNumber || ''),
       data
     })
   },

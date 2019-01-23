@@ -1,11 +1,11 @@
 // form item type, contact同时支持手机和座机, phone 仅验证手机号
-const FORM_ITEM_TYPE = [ 'text', 'textarea', 'number', 'switch', 'select', 'click', 'loading', 'phone']
-const FORM_ITEM_ALIGN = [ 'left', 'center', 'right' ]
+const FORM_ITEM_TYPE = ['text', 'textarea', 'number', 'switch', 'select', 'click', 'loading', 'phone']
+const FORM_ITEM_ALIGN = ['left', 'center', 'right']
 const itemInArray = (item, array) => array.indexOf(item) > -1
 
 export default {
   value: {
-    type: [ String, Number, Boolean ],
+    type: [String, Number, Boolean],
     required: true
   },
   // 输入框类型
@@ -15,7 +15,7 @@ export default {
   type: {
     type: String,
     default: 'text',
-    validator: value => itemInArray(value, FORM_ITEM_TYPE)
+    validator: (value) => itemInArray(value, FORM_ITEM_TYPE)
   },
   // select类型的选择数据
   options: {
@@ -43,7 +43,7 @@ export default {
   },
   // 数值精度
   precision: {
-    type: [ Number, String ],
+    type: [Number, String],
     default: 0
   },
   // 当form item右侧存在一个单独的点击图标时传入该值，同时提供on-icon-click作为事件处理回调
@@ -63,7 +63,7 @@ export default {
   },
   // 当 type = textarea 且 maxlength != Infinity 或 0 时，会在文本框下方显示计数器
   maxlength: {
-    type: [ String, Number ],
+    type: [String, Number],
     default: Infinity
   },
   // type=textarea 时有效，文本框行数
@@ -105,7 +105,7 @@ export default {
   align: {
     type: String,
     default: 'right',
-    validator: value => itemInArray(value, FORM_ITEM_ALIGN)
+    validator: (value) => itemInArray(value, FORM_ITEM_ALIGN)
   },
   readonly: {
     type: Boolean,
