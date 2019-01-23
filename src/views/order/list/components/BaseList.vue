@@ -10,14 +10,20 @@
         <div class="list-item__time border-bottom-1px">
           <span class="cube-ml-15">{{item.createTime | datetimeFormat}}</span>
           <div class="list-item__flag">
-            <span v-if="item.collectionMoney>0" class="item orange">代</span>
-            <span v-if="item.cashBack>0" class="item red">返</span>
-            <span v-if="item.abnormalLabel==2" class="item blue">异</span>
+            <span v-if="item.disassembleStatus===1" class="item blue" style="background:#418DF9">子</span>
+            <span v-if="item.collectionMoney>0" class="item orange" style="background:#FCA950">代</span>
+            <span v-if="item.cashBack>0" class="item green" style="background:#40D1A4">返</span>
+            <span v-if="item.abnormalLabel==2" class="item red" style="background:#F35851">异</span>
             <span class="item" :style="{'background':getColorType(item.status)}">{{item.status | orderType}}</span>
           </div>
         </div>
         <div class="list-item__body">
-          <p class="list-item__city">{{item.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{item.endName}}</p>
+          <p v-if="item.startName || item.endName" class="list-item__city">{{item.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{item.endName}}</p>
+          <p v-else class="list-item__city">
+            <span class="address">{{item.consignerAddress}}</span>
+            <i class="iconfont icon-line cube-ml-5 cube-mr-5"/>
+            <span class="address">{{item.consigneeAddress}}</span>
+          </p>
           <div>
             <span v-if="item.cargoNames" class="list-item__count">{{item.cargoNames.length>1?item.cargoNames[0]+'等':item.cargoNames[0]}}</span>
             <span v-if="item.weight" class="list-item__count">{{item.weight}}吨</span>
@@ -178,7 +184,13 @@ export default {
       overflow hidden
       text-overflow ellipsis
       white-space nowrap
-
+      .address
+        font-weight bold
+        display inline-block
+        overflow hidden
+        text-overflow ellipsis
+        white-space nowrap
+        max-width 140px
     &__count
       background #efefef
       display inline-block
@@ -215,10 +227,12 @@ export default {
         display inline-block
         margin-left 5px
         padding 0 3px
-      .orange
-        background #FCAF3B
-      .red
-        background #FF8463
-      .blue
-        background #418DF9
+      // .orange
+      //   background #FCA950
+      // .red
+      //   background #F35851
+      // .blue
+      //   background #418DF9
+      // .green
+      //   background #40D1A4
 </style>

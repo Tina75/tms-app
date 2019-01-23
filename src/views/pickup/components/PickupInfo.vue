@@ -21,7 +21,7 @@
       </detail-panel-item>
       <detail-panel-item :label="'联系方式'">
         <p class="remix-content">
-          <span class="border-right-1px">{{pickupDetail.driverPhone}}</span>
+          <span class="border-right-1px">{{pickupDetail.driverPhone|phoneFormat}}</span>
           <a @click="phoneCall(pickupDetail.driverPhone)">
             联系TA
             <icon-font
@@ -42,7 +42,7 @@
         </detail-panel-item>
         <detail-panel-item :label="'联系方式'">
           <p class="remix-content">
-            <span class="border-right-1px">{{pickupDetail.driverPhone}}</span>
+            <span class="border-right-1px">{{pickupDetail.driverPhone|phoneFormat}}</span>
             <a @click="phoneCall(pickupDetail.driverPhone)">
               联系TA
               <icon-font
@@ -59,7 +59,7 @@
         </detail-panel-item>
         <detail-panel-item v-if="pickupDetail.assistantDriverPhone" :label="'联系方式'">
           <p class="remix-content">
-            <span class="border-right-1px">{{pickupDetail.assistantDriverPhone}}</span>
+            <span class="border-right-1px">{{pickupDetail.assistantDriverPhone|phoneFormat}}</span>
             <a @click="phoneCall(pickupDetail.driverPhone)">
               联系TA
               <icon-font

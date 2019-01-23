@@ -18,7 +18,7 @@
       />
       <FormItem v-model="form.additional" label="补充地址" placeholder="请输入楼号-门牌号"/>
     </FromGroup>
-    <BmapAddressList :city="limitCityGeo" :search="searchValue" @select="onSelectAddress"/>
+    <BmapAddressList v-if="allowSearch" :city="limitCityGeo" :search="form.address" @select="onSelectAddress"/>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
     <CityPicker v-model="showCityPicker" @confirm="confirmCity"/>
   </div>
@@ -82,19 +82,17 @@ export default {
     },
     namespace() {
       return this.AddressPage.namespace ? this.AddressPage.namespace + '/' : ''
-    },
-    searchValue () {
-      if (this.allowSearch) {
-        return this.form.address
-      }
-      return ''
     }
   },
   methods: {
     ...mapActions(moudleName, ['resetAddressPage']),
     onSelectAddress(item) {
-      const detail = item.detail || ''
+      let detail = item.detail || ''
       const title = item.name || ''
+      this.form.locale.forEach(({ name = '', shortName = '' }) => {
+        detail = detail.replace(name, '')
+        detail = detail.replace(shortName, '')
+      })
       this.form.address = detail.includes(title) ? detail : detail + title
       this.form.addressDetail = item.data
       this.allowSearch = false
@@ -125,6 +123,7 @@ export default {
       this.form.locale = data
     },
     reset() {
+      this.$refs.form.reset()
       const options = this.AddressPage
       this.form = Address.toForm(options.data)
       if (options.appButton) {

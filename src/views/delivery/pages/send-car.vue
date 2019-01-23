@@ -30,7 +30,10 @@
         </cube-form-group>
         <cube-form-group>
           <cube-form-item :field="fields['mileage']"/>
-          <cube-form-item v-if="model.assignCarType === 1" :field="fields['freightFee']"/>
+          <cube-form-item v-if="model.assignCarType === 1" :field="fields['freightFee']">
+            <cube-input v-model="model.freightFee" class="freightFee_input border-right-1px" placeholder="请输入"/>
+            <i class="iconfont icon-ico_rule cube-c-green " @click.stop="goGetRule"/>
+          </cube-form-item>
           <cube-form-item v-if="model.assignCarType === 2" :field="fields['gasFee']"/>
           <cube-form-item :field="fields['loadFee']"/>
           <cube-form-item :field="fields['unloadFee']"/>
@@ -93,12 +96,13 @@ export default {
       allDriverList: [],
       model: {
         assignCarType: 1,
+        selCarNo: '',
         selfDriverName: '',
         selfAssistantDriverName: '',
-        carrierName: '',
         carNo: '',
         driverName: '',
         driverPhone: '',
+        carrierName: '',
         carType: '',
         carLength: '',
         carrierWaybillNo: '',
@@ -141,16 +145,7 @@ export default {
           modelKey: 'assignCarType',
           label: '派车方式',
           props: {
-            options: [
-              {
-                value: 1,
-                text: '外转'
-              },
-              {
-                value: 2,
-                text: '自送'
-              }
-            ],
+            options: [{ value: 1, text: '外转' }, { value: 2, text: '自送' }],
             placeholder: '请选择'
           },
           rules: {
@@ -159,7 +154,7 @@ export default {
         },
         selCarNo: {
           type: 'select',
-          modelKey: 'carNo',
+          modelKey: 'selCarNo',
           label: '车牌号',
           props: {
             options: [],
@@ -207,18 +202,17 @@ export default {
           }
         },
         carrierName: {
-          type: 'select',
+          type: 'input',
           modelKey: 'carrierName',
           label: '承运商名称',
           props: {
-            options: [],
-            placeholder: '请选择'
+            placeholder: '请输入（必填）'
           },
           rules: {
             required: true
           },
           messages: {
-            pattern: '承运商必选'
+            pattern: '承运商必填写'
           }
         },
         carNo: {
@@ -440,7 +434,7 @@ export default {
             type: 'number'
           },
           rules: {
-            pattern: /^((([1-9]\d{0,6})|0)(\.\d{0,1}[1-9])?)?$/
+            pattern: /^((([1-9]\d{0,5})|0)(\.\d{0,1}[1-9])?)?$/
           },
           messages: {
             pattern: '请输入正确的金额公里数'
@@ -734,24 +728,7 @@ export default {
           modelKey: 'allocationStrategy',
           label: '分摊策略',
           props: {
-            options: [
-              {
-                value: 1,
-                text: '按订单数分摊'
-              },
-              {
-                value: 2,
-                text: '按件数分摊'
-              },
-              {
-                value: 3,
-                text: '按重量分摊'
-              },
-              {
-                value: 4,
-                text: '按体积分摊'
-              }
-            ],
+            options: [{ value: 1, text: '按订单数分摊' }, { value: 2, text: '按件数分摊' }, { value: 3, text: '按重量分摊' }, { value: 4, text: '按体积分摊' }],
             placeholder: '请选择'
           }
         },
@@ -789,7 +766,20 @@ export default {
               this.model.tollFee,
               this.model.accommodation,
               this.model.insuranceFee,
-              this.model.otherFee) - this.model.infoFee
+              this.model.otherFee)
+      } else {
+        this.model.totalFee =
+            NP.plus(
+              this.model.freightFee,
+              this.model.loadFee,
+              this.model.unloadFee,
+              this.model.tollFee,
+              this.model.insuranceFee,
+              this.model.otherFee,
+              this.model.fuelCardAmount1, this.model.cashAmount1,
+              this.model.fuelCardAmount2, this.model.cashAmount2,
+              this.model.fuelCardAmount3, this.model.cashAmount3,
+              this.model.fuelCardAmount4, this.model.cashAmount4) - this.model.infoFee
       }
       // }
       // console.log('validity', result.validity, result.valid, result.dirty, result.firstInvalidFieldIndex)
@@ -803,9 +793,9 @@ export default {
           carrierName: this.model.carrierName,
           driverName: this.model.assignCarType === 1 ? this.model.driverName : this.model.selfDriverName.split('-')[0],
           driverPhone: this.model.assignCarType === 1 ? this.model.driverPhone : this.model.selfDriverName.split('-')[1],
-          carNo: this.model.assignCarType === 1 ? this.model.carNo : this.model.carNo.split('-')[0],
-          carType: this.model.assignCarType === 1 ? this.model.carType : this.model.carNo.split('-')[1],
-          carLength: this.model.assignCarType === 1 ? this.model.carLength : this.model.carNo.split('-')[2],
+          carNo: this.model.assignCarType === 1 ? this.model.carNo : this.model.selCarNo.split('-')[0],
+          carType: this.model.assignCarType === 1 ? this.model.carType : this.model.selCarNo.split('-')[1],
+          carLength: this.model.assignCarType === 1 ? this.model.carLength : this.model.selCarNo.split('-')[2],
           mileage: NP.times(this.model.mileage, 1000),
           freightFee: NP.times(this.model.freightFee, 100),
           tollFee: NP.times(this.model.tollFee, 100),
@@ -861,6 +851,9 @@ export default {
         this.$router.back()
       }
     },
+    goGetRule() {
+      window.toast('稍后加')
+    },
     initWaybillInfo(vm, waybillId) {
       vm.getWaybillDetail(waybillId).then(({ waybill }) => {
         vm.start = waybill.start
@@ -869,14 +862,17 @@ export default {
 
         vm.model = Object.assign(vm.model, waybill)
         vm.model.settlementType = waybill.settlementType ? waybill.settlementType : 1
+        vm.model.selCarNo = waybill.assignCarType === 1 ? '' : `${waybill.carNo}-${waybill.carType}-${waybill.carLength}`
+        vm.model.selfDriverName = waybill.assignCarType === 1 ? '' : `${waybill.driverName}-${waybill.driverPhone}`
+        vm.model.selfAssistantDriverName = waybill.assignCarType === 1 ? '' : `${waybill.assistantDriverName}-${waybill.assistantDriverPhone}`
 
-        const moneyKeys = ['freightFee', 'loadFee', 'unloadFee', 'tollFee', 'accommodation', 'insuranceFee', 'otherFee', 'infoFee', 'cashBack']
+        const moneyKeys = ['freightFee', 'loadFee', 'unloadFee', 'tollFee', 'accommodation', 'insuranceFee', 'otherFee', 'infoFee', 'cashBack', 'totalFee']
         moneyKeys.forEach(key => { vm.model[key] = waybill[key] ? NP.divide(waybill[key], 100) : '' })
 
         vm.model.mileage = waybill.mileage ? NP.divide(waybill.mileage, 1000) : ''
         waybill.settlementPayInfo.forEach((item, index) => {
-          vm.model[`cashAmount${index + 1}`] = item ? NP.divide(item.cashAmount, 100) : ''
-          vm.model[`fuelCardAmount${index + 1}`] = item ? NP.divide(item.fuelCardAmount, 100) : ''
+          vm.model[`cashAmount${index + 1}`] = item.cashAmount ? NP.divide(item.cashAmount, 100) : ''
+          vm.model[`fuelCardAmount${index + 1}`] = item.fuelCardAmount ? NP.divide(item.fuelCardAmount, 100) : ''
         })
 
         // vm.model.cashBack = waybill.cashBack ? NP.divide(waybill.cashBack, 100) : ''
@@ -890,9 +886,9 @@ export default {
       if (!to.query.type) { // 不是直接派车
         vm.initWaybillInfo(vm, waybillId)
       }
-      vm.getCarrierNameList().then(list => {
-        vm.fields.carrierName.props.options = list
-      })
+      // vm.getCarrierNameList().then(list => {
+      //   vm.fields.carrierName.props.options = list
+      // })
       vm.getSelfCarList().then(list => {
         vm.fields.selCarNo.props.options = list
       })
@@ -919,6 +915,11 @@ export default {
     &:before
       content: "\e6d6";
       color: #C5C8CE;
+  .icon-ico_rule
+    margin-top 10px
+    font-size 20px
+    margin-right -10px
+
   .pickup-assign
     height: 100%
     display: flex
@@ -951,6 +952,8 @@ export default {
                 padding: 0 10px
                 line-height: 20px;
                 border-left: 1px solid #ddd;
+          .freightFee_input
+            padding-right 10px
         .cube-form-label
           padding-top: 12px;
           width: 140px;

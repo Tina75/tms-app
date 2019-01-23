@@ -1,6 +1,6 @@
 <template>
   <div class="pickup-assign">
-    <cube-scroll>
+    <cube-scroll v-if="showPage">
       <div class="edit-form">
         <cube-form ref="assign-form" :model="model" :options="options" :immediate-validate="false" @validate="validateHandler">
           <cube-form-group>
@@ -42,10 +42,10 @@
           </cube-form-group>
         </cube-form>
       </div>
-      <div class="confirm-btns">
-        <a @click="submitAssign">确定</a>
-      </div>
     </cube-scroll>
+    <div class="confirm-btns">
+      <a @click="submitAssign">确定</a>
+    </div>
   </div>
 </template>
 
@@ -63,6 +63,7 @@ export default {
   data () {
     let _this = this
     return {
+      showPage: true,
       validity: {},
       valid: true,
       orderLength: 0,
@@ -515,7 +516,7 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       function moneyInit (money) {
-        return money === 0 ? NP.divide(money, 100) : ''
+        return money === 0 ? '' : NP.divide(money, 100)
       }
       if (to.params.id) {
         vm.getPickupDetailForForm(to.params.id).then(data => {
@@ -552,6 +553,8 @@ export default {
         vm.fields.selfDriverName.props.options = list
         vm.fields.selfAssistantDriverName.props.options = list
       })
+      vm.showPage = false
+      vm.$nextTick(() => { vm.showPage = true })
     })
   }
 }

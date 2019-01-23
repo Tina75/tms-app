@@ -118,6 +118,7 @@ export default {
       }
     },
     async setForm() {
+      this.$refs.form.reset()
       this.loadOperators()
       if (!this.isCreate) {
         // 编辑操作, 判断store中的值是否是目标, 不是则拉新的

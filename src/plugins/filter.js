@@ -43,8 +43,22 @@ Vue.filter('mileageFormat', function (value, num = 3) {
   return NP.divide(value, Math.pow(10, num))
 })
 
+Vue.filter('phoneFormat', function (value) {
+  if (!value) return ''
+  return value.substring(0, 3) + ' ' + value.substring(3, 7) + ' ' + value.substring(7, 11)
+})
+
+Vue.filter('textOverflow', function (value, length = 8) {
+  if (value.length < length) return value
+  return value.substring(0, length) + '...'
+})
 Vue.filter('settlementTypeFormat', (value) => {
   const settlement = ['未知', '按单结', '按单结', '按单结', '月结']
+  return settlement[value] ? settlement[value] : '未知'
+})
+
+Vue.filter('settlementTypeFormatForOrder', (value) => {
+  const settlement = ['未知', '现付', '到付', '回付', '月结']
   return settlement[value] ? settlement[value] : '未知'
 })
 
