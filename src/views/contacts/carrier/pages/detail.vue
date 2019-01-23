@@ -10,7 +10,7 @@
             <span v-text="viewData.carrierPhone"/>
           </div>
           <div v-if="viewData.customerCarrierPhone" class="cube-mt-10">
-            <i class="iconfont icon-ico_KF cube-mr-10"/>
+            <i class="iconfont icon-ico_KF1 cube-mr-10"/>
             <span class="cube-mr-10">客服</span>
             <span v-text="viewData.customerCarrierPhone"/>
           </div>
