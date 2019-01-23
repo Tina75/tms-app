@@ -54,8 +54,9 @@ export default {
   methods: {
     ...mapActions(moudleName, ['loadDriverList']),
     onPageRefresh() {
-      console.info('onPageRefresh')
       this.loading = true
+    },
+    setBtn() {
       setAppRightBtn([
         {
           text: '添加',
@@ -72,6 +73,9 @@ export default {
     onItemClick(item, index) {
       this.$router.push({ name: 'contacts-driver-detail', query: { driverId: item.id } })
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => vm.setBtn())
   }
 }
 </script>
