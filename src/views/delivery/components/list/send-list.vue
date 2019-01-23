@@ -31,11 +31,12 @@ export default {
   },
 
   methods: {
-    ...mapActions('delivery', ['getSend', 'clearSend', 'deleteBillById']),
+    ...mapActions('delivery', ['getSend', 'clearSend', 'deleteBillById', 'getTabCount']),
 
     refresh() {
       this.clearSend()
       this.getSend()
+      this.getTabCount()
     },
     loadmore() {
       this.getSend()
