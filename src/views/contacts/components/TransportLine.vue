@@ -5,15 +5,19 @@
       v-model="from.sn"
       type="click"
       :label="label[0]"
+      :click-icon="from.sn ? 'icon-shanchu-shuru' : ''"
       placeholder="请选择出发地城市"
       @on-click="showPickCity(0)"
+      @on-icon-click="handleRemove(0)"
     />
     <form-item
       v-model="to.en"
       type="click"
       :label="label[1]"
+      :click-icon="to.sn ? 'icon-shanchu-shuru' : ''"
       placeholder="请选择目的地城市"
       @on-click="showPickCity(1)"
+      @on-icon-click="handleRemove(1)"
     />
 
     <CityPicker v-model="pickCityVisible" @confirm="citySelect"/>
@@ -90,6 +94,28 @@ export default {
           en: this.value.en,
           s: res.code,
           sn: address
+        }
+      }
+      console.log(eventData)
+      this.$emit('input', eventData)
+    },
+
+    handleRemove (index) {
+      const isDestination = Boolean(index)
+      let eventData = {}
+      if (isDestination) {
+        eventData = {
+          e: '',
+          en: '',
+          s: this.value.s,
+          sn: this.value.sn
+        }
+      } else {
+        eventData = {
+          e: this.value.e,
+          en: this.value.en,
+          s: '',
+          sn: ''
         }
       }
       console.log(eventData)

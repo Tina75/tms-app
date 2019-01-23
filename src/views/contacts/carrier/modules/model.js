@@ -3,6 +3,7 @@ export class ContactDetail {
   carrierName = ''
   carrierPrincipal = '' // 负责人
   carrierPhone = ''
+  customerCarrierPhone = ''
   payType = '' // 支付方式 1：现付 2：到付 3：回单付 4：月结
   remark = '' // 备注
 

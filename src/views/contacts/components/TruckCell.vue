@@ -4,7 +4,7 @@
       <slot>
         <span class="cube-c-black cube-font-17">
           <span v-text="item.title"/>
-          <span class="truck-tag" v-text="item.tag" />
+          <span v-if="item.tag" class="truck-tag" v-text="item.tag" />
         </span>
         <div class="cube-c-light-grey cube-ellipsis cube-font-14 cube-mt-5">
           <span v-for="(it, index) in item.info" :key="index" class="truck-tag-gray" v-text="it" />
