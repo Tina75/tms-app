@@ -6,7 +6,6 @@
       <FormItem
         v-model="model.carrierPhone"
         label="负责人号码"
-        :maxlength="rules.carrierPhone.max"
         prop="carrierPhone"
         type="phone"
       />

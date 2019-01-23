@@ -139,7 +139,8 @@ export default [
     path: '/contacts/driver/modify',
     name: 'contacts-driver-modify',
     meta: {
-      noNeedRefresh: []
+      noNeedRefresh: [],
+      formLeaveConfirm: true
     },
     component: () => import(/* webpackChunkName: "contacts-driver" */ './driver/pages/modify.vue')
   },
@@ -183,7 +184,8 @@ export default [
     path: '/contacts/carrier/truck/modify',
     name: 'contacts-carrier-truck-modify',
     meta: {
-      noNeedRefresh: []
+      noNeedRefresh: [],
+      formLeaveConfirm: true
     },
     component: () => import(/* webpackChunkName: "contacts-carrier" */ './carrier/pages/truck-create.vue')
   },
