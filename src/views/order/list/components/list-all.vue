@@ -36,6 +36,7 @@ export default {
     refresh() {
       this.clearAll()
       this.getAll()
+      this.getTabCount()
     },
     loadmore() {
       this.getAll()

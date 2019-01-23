@@ -82,10 +82,11 @@ export default {
   },
 
   methods: {
-    ...mapActions('delivery', ['getDispatch', 'clearDispatch']),
+    ...mapActions('delivery', ['getDispatch', 'clearDispatch', 'getTabCount']),
     refresh() {
       this.clearDispatch()
       this.getDispatch()
+      this.getTabCount()
     },
     loadmore() {
       this.getDispatch()

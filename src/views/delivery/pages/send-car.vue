@@ -4,15 +4,14 @@
       <dispatch-city
         v-if="isEditMode"
         :start-code.sync="start"
-        :end-code.sync="end"
-        class="city"/>
+        :end-code.sync="end"/>
       <cube-form ref="assign-form"
                  :model="model"
                  :options="options"
                  :immediate-validate="false"
                  @validate="validateHandler">
-        <cube-form-group>
-          <cube-form-item :field="fields['assignCarType']"/>
+        <cube-form-group class="cube-mt-15">
+          <cube-form-item :field="fields['assignCarType']" />
         </cube-form-group>
         <cube-form-group v-if="model.assignCarType === 1">
           <cube-form-item :field="fields['carrierName']"/>
@@ -67,9 +66,7 @@
         </cube-form-group>
       </cube-form>
     </div>
-    <div class="confirm-btns">
-      <a @click="submitAssign">确定</a>
-    </div>
+    <cube-button class="confirm-btn" @click="submitAssign">确定</cube-button>
   </div>
 </template>
 
@@ -80,9 +77,7 @@ import DispatchCity from '../components/dispach-city'
 
 export default {
   name: 'delivery-send-car',
-  metaInfo: {
-    title: '派车'
-  },
+  metaInfo: { title: '编辑派车' },
   components: { DispatchCity },
 
   data () {
@@ -775,11 +770,7 @@ export default {
               this.model.unloadFee,
               this.model.tollFee,
               this.model.insuranceFee,
-              this.model.otherFee,
-              this.model.fuelCardAmount1, this.model.cashAmount1,
-              this.model.fuelCardAmount2, this.model.cashAmount2,
-              this.model.fuelCardAmount3, this.model.cashAmount3,
-              this.model.fuelCardAmount4, this.model.cashAmount4) - this.model.infoFee
+              this.model.otherFee) - this.model.infoFee
       }
       // }
       // console.log('validity', result.validity, result.valid, result.dirty, result.firstInvalidFieldIndex)
@@ -858,7 +849,9 @@ export default {
       vm.getWaybillDetail(waybillId).then(({ waybill }) => {
         vm.start = waybill.start
         vm.end = waybill.end
-        if (waybill.carNo) { vm.isEditMode = true } // 没有车牌号说明未拍过车
+        if ((waybill.assignCarType === 1 && waybill.carrierName) || (waybill.assignCarType === 2 && waybill.carNo)) {
+          vm.isEditMode = true
+        } // 没有车牌号说明未派过车 现在是在编辑
 
         vm.model = Object.assign(vm.model, waybill)
         vm.model.settlementType = waybill.settlementType ? waybill.settlementType : 1
@@ -925,12 +918,12 @@ export default {
     display: flex
     flex-direction column
     .edit-form
-      padding-top: 15px;
       flex 1
       overflow auto
       overflow-scrolling touch
       >>> .cube-form
         background-color: #F3F3F3;
+        color #333
         .cube-form-group
           background-color: #fff;
           margin-bottom: 15px;
@@ -1026,17 +1019,11 @@ export default {
           textarea
             min-height: 50px
             width: 270px;
-    .confirm-btns
-      height: 45px
-      display: flex
-      a
-        flex: 1
-        background: #27A3BD;
-        text-align: center
-        height: 45px
-        line-height: 45px
-        font-size: 17px
-        color: #ffffff
-        &.light-btn
-          background: #32C4D3;
+    .confirm-btn
+      display  flex
+      font-weight bold
+      text-align center
+      font-size 17px
+      border-radius 0
+
 </style>

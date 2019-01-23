@@ -38,6 +38,7 @@ export default {
     refresh() {
       this.clearDelivery()
       this.getDelivery()
+      this.getTabCount()
     },
     loadmore() {
       this.getDelivery()

@@ -37,6 +37,7 @@ export default {
     refresh() {
       this.clearPickup()
       this.getPickup()
+      this.getTabCount()
     },
     loadmore() {
       this.getPickup()

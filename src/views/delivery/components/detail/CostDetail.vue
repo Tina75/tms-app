@@ -40,7 +40,7 @@
         </detail-panel-item>
       </div>
     </div>
-    <div v-if="Waybill.totalFee" class="total-cost">
+    <div class="total-cost">
       <label>合计</label>
       <span>{{Waybill.totalFee | moneyFormat}}元</span>
       <i v-if="Waybill.settlementType">{{Waybill.settlementType | settlementTypeFormat}}</i>
