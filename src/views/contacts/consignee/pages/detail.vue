@@ -69,9 +69,8 @@ export default {
   },
   methods: {
     ...mapActions(moudleName, ['loadConsigneeDetail', 'removeConsignee']),
-    async onPageRefresh() {
-      await this.loadConsigneeDetail()
-      this.setButton()
+    onPageRefresh() {
+      this.loadConsigneeDetail()
     },
     callPhone () {
       window.location.href = `tel:${this.consigneeDetail.phone}`
@@ -105,6 +104,9 @@ export default {
         }
       ])
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => vm.setButton())
   }
 }
 </script>

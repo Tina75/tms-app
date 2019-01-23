@@ -26,7 +26,7 @@ const lists = [
   {
     // 承运商
     key: 'contact',
-    url: '/carrier/list?carrierType=2&type=2',
+    url: '/carrier/list?carrierType=2&type=2&order=update_time,desc',
     itemParser(data) {
       return {
         id: data.id,

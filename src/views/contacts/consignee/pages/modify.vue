@@ -27,7 +27,7 @@
           prop="phone"
           label="联系电话"
           placeholder="请输入手机号或座机号"
-          :maxlength="maxlength"
+          :maxlength="20"
           type="phone"
         />
       </div>
@@ -64,7 +64,7 @@
 import LoadingButton from '@/components/LoadingButton'
 import { FormGroup, FormItem } from '@/components/Form'
 import { mapActions, mapState, mapGetters } from 'vuex'
-import { validatePhone, ConsigneeDetail } from '../modules/model'
+import { consigneeRule, ConsigneeDetail } from '../modules/model'
 const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeAdd',
@@ -77,19 +77,7 @@ export default {
   data() {
     return {
       showPickCity: false,
-      rules: {
-        consigner: { required: true },
-        contact: { required: true },
-        phone: {
-          required: true,
-          type: 'string',
-          validatePhone: validatePhone,
-          messages: {
-            validatePhone: '请输入正确的手机号或座机号'
-          }
-        },
-        address: { required: true }
-      },
+      rules: consigneeRule,
       submiting: false,
       confirmed: false
     }
@@ -99,12 +87,6 @@ export default {
     ...mapGetters(moudleName, ['formList', 'saveAddress']),
     isEdit () {
       return !this.$route.query.consigneeId
-    },
-    maxlength () {
-      if (this.formList.phone && +this.formList.phone[0] === 1) {
-        return 15
-      }
-      return 20
     }
   },
   methods: {

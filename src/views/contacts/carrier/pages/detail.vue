@@ -6,11 +6,11 @@
         <div class="carrier-detail__flex">
           <div class="cube-mt-15">
             <i class="cubeic-person cube-mr-10" style="color: #FCA950"/>
-            <span class="cube-mr-10" v-text="viewData.carrierPrincipal"/>
+            <span class="cube-mr-10 cube-ellipsis carrier-detail__carrierPrincipal" v-text="viewData.carrierPrincipal"/>
             <span v-text="viewData.carrierPhone"/>
           </div>
           <div v-if="viewData.customerCarrierPhone" class="cube-mt-10">
-            <i class="iconfont icon-lianxikefu cube-mr-10"/>
+            <i class="iconfont icon-ico_KF cube-mr-10"/>
             <span class="cube-mr-10">客服</span>
             <span v-text="viewData.customerCarrierPhone"/>
           </div>
@@ -26,7 +26,7 @@
     <CellItem
       class="cube-mt-15"
       label="合作车辆"
-      left-icon="icon-ico_driver"
+      left-icon="icon-ico_driver cube-font-21"
       :right-title="viewData.carCnt"
       @click="$router.push({name: 'contacts-carrier-truck', query:{carrierId: viewData.id}})"
     />
@@ -104,7 +104,7 @@ export default {
 }
 </script>
 
-<style lang='stylus' scoped>
+<style lang='stylus'>
 .carrier-detail
   .cell-item
     background #fff
@@ -125,4 +125,7 @@ export default {
     align-items flex-end
   &__flex
     flex 1
+  &__carrierPrincipal
+    display inline-block
+    max-width 155px
 </style>

@@ -101,7 +101,6 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      console.log(vm.feeInfo)
       for (let key in vm.form) {
         vm.form[key] = vm.feeInfo[key] === undefined || vm.feeInfo[key] === '' ? '' : NP.divide(vm.feeInfo[key], 100)
       }

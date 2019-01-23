@@ -127,7 +127,6 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(async vm => {
-      console.log(vm.consumerInfo)
       for (let key in vm.form) {
         vm.form[key] = vm.consumerInfo[key] === undefined ? '' : vm.consumerInfo[key]
       }

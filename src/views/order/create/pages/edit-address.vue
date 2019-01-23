@@ -180,7 +180,6 @@ export default {
     },
 
     async submit () {
-      console.log(await this.$refs.$form.validate())
       if (!(await this.$refs.$form.validate())) return window.toast('请填写详细地址')
       this.SET_ADDRESS_INFO(Object.assign({}, this.form, { cityName: this.localeView.split('/').join('') }))
       this.$formWillLeave(() => {

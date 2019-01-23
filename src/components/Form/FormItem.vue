@@ -153,6 +153,9 @@ export default {
       return (ph || '请输入') + (this.inputRequired ? '(必填)' : '')
     },
     inputMaxLength () {
+      if (this.type === 'phone' && +this.value[0] === 1) {
+        return 15
+      }
       const maxlength = Number(this.maxlength)
       if (isNaN(maxlength)) return Infinity
       return maxlength
@@ -209,15 +212,14 @@ export default {
   methods: {
     iconClickHandler () { if (!this.inputDisabled) this.$emit('on-icon-click') },
     inputClickHandler () { if (this.type === 'click' && !this.inputDisabled) this.$emit('on-click') },
-    inputBlurHandler () {
+    inputBlurHandler (e) {
       if (this.type === 'click') return
-      this.$emit('on-blur', this.inputValue)
+      this.$emit('on-blur', e)
       this.doValidate()
     },
     inputFocusHandler (e) {
-      // console.log(e)
-      this.$emit('on-focus', this.inputValue)
-      if (this.focusOnEnd) {
+      this.$emit('on-focus', e)
+      if (this.focusOnEnd && this.type !== 'textarea') {
         this.$nextTick(() => this.moveToEnd(e.target))
       }
     },

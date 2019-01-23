@@ -20,8 +20,8 @@
  * 路由参数
  * partnerType {required} 1-发货方 2-承运商 3-外转方
  * partnerId {required}
- * departure 出发地code
- * destination 目的地code
+ * departure {required} 出发地code
+ * destination {required} 目的地code
  * weight 重量（公斤）
  * volume 体积
  * distance 距离（米）
@@ -80,8 +80,8 @@ export default {
     next(async vm => {
       vm.CLEAR_CALCULATED_AMOUNT()
       vm.loading = true
-      const { partnerType, partnerId } = vm.info
-      if (!partnerType || !partnerId) {
+      const { partnerType, partnerId, departure, destination } = vm.info
+      if (!partnerType || !partnerId || !departure || !destination) {
         // window.toast('缺少参数')
         // vm.$router.back()
         vm.loading = false
