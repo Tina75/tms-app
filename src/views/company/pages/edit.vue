@@ -1,8 +1,8 @@
 <template>
-  <div class="create-order-page scroll-list-wrap">
-    <cube-scroll class="scroll-box">
-      <form-group ref="$form" class="form" :rules="rules">
-        <div v-if="step === 1" key="1">
+  <div class="create-order-page scroll-list-wrap scroll-box">
+    <form-group ref="$form" class="form" :rules="rules">
+      <cube-scroll v-if="step === 1" key="1">
+        <div>
           <div class="form-section">
             <form-item
               v-model="companyInfo.name"
@@ -114,7 +114,9 @@
               maxlength="50" />
           </div>
         </div>
-        <div v-if="step === 2" key="2">
+      </cube-scroll>
+      <cube-scroll v-if="step === 2" key="2" class="scroll-box">
+        <div>
           <div class="form-section">
             <div class="cardInfo">
               <div class="cardInfo-content edit">
@@ -173,7 +175,9 @@
             </div>
           </div>
         </div>
-        <div v-if="step === 3" key="3">
+      </cube-scroll>
+      <cube-scroll v-if="step === 3" key="3" class="scroll-box">
+        <div>
           <div class="form-section">
             <div class="cardInfo-content edit">
               <span class="cardTitle">公司风貌（{{companyPhotoList.length}}/10）</span>
@@ -193,25 +197,23 @@
             </div>
           </div>
         </div>
-      </form-group>
-    </cube-scroll>
-    <div class="foot">
-      <cube-button
-        v-if="step < 3"
-        type="submit"
-        class="footer-button"
-        primary
-        @click="nextSetp">
-        下一步 {{step}}/{{setpCount}}
-      </cube-button>
-      <cube-button
-        v-else
-        class="footer-button"
-        primary
-        @click="save">
-        保存
-      </cube-button>
-    </div>
+      </cube-scroll>
+    </form-group>
+    <cube-button
+      v-if="step < 3"
+      type="submit"
+      class="footer-button"
+      primary
+      @click="nextSetp">
+      下一步 {{step}}/{{setpCount}}
+    </cube-button>
+    <cube-button
+      v-else
+      class="footer-button"
+      primary
+      @click="save">
+      保存
+    </cube-button>
   </div>
 </template>
 <script>
@@ -294,16 +296,26 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
-    next(async vm => {
-      await vm.getCompanyData()
-      await vm.onPageRefresh()
-      vm.step = 1
-    })
-  },
-  mounted () {
-    this.getCompanyData()
-    this.onPageRefresh()
-    this.step = 1
+    if (from.name === 'image-preview') {
+      next(async vm => {
+        setTimeout(() => {
+          setAppTitleBtn({
+            text: '返回',
+            position: 'left',
+            action: () => {
+              if (vm.step > 1) vm.step = --vm.step
+              else vm.$router.push({ name: 'company' })
+            }
+          })
+        }, 200)
+      })
+    } else {
+      next(async vm => {
+        await vm.getCompanyData()
+        await vm.onPageRefresh()
+        vm.step = 1
+      })
+    }
   },
   methods: {
     ...mapActions(['getCompanyInfo', 'saveCompanyInfo']),

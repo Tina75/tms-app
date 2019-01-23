@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <cube-scroll class="scroll-box">
+  <div class="scroll-box">
+    <cube-scroll>
       <div class="head-div">
         <p class="head-p">完善并分享公司名片，有利于提升品牌影响力哦</p>
       </div>
@@ -121,12 +121,10 @@
         </div>
       </div>
     </cube-scroll>
-    <div class="foot">
-      <cube-button
-        class="footer-button"
-        primary
-        @click="sharePath">分享</cube-button>
-    </div>
+    <cube-button
+      class="footer-button"
+      primary
+      @click="sharePath">分享</cube-button>
     <!-- <div v-show="sharFoot" class="share-foot">
       <div class="share-div">
         <p class="share-title">分享到</p>
@@ -209,7 +207,7 @@ export default {
           text: '修改',
           iconType: 'edit',
           action: () => {
-            this.$router.push({ name: 'company-edit' })
+            this.$router.push({ name: 'company-edit', params: { 'step': 1 } })
           }
         }
       ])
@@ -268,7 +266,6 @@ export default {
       param.desc = '物流运输管理就用运掌柜TMS，免费试用'
       param.url = this.shareUrl
       param.thumburl = this.formatImag(this.companyInfo.logoUrl)
-      param.platformType = ''
       param.log = {}
       bridge.call('navigation.share', { ...param }, function(result) {
       })
