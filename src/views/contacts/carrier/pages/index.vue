@@ -57,8 +57,9 @@ export default {
       this.loadContactList(refresh)
     },
     onPageRefresh() {
-      console.info('onRefreshPage')
       this.loading = true
+    },
+    setBtns () {
       setAppRightBtn([
         {
           text: '添加',
@@ -75,6 +76,9 @@ export default {
     onItemClick(item, index) {
       this.$router.push({ name: 'contacts-carrier-detail', query: { carrierId: item.id } })
     }
+  },
+  beforeRouteEnter: (to, from, next) => {
+    next(vm => vm.setBtns())
   }
 }
 </script>
