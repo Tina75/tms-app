@@ -3,7 +3,12 @@
     <FromGroup ref="form" :rules="rules" >
       <FormItem v-model="model.driverName" label="司机姓名" :maxlength="rules.driverName.max" prop="driverName"/>
       <FormItem v-model="model.driverPhone" label="手机号" type="phone" :maxlength="rules.driverPhone.max" prop="driverPhone"/>
-      <FormItem v-model="model.carNO" label="车牌号" class="cube-mb-15" prop="carNO"/>
+      <FormItem
+        v-model="model.carNO"
+        label="车牌号"
+        type="click"
+        prop="carNO"
+        @on-click="showKeyboard = true"/>
 
       <FormItem
         v-model="model.carType"
@@ -41,13 +46,23 @@
       <card class="cube-mb-15" title="证件上传">
         <div class="uploadWrap">
           <upload v-model="model.drivePhoto" label="点击上传行驶证"/>
-          <upload v-model="model.travelPhoto" label="点击上传道路运输证"/>
+          <upload v-model="model.travelPhoto" label="点击上传驾驶证"/>
         </div>
       </card>
 
       <FormItem v-model="model.remark" prop="remark" :maxlength="rules.remark.max" type="textarea" label="备注"/>
     </FromGroup>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
+    <cube-popup
+      ref="popup"
+      v-model="showKeyboard"
+      :mask-closable="true"
+      position="bottom">
+      <Keyboard
+        v-model="model.carNO"
+        @cancel="showKeyboard=false"
+        @confirm="showKeyboard=false" />
+    </cube-popup>
   </div>
 </template>
 <script>
@@ -59,6 +74,7 @@ import { DriverDetail } from '../modules/model'
 import Upload from '../../components/Upload'
 import Card from '../../components/Card'
 import TransportLine from '../../components/TransportLine'
+import Keyboard from '../../components/keyboard'
 import { driverRule } from '../modules/rules'
 const moudleName = 'contacts/driver'
 
@@ -69,7 +85,7 @@ export default {
       title: this.isCreate ? '新增熟车司机' : '修改熟车司机'
     }
   },
-  components: { FormItem, FromGroup, LoadingButton, Upload, Card, TransportLine },
+  components: { FormItem, FromGroup, LoadingButton, Upload, Card, TransportLine, Keyboard },
   data() {
     return {
       model: new DriverDetail(),
@@ -80,6 +96,7 @@ export default {
       },
       rules: driverRule,
       submiting: false,
+      showKeyboard: false,
       purchDate: '', // 生产日期
       regularLine1: '', // 常发线路1
       regularLine2: '' // 常发线路2
@@ -154,8 +171,9 @@ export default {
           // 更新了detail的则要刷新detail页
           this.$refreshPage('contacts-driver-detail')
         }
-        this.setRegularLine()
         this.model = DriverDetail.toForm(this.driverDetail)
+        this.setRegularLine()
+        console.log(this.model)
       } else {
         this.model = new DriverDetail()
       }
@@ -164,7 +182,7 @@ export default {
     setRegularLine () {
       try {
         // console.log(this.driverDetail.regularLine)
-        const serveData = JSON.parse(this.driverDetail.regularLine)
+        const serveData = JSON.parse(this.model.regularLine)
         if (Array.isArray(serveData)) {
           this.regularLine1 = serveData[0] || {}
           this.regularLine2 = serveData[1] || {}
