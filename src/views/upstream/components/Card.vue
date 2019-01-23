@@ -6,7 +6,7 @@
     </div>
     <div class="consignee-info">
       <div class="city">
-        {{data.departureCityName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{data.destinationCityName}}
+        {{data.departureCityName | textOverflow(7)}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{data.destinationCityName | textOverflow(7)}}
       </div>
       <div class="cargos">
         <div class="cargo-infos">{{cargoName}}</div>
@@ -64,9 +64,11 @@ export default {
       const arr = this.data.cargoInfoDTO
       if (arr.length) {
         const cargoNm = arr[0].name
-        name = cargoNm.length > 10 ? `${cargoNm.substr(0, 10)}...` : cargoNm
-        if (arr.length > 1) {
-          name += '等'
+        if (cargoNm) {
+          name = cargoNm.length > 10 ? `${cargoNm.substr(0, 10)}...` : cargoNm
+          if (arr.length > 1) {
+            name += '等'
+          }
         }
       }
       return name
