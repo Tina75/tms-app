@@ -1,6 +1,6 @@
 <template>
   <div class="scroll-list-wrap">
-    <cube-scroll v-if="showPage" class="scroll-box">
+    <cube-scroll v-if="showPage" ref="$scroll" class="scroll-box">
       <div class="cargo-form-box">
         <form-group ref="$form" :rules="rules">
           <div v-for="(form, index) in formList" :key="index" class="form-section">
@@ -19,33 +19,38 @@
               required
               maxlength="200"
               click-icon="icon-ico_boxx"
-              @on-icon-click="chooseCargoInfo(index)" />
+              @on-icon-click="chooseCargoInfo(index)"
+              @on-focus="inputFocus" />
             <form-item
               v-if="orderConfig.weightTonOption"
               v-model="form.weight"
               prop="weight"
               label="重量(吨)"
               type="number"
-              precision="3" />
+              precision="3"
+              @on-focus="inputFocus" />
             <form-item
               v-if="orderConfig.weightKgOption"
               v-model="form.weightKg"
               prop="weightKg"
               label="重量(公斤)"
-              type="number" />
+              type="number"
+              @on-focus="inputFocus" />
             <form-item
               v-if="orderConfig.volumeOption"
               v-model="form.volume"
               prop="volume"
               label="体积(方)"
               type="number"
-              precision="6" />
+              precision="6"
+              @on-focus="inputFocus" />
             <form-item
               v-if="orderConfig.cargoCostOption"
               v-model="form.cargoCost"
               label="货值(元)"
               type="number"
-              precision="4" />
+              precision="4"
+              @on-focus="inputFocus" />
             <form-item
               v-if="orderConfig.unitOption"
               v-model="form.unit"
@@ -57,7 +62,8 @@
               v-model="form.quantity"
               prop="quantity"
               type="number"
-              label="包装数量" />
+              label="包装数量"
+              @on-focus="inputFocus" />
             <form-item
               v-if="orderConfig.dimensionOption"
               v-model="form.size"
@@ -70,21 +76,24 @@
               v-if="orderConfig.cargoNoOption"
               v-model="form.cargoNo"
               label="货物编码"
-              maxlength="200" />
+              maxlength="200"
+              @on-focus="inputFocus" />
             <form-item
               v-if="orderConfig.remark1Option"
               v-model="form.remark1"
               label="备注1"
               placeholder="请输入(最多输入200字)"
               type="textarea"
-              maxlength="200" />
+              maxlength="200"
+              @on-focus="inputFocus" />
             <form-item
               v-if="orderConfig.remark2Option"
               v-model="form.remark2"
               label="备注2"
               placeholder="请输入(最多输入200字)"
               type="textarea"
-              maxlength="200" />
+              maxlength="200"
+              @on-focus="inputFocus" />
             <!-- <form-item
               v-if="orderConfig.remark3Option"
               v-model="form.remark3"
@@ -136,6 +145,7 @@ import NP from 'number-precision'
 import { mapGetters, mapMutations } from 'vuex'
 import { FormGroup, FormItem, FormTitle } from '@/components/Form'
 import dialogs from '../js/cargoDialog'
+import inputAutoPosition from '../js/inputAutoPosition'
 const CARGO_IMAGE = require('../assets/box.png')
 
 export default {
@@ -144,6 +154,8 @@ export default {
   data () {
     return {
       showPage: true,
+      windowOriginHeight: 0,
+      windowIsResize: false,
       CARGO_IMAGE,
       formList: [],
       cargoIndex: void 0,
@@ -179,6 +191,7 @@ export default {
     }
   },
   methods: {
+    ...inputAutoPosition,
     ...mapMutations('order/create', [ 'CLEAR_CARGO_OFTEN', 'SET_CARGO_LIST' ]),
     // 初始化货物信息
     initCargoList (fromName) {
@@ -258,6 +271,7 @@ export default {
 
   beforeRouteEnter (to, from, next) {
     next(vm => {
+      vm.setWindowResizeListener()
       vm.initCargoList(from.name)
       vm.showPage = false
       vm.$nextTick(() => { vm.showPage = true })

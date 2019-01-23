@@ -1,6 +1,6 @@
 <template>
   <div class="create-order-page">
-    <cube-scroll v-if="showPage" class="scroll-box">
+    <cube-scroll v-if="showPage" ref="$scroll" class="scroll-box">
       <!-- <cube-button primary @click="$router.push({ name: 'order-often' })">常发订单</cube-button> -->
       <form-group
         ref="$form"
@@ -19,18 +19,21 @@
             autofocus
             maxlength="20"
             click-icon="icon-ico_custerm"
-            @on-icon-click="gotoConsignerPage" />
+            @on-icon-click="gotoConsignerPage"
+            @on-focus="inputFocus" />
           <form-item
             v-model="orderInfo.consignerContact"
             prop="consignerContact"
             maxlength="15"
-            label="发货人" />
+            label="发货人"
+            @on-focus="inputFocus" />
           <form-item
             v-model="orderInfo.consignerPhone"
             prop="consignerPhone"
             label="联系号码"
             maxlength="20"
-            @input="consignerPhoneInputHandler" />
+            @input="consignerPhoneInputHandler"
+            @on-focus="inputFocus" />
           <form-item
             v-model="orderInfo.consignerAddressText"
             prop="consignerAddressText"
@@ -57,13 +60,15 @@
             label="收货人"
             maxlength="15"
             click-icon="icon-ico_custerm"
-            @on-icon-click="gotoConsigneePage" />
+            @on-icon-click="gotoConsigneePage"
+            @on-focus="inputFocus" />
           <form-item
             v-model="orderInfo.consigneePhone"
             prop="consigneePhone"
             label="联系号码"
             maxlength="20"
-            @input="consigneePhoneInputHandler" />
+            @input="consigneePhoneInputHandler"
+            @on-focus="inputFocus" />
           <form-item
             v-model="orderInfo.consigneeAddressText"
             prop="consigneeAddressText"
@@ -76,7 +81,8 @@
             v-if="orderConfig.consigneeCompanyNameOption"
             v-model="orderInfo.consigneeCompanyName"
             label="收货人单位"
-            maxlength="50" />
+            maxlength="50"
+            @on-focus="inputFocus" />
         </div>
 
         <div class="form-section">
@@ -108,7 +114,8 @@
             v-model="orderInfo.receiptCount"
             prop="receiptCount"
             type="number"
-            label="回单数量(份)" />
+            label="回单数量(份)"
+            @on-focus="inputFocus" />
         </div>
 
         <div class="form-section">
@@ -117,7 +124,8 @@
             v-model="orderInfo.mileage"
             type="number"
             label="计费里程(公里)"
-            precision="1" />
+            precision="1"
+            @on-focus="inputFocus" />
           <form-item
             v-model="orderInfo.freightFee"
             prop="freightFee"
@@ -125,7 +133,8 @@
             label="运输费用(元)"
             precision="4"
             click-icon="icon-ico_rule"
-            @on-icon-click="gotoChargeRulePage" />
+            @on-icon-click="gotoChargeRulePage"
+            @on-focus="inputFocus" />
         </div>
 
         <div class="form-section">
@@ -162,6 +171,7 @@ import gotoOtherPages from '../js/createGotoOtherPage'
 import showData from '../js/createShowData'
 import orderSubmit from '../js/createSubmit'
 import createInit from '../js/createInit'
+import inputAutoPosition from '../js/inputAutoPosition'
 
 const IMAGES = {
   ACCEPT: require('../assets/accept.png'),
@@ -207,6 +217,8 @@ export default {
       mode: '',
       id: '',
       loading: false,
+      windowOriginHeight: 0,
+      windowIsResize: false,
       settlementOptions: SETTLEMENT_TYPE,
       pickupOptions: PICKUP_TYPE,
       rules: {
@@ -258,13 +270,15 @@ export default {
     ...gotoOtherPages,
     ...showData,
     ...orderSubmit,
-    ...createInit
+    ...createInit,
+    ...inputAutoPosition
   },
 
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.mode = vm.$route.meta.mode
       vm.id = vm.$route.params.id
+      vm.setWindowResizeListener()
       vm.$nextTick(async () => {
         vm.setTitleButtons()
         const fromPage = from.name
