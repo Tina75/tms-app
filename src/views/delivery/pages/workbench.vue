@@ -59,7 +59,7 @@ export default {
     ...mapGetters('delivery', ['DispatchList'])
   },
 
-  created () {
+  activated () {
     this.info = this.$route.params.info
     this.startCode = this.info.start
     this.endCode = this.info.end
