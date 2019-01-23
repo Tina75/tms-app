@@ -1,4 +1,5 @@
 import bridge from './dsbridge'
+import router from '@/router'
 import { reuse } from './util'
 
 export const getUserInfo = reuse(() => {
@@ -49,27 +50,36 @@ export const closeWindow = (config = {}) => {
     bridge.call('webviews.close', { id }, () => {})
   }
 }
-
-let appBtn = {
-  right: 0
-}
-// 设置标题栏按钮
-export const setAppTitleBtn = (option) => {
-  const { action, position, ...config } = option
-  if (typeof action === 'function') {
-    let isLeft = position === 'left'
-    let protocol = isLeft ? 'ui.setLeftButtonAction' : (appBtn.right = 1 && 'ui.setRightButtonAction')
-    config.action = isLeft ? 'appLeftBtn_H5' : 'appRightBtn_H5'
-    bridge.call(protocol, config, () => {})
-    bridge.register(config.action, action, false)
-    console.warn('setAppBtn: ' + protocol, config)
-  }
-}
 // 按钮类型
 const type = {
   add: 'ui/ico-add.png',
   delete: 'ui/ico-delete.png',
-  edit: 'ui/ico-edit.png'
+  edit: 'ui/ico-edit.png',
+  back: 'ui/ico-back.png'
+}
+const appBtn = {
+  right: 0, // 标记设置过右侧按钮
+  globalBack: 0 // 标记左侧返回按钮是否被设置
+}
+// 设置标题栏按钮
+export const setAppTitleBtn = (option) => {
+  const { action, position, iconType, ...config } = option
+  if (typeof action === 'function') {
+    let isLeft = position === 'left'
+    let protocol = isLeft ? 'ui.setLeftButtonAction' : 'ui.setRightButtonAction'
+    config.action = isLeft ? 'appLeftBtn_H5' : 'appRightBtn_H5'
+    if (iconType) {
+      config.url = process.env.VUE_APP_IMG_HOST + type[iconType]
+    }
+    if (isLeft) {
+      appBtn.globalBack = 0
+    } else {
+      appBtn.right = 1
+    }
+    bridge.call(protocol, config, () => {})
+    bridge.register(config.action, action, false)
+    console.warn('setAppBtn: ' + protocol, config)
+  }
 }
 // 设置标题栏右边按钮
 export const setAppRightBtn = (options = []) => {
@@ -93,6 +103,18 @@ export const setAppRightBtn = (options = []) => {
   bridge.call('ui.setRightButtonAction', { list: arr }, () => {})
 }
 
+export const setGlobalBack = (vm) => {
+  if (!appBtn.globalBack) {
+    appBtn.globalBack = 1
+    setAppTitleBtn({
+      text: '返回',
+      iconType: 'back',
+      position: 'left',
+      action: router.back
+    })
+  }
+}
+
 // 默认清设置过的右侧按钮, 左侧按钮默认是返回键, 应该手动控制清除
 export const clearAppTitleBtn = (left) => {
   const empty = {
@@ -101,12 +123,13 @@ export const clearAppTitleBtn = (left) => {
     url: '',
     img: ''
   }
-  const doNothing = () => {}
   if (left) {
     console.warn('clearAppBtn')
-    bridge.call('ui.setLeftButtonAction', empty, doNothing)
+    if (!appBtn.globalBack) {
+      setGlobalBack()
+    }
   } else if (appBtn.right) {
-    bridge.call('ui.setRightButtonAction', empty, doNothing)
+    bridge.call('ui.setRightButtonAction', empty, () => {})
     appBtn.right = 0
   }
 }
@@ -162,9 +185,7 @@ export const appCallRefresh = (callback = () => {}) => {
 }
 
 /** 新开webview */
-export const appOpenWebview = () => {
-
-}
+export const appOpenWebview = () => {}
 
 // 拼成url参数
 function parseToStr(data = {}) {
