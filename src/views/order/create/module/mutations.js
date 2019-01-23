@@ -1,4 +1,5 @@
 import NP from 'number-precision'
+import { addressConcat } from '../../js/filters'
 
 export default {
   // 设置开单配置
@@ -122,7 +123,7 @@ export default {
       info.consignerAddressLongitude = payload.longitude
       info.consignerAddressLatitude = payload.latitude
       info.consignerAddressLocale = payload.locale
-      info.consignerAddressText = payload.cityName + payload.address + payload.extra
+      info.consignerAddressText = addressConcat(payload.address, payload.cityName, payload.extra)
     } else {
       info.end = payload.cityCode
       info.endCityName = payload.cityName
@@ -131,7 +132,7 @@ export default {
       info.consigneeAddressLongitude = payload.longitude
       info.consigneeAddressLatitude = payload.latitude
       info.consigneeAddressLocale = payload.locale
-      info.consigneeAddressText = payload.cityName + payload.address + payload.extra
+      info.consigneeAddressText = addressConcat(payload.address, payload.cityName, payload.extra)
     }
     state.currentArrdessType = ''
     state.addressChanged = true

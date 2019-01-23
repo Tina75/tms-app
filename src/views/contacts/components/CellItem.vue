@@ -2,7 +2,7 @@
   <div class="normal-cell" @click="$emit('click')">
     <div class="normal-cell__group">
       <slot name="left">
-        <i v-if="leftIcon" :class="leftIcon" class="normal-cell__icon iconfont cube-font-16 cube-mr-10"/>
+        <i v-if="leftIcon" :class="leftIcon" class="normal-cell__icon iconfont cube-font-17 cube-mr-10"/>
       </slot>
       <span class="normal-cell__label cube-font-15 cube-c-black" v-text="label"/>
     </div>
@@ -11,7 +11,7 @@
         <i v-if="rightIcon" :class="rightIcon" class="normal-cell__icon iconfont cube-font-16 cube-mr-5"/>
       </slot>
       <span v-if="rightTitle" class="cube-font--15 cube-c-grey" v-text="rightTitle"/>
-      <i v-if="showArrow" class="cube-font-12 cube-ml-5 iconfont icon-ico_right" style="color:#C5C8CE"/>
+      <i v-if="showArrow" class="cube-font-12 cube-ml-5 iconfont icon-ico_right cube-font-weight" style="color:#C5C8CE"/>
     </div>
   </div>
 </template>
@@ -52,6 +52,9 @@ export default {
   justify-content space-between
   &__icon
     color #6C798E
+    vertical-align middle
+    position relative
+    top -1px
   &__group
     display flex
     align-items center

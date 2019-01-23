@@ -30,8 +30,8 @@
               required
               clearable
               @input="busPhoneInputHandler"/>
-            <div v-if="!(contact1 && contact2 && contact3)" class="cardInfo-content edit">
-              <p class="addContact"><span @click="addContact">+添加更多联系人</span></p>
+            <div v-if="!(contact1 && contact2 && contact3)" class="cardInfo-content edit" @click="addContact">
+              <p class="addContact"><span>+添加更多联系人</span></p>
             </div>
           </div>
           <!-- 业务联系 -->
@@ -50,8 +50,8 @@
               clearable
               required
               @input="contactPhoneInputHandler1"/>
-            <div class="cardInfo-content edit">
-              <p class="removeContact"><span @click="removeContact('contact1', 1)">删除该联系人</span></p>
+            <div class="cardInfo-content edit" @click="removeContact('contact1', 1)">
+              <p class="removeContact"><span>删除该联系人</span></p>
             </div>
           </div>
           <div v-if="contact2" class="form-section">
@@ -69,8 +69,8 @@
               clearable
               required
               @input="contactPhoneInputHandler2"/>
-            <div class="cardInfo-content edit">
-              <p class="removeContact"><span @click="removeContact('contact2', 2)">删除该联系人</span></p>
+            <div class="cardInfo-content edit" @click="removeContact('contact2', 2)">
+              <p class="removeContact"><span>删除该联系人</span></p>
             </div>
           </div>
           <div v-if="contact3" class="form-section">
@@ -88,8 +88,8 @@
               clearable
               required
               @input="contactPhoneInputHandler3"/>
-            <div class="cardInfo-content edit">
-              <p class="removeContact"><span @click="removeContact('contact3', 3)">删除该联系人</span></p>
+            <div class="cardInfo-content edit" @click="removeContact('contact3', 3)">
+              <p class="removeContact"><span>删除该联系人</span></p>
             </div>
           </div>
           <!-- 业务联系 -->
@@ -513,6 +513,8 @@ export default {
   overflow: -webkit-paged-x;
 >>>.textarea .border-bottom-1px:after
   border none
+>>>textarea.form-item-input.form-item-textarea
+  line-height 20px
 .form
   margin-bottom 15px
   &-section

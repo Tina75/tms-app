@@ -69,12 +69,18 @@ export default {
   },
   methods: {
     ...mapActions(moudleName, ['loadConsigneeDetail', 'removeConsignee']),
-    onPageRefresh() {
-      this.loadConsigneeDetail()
+    async onPageRefresh() {
+      await this.loadConsigneeDetail()
       this.setButton()
     },
     callPhone () {
       window.location.href = `tel:${this.consigneeDetail.phone}`
+    },
+    async remove () {
+      await this.removeConsignee({ id: this.consigneeDetail.id })
+      this.$refreshPage('contacts-consignee')
+      window.toast('删除成功')
+      this.$router.back(true)
     },
     setButton() {
       setAppRightBtn([
@@ -86,18 +92,7 @@ export default {
               type: 'confirm',
               content: '确定删除？',
               icon: 'cubeic-alert',
-              onConfirm: () => {
-                const data = {
-                  id: this.consigneeDetail.id
-                }
-                try {
-                  this.removeConsignee(data)
-                } catch (e) {
-                  console.log(e)
-                } finally {
-                  this.$router.back()
-                }
-              }
+              onConfirm: this.remove.bind(this)
             }).show()
           }
         },

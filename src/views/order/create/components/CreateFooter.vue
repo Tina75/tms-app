@@ -141,6 +141,7 @@ export default {
         height 44px
         padding 0
         border-radius 0
+        font-weight bold
 
         &:first-child
           background #27C4D3
