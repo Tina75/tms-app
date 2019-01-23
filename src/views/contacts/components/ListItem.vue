@@ -2,7 +2,7 @@
   <div class="contact-item border-bottom-1px cube-ellipsis" @click="$emit('click', item, index)">
     <div class="contact-item__prefix cube-flex-center">
       <slot name="left">
-        <span v-if="useNameIcon" v-text="prefix"/>
+        <span v-if="useNameIcon" class="cube-font-weight cube-font-17" v-text="prefix"/>
         <i v-else class="iconfont cube-font-22" :class="icon"/>
       </slot>
     </div>
@@ -77,7 +77,7 @@ export default {
   display flex
   background #fff
   align-items center
-  padding 10px 15px
+  padding 15px 15px
   &:first-of-type // 列表页暂时没有写搜索框的时候要和标题有分割线
     margin-top 5px
   &:last-of-type:after
@@ -89,7 +89,6 @@ export default {
     height 40px
     width 40px
     background #E4E7EC
-    font-size 17px
     color #fff
     border-radius 100%
   &__right-icon
