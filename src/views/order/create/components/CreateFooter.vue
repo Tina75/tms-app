@@ -8,8 +8,8 @@
          @click.prevent="showDetail = !showDetail">
         <span class="total-tip">费用合计：</span>
         <money-label class="total-money" :money="total" />
-        <icon-font class="total-detail" :class="{ 'rotate': !showDetail }" name="icon-ico_up" />
       </a>
+      <icon-font class="total-detail" :class="{ 'rotate': !showDetail }" name="icon-ico_up" />
     </div>
     <div class="footer-item">
       <cube-button
@@ -100,8 +100,8 @@ export default {
 
     .footer-item
       display flex
+      align-items center
       height 44px
-      line-height 44px
 
       &-select
         flex none
@@ -118,29 +118,31 @@ export default {
         display block
         position relative
         margin-right 15px
+        padding-right 27px
         font-size 14px
         text-align right
-        background #ffffff
+        line-height 1.3
+        z-index 1
 
         .total-tip
           color #333333
-        .total-money
-          margin-right 27px
-        .total-detail
-          position absolute
-          display block
-          right 0
-          top 13px
-          width 17px
-          height 17px
-          line-height 17px
-          color #C5C8CE
+
+      .total-detail
+        position absolute
+        display block
+        right 15px
+        top 13px
+        width 17px
+        height 17px
+        color #C5C8CE
+        z-index 0
 
       &-button
         flex 1
         height 44px
         padding 0
         border-radius 0
+        font-weight bold
 
         &:first-child
           background #27C4D3

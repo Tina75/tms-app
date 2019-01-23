@@ -1,4 +1,4 @@
-import { setAppTitleBtn, clearAppTitleBtn, closeWindow } from '@/libs/bridgeUtil'
+import { setGlobalBack, clearAppTitleBtn, closeWindow } from '@/libs/bridgeUtil'
 import Vue from 'vue'
 import router from '@/router'
 import PLUGINS from './routerPlugin'
@@ -64,7 +64,7 @@ Vue.mixin({
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       try {
-        setGlobalBack(vm)
+        setGlobalBack()
         if (ENTER_HANDLERS_LENGTH) {
           ENTER_HANDLERS.forEach((handler) => handler(to, from, vm))
         }
@@ -121,14 +121,4 @@ function getHandlerArr(target, key) {
     }
     return arr
   }, [])
-}
-
-function setGlobalBack(vm) {
-  setAppTitleBtn({
-    text: '返回',
-    position: 'left',
-    action: () => {
-      vm.$router.back()
-    }
-  })
 }

@@ -31,7 +31,7 @@
               <span>{{ item.consigneePhone }}</span>
             </p>
             <p class="order-body-user">
-              {{ item.consigneeAddress }}
+              {{ item.consigneeAddress | addressConcat(item.endName, item.consigneeHourseNumber) }}
             </p>
           </div>
 
@@ -70,14 +70,14 @@
 import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
-import NO_DATA from '@/assets/img-no-data.png'
-import { settlementType, totalFee } from '../../js/filters'
+import NO_DATA from '@/assets/img-no-often.png'
+import { settlementType, totalFee, addressConcat } from '../../js/filters'
 
 export default {
   name: 'order-often',
   metaInfo: { title: '常发订单' },
   components: { NoData, InfiniteList },
-  filters: { settlementType, totalFee },
+  filters: { settlementType, totalFee, addressConcat },
   data () {
     return {
       NO_DATA,
@@ -141,6 +141,9 @@ export default {
   .order-company
     height 33px
     line-height 33px
+    white-space nowrap
+    text-overflow ellipsis
+    overflow hidden
 
   .order-footer
     display flex
@@ -156,8 +159,10 @@ export default {
       .info-money
         font-size 20px
         color #FA8C15
+        font-weight bold
         span
           font-size 14px
+          font-weight bold
     &-button
       flex none
       &-item
@@ -186,6 +191,7 @@ export default {
     padding-bottom 14px
     &-cities
       display flex
+      line-height 1.1
       font-size 18px
       font-weight bold
       i
@@ -208,7 +214,7 @@ export default {
         padding 0 4px
         margin-right 10px
         line-height 18px
-        background #F8F8F9
+        background #f3f5f9
     &-user
       font-size 12px
       color #666666

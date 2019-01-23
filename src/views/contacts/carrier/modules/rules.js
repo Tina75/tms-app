@@ -74,24 +74,21 @@ export const truckRule = {
   carLength: {
     required: true
   },
-  // price: {
-  //   pattern: /^(\d+(\.\d{1,4})?$)$/,
-  //   message: {
-  //     pattern: '数字,最多支持4位小数'
-  //   }
-  // },
-  // weight: {
-  //   pattern: /^\d*$/,
-  //   message: {
-  //     pattern: '请输入整数'
-  //   }
-  // },
-  // volume: {
-  //   pattern: /^(\d+(\.\d{1,6})?$)$/,
-  //   message: {
-  //     pattern: '数字,最多支持6位小数'
-  //   }
-  // },
+  shippingWeight: {
+    pattern: /^\d{0,9}$/,
+    message: {
+      pattern: '请输入整数, 最多9位'
+    }
+  },
+  shippingVolume: {
+    pattern: /^(\d{1,6}(\.\d{1,6})?$)$/,
+    message: {
+      pattern: '数字,最多6位整数,6位小数'
+    }
+  },
+  carBrand: {
+    max: 20
+  },
   remark: {
     max: 100
   }

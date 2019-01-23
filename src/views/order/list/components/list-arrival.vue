@@ -35,6 +35,7 @@ export default {
     refresh() {
       this.clearArrival()
       this.getArrival()
+      this.getTabCount()
     },
     loadmore() {
       this.getArrival()

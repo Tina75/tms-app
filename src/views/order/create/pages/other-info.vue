@@ -22,7 +22,7 @@
             type="number"
             precision="4" />
         </div>
-        <div class="form-section">
+        <div v-if="orderConfig.orderRemarkOption" class="form-section">
           <form-item
             v-model="form.remark"
             label="备注"
@@ -111,4 +111,5 @@ export default {
     height 44px
     padding 0
     border-radius 0
+    font-weight bold
 </style>

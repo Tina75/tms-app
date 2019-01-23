@@ -16,7 +16,12 @@
           </div>
         </div>
         <div class="list-item__body">
-          <p class="list-item__city">{{info.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{info.endName}}</p>
+          <p v-if="info.startName||info.endName" class="list-item__city">{{info.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{info.endName}}</p>
+          <p v-else class="list-item__city">
+            <span class="address">{{info.consignerAddress}}</span>
+            <i class="iconfont icon-line cube-ml-5 cube-mr-5"/>
+            <span class="address">{{info.consigneeAddress}}</span>
+          </p>
           <div>
             <span v-if="info.weight" class="list-item__count">{{info.weight}}吨</span>
             <span v-if="info.volume" class="list-item__count">{{info.volume}}方</span>
@@ -166,6 +171,13 @@ export default {
       white-space  nowrap
       overflow hidden
       text-overflow ellipsis
+      .address
+        font-weight bold
+        display inline-block
+        overflow hidden
+        text-overflow ellipsis
+        white-space nowrap
+        max-width 150px
     &__count
       background #efefef
       display inline-block

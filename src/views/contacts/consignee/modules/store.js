@@ -63,6 +63,15 @@ const store = {
     saveAddress: (state) => state.saveAddress
   }
 }
+
+const hasCity = (address, cityCode) => {
+  const cityForm = cityUtil.getCityNameArray(cityCode)
+  cityForm.forEach(({ name = '', shortName = '' }) => {
+    address = address.replace(name, '')
+    address = address.replace(shortName, '')
+  })
+  return address
+}
 // -----下拉列表-----
 const lists = [
   {
@@ -72,7 +81,7 @@ const lists = [
     itemParser: (data) => ({
       id: data.id,
       name: data.contact + '  ' + data.phone,
-      detail: data.cityName ? data.cityName + data.address : data.address,
+      detail: data.cityName + hasCity(data.address, data.cityCode),
       phone: data.phone,
       data
     })

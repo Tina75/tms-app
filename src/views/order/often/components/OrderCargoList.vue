@@ -4,7 +4,7 @@
       <li
         v-for="cargo in cargoList"
         :key="cargo.id" class="cargo-item">
-        <p class="cargo-title">{{ cargo.cargoName }} {{ `(${cargo.cargoNo})` }}</p>
+        <p class="cargo-title">{{ cargo.cargoName }} {{ cargo.cargoNo ? `(${cargo.cargoNo})` : '' }}</p>
         <p class="cargo-content">{{ cargo | cargoDetail }}</p>
       </li>
     </ul>
@@ -24,8 +24,8 @@ export default {
       const details = []
       if (cargo.weight) details.push(cargo.weight + '吨')
       if (cargo.volume) details.push(cargo.volume + '方')
-      if (cargo.quantity) details.push(cargo.quantity + '件')
       if (cargo.unit) details.push(cargo.unit)
+      if (cargo.quantity) details.push(cargo.quantity + '件')
       if (cargo.cargoCost) details.push(NP.divide(cargo.cargoCost, 100) + '元')
       if (cargo.remark1) details.push(cargo.remark1)
       if (cargo.remark2) details.push(cargo.remark2)

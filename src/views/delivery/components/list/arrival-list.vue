@@ -28,10 +28,11 @@ export default {
   },
 
   methods: {
-    ...mapActions('delivery', ['getArrival', 'clearArrival']),
+    ...mapActions('delivery', ['getArrival', 'clearArrival', 'getTabCount']),
     refresh() {
       this.clearArrival()
       this.getArrival()
+      this.getTabCount()
     },
     loadmore() {
       this.getArrival()

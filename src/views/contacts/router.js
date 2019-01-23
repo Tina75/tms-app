@@ -86,7 +86,7 @@ export default [
     path: '/contacts/consignee',
     name: 'contacts-consignee',
     meta: {
-      noNeedRefresh: []
+      noNeedRefresh: ['contacts-consignee-detail']
     },
     component: () => import(/* webpackChunkName: "contacts-consignee" */ './consignee/pages/index.vue')
   },
@@ -104,7 +104,7 @@ export default [
     path: '/contacts/consignee/modify',
     name: 'contacts-consignee-modify',
     meta: {
-      noNeedRefresh: []
+      formLeaveConfirm: true
     },
     component: () => import(/* webpackChunkName: "contacts-consignee" */ './consignee/pages/modify.vue')
   },

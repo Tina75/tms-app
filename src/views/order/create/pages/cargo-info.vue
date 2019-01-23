@@ -117,9 +117,11 @@
           <span v-if="orderConfig.weightTonOption">总重量：<span class="footer-detail-line-data">{{ total.weight }}吨</span> </span>
           <span v-if="orderConfig.weightKgOption">总重量：<span class="footer-detail-line-data">{{ total.weightKg }}公斤</span> </span>
           <span v-if="orderConfig.volumeOption">总体积：<span class="footer-detail-line-data">{{ total.volume }}方</span> </span>
-          <span v-if="orderConfig.quantityOption">总数量：<span class="footer-detail-line-data">{{ total.quantity }}</span> </span>
         </p>
-        <p v-if="orderConfig.cargoCostOption" class="footer-detail-line">总货值：<span class="footer-detail-line-data">{{ total.cargoCost }}元</span></p>
+        <p class="footer-detail-line">
+          <span v-if="orderConfig.quantityOption">总数量：<span class="footer-detail-line-data">{{ total.quantity }}</span> </span>
+          <span v-if="orderConfig.cargoCostOption">总货值：<span class="footer-detail-line-data">{{ total.cargoCost }}元</span> </span>
+        </p>
       </div>
       <cube-button
         class="footer-button"
@@ -291,6 +293,7 @@ export default {
       height 44px
       padding 0
       border-radius 0
+      font-weight bold
     &-detail
       display flex
       flex-direction column
@@ -299,12 +302,12 @@ export default {
       padding 16px
       background #ffffff
       &-line
+        display flex
         font-size 12px
         color #999999
-        &:first-child
-          display flex
-          span
-            flex 33.333333%
+        > span
+            flex none
+            width 50%
         &-data
           font-size 14px
           color #333333

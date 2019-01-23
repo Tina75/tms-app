@@ -82,6 +82,7 @@ export default {
     if (this.mode !== 'create') return
     setAppTitleBtn({
       text: '返回',
+      iconType: 'back',
       position: 'left',
       action: () => {
         this.$createDialog({

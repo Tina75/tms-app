@@ -29,11 +29,12 @@ export default {
   },
 
   methods: {
-    ...mapActions('order/list', ['getSending', 'clearSending']),
+    ...mapActions('order/list', ['getSending', 'clearSending', 'getTabCount']),
 
     refresh() {
       this.clearSending()
       this.getSending()
+      this.getTabCount()
     },
     loadmore() {
       this.getSending()

@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import NP from 'number-precision'
+import { addressConcat } from '../../js/filters'
 
 export default {
   async orderInfoInit () {
@@ -80,8 +81,8 @@ function setOrderBaseInfo (orderInfo, context) {
     'otherFee'
   ])
   if (orderBaseInfo.mileage) orderBaseInfo.mileage = NP.divide(orderBaseInfo.mileage, 1000)
-  orderBaseInfo.consignerAddressText = orderBaseInfo.consignerAddress + (orderBaseInfo.consignerHourseNumber || '')
-  orderBaseInfo.consigneeAddressText = orderBaseInfo.consigneeAddress + (orderBaseInfo.consigneeHourseNumber || '')
+  orderBaseInfo.consignerAddressText = addressConcat(orderBaseInfo.consignerAddress, orderBaseInfo.startName, orderBaseInfo.consignerHourseNumber)
+  orderBaseInfo.consigneeAddressText = addressConcat(orderBaseInfo.consigneeAddress, orderBaseInfo.endName, orderBaseInfo.consigneeHourseNumber)
   orderBaseInfo.consignerAddressLocale = []
   orderBaseInfo.consigneeAddressLocale = []
   orderBaseInfo.freightFee = isNaN(Number(orderInfo.freightFee)) ? '' : NP.divide(orderInfo.freightFee, 100)

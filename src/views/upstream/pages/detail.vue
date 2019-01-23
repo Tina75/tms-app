@@ -124,6 +124,7 @@ import VueClipboard from 'vue-clipboard2'
 import Vue from 'vue'
 import { getRate, getMoney, getMile, orderStatus } from '../libs'
 import * as API from '../libs/api'
+import { mapActions } from 'vuex'
 Vue.use(VueClipboard)
 
 export default {
@@ -158,6 +159,7 @@ export default {
     })
   },
   methods: {
+    ...mapActions(['reFresh']),
     initDetail () {
       API.initDetail(this.id).then(response => {
         this.detail = response.data.data
@@ -169,6 +171,7 @@ export default {
         title: '确认拒绝订单?',
         onConfirm: () => {
           API.refuse(this.id).then(response => {
+            this.reFresh({ key: 'waitAccept' })
             window.toast('拒绝成功')
             this.initDetail()
           })
@@ -177,15 +180,24 @@ export default {
     },
     receipt () {
       API.receipt(this.id).then(response => {
+        this.reFresh({ key: 'waitAccept' })
         window.toast('接收成功')
         this.initDetail()
       })
     },
     copyBtn (e) {
-      alert('复制成功')
+      this.$createToast({
+        type: 'correct',
+        time: 1000,
+        txt: '复制成功'
+      }).show()
     },
     onError (e) {
-      alert('复制失败，请使用Ctrl-C手动复制')
+      this.$createToast({
+        type: 'error',
+        time: 1000,
+        txt: '复制失败'
+      }).show()
     },
     orderStatus (val) {
       return orderStatus(val)

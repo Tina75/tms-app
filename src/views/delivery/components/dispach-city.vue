@@ -1,18 +1,24 @@
 <!-- 调度工作台 城市选择 -->
 <template>
   <div class="city-content">
-    <div class="city-cell start" @click="startSelVisable = !startSelVisable" >
+    <div class="city-cell start border-bottom-1px" @click="startSelVisable = !startSelVisable" >
       <div class="city-left">
         <span class="city-icon start-icon">始</span>始发地
       </div>
-      <div class="city-right">{{startCode | codeToName}}&nbsp;&nbsp;<i class="iconfont yzg-gengduo-huidanzhao"/></div>
+      <div class="city-right">
+        {{startCode | codeToName}}&nbsp;
+        <i class="iconfont icon-ico_right"/>
+      </div>
     </div>
     <city-picker :value="startSelVisable" :deep="3" @confirm="confirmStart"/>
     <div class="city-cell cube-ml-15" @click="endSelVisable = !endSelVisable">
       <div class="city-left">
         <span class="city-icon end-icon">目</span>目的地
       </div>
-      <div class="city-right">{{endCode | codeToName}}&nbsp;&nbsp;<i class="iconfont yzg-gengduo-huidanzhao"/></div>
+      <div class="city-right">
+        {{endCode | codeToName}}&nbsp;
+        <i class="iconfont icon-ico_right"/>
+      </div>
     </div>
     <city-picker :value="endSelVisable" :deep="3" @confirm="confirmEnd"/>
   </div>
@@ -94,10 +100,9 @@ export default {
       width 100px
     &-right
       text-align right
-      padding-right 10px
+      padding-right 15px
   .start
     margin-left 15px
-    border-bottom 1px solid #efefef
     &-icon
       background #00A4BD
   .end

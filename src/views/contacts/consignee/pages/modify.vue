@@ -28,7 +28,7 @@
           label="联系电话"
           placeholder="请输入手机号或座机号"
           :maxlength="20"
-          @input="formatTel"
+          type="phone"
         />
       </div>
       <div class="consignee-modify_form__card">
@@ -64,7 +64,7 @@
 import LoadingButton from '@/components/LoadingButton'
 import { FormGroup, FormItem } from '@/components/Form'
 import { mapActions, mapState, mapGetters } from 'vuex'
-import { validatePhone, formatPhone, ConsigneeDetail, editPhone } from '../modules/model'
+import { validatePhone, ConsigneeDetail } from '../modules/model'
 const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeAdd',
@@ -76,8 +76,6 @@ export default {
   components: { FormItem, FormGroup, LoadingButton },
   data() {
     return {
-      formatPhone,
-      editPhone,
       showPickCity: false,
       rules: {
         consigner: { required: true },
@@ -113,7 +111,7 @@ export default {
       clearForm: moudleName + '/clearForm',
       resetAddressPage: 'contacts/resetAddressPage'
     }),
-    async initForm(from) {
+    async initForm(to, from) {
       // 进入页面时刷新列表数据
       this.$refs.$form.reset()
       this.setSender()
@@ -131,6 +129,7 @@ export default {
     },
     // 选择发货人信息
     selectSender () {
+      this.$formWillLeave()
       this.$router.push({ name: 'select-shipper' })
     },
     // 将选择的发货人信息渲染到表单上
@@ -146,19 +145,11 @@ export default {
         this.formList.address = this.saveAddress.cityName + this.saveAddress.address + this.saveAddress.consignerHourseNumber
       }
     },
-    // 新增的时候格式化手机号码
-    formatTel (value) {
-      this.formList.phone = this.formatPhone(value)
-    },
-    // 编辑的时候格式化手机号码
-    editTel (value) {
-      this.formList.phone = this.editPhone(value)
-    },
     // 提交
     async submit () {
       // 如果是修改且收货地址没有变更 取详情的地址，变更了取新设置的地址
       const address = Object.assign({}, this.formList, { address: this.consigneeDetail.address })
-      const data = this.saveAddress
+      const data = this.saveAddress.address
         ? ConsigneeDetail.toServer(Object.assign({}, address, this.saveAddress))
         : ConsigneeDetail.toServer(Object.assign({}, address))
       console.log('data', data)
@@ -168,15 +159,15 @@ export default {
         try {
           this.submiting = true
           await this.modifyConsignee(data)
-          this.confirmed = true
+          this.$refreshPage('contacts-consignee', 'contacts-consignee-detail')
+          this.$formWillLeave()
+          window.toast('保存成功')
+          this.clearForm()
+          this.$router.back()
         } catch (e) {
           console.log(e)
         } finally {
-          window.toast('保存成功')
-          this.$refreshPage('contacts-consignee', 'contacts-consignee-detail')
-          this.clearForm()
           this.submiting = false
-          this.$router.back()
         }
       } else {
         window.toast('请填写必填信息')
@@ -202,38 +193,25 @@ export default {
       }
 
       this.resetAddressPage(config)
+      this.$formWillLeave()
       this.$router.push({ name: 'contacts-address' })
     },
     setFormList () {
       this.loadFormInfo(this.consigneeDetail)
-      this.editTel(this.formList.phone)
     }
   },
   beforeRouteEnter (to, from, next) {
-    next(vm => vm.initForm(from))
+    next(vm => {
+      vm.initForm(to, from)
+    })
   },
   beforeRouteLeave (to, from, next) {
-    // 当从页面离开不进入选择地址和选择发货方时  清空选择的数据
-    next(false)
-    const leave = () => {
-      this.confirmed = false
+    if (to.name !== 'select-shipper' && to.name !== 'contacts-address') {
       this.saveConsignerInfo()
       this.saveAddressInfo()
-      next()
+      this.clearForm()
     }
-    if (to.name !== 'select-shipper' && to.name !== 'contacts-address' && !this.confirmed) {
-      this.$createDialog({
-        type: 'confirm',
-        content: '信息未保存，确认退出吗？',
-        icon: 'cubeic-alert',
-        onConfirm: () => {
-          this.clearForm()
-          leave()
-        }
-      }).show()
-    } else {
-      leave()
-    }
+    next()
   }
 }
 </script>

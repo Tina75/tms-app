@@ -1,18 +1,20 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10">
     <FromGroup ref="form" :rules="rules">
-      <FormItem v-model="model.carrierName" label="承运商名称" maxlength="rules.carrierName.max" prop="carrierName"/>
-      <FormItem v-model="model.carrierPrincipal" label="负责人" maxlength="rules.carrierPrincipal.max" prop="carrierPrincipal"/>
+      <FormItem v-model="model.carrierName" label="承运商名称" :maxlength="rules.carrierName.max" prop="carrierName"/>
+      <FormItem v-model="model.carrierPrincipal" label="负责人" :maxlength="rules.carrierPrincipal.max" prop="carrierPrincipal"/>
       <FormItem
         v-model="model.carrierPhone"
         label="负责人号码"
-        maxlength="rules.carrierPhone.max"
+        :maxlength="rules.carrierPhone.max"
         prop="carrierPhone"
+        type="phone"
       />
       <FormItem
         v-model="model.customerCarrierPhone"
         label="客服号码"
         prop="customerCarrierPhone"
+        type="phone"
       />
       <FormItem
         v-model="model.payType"
@@ -23,7 +25,7 @@
         :bottom-line="false"
         :options="options.payType"
       />
-      <FormItem v-model="model.remark" maxlength="rules.remark.max" type="textarea" label="备注"/>
+      <FormItem v-model="model.remark" type="textarea" label="备注" prop="remark" :maxlength="rules.remark.max"/>
     </FromGroup>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
   </div>
