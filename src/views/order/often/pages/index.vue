@@ -223,5 +223,10 @@ export default {
       text-overflow ellipsis
       overflow hidden
       span
-        margin-right 12px
+        &:first-child:after
+          content: "|"
+          margin-left  6px
+          color #E4E7EC
+        &:last-child
+          padding-left 6px
 </style>
