@@ -141,6 +141,9 @@ export default {
   .order-company
     height 33px
     line-height 33px
+    white-space nowrap
+    text-overflow ellipsis
+    overflow hidden
 
   .order-footer
     display flex
