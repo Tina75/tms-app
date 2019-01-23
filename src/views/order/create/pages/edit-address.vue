@@ -55,6 +55,7 @@
         @select="onSelectAddress" />
     </div>
     <cube-button
+      class="footer-button"
       primary
       @click.stop="submit">
       确定
@@ -226,6 +227,8 @@ export default {
       flex 1
       height 100%
       overflow-y auto
+    .footer-button
+      font-weight bold
 
   .address-list-title
     padding 0 15px
@@ -234,5 +237,4 @@ export default {
 
   .address-often-list
     flex 1
-
 </style>

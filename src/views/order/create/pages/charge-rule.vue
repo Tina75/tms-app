@@ -2,7 +2,7 @@
   <no-data
     v-if="!loading && !ruleList.length"
     :img="NO_DATA"
-    message="暂无计费规则" />
+    message="老板，您还有设置计费规则<br>快去电脑端设置一个哦～" />
 
   <cube-scroll v-else class="scroll-box">
     <ul class="rule-list">
@@ -40,7 +40,7 @@
 import { mapMutations, mapActions } from 'vuex'
 import NP from 'number-precision'
 import NoData from '@/components/NoData'
-import NO_DATA from '@/assets/img-no-data.png'
+import NO_DATA from '@/assets/img-no-rule.png'
 
 export default {
   name: 'order-charge-rule',

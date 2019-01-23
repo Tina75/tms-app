@@ -291,6 +291,7 @@ export default {
       height 44px
       padding 0
       border-radius 0
+      font-weight bold
     &-detail
       display flex
       flex-direction column

@@ -135,4 +135,5 @@ export default {
     .footer-button
       border-radius 0
       padding 0
+      font-weight bold
 </style>
