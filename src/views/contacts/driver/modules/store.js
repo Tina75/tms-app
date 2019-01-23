@@ -15,7 +15,7 @@ const store = {
         method: 'get',
         url: '/carrier/details/for/driver',
         loading: true,
-        params: { carrierId: rootState.route.query.driverId }
+        params: { carrierId: rootState.route.query.carrierId }
       }).then((response) => commit('setDriverDetail', response.data.data))
     }
   },

@@ -71,7 +71,7 @@ export default {
       window.location.href = `tel:${item.phone}`
     },
     onItemClick(item, index) {
-      this.$router.push({ name: 'contacts-driver-detail', query: { driverId: item.id } })
+      this.$router.push({ name: 'contacts-driver-detail', query: { carrierId: item.id } })
     }
   },
   beforeRouteEnter (to, from, next) {

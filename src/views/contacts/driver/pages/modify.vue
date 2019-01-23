@@ -105,7 +105,7 @@ export default {
   computed: {
     ...mapState(moudleName, ['driverDetail']),
     isCreate() {
-      return typeof this.$route.query.driverId === 'undefined'
+      return typeof this.$route.query.carrierId === 'undefined'
     },
     regularLine () {
       const res = []
@@ -130,7 +130,7 @@ export default {
         if (!validLine) return
 
         this.model.regularLine = this.regularLine
-        this.model.carrierId = this.$route.query.driverId
+        this.model.carrierId = this.$route.query.carrierId
         await this.modifyDriver(DriverDetail.toServer(this.model))
         this.afterSubmit()
       } catch (e) {
@@ -165,7 +165,7 @@ export default {
       this.$refs.form.reset()
       if (!this.isCreate) {
         // 编辑操作, 判断store中的值是否是目标, 不是则拉新的
-        const urlId = +this.$route.query.driverId
+        const urlId = +this.$route.query.carrierId
         if (urlId !== +this.driverDetail.driverId) {
           await this.loadDriverDetail()
           // 更新了detail的则要刷新detail页

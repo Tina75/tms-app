@@ -132,7 +132,7 @@ export default {
       window.location.href = `tel: ${this.driverDetail.driverPhone}`
     },
     async remove() {
-      await this.removeDriver({ carrierId: this.$route.query.driverId })
+      await this.removeDriver({ carrierId: this.$route.query.carrierId })
       this.$refreshPage('contacts-driver')
       window.toast('删除成功')
       this.$router.back(true)
@@ -160,7 +160,7 @@ export default {
       ])
     },
     editDriver() {
-      this.$router.push({ name: 'contacts-driver-modify', query: { driverId: this.$route.query.driverId } })
+      this.$router.push({ name: 'contacts-driver-modify', query: { carrierId: this.$route.query.carrierId } })
     }
   },
   beforeRouteEnter (to, from, next) {
