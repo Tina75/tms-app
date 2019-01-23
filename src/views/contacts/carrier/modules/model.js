@@ -68,14 +68,15 @@ export class TruckDetail {
     { text: '高低板', value: 7 },
     { text: '面包车', value: 8 },
     { text: '爬梯车', value: 9 },
-    { text: '飞翼车', value: 10 }
+    { text: '飞翼车', value: 10 },
+    { text: '罐车', value: 11 }
   ]
 
   static driverType = [
-    { text: '合作车', value: 1 },
-    { text: '临时车', value: 2 },
-    { text: '自有车', value: 3 },
-    { text: '挂靠车', value: 4 }
+    { text: '合作', value: 1 },
+    { text: '临时', value: 2 },
+    { text: '自有', value: 3 },
+    { text: '挂靠', value: 4 }
   ]
 
   static carLength = [
