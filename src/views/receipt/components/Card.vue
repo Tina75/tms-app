@@ -69,9 +69,8 @@ export default {
 .tab-card
   background #fff
   margin-top 15px
-  padding 0 15px
 .tab-card-title
-  padding 10px 0
+  padding 10px 15px
   border-bottom 1px solid #F3F5F9
   .create-time
     font-size 14px
@@ -83,13 +82,13 @@ export default {
     background #fcaf3b
     padding 2px
 .consignee-info
-  padding 15px 0
+  padding 14px 15px
   .city
     color #333
     font-size 18px
     font-weight 600
   .cargos
-    margin-top 4px
+    margin-top 6px
     .cargo-infos
       display inline-block
       padding 0 5px
@@ -102,14 +101,14 @@ export default {
     font-size 14px
     margin-top 7px
   .company
-    margin-top 4px
+    margin-top 6px
     color #666
     font-size 14px
     line-height 20px
 .footer
   border-top 1px solid #F3F5F9
   overflow hidden
-  padding 8px 0
+  padding 8px 15px
   .left
     min-width 50%
     display flex
