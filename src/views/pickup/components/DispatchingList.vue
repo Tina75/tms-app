@@ -16,13 +16,13 @@
           <i v-if="item.collectionMoney">代</i>
         </div>
         <div class="item-content border-bottom-1px">
-          <p v-if="item.start" class="order-route">
-            <span>{{item.startName}}</span>
+          <p class="order-route">
+            <span class="address">{{item.consignerAddress|textOverflow}}</span>
             <icon-font
               name="icon-line"
               :size="20"
               color="#333333"/>
-            <span>{{item.endName}}</span>
+            <span class="address">{{item.consigneeAddress|textOverflow}}</span>
           </p>
           <p class="order-stat">
             <span v-if="item.weight">{{item.weight}}吨</span>
@@ -149,13 +149,17 @@ export default {
     padding: 10px 0
     .order-route
       margin-bottom: 5px;
-      span
+      .address
         line-height: 25px;
         font-size: 18px;
         color: #333333;
         font-weight: bold
+        display inline-block
+        vertical-align: middle
       .icon-line
-        margin: -5px 5px 0;
+        display inline-block
+        vertical-align: middle
+        margin: 0 5px;
     .order-stat
       margin-bottom: 10px;
       span
