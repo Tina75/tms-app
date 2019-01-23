@@ -93,7 +93,6 @@ export default {
                 },
                 async onConfirm () {
                   await _this.deleteBill(_this.$route.params.id)
-                  // await _this.removeBePicking(_this.$route.query.index)
                   _this.$createToast({
                     type: 'warn',
                     time: 1000,
@@ -232,6 +231,7 @@ export default {
     flex: 1
   .handle-btns
     display: flex
+    height: 45px
     a
       flex: 1
       background: #27A3BD;

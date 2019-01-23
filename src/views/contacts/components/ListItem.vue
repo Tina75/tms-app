@@ -78,6 +78,8 @@ export default {
   background #fff
   align-items center
   padding 10px 15px
+  &:first-of-type // 列表页暂时没有写搜索框的时候要和标题有分割线
+    margin-top 5px
   &:last-of-type:after
     content none
   &:after
