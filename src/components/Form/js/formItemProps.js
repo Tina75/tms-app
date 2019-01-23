@@ -1,5 +1,5 @@
 // form item type, contact同时支持手机和座机, phone 仅验证手机号
-const FORM_ITEM_TYPE = [ 'text', 'textarea', 'number', 'switch', 'select', 'click', 'loading', 'phone']
+const FORM_ITEM_TYPE = [ 'text', 'textarea', 'number', 'switch', 'select', 'click', 'loading', 'phone' ]
 const FORM_ITEM_ALIGN = [ 'left', 'center', 'right' ]
 const itemInArray = (item, array) => array.indexOf(item) > -1
 
@@ -56,10 +56,10 @@ export default {
     type: Boolean,
     default: false
   },
-  // 焦点在末尾
+  // 焦点在末尾，type=text number 时有效
   focusOnEnd: {
     type: Boolean,
-    default: false
+    default: true
   },
   // 当 type = textarea 且 maxlength != Infinity 或 0 时，会在文本框下方显示计数器
   maxlength: {
