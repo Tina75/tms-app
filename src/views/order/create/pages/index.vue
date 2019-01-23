@@ -123,6 +123,7 @@
             prop="freightFee"
             type="number"
             label="运输费用(元)"
+            precision="4"
             click-icon="icon-ico_rule"
             @on-icon-click="gotoChargeRulePage" />
         </div>
