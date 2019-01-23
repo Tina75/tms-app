@@ -126,7 +126,8 @@ export default {
       picker: null,
       valid: true,
       resetValidator: false,
-      rule: null
+      rule: null,
+      rows: 2
     }
   },
   computed: {
@@ -134,6 +135,9 @@ export default {
       const type = this.type
       if (type === 'text' || type === 'number') return type
       if (type === 'phone') return 'text'
+      if (type === 'textarea' && this.value) {
+        this.initTextAreaRow(this.value)
+      }
       return ''
     },
     inputRequired () {
@@ -149,6 +153,9 @@ export default {
       return (ph || '请输入') + (this.inputRequired ? '(必填)' : '')
     },
     inputMaxLength () {
+      if (this.type === 'phone' && +this.value[0] === 1) {
+        return 15
+      }
       const maxlength = Number(this.maxlength)
       if (isNaN(maxlength)) return Infinity
       return maxlength
@@ -265,6 +272,19 @@ export default {
       }
       if (this.type === 'text' || this.type === 'number') {
         el.scrollLeft = 10000 // 尽量大，直接显示到末尾
+      }
+    },
+    initTextAreaRow (inputText) {
+      let fromIndex = 0
+      this.rows = 2
+      while (true) {
+        let index = inputText.indexOf('\n', fromIndex)
+        if (index !== -1) {
+          fromIndex = index + 1
+          this.rows++
+        } else {
+          break
+        }
       }
     }
   }

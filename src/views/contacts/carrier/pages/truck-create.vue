@@ -1,7 +1,12 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10 truck-create">
     <FromGroup ref="form" :rules="rules" >
-      <FormItem v-model="model.carNo" label="车牌号" prop="carNo"/>
+      <FormItem
+        v-model="model.carNo"
+        label="车牌号"
+        type="click"
+        prop="carNo"
+        @on-click="showKeyboard = true"/>
       <FormItem v-model="model.driverName" label="司机姓名" :maxlength="rules.driverName.max" prop="driverName"/>
       <FormItem v-model="model.driverPhone" label="手机号" type="phone" prop="driverPhone"/>
       <FormItem
@@ -60,7 +65,16 @@
       <FormItem v-model="model.remark" :maxlength="rules.remark.max" type="textarea" label="备注"/>
     </FromGroup>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
-
+    <cube-popup
+      ref="popup"
+      v-model="showKeyboard"
+      :mask-closable="true"
+      position="bottom">
+      <Keyboard
+        v-model="model.carNo"
+        @cancel="showKeyboard=false"
+        @confirm="showKeyboard=false" />
+    </cube-popup>
   </div>
 </template>
 <script>
@@ -71,6 +85,7 @@ import FormItem from '@/components/Form/FormItem'
 import { TruckDetail } from '../modules/model'
 import Upload from '../../components/Upload'
 import Card from '../../components/Card'
+import Keyboard from '../../components/keyboard'
 import TransportLine from '../../components/TransportLine'
 import { truckRule } from '../modules/rules'
 const moudleName = 'contacts/carrier'
@@ -81,7 +96,7 @@ export default {
       title: this.isCreate ? '新增车辆' : '修改车辆'
     }
   },
-  components: { FormItem, FromGroup, LoadingButton, Upload, Card, TransportLine },
+  components: { FormItem, FromGroup, LoadingButton, Upload, Card, TransportLine, Keyboard },
   data() {
     return {
       model: new TruckDetail(),
@@ -92,6 +107,7 @@ export default {
       },
       rules: truckRule,
       submiting: false,
+      showKeyboard: false,
       purchDate: '', // 生产日期
       regularLine1: '', // 常发线路1
       regularLine2: '' // 常发线路2
@@ -176,7 +192,7 @@ export default {
 
     setRegularLine () {
       try {
-        const serveData = JSON.parse(this.truckDetail.regularLine)
+        const serveData = JSON.parse(this.model.regularLine)
         if (Array.isArray(serveData)) {
           this.regularLine1 = serveData[0] || {}
           this.regularLine2 = serveData[1] || {}

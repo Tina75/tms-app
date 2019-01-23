@@ -122,7 +122,7 @@ export default [
     path: '/contacts/driver',
     name: 'contacts-driver',
     meta: {
-      noNeedRefresh: []
+      noNeedRefresh: ['contacts-driver-detail']
     },
     component: () => import(/* webpackChunkName: "contacts-driver" */ './driver/pages/index.vue')
   },

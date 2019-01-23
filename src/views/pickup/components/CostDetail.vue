@@ -1,19 +1,19 @@
 <template>
   <div>
     <detail-panel :title="'应付费用'">
-      <detail-panel-item v-if="pickupDetail.freightFee" :label="pickupDetail.assignCarType === 1 ? '运输费用' : '油费'">
+      <detail-panel-item v-if="pickupDetail.freightFee !== null" :label="pickupDetail.assignCarType === 1 ? '运输费用' : '油费'">
         <p>{{pickupDetail.freightFee|moneyFormat}}元</p>
       </detail-panel-item>
-      <detail-panel-item v-if="pickupDetail.loadFee" :label="'装货费用'">
+      <detail-panel-item v-if="pickupDetail.loadFee !== null" :label="'装货费用'">
         <p>{{pickupDetail.loadFee|moneyFormat}}元</p>
       </detail-panel-item>
-      <detail-panel-item v-if="pickupDetail.unloadFee" :label="'卸货费用'">
+      <detail-panel-item v-if="pickupDetail.unloadFee !== null" :label="'卸货费用'">
         <p>{{pickupDetail.unloadFee|moneyFormat}}元</p>
       </detail-panel-item>
-      <detail-panel-item v-if="pickupDetail.insuranceFee" :label="'保险费用'">
+      <detail-panel-item v-if="pickupDetail.insuranceFee !== null" :label="'保险费用'">
         <p>{{pickupDetail.insuranceFee|moneyFormat}}元</p>
       </detail-panel-item>
-      <detail-panel-item v-if="pickupDetail.otherFee" :label="'其他费用'">
+      <detail-panel-item v-if="pickupDetail.otherFee !== null" :label="'其他费用'">
         <p>{{pickupDetail.otherFee|moneyFormat}}元</p>
       </detail-panel-item>
       <div class="total-cost">
@@ -26,10 +26,10 @@
         <p>{{settlementTypeMap[pickupDetail.settlementType]}}</p>
       </detail-panel-item>
       <template v-if="pickupDetail.settlementType === 1 && pickupDetail.settlementPayInfo.length">
-        <detail-panel-item v-if="pickupDetail.settlementPayInfo[0].cashAmount" :label="'到付现金'">
+        <detail-panel-item v-if="pickupDetail.settlementPayInfo[0].cashAmount !== null" :label="'到付现金'">
           <p>{{pickupDetail.settlementPayInfo[0].cashAmount|moneyFormat}}元</p>
         </detail-panel-item>
-        <detail-panel-item v-if="pickupDetail.settlementPayInfo[0].fuelCardAmount" :label="'到付油卡'">
+        <detail-panel-item v-if="pickupDetail.settlementPayInfo[0].fuelCardAmount !== null" :label="'到付油卡'">
           <p>{{pickupDetail.settlementPayInfo[0].fuelCardAmount|moneyFormat}}元</p>
         </detail-panel-item>
       </template>

@@ -67,10 +67,10 @@ export default {
     default: Infinity
   },
   // type=textarea 时有效，文本框行数
-  rows: {
-    type: [ String, Number ],
-    default: 2
-  },
+  // rows: {
+  //   type: [ String, Number ],
+  //   default: 2
+  // },
   // type = text || number 时有效，显示清空按钮
   clearable: {
     type: Boolean,

@@ -24,6 +24,7 @@ export const contactRule = {
   },
   customerCarrierPhone: {
     required: false,
+    max: '20',
     custom: (val) => {
       val = val + ''
       val = val.replace(/\s/g, '')
@@ -44,7 +45,7 @@ export const truckRule = {
     custom: (val) => {
       val = val + ''
       val = val.replace(/\s/g, '')
-      return VALIDATE_CAR.test(val) || VALIDATE_TEL.test(val)
+      return VALIDATE_CAR.test(val)
     },
     message: {
       custom: '请输入车牌号'
@@ -66,24 +67,24 @@ export const truckRule = {
     }
   },
   driverType: {
-    required: true
+    required: false
   },
   carType: {
-    required: true
+    required: false
   },
   carLength: {
-    required: true
+    required: false
   },
   shippingWeight: {
-    pattern: /^\d{0,9}$/,
+    pattern: /^[0-9]{0,6}(?:\.\d{1,2})?$/,
     message: {
-      pattern: '请输入整数, 最多9位'
+      pattern: '小于等于六位整数,最多两位小数'
     }
   },
   shippingVolume: {
-    pattern: /^(\d{1,6}(\.\d{1,6})?$)$/,
+    pattern: /^[0-9]{0,6}(?:\.\d{1,1})?$/,
     message: {
-      pattern: '数字,最多6位整数,6位小数'
+      pattern: '小于等于六位整数,最多一位小数'
     }
   },
   carBrand: {

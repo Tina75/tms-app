@@ -141,7 +141,6 @@
                 v-model="companyInfo.companyProfile"
                 label="公司简介"
                 type="textarea"
-                :rows="5"
                 placeholder="请输入，不超过500个字"
                 maxlength="500"/>
             </div>
@@ -151,7 +150,6 @@
               v-model="companyInfo.busiIntroduce"
               label="业务介绍"
               type="textarea"
-              :rows="5"
               placeholder="请输入，不超过500个字"
               maxlength="500"/>
             <div class="hr"/>
@@ -165,7 +163,6 @@
               v-model="companyInfo.busiAdvantce"
               label="服务优势"
               type="textarea"
-              :rows="5"
               placeholder="请输入，不超过500个字"
               maxlength="500"/>
             <div class="hr"/>

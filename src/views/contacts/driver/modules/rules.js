@@ -1,5 +1,4 @@
 const VALIDATE_PHONE = /^1[0-9]{10}$/
-const VALIDATE_TEL = /^[(（）)\-02-9][(（）)\-0-9]{1,19}$/
 const VALIDATE_CAR = /(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$)))|(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]{1}$)/
 
 export const driverRule = {
@@ -8,7 +7,7 @@ export const driverRule = {
     custom: (val) => {
       val = val + ''
       val = val.replace(/\s/g, '')
-      return VALIDATE_CAR.test(val) || VALIDATE_TEL.test(val)
+      return VALIDATE_CAR.test(val)
     },
     message: {
       custom: '请输入车牌号'
@@ -16,7 +15,7 @@ export const driverRule = {
   },
   driverName: {
     required: true,
-    max: 20
+    max: 15
   },
   driverPhone: {
     required: true,
@@ -30,24 +29,24 @@ export const driverRule = {
     }
   },
   driverType: {
-    required: true
+    required: false
   },
   carType: {
-    required: true
+    required: false
   },
   carLength: {
-    required: true
+    required: false
   },
   shippingWeight: {
-    pattern: /^\d{0,9}$/,
+    pattern: /^[0-9]{0,6}(?:\.\d{1,2})?$/,
     message: {
-      pattern: '请输入整数, 最多9位'
+      pattern: '小于等于六位整数,最多两位小数'
     }
   },
   shippingVolume: {
-    pattern: /^(\d{1,6}(\.\d{1,6})?$)$/,
+    pattern: /^[0-9]{0,6}(?:\.\d{1,1})?$/,
     message: {
-      pattern: '数字,最多6位整数,6位小数'
+      pattern: '小于等于六位整数,最多一位小数'
     }
   },
   carBrand: {
