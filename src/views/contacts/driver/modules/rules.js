@@ -38,6 +38,21 @@ export const driverRule = {
   carLength: {
     required: true
   },
+  shippingWeight: {
+    pattern: /^\d{0,9}$/,
+    message: {
+      pattern: '请输入整数, 最多9位'
+    }
+  },
+  shippingVolume: {
+    pattern: /^(\d{1,6}(\.\d{1,6})?$)$/,
+    message: {
+      pattern: '数字,最多6位整数,6位小数'
+    }
+  },
+  carBrand: {
+    max: 20
+  },
   remark: {
     max: 100
   }

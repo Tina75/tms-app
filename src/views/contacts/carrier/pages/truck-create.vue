@@ -1,9 +1,9 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10 truck-create">
     <FromGroup ref="form" :rules="rules" >
-      <FormItem v-model="model.carNo" label="车牌号" prop="carNO"/>
-      <FormItem v-model="model.driverName" label="司机姓名" maxlength="rules.driverName.max" prop="driverName"/>
-      <FormItem v-model="model.driverPhone" label="手机号" prop="driverPhone"/>
+      <FormItem v-model="model.carNo" label="车牌号" prop="carNo"/>
+      <FormItem v-model="model.driverName" label="司机姓名" :maxlength="rules.driverName.max" prop="driverName"/>
+      <FormItem v-model="model.driverPhone" label="手机号" type="phone" prop="driverPhone"/>
       <FormItem
         v-model="model.driverType"
         label="合作方式"
@@ -31,9 +31,9 @@
         :options="options.carLength"
         prop="carLength"
       />
-      <FormItem v-model="model.shippingWeight" label="载重（吨）" maxlength="15"/>
-      <FormItem v-model="model.shippingVolume" label="净空（方）" maxlength="15"/>
-      <FormItem v-model="model.carBrand" label="品牌" maxlength="15"/>
+      <FormItem v-model="model.shippingWeight" label="载重（吨）" prop="shippingWeight" maxlength="15"/>
+      <FormItem v-model="model.shippingVolume" label="净空（方）" prop="shippingVolume" maxlength="15"/>
+      <FormItem v-model="model.carBrand" label="品牌" prop="carBrand" :maxlength="rules.carBrand.max"/>
 
       <FormItem
         v-model="purchDate"
@@ -57,7 +57,7 @@
         </div>
       </card>
 
-      <FormItem v-model="model.remark" maxlength="rules.remark.max" type="textarea" label="备注"/>
+      <FormItem v-model="model.remark" :maxlength="rules.remark.max" type="textarea" label="备注"/>
     </FromGroup>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
 
