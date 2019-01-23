@@ -1,5 +1,6 @@
 import { getDistance } from '@/libs/util'
 import NP from 'number-precision'
+import { addressConcat } from '../../js/filters'
 
 export default {
   // 设置选择后的发货人信息
@@ -25,7 +26,7 @@ export default {
       info.consignerHourseNumber = consignerAddress.consignerHourseNumber || ''
       info.consignerAddressLongitude = consignerAddress.longitude || ''
       info.consignerAddressLatitude = consignerAddress.latitude || ''
-      info.consignerAddressText = info.consignerAddress + info.consignerHourseNumber
+      info.consignerAddressText = addressConcat(info.consignerAddress, info.cityName, info.consignerHourseNumber)
     } else {
       info.consignerHourseNumber = consigner.consignerHourseNumber || ''
     }
@@ -63,7 +64,7 @@ export default {
     info.consigneeHourseNumber = consignee.consigneeHourseNumber || ''
     info.consigneeAddressLongitude = consignee.longitude || ''
     info.consigneeAddressLatitude = consignee.latitude || ''
-    info.consigneeAddressText = info.consigneeAddress + info.consigneeHourseNumber
+    info.consigneeAddressText = addressConcat(info.consigneeAddress, info.cityName, info.consigneeHourseNumber)
     this.SET_CONSIGNEE_INFO(null)
     this.TRIGGER_ADDRESS_CHANGE(true)
   },

@@ -31,7 +31,7 @@
               <span>{{ item.consigneePhone }}</span>
             </p>
             <p class="order-body-user">
-              {{ item.consigneeAddress }}
+              {{ item.consigneeAddress | addressConcat(item.endName, item.consigneeHourseNumber) }}
             </p>
           </div>
 
@@ -71,13 +71,13 @@ import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-data.png'
-import { settlementType, totalFee } from '../../js/filters'
+import { settlementType, totalFee, addressConcat } from '../../js/filters'
 
 export default {
   name: 'order-often',
   metaInfo: { title: '常发订单' },
   components: { NoData, InfiniteList },
-  filters: { settlementType, totalFee },
+  filters: { settlementType, totalFee, addressConcat },
   data () {
     return {
       NO_DATA,
