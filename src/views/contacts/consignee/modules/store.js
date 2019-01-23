@@ -64,8 +64,13 @@ const store = {
   }
 }
 
-const hasCity = (val, cityName) => {
-  return val.indexOf(cityName) === 0 || val.indexOf('省') > -1 || val.indexOf('市') > -1
+const hasCity = (address, cityCode) => {
+  const cityForm = cityUtil.getCityNameArray(cityCode)
+  cityForm.forEach(({ name = '', shortName = '' }) => {
+    address = address.replace(name, '')
+    address = address.replace(shortName, '')
+  })
+  return address
 }
 // -----下拉列表-----
 const lists = [
@@ -76,7 +81,7 @@ const lists = [
     itemParser: (data) => ({
       id: data.id,
       name: data.contact + '  ' + data.phone,
-      detail: hasCity(data.address, data.cityName)  ? data.address : data.cityName + data.address,
+      detail: data.cityName + hasCity(data.address, data.cityCode),
       phone: data.phone,
       data
     })

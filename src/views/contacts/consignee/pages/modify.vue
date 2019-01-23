@@ -28,7 +28,7 @@
           label="联系电话"
           placeholder="请输入手机号或座机号"
           :maxlength="20"
-          @input="formatTel"
+          type="phone"
         />
       </div>
       <div class="consignee-modify_form__card">
@@ -64,7 +64,7 @@
 import LoadingButton from '@/components/LoadingButton'
 import { FormGroup, FormItem } from '@/components/Form'
 import { mapActions, mapState, mapGetters } from 'vuex'
-import { validatePhone, formatPhone, ConsigneeDetail, editPhone } from '../modules/model'
+import { validatePhone, ConsigneeDetail } from '../modules/model'
 const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeAdd',
@@ -76,8 +76,6 @@ export default {
   components: { FormItem, FormGroup, LoadingButton },
   data() {
     return {
-      formatPhone,
-      editPhone,
       showPickCity: false,
       rules: {
         consigner: { required: true },
@@ -147,14 +145,6 @@ export default {
         this.formList.address = this.saveAddress.cityName + this.saveAddress.address + this.saveAddress.consignerHourseNumber
       }
     },
-    // 新增的时候格式化手机号码
-    formatTel (value) {
-      this.formList.phone = this.formatPhone(value)
-    },
-    // 编辑的时候格式化手机号码
-    editTel (value) {
-      this.formList.phone = this.editPhone(value)
-    },
     // 提交
     async submit () {
       // 如果是修改且收货地址没有变更 取详情的地址，变更了取新设置的地址
@@ -208,7 +198,6 @@ export default {
     },
     setFormList () {
       this.loadFormInfo(this.consigneeDetail)
-      this.editTel(this.formList.phone)
     }
   },
   beforeRouteEnter (to, from, next) {

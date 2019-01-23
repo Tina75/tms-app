@@ -15,26 +15,6 @@ export const validatePhone = (val) => {
   return validator.phone(value) || validator.telphone(value)
 }
 
-export const formatPhone = (value) => {
-  if (value && /^1/.test(value)) {
-    const length = value.length
-    if (length === 4) {
-      value = value.slice(0, 3) + ' ' + value[3]
-    }
-    if (length === 9) {
-      value = value.slice(0, 8) + ' ' + value[8]
-    }
-  }
-  return value.trim()
-}
-
-export const editPhone = (value) => {
-  if (value && /^1/.test(value)) {
-    return value.slice(0, 3) + ' ' + value.slice(3, 7) + ' ' + value.slice(7)
-  } else {
-    return value
-  }
-}
 export const setRightButton = () => {
   bridge.register('consignee', () => { this.$router.push({ name: 'contacts-consignee-modify' }) })
 }
@@ -70,7 +50,7 @@ export class ConsigneeDetail {
       latitude: data.latitude,
       longitude: data.longitude,
       mapType: data.mapType,
-      phone: data.phone.replace(/\s/g, ''),
+      phone: data.phone,
       remark: data.remark,
       id: data.id,
       cityCode: data.cityCode
