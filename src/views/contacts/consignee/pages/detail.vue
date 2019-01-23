@@ -69,8 +69,8 @@ export default {
   },
   methods: {
     ...mapActions(moudleName, ['loadConsigneeDetail', 'removeConsignee']),
-    onPageRefresh() {
-      this.loadConsigneeDetail()
+    async onPageRefresh() {
+      await this.loadConsigneeDetail()
       this.setButton()
     },
     callPhone () {

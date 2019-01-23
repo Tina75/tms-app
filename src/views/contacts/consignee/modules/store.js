@@ -63,6 +63,10 @@ const store = {
     saveAddress: (state) => state.saveAddress
   }
 }
+
+const hasCity = (val, cityName) => {
+  return val.indexOf(cityName) === 0 || val.indexOf('省') > -1 || val.indexOf('市') > -1
+}
 // -----下拉列表-----
 const lists = [
   {
@@ -72,7 +76,7 @@ const lists = [
     itemParser: (data) => ({
       id: data.id,
       name: data.contact + '  ' + data.phone,
-      detail: data.cityName ? data.cityName + data.address : data.address,
+      detail: hasCity(data.address, data.cityName)  ? data.address : data.cityName + data.address,
       phone: data.phone,
       data
     })
