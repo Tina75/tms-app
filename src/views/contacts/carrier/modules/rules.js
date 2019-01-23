@@ -24,6 +24,7 @@ export const contactRule = {
   },
   customerCarrierPhone: {
     required: false,
+    max: '20',
     custom: (val) => {
       val = val + ''
       val = val.replace(/\s/g, '')
