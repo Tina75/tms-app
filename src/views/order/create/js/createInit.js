@@ -85,7 +85,7 @@ function setOrderBaseInfo (orderInfo, context) {
   orderBaseInfo.consigneeAddressText = addressConcat(orderBaseInfo.consigneeAddress, orderBaseInfo.endName, orderBaseInfo.consigneeHourseNumber)
   orderBaseInfo.consignerAddressLocale = []
   orderBaseInfo.consigneeAddressLocale = []
-  orderBaseInfo.freightFee = isNaN(Number(orderInfo.freightFee)) ? '' : NP.divide(orderInfo.freightFee, 100)
+  orderBaseInfo.freightFee = orderInfo.freightFee === null ? '' : NP.divide(orderInfo.freightFee, 100)
   orderBaseInfo.isSaveOrderTemplate = 0
   orderBaseInfo.consignerAddressMapType = 1
   orderBaseInfo.consigneeAddressMapType = 1
