@@ -105,13 +105,13 @@ export const setAppRightBtn = (options = []) => {
 
 export const setGlobalBack = (vm) => {
   if (!appBtn.globalBack) {
-    appBtn.globalBack = 1
     setAppTitleBtn({
       text: '返回',
       iconType: 'back',
       position: 'left',
       action: router.back
     })
+    appBtn.globalBack = 1
   }
 }
 
