@@ -67,13 +67,13 @@ export const truckRule = {
     }
   },
   driverType: {
-    required: true
+    required: false
   },
   carType: {
-    required: true
+    required: false
   },
   carLength: {
-    required: true
+    required: false
   },
   shippingWeight: {
     pattern: /^[0-9]{0,6}(?:\.\d{1,2})?$/,

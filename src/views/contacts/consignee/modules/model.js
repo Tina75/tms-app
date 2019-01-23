@@ -1,4 +1,3 @@
-import bridge from '@/libs/dsbridge'
 const validator = {
   // 手机号码
   phone (value) {
@@ -10,13 +9,22 @@ const validator = {
     return /^[(（）)\-02-9][(（）)\-0-9]{1,19}$/.test(value)
   }
 }
-export const validatePhone = (val) => {
-  const value = val.replace(/\s/g, '')
-  return validator.phone(value) || validator.telphone(value)
-}
-
-export const setRightButton = () => {
-  bridge.register('consignee', () => { this.$router.push({ name: 'contacts-consignee-modify' }) })
+// 表单校验规则
+export const consigneeRule = {
+  consigner: { required: true },
+  contact: { required: true },
+  phone: {
+    required: true,
+    type: 'string',
+    validatePhone: (val) => {
+      const value = val.replace(/\s/g, '')
+      return validator.phone(value) || validator.telphone(value)
+    },
+    messages: {
+      validatePhone: '请输入正确的手机号或座机号'
+    }
+  },
+  address: { required: true }
 }
 
 export class ConsigneeDetail {

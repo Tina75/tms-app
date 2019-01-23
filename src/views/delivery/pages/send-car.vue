@@ -15,9 +15,9 @@
         </cube-form-group>
         <cube-form-group v-if="model.assignCarType === 1">
           <cube-form-item :field="fields['carrierName']"/>
-          <cube-form-item :field="fields['carNo']"/>
-          <cube-form-item :field="fields['driverName']"/>
-          <cube-form-item :field="fields['driverPhone']"/>
+          <cube-form-item :field="fields['carrierCarNo']"/>
+          <cube-form-item :field="fields['carrierDriverName']"/>
+          <cube-form-item :field="fields['carrierDriverPhone']"/>
           <cube-form-item :field="fields['carType']"/>
           <cube-form-item :field="fields['carLength']"/>
           <cube-form-item :field="fields['carrierWaybillNo']"/>
@@ -91,12 +91,15 @@ export default {
       allDriverList: [],
       model: {
         assignCarType: 1,
+        // 自送专用
         selCarNo: '',
         selfDriverName: '',
         selfAssistantDriverName: '',
-        carNo: '',
-        driverName: '',
-        driverPhone: '',
+        // 外转专用
+        carrierCarNo: '',
+        carrierDriverName: '',
+        carrierDriverPhone: '',
+
         carrierName: '',
         carType: '',
         carLength: '',
@@ -210,9 +213,9 @@ export default {
             pattern: '承运商必填写'
           }
         },
-        carNo: {
+        carrierCarNo: {
           type: 'input',
-          modelKey: 'carNo',
+          modelKey: 'carrierCarNo',
           label: '车牌号',
           props: {
             placeholder: '请输入'
@@ -225,17 +228,17 @@ export default {
           },
           trigger: 'blur'
         },
-        driverName: {
+        carrierDriverName: {
           type: 'input',
-          modelKey: 'driverName',
+          modelKey: 'carrierDriverName',
           label: '司机姓名',
           props: {
             placeholder: '请输入'
           }
         },
-        driverPhone: {
+        carrierDriverPhone: {
           type: 'input',
-          modelKey: 'driverPhone',
+          modelKey: 'carrierDriverPhone',
           label: '司机手机号',
           props: {
             placeholder: '请输入'
@@ -782,9 +785,9 @@ export default {
           start: this.start,
           end: this.end,
           carrierName: this.model.carrierName,
-          driverName: this.model.assignCarType === 1 ? this.model.driverName : this.model.selfDriverName.split('-')[0],
-          driverPhone: this.model.assignCarType === 1 ? this.model.driverPhone : this.model.selfDriverName.split('-')[1],
-          carNo: this.model.assignCarType === 1 ? this.model.carNo : this.model.selCarNo.split('-')[0],
+          carNo: this.model.assignCarType === 1 ? this.model.carrierCarNo : this.model.selCarNo.split('-')[0],
+          driverName: this.model.assignCarType === 1 ? this.model.carrierDriverName : this.model.selfDriverName.split('-')[0],
+          driverPhone: this.model.assignCarType === 1 ? this.model.carrierDriverPhone : this.model.selfDriverName.split('-')[1],
           carType: this.model.assignCarType === 1 ? this.model.carType : this.model.selCarNo.split('-')[1],
           carLength: this.model.assignCarType === 1 ? this.model.carLength : this.model.selCarNo.split('-')[2],
           mileage: NP.times(this.model.mileage, 1000),
@@ -855,9 +858,16 @@ export default {
 
         vm.model = Object.assign(vm.model, waybill)
         vm.model.settlementType = waybill.settlementType ? waybill.settlementType : 1
-        vm.model.selCarNo = waybill.assignCarType === 1 ? '' : `${waybill.carNo}-${waybill.carType}-${waybill.carLength}`
-        vm.model.selfDriverName = waybill.assignCarType === 1 ? '' : `${waybill.driverName}-${waybill.driverPhone}`
-        vm.model.selfAssistantDriverName = waybill.assignCarType === 1 ? '' : `${waybill.assistantDriverName}-${waybill.assistantDriverPhone}`
+
+        if (waybill.assignCarType === 1) { // 外转
+          vm.model.carrierCarNo = waybill.carNo
+          vm.model.carrierDriverName = waybill.driverName
+          vm.model.carrierDriverPhone = waybill.driverPhone
+        } else { // 自送
+          vm.model.selCarNo = `${waybill.carNo}-${waybill.carType}-${waybill.carLength}`
+          vm.model.selfDriverName = `${waybill.driverName}-${waybill.driverPhone}`
+          vm.model.selfAssistantDriverName = `${waybill.assistantDriverName}-${waybill.assistantDriverPhone}`
+        }
 
         const moneyKeys = ['freightFee', 'loadFee', 'unloadFee', 'tollFee', 'accommodation', 'insuranceFee', 'otherFee', 'infoFee', 'cashBack', 'totalFee']
         moneyKeys.forEach(key => { vm.model[key] = waybill[key] ? NP.divide(waybill[key], 100) : '' })

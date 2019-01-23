@@ -18,7 +18,7 @@ export const contactRule = {
       return VALIDATE_PHONE.test(val) || VALIDATE_TEL.test(val)
     },
     message: {
-      custom: '请输入手机号或座机号，座机需加区号'
+      custom: '请输入正确的手机号或座机号'
     }
   },
   invoiceRate: {
