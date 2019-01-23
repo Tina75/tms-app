@@ -31,8 +31,8 @@
               <span class="total-money">{{model.totalFee}}</span>
             </cube-form-item>
             <cube-form-item v-if="model.assignCarType === 1" :field="fields['settlementType']"/>
-            <cube-form-item v-if="model.assignCarType === 1 && model.settlementType === 1" :field="fields['fuelCardAmount']"/>
-            <cube-form-item v-if="model.assignCarType === 1 && model.settlementType === 1" :field="fields['cashAmount']"/>
+            <cube-form-item v-if="model.assignCarType === 1 && model.settlementType === 1" ref="fuel-item" :field="fields['fuelCardAmount']"/>
+            <cube-form-item v-if="model.assignCarType === 1 && model.settlementType === 1" ref="cash-item" :field="fields['cashAmount']"/>
           </cube-form-group>
           <cube-form-group>
             <cube-form-item v-if="orderLength > 1" :field="fields['allocationStrategy']"/>
@@ -67,6 +67,7 @@ export default {
       validity: {},
       valid: true,
       orderLength: 0,
+      isSubmitValid: false,
       model: {
         assignCarType: 1,
         carNo: '',
@@ -112,9 +113,6 @@ export default {
               }
             ],
             placeholder: '请选择'
-          },
-          rules: {
-            required: true
           }
         },
         carNo: {
@@ -130,7 +128,8 @@ export default {
           },
           messages: {
             required: '车牌号必选'
-          }
+          },
+          trigger: 'change'
         },
         selfDriverName: {
           type: 'select',
@@ -151,7 +150,8 @@ export default {
           },
           messages: {
             required: '主司机必选'
-          }
+          },
+          trigger: 'change'
         },
         selfAssistantDriverName: {
           type: 'select',
@@ -173,6 +173,7 @@ export default {
           modelKey: 'carrierName',
           label: '承运商名称',
           props: {
+            maxlength: 20,
             placeholder: '请输入（必填）'
           },
           rules: {
@@ -180,7 +181,8 @@ export default {
           },
           messages: {
             required: '承运商必填'
-          }
+          },
+          trigger: 'blur'
         },
         carrierCarNo: {
           type: 'input',
@@ -190,18 +192,18 @@ export default {
             placeholder: '请输入'
           },
           rules: {
-            partten: /^[冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤川青藏琼宁渝京津沪][A-Za-z][A-Za-z0-9]{5,6}$/
+            pattern: /(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z][A-Z](([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$)))|(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z][A-Z][A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]$)/
           },
           messages: {
             pattern: '请输入正确的车牌号'
-          },
-          trigger: 'blur'
+          }
         },
         carrierDriverName: {
           type: 'input',
           modelKey: 'carrierDriverName',
           label: '司机姓名',
           props: {
+            maxlength: 15,
             placeholder: '请输入'
           }
         },
@@ -388,8 +390,8 @@ export default {
             placeholder: '请选择'
           }
         },
-        cashAmount: _this.createMoneyField('cashAmount', '到付现金(元)'),
-        fuelCardAmount: _this.createMoneyField('fuelCardAmount', '到付油卡(元)'),
+        cashAmount: _this.createSettlementMoneyField('cashAmount', '到付现金(元)'),
+        fuelCardAmount: _this.createSettlementMoneyField('fuelCardAmount', '到付油卡(元)'),
         allocationStrategy: {
           type: 'select',
           modelKey: 'allocationStrategy',
@@ -437,15 +439,31 @@ export default {
     ...mapActions('order/create', ['sendDirectly']),
     validateHandler(result) {
       this.validity = result.validity
-      this.valid = result.valid
       if (result.valid !== false) {
         this.model.totalFee = NP.plus(this.model.freightFee, this.model.loadFee, this.model.unloadFee, this.model.otherFee, this.model.insuranceFee)
       }
-      // console.log('validity', result.validity, result.valid, result.dirty, result.firstInvalidFieldIndex)
+      if (this.isSubmitValid) {
+        let resultArray = Object.values(result.validity)
+        if (resultArray.some(item => item.result.required && !item.result.required.valid)) {
+          window.toast('请填写必填信息')
+        }
+        if (resultArray.some(item => item.result.pattern && !item.result.pattern.valid)) {
+          window.toast('已填信息格式不正确')
+        }
+        if (resultArray.some(item => item.result.custom && !item.result.custom.valid)) {
+          window.toast('结算总额应与费用合计相等')
+        }
+        this.isSubmitValid = false
+      }
+      console.log('validity', result.validity, result.valid, result.dirty, result.firstInvalidFieldIndex)
     },
     async submitAssign () {
+      function moneyReduce (money) {
+        return (money === '' || money === null) ? null : NP.times(money, 100)
+      }
       let isValid = await this.$refs['assign-form'].validate()
-      if (isValid) {
+      let freightValid = await this.freightValid()
+      if (isValid && freightValid) {
         let req = {
           carrierName: this.model.carrierName,
           driverName: this.model.assignCarType === 1 ? this.model.carrierDriverName : this.model.selfDriverName.split('-')[0],
@@ -453,16 +471,16 @@ export default {
           carNo: this.model.assignCarType === 1 ? this.model.carrierCarNo : this.model.carNo.split('-')[0],
           carType: this.model.assignCarType === 1 ? this.model.carType : this.model.carNo.split('-')[1],
           carLength: this.model.assignCarType === 1 ? this.model.carLength : this.model.carNo.split('-')[2],
-          freightFee: NP.times(this.model.freightFee, 100),
-          loadFee: NP.times(this.model.loadFee, 100),
-          unloadFee: NP.times(this.model.unloadFee, 100),
-          otherFee: NP.times(this.model.otherFee, 100),
-          insuranceFee: NP.times(this.model.insuranceFee, 100),
+          freightFee: moneyReduce(this.model.freightFee),
+          loadFee: moneyReduce(this.model.loadFee),
+          unloadFee: moneyReduce(this.model.unloadFee),
+          otherFee: moneyReduce(this.model.otherFee),
+          insuranceFee: moneyReduce(this.model.insuranceFee),
           settlementType: this.model.assignCarType === 1 ? this.model.settlementType : '',
           settlementPayInfo: this.model.assignCarType === 1 ? [{
             payType: this.model.payType,
-            fuelCardAmount: NP.times(this.model.fuelCardAmount, 100),
-            cashAmount: NP.times(this.model.cashAmount, 100)
+            fuelCardAmount: moneyReduce(this.model.fuelCardAmount),
+            cashAmount: moneyReduce(this.model.cashAmount)
           }] : [],
           assignCarType: this.model.assignCarType,
           assistantDriverName: this.model.assignCarType === 1 ? '' : this.model.selfAssistantDriverName.split('-')[0],
@@ -480,6 +498,11 @@ export default {
           }
         }
         this.$router.back()
+      } else {
+        this.isSubmitValid = true
+        if (!freightValid) {
+          window.toast('结算总额应与费用合计相等')
+        }
       }
     },
     createMoneyField (field, name) {
@@ -488,7 +511,6 @@ export default {
         modelKey: field,
         label: name,
         props: {
-          type: 'number',
           placeholder: '请输入'
         },
         rules: {
@@ -499,24 +521,65 @@ export default {
         },
         trigger: 'blur',
         events: {
-          'focus': () => {
-            if (Number(this.model[field]) === 0) {
-              this.model[field] = ''
-            }
-          },
+          // 'focus': () => {
+          //   if (Number(this.model[field]) === 0) {
+          //     this.model[field] = ''
+          //   }
+          // },
+          // 'blur': () => {
+          //   if (this.model[field] === 0 || this.model[field] === '0') {
+          //     this.model[field] = 0
+          //   }
+          // }
+        }
+      }
+    },
+    createSettlementMoneyField (field, name) {
+      const _this = this
+      return {
+        type: 'input',
+        modelKey: field,
+        label: name,
+        props: {
+          placeholder: '请输入'
+        },
+        rules: {
+          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/,
+          custom: (val) => {
+            return NP.plus(_this.model.fuelCardAmount, _this.model.cashAmount) === NP.plus(0, _this.model.freightFee)
+          }
+        },
+        messages: {
+          pattern: '请输入正确的金额',
+          custom: ' 结算总额应与费用合计相等'
+        },
+        trigger: 'blur',
+        events: {
+          // 'focus': () => {
+          //   if (Number(this.model[field]) === 0) {
+          //     this.model[field] = ''
+          //   }
+          // },
           'blur': () => {
-            if (Number(this.model[field]) === 0) {
-              this.model[field] = 0
-            }
+            // if (Number(this.model[field]) === 0) {
+            //   this.model[field] = 0
+            // }
+            _this.$refs['fuel-item'].validate()
+            _this.$refs['cash-item'].validate()
           }
         }
       }
+    },
+    freightValid () {
+      return new Promise((resolve, reject) => {
+        resolve(NP.plus(this.model.fuelCardAmount, this.model.cashAmount) === NP.plus(0, this.model.freightFee))
+      })
     }
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
       function moneyInit (money) {
-        return money === 0 ? '' : NP.divide(money, 100)
+        return money !== null ? NP.divide(money, 100) : ''
       }
       if (to.params.id) {
         vm.getPickupDetailForForm(to.params.id).then(data => {
@@ -525,12 +588,12 @@ export default {
           vm.model.carNo = data.assignCarType === 1 ? '' : `${data.carNo}-${data.carType}-${data.carLength}`
           vm.model.selfDriverName = data.assignCarType === 1 ? '' : `${data.driverName}-${data.driverPhone}`
           vm.model.selfAssistantDriverName = data.assignCarType === 1 ? '' : `${data.assistantDriverName}-${data.assistantDriverPhone}`
-          vm.model.carrierName = data.assignCarType === 1 ? data.carrierName : ''
+          vm.model.carrierName = (data.assignCarType === 1 && data.carrierName) ? data.carrierName : ''
           vm.model.carrierCarNo = data.assignCarType === 1 ? data.carNo : ''
           vm.model.carrierDriverName = data.assignCarType === 1 ? data.driverName : ''
           vm.model.carrierDriverPhone = data.assignCarType === 1 ? data.driverPhone : ''
-          vm.model.carType = data.carType
-          vm.model.carLength = data.carLength
+          vm.model.carType = data.assignCarType === 1 ? data.carType : ''
+          vm.model.carLength = data.assignCarType === 1 ? data.carLength : ''
           vm.model.carrierWaybillNo = data.carrierWaybillNo
           vm.model.freightFee = moneyInit(data.freightFee)
           vm.model.insuranceFee = moneyInit(data.insuranceFee)
@@ -543,7 +606,7 @@ export default {
           vm.model.cashAmount = data.settlementPayInfo.length ? moneyInit(data.settlementPayInfo[0].cashAmount) : ''
           vm.model.fuelCardAmount = data.settlementPayInfo.length ? moneyInit(data.settlementPayInfo[0].fuelCardAmount) : ''
           vm.model.allocationStrategy = data.orderLength > 1 ? (data.allocationStrategy || vm.UserConfig.allocationStrategyInfo.waybillStrategy || 1) : null
-          vm.model.remark = data.remark
+          vm.model.remark = data.remark || ''
         })
       }
       vm.getSelfCarList().then(list => {

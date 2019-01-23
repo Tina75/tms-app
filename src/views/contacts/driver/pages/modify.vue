@@ -128,6 +128,8 @@ export default {
       this.$refreshPage('contacts-driver', 'contacts-driver-detail')
       this.$formWillLeave()
       window.toast(this.isCreate ? '新增熟车司机成功' : '修改熟车司机成功')
+      this.regularLine1 = ''
+      this.regularLine2 = ''
       this.$router.back()
     },
 

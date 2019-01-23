@@ -64,7 +64,7 @@
 import LoadingButton from '@/components/LoadingButton'
 import { FormGroup, FormItem } from '@/components/Form'
 import { mapActions, mapState, mapGetters } from 'vuex'
-import { validatePhone, ConsigneeDetail } from '../modules/model'
+import { consigneeRule, ConsigneeDetail } from '../modules/model'
 const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeAdd',
@@ -77,19 +77,7 @@ export default {
   data() {
     return {
       showPickCity: false,
-      rules: {
-        consigner: { required: true },
-        contact: { required: true },
-        phone: {
-          required: true,
-          type: 'string',
-          validatePhone: validatePhone,
-          messages: {
-            validatePhone: '请输入正确的手机号或座机号'
-          }
-        },
-        address: { required: true }
-      },
+      rules: consigneeRule,
       submiting: false,
       confirmed: false
     }

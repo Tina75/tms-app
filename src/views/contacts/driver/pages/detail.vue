@@ -127,10 +127,15 @@ export default {
     ...mapActions(moudleName, ['loadDriverDetail', 'removeDriver']),
     onPageRefresh() {
       this.loadDriverDetail()
-      this.setButton()
     },
     callPhone () {
       window.location.href = `tel: ${this.driverDetail.driverPhone}`
+    },
+    async remove() {
+      await this.removeDriver({ carrierId: this.$route.query.driverId })
+      this.$refreshPage('contacts-driver')
+      window.toast('删除成功')
+      this.$router.back(true)
     },
     setButton() {
       setAppRightBtn([
@@ -143,18 +148,7 @@ export default {
               title: '',
               content: '请确认是否需要删除该信息?',
               icon: 'cubeic-alert',
-              onConfirm: () => {
-                const data = {
-                  carrierId: this.$route.query.driverId
-                }
-                try {
-                  this.removeDriver(data)
-                } catch (e) {
-                  console.log(e)
-                } finally {
-                  this.$router.back()
-                }
-              }
+              onConfirm: this.remove.bind(this)
             }).show()
           }
         },
@@ -167,6 +161,9 @@ export default {
         }
       ])
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => vm.setButton())
   }
 }
 </script>
