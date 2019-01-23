@@ -180,20 +180,19 @@ export default {
     },
 
     setRegularLine () {
+      if (!this.model.regularLine) {
+        this.regularLine1 = ''
+        this.regularLine2 = ''
+        return
+      }
       try {
-        // console.log(this.driverDetail.regularLine)
         const serveData = JSON.parse(this.model.regularLine)
-        if (Array.isArray(serveData)) {
-          this.regularLine1 = serveData[0] || {}
-          this.regularLine2 = serveData[1] || {}
-        } else {
-          this.regularLine1 = {}
-          this.regularLine2 = {}
-        }
+        this.regularLine1 = Array.isArray(serveData) && serveData[0] ? serveData[0] : ''
+        this.regularLine2 = Array.isArray(serveData) && serveData[1] ? serveData[1] : ''
       } catch (error) {
-        this.regularLine1 = {}
-        this.regularLine2 = {}
-        // console.error(error)
+        this.regularLine1 = ''
+        this.regularLine2 = ''
+        console.error(error)
       }
     },
 
