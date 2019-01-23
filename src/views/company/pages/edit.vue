@@ -314,6 +314,12 @@ export default {
       })
     }
   },
+  updated () {
+    let docList = document.getElementsByClassName('form-item-textarea')
+    for (let index = 0; index < docList.length; index++) {
+      document.getElementsByClassName('form-item-textarea')[index].style.height = docList[index].scrollHeight + 'px'
+    }
+  },
   methods: {
     ...mapActions(['getCompanyInfo', 'saveCompanyInfo']),
     onPageRefresh() {
