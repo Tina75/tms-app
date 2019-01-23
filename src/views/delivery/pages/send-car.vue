@@ -1020,9 +1020,9 @@ export default {
             min-height: 50px
             width: 270px;
     .confirm-btn
-      display  flex
       font-weight bold
       text-align center
+      padding 15px
       font-size 17px
       border-radius 0
 

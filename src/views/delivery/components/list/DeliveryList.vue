@@ -10,9 +10,9 @@
         <div class="list-item__time  border-bottom-1px">
           <span class="cube-ml-15">{{info.createTime | datetimeFormat}}</span>
           <div class="list-item__flag">
-            <span v-if="item.collectionMoney>0" class="item" style="background:#FCA950">代</span>
-            <span v-if="item.cashBack>0" class="item" style="background:#40D1A4">返</span>
-            <span v-if="item.abnormalLabel==2" class="item" style="background:#F35851">异</span>
+            <span v-if="info.collectionMoney>0" class="item" style="background:#FCA950">代</span>
+            <span v-if="info.cashBack>0" class="item" style="background:#40D1A4">返</span>
+            <span v-if="info.abnormalLabel==2" class="item" style="background:#F35851">异</span>
           </div>
         </div>
         <div class="list-item__body">
