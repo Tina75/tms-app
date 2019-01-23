@@ -51,7 +51,7 @@ import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { FormItem } from '@/components/Form'
 
 export default {
-  metaInfo: { title: '客户单号及其他' },
+  metaInfo: { title: '客户订单号及其他' },
   components: { FormItem },
   data () {
     return {

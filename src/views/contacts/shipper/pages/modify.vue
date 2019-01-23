@@ -1,13 +1,14 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10">
     <FromGroup ref="form" :rules="rules">
-      <FormItem v-model="form.name" label="发货人名称" prop="name" :maxlength="rules.name.max"/>
+      <FormItem v-model="form.name" label="发货方名称" prop="name" :maxlength="rules.name.max"/>
       <FormItem v-model="form.contact" label="联系人" prop="contact" :maxlength="rules.contact.max"/>
       <FormItem
         v-model="form.phone"
         :bottom-line="false"
         class="cube-mb-15"
         label="联系人电话"
+        type="phone"
         prop="phone"
       />
       <FormItem
@@ -21,7 +22,7 @@
         v-model="form.payType"
         :options="options.payType"
         type="select"
-        label="支付方式"
+        label="结算方式"
         placeholder="请选择"
       />
       <FormItem v-model="form.isInvoice" label="是否开票" type="switch"/>
@@ -117,6 +118,7 @@ export default {
       }
     },
     async setForm() {
+      this.$refs.form.reset()
       this.loadOperators()
       if (!this.isCreate) {
         // 编辑操作, 判断store中的值是否是目标, 不是则拉新的

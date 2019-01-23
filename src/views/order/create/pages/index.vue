@@ -1,6 +1,6 @@
 <template>
   <div class="create-order-page">
-    <cube-scroll class="scroll-box">
+    <cube-scroll v-if="showPage" class="scroll-box">
       <!-- <cube-button primary @click="$router.push({ name: 'order-often' })">常发订单</cube-button> -->
       <form-group
         ref="$form"
@@ -41,7 +41,7 @@
             @click.native="gotoAddressInfoPage('send')" />
           <form-item
             v-model="orderInfo.consumerInfo"
-            label="客户单号及其他"
+            label="客户订单号及其他"
             type="click"
             ellipsis
             @click.native="gotoConsumerInfoPage" />
@@ -161,7 +161,6 @@ import gotoOtherPages from '../js/createGotoOtherPage'
 import showData from '../js/createShowData'
 import orderSubmit from '../js/createSubmit'
 import createInit from '../js/createInit'
-import { clearAppTitleBtn } from '@/libs/bridgeUtil'
 
 const IMAGES = {
   ACCEPT: require('../assets/accept.png'),
@@ -202,6 +201,7 @@ export default {
     const phoneMessage = { phoneValidate: '请输入正确的手机号或座机号' }
 
     return {
+      showPage: true, // scroll 组件在数据更新后可能会出现卡顿的情况，所以在确认显示数据以后再显示 scroll
       IMAGES,
       mode: '',
       id: '',
@@ -230,14 +230,14 @@ export default {
   computed: {
     orderInfo: {
       get: mapGetters('order/create', [ 'orderInfo' ]).orderInfo,
-      set: function (val) {
+      set: function () {
         this.saveConsignerInfo()
-        this.RESET_ORDER(val)
+        this.RESET_ORDER()
       }
     },
     ...mapGetters('order/create', [
       'consignerId',
-      'consumerInfo', // 客户单号及其他
+      'consumerInfo', // 客户订单号及其他
       'orderCargoList', // 货物信息
       'feeInfo', // 费用信息
       'otherInfo', // 其他信息
@@ -266,9 +266,11 @@ export default {
       vm.id = vm.$route.params.id
       vm.$nextTick(async () => {
         vm.setTitleButtons()
-
         const fromPage = from.name
-        if (NO_RESET_PAGE.indexOf(fromPage) === -1 || vm.orderNeedReset) vm.$refs.$form.reset()
+        // console.log(vm.orderNeedReset)
+        if (NO_RESET_PAGE.indexOf(fromPage) === -1 || vm.orderNeedReset) {
+          vm.$refs.$form.reset()
+        }
         // 发运页面返回的情况不查询订单数据
         if (fromPage !== 'pickup-assign' && fromPage !== 'delivery-send-car') {
           await vm.orderInfoInit()
@@ -280,6 +282,8 @@ export default {
         vm.showOtherInfo()
         vm.showFreightFee()
         vm.calculateDistance()
+        vm.showPage = false
+        vm.$nextTick(() => { vm.showPage = true })
       })
     })
   }

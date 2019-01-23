@@ -2,7 +2,7 @@ import NP from 'number-precision'
 import { setAppTitleBtn, closeWindow } from '@/libs/bridgeUtil'
 
 export default {
-  // 进入客户单号及其他信息
+  // 进入客户订单号及其他信息
   gotoConsumerInfoPage () {
     this.$formWillLeave()
     this.$router.push({ name: 'order-consumer-info' })
@@ -38,7 +38,7 @@ export default {
     this.$router.push({ name: 'order-select-consignee' })
   },
   // 进入计费规则列表
-  gotoChargeRulePage () {
+  async gotoChargeRulePage () {
     // if (!this.saveConsigner.id) {
     //   window.toast('请通过通讯录选择发货方')
     //   return
@@ -47,6 +47,9 @@ export default {
     let query = { partnerType: 1, partnerId: this.saveConsigner.id }
     query.departure = String(order.start)
     query.destination = String(order.end)
+    if (!query.partnerId || !query.departure || !query.destination || !(await this.getRuleList(query)).length) {
+      return window.toast('暂无符合的计费规则')
+    }
     query.distance = NP.times((order.mileage || 0), 1000)
     const { weight, weightKg, volume, cargoInfos } = this.orderCargoList.reduce((last, item) => {
       return {

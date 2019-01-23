@@ -5,6 +5,9 @@
     :list="PickupList"
     @refresh="refresh"
     @loadmore="loadmore"
+    @edit-order="editOrderById"
+    @edit-bill ="editBillById"
+    @delete = "deleteById"
   />
 </template>
 
@@ -29,7 +32,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('order/list', ['getPickup', 'clearPickup', 'deleteOrder']),
+    ...mapActions('order/list', ['getPickup', 'clearPickup', 'deleteOrder', 'setPickupList', 'getTabCount']),
 
     refresh() {
       this.clearPickup()
@@ -38,11 +41,13 @@ export default {
     loadmore() {
       this.getPickup()
     },
-    deleteById(id) {
-      this.deleteOrder(id)
+    async deleteById(id) {
+      await this.deleteOrder(id)
+      await this.setPickupList(this.PickupList.filter(item => item.id !== id))
+      this.getTabCount()
     },
     editOrderById(id) { // 修改订单
-      this.$router.push({ name: 'order-create', params: { id } })
+      this.$router.push({ name: 'order-edit', params: { id } })
     },
     editBillById(id, type) {
       // TODO: 提货单和送货单不同

@@ -7,17 +7,23 @@
     @pulling-up="onPullingUp">
     <ul >
       <li v-for="item in list" :key="item.id" class="list-item" @click.stop="onItemClick(item.id)">
-        <div class="list-item__time">
+        <div class="list-item__time border-bottom-1px">
           <span class="cube-ml-15">{{item.createTime | datetimeFormat}}</span>
           <div class="list-item__flag">
-            <span v-if="item.collectionMoney>0" class="item orange">代</span>
-            <span v-if="item.cashBack>0" class="item red">返</span>
-            <span v-if="item.abnormalLabel==2" class="item blue">异</span>
+            <span v-if="item.disassembleStatus===1" class="item blue" style="background:#418DF9">子</span>
+            <span v-if="item.collectionMoney>0" class="item orange" style="background:#FCA950">代</span>
+            <span v-if="item.cashBack>0" class="item green" style="background:#40D1A4">返</span>
+            <span v-if="item.abnormalLabel==2" class="item red" style="background:#F35851">异</span>
             <span class="item" :style="{'background':getColorType(item.status)}">{{item.status | orderType}}</span>
           </div>
         </div>
         <div class="list-item__body">
-          <p class="list-item__city">{{item.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{item.endName}}</p>
+          <p v-if="item.startName || item.endName" class="list-item__city">{{item.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{item.endName}}</p>
+          <p v-else class="list-item__city">
+            <span class="address">{{item.consignerAddress}}</span>
+            <i class="iconfont icon-line cube-ml-5 cube-mr-5"/>
+            <span class="address">{{item.consigneeAddress}}</span>
+          </p>
           <div>
             <span v-if="item.cargoNames" class="list-item__count">{{item.cargoNames.length>1?item.cargoNames[0]+'等':item.cargoNames[0]}}</span>
             <span v-if="item.weight" class="list-item__count">{{item.weight}}吨</span>
@@ -29,17 +35,17 @@
             <span v-if="item.consignerContact" class="cube-ml-10">{{item.consignerContact}}</span>
           </div>
         </div>
-        <div class="list-item__money">
-          <p v-if="item.settlementType" class="cube-c-black cube-font-12 cube-ml-15">{{item.settlementType|settlementTypeFormat}}</p>
+        <div class="list-item__money border-top-1px">
+          <p v-if="item.settlementType" class="cube-c-black cube-font-12 cube-ml-15">{{item.settlementType|settlementTypeFormatForOrder}}</p>
           <div v-if="item.totalFee" class="cube-c-yellow cube-mt-5 cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{item.totalFee |moneyFormat}}</span>/元</div>
           <!--
             子状态为 待调度,列表展示 “删除”“编辑”按钮，详情页展示“删除”“编辑”“分享”按钮
             子状态为 其它,列表展示“改单”按钮，详情展示“改单”“分享”按钮
           -->
-          <div v-if="item.status=='10'" class="list-item__btngroup">
-            <cube-button v-if="deleteBtnVisable(item)" class="btn" :outline="true"  :inline="true" @click.stop="handleClickDelete">删除</cube-button>
-            <cube-button v-if="editOrderBtnVisable(item)" class="btn" :outline="true"  :inline="true" primary @click.stop="handleClickEditOrder">编辑</cube-button>
-            <cube-button v-if="editBillBtnVisable(item)" class="btn" :outline="true" :inline="true" :primary="true" @click.stop="handleClickEditBill">改单</cube-button>
+          <div class="list-item__btngroup">
+            <cube-button v-if="deleteBtnVisable(item)" class="btn" :outline="true"  :inline="true" @click.stop="handleClickDelete(item.id)">删除</cube-button>
+            <cube-button v-if="editOrderBtnVisable(item)" class="btn" :outline="true"  :inline="true" primary @click.stop="handleClickEditOrder(item.id)">编辑</cube-button>
+            <!-- <cube-button v-if="editBillBtnVisable(item)" class="btn" :outline="true" :inline="true" :primary="true" @click.stop="handleClickEditBill">改单</cube-button> -->
           </div>
 
         </div>
@@ -59,15 +65,11 @@ export default {
   computed: {
     options() {
       return {
-        pullDownRefresh: true,
+        pullDownRefresh: { pullDownRefresh: 60, stopTime: 600, txt: '刷新成功' },
         pullUpLoad: true,
-        scrollbar: true
+        scrollbar: { fade: true }
       }
     }
-
-  },
-
-  mounted() {
   },
 
   methods: {
@@ -112,25 +114,28 @@ export default {
       }).show()
     },
     handleClickEditOrder(id) {
-      this.$emit('editOrder', id)
+      this.$emit('edit-order', id)
     },
     handleClickEditBill(id) {
       this.$emit('editBill', id)
     },
     deleteBtnVisable(item) {
       let arr = []
-      const list = ['1000', '1001', '2000', '2001'] // 见文档
+      // status + pickupStatus + dispachStatus + disassembleStatus
+      const list = ['10000', '10001', '20000', '20001', '50010', '50100'] // 见文档
       arr.push(item.status)
       arr.push(item.pickupStatus)
+      arr.push(item.dispatchStatus)
       arr.push(item.disassembleStatus)
       console.log('xxxx' + arr.join(''))
       return list.includes(arr.join(''))
     },
     editOrderBtnVisable(item) {
       let arr = []
-      const list = ['1000', '2000']
+      const list = ['10000', '20000']
       arr.push(item.status)
       arr.push(item.pickupStatus)
+      arr.push(item.dispatchStatus)
       arr.push(item.disassembleStatus)
       return list.includes(arr.join(''))
     },
@@ -160,33 +165,32 @@ export default {
     color #666666
     position relative
     &__time
-      height 20px
-      line-height 20px
+      height 30px
+      line-height 22px
       position relative
-    &__time:after
-      content ''
-      display block
-      border-bottom 1px solid #F3F5F9
-      margin-top 6px
+
     &__money
       min-height 46px
-    &__money:before
-      content ''
-      display block
-      border-bottom 1px solid #F3F5F9
-      margin-bottom 10px
+      padding-top 10px
+
     &__body
       padding-left 15px
 
     &__city
       color #333
       font-size 18px
-      margin-top 20px
+      margin-top 10px
       font-weight bold
       overflow hidden
       text-overflow ellipsis
       white-space nowrap
-
+      .address
+        font-weight bold
+        display inline-block
+        overflow hidden
+        text-overflow ellipsis
+        white-space nowrap
+        max-width 140px
     &__count
       background #efefef
       display inline-block
@@ -205,7 +209,7 @@ export default {
     &__btngroup
       position absolute
       right 15px
-      bottom 15px
+      bottom 0
       font-size 14px
       min-width 50px
       .btn
@@ -223,10 +227,12 @@ export default {
         display inline-block
         margin-left 5px
         padding 0 3px
-      .orange
-        background #FCAF3B
-      .red
-        background #FF8463
-      .blue
-        background #418DF9
+      // .orange
+      //   background #FCA950
+      // .red
+      //   background #F35851
+      // .blue
+      //   background #418DF9
+      // .green
+      //   background #40D1A4
 </style>

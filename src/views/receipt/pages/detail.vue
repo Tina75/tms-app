@@ -4,65 +4,61 @@
       <StatusBar slot="prepend" :status="detail.receiptOrder && detail.receiptOrder.receiptStatus" :time="detail.createTime" type="receipt"/>
       <cube-scroll-nav-panel label="基本信息">
         <Panel title="基本信息">
-          <FormItem label="客户名称">
+          <FormItem v-if="detail.consignerName" label="客户名称">
             {{detail.consignerName}}
           </FormItem>
-          <FormItem label="订单号">
+          <FormItem v-if="detail.orderNo" label="订单号">
             {{detail.orderNo}}
             <span
-              v-if="detail.orderNo"
               slot="right"
               v-clipboard:copy="detail.orderNo"
               v-clipboard:success="copyBtn"
               v-clipboard:error="onError"
               class="act-btn">复制</span>
           </FormItem>
-          <FormItem label="客户订单号">
+          <FormItem v-if="detail.customerOrderNo" label="客户订单号">
             {{detail.customerOrderNo}}
             <span
-              v-if="detail.customerOrderNo"
               slot="right"
               v-clipboard:copy="detail.customerOrderNo"
               v-clipboard:success="copyBtn"
               v-clipboard:error="onError"
               class="act-btn">复制</span>
           </FormItem>
-          <FormItem label="客户运单号">
+          <FormItem v-if="detail.customerWaybillNo" label="客户运单号">
             {{detail.customerWaybillNo}}
             <span
-              v-if="detail.customerWaybillNo"
               slot="right"
               v-clipboard:copy="detail.customerWaybillNo"
               v-clipboard:success="copyBtn"
               v-clipboard:error="onError"
               class="act-btn">复制</span>
           </FormItem>
-          <FormItem label="运单号">
+          <FormItem v-if="detail.waybillNo" label="运单号">
             {{detail.waybillNo}}
             <span
-              v-if="detail.waybillNo"
               slot="right"
               v-clipboard:copy="detail.waybillNo"
               v-clipboard:success="copyBtn"
               v-clipboard:error="onError"
               class="act-btn">复制</span>
           </FormItem>
-          <FormItem label="始发地">
+          <FormItem v-if="detail.startName" label="始发地">
             {{detail.startName}}
           </FormItem>
-          <FormItem label="目的地">
+          <FormItem v-if="detail.endName" label="目的地">
             {{detail.endName}}
           </FormItem>
-          <FormItem label="发货时间">
+          <FormItem v-if="detail.deliveryTime" label="发货时间">
             {{detail.deliveryTime | datetimeFormat}}
           </FormItem>
-          <FormItem label="到货时间">
+          <FormItem v-if="detail.arriveTime" label="到货时间">
             {{detail.arriveTime | datetimeFormat}}
           </FormItem>
-          <FormItem label="提货方式">
+          <FormItem v-if="detail.pickup" label="提货方式">
             {{detail.pickup | pickUp}}
           </FormItem>
-          <FormItem label="回单数量">
+          <FormItem v-if="detail.receiptCount" label="回单数量">
             {{detail.receiptCount}}份
           </FormItem>
           <!-- <FormItem label="代收货款">
@@ -74,38 +70,36 @@
           <FormItem label="是否开票">
             {{detail.isInvoice == 1 ? `是（${rate(detail.invoiceRate)}%）` : '否'}}
           </FormItem> -->
-          <FormItem label="备注">
+          <FormItem v-if="detail.remark" label="备注">
             {{detail.remark}}
           </FormItem>
         </Panel>
       </cube-scroll-nav-panel>
-      <cube-scroll-nav-panel label="发货人">
+      <cube-scroll-nav-panel label="收发货人">
         <Panel title="发货人">
-          <FormItem label="联系人">
+          <FormItem v-if="detail.consignerContact" label="联系人">
             {{detail.consignerContact}}
           </FormItem>
-          <FormItem label="联系方式">
+          <FormItem v-if="detail.consignerPhone" label="联系方式">
             {{detail.consignerPhone}}
-            <a v-if="detail.consignerPhone" slot="right" :href="`tel:${detail.consignerPhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
+            <a slot="right" :href="`tel:${detail.consignerPhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
           </FormItem>
-          <FormItem label="发货地址">
+          <FormItem v-if="detail.consignerAddress" label="发货地址">
             {{detail.consignerAddress}}
           </FormItem>
         </Panel>
-      </cube-scroll-nav-panel>
-      <cube-scroll-nav-panel  label="收货人">
         <Panel title="收货人">
-          <FormItem label="联系人">
+          <FormItem v-if="detail.consigneeContact" label="联系人">
             {{detail.consigneeContact}}
           </FormItem>
-          <FormItem label="联系方式">
+          <FormItem v-if="detail.consigneePhone" label="联系方式">
             {{detail.consigneePhone}}
-            <a v-if="detail.consigneePhone" slot="right" :href="`tel:${detail.consigneePhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
+            <a slot="right" :href="`tel:${detail.consigneePhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
           </FormItem>
-          <FormItem label="收货地址">
+          <FormItem v-if="detail.consigneeAddress" label="收货地址">
             {{detail.consigneeAddress}}
           </FormItem>
-          <FormItem label="收货人单位">
+          <FormItem v-if="detail.consigneeCompanyName" label="收货人单位">
             {{detail.consigneeCompanyName}}
           </FormItem>
         </Panel>
@@ -113,17 +107,17 @@
       <cube-scroll-nav-panel  label="承运商信息">
         <template v-if="detail.receiptOrder" >
           <Panel v-for="(item, index) in detail.receiptOrder.carrierInfos" :key="index" title="承运商信息">
-            <FormItem label="承运商">
+            <FormItem v-if="item.carrierName" label="承运商">
               {{item.carrierName}}
             </FormItem>
-            <FormItem label="司机">
+            <FormItem v-if="item.driverName" label="司机">
               {{item.driverName}}
             </FormItem>
-            <FormItem label="联系方式">
+            <FormItem v-if="item.driverPhone" label="联系方式">
               {{item.driverPhone}}
               <a v-if="item.driverPhone" slot="right" :href="`tel:${item.driverPhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
             </FormItem>
-            <FormItem label="车牌号">
+            <FormItem v-if="item.carNo" label="车牌号">
               {{item.carNo}}
             </FormItem>
           </Panel>
@@ -213,7 +207,8 @@ export default {
         title: '回收',
         prompt: {
           value: '',
-          placeholder: '请输入回收人'
+          placeholder: '请输入回收人',
+          maxlength: 15
         },
         onConfirm: (e, promptValue) => {
           const params = {
@@ -241,7 +236,8 @@ export default {
         title: '返厂',
         prompt: {
           value: '',
-          placeholder: '请输入接收人'
+          placeholder: '请输入接收人',
+          maxlength: 15
         },
         onConfirm: (e, promptValue) => {
           const params = {
@@ -317,4 +313,11 @@ export default {
     .cube-sticky-ele
       height 0
       visibility hidden
+.cube-dialog-title-def
+  font-weight 600
+.cube-input
+  border-color #F9F9F9
+  background-color rgba(249,249,249,1)
+.cube-dialog-btn:first-child
+  color #333
 </style>

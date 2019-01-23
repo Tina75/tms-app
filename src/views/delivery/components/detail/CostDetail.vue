@@ -18,15 +18,20 @@
     <detail-panel-item v-if="Waybill.tollFee" :label="'路桥费'">
       <p>{{Waybill.tollFee  | moneyFormat}}元</p>
     </detail-panel-item>
+    <detail-panel-item v-if="Waybill.accommodation && Waybill.assignCarType===2" :label="'住宿费'">
+      <p>{{Waybill.accommodation  | moneyFormat}}元</p>
+    </detail-panel-item>
     <detail-panel-item v-if="Waybill.insuranceFee" :label="'保险费用'">
       <p>{{Waybill.insuranceFee  | moneyFormat}}元</p>
     </detail-panel-item>
     <detail-panel-item v-if="Waybill.otherFee" :label="'其他费用'">
       <p>{{Waybill.otherFee | moneyFormat}}元</p>
     </detail-panel-item>
+    <detail-panel-item v-if="Waybill.infoFee && Waybill.assignCarType===1" :label="'信息费'">
+      <p>{{Waybill.infoFee | moneyFormat}}元</p>
+    </detail-panel-item>
     <div v-if="Waybill.settlementPayInfo&&Waybill.settlementPayInfo.length">
       <div v-for="item in Waybill.settlementPayInfo" :key="item.payType"  >
-
         <detail-panel-item  v-if="item.cashAmount || item.fuelCardAmount"  :label="item.payType | payType">
           <p >
             <span v-if="item.cashAmount">{{item.cashAmount | moneyFormat}}元(现金)</span> &nbsp;
@@ -35,7 +40,7 @@
         </detail-panel-item>
       </div>
     </div>
-    <div class="total-cost">
+    <div v-if="Waybill.totalFee" class="total-cost">
       <label>合计</label>
       <span>{{Waybill.totalFee | moneyFormat}}元</span>
       <i v-if="Waybill.settlementType">{{Waybill.settlementType | settlementTypeFormat}}</i>
@@ -49,20 +54,12 @@ import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
 
 export default {
-  name: 'order-cost-detail',
+  name: 'delivery-cost-detail',
   components: { detailPanel, detailPanelItem },
   computed: {
-    ...mapGetters('delivery', ['Waybill']),
-    options () {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
+    ...mapGetters('delivery', ['Waybill'])
   },
   methods: {
-    // ...mapActions(['getBePicking']),
   }
 }
 </script>

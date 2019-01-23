@@ -13,13 +13,15 @@
       @pulling-up="loadmore">
       <ul>
         <li v-for="item in DispatchList" :key="item.id" >
-          <workbench-list-item :info="item"/>
+          <workbench-list-item :info="item" @update-city="updateCity"/>
         </li>
       </ul>
     </cube-scroll>
     <div class="footer">
       <div class="footer-calc">
-        <cube-checkbox v-model="checkAll">全选</cube-checkbox>
+        <cube-checkbox v-model="checkAll" class="cube-font-18">
+          <span class="cube-font-15">全选</span>
+        </cube-checkbox>
         <span class="cube-c-green">{{totalCount}}</span>单
         <div style="float:right">
           合计&nbsp;
@@ -54,9 +56,9 @@ export default {
     ...mapGetters('delivery', ['DispatchList']),
     options() {
       return {
-        pullDownRefresh: true,
+        pullDownRefresh: { pullDownRefresh: 60, stopTime: 600, txt: '刷新成功' },
         pullUpLoad: true,
-        scrollbar: true
+        scrollbar: false
       }
     },
     totalWeight() {
@@ -75,18 +77,15 @@ export default {
   watch: {
     checkAll: function(val) {
       this.DispatchList.forEach(item => { item.checked = val })
-    },
-    DispatchList: function(newList) {
-      if (newList && newList.length) {
-        const firstOne = newList[0]
-        this.startCode = firstOne.start
-        this.endCode = firstOne.end
-      }
+      this.updateCity()
     }
   },
 
-  created () {
+  activated () {
     this.refresh()
+    this.startCode = -1
+    this.endCode = -1
+    this.checkAll = false
   },
 
   methods: {
@@ -94,6 +93,7 @@ export default {
     refresh() {
       this.clearDispatch()
       this.getDispatch().then(() => { this.checkAll = false })
+      this.updateCity()
     },
     loadmore() {
       this.getDispatch()
@@ -108,16 +108,31 @@ export default {
     },
     doDispatch() {
       let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)
-      if (!this.startCode) return window.toast('请选择始发地')
-      if (!this.endCode) return window.toast('请选择目的地')
+      if (this.startCode <= 0) return window.toast('请选择始发地')
+      if (this.endCode <= 0) return window.toast('请选择目的地')
       if (!ids.length) return window.toast('请至少选择一单')
-      console.log('选中的id有 ' + JSON.stringify(ids))
       const data = {
         start: this.startCode,
         end: this.endCode,
         orderIds: ids
       }
-      this.dispatchOrder(data).then(() => { this.$router.back() })
+      this.$createDialog({
+        type: 'confirm',
+        icon: 'cubeic-alert',
+        content: '是否确认做送货调度，创建运单',
+        onConfirm: () => {
+          this.dispatchOrder(data).then(() => {
+            window.toast('创建成功')
+            this.$router.back()
+          })
+        } }).show()
+    },
+    updateCity() {
+      const firstOne = this.DispatchList.find(item => item.checked === true)
+      if (firstOne && this.startCode < 0 && this.endCode < 0) {
+        this.startCode = firstOne.start
+        this.endCode = firstOne.end
+      }
     }
   }
 }
@@ -125,7 +140,7 @@ export default {
 </script>
 <style lang='stylus' scoped>
 .scroll-wrap
-  padding-bottom 44px
+  height calc(100% - 190px)
 .footer
   width 100%
   position fixed
@@ -144,6 +159,8 @@ export default {
     div
       display inline-block
   .btn-bottom
-    height 44px
+    padding 15px
+    font-size 17px
+    font-weight bold
 
 </style>

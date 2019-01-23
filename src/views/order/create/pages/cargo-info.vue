@@ -1,6 +1,6 @@
 <template>
   <div class="scroll-list-wrap">
-    <cube-scroll class="scroll-box">
+    <cube-scroll v-if="showPage" class="scroll-box">
       <div class="cargo-form-box">
         <form-group ref="$form" :rules="rules">
           <div v-for="(form, index) in formList" :key="index" class="form-section">
@@ -8,7 +8,7 @@
               :image="CARGO_IMAGE"
               :title="'货物' + (index + 1)">
               <span
-                v-if="index"
+                v-if="formList.length > 1"
                 slot="extra"
                 @click="cargoDelete(index)">删除</span>
             </form-title>
@@ -23,17 +23,20 @@
             <form-item
               v-if="orderConfig.weightTonOption"
               v-model="form.weight"
+              prop="weight"
               label="重量(吨)"
               type="number"
               precision="3" />
             <form-item
               v-if="orderConfig.weightKgOption"
               v-model="form.weightKg"
+              prop="weightKg"
               label="重量(公斤)"
               type="number" />
             <form-item
               v-if="orderConfig.volumeOption"
               v-model="form.volume"
+              prop="volume"
               label="体积(方)"
               type="number"
               precision="6" />
@@ -52,6 +55,8 @@
             <form-item
               v-if="orderConfig.quantityOption"
               v-model="form.quantity"
+              prop="quantity"
+              type="number"
               label="包装数量" />
             <form-item
               v-if="orderConfig.dimensionOption"
@@ -128,8 +133,7 @@
 import NP from 'number-precision'
 import { mapGetters, mapMutations } from 'vuex'
 import { FormGroup, FormItem, FormTitle } from '@/components/Form'
-import SizeInput from '../components/SizeInput'
-import { UNIT_TYPE } from '../../js/constant'
+import dialogs from '../js/cargoDialog'
 const CARGO_IMAGE = require('../assets/box.png')
 
 export default {
@@ -137,16 +141,17 @@ export default {
   components: { FormGroup, FormItem, FormTitle },
   data () {
     return {
+      showPage: true,
       CARGO_IMAGE,
       formList: [],
       cargoIndex: void 0,
-      dialogIndex: void 0,
-      size: { length: '', width: '', height: '' },
-      unit: '',
+      unit: void 0,
       rules: {
         cargoName: { required: true, type: 'string' },
         weight: { type: 'number', min: 0 },
-        weightKg: { type: 'number', min: 0 }
+        weightKg: { type: 'number', min: 0 },
+        volume: { type: 'number', min: 0 },
+        quantity: { type: 'number', min: 1 }
       }
     }
   },
@@ -174,8 +179,12 @@ export default {
   methods: {
     ...mapMutations('order/create', [ 'CLEAR_CARGO_OFTEN', 'SET_CARGO_LIST' ]),
     // 初始化货物信息
-    initCargoList () {
-      const tempCargoList = Object.assign([], this.orderCargoList).map(item => {
+    initCargoList (fromName) {
+      const tempCargoList = Object.assign(
+        [],
+        fromName === 'order-cargo-often'
+          ? this.formList
+          : this.orderCargoList).map(item => {
         if (item.cargoCost) item.cargoCost = NP.divide(item.cargoCost, 100)
         if (item.size === undefined) item.size = [ item.dimension.length || '-', item.dimension.width || '-', item.dimension.height || '-' ].join('x')
         return item
@@ -187,13 +196,13 @@ export default {
     // 提交货物信息
     async submitCargoList () {
       const valid = await this.$refs.$form.validate()
-      if (!valid) return
+      if (!valid) return window.toast('请填写货物名称')
       const tempCargoList = Object.assign([], this.formList).map(item => {
         if (item.cargoCost) item.cargoCost = NP.times(item.cargoCost, 100)
         return item
       })
       this.SET_CARGO_LIST(tempCargoList)
-      this.$formWillLeave()
+      this.$formWillLeave(() => { this.showPage = false })
       this.$router.back()
     },
     // 删除货物
@@ -241,111 +250,15 @@ export default {
       }
       this.cargoIndex = void 0
     },
-    // 显示填写尺寸对话框
-    showSizeDialog (index) {
-      this.dialogIndex = index
-      this.initSizeDialog()
-      const temp = this.formList[index]
-      this.size.length = temp.dimension.length
-      this.size.height = temp.dimension.height
-      this.size.width = temp.dimension.width
-      this.sizeDialog.show()
-    },
-    // 初始化填写尺寸对话框
-    initSizeDialog () {
-      const temp = this.formList[this.dialogIndex]
-      let sizeInput
-      this.sizeDialog = this.$createDialog({
-        title: '包装尺寸(毫米)',
-        type: 'confirm',
-        onConfirm: () => {
-          let extra = { volume: temp.volume, size: '' }
-          if (!temp.volume) {
-            extra.volume = NP.round(
-              NP.divide(
-                NP.times(this.size.length || 0, this.size.width || 0, this.size.height || 0),
-                1000 * 1000 * 1000
-              ),
-              6
-            )
-          }
-          extra.size = [ this.size.length || '-', this.size.width || '-', this.size.height || '-' ].join('x')
-          this.formList.splice(this.dialogIndex, 1, Object.assign(temp, { dimension: this.size }, extra))
-          this.size.length = this.size.width = this.size.height = ''
-        }
-      }, createElement => {
-        return createElement(SizeInput, {
-          slot: 'content',
-          props: {
-            length: temp.dimension.length,
-            width: temp.dimension.width,
-            height: temp.dimension.height
-          },
-          on: {
-            blur: (length, width, height) => {
-              this.size.length = Number(length)
-              this.size.width = Number(width)
-              this.size.height = Number(height)
-            }
-          }
-        })
-      })
-    },
-    // 显示填写包装对话框
-    showUnitDialog (index) {
-      this.dialogIndex = index
-      this.initUnitDialog()
-      const temp = this.formList[index]
-      this.unit = temp.unit
-      this.unitDialog.show()
-    },
-    // 初始化填写包装对话框
-    initUnitDialog () {
-      this.unitDialog = this.$createDialog({
-        title: '包装方式',
-        type: 'confirm',
-        onConfirm: () => {
-          const temp = this.formList[this.dialogIndex]
-          if (this.unit) {
-            this.formList.splice(this.dialogIndex, 1, Object.assign(temp, { unit: this.unit }))
-          }
-        }
-      }, createElement => {
-        const buttons = UNIT_TYPE.map(item => createElement(
-          'cube-button',
-          {
-            props: { light: true, inline: true },
-            style: { margin: '5px' },
-            on: { click: () => { this.unit = item.text } }
-          },
-          item.text)
-        )
-        return createElement('div', {
-          slot: 'content',
-          placeholder: '请输入',
-          style: {
-            margin: '0 10px'
-          }
-        }, [
-          createElement('cube-input', {
-            props: {
-              value: this.unit
-            },
-            on: {
-              blur: ({ target }) => {
-                this.unit = target.value
-              }
-            }
-          }),
-          ...buttons
-        ])
-      })
-    }
+
+    ...dialogs
   },
 
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.initCargoList()
+      vm.initCargoList(from.name)
+      vm.showPage = false
+      vm.$nextTick(() => { vm.showPage = true })
     })
   }
 }
@@ -359,7 +272,7 @@ export default {
   .cargo-form-box
     padding-bottom 15px
 
-  form
+  .form-section
     margin-top 15px
     &:first-child
       margin-top 10px
@@ -402,4 +315,13 @@ export default {
 <style lang="stylus">
   .cargo-form-box .form-section .form-item-box:last-child .form-item:after
     border-style none
+  .cargo-info-size-dialog
+    display flex
+    justify-content space-around
+    padding 10px 5px
+    &-item
+      flex 1
+      margin 0 5px
+      input
+        text-align center
 </style>

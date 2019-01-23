@@ -47,20 +47,12 @@ export default {
   name: 'pickupInfo',
   components: { detailPanel, detailPanelItem },
   computed: {
-    ...mapGetters('order/detail', ['Detail']),
-    options () {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    }
+    ...mapGetters('order/detail', ['Detail'])
   },
   methods: {
     call(tel) {
       window.location.href = `tel:${tel}`
     }
-    // ...mapActions(['getBePicking']),
   }
 }
 </script>

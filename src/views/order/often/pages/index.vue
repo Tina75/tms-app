@@ -45,7 +45,7 @@
                 v-if="oftenPermission.indexOf(100402) > -1"
                 class="order-footer-button-item order-footer-button-delete"
                 inline light outline
-                @click.stop="orderDelete(item.id)">删除</cube-button>
+                @click.stop="orderDelete(item.id, index)">删除</cube-button>
               <cube-button
                 v-if="oftenPermission.indexOf(100401) > -1"
                 class="order-footer-button-item order-footer-button-add"
@@ -104,10 +104,18 @@ export default {
       })
     },
 
-    async orderDelete (id) {
-      if (!confirm('确认需要删除此常发订单？')) return
-      await this.deleteOftenOrder(id)
-      window.toast('删除成功')
+    orderDelete (id, index) {
+      this.$createDialog({
+        type: 'confirm',
+        title: '',
+        content: '确认需要删除此常发订单？',
+        icon: 'cubeic-alert',
+        onConfirm: async () => {
+          await this.deleteOftenOrder(id)
+          this.oftenList.list.splice(index, 1)
+          window.toast('删除成功')
+        }
+      }).show()
     }
   },
   beforeRouteEnter (to, from, next) {

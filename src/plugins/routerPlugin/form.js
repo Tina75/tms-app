@@ -23,21 +23,25 @@ export default {
   onEnter() {
     $formState.hasSubmitted = false
   },
-  onLeave(to, from, next) {
+  onLeave(to, from, allowLeave) {
     const { formLeaveConfirm } = from.meta
     if (!formLeaveConfirm || $formState.hasSubmitted) {
       $formState.willLeave(to, from)
       return true
     }
+    // 去除键盘弹窗
+    if (document.activeElement) {
+      document.activeElement.blur()
+    }
     this.$createDialog({
       type: 'confirm',
       title: '',
-      content: '信息未保存，是否确认离开？',
+      content: '信息未保存，确认退出吗？',
       icon: 'cubeic-alert',
       onConfirm: () => {
         $formState.willLeave(to, from)
         $formState.willLeave = () => {}
-        next()
+        allowLeave()
       }
     }).show()
   }

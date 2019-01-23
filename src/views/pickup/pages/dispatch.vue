@@ -40,7 +40,7 @@
                 {{item.consignerName}}
               </p>
               <p v-if="item.customerOrderNo" class="order-custom">
-                客户单号：{{item.customerOrderNo}}
+                客户订单号：{{item.customerOrderNo}}
               </p>
             </div>
             <div class="item-footer">

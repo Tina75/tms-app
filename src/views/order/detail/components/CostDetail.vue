@@ -1,5 +1,5 @@
 <template>
-  <detail-panel :title="'应付费用'">
+  <detail-panel :title="'应收费用'">
     <detail-panel-item v-if="Detail.mileage" :label="'计费里程'">
       <p>{{Detail.mileage | mileageFormat}}公里</p>
     </detail-panel-item>
@@ -26,8 +26,8 @@
     </detail-panel-item>
     <div class="total-cost">
       <label>合计</label>
-      <span>{{totalFee | moneyFormat}}元</span>
-      <i v-if="Detail.settlementType">{{Detail.settlementType | settlementTypeFormat}}</i>
+      <span>{{Detail.totalFee | moneyFormat}}元</span>
+      <i v-if="Detail.settlementType">{{Detail.settlementType | settlementTypeFormatForOrder}}</i>
     </div>
   </detail-panel>
 </template>
@@ -41,20 +41,7 @@ export default {
   name: 'order-cost-detail',
   components: { detailPanel, detailPanelItem },
   computed: {
-    ...mapGetters('order/detail', ['Detail']),
-    options () {
-      return {
-        pullDownRefresh: true,
-        pullUpLoad: true,
-        scrollbar: true
-      }
-    },
-    totalFee() {
-      return this.Detail.freightFee + this.Detail.loadFee + this.Detail.unloadFee + this.Detail.insuranceFee + this.Detail.otherFee
-    }
-  },
-  methods: {
-    // ...mapActions(['getBePicking']),
+    ...mapGetters('order/detail', ['Detail'])
   }
 }
 </script>

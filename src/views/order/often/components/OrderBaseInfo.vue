@@ -60,10 +60,6 @@ import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
 import { pickupType } from '../../js/filters'
 import NP from 'number-precision'
-// import Copy from 'vue-clipboard2'
-import Vue from 'vue'
-
-// Vue.use(Copy)
 
 export default {
   name: 'pickupInfo',
@@ -77,13 +73,6 @@ export default {
       else return `是(${NP.times(this.detail.invoiceRate || 0, 100)}%)`
     }
   }
-  // methods: {
-  //   copy (text) {
-  //     this.$copyText(text)
-  //       .then(() => { window.toast('复制成功') })
-  //       .catch(() => { window.toast('复制失败') })
-  //   }
-  // }
 }
 </script>
 <style scoped lang="stylus">

@@ -101,7 +101,7 @@ export default {
         data: {
           status: 20,
           pageNo: state.dispatch.pageNo,
-          pageSize: 3
+          pageSize: 5
         }
       }).then(({ data }) => {
         commit('DISPATCH', data.data)
@@ -115,7 +115,7 @@ export default {
         method: 'post',
         data: { status: 2,
           pageNo: state.send.pageNo,
-          pageSize: 3 }
+          pageSize: 5 }
       }).then(({ data }) => {
         commit('SEND', data.data)
       })
@@ -127,7 +127,7 @@ export default {
         method: 'post',
         data: { status: 3,
           pageNo: state.sending.pageNo,
-          pageSize: 3 }
+          pageSize: 5 }
       }).then(({ data }) => {
         commit('SENDING', data.data)
       })
@@ -139,20 +139,21 @@ export default {
         method: 'post',
         data: { status: 4,
           pageNo: state.arrival.pageNo,
-          pageSize: 3 }
+          pageSize: 5 }
       }).then(({ data }) => {
         commit('ARRIVAL', data.data)
       })
     },
     clearArrival: ({ commit }) => { commit('ARRIVAL_CLEAR') },
-    // 改单
+    // 编辑运单
     doEditWaybill: ({ commit, state }, info) => {
       return Server({
-        url: '/waybill/modify',
+        url: '/waybill/update',
         method: 'post',
         data: { waybill: info }
       }).then(() => {
         // 刷新详情
+        window.toast('编辑成功')
       })
     },
     // 派车
@@ -163,8 +164,8 @@ export default {
         data: info
       }).then(() => {
         // 派车成功，刷新列表
-        let list = state.send.list.filter(item => info.id !== item.id)
-        commit('SET_SEND_LIST', list)
+        // let list = state.send.list.filter(item => info.id !== item.id)
+        // commit('SET_SEND_LIST', list)
       })
     },
     // 发运
@@ -186,14 +187,14 @@ export default {
     },
     // 到货
     doArrival: ({ commit, state }, id) => {
-      Server({
+      return Server({
         url: '/waybill/confirm/arrival',
         method: 'post',
         data: { waybillIds: [id] }
       }).then(({ data }) => {
-        window.toast('到货成功')
-        let list = state.arrival.list.filter(item => item.id !== id)
-        commit('SET_SENDING_LIST', list)
+        // window.toast('到货成功')
+        // let list = state.arrival.list.filter(item => item.id !== id)
+        // commit('SET_SENDING_LIST', list)
       })
     },
     // 调度 and 创建运单

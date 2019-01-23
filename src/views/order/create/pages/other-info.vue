@@ -1,8 +1,8 @@
 <template>
   <div class="scroll-list-wrap">
     <cube-scroll class="scroll-box">
-      <form-group>
-        <div class="form-section">
+      <form-group ref="$form" :rules="rules">
+        <div v-if="orderConfig.isInvoiceOption" class="form-section">
           <form-item
             v-model="isInvoice"
             label="是否开票"
@@ -14,9 +14,10 @@
             type="number"
             precision="2" />
         </div>
-        <div class="form-section">
+        <div v-if="orderConfig.collectionMoneyOption" class="form-section">
           <form-item
             v-model="form.collectionMoney"
+            prop="collectionMoney"
             label="代收货款(元)"
             type="number"
             precision="4" />
@@ -52,19 +53,21 @@ export default {
         invoiceRate: '',
         collectionMoney: '',
         remark: ''
+      },
+      rules: {
+        collectionMoney: { type: 'number', min: 0 }
       }
     }
   },
-  computed: {
-    ...mapGetters('order/create', [ 'otherInfo' ])
-  },
+  computed: mapGetters('order/create', [ 'otherInfo', 'orderConfig' ]),
   watch: {
     isInvoice (val) { this.form.isInvoice = Number(val) }
   },
   methods: {
     ...mapMutations('order/create', [ 'SET_OTHER_INFO' ]),
 
-    ensure () {
+    async ensure () {
+      if (!(await this.$refs.$form.validate())) return
       const temp = Object.assign({}, this.form)
       temp.invoiceRate = temp.invoiceRate ? NP.divide(temp.invoiceRate, 100) : temp.invoiceRate
       temp.collectionMoney = temp.collectionMoney ? NP.times(temp.collectionMoney, 100) : temp.collectionMoney

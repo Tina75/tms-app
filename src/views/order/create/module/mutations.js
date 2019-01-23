@@ -14,10 +14,45 @@ export default {
     }
   },
   // 重置订单
-  RESET_ORDER: (state, payload) => {
-    resetFields(payload)
+  RESET_ORDER: state => {
+    const temp = {
+      consignerName: '',
+      consignerContact: '',
+      consignerPhone: '',
+      start: '',
+      startCityName: '',
+      consignerAddress: '',
+      consignerAddressText: '',
+      consignerAddressLocale: [],
+      consignerHourseNumber: '',
+      consignerAddressLongitude: '',
+      consignerAddressLatitude: '',
+      consumerInfo: '',
+      consigneeContact: '',
+      consigneePhone: '',
+      end: '',
+      endCityName: '',
+      consigneeAddress: '',
+      consigneeAddressText: '',
+      consigneeAddressLocale: [],
+      consigneeHourseNumber: '',
+      consigneeAddressLongitude: '',
+      consigneeAddressLatitude: '',
+      consigneeCompanyName: '',
+      orderCargoList: '',
+      settlementType: '',
+      pickup: '',
+      receiptCount: 1,
+      mileage: '',
+      freightFee: '',
+      otherFee: '',
+      otherInfo: '',
+      isSaveOrderTemplate: 0,
+      consignerAddressMapType: 1,
+      consigneeAddressMapType: 1
+    }
     for (let key in state.orderInfo) {
-      state.orderInfo[key] = payload[key]
+      state.orderInfo[key] = temp[key]
     }
     state.consignerId = void 0
     state.orderCargoList = []
@@ -39,9 +74,10 @@ export default {
   SET_FEE_INFO: (state, payload) => {
     resetFields(payload)
     state.feeInfo = payload
+    console.log(payload)
     const fees = [ payload.pickupFee, payload.loadFee, payload.unloadFee, payload.insuranceFee, payload.otherFee ]
     const totalFee = fees.reduce((last, fee) => {
-      if (last === fee) return last
+      if (fee === '') return last
       return NP.plus(last || 0, fee || 0)
     }, '')
     state.orderInfo.otherFee = totalFee === '' ? '' : NP.divide(totalFee, 100)
@@ -80,20 +116,22 @@ export default {
     const info = state.orderInfo
     if (state.currentArrdessType === 'send') {
       info.start = payload.cityCode
+      info.startCityName = payload.cityName
       info.consignerAddress = payload.address
       info.consignerHourseNumber = payload.extra
       info.consignerAddressLongitude = payload.longitude
       info.consignerAddressLatitude = payload.latitude
       info.consignerAddressLocale = payload.locale
-      info.consignerAddressText = payload.address + payload.extra
+      info.consignerAddressText = payload.cityName + payload.address + payload.extra
     } else {
       info.end = payload.cityCode
+      info.endCityName = payload.cityName
       info.consigneeAddress = payload.address
       info.consigneeHourseNumber = payload.extra
       info.consigneeAddressLongitude = payload.longitude
       info.consigneeAddressLatitude = payload.latitude
       info.consigneeAddressLocale = payload.locale
-      info.consigneeAddressText = payload.address + payload.extra
+      info.consigneeAddressText = payload.cityName + payload.address + payload.extra
     }
     state.currentArrdessType = ''
     state.addressChanged = true

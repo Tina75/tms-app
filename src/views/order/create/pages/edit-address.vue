@@ -180,7 +180,12 @@ export default {
     async submit () {
       console.log(await this.$refs.$form.validate())
       if (!(await this.$refs.$form.validate())) return window.toast('请填写详细地址')
-      this.SET_ADDRESS_INFO(Object.assign({}, this.form, { cityName: this.localeView.split('/') }))
+      console.log(this.localeView.split('/'))
+      let cityArr = this.localeView.split('/')
+      cityArr.pop()
+      let cityName = cityArr.filter(name => this.form.address.indexOf(name) === -1).join('')
+      if (this.form.address.indexOf(cityName) > -1) cityName = ''
+      this.SET_ADDRESS_INFO(Object.assign({}, this.form, { cityName }))
       this.$formWillLeave(() => {
         this.showCityPicker = false
         this.$refs.$form.reset()
@@ -194,7 +199,7 @@ export default {
       const form = vm.form
       if (vm.currentArrdessType === 'send') {
         form.cityCode = info.start
-        form.address = info.consignerAddress || ''
+        form.address = info.consignerAddress.replace(info.startCityName, '') || ''
         form.extra = info.consignerHourseNumber || ''
         form.longitude = info.consignerAddressLongitude || ''
         form.latitude = info.consignerAddressLatitude || ''
@@ -202,7 +207,7 @@ export default {
         vm.fetchAddressData()
       } else {
         form.cityCode = info.end
-        form.address = info.consigneeAddress || ''
+        form.address = info.consigneeAddress.replace(info.endCityName, '') || ''
         form.extra = info.consigneeHourseNumber || ''
         form.longitude = info.consigneeAddressLongitude || ''
         form.latitude = info.consigneeAddressLatitude || ''

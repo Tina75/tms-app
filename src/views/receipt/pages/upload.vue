@@ -1,8 +1,8 @@
 <template>
   <div class="receipt-upload">
     <div class="upload-box">
-      <span class="cardTitle">{{isUpdate ? '修改回单' : '上传回单'}}（{{photoList.length}}/6）</span>
-      <Upload :upload-photos="photoList" :max-count="6" :input-show="false"/>
+      <span class="cardTitle">{{isUpdate ? '修改回单' : '上传回单'}}（{{photoList.length}}/10）</span>
+      <Upload :upload-photos="photoList" :max-count="10" :input-show="false"/>
     </div>
     <div class="btn-box">
       <cube-button :disabled="!photoList.length" primary @click="save">提交</cube-button>
@@ -12,10 +12,11 @@
 <script>
 import Upload from '@/components/Upload'
 import * as Api from '../libs/api'
+import { mapActions } from 'vuex'
 export default {
   name: 'receipt-upload',
   metaInfo: {
-    title: '回单上传'
+    title: '上传回单'
   },
   components: { Upload },
   data () {
@@ -32,6 +33,10 @@ export default {
     },
     orderId () {
       return this.$route.query.orderId
+    },
+    // 刷新tab
+    tab () {
+      return this.$route.query.tab
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -40,6 +45,7 @@ export default {
     })
   },
   methods: {
+    ...mapActions(['receiptReFresh']),
     getUrlList () {
       if (this.isUpdate) {
         Api.initDetail(this.orderId).then(response => {
@@ -59,9 +65,10 @@ export default {
       }
       Api.uploadReceiptPic(params)
         .then(res => {
-          this.$router.push({
-            name: 'receipt'
-          })
+          if (this.tab) {
+            this.receiptReFresh({ key: this.tab })
+          }
+          this.$router.back()
         })
     }
   }

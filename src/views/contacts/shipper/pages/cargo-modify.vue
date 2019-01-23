@@ -25,7 +25,14 @@
         @on-click="showDismensionInput = true"
       />
       <FormItem v-model="form.weight" label="重量(公斤)" type="number" prop="weight"/>
-      <FormItem v-model="form.volume" label="体积(方)" type="number" class="cube-mb-15" prop="volume" precision="6"/>
+      <FormItem
+        v-model="form.volume"
+        label="体积(方)"
+        type="number"
+        class="cube-mb-15"
+        prop="volume"
+        precision="6"
+      />
       <FormItem
         v-model="form.remark1"
         label="备注1"
@@ -51,11 +58,7 @@
       placeholder="请输入包装方式"
       @confirm="form.unit = $event"
     />
-    <DimensionPopup
-      v-model="showDismensionInput"
-      :value="form.dimension"
-      @confirm="form.dimension = $event"
-    />
+    <DimensionPopup v-model="showDismensionInput" :value="form.dimension" @confirm="setDimension"/>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
   </div>
 </template>
@@ -64,6 +67,7 @@ import { mapActions, mapState, mapMutations } from 'vuex'
 import { CargoDetail } from '../modules/model'
 import { cargoRule } from '../modules/rules'
 import { setAppRightBtn } from '@/libs/bridgeUtil'
+import float from '@/libs/float'
 import LoadingButton from '@/components/LoadingButton'
 import FromGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
@@ -139,7 +143,20 @@ export default {
         this.submiting = false
       }
     },
+    setDimension({ length, width, height } = {}) {
+      this.form.dimension = {
+        length, width, height
+      }
+      if (
+        isNum(length) &&
+        isNum(width) &&
+        isNum(height)
+      ) {
+        this.form.volume = float.round(length * width * height / (1000 * 1000 * 1000), 6)
+      }
+    },
     setForm() {
+      this.$refs.form.reset()
       const list = this.cargoList.list
       const id = this.$route.query.id
       let detailData

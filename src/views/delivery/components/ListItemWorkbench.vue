@@ -1,10 +1,10 @@
 <template>
 
-  <li class="list-item">
-    <div class="list-item__time  border-bottom-1px ">
-      <cube-checkbox v-model="info.checked" class="list-item__checkbox">
-        <span class="cube-ml-15">{{info.createTime||info.createTimeLong | datetimeFormat}}</span>
-        <div class="list-item__flag">
+  <li class="list-item" @click.stop="handleClick">
+    <div class="list-item__time  border-bottom-1px " >
+      <cube-checkbox :value="info.checked" class="list-item__checkbox">
+        <span class="cube-ml-10 cube-font-14">{{info.createTime| datetimeFormat}}</span>
+        <div class="list-item__flag cube-font-12">
           <span v-if="info.collectionMoney>0" class="item orange">代</span>
           <span v-if="info.cashBack>0" class="item red">返</span>
           <span v-if="info.abnormalLabel==2" class="item blue">异</span>
@@ -20,13 +20,13 @@
       </div>
       <p v-if="info.consignerName" class="cube-mt-5">{{info.consignerName}}</p>
       <!-- <p v-if="info.carrierName" class="cube-mt-5">{{info.carrierName}}</p> -->
-      <p v-if="info.id && info.customerOrderNo" class="list-item__number">客户单号：{{info.customerOrderNo}}</p>
+      <p v-if="info.id && info.customerOrderNo" class="list-item__number">客户订单号：{{info.customerOrderNo}}</p>
       <p v-if="(info.assignCarType === 1 && info.carrierName) || (info.assignCarType === 2 && info.carNo)" class="list-item__number cube-font-12">
         <span class="send-type">{{info.assignCarType==1?'外转':'自送'}}</span>{{info.driverName}}  {{info.assistantDriverName}}  {{info.carNo}}
       </p>
     </div>
     <div class="list-item__money border-top-1px">
-      <p class="cube-c-black cube-font-12 cube-ml-15">应付费用({{info.settlementType|settlementTypeFormat}})</p>
+      <p class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormatForOrder}})</p>
       <div class="cube-c-yellow cube-mt-5 cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.pickupFee||info.totalFee |moneyFormat}}</span>/元</div>
     </div>
   </li>
@@ -43,6 +43,10 @@ export default {
     this.$set(this.info, 'checked', this.info.checked)
   },
   methods: {
+    handleClick() {
+      this.info.checked = !this.info.checked
+      this.$emit('update-city')
+    }
   }
 }
 
@@ -58,6 +62,7 @@ export default {
     position relative
     &__checkbox
       height 20px
+      font-size 18px
     &__time
       position relative
       padding-bottom 10px

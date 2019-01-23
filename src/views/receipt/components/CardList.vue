@@ -1,17 +1,22 @@
 <template>
-  <div>
+  <cube-scroll
+    ref="scroll"
+    :data="cardList"
+    :options="options"
+    @pulling-down="onPullingDown"
+    @pulling-up="onPullingUp">
     <Card
       v-for="(el, index) in cardList"
       :key="index"
       :data="el"
       @card-action="handleClick"
       @click.native="toDetail(el.id)"/>
-  </div>
+  </cube-scroll>
 </template>
 <script>
 import Card from '../components/Card'
 import * as API from '../libs/api'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'upstream-list',
   components: {
@@ -27,14 +32,31 @@ export default {
       default: () => []
     }
   },
+  computed: {
+    ...mapGetters(['receiptNext']),
+    options () {
+      return {
+        pullDownRefresh: {
+          txt: '刷新成功'
+        },
+        pullUpLoad: this.receiptNext[this.keys]
+      }
+    }
+  },
   methods: {
-    ...mapActions(['getReceiptStatusCnt', 'initReceiptList']),
+    ...mapActions(['getReceiptStatusCnt', 'initReceiptList', 'receiptReFresh', 'receiptLoadMore']),
     toDetail (id) {
       // 路由跳转
       this.$router.push({
         params: { id },
         name: 'receipt-detail'
       })
+    },
+    onPullingDown () {
+      this.receiptReFresh({ key: this.keys })
+    },
+    onPullingUp () {
+      this.receiptLoadMore({ key: this.keys })
     },
     handleClick (type, item) {
       if (type === 'receipt') {
@@ -54,7 +76,8 @@ export default {
         title: '回收',
         prompt: {
           value: '',
-          placeholder: '请输入回收人'
+          placeholder: '请输入回收人',
+          maxlength: 15
         },
         onConfirm: (e, promptValue) => {
           const params = {
@@ -83,7 +106,8 @@ export default {
         title: '返厂',
         prompt: {
           value: '',
-          placeholder: '请输入接收人'
+          placeholder: '请输入接收人',
+          maxlength: 15
         },
         onConfirm: (e, promptValue) => {
           const params = {
@@ -107,13 +131,13 @@ export default {
     },
     uploadPic (item) {
       this.$router.push({
-        query: { id: item.receiptOrder.id, type: 'add' },
+        query: { id: item.receiptOrder.id, type: 'add', tab: this.keys },
         name: 'receipt-upload'
       })
     },
     updatePic (item) {
       this.$router.push({
-        query: { id: item.receiptOrder.id, type: 'update', orderId: item.id },
+        query: { id: item.receiptOrder.id, type: 'update', orderId: item.id, tab: this.keys },
         name: 'receipt-upload'
       })
     }
