@@ -10,6 +10,7 @@
         label="联系人电话"
         type="phone"
         prop="phone"
+        :maxlength="20"
       />
       <FormItem
         v-model="form.pickUp"
