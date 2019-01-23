@@ -268,8 +268,7 @@ export default {
       param.thumburl = this.formatImag(this.companyInfo.logoUrl)
       param.log = {}
       bridge.call('navigation.share', { ...param }, function(result) {
-        console.log(result)
-        window.toast(result.msg)
+        if (result.code !== 10000) window.toast(result.msg)
       })
     }
   }

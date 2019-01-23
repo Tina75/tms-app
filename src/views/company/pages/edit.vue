@@ -1,7 +1,7 @@
 <template>
   <div class="create-order-page scroll-list-wrap scroll-box">
     <form-group ref="$form" class="form" :rules="rules">
-      <cube-scroll v-if="step === 1" key="1">
+      <cube-scroll v-if="step === 1" key="1" class="scroll-box">
         <div>
           <div class="form-section">
             <form-item
