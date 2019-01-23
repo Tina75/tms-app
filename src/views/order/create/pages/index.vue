@@ -123,6 +123,7 @@
             prop="freightFee"
             type="number"
             label="运输费用(元)"
+            precision="4"
             click-icon="icon-ico_rule"
             @on-icon-click="gotoChargeRulePage" />
         </div>
@@ -267,7 +268,6 @@ export default {
       vm.$nextTick(async () => {
         vm.setTitleButtons()
         const fromPage = from.name
-        // console.log(vm.orderNeedReset)
         if (NO_RESET_PAGE.indexOf(fromPage) === -1 || vm.orderNeedReset) {
           vm.$refs.$form.reset()
         }

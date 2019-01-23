@@ -1,8 +1,8 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10 driver-create">
     <FromGroup ref="form" :rules="rules" >
-      <FormItem v-model="model.driverName" label="司机姓名" maxlength="rules.driverName.max" prop="driverName"/>
-      <FormItem v-model="model.driverPhone" label="手机号" maxlength="rules.driverPhone.max" prop="driverPhone"/>
+      <FormItem v-model="model.driverName" label="司机姓名" :maxlength="rules.driverName.max" prop="driverName"/>
+      <FormItem v-model="model.driverPhone" label="手机号" type="phone" :maxlength="rules.driverPhone.max" prop="driverPhone"/>
       <FormItem v-model="model.carNO" label="车牌号" class="cube-mb-15" prop="carNO"/>
 
       <FormItem
@@ -21,9 +21,9 @@
         :options="options.carLength"
         prop="carLength"
       />
-      <FormItem v-model="model.shippingWeight" label="载重（吨）" maxlength="15"/>
-      <FormItem v-model="model.shippingVolume" label="净空（方）" maxlength="15"/>
-      <FormItem v-model="model.carBrand" label="品牌" maxlength="15"/>
+      <FormItem v-model="model.shippingWeight" label="载重（吨）" prop="shippingWeight" :maxlength="rules.shippingWeight.max"/>
+      <FormItem v-model="model.shippingVolume" label="净空（方）" prop="shippingVolume" :maxlength="rules.shippingVolume.max"/>
+      <FormItem v-model="model.carBrand" label="品牌" prop="carBrand" :maxlength="rules.carBrand.max"/>
       <FormItem
         v-model="model.payType"
         label="结算方式"
@@ -45,7 +45,7 @@
         </div>
       </card>
 
-      <FormItem v-model="model.remark" maxlength="200" type="textarea" label="备注"/>
+      <FormItem v-model="model.remark" prop="remark" :maxlength="rules.remark.max" type="textarea" label="备注"/>
     </FromGroup>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
   </div>

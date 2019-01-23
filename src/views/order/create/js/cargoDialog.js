@@ -82,15 +82,12 @@ export default {
       )
       return createElement('div', {
         slot: 'content',
-        placeholder: '请输入',
         style: {
           margin: '0 10px'
         }
       }, [
         createElement('cube-input', {
-          props: {
-            value: this.unit
-          },
+          props: { value: this.unit, placeholder: '请输入', maxlength: 10 },
           on: {
             blur: ({ target }) => {
               this.unit = target.value

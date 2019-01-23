@@ -23,6 +23,7 @@ import OrderBaseInfo from '../components/OrderBaseInfo'
 import ReceiveAndSend from '../components/ReceiveAndSend'
 import OrderCargoList from '../components/OrderCargoList'
 import CostDetail from '../components/CostDetail'
+import { setAppTitleBtn } from '@/libs/bridgeUtil'
 
 export default {
   name: 'order-often-detail',
@@ -44,13 +45,33 @@ export default {
     ...mapGetters('order/create', [ 'oftenPermission' ])
   },
   methods: {
-    ...mapMutations('order/often', [ 'SET_DETAIL' ]),
     ...mapMutations('order/create', [ 'SET_ORDER_RESET' ]),
-    ...mapActions('order/often', [ 'getOftenDetail' ]),
+    ...mapMutations('order/often', [ 'SET_DETAIL' ]),
+    ...mapActions('order/often', [ 'getOftenDetail', 'deleteOftenOrder' ]),
 
     orderOneMore () {
       this.SET_ORDER_RESET(true)
       this.$router.push({ name: 'order-one-more', params: { id: this.detail.id } })
+    },
+
+    setRightButton () {
+      setAppTitleBtn({
+        text: '删除',
+        iconType: 'delete',
+        action: () => {
+          this.$createDialog({
+            type: 'confirm',
+            title: '',
+            content: '确认需要删除此常发订单？',
+            icon: 'cubeic-alert',
+            onConfirm: async () => {
+              await this.deleteOftenOrder(this.orderId)
+              window.toast('删除成功')
+              this.$router.back()
+            }
+          }).show()
+        }
+      })
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -59,6 +80,7 @@ export default {
       try {
         window.loading(true)
         await vm.getOftenDetail(vm.orderId)
+        vm.setRightButton()
       } catch (err) {
         //
       } finally {
