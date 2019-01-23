@@ -27,7 +27,7 @@
           prop="phone"
           label="联系电话"
           placeholder="请输入手机号或座机号"
-          :maxlength="20"
+          :maxlength="maxlength"
           type="phone"
         />
       </div>
@@ -99,6 +99,12 @@ export default {
     ...mapGetters(moudleName, ['formList', 'saveAddress']),
     isEdit () {
       return !this.$route.query.consigneeId
+    },
+    maxlength () {
+      if (this.formList.phone && +this.formList.phone[0] === 1) {
+        return 15
+      }
+      return 20
     }
   },
   methods: {
