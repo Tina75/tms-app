@@ -7,6 +7,7 @@
     @loadmore="loadmore"
     @on-item-click="onItemClick"
     @delete-item="deleteItem"
+    @set-off="setOff"
   />
 </template>
 
@@ -31,7 +32,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('delivery', ['getSend', 'clearSend', 'deleteBillById', 'getTabCount']),
+    ...mapActions('delivery', ['getSend', 'clearSend', 'doSetOff', 'deleteBillById', 'getTabCount', 'updateSend']),
 
     refresh() {
       this.clearSend()
@@ -44,7 +45,21 @@ export default {
     onItemClick(id) {
       this.$router.push({ name: 'delivery-detail', params: { id } })
     },
-
+    // 发运
+    setOff(id) {
+      this.$createDialog({
+        type: 'confirm',
+        icon: 'cubeic-alert',
+        content: '是否发运？',
+        onConfirm: () => {
+          this.doSetOff(id).then(() => {
+            this.refresh()
+            // let list = this.SendList.filter(item => id !== item.id)
+            // this.updateSend(list)
+          })
+        }
+      }).show()
+    },
     // 删除
     deleteItem(id) {
       this.$createDialog({
