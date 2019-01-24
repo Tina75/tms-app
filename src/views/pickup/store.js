@@ -398,6 +398,8 @@ export default {
         }).then((response) => {
           commit('getLocations', response.data.data)
           resolve()
+        }).catch(e => {
+          commit('getLocations', { points: [] })
         })
       })
     },
@@ -412,6 +414,8 @@ export default {
         }).then((response) => {
           commit('getLocations', response.data.data)
           resolve()
+        }).catch(e => {
+          commit('getLocations', { points: [] })
         })
       })
     },

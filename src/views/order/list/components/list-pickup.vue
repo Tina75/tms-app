@@ -42,10 +42,11 @@ export default {
     loadmore() {
       this.getPickup()
     },
-    async deleteById(id) {
-      await this.deleteOrder(id)
-      await this.setPickupList(this.PickupList.filter(item => item.id !== id))
-      this.getTabCount()
+    deleteById(id) {
+      this.deleteOrder(id).then(() => {
+        this.setPickupList(this.PickupList.filter(item => item.id !== id))
+        this.getTabCount()
+      })
     },
     editOrderById(id) { // 修改订单
       this.$router.push({ name: 'order-edit', params: { id } })

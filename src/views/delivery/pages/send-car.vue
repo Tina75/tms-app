@@ -5,11 +5,12 @@
         v-if="isEditMode"
         :start-code.sync="start"
         :end-code.sync="end"/>
-      <cube-form ref="assign-form"
-                 :model="model"
-                 :options="options"
-                 :immediate-validate="false"
-                 @validate="validateHandler">
+      <cube-form
+        ref="assign-form"
+        :model="model"
+        :options="options"
+        :immediate-validate="false"
+        @validate="validateHandler">
         <cube-form-group class="cube-mt-15">
           <cube-form-item :field="fields['assignCarType']" />
         </cube-form-group>
@@ -29,10 +30,7 @@
         </cube-form-group>
         <cube-form-group>
           <cube-form-item :field="fields['mileage']"/>
-          <cube-form-item v-if="model.assignCarType === 1" :field="fields['freightFee']">
-            <!-- <cube-input v-model="model.freightFee" class="freightFee_input border-right-1px" placeholder="请输入"/>
-            <i class="iconfont icon-ico_rule cube-c-green " @click.stop="goGetRule"/> -->
-          </cube-form-item>
+          <cube-form-item v-if="model.assignCarType === 1" :field="fields['freightFee']"/>
           <cube-form-item v-if="model.assignCarType === 2" :field="fields['gasFee']"/>
           <cube-form-item :field="fields['loadFee']"/>
           <cube-form-item :field="fields['unloadFee']"/>
@@ -62,7 +60,7 @@
           <cube-form-item v-if="model.assignCarType === 1" :field="fields['cashBack']"/>
         </cube-form-group>
         <cube-form-group>
-          <cube-form-item :field="fields['remark']"/>
+          <cube-form-item class="text-item" :field="fields['remark']"/>
         </cube-form-group>
       </cube-form>
     </div>
@@ -206,6 +204,7 @@ export default {
           modelKey: 'carrierName',
           label: '承运商名称',
           props: {
+            maxlength: 20,
             placeholder: '请输入（必填）'
           },
           rules: {
@@ -223,18 +222,18 @@ export default {
             placeholder: '请输入'
           },
           rules: {
-            partten: /^[冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤川青藏琼宁渝京津沪][A-Za-z][A-Za-z0-9]{5,6}$/
+            pattern: /(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z][A-Z](([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$)))|(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z][A-Z][A-HJ-NP-Z0-9]{4}[A-HJ-NP-Z0-9挂学警港澳]$)/
           },
           messages: {
             pattern: '请输入正确的车牌号'
-          },
-          trigger: 'blur'
+          }
         },
         carrierDriverName: {
           type: 'input',
           modelKey: 'carrierDriverName',
           label: '司机姓名',
           props: {
+            maxlength: 15,
             placeholder: '请输入'
           }
         },
@@ -246,10 +245,35 @@ export default {
             placeholder: '请输入'
           },
           rules: {
-            pattern: /^(1\d{10})?$/
+            pattern: /^(1\d{2}\s\d{4}\s\d{4})?$/
           },
           messages: {
             pattern: '请输入正确的手机号码'
+          },
+          events: {
+            'input': (val) => {
+              if (!val || val[0] !== '1') return
+              val = val.trim().split(' ').join('')
+              let phoneArr = []
+              let phoneTemp = ''
+              for (let i in val) {
+                i = Number(i)
+                phoneTemp += val[i]
+                if (!phoneArr.length && i === 2) {
+                  phoneArr.push(phoneTemp)
+                  phoneTemp = ''
+                } else if (phoneTemp.length === 4) {
+                  phoneArr.push(phoneTemp)
+                  phoneTemp = ''
+                } else if (i === (val.length - 1)) {
+                  phoneArr.push(phoneTemp)
+                  phoneTemp = ''
+                }
+              }
+              this.$nextTick(() => {
+                this.model.carrierDriverPhone = phoneArr.join(' ')
+              })
+            }
           },
           trigger: 'blur'
         },
@@ -390,6 +414,7 @@ export default {
           modelKey: 'carrierWaybillNo',
           label: '承运商运单号',
           props: {
+            maxlength: 20,
             placeholder: '请输入'
           }
         },
@@ -434,7 +459,7 @@ export default {
             type: 'number'
           },
           rules: {
-            pattern: /^((([1-9]\d{0,5})|0)(\.\d{0,1}[1-9])?)?$/
+            pattern: /^((([1-9]\d{0,5})|0)(\.[1-9])?)?$/
           },
           messages: {
             pattern: '请输入正确的金额公里数'
@@ -738,8 +763,9 @@ export default {
           modelKey: 'remark',
           label: '备注',
           props: {
+            maxlength: 100,
             autoExpand: true,
-            placeholder: ''
+            placeholder: '请输入备注信息'
           }
         }
       }
@@ -805,7 +831,7 @@ export default {
           carrierName: this.model.carrierName,
           carNo: this.model.assignCarType === 1 ? this.model.carrierCarNo : this.model.selCarNo.split('-')[0],
           driverName: this.model.assignCarType === 1 ? this.model.carrierDriverName : this.model.selfDriverName.split('-')[0],
-          driverPhone: this.model.assignCarType === 1 ? this.model.carrierDriverPhone : this.model.selfDriverName.split('-')[1],
+          driverPhone: this.model.assignCarType === 1 ? this.model.carrierDriverPhone.split(' ').join('') : this.model.selfDriverName.split('-')[1],
           carType: this.model.assignCarType === 1 ? this.model.carType : this.model.selCarNo.split('-')[1],
           carLength: this.model.assignCarType === 1 ? this.model.carLength : this.model.selCarNo.split('-')[2],
           mileage: NP.times(this.model.mileage, 1000),
@@ -982,6 +1008,13 @@ export default {
                 padding: 0 10px
                 line-height: 20px;
                 border-left: 1px solid #ddd;
+          &.text-item
+            display: block
+            .cube-form-field
+              display: block
+          .cube-validator-content
+            .cube-input
+              width 100%
           .freightFee_input
             padding-right 10px
         .cube-form-label

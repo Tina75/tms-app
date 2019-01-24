@@ -16,8 +16,8 @@
             prop="consignerName"
             required
             label="客户名称"
-            autofocus
             maxlength="20"
+            autofocus
             click-icon="icon-ico_custerm"
             @on-icon-click="gotoConsignerPage"
             @on-focus="inputFocus" />
@@ -295,8 +295,7 @@ export default {
         vm.showOtherInfo()
         vm.showFreightFee()
         vm.calculateDistance()
-        vm.showPage = false
-        vm.$nextTick(() => { vm.showPage = true })
+        vm.$refs.$scroll.refresh()
       })
     })
   }

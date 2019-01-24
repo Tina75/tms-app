@@ -26,10 +26,6 @@
           <p v-if="info.consignerName" class="cube-mb-5">{{info.consignerName}}</p>
           <p v-if="info.carrierName" class="cube-mb-5">{{info.carrierName}}</p>
           <p v-if="info.id && info.customerOrderNo" class="list-item__number">客户订单号：{{info.customerOrderNo}}</p>
-          <!-- <p v-if="hasSendCar(info)" class="list-item__number cube-font-12 cube-mt-5">
-            <span class="send-type">{{info.assignCarType==1?'外转':'自送'}}</span>
-            <span class="cube-font-14">&nbsp;{{info.driverName}}&nbsp;{{info.assistantDriverName}}&nbsp;{{info.carNo}}</span>
-          </p> -->
         </div>
         <div class="list-item__money border-top-1px">
           <p v-if="info.totalFee"  class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormatForOrder}})</p>
@@ -42,17 +38,6 @@
             inline
             primary
             @click.stop="onDispatch(info)">调度</cube-button>
-          <!-- <div v-else class="list-item__btngroup">
-            <div v-if="info.status==2">
-              <cube-button class="btn" :outline="true" :inline="true" @click.stop="$emit('delete-item', info.waybillId)">删除</cube-button>
-              <cube-button v-if="!hasSendCar(info)" class="btn" :outline="true"  :inline="true" primary @click.stop="sendCar(info.waybillId)">派车</cube-button>
-              <cube-button v-else class="btn" :outline="true"  :inline="true" primary @click.stop="setOff(info.waybillId)">发运</cube-button>
-            </div>
-            <div v-if="info.status==3">
-              <cube-button class="btn" :outline="true"  :inline="true" @click.stop="location(info.waybillId)">位置</cube-button>
-              <cube-button  class="btn" :outline="true"  :inline="true" primary @click.stop="arrival(info.waybillId)">到货</cube-button>
-            </div>
-          </div> -->
         </div>
       </li>
     </ul>
@@ -135,12 +120,12 @@ export default {
       overflow hidden
       text-overflow ellipsis
     &__count
-      background #efefef
+      background #f3f5f9
       display inline-block
       margin 7px 8px 7px 0
-      border-radius 3px
       padding 3px 5px 2px 5px
       font-size 12px
+      color #333
     &__number
       line-height 25px
       .send-type

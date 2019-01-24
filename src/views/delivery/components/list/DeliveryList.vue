@@ -43,7 +43,7 @@
             <div v-if="info.status==2">
               <!-- <cube-button class="btn" outline inline @click.stop="$emit('delete-item', info.waybillId)">删除</cube-button> -->
               <cube-button v-if="!hasSendCar(info)" class="btn" outline inline primary @click.stop="sendCar(info.waybillId)">派车</cube-button>
-              <cube-button v-else class="btn" outline inline primary @click.stop="setOff(info.waybillId)">发运</cube-button>
+              <cube-button v-else class="btn" outline inline primary @click.stop="$emit('set-off',info.waybillId)">发运</cube-button>
             </div>
             <div v-if="info.status==3">
               <cube-button class="btn" outline inline @click.stop="location(info.waybillId)">位置</cube-button>
@@ -88,16 +88,6 @@ export default {
     // 派车
     sendCar(id) {
       this.$router.push({ name: 'delivery-send-car', params: { id } })
-    },
-    // 发运
-    setOff(id) {
-      this.showDialog('是否发运？', () => {
-        this.doSetOff(id)
-      })
-    },
-    // 到货
-    arrival(id) {
-
     },
 
     location(id) {
@@ -179,12 +169,12 @@ export default {
         white-space nowrap
         max-width 150px
     &__count
-      background #efefef
+      background #f3f5f9
       display inline-block
       margin 7px 8px 7px 0
-      border-radius 3px
       padding 3px 5px 2px 5px
       font-size 12px
+      color #333
     &__number
       line-height 25px
       .send-type

@@ -20,7 +20,7 @@ export default {
         //   )
         // }
         const { length, width, height } = temp.dimension
-        const size = [ length || '-', width || '-', height || '-' ].join('x')
+        const size = !length && !width && !height ? '' : [ length || '-', width || '-', height || '-' ].join('x')
         this.formList.splice(this.dialogIndex, 1, Object.assign(temp, { size }))
       }
     }, createElement => {

@@ -2,7 +2,7 @@
   <div class="normal-cell" @click="$emit('click')">
     <div class="normal-cell__group">
       <slot name="left">
-        <i v-if="leftIcon" :class="leftIcon" class="normal-cell__icon iconfont cube-font-17 cube-mr-10"/>
+        <i v-if="leftIcon" :class="leftIcon" class="normal-cell__icon iconfont cube-font-18 cube-mr-10"/>
       </slot>
       <span class="normal-cell__label cube-font-15 cube-c-black" v-text="label"/>
     </div>

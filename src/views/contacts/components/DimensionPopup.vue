@@ -10,23 +10,23 @@
     >
       <transition name="cube-picker-move">
         <div v-show="show" class="dimension-popup">
-          <div class="dimension-popup__title cube-c-black cube-font-18 cube-font-weight--m">包装尺寸(毫米)</div>
+          <p class="dimension-popup__title cube-dialog-title">包装尺寸(毫米)</p>
           <div class="dimension-popup__group">
-            <input
-              v-for="item in options"
-              :key="item.key"
-              v-model="item.value"
-              type="number"
-              class="dimension-popup__input cube-c-placeholder"
-              :placeholder="item.placeholder"
-              @input="checkValid"
-            >
+            <div v-for="item in options" :key="item.key" class="cube-input cube-ml-5 cube-mr-5">
+              <input
+                v-model="item.value"
+                type="number"
+                class="dimension-popup__input cube-c-placeholder "
+                :placeholder="item.placeholder"
+                @input="checkValid"
+              >
+            </div>
           </div>
-          <div class="cube-validator-msg-def"> {{!valid ? '支持输入数字和1位小数' : ''}}</div>
+          <div class="cube-validator-msg-def border-bottom-1px"> {{!valid ? '支持输入数字和1位小数' : ''}}</div>
           <div class="dimension-popup__btns">
-            <a class="cube-dialog-btn border-top-1px" @click="toggle()">取消</a>
+            <a class="cube-dialog-btn border-right-1px" @click="toggle()">取消</a>
             <a
-              class="cube-dialog-btn border-top-1px cube-dialog-btn_highlight"
+              class="cube-dialog-btn cube-dialog-btn_highlight"
               @click.stop="onConfirm"
             >确定</a>
           </div>
@@ -125,28 +125,29 @@ export default {
 <style lang='stylus'>
 .dimension-popup
   background #fff
-  width 344px
+  width 270px
   .cube-validator-msg-def
     text-align center
-    padding 10px 0
-    height 40px
+    padding 5px 0
+    height 25px
     vertical-align middle
     font-size 14px
   &__title
     text-align center
-    padding 30px 0
+    font-size 16px
+    padding 30px 0 25px
   &__group
     display flex
     overflow hidden
     justify-content space-around
     width 100%
+    padding 0 5px
   &__input
     -webkit-appearance none
-    border 1px solid #DCDEE2
-    width 100px
-    height 44px
+    width 76px
+    height 39px
     text-align center
-    font-size 16px
+    font-size 14px
     padding 0
     margin 0
   &__btns

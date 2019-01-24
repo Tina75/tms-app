@@ -12,10 +12,10 @@
         <a v-clipboard:copy="Detail.customerOrderNo" v-clipboard:success="copySuccess">复制</a>
       </p>
     </detail-panel-item>
-    <detail-panel-item v-if="Detail.waybillNo" :label="'客户运单号'">
+    <detail-panel-item v-if="Detail.customerWaybillNo" :label="'客户运单号'">
       <p class="remix-content">
-        <span class="border-right-1px">{{Detail.waybillNo}}</span>
-        <a v-clipboard:copy="Detail.waybillNo" v-clipboard:success="copySuccess">复制</a>
+        <span class="border-right-1px">{{Detail.customerWaybillNo}}</span>
+        <a v-clipboard:copy="Detail.customerWaybillNo" v-clipboard:success="copySuccess">复制</a>
       </p>
     </detail-panel-item>
     <detail-panel-item v-if="Detail.startName" :label="'始发地'">

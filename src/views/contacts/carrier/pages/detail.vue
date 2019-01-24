@@ -1,7 +1,7 @@
 <template>
   <div class="carrier-detail cube-has-bottom-btn">
     <div class="carrier-detail__header">
-      <span class="cube-font-18 cube-font-weight cube-ellipsis" v-text="viewData.carrierName"/>
+      <span class="cube-font-20 cube-font-weight cube-ellipsis" v-text="viewData.carrierName"/>
       <div class="carrier-detail__flexbox cube-font-14 cube-c-grey">
         <div class="carrier-detail__flex">
           <div class="cube-mt-15">

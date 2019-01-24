@@ -166,9 +166,9 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       if (Number(to.query.type) === 1) {
-        vm.getPickupLocation(to.params.id).catch(e => { vm.$router.back() })
+        vm.getPickupLocation(to.params.id)
       } else if (Number(to.query.type) === 2) {
-        vm.getWaybillLocation(to.params.id).catch(e => { vm.$router.back() })
+        vm.getWaybillLocation(to.params.id)
       }
     })
   },
@@ -221,7 +221,7 @@ export default {
     display: flex
     width: 110px;
     height: 35px;
-    padding: 2px 5px;
+    padding: 2px 4px;
     background: #00A4BD;
     overflow: hidden;
     color: #fff;
@@ -230,12 +230,13 @@ export default {
       width: 20px;
       height: 20px;
       margin-top: 6px;
-      margin-right: 5px;
+      margin-right: 2px;
     .driver-text
       flex: 1
       text-align: left
       .truck-no
-        font-size: 15px;
+        text-align: center
+        font-size: 14px;
         font-weight: bold
         line-height: 35px;
         letter-spacing: -1px

@@ -20,7 +20,7 @@
         <p>{{pickupDetail.driverName}}</p>
       </detail-panel-item>
       <detail-panel-item :label="'联系方式'">
-        <p class="remix-content">
+        <p v-if="pickupDetail.driverPhone" class="remix-content">
           <span class="border-right-1px">{{pickupDetail.driverPhone|phoneFormat}}</span>
           <a @click="phoneCall(pickupDetail.driverPhone)">
             联系TA
@@ -121,6 +121,9 @@ export default {
     a
       padding-left: 10px;
       color: #00a4bd;
+      i
+        display: inline-block
+        margin-top: -3px;
   .remark
     max-width 240px
     text-align: left

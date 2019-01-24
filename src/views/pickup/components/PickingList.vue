@@ -12,7 +12,7 @@
         :data="item">
         <a class="grey" @click.stop="locate(item, index)">位置</a>
         <a @click.stop="arrive(item, index)">到货</a>
-      </bill-item>>
+      </bill-item>
     </div>
   </cube-scroll>
 </template>
