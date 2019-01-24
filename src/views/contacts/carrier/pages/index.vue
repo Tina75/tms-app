@@ -12,7 +12,7 @@
         :index="i"
         :item="item"
         icon="icon-ico-driver"
-        @phoneCall="onItemPhoneCall"
+        @phoneCall="onShowPhonePopup"
         @click="onItemClick"
       />
       <template slot="empty">
@@ -29,6 +29,22 @@
         </NoData>
       </template>
     </InfiniteList>
+    <cube-popup ref="phoneCall" type="phoneCall-popup" position="bottom" :mask-closable="true">
+      <a
+        v-if="currentItem.carrierPhone"
+        href="javascript:;"
+        class="contacts-carrier__phone-btn border-bottom-1px"
+        @click="onItemPhoneCall(currentItem.carrierPhone)">
+        {{ `负责人 ${currentItem.carrierPhone}`}}
+      </a>
+      <a
+        v-if="currentItem.customerCarrierPhone"
+        href="javascript:;"
+        class="contacts-carrier__phone-btn"
+        @click="onItemPhoneCall(currentItem.customerCarrierPhone)">
+        {{ `客服 ${currentItem.customerCarrierPhone}`}}
+      </a>
+    </cube-popup>
   </div>
 </template>
 
@@ -47,7 +63,8 @@ export default {
   components: { ListItem, NoData, InfiniteList },
   data() {
     return {
-      loading: false
+      loading: false,
+      currentItem: ''
     }
   },
   computed: mapState(moudleName, ['contactList']),
@@ -70,8 +87,13 @@ export default {
         }
       ])
     },
-    onItemPhoneCall(item) {
-      window.location.href = `tel:${item.phone}`
+    onShowPhonePopup(item) {
+      this.currentItem = item.data
+      this.$refs.phoneCall.show()
+    },
+    onItemPhoneCall (phone) {
+      window.location.href = `tel:${phone}`
+      this.$refs.phoneCall.hide()
     },
     onItemClick(item, index) {
       this.$router.push({ name: 'contacts-carrier-detail', query: { carrierId: item.id } })
@@ -89,4 +111,11 @@ export default {
   &__placeholder
     width 179px
     height 133px
+  &__phone-btn
+    display block
+    line-height 45px
+    text-align center
+    color #418DF9
+    font-size 15px
+    background #ffffff
 </style>
