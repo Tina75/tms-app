@@ -221,7 +221,7 @@ export default {
     display: flex
     width: 110px;
     height: 35px;
-    padding: 2px 5px;
+    padding: 2px 4px;
     background: #00A4BD;
     overflow: hidden;
     color: #fff;
@@ -230,7 +230,7 @@ export default {
       width: 20px;
       height: 20px;
       margin-top: 6px;
-      margin-right: 5px;
+      margin-right: 2px;
     .driver-text
       flex: 1
       text-align: left
