@@ -100,10 +100,7 @@ export const setAppRightBtn = (options = []) => {
     arr.push(config)
   })
   console.warn('setAppBtn: ', arr)
-  // 原: 右上角多个按钮的顺序，ios和android约定按传入的逆序排列
-  // ios实现上按逆序,andorid实现上又顺序了
-  // 后约定都按顺序来,但此处h5已经全部按逆序调用了,谁有空谁全局改吧
-  bridge.call('ui.setRightButtonAction', { list: arr.reverse() }, () => {})
+  bridge.call('ui.setRightButtonAction', { list: arr }, () => {})
 }
 
 export const setGlobalBack = (vm) => {
