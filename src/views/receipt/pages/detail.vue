@@ -219,11 +219,8 @@ export default {
           }
           API.updateReceipt(params)
             .then(res => {
-              this.$createToast({
-                type: 'warn',
-                time: 1000,
-                txt: '回收成功'
-              }).show()
+              this.initDetail()
+              window.toast('回收成功')
             })
         }
       }, false).show()
@@ -248,11 +245,8 @@ export default {
           }
           API.updateReceipt(params)
             .then(res => {
-              this.$createToast({
-                type: 'warn',
-                time: 1000,
-                txt: '返厂成功'
-              }).show()
+              this.initDetail()
+              window.toast('返厂成功')
             })
         }
       }, false).show()

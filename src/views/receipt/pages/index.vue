@@ -33,7 +33,7 @@ export default {
   },
   data () {
     return {
-      selectedLabel: '',
+      selectedLabel: '全部',
       cache: {},
       tabs: [
         {
@@ -86,10 +86,17 @@ export default {
       this.tabChange(val)
     }
   },
-  mounted () {
-    this.selectedLabel = this.tabs[this.tabIndex].label
-    this.getReceiptStatusCnt()
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.getReceiptStatusCnt()
+      if (vm.selectedLabel) {
+        vm.tabChange(vm.selectedLabel)
+      }
+    })
   },
+  // mounted () {
+  //   this.selectedLabel = this.tabs[this.tabIndex].label
+  // },
   methods: {
     ...mapActions(['getReceiptStatusCnt', 'initReceiptList']),
     async tabChange (val) {

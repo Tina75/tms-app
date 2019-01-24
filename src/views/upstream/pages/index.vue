@@ -35,7 +35,7 @@ export default {
   },
   data () {
     return {
-      selectedLabel: '',
+      selectedLabel: '全部',
       cache: {},
       tabs: [
         {
@@ -69,9 +69,16 @@ export default {
       this.tabChange(val)
     }
   },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.getUpstreamStatusCnt()
+      if (vm.selectedLabel) {
+        vm.tabChange(vm.selectedLabel)
+      }
+    })
+  },
   mounted () {
-    this.selectedLabel = this.tabs[0].label
-    this.getUpstreamStatusCnt()
+    // this.selectedLabel = this.tabs[0].label
   },
   methods: {
     ...mapActions(['getUpstreamStatusCnt', 'initList']),
