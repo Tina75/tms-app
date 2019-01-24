@@ -298,6 +298,7 @@ export default {
         setTimeout(() => {
           setAppTitleBtn({
             text: '返回',
+            iconType: 'back',
             position: 'left',
             action: () => {
               if (vm.step > 1) vm.step = --vm.step

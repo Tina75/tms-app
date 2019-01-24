@@ -25,7 +25,10 @@
             <span class="address">{{item.consigneeAddress}}</span>
           </p>
           <div>
-            <span v-if="item.cargoNames" class="list-item__count">{{item.cargoNames.length>1?item.cargoNames[0]+'等':item.cargoNames[0]}}</span>
+            <span v-if="item.cargoNames" class="list-item__count">
+              {{item.cargoNames[0]|textOverflow(10)}}
+              <span v-if="item.cargoNames[0].length<10&& item.cargoNames.length>1">等</span>
+            </span>
             <span v-if="item.weight" class="list-item__count">{{item.weight}}吨</span>
             <span v-if="item.volume" class="list-item__count">{{item.volume}}方</span>
             <span v-if="item.quantity" class="list-item__count">{{item.quantity}}件</span>
@@ -192,12 +195,12 @@ export default {
         white-space nowrap
         max-width 150px
     &__count
-      background #efefef
+      background #f3f5f9
       display inline-block
       margin 5px 8px 5px 0
-      border-radius 3px
       padding 3px 5px 2px 5px
       font-size 12px
+      color #333
     &__number
       line-height 25px
       margin-bottom 10px

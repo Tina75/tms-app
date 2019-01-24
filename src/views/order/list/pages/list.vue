@@ -43,31 +43,41 @@ export default {
   },
 
   computed: {
-    ...mapGetters('order/list', ['TabCount'])
+    ...mapGetters('order/list', ['TabCount', 'AllList', 'PickupList', 'DeliveryList', 'SendingList', 'ArrivalList'])
   },
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
       switch (vm.selectedLabel) {
         case '全部':
-          vm.clearAll()
-          vm.getAll()
+          if (vm.AllList.length) {
+            vm.clearAll()
+            vm.getAll()
+          }
           break
         case '待送货':
-          vm.clearDelivery()
-          vm.getDelivery()
+          if (vm.PickupList.length) {
+            vm.clearDelivery()
+            vm.getDelivery()
+          }
           break
         case '待提货':
-          vm.clearPickup()
-          vm.getPickup()
+          if (vm.DeliveryList.length) {
+            vm.clearPickup()
+            vm.getPickup()
+          }
           break
         case '在途':
-          vm.clearSending()
-          vm.getSending()
+          if (vm.SendingList.length) {
+            vm.clearSending()
+            vm.getSending()
+          }
           break
         case '已完成':
-          vm.clearArrival()
-          vm.getArrival()
+          if (vm.ArrivalList.length) {
+            vm.clearArrival()
+            vm.getArrival()
+          }
           break
       }
     })

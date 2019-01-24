@@ -9,7 +9,7 @@
     <!-- <detail-panel-item :label="'油费'">
       <p>1000元</p>
     </detail-panel-item> -->
-    <detail-panel-item :label="'提货费用'" >
+    <detail-panel-item v-if="Detail.pickupFee" :label="'提货费用'" >
       <p>{{Detail.pickupFee | moneyFormat}}元</p>
     </detail-panel-item>
     <detail-panel-item v-if="Detail.loadFee" :label="'装货费用'">

@@ -1,6 +1,12 @@
 <template>
   <detail-panel :title="'货物明细'">
-    <a v-if="pickupDetail.status === 1" slot="title-btn" class="cargo-edit" @click="toEditOrders">编辑</a>
+    <a v-if="pickupDetail.status === 1" slot="title-btn" class="cargo-edit" @click="toEditOrders">
+      <icon-font
+        name="icon-ico_edite"
+        :size="16"
+        color="#00A4BD"/>
+      编辑
+    </a>
     <div class="order-list">
       <ul>
         <li v-for="(item, index) in pickupCargoDetail" :key="index" class="order-item">
@@ -30,10 +36,11 @@
 <script>
 import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
+import IconFont from '@/components/Iconfont'
 
 export default {
   name: 'order-list',
-  components: { detailPanel },
+  components: { detailPanel, IconFont },
   computed: {
     ...mapGetters('pickup', ['pickupDetail', 'pickupCargoDetail'])
   },
@@ -58,6 +65,9 @@ export default {
     padding-right: 25px;
     color: #00A4BD;
     font-size: 15px;
+    i
+      display: inline-block
+      margin-top: -3px;
   .order-list
     padding: 15px 15px 0 0
     .order-item

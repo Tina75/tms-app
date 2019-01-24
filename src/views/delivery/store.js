@@ -176,8 +176,8 @@ export default {
         data: { waybillIds: [id] }
       }).then(({ data }) => {
         window.toast('发运成功')
-        let list = state.send.list.filter(item => id !== item.id)
-        commit('SET_SEND_LIST', list)
+        // let list = state.send.list.filter(item => id !== item.id)
+        // commit('SET_SEND_LIST', list)
       })
     },
     getTabCount: ({ commit, state }) => {
@@ -199,14 +199,14 @@ export default {
     },
     // 调度 and 创建运单
     dispatchOrder: ({ commit, state }, data) => {
-      const ids = data.orderIds
+      // const ids = data.orderIds
       return Server({
         url: '/waybill/create',
         method: 'post',
         data
       }).then(({ data }) => {
-        let list = state.dispatch.list.filter(item => !(ids.includes(item.id)))
-        commit('SET_DISPATCH', list)
+        // let list = state.dispatch.list.filter(item => !(ids.includes(item.id)))
+        // commit('SET_DISPATCH', list)
       })
     },
     // 获取运单详情
