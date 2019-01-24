@@ -1,6 +1,6 @@
 <template>
   <div class="scroll-list-wrap">
-    <cube-scroll v-if="showPage" ref="$scroll" class="scroll-box">
+    <cube-scroll ref="$scroll" class="scroll-box">
       <div class="cargo-form-box">
         <form-group ref="$form" :rules="rules">
           <div v-for="(form, index) in formList" :key="index" class="form-section">
@@ -47,6 +47,7 @@
             <form-item
               v-if="orderConfig.cargoCostOption"
               v-model="form.cargoCost"
+              prop="cargoCost"
               label="货值(元)"
               type="number"
               precision="4"
@@ -153,7 +154,6 @@ export default {
   components: { FormGroup, FormItem, FormTitle },
   data () {
     return {
-      showPage: true,
       windowOriginHeight: 0,
       windowIsResize: false,
       CARGO_IMAGE,
@@ -200,24 +200,29 @@ export default {
         fromName === 'order-cargo-often'
           ? this.formList
           : this.orderCargoList).map(item => {
-        if (item.cargoCost) item.cargoCost = NP.divide(item.cargoCost, 100)
-        if (item.size === undefined) item.size = [ item.dimension.length || '-', item.dimension.width || '-', item.dimension.height || '-' ].join('x')
+        if (item.cargoCost && fromName !== 'order-cargo-often') item.cargoCost = NP.divide(item.cargoCost, 100)
+        if (item.size === undefined) {
+          item.size = !item.dimension.length && !item.dimension.width && !item.dimension.height
+            ? ''
+            : [ item.dimension.length || '-', item.dimension.width || '-', item.dimension.height || '-' ].join('x')
+        }
         return item
       })
       this.formList = tempCargoList
       if (!this.formList.length) this.cargoAdd()
       this.setChoosedCargo()
+      this.$refs.$scroll.refresh()
     },
     // 提交货物信息
     async submitCargoList () {
       const valid = await this.$refs.$form.validate()
-      if (!valid) return window.toast('请填写货物名称')
+      if (!valid) return window.toast('请修改错误信息')
       const tempCargoList = Object.assign([], this.formList).map(item => {
         if (item.cargoCost) item.cargoCost = NP.times(item.cargoCost, 100)
         return item
       })
       this.SET_CARGO_LIST(tempCargoList)
-      this.$formWillLeave(() => { this.showPage = false })
+      this.$formWillLeave()
       this.$router.back()
     },
     // 删除货物
@@ -227,6 +232,7 @@ export default {
     // 添加货物
     cargoAdd (index) {
       this.formList.push(this.getEmptyCargo())
+      this.$refs.$scroll.refresh()
     },
     // 返回一个空的货物信息
     getEmptyCargo () {
@@ -271,9 +277,7 @@ export default {
 
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.initCargoList(from.name)
-      vm.showPage = false
-      vm.$nextTick(() => { vm.showPage = true })
+      vm.$nextTick(() => { vm.initCargoList(from.name) })
     })
   }
 }

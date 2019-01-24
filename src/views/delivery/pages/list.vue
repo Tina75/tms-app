@@ -42,7 +42,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters('delivery', ['TabCount'])
+    ...mapGetters('delivery',
+      ['TabCount',
+        'DispatchList',
+        'SendList',
+        'SendingList',
+        'ArrivalList'])
   },
 
   watch: {
@@ -57,6 +62,32 @@ export default {
       if (tab) { vm.selectedLabel = vm.tabs[tab - 1].label }
       vm.getTabCount()
       vm.setRightBtn()
+      switch (vm.selectedLabel) {
+        case '待调度':
+          if (vm.DispatchList.length) {
+            vm.clearDispatch()
+            vm.getDispatch()
+          }
+          break
+        case '待发运':
+          if (vm.SendList.length) {
+            vm.clearSend()
+            vm.getSend()
+          }
+          break
+        case '在途':
+          if (vm.SendingList.length) {
+            vm.clearSending()
+            vm.getSending()
+          }
+          break
+        case '已到货':
+          if (vm.ArrivalList.length) {
+            vm.clearArrival()
+            vm.getArrival()
+          }
+          break
+      }
     })
   },
 
@@ -70,7 +101,11 @@ export default {
     this.updateView(this.selectedLabel)
   },
   methods: {
-    ...mapActions('delivery', ['getTabCount']),
+    ...mapActions('delivery', ['getTabCount',
+      'getDispatch', 'clearDispatch',
+      'getSend', 'clearSend',
+      'getSending', 'clearSending',
+      'getArrival', 'clearArrival']),
     updateView(label) {
       this.current = this.tabs.find(item => item.label === label).componentName
     },

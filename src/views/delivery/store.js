@@ -31,7 +31,7 @@ export default {
       state.dispatch.pageNo = ++payload.pageNo
       state.dispatch.list = state.dispatch.list.concat(payload.list)
     },
-    SET_DISPATCH(state, list) {
+    SET_DISPATCH_LIST(state, list) {
       state.dispatch.list = [...list]
     },
     DISPATCH_CLEAR (state) {
@@ -41,7 +41,6 @@ export default {
       state.send.pageNo = ++payload.pageNo
       state.send.list = state.send.list.concat(payload.waybillList)
     },
-
     SET_SEND_LIST(state, list) {
       state.send.list = [...list]
     },
@@ -108,6 +107,7 @@ export default {
       })
     },
     clearDispatch: ({ commit }) => { commit('DISPATCH_CLEAR') },
+    updateDispatch: ({ commit }, list) => { commit('SET_SEND_LIST', list) },
     // 运单状态 2 待发运、 3 在途、4 已到货 不传表示所有
     getSend: ({ commit, state }) => {
       return Server({
@@ -121,6 +121,8 @@ export default {
       })
     },
     clearSend: ({ commit }) => { commit('SEND_CLEAR') },
+    updateSend: ({ commit }, list) => { commit('SET_SEND_LIST', list) },
+
     getSending: ({ commit, state }) => {
       return Server({
         url: '/waybill/list',
@@ -176,8 +178,6 @@ export default {
         data: { waybillIds: [id] }
       }).then(({ data }) => {
         window.toast('发运成功')
-        let list = state.send.list.filter(item => id !== item.id)
-        commit('SET_SEND_LIST', list)
       })
     },
     getTabCount: ({ commit, state }) => {
@@ -199,14 +199,14 @@ export default {
     },
     // 调度 and 创建运单
     dispatchOrder: ({ commit, state }, data) => {
-      const ids = data.orderIds
+      // const ids = data.orderIds
       return Server({
         url: '/waybill/create',
         method: 'post',
         data
       }).then(({ data }) => {
-        let list = state.dispatch.list.filter(item => !(ids.includes(item.id)))
-        commit('SET_DISPATCH', list)
+        // let list = state.dispatch.list.filter(item => !(ids.includes(item.id)))
+        // commit('SET_DISPATCH', list)
       })
     },
     // 获取运单详情

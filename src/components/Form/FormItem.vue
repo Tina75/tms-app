@@ -133,8 +133,7 @@ export default {
   computed: {
     inputType () {
       const type = this.type
-      if (type === 'text' || type === 'number') return type
-      if (type === 'phone') return 'text'
+      if (type === 'text' || type === 'number' || type === 'phone') return 'text'
       if (type === 'textarea' && this.value) {
         this.initTextAreaRow(this.value)
       }
@@ -188,7 +187,7 @@ export default {
         case 'number':
           if (isNaN(Number(newVal))) {
             this.$nextTick(() => {
-              this.inputValue = ''
+              this.inputValue = oldVal
               this.inputEmit()
             })
             return
