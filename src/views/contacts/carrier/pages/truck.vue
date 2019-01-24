@@ -59,6 +59,8 @@ export default {
     onPageRefresh() {
       console.info('onRefreshPage')
       this.loading = true
+    },
+    setBtns () {
       setAppRightBtn([
         {
           text: '添加',
@@ -81,6 +83,9 @@ export default {
         query: { carrierId: item.carrierId, carId: item.id }
       })
     }
+  },
+  beforeRouteEnter: (to, from, next) => {
+    next(vm => vm.setBtns())
   }
 }
 </script>
