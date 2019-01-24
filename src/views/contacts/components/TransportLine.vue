@@ -5,7 +5,7 @@
       v-model="from.sn"
       type="click"
       :label="label[0]"
-      :click-icon="from.sn ? 'icon-shanchu-shuru' : ''"
+      :click-icon="from.sn ? 'icon-shanchu-shuru remove-btn-color' : ''"
       placeholder="请选择出发地城市"
       @on-click="showPickCity(0)"
       @on-icon-click="handleRemove(0)"
@@ -14,7 +14,7 @@
       v-model="to.en"
       type="click"
       :label="label[1]"
-      :click-icon="to.en ? 'icon-shanchu-shuru' : ''"
+      :click-icon="to.en ? 'icon-shanchu-shuru remove-btn-color' : ''"
       placeholder="请选择目的地城市"
       @on-click="showPickCity(1)"
       @on-icon-click="handleRemove(1)"
@@ -122,6 +122,13 @@ export default {
       console.log(eventData)
       this.$emit('input', eventData)
     }
+  },
+
+  beforeRouteLeave (to, from, next) {
+    next(vm => {
+      debugger
+      vm.pickCityVisible = false
+    })
   }
 }
 </script>
@@ -130,6 +137,10 @@ export default {
 .transport-line
   position relative
   padding-left 20px
+  .remove-btn-color
+    color #C5C8CE !important
+  .form-item-icon::before
+    display none
   &__icon
     position absolute
     display block
