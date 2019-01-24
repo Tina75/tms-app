@@ -12,13 +12,9 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'message-detail',
   metaInfo: { title: '消息' },
-  data () {
-    return {
-    }
-  },
 
   computed: {
-    ...mapGetters(['MsgDetail'])
+    ...mapGetters('message', ['MsgDetail'])
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -26,7 +22,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['getMsgById', 'deleteMsgById'])
+    ...mapActions('message', ['getMsgById', 'deleteMsgById'])
   }
 }
 
