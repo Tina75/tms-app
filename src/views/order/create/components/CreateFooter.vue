@@ -22,8 +22,8 @@
         @click="saveOrder(true)">立即发运</cube-button>
     </div>
 
-    <div v-show="showDetail" class="detail-box">
-      <div class="detail-data">
+    <div v-show="showDetail" class="detail-box" @click.prevent="showDetail = !showDetail">
+      <div class="detail-data" @click.stop="showDetail = true">
         <p>费用合计明细</p>
         <ul>
           <li><span>运输费：</span>{{ freightFee }}元</li>

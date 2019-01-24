@@ -55,7 +55,14 @@ export default {
         remark: ''
       },
       rules: {
-        collectionMoney: { type: 'number', min: 0 }
+        collectionMoney: {
+          type: 'number',
+          min: 0,
+          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/,
+          messages: {
+            pattern: '整数位不得超过9位'
+          }
+        }
       }
     }
   },

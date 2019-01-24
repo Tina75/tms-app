@@ -29,7 +29,7 @@
         clearable />
     </form-group>
     <div class="contacts-address-list">
-      <template v-if="showOftenList || !allowSearch">
+      <template v-if="(showOftenList || !allowSearch) && oftenAddresses.length">
         <p class="address-list-title">常用地址</p>
         <ul class="address-often-list list">
           <li

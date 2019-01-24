@@ -29,6 +29,7 @@
 
           <!-- 选择器 type = selece -->
           <cube-select
+            ref="$picker"
             v-if="type === 'select'"
             v-model="inputValue"
             class="form-item-input"
@@ -123,11 +124,11 @@ export default {
   data () {
     return {
       inputValue: this.value,
-      picker: null,
       valid: true,
       resetValidator: false,
       rule: null,
-      rows: 2
+      rows: 2,
+      picker: null
     }
   },
   computed: {
@@ -230,6 +231,7 @@ export default {
     },
     selectChangeHandler (value, index, text) { this.$emit('change', value, index, text) },
     pickerShowHandler () {
+      this.picker = this.$refs.$picker.picker
       this.inputBlurTrigger()
       this.$emit('picker-show')
     },
@@ -337,6 +339,7 @@ export default {
         display inline-block
         width 18px
         height 18px
+        margin-left 2px
         margin-right 10px
         border-radius 2px
         vertical-align text-top

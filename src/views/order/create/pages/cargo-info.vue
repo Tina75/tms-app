@@ -165,7 +165,14 @@ export default {
         weight: { type: 'number', min: 0 },
         weightKg: { type: 'number', min: 0 },
         volume: { type: 'number', min: 0 },
-        quantity: { type: 'number', min: 1 }
+        quantity: { type: 'number', min: 1 },
+        cargoCost: {
+          type: 'number',
+          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/,
+          messages: {
+            pattern: '整数位不得超过9位'
+          }
+        }
       }
     }
   },
