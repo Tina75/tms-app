@@ -16,16 +16,6 @@ export default [
     component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
   },
   {
-    path: '/order/more/:id',
-    name: 'order-one-more', // 再来一单
-    meta: {
-      mode: 'oneMore',
-      title: '再来一单',
-      formLeaveConfirm: true
-    },
-    component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
-  },
-  {
     path: '/order/edit/:id',
     name: 'order-edit', // 编辑订单
     meta: {

@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
 import { setAppRightBtn } from '@/libs/bridgeUtil'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'message-detail',
@@ -21,8 +21,26 @@ export default {
   beforeRouteEnter(to, from, next) {
     next(vm => {
       vm.getMsgById(to.params.id)
-      vm.setAppRightBtn([{ text: '删除', iconType: 'delete', action: () => { vm.deleteMsgById(to.params.id) } }])
     })
+  },
+  activated() {
+    setAppRightBtn([
+      { text: '删除',
+        iconType: 'delete',
+        action: () => {
+          this.$createDialog({
+            type: 'confirm',
+            icon: 'cubeic-alert',
+            content: '确定要删除消息吗？',
+            onConfirm: () => {
+              this.deleteMsgById(this.$route.params.id).then(() => {
+                this.$route.back()
+              })
+            }
+          }).show()
+        }
+      }
+    ])
   },
   beforeRouteLeave(to, from, next) {
     setAppRightBtn([{ text: '', action: () => { } }])

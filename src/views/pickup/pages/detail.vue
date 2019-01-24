@@ -226,15 +226,21 @@ export default {
   height: 100%
   background-color: #EFEFEF;
   display: flex
+  display: -webkit-box;
+  display: -webkit-flex;
   flex-direction column
   .cube-scroll-nav
     flex: 1
+    -webkit-box-flex: 1
     height: calc(100% - 45px)
   .handle-btns
     display: flex
+    display: -webkit-box;
+    display: -webkit-flex;
     height: 45px
     a
       flex: 1
+      -webkit-box-flex:1
       background: #27A3BD;
       text-align: center
       height: 45px
@@ -258,8 +264,11 @@ export default {
     width 100%
     .cube-scroll-nav-bar-items
       display: flex
+      display: -webkit-box;
+      display: -webkit-flex;
       .cube-scroll-nav-bar-item
         flex 1
+        -webkit-box-flex:1
         padding-top: 15px;
         padding-bottom: 15px;
   >>> .cube-scroll-nav-panel

@@ -260,7 +260,8 @@ export default {
       'calculatedAmount',
       'orderConfig',
       'orderNeedReset',
-      'oftenPermission'
+      'oftenPermission',
+      'oneMoreId'
     ]),
     ...mapState('contacts/consignee', [
       'saveConsigner'

@@ -15,18 +15,19 @@ export default {
       }
     }
 
-    this.$formWillLeave(false, () => {
-      this.$refs.$form.reset()
-    })
-    if (this.mode === 'create') return
-    if (this.orderInfo.consignerName) return
+    // this.$formWillLeave(false, () => {
+    //   this.$refs.$form.reset()
+    // })
+    if (this.mode === 'create' && !this.oneMoreId) return
+    // if (this.orderInfo.consignerName) return
     window.loading(true)
     let orderInfo
     let cargoList
     try {
-      if (this.mode === 'oneMore') {
-        orderInfo = await this.getOftenDetail(this.id)
+      if (this.mode !== 'edit') {
+        orderInfo = await this.getOftenDetail(this.oneMoreId)
         cargoList = orderInfo.orderCargoTemplateList
+        this.SET_ONE_MORE_ID()
       } else {
         orderInfo = await this.fetchOrderInfo(this.id)
         cargoList = orderInfo.orderCargoList

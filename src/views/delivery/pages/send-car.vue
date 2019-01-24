@@ -822,6 +822,14 @@ export default {
       // }
       // console.log('validity', result.validity, result.valid, result.dirty, result.firstInvalidFieldIndex)
     },
+    getDriverPhone() {
+      if (this.model.assignCarType === 1) {
+        this.model.carrierDriverPhone = this.model.carrierDriverPhone ? this.model.carrierDriverPhone : ''
+        return this.model.carrierDriverPhone.split(' ').join('')
+      } else {
+        return this.model.selfDriverName.split('-')[1]
+      }
+    },
     async submitAssign () {
       let isValid = await this.$refs['assign-form'].validate()
       if (isValid) {
@@ -831,7 +839,7 @@ export default {
           carrierName: this.model.carrierName,
           carNo: this.model.assignCarType === 1 ? this.model.carrierCarNo : this.model.selCarNo.split('-')[0],
           driverName: this.model.assignCarType === 1 ? this.model.carrierDriverName : this.model.selfDriverName.split('-')[0],
-          driverPhone: this.model.assignCarType === 1 ? this.model.carrierDriverPhone.split(' ').join('') : this.model.selfDriverName.split('-')[1],
+          driverPhone: this.getDriverPhone(),
           carType: this.model.assignCarType === 1 ? this.model.carType : this.model.selCarNo.split('-')[1],
           carLength: this.model.assignCarType === 1 ? this.model.carLength : this.model.selCarNo.split('-')[2],
           mileage: NP.times(this.model.mileage, 1000),
