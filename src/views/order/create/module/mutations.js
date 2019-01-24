@@ -116,6 +116,7 @@ export default {
     if (!state.currentArrdessType) return
     resetFields(payload)
     const info = state.orderInfo
+    console.log(payload)
     if (state.currentArrdessType === 'send') {
       info.start = payload.cityCode
       info.startCityName = payload.cityName
@@ -125,6 +126,7 @@ export default {
       info.consignerAddressLatitude = payload.latitude
       info.consignerAddressLocale = payload.locale
       info.consignerAddressText = addressConcat(payload.address, payload.cityName, payload.extra)
+      console.log(info, payload)
     } else {
       info.end = payload.cityCode
       info.endCityName = payload.cityName

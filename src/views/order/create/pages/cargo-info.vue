@@ -83,17 +83,17 @@
               v-if="orderConfig.remark1Option"
               v-model="form.remark1"
               label="备注1"
-              placeholder="请输入(最多输入200字)"
+              placeholder="请输入(最多输入100字)"
               type="textarea"
-              maxlength="200"
+              maxlength="100"
               @on-focus="inputFocus" />
             <form-item
               v-if="orderConfig.remark2Option"
               v-model="form.remark2"
               label="备注2"
-              placeholder="请输入(最多输入200字)"
+              placeholder="请输入(最多输入100字)"
               type="textarea"
-              maxlength="200"
+              maxlength="100"
               @on-focus="inputFocus" />
             <!-- <form-item
               v-if="orderConfig.remark3Option"

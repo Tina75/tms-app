@@ -29,7 +29,7 @@
         clearable />
     </form-group>
     <div class="contacts-address-list">
-      <template v-if="showOftenList">
+      <template v-if="showOftenList || !allowSearch">
         <p class="address-list-title">常用地址</p>
         <ul class="address-often-list list">
           <li
@@ -135,7 +135,9 @@ export default {
     ...mapActions('order/create', [ 'getOftenAddress' ]),
 
     onSelectAddress (item) {
-      this.form.address = ((item.detail || '') + (item.name || '')).replace(/(.{0,}省){0,1}(.{0,}市){0,1}/, '')
+      const address = item.detail === item.name ? item.detail : (item.detail || '') + (item.name || '')
+      const temp = address.replace(/(.{0,}省){0,1}(.{0,}市){0,1}/, '')
+      this.form.address = temp ? temp : address
       this.form.latitude = item.data.point.lat
       this.form.longitude = item.data.point.lng
       this.allowSearch = false

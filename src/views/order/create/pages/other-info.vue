@@ -27,8 +27,8 @@
             v-model="form.remark"
             label="备注"
             type="textarea"
-            placeholder="请输入(最多输入200字)"
-            maxlength="200" />
+            placeholder="请输入(最多输入100字)"
+            maxlength="100" />
         </div>
       </form-group>
     </cube-scroll>
