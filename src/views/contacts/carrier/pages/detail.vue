@@ -87,16 +87,16 @@ export default {
       this.loadCarrierDetail(carrierId)
       setAppRightBtn([
         {
-          text: '删除',
-          iconType: 'delete',
-          action: this.removeHandle
-        },
-        {
           text: '修改',
           iconType: 'edit',
           action: () => {
             this.$router.push({ name: 'contacts-carrier-modify', query: { carrierId: this.contactDetail.id } })
           }
+        },
+        {
+          text: '删除',
+          iconType: 'delete',
+          action: this.removeHandle
         }
       ])
     }
