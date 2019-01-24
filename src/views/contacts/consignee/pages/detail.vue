@@ -14,16 +14,16 @@
       </div>
     </div>
     <div class="consignee-detail_other">
-      <div class="consignee-detail_other__card">
+      <div class="consignee-detail_other__card border-bottom-1px">
         <div class="consignee-detail_title">收货地址</div>
         <div class="consignee-detail_address">{{consigneeDetail.cityName}}</div>
         <div class="consignee-detail_address">{{address}}</div>
       </div>
-      <div class="consignee-detail_other__card">
+      <div class="consignee-detail_other__card border-bottom-1px">
         <div class="consignee-detail_title">所属发货方</div>
         <div class="consignee-detail_address">{{consigneeDetail.consignerName}}</div>
       </div>
-      <div class="consignee-detail_other__card">
+      <div class="consignee-detail_other__card border-bottom-1px">
         <div class="consignee-detail_title">收货人单位</div>
         <div class="consignee-detail_address">{{consigneeDetail.consigneeCompanyName}}</div>
       </div>
@@ -161,7 +161,7 @@ export default {
     &__card
       background-color #ffffff
       padding 24px 15px 15px
-      border-bottom 1px solid #E4E7EC
+      // border-bottom 0.5px solid #E4E7EC
     &__card:last-child
       border-bottom none
   &_call
