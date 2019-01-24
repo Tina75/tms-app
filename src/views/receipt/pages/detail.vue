@@ -71,7 +71,7 @@
             {{detail.isInvoice == 1 ? `是（${rate(detail.invoiceRate)}%）` : '否'}}
           </FormItem> -->
           <FormItem v-if="detail.remark" label="备注">
-            {{detail.remark}}
+            <p>{{detail.remark}}</p>
           </FormItem>
         </Panel>
       </cube-scroll-nav-panel>
@@ -85,7 +85,7 @@
             <a slot="right" :href="`tel:${detail.consignerPhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
           </FormItem>
           <FormItem v-if="detail.consignerAddress" label="发货地址">
-            {{detail.consignerAddress}}
+            <p>{{detail.consignerAddress}}</p>
           </FormItem>
         </Panel>
         <Panel title="收货人">
@@ -97,10 +97,10 @@
             <a slot="right" :href="`tel:${detail.consigneePhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
           </FormItem>
           <FormItem v-if="detail.consigneeAddress" label="收货地址">
-            {{detail.consigneeAddress}}
+            <p>{{detail.consigneeAddress}}</p>
           </FormItem>
           <FormItem v-if="detail.consigneeCompanyName" label="收货人单位">
-            {{detail.consigneeCompanyName}}
+            <p>{{detail.consigneeCompanyName}}</p>
           </FormItem>
         </Panel>
       </cube-scroll-nav-panel>

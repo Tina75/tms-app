@@ -90,11 +90,7 @@ export default {
             .then(res => {
               this.getReceiptStatusCnt()
               this.initReceiptList({ key: this.keys })
-              this.$createToast({
-                type: 'warn',
-                time: 1000,
-                txt: '回收成功'
-              }).show()
+              window.toast('回收成功')
             })
         }
       }, false).show()
@@ -120,11 +116,7 @@ export default {
             .then(res => {
               this.getReceiptStatusCnt()
               this.initReceiptList({ key: this.keys })
-              this.$createToast({
-                type: 'warn',
-                time: 1000,
-                txt: '返厂成功'
-              }).show()
+              window.toast('返厂成功')
             })
         }
       }, false).show()
