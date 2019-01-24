@@ -45,6 +45,7 @@ export default {
     this.$nextTick(() => {
       setAppTitleBtn({
         text: '返回',
+        iconType: 'back',
         position: 'left',
         action: () => {
           if (this.startSelVisable || this.endSelVisable) {

@@ -56,8 +56,6 @@ export default {
   beforeRouteEnter(to, from, next) {
     next(vm => {
       vm.getWaybillDetail(to.params.id).then(({ waybill }) => {
-        console.log('waybill.assignCarType=' + waybill.assignCarType + ' waybill.carNo=' + waybill.carNo)
-
         vm.hasSendCar = (waybill.assignCarType === 1 && waybill.carrierName) || (waybill.assignCarType === 2 && waybill.carNo)
         vm.initTitleBtns(waybill)
       })
@@ -65,7 +63,7 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     setAppRightBtn([{ text: '', action: () => { } }])
-    this.clearWaybillDetail()
+    // this.clearWaybillDetail()
     next()
   },
 
