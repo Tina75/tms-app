@@ -75,9 +75,10 @@ export default {
       // 外转且有承运商名称  or 自送且有车牌号
       return (info.assignCarType === 1 && info.carrierName) || (info.assignCarType === 2 && info.carNo)
     },
-    async removeItem(orderId) {
-      await this.updatetBillOrders(this.waybillId)
-      await this.removeBillOrder(orderId)
+    removeItem(orderId) {
+      this.updatetBillOrders(this.waybillId).then(() => {
+        this.removeBillOrder(orderId)
+      })
     }
   }
 }

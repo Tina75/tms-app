@@ -5,7 +5,7 @@
       v-model="from.sn"
       type="click"
       :label="label[0]"
-      :click-icon="from.sn ? 'icon-shanchu-shuru' : ''"
+      :click-icon="from.sn ? 'icon-shanchu-shuru remove-btn-color' : ''"
       placeholder="请选择出发地城市"
       @on-click="showPickCity(0)"
       @on-icon-click="handleRemove(0)"
@@ -14,7 +14,7 @@
       v-model="to.en"
       type="click"
       :label="label[1]"
-      :click-icon="to.en ? 'icon-shanchu-shuru' : ''"
+      :click-icon="to.en ? 'icon-shanchu-shuru remove-btn-color' : ''"
       placeholder="请选择目的地城市"
       @on-click="showPickCity(1)"
       @on-icon-click="handleRemove(1)"
@@ -41,6 +41,11 @@ export default {
       type: [Object, String],
       required: true,
       default: () => {}
+    },
+    visible: {
+      type: Boolean,
+      required: true,
+      default: false
     }
   },
 
@@ -48,38 +53,34 @@ export default {
     return {
       pickCityVisible: false,
       isDestination: false, // 目标值是否是目的地
-      from: {
-        s: '',
-        sn: ''
-      },
-      to: {
-        e: '',
-        en: ''
-      }
+      from: { s: '', sn: '' },
+      to: { e: '', en: '' }
     }
   },
 
   watch: {
     value (newVal) {
-      this.from = {
-        s: newVal.s || '',
-        sn: newVal.sn || ''
-      }
-      this.to = {
-        e: newVal.e || '',
-        en: newVal.en || ''
-      }
+      this.from = { s: newVal.s || '', sn: newVal.sn || '' }
+      this.to = { e: newVal.e || '', en: newVal.en || '' }
+    },
+    visible (newVal) {
+      this.pickCityVisible = newVal
     }
   },
 
   methods: {
     showPickCity (index) {
       this.pickCityVisible = true
+      this.$emit('update:visible', true)
       this.isDestination = Boolean(index)
     },
 
     citySelect (city) {
-      const address = city.reduce((prev, { name }) => (prev += name), '')
+      let address = []
+      city.forEach(({ name }) => {
+        address = address.includes(name) ? [ ...address, '全境' ] : [ ...address, name ]
+      })
+      address = address.join('')
       const res = city.slice(-1)[0]
       let eventData = {}
       if (this.isDestination) {
@@ -130,6 +131,10 @@ export default {
 .transport-line
   position relative
   padding-left 20px
+  .remove-btn-color
+    color #C5C8CE !important
+  .form-item-icon::before
+    display none
   &__icon
     position absolute
     display block
@@ -145,6 +150,7 @@ export default {
       height 6px
       width 6px
       border-radius 100%
+      box-shadow 0 0 4px #00A4BD
       background #00A4BD
     &::after
       content ''
@@ -154,5 +160,6 @@ export default {
       height 6px
       width 6px
       border-radius 100%
+      box-shadow 0 0 4px #252A2F
       background #252A2F
 </style>

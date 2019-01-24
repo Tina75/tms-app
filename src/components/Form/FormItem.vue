@@ -210,8 +210,14 @@ export default {
     this.rulesParser()
   },
   methods: {
+    inputBlurTrigger () { Array.from(document.getElementsByTagName('input')).forEach($input => { $input.blur() }) },
     iconClickHandler () { if (!this.inputDisabled) this.$emit('on-icon-click') },
-    inputClickHandler () { if (this.type === 'click' && !this.inputDisabled) this.$emit('on-click') },
+    inputClickHandler () {
+      if (this.type === 'click' && !this.inputDisabled) {
+        this.inputBlurTrigger()
+        this.$emit('on-click')
+      }
+    },
     inputBlurHandler (e) {
       if (this.type === 'click') return
       this.$emit('on-blur', e)
@@ -224,7 +230,10 @@ export default {
       }
     },
     selectChangeHandler (value, index, text) { this.$emit('change', value, index, text) },
-    pickerShowHandler () { this.$emit('picker-show') },
+    pickerShowHandler () {
+      this.inputBlurTrigger()
+      this.$emit('picker-show')
+    },
     pickerHideHandler () {
       this.$emit('picker-hide')
       this.doValidate()

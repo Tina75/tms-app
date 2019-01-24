@@ -130,5 +130,4 @@ export default {
     top 0
     right 0
     transform translate(50%, -50%)
-    z-index 10
 </style>
