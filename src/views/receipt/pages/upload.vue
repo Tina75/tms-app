@@ -12,7 +12,6 @@
 <script>
 import Upload from '@/components/Upload'
 import * as Api from '../libs/api'
-import { mapActions } from 'vuex'
 export default {
   name: 'receipt-upload',
   metaInfo: {
@@ -45,7 +44,6 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['receiptReFresh']),
     getUrlList () {
       if (this.isUpdate) {
         Api.initDetail(this.orderId).then(response => {
@@ -65,9 +63,6 @@ export default {
       }
       Api.uploadReceiptPic(params)
         .then(res => {
-          if (this.tab) {
-            this.receiptReFresh({ key: this.tab })
-          }
           this.$router.back()
         })
     }

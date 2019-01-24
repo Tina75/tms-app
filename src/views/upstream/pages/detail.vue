@@ -171,7 +171,7 @@ export default {
         title: '确认拒绝订单?',
         onConfirm: () => {
           API.refuse(this.id).then(response => {
-            this.reFresh({ key: 'waitAccept' })
+            // this.reFresh({ key: 'waitAccept' })
             window.toast('拒绝成功')
             this.initDetail()
           })
@@ -180,7 +180,7 @@ export default {
     },
     receipt () {
       API.receipt(this.id).then(response => {
-        this.reFresh({ key: 'waitAccept' })
+        // this.reFresh({ key: 'waitAccept' })
         window.toast('接收成功')
         this.initDetail()
       })
