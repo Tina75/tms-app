@@ -666,10 +666,13 @@ export default {
   .pickup-assign
     height: 100%
     display: flex
+    display: -webkit-box;
+    display: -webkit-flex;
     flex-direction column
     .edit-form
       padding-top: 15px;
       flex 1
+      -webkit-box-flex: 1
       height: calc(100% - 45px)
       overflow auto
       overflow-scrolling touch
@@ -779,8 +782,11 @@ export default {
     .confirm-btns
       height: 45px
       display: flex
+      display: -webkit-box;
+      display: -webkit-flex;
       a
         flex: 1
+        -webkit-box-flex: 1
         background: #27A3BD;
         text-align: center
         height: 45px

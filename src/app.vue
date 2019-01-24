@@ -81,7 +81,7 @@ body
   height 100%
   // user-select: all
 #app
-  font-family 'Avenir', Helvetica, Arial, sans-serif
+  font-family 'PingFang SC', 'STHeitiSC-Light', 'Helvetica-Light', arial, sans-serif
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
   // text-align center
