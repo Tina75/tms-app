@@ -43,11 +43,6 @@
       </div>
     </div>
 
-    <div v-if="viewData.remark" class="truck-detail__card cube-font-15 cube-mt-15">
-      <div class="cube-c-black cube-mb-15" v-text="'备注'"/>
-      <p class="cube-c-grey" v-text="viewData.remark"/>
-    </div>
-
     <cube-button class="cube-bottom-button" :primary="true" @click="phoneCall">
       <i class="iconfont icon-ico_call"/>
       拨打电话

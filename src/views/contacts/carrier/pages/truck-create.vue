@@ -51,8 +51,8 @@
       />
 
       <card class="cube-mb-15" title="常跑线路">
-        <transport-line v-model="regularLine1" :label="['出发地1', '目的地1']"/>
-        <transport-line v-model="regularLine2" :label="['出发地2', '目的地2']"/>
+        <transport-line v-model="regularLine1" :visible.sync="cityPickerVisible" :label="['出发地1', '目的地1']"/>
+        <transport-line v-model="regularLine2" :visible.sync="cityPickerVisible" :label="['出发地2', '目的地2']"/>
       </card>
 
       <card class="cube-mb-15" title="证件上传">
@@ -62,7 +62,7 @@
         </div>
       </card>
 
-      <FormItem v-model="model.remark" :maxlength="rules.remark.max" type="textarea" label="备注"/>
+      <!-- <FormItem v-model="model.remark" :maxlength="rules.remark.max" type="textarea" label="备注"/> -->
     </FromGroup>
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
     <cube-popup
@@ -108,6 +108,7 @@ export default {
       rules: truckRule,
       submiting: false,
       showKeyboard: false,
+      cityPickerVisible: false,
       purchDate: '', // 生产日期
       regularLine1: '', // 常发线路1
       regularLine2: '' // 常发线路2
@@ -154,9 +155,7 @@ export default {
     /* 提交成功后续操作 */
     afterSubmit () {
       this.$refreshPage('contacts-carrier-truck', 'contacts-carrier-truck-detail')
-      this.$formWillLeave(() => {
-
-      })
+      this.$formWillLeave()
       window.toast(this.isCreate ? '新增车辆成功' : '修改车辆成功')
       this.$router.back()
     },
@@ -226,6 +225,10 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(vm => vm.setForm())
+  },
+  beforeRouteLeave(to, from, next) {
+    this.cityPickerVisible = false
+    next()
   }
 }
 </script>

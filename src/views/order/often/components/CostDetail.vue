@@ -1,7 +1,7 @@
 <template>
   <detail-panel :title="'应付费用'">
     <detail-panel-item :label="'计费里程'">
-      <p>{{ detail.mileage }}公里</p>
+      <p>{{ detail.mileage / 1000 }}公里</p>
     </detail-panel-item>
     <detail-panel-item :label="'运输费用'">
       <p>{{ detail.freightFee | moneyFormat }}元</p>
