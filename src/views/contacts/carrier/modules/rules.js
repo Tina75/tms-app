@@ -67,7 +67,7 @@ export const truckRule = {
     }
   },
   driverType: {
-    required: false
+    required: true
   },
   carType: {
     required: false
