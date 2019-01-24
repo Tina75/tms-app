@@ -1,4 +1,4 @@
-import { setGlobalBack, clearAppTitleBtn, closeWindow } from '@/libs/bridgeUtil'
+import { setGlobalBack, clearAppTitleBtn, closeWindow, toggleTitleBar } from '@/libs/bridgeUtil'
 import Vue from 'vue'
 import router from '@/router'
 import PLUGINS from './routerPlugin'
@@ -39,7 +39,7 @@ router.back = (closeTip) => {
 }
 
 // 拦截并记录页面离开的方式
-['back', 'push', 'replace', 'go', 'forward'].forEach((name) => {
+;['back', 'push', 'replace', 'go', 'forward'].forEach((name) => {
   let pre = router[name]
   router[name] = function() {
     RUNTIME.leaveAction.type = name
@@ -91,9 +91,17 @@ Vue.mixin({
         go = go && allows
       }
     }
+    // 去除键盘弹窗
+    if (document.activeElement) {
+      document.activeElement.blur()
+    }
     next(go)
     if (go) {
       RUNTIME.allowLeave = false
+    } else {
+      // android机制问题,无法检测到同一个页面标题的变化
+      // 在小米或某些型号上,虽然阻止了路由跳转,但标题栏没有被还原为当前页,因此要手动出发android标题设置
+      toggleTitleBar({ title: document.title })
     }
   }
 })
