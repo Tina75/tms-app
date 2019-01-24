@@ -29,8 +29,17 @@ export default {
 </script>
 <style lang='stylus' scoped>
 .msg
+  width 375px
   padding 20px 15px
   background white
+  overflow hidden
+  pre
+    margin-top: 15px
+    color: #666666
+    font-size: 15px
+    line-height:20px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
   &-title
     font-size 18px
     color #333333
@@ -42,7 +51,9 @@ export default {
     display block
   &-content
     color #666666
+    display inline-block
     font-size 15px
+    word-break break-all
     line-height 22px
     margin-top 10px
     margin-bottom 10px
