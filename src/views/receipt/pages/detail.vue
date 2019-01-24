@@ -191,18 +191,10 @@ export default {
       })
     },
     copyBtn (e) {
-      this.$createToast({
-        type: 'correct',
-        time: 1000,
-        txt: '复制成功'
-      }).show()
+      window.toast('复制成功')
     },
     onError (e) {
-      this.$createToast({
-        type: 'error',
-        time: 1000,
-        txt: '复制失败'
-      }).show()
+      window.toast('复制失败')
     },
     rate (val) {
       return getRate(val)
