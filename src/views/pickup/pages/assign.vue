@@ -542,7 +542,7 @@ export default {
           pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
         },
         messages: {
-          pattern: '请输入正确的金额'
+          pattern: '不得超过9位整数和4位小数'
         },
         trigger: 'blur',
         events: {
@@ -575,7 +575,7 @@ export default {
           }
         },
         messages: {
-          pattern: '请输入正确的金额',
+          pattern: '不得超过9位整数和4位小数',
           custom: ' 结算总额应与费用合计相等'
         },
         trigger: 'blur',
