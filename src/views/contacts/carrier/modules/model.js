@@ -74,7 +74,7 @@ export class TruckDetail {
   ]
 
   static driverType = [
-    { text: '合作', value: 1 },
+    { text: '合约', value: 1 },
     { text: '临时', value: 2 },
     { text: '自有', value: 3 },
     { text: '挂靠', value: 4 }
