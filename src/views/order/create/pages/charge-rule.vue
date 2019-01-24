@@ -89,7 +89,7 @@ export default {
       }
       window.loading(true)
       try {
-        vm.ruleList = await vm.getRuleList({ partnerType, partnerId })
+        vm.ruleList = await vm.getRuleList({ partnerType, partnerId, departure, destination })
       } catch (err) {
         //
       } finally {
