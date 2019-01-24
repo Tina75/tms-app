@@ -10,17 +10,17 @@
       <p>{{pickupDetail.assignCarType === 2 ? '自送' : '外转'}}</p>
     </detail-panel-item>
     <template v-if="pickupDetail.assignCarType === 1">
-      <detail-panel-item :label="'承运商'">
+      <detail-panel-item v-if="pickupDetail.carrierName" :label="'承运商'">
         <p>{{pickupDetail.carrierName}}</p>
       </detail-panel-item>
-      <detail-panel-item :label="'车牌号'">
+      <detail-panel-item v-if="pickupDetail.carNo" :label="'车牌号'">
         <p>{{pickupDetail.carNo}}</p>
       </detail-panel-item>
-      <detail-panel-item :label="'司机'">
+      <detail-panel-item v-if="pickupDetail.driverName" :label="'司机'">
         <p>{{pickupDetail.driverName}}</p>
       </detail-panel-item>
-      <detail-panel-item :label="'联系方式'">
-        <p v-if="pickupDetail.driverPhone" class="remix-content">
+      <detail-panel-item v-if="pickupDetail.driverPhone" :label="'联系方式'">
+        <p class="remix-content">
           <span class="border-right-1px">{{pickupDetail.driverPhone|phoneFormat}}</span>
           <a @click="phoneCall(pickupDetail.driverPhone)">
             联系TA
@@ -33,14 +33,14 @@
       </detail-panel-item>
     </template>
     <template v-if="pickupDetail.assignCarType === 2">
-      <detail-panel-item :label="'车牌号'">
+      <detail-panel-item v-if="pickupDetail.carNo" :label="'车牌号'">
         <p>{{pickupDetail.carNo}}</p>
       </detail-panel-item>
       <template v-if="pickupDetail.driverName">
         <detail-panel-item :label="'主司机'">
           <p>{{pickupDetail.driverName}}</p>
         </detail-panel-item>
-        <detail-panel-item :label="'联系方式'">
+        <detail-panel-item v-if="pickupDetail.driverPhone" :label="'联系方式'">
           <p class="remix-content">
             <span class="border-right-1px">{{pickupDetail.driverPhone|phoneFormat}}</span>
             <a @click="phoneCall(pickupDetail.driverPhone)">
@@ -71,13 +71,13 @@
         </detail-panel-item>
       </template>
     </template>
-    <detail-panel-item :label="'车型'">
+    <detail-panel-item v-if="carTypeMap[pickupDetail.carType]" :label="'车型'">
       <p>{{carTypeMap[pickupDetail.carType]}}</p>
     </detail-panel-item>
-    <detail-panel-item :label="'车长'">
+    <detail-panel-item v-if="carLengthMap[pickupDetail.carLength]" :label="'车长'">
       <p>{{carLengthMap[pickupDetail.carLength]}}</p>
     </detail-panel-item>
-    <detail-panel-item :label="'备注'">
+    <detail-panel-item v-if="pickupDetail.remark" :label="'备注'">
       <p class="remark">{{pickupDetail.remark}}</p>
     </detail-panel-item>
   </detail-panel>
