@@ -43,10 +43,11 @@ export default {
     editBillById(id, type) {
       // TODO: 提货单和送货单不同
     },
-    async deleteById(id) {
-      await this.deleteOrder(id)
-      await this.setDeliveryList(this.DeliveryList.filter(item => item.id !== id))
-      this.getTabCount()
+    deleteById(id) {
+      this.deleteOrder(id).then(() => {
+        this.setDeliveryList(this.DeliveryList.filter(item => item.id !== id))
+        this.getTabCount()
+      })
     }
   }
 }

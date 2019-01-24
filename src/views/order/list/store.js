@@ -154,7 +154,6 @@ export default {
     clearArrival: ({ commit }) => { commit('ARRIVAL_CLEAR') },
     setArrivalList: ({ commit }, list) => { commit('SET_ARRIVAL_LIST', list) },
 
-    // 删除待调度订单
     deleteOrder: ({ commit, state }, id) => {
       Server({
         url: '/order/delete',
@@ -172,46 +171,6 @@ export default {
         commit('TAB_COUNT', data.data)
       })
     }
-    // // 发运
-    // doSetOff: ({ commit, state }, waybillIds = []) => {
-    //   Server({
-    //     url: '/waybill/shipment',
-    //     method: 'post',
-    //     data: { waybillIds }
-    //   }).then(({ data }) => {
-    //     window.toast('发运成功')
-    //   })
-    // },
-    // // 到货
-    // doArrival: ({ commit, state }, waybillIds = []) => {
-    //   Server({
-    //     url: '/waybill/confirm/arrival',
-    //     method: 'post',
-    //     data: { waybillIds }
-    //   }).then(({ data }) => {
-    //     window.toast('到货成功')
-    //   })
-    // },
-    // // 调度 or 创建运单
-    // dispatchOrder: ({ commit }, data) => {
-    //   return Server({
-    //     url: '/waybill/create',
-    //     method: 'post',
-    //     data
-    //   }).then(({ data }) => {
-    //     window.toast(data.msg)
-    //   })
-    // },
-    // // 获取运单详情
-    // getWaybillDetail: ({ commit }, id) => {
-    //   Server(
-    //     { url: '/waybill/details',
-    //       method: 'post',
-    //       data: { waybillId: id } }
-    //   ).then(({ data }) => {
-    //     commit('WAYBILL_DETAIL', data.data)
-    //   })
-    // }
   },
   getters: {
     AllList: state => state.all.list,

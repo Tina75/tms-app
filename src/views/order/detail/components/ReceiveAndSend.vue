@@ -22,14 +22,14 @@
       </detail-panel-item>
       <detail-panel-item :label="'联系方式'">
         <p class="remix-content">
-          <span class="border-right-1px">{{Detail.consigneePhone+Detail.consigneeHourseNumber}}</span>
+          <span class="border-right-1px">{{Detail.consigneePhone}}</span>
           <a @click="call(Detail.consigneePhone)">
             联系TA <i class="iconfont icon-ico_call "/>
           </a>
         </p>
       </detail-panel-item>
       <detail-panel-item v-if="Detail.consigneeAddress" :label="'收货地址'">
-        <p class="address">{{Detail.consigneeAddress}}</p>
+        <p class="address">{{Detail.consigneeAddress+Detail.consigneeHourseNumber}}</p>
       </detail-panel-item>
       <detail-panel-item v-if="Detail.consigneeCompanyName" :label="'收货人单位'">
         <p class="address">{{Detail.consigneeCompanyName}}</p>

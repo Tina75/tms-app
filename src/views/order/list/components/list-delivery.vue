@@ -43,10 +43,11 @@ export default {
     loadmore() {
       this.getDelivery()
     },
-    async deleteById(id) {
-      await this.deleteOrder(id)
-      await this.setDeliveryList(this.DeliveryList.filter(item => item.id !== id))
-      this.getTabCount()
+    deleteById(id) {
+      this.deleteOrder(id).then(() => {
+        this.setDeliveryList(this.DeliveryList.filter(item => item.id !== id))
+        this.getTabCount()
+      })
     },
     editOrderById(id) { // 修改订单
       this.$router.push({ name: 'order-edit', params: { id } })
