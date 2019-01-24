@@ -235,6 +235,7 @@ export default {
       flex: 1
       text-align: left
       .truck-no
+        text-align: center
         font-size: 14px;
         font-weight: bold
         line-height: 35px;
