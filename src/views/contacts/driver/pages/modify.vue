@@ -172,11 +172,10 @@ export default {
           this.$refreshPage('contacts-driver-detail')
         }
         this.model = DriverDetail.toForm(this.driverDetail)
-        this.setRegularLine()
-        console.log(this.model)
       } else {
         this.model = new DriverDetail()
       }
+      this.setRegularLine()
     },
 
     setRegularLine () {

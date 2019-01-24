@@ -14,7 +14,7 @@
       v-model="to.en"
       type="click"
       :label="label[1]"
-      :click-icon="to.sn ? 'icon-shanchu-shuru' : ''"
+      :click-icon="to.en ? 'icon-shanchu-shuru' : ''"
       placeholder="请选择目的地城市"
       @on-click="showPickCity(1)"
       @on-icon-click="handleRemove(1)"
@@ -29,6 +29,7 @@ import FormItem from '@/components/Form/FormItem'
 import CityPicker from '@/components/CityPicker'
 
 export default {
+  name: 'TransportLine',
   components: { CityPicker, FormItem },
 
   props: {

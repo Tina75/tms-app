@@ -154,7 +154,9 @@ export default {
     /* 提交成功后续操作 */
     afterSubmit () {
       this.$refreshPage('contacts-carrier-truck', 'contacts-carrier-truck-detail')
-      this.$formWillLeave()
+      this.$formWillLeave(() => {
+
+      })
       window.toast(this.isCreate ? '新增车辆成功' : '修改车辆成功')
       this.$router.back()
     },
@@ -183,11 +185,11 @@ export default {
         if (this.truckDetail.purchDate) {
           this.purchDate = new Date(this.truckDetail.purchDate).toISOString().split('T')[0]
         }
-        this.setRegularLine()
         this.model = TruckDetail.toForm(this.truckDetail)
       } else {
         this.model = new TruckDetail()
       }
+      this.setRegularLine()
     },
 
     setRegularLine () {
