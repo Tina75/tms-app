@@ -307,7 +307,7 @@ export default {
     height calc(100vh - 88px)
 
   .form
-    margin-bottom 15px
+    margin-bottom 25px
 
     &-section
       margin-top 15px
