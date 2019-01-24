@@ -1,7 +1,7 @@
 <template>
   <div class="truck-detail">
     <div class="truck-detail__header cube-mb-15">
-      <div class="cube-font-18">
+      <div class="cube-font-20 cube-font-weight cube-ellipsis">
         <span v-text="viewData.carNo"/>
         <span v-if="viewData.driverType" class="truck-tag" v-text="viewData.driverType" />
       </div>
@@ -177,7 +177,7 @@ export default {
 <style lang="stylus" scoped>
 .truck-tag
   display inline-block
-  margin-left 5px
+  margin-left 10px
   font-size 10px
   line-height 10px
   text-align center
