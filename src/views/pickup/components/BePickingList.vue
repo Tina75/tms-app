@@ -5,58 +5,25 @@
     :options="options"
     @pulling-down="onPullingDown"
     @pulling-up="onPullingUp">
-    <ul class="order-wrapper">
-      <li
+    <div class="order-wrapper">
+      <bill-item
         v-for="(item, index) in bePickingData.list"
         :key="index"
-        class="order-item"
-        @click="toDetail(item, index)">
-        <div class="item-header border-bottom-1px">
-          <span>{{item.createTime|datetimeFormat}}</span>
-          <i v-if="item.abnormalLabel === 2">异</i>
-        </div>
-        <div class="item-content border-bottom-1px">
-          <p class="order-route">
-            <span>{{item.pickupNo}}</span>
-          </p>
-          <p class="order-stat">
-            <span v-if="item.weight">{{item.weight}}吨</span>
-            <span v-if="item.volume">{{item.volume}}方</span>
-            <span v-if="item.quantity">{{item.quantity}}件</span>
-          </p>
-          <template v-if="assignStatus(item)">
-            <p v-if="item.assignCarType === 1" class="order-custom">
-              {{item.carrierName}}
-            </p>
-            <p class="order-custom">
-              <i class="assign-type">{{item.assignCarType === 2 ? '自送' : '外转'}}</i>
-              <span>{{item.driverName}}</span>
-              <span>{{item.carNo}}</span>
-            </p>
-          </template>
-        </div>
-        <div class="item-footer">
-          <div class="order-cost">
-            <template v-if="assignStatus(item)">
-              <p class="cost-label">应付费用<template v-if="item.assignCarType === 1">（{{settlementTypeMap[item.settlementType]}}）</template></p>
-              <p class="cost-money">{{item.totalFee|moneyFormat}}<span>/元</span></p>
-            </template>
-          </div>
-          <div class="order-btns">
-            <a v-if="assignStatus(item)" @click.stop="pickup(item, index)">提货</a>
-            <a v-else @click.stop="assign(item, index)">派车</a>
-          </div>
-        </div>
-      </li>
-    </ul>
+        :data="item">
+        <a v-if="assignStatus(item)" @click.stop="pickup(item, index)">提货</a>
+        <a v-else @click.stop="assign(item, index)">派车</a>
+      </bill-item>
+    </div>
   </cube-scroll>
 </template>
 
 <script>
+import BillItem from './BillItem'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'BePickingList',
+  components: { BillItem },
   computed: {
     ...mapGetters('pickup', ['bePickingData', 'settlementTypeMap']),
     options () {
@@ -121,116 +88,7 @@ export default {
           }).show()
         }
       }).show()
-    },
-    toDetail (item, index) {
-      this.$router.push({
-        name: 'pickup-detail',
-        params: {
-          id: item.pickUpId
-        },
-        query: {
-          index: index
-        }
-      })
     }
   }
 }
 </script>
-<style scoped lang="stylus">
-.order-item
-  background-color: #ffffff;
-  margin-bottom: 15px;
-  padding: 10px 0 10px 15px;
-  .item-header
-    padding-bottom: 10px;
-    span
-      font-size: 14px;
-      color: #666666
-      line-height: 20px;
-    i
-      display: block
-      float: right
-      width 16px
-      height: 16px
-      margin-right: 15px;
-      background-color: #FCAF3B;
-      line-height: 16px;
-      font-size: 12px;
-      font-style: normal
-      text-align: center
-      color: #ffffff;
-  .item-content
-    padding: 10px 0
-    .order-route
-      margin-bottom: 5px;
-      span
-        line-height: 25px;
-        font-size: 18px;
-        color: #333333;
-        font-weight: bold
-    .order-stat
-      margin-bottom: 10px;
-      span
-        display: inline-block
-        vertical-align: middle
-        background-color: #F3F5F9;
-        margin-right: 5px;
-        padding: 0 5px
-        color #333333
-        font-size: 12px;
-        line-height: 17px;
-    .order-custom
-      font-size: 14px;
-      line-height: 20px;
-      color: #666666;
-      i
-        display: inline-block
-        vertical-align: middle
-        padding: 0 5px
-        font-size: 12px;
-        font-style normal
-        line-height: 17px;
-        border: 1px solid #efefef;
-        margin-right: 10px;
-      span
-        display: inline-block
-        vertical-align: middle
-        margin-right: 10px;
-  .item-footer
-    padding-top: 10px;
-    display: flex
-    flex-direction row
-    align-items center
-    .order-cost
-      flex 1
-      .cost-label
-        color: #333333
-        font-size: 12px;
-        line-height: 17px;
-        text-align: left
-      .cost-money
-        color: #FA8C16
-        font-size: 20px;
-        line-height: 28px;
-        text-align: left
-        span
-          font-size: 14px;
-    .order-btns
-      margin-right: 15px;
-      a
-        display: inline-block
-        padding: 5px 13px
-        text-align: center
-        line-height: 20px;
-        font-size: 14px;
-        border-radius: 3px;
-        border-style: solid;
-        border-width: 1px;
-        border-color: #00A4BD;
-        color: #00A4BD;
-        &:not(:last-child)
-          margin-right: 15px;
-        &.grey
-          color: #999999
-          border-color: #999999;
-</style>
