@@ -21,11 +21,13 @@ export default {
     info.pickup = consigner.pickUp || ''
     if (consignerAddress) {
       info.start = consignerAddress.cityCode || ''
+      info.startName = consignerAddress.cityName || ''
       info.consignerAddress = consignerAddress.address || ''
-      info.consignerHourseNumber = info.consignerHourseNumber || consignerAddress.consignerHourseNumber || ''
+      info.consignerHourseNumber = consignerAddress.consignerHourseNumber || ''
       info.consignerAddressLongitude = consignerAddress.longitude || ''
       info.consignerAddressLatitude = consignerAddress.latitude || ''
-      info.consignerAddressText = addressConcat(info.consignerAddress, info.cityName, info.consignerHourseNumber)
+      info.consignerAddressText = addressConcat(info.consignerAddress, info.startName, info.consignerHourseNumber)
+      console.log(info.consignerAddress, info.startName, info.consignerHourseNumber)
     } else {
       info.consignerHourseNumber = info.consignerHourseNumber || consigner.consignerHourseNumber || ''
     }
@@ -59,11 +61,12 @@ export default {
     info.consigneePhone = consignee.phone || ''
     info.consigneeCompanyName = consignee.consigneeCompanyName || ''
     info.end = consignee.cityCode || ''
+    info.endName = consignee.cityName || ''
     info.consigneeAddress = consignee.address || ''
     info.consigneeHourseNumber = info.consigneeHourseNumber || consignee.consigneeHourseNumber || ''
     info.consigneeAddressLongitude = consignee.longitude || ''
     info.consigneeAddressLatitude = consignee.latitude || ''
-    info.consigneeAddressText = addressConcat(info.consigneeAddress, info.cityName, info.consigneeHourseNumber)
+    info.consigneeAddressText = addressConcat(info.consigneeAddress, info.endName, info.consigneeHourseNumber)
     this.SET_CONSIGNEE_INFO(null)
     this.TRIGGER_ADDRESS_CHANGE(true)
   },
