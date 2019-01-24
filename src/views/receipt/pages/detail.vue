@@ -130,7 +130,7 @@
       </cube-scroll-nav-panel>
     </cube-scroll-nav>
     <div v-if="!!detail.receiptOrder" class="upstream-footer">
-      <cube-button v-if="detail.receiptOrder.receiptStatus === 0 && detail.status === 40" class="footer-item-btn" @click="receipt">回收</cube-button>
+      <cube-button v-if="detail.receiptOrder.receiptStatus === 0 && detail.status === 40" class="footer-item-btn footer-item-primary" @click="receipt">回收</cube-button>
       <cube-button v-if="detail.receiptOrder.receiptStatus === 1" class="footer-item-btn" @click="backFactory">返厂</cube-button>
       <cube-button v-if="detail.receiptOrder.receiptStatus > 0 && !detail.receiptOrder.receiptUrl.length" class="footer-item-btn  footer-item-primary" @click="uploadPic">上传回单</cube-button>
       <cube-button v-if="detail.receiptOrder.receiptStatus > 0 && detail.receiptOrder.receiptUrl.length" class="footer-item-btn footer-item-primary" @click="updatePic">修改回单</cube-button>
@@ -214,7 +214,7 @@ export default {
           const params = {
             orderIds: [item.id],
             recoveryName: promptValue,
-            receiptStatus: item.receiptOrder.receiptStatus,
+            receiptStatus: 1,
             ids: [item.receiptOrder.orderId]
           }
           API.updateReceipt(params)
@@ -240,7 +240,7 @@ export default {
           const params = {
             orderIds: [item.id],
             returnName: promptValue,
-            receiptStatus: item.receiptOrder.receiptStatus,
+            receiptStatus: 2,
             ids: [item.receiptOrder.orderId]
           }
           API.updateReceipt(params)
