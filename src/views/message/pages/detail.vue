@@ -33,7 +33,9 @@ export default {
             icon: 'cubeic-alert',
             content: '确定要删除消息吗？',
             onConfirm: () => {
-              this.deleteMsgById(this.$route.params.id)
+              this.deleteMsgById(this.$route.params.id).then(() => {
+                this.$route.back()
+              })
             }
           }).show()
         }
