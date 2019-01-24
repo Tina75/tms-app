@@ -110,8 +110,8 @@ export default {
     initTitleBtns(waybill) {
       let btns = []
       if (waybill.status === 2) {
-        btns.push({ text: '删除', iconType: 'delete', action: () => { this.deleteItem(waybill.waybillId) } })
         if (this.hasSendCar) btns.push({ text: '编辑', iconType: 'edit', action: () => { this.editWaybill(waybill.waybillId) } })
+        btns.push({ text: '删除', iconType: 'delete', action: () => { this.deleteItem(waybill.waybillId) } })
       }
       setAppRightBtn(btns)
     },

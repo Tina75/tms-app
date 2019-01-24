@@ -184,8 +184,11 @@ export const appCallRefresh = (callback = () => {}) => {
   bridge.register('onRefreshPage', callback, false)
 }
 
-/** 新开webview */
-export const appOpenWebview = () => {}
+/** 隐藏和显示标题栏 */
+export const toggleTitleBar = ({ show = 1, title = '' }) => {
+  console.info('toggleTitle', title)
+  bridge.call('ui.showTitleBar', { show: show ? 1 : 0, title }, function(result) {})
+}
 
 // 拼成url参数
 function parseToStr(data = {}) {

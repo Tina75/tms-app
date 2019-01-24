@@ -51,7 +51,7 @@ const lists = [
         title: data.carNO,
         tag: data.driverType,
         info: [],
-        detail: data.driverName + '  ' + data.driverPhone,
+        detail: (data.driverName || '') + '  ' + (data.driverPhone || ''),
         phone: data.driverPhone
       }
       data.carType && res.info.push(data.carType)

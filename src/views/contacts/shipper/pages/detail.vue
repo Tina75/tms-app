@@ -117,6 +117,11 @@ export default {
     setBtns() {
       setAppRightBtn([
         {
+          text: '修改',
+          iconType: 'edit',
+          action: this.edit.bind(this)
+        },
+        {
           text: '删除',
           iconType: 'delete',
           action: () => {
@@ -126,11 +131,6 @@ export default {
               onConfirm: this.remove.bind(this)
             })
           }
-        },
-        {
-          text: '修改',
-          iconType: 'edit',
-          action: this.edit.bind(this)
         }
       ])
     }

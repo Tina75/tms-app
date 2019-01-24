@@ -38,7 +38,7 @@
             <cube-form-item v-if="orderLength > 1" :field="fields['allocationStrategy']"/>
           </cube-form-group>
           <cube-form-group>
-            <cube-form-item :field="fields['remark']"/>
+            <cube-form-item class="text-item" :field="fields['remark']"/>
           </cube-form-group>
         </cube-form>
       </div>
@@ -424,7 +424,7 @@ export default {
           label: '备注',
           props: {
             autoExpand: true,
-            placeholder: ''
+            placeholder: '请输入'
           }
         }
       }
@@ -572,7 +572,9 @@ export default {
     },
     freightValid () {
       return new Promise((resolve, reject) => {
-        resolve(NP.plus(this.model.fuelCardAmount, this.model.cashAmount) === NP.plus(0, this.model.freightFee))
+        console.log(this.model.settlementType)
+        console.log(this.model.fuelCardAmount, this.model.cashAmount)
+        resolve(this.model.settlementType !== 1 || (NP.plus(this.model.fuelCardAmount, this.model.cashAmount) === NP.plus(0, this.model.freightFee)))
       })
     }
   },
@@ -662,12 +664,20 @@ export default {
               display: flex
               .cube-input
                 flex: 1
+                width 100%
               .iconfont
                 width: 30px;
                 margin: 15px 10px;
                 padding: 0 10px
                 line-height: 20px;
                 border-left: 1px solid #ddd;
+          &.text-item
+            display: block
+            .cube-form-field
+              display: block
+          .cube-validator-content
+            .cube-input
+              width 100%
         .cube-form-label
           padding-top: 12px;
           width: 140px;

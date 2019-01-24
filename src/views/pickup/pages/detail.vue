@@ -71,6 +71,21 @@ export default {
       if (val === 1) {
         setAppRightBtn([
           {
+            text: '编辑',
+            iconType: 'edit',
+            action: () => {
+              this.$router.push({
+                name: 'pickup-assign',
+                params: {
+                  id: this.$route.params.id
+                },
+                query: {
+                  isEdit: 1
+                }
+              })
+            }
+          },
+          {
             text: '删除',
             iconType: 'delete',
             action: () => {
@@ -101,21 +116,6 @@ export default {
                   _this.$router.back()
                 }
               }).show()
-            }
-          },
-          {
-            text: '编辑',
-            iconType: 'edit',
-            action: () => {
-              this.$router.push({
-                name: 'pickup-assign',
-                params: {
-                  id: this.$route.params.id
-                },
-                query: {
-                  isEdit: 1
-                }
-              })
             }
           }
         ])

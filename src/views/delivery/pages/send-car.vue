@@ -30,8 +30,8 @@
         <cube-form-group>
           <cube-form-item :field="fields['mileage']"/>
           <cube-form-item v-if="model.assignCarType === 1" :field="fields['freightFee']">
-            <cube-input v-model="model.freightFee" class="freightFee_input border-right-1px" placeholder="请输入"/>
-            <i class="iconfont icon-ico_rule cube-c-green " @click.stop="goGetRule"/>
+            <!-- <cube-input v-model="model.freightFee" class="freightFee_input border-right-1px" placeholder="请输入"/>
+            <i class="iconfont icon-ico_rule cube-c-green " @click.stop="goGetRule"/> -->
           </cube-form-item>
           <cube-form-item v-if="model.assignCarType === 2" :field="fields['gasFee']"/>
           <cube-form-item :field="fields['loadFee']"/>
@@ -77,7 +77,9 @@ import DispatchCity from '../components/dispach-city'
 
 export default {
   name: 'delivery-send-car',
-  metaInfo: { title: '编辑派车' },
+  metaInfo() {
+    return { title: this.getTitle() }
+  },
   components: { DispatchCity },
 
   data () {
@@ -705,6 +707,7 @@ export default {
           modelKey: 'settlementType',
           label: '结算方式',
           props: {
+            disabled: false,
             options: [
               {
                 value: 1,
@@ -747,10 +750,25 @@ export default {
     ...mapGetters('pickup', ['backupDriverList']),
     ...mapGetters('delivery', ['WaybillDetail'])
   },
+
+  watch: {
+    'model.totalFee': function(val) {
+      if (val < 0) {
+        this.model.settlementType = 2
+        this.fields.settlementType.props.disabled = true
+      } else {
+        this.fields.settlementType.props.disabled = false
+      }
+    }
+  },
+
   methods: {
     ...mapActions('delivery', ['getWaybillDetail', 'doSendCar', 'getSend', 'clearSend', 'doEditWaybill']),
     ...mapActions('pickup', ['getCarrierNameList', 'getSelfCarList', 'getSelfDriverList']),
     ...mapActions('order/create', ['sendDirectly']),
+    getTitle() {
+      return this.isEditMode ? '编辑' : '派车'
+    },
     validateHandler(result) {
       this.validity = result.validity
       this.valid = result.valid
@@ -834,9 +852,13 @@ export default {
           await this.sendDirectly(data)
         } else {
           if (this.isEditMode) {
-            await this.doEditWaybill(data)
+            await this.doEditWaybill(data).then(() => {
+              window.toast('编辑成功')
+            })
           } else {
-            await this.doSendCar(data)
+            await this.doSendCar(data).then(() => {
+              window.toast('派车成功')
+            })
           }
           await this.clearSend()// 刷新列表
           await this.getSend()
@@ -858,15 +880,20 @@ export default {
 
         vm.model = Object.assign(vm.model, waybill)
         vm.model.settlementType = waybill.settlementType ? waybill.settlementType : 1
+        vm.model.remark = waybill.remark ? waybill.remark : ''
 
         if (waybill.assignCarType === 1) { // 外转
           vm.model.carrierCarNo = waybill.carNo
           vm.model.carrierDriverName = waybill.driverName
           vm.model.carrierDriverPhone = waybill.driverPhone
+          vm.model.carType = waybill.carType
+          vm.model.carLength = waybill.carLength
         } else { // 自送
           vm.model.selCarNo = `${waybill.carNo}-${waybill.carType}-${waybill.carLength}`
           vm.model.selfDriverName = `${waybill.driverName}-${waybill.driverPhone}`
           vm.model.selfAssistantDriverName = `${waybill.assistantDriverName}-${waybill.assistantDriverPhone}`
+          vm.model.carType = ''
+          vm.model.carLength = ''
         }
 
         const moneyKeys = ['freightFee', 'loadFee', 'unloadFee', 'tollFee', 'accommodation', 'insuranceFee', 'otherFee', 'infoFee', 'cashBack', 'totalFee']

@@ -126,8 +126,9 @@ export default {
 .order-item
   background-color: #ffffff;
   margin-bottom: 15px;
-  padding: 10px 0 10px 15px;
+  padding: 10px 0;
   .item-header
+    padding-left: 15px;
     padding-bottom: 10px;
     span
       font-size: 14px;
@@ -146,7 +147,7 @@ export default {
       text-align: center
       color: #ffffff;
   .item-content
-    padding: 10px 0
+    padding: 10px 0 10px 15px
     .order-route
       margin-bottom: 5px;
       .address
@@ -176,6 +177,7 @@ export default {
       line-height: 20px;
       color: #666666;
   .item-footer
+    padding-left: 15px;
     padding-top: 10px;
     display: flex
     flex-direction row
@@ -192,8 +194,10 @@ export default {
         font-size: 20px;
         line-height: 28px;
         text-align: left
+        font-weight: bold;
         span
           font-size: 14px;
+          font-weight: normal;
     .order-btns
       margin-right: 15px;
       a

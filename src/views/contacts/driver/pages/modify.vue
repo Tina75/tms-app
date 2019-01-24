@@ -105,7 +105,7 @@ export default {
   computed: {
     ...mapState(moudleName, ['driverDetail']),
     isCreate() {
-      return typeof this.$route.query.driverId === 'undefined'
+      return typeof this.$route.query.carrierId === 'undefined'
     },
     regularLine () {
       const res = []
@@ -130,7 +130,7 @@ export default {
         if (!validLine) return
 
         this.model.regularLine = this.regularLine
-        this.model.carrierId = this.$route.query.driverId
+        this.model.carrierId = this.$route.query.carrierId
         await this.modifyDriver(DriverDetail.toServer(this.model))
         this.afterSubmit()
       } catch (e) {
@@ -165,35 +165,33 @@ export default {
       this.$refs.form.reset()
       if (!this.isCreate) {
         // 编辑操作, 判断store中的值是否是目标, 不是则拉新的
-        const urlId = +this.$route.query.driverId
+        const urlId = +this.$route.query.carrierId
         if (urlId !== +this.driverDetail.driverId) {
           await this.loadDriverDetail()
           // 更新了detail的则要刷新detail页
           this.$refreshPage('contacts-driver-detail')
         }
         this.model = DriverDetail.toForm(this.driverDetail)
-        this.setRegularLine()
-        console.log(this.model)
       } else {
         this.model = new DriverDetail()
       }
+      this.setRegularLine()
     },
 
     setRegularLine () {
+      if (!this.model.regularLine) {
+        this.regularLine1 = ''
+        this.regularLine2 = ''
+        return
+      }
       try {
-        // console.log(this.driverDetail.regularLine)
         const serveData = JSON.parse(this.model.regularLine)
-        if (Array.isArray(serveData)) {
-          this.regularLine1 = serveData[0] || {}
-          this.regularLine2 = serveData[1] || {}
-        } else {
-          this.regularLine1 = {}
-          this.regularLine2 = {}
-        }
+        this.regularLine1 = Array.isArray(serveData) && serveData[0] ? serveData[0] : ''
+        this.regularLine2 = Array.isArray(serveData) && serveData[1] ? serveData[1] : ''
       } catch (error) {
-        this.regularLine1 = {}
-        this.regularLine2 = {}
-        // console.error(error)
+        this.regularLine1 = ''
+        this.regularLine2 = ''
+        console.error(error)
       }
     },
 
@@ -213,7 +211,9 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    next(vm => vm.setForm())
+    next(vm => {
+      vm.setForm()
+    })
   }
 }
 </script>

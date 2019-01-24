@@ -10,7 +10,7 @@
             <span v-text="viewData.carrierPhone"/>
           </div>
           <div v-if="viewData.customerCarrierPhone" class="cube-mt-10">
-            <i class="iconfont icon-ico_KF cube-mr-10"/>
+            <i class="iconfont icon-ico_KF1 cube-mr-10" style="color: #A4AFC0"/>
             <span class="cube-mr-10">客服</span>
             <span v-text="viewData.customerCarrierPhone"/>
           </div>
@@ -87,16 +87,16 @@ export default {
       this.loadCarrierDetail(carrierId)
       setAppRightBtn([
         {
-          text: '删除',
-          iconType: 'delete',
-          action: this.removeHandle
-        },
-        {
           text: '修改',
           iconType: 'edit',
           action: () => {
             this.$router.push({ name: 'contacts-carrier-modify', query: { carrierId: this.contactDetail.id } })
           }
+        },
+        {
+          text: '删除',
+          iconType: 'delete',
+          action: this.removeHandle
         }
       ])
     }

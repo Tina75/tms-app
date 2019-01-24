@@ -59,7 +59,7 @@ export default {
     ...mapGetters('delivery', ['DispatchList'])
   },
 
-  created () {
+  activated () {
     this.info = this.$route.params.info
     this.startCode = this.info.start
     this.endCode = this.info.end
@@ -77,7 +77,7 @@ export default {
       this.$createDialog({
         type: 'confirm',
         icon: 'cubeic-alert',
-        content: '是否确认做提货调度，创建运单',
+        content: '是否确认做送货调度，创建运单',
         onConfirm: () => {
           this.dispatchOrder(data).then(() => {
             window.toast('创建成功')

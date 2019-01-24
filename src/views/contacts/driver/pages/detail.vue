@@ -132,13 +132,18 @@ export default {
       window.location.href = `tel: ${this.driverDetail.driverPhone}`
     },
     async remove() {
-      await this.removeDriver({ carrierId: this.$route.query.driverId })
+      await this.removeDriver({ carrierId: this.$route.query.carrierId })
       this.$refreshPage('contacts-driver')
       window.toast('删除成功')
       this.$router.back(true)
     },
     setButton() {
       setAppRightBtn([
+        {
+          text: '修改',
+          iconType: 'edit',
+          action: this.editDriver.bind(this)
+        },
         {
           text: '删除',
           iconType: 'delete',
@@ -151,15 +156,11 @@ export default {
               onConfirm: this.remove.bind(this)
             }).show()
           }
-        },
-        {
-          text: '修改',
-          iconType: 'edit',
-          action: () => {
-            this.$router.push({ name: 'contacts-driver-modify', query: { driverId: this.driverDetail.id } })
-          }
         }
       ])
+    },
+    editDriver() {
+      this.$router.push({ name: 'contacts-driver-modify', query: { carrierId: this.$route.query.carrierId } })
     }
   },
   beforeRouteEnter (to, from, next) {
