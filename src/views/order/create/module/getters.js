@@ -2,6 +2,7 @@ export default {
   orderConfig: state => state.orderConfig,
   oftenPermission: state => state.oftenPermission,
   orderNeedReset: state => state.orderNeedReset,
+  oneMoreId: state => state.oneMoreId,
   orderInfo: state => state.orderInfo,
   consignerId: state => state.consignerId,
   orderOften: state => !!state.orderInfo.isSaveOrderTemplate,

@@ -101,6 +101,7 @@ export default {
     setAppTitleBtn({
       text: '常发订单',
       action: () => {
+        this.$formWillLeave()
         this.$router.push({ name: 'order-often' })
       }
     })
