@@ -21,35 +21,35 @@
           @click.prevent="copy(detail.customerWaybillNo)">复制</a>
       </p>
     </detail-panel-item> -->
-    <!-- <detail-panel-item :label="'始发地'">
-      <p>广东省深圳市宝安区</p>
+    <detail-panel-item v-if="detail.startName" :label="'始发地'">
+      <p>{{ detail.startName }}</p>
     </detail-panel-item>
-    <detail-panel-item :label="'目的地'">
-      <p>黑龙江哈尔滨市南岗区</p>
-    </detail-panel-item> -->
-    <detail-panel-item :label="'发货时间'">
-      <p>{{ detail.deliveryTime | datetimeFormat('YYYY-MM-DD HH:mm', '-') }}</p>
+    <detail-panel-item v-if="detail.endName" :label="'目的地'">
+      <p>{{ detail.endName }}</p>
     </detail-panel-item>
-    <detail-panel-item :label="'到货时间'">
-      <p>{{ detail.arriveTime | datetimeFormat('YYYY-MM-DD HH:mm', '-') }}</p>
+    <detail-panel-item v-if="detail.deliveryTime" :label="'发货时间'">
+      <p>{{ detail.deliveryTime | datetimeFormat }}</p>
+    </detail-panel-item>
+    <detail-panel-item v-if="detail.arriveTime" :label="'到货时间'">
+      <p>{{ detail.arriveTime | datetimeFormat }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'提货方式'">
       <p>{{ detail.pickup | pickupType }}</p>
     </detail-panel-item>
-    <detail-panel-item :label="'回单数量'">
+    <detail-panel-item v-if="detail.receiptCount" :label="'回单数量'">
       <p>{{ detail.receiptCount }}份</p>
     </detail-panel-item>
-    <detail-panel-item :label="'代收货款'">
+    <detail-panel-item v-if="detail.collectionMoney" :label="'代收货款'">
       <p>{{ detail.collectionMoney | moneyFormat }}元</p>
     </detail-panel-item>
-    <detail-panel-item :label="'对接业务员'">
+    <detail-panel-item v-if="detail.salesmanNam" :label="'对接业务员'">
       <p>{{ detail.salesmanName }}</p>
     </detail-panel-item>
     <detail-panel-item :label="'是否开票'">
       <p>{{ invoiceRender }}</p>
     </detail-panel-item>
-    <detail-panel-item :label="'备注'">
-      <p class="remark">{{ detail.remark || '-' }}</p>
+    <detail-panel-item v-if="detail.remark" :label="'备注'">
+      <p class="remark">{{ detail.remark }}</p>
     </detail-panel-item>
   </detail-panel>
 </template>
@@ -76,6 +76,16 @@ export default {
 }
 </script>
 <style scoped lang="stylus">
+  >>> .detail-panel-item
+    label
+      flex none
+    .cell-content
+      width 0
+    p
+      white-space nowrap
+      text-overflow ellipsis
+      overflow hidden
+      
   .remix-content
     display: flex
     span

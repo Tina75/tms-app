@@ -271,7 +271,6 @@ export default {
 
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.setWindowResizeListener()
       vm.initCargoList(from.name)
       vm.showPage = false
       vm.$nextTick(() => { vm.showPage = true })

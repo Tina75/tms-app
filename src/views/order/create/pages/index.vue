@@ -278,7 +278,6 @@ export default {
     next(vm => {
       vm.mode = vm.$route.meta.mode
       vm.id = vm.$route.params.id
-      vm.setWindowResizeListener()
       vm.$nextTick(async () => {
         vm.setTitleButtons()
         const fromPage = from.name
