@@ -41,6 +41,11 @@ export default {
       type: [Object, String],
       required: true,
       default: () => {}
+    },
+    visible: {
+      type: Boolean,
+      required: true,
+      default: false
     }
   },
 
@@ -48,38 +53,34 @@ export default {
     return {
       pickCityVisible: false,
       isDestination: false, // 目标值是否是目的地
-      from: {
-        s: '',
-        sn: ''
-      },
-      to: {
-        e: '',
-        en: ''
-      }
+      from: { s: '', sn: '' },
+      to: { e: '', en: '' }
     }
   },
 
   watch: {
     value (newVal) {
-      this.from = {
-        s: newVal.s || '',
-        sn: newVal.sn || ''
-      }
-      this.to = {
-        e: newVal.e || '',
-        en: newVal.en || ''
-      }
+      this.from = { s: newVal.s || '', sn: newVal.sn || '' }
+      this.to = { e: newVal.e || '', en: newVal.en || '' }
+    },
+    visible (newVal) {
+      this.pickCityVisible = newVal
     }
   },
 
   methods: {
     showPickCity (index) {
       this.pickCityVisible = true
+      this.$emit('update:visible', true)
       this.isDestination = Boolean(index)
     },
 
     citySelect (city) {
-      const address = city.reduce((prev, { name }) => (prev += name), '')
+      let address = []
+      city.forEach(({ name }) => {
+        address = address.includes(name) ? [ ...address, '全境' ] : [ ...address, name ]
+      })
+      address = address.join('')
       const res = city.slice(-1)[0]
       let eventData = {}
       if (this.isDestination) {
@@ -122,13 +123,6 @@ export default {
       console.log(eventData)
       this.$emit('input', eventData)
     }
-  },
-
-  beforeRouteLeave (to, from, next) {
-    next(vm => {
-      debugger
-      vm.pickCityVisible = false
-    })
   }
 }
 </script>
