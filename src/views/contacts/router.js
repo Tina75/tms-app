@@ -158,7 +158,8 @@ export default [
     path: '/contacts/carrier/modify',
     name: 'contacts-carrier-modify',
     meta: {
-      noNeedRefresh: []
+      noNeedRefresh: [],
+      formLeaveConfirm: true
     },
     component: () => import(/* webpackChunkName: "contacts-carrier" */ './carrier/pages/create.vue')
   },
