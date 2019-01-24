@@ -166,9 +166,9 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       if (Number(to.query.type) === 1) {
-        vm.getPickupLocation(to.params.id).catch(e => { vm.$router.back() })
+        vm.getPickupLocation(to.params.id)
       } else if (Number(to.query.type) === 2) {
-        vm.getWaybillLocation(to.params.id).catch(e => { vm.$router.back() })
+        vm.getWaybillLocation(to.params.id)
       }
     })
   },
@@ -235,7 +235,7 @@ export default {
       flex: 1
       text-align: left
       .truck-no
-        font-size: 15px;
+        font-size: 14px;
         font-weight: bold
         line-height: 35px;
         letter-spacing: -1px

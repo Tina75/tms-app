@@ -215,10 +215,35 @@ export default {
             placeholder: '请输入'
           },
           rules: {
-            pattern: /^(1\d{10})?$/
+            pattern: /^(1\d{2}\s\d{4}\s\d{4})?$/
           },
           messages: {
             pattern: '请输入正确的手机号码'
+          },
+          events: {
+            'input': (val) => {
+              if (!val || val[0] !== '1') return
+              val = val.trim().split(' ').join('')
+              let phoneArr = []
+              let phoneTemp = ''
+              for (let i in val) {
+                i = Number(i)
+                phoneTemp += val[i]
+                if (!phoneArr.length && i === 2) {
+                  phoneArr.push(phoneTemp)
+                  phoneTemp = ''
+                } else if (phoneTemp.length === 4) {
+                  phoneArr.push(phoneTemp)
+                  phoneTemp = ''
+                } else if (i === (val.length - 1)) {
+                  phoneArr.push(phoneTemp)
+                  phoneTemp = ''
+                }
+              }
+              this.$nextTick(() => {
+                this.model.carrierDriverPhone = phoneArr.join(' ')
+              })
+            }
           },
           trigger: 'blur'
         },
@@ -467,7 +492,7 @@ export default {
         let req = {
           carrierName: this.model.carrierName,
           driverName: this.model.assignCarType === 1 ? this.model.carrierDriverName : this.model.selfDriverName.split('-')[0],
-          driverPhone: this.model.assignCarType === 1 ? this.model.carrierDriverPhone : this.model.selfDriverName.split('-')[1],
+          driverPhone: this.model.assignCarType === 1 ? this.model.carrierDriverPhone.split(' ').join('') : this.model.selfDriverName.split('-')[1],
           carNo: this.model.assignCarType === 1 ? this.model.carrierCarNo : this.model.carNo.split('-')[0],
           carType: this.model.assignCarType === 1 ? this.model.carType : this.model.carNo.split('-')[1],
           carLength: this.model.assignCarType === 1 ? this.model.carLength : this.model.carNo.split('-')[2],
