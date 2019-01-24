@@ -1,5 +1,5 @@
 <template>
-  <div class="bill-item" @click="toDetail(data, index)">
+  <div class="bill-item" @click="toDetail(data)">
     <div class="item-header border-bottom-1px">
       <span>{{data.createTime|datetimeFormat}}</span>
       <i v-if="data.abnormalLabel === 2">异</i>
