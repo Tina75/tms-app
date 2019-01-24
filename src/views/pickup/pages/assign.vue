@@ -670,6 +670,7 @@ export default {
     .edit-form
       padding-top: 15px;
       flex 1
+      height: calc(100% - 45px)
       overflow auto
       overflow-scrolling touch
       >>> .cube-form

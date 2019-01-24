@@ -19,7 +19,8 @@
         maxlength="100"
         placeholder="请输入详细地址"
         clearable
-        @on-focus="allowSearch = true" />
+        @on-focus="allowSearch = true"
+        @on-blur="allowSearch = false" />
       <form-item
         v-model="form.extra"
         label="补充地址"
@@ -102,7 +103,7 @@ export default {
       },
       oftenAddresses: [],
       showCityPicker: false,
-      allowSearch: true
+      allowSearch: false
     }
   },
   computed: {

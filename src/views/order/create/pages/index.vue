@@ -32,7 +32,7 @@
             prop="consignerPhone"
             label="联系号码"
             maxlength="20"
-            @input="consignerPhoneInputHandler"
+            type="phone"
             @on-focus="inputFocus" />
           <form-item
             v-model="orderInfo.consignerAddressText"
@@ -67,7 +67,7 @@
             prop="consigneePhone"
             label="联系号码"
             maxlength="20"
-            @input="consigneePhoneInputHandler"
+            type="phone"
             @on-focus="inputFocus" />
           <form-item
             v-model="orderInfo.consigneeAddressText"
@@ -193,7 +193,8 @@ const NO_RESET_PAGE = [
   'order-select-consigner', // 选择发货人
   'order-select-consignee', // 选择收货人
   'pickup-assign', // 提货发运
-  'delivery-send-car' // 送货发运
+  'delivery-send-car', // 送货发运,
+  'order-often' // 常发订单
 ]
 
 export default {
@@ -307,7 +308,7 @@ export default {
     height calc(100vh - 88px)
 
   .form
-    margin-bottom 15px
+    margin-bottom 50px
 
     &-section
       margin-top 15px

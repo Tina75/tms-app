@@ -69,35 +69,35 @@ export default {
     this.TRIGGER_ADDRESS_CHANGE(true)
   },
   // 联系电话格式化
-  consignerPhoneInputHandler (phone) {
-    this.phoneFormatter(phone, 'consignerPhone')
-  },
-  consigneePhoneInputHandler (phone) {
-    this.phoneFormatter(phone, 'consigneePhone')
-  },
-  phoneFormatter (phone, field) {
-    if (!phone || phone[0] !== '1') return
-    phone = phone.trim().split(' ').join('')
-    let phoneArr = []
-    let phoneTemp = ''
-    for (let i in phone) {
-      i = Number(i)
-      phoneTemp += phone[i]
-      if (!phoneArr.length && i === 2) {
-        phoneArr.push(phoneTemp)
-        phoneTemp = ''
-      } else if (phoneTemp.length === 4) {
-        phoneArr.push(phoneTemp)
-        phoneTemp = ''
-      } else if (i === (phone.length - 1)) {
-        phoneArr.push(phoneTemp)
-        phoneTemp = ''
-      }
-    }
-    this.$nextTick(() => {
-      this.orderInfo[field] = phoneArr.join(' ')
-    })
-  },
+  // consignerPhoneInputHandler (phone) {
+  //   this.phoneFormatter(phone, 'consignerPhone')
+  // },
+  // consigneePhoneInputHandler (phone) {
+  //   this.phoneFormatter(phone, 'consigneePhone')
+  // },
+  // phoneFormatter (phone, field) {
+  //   if (!phone || phone[0] !== '1') return
+  //   phone = phone.trim().split(' ').join('')
+  //   let phoneArr = []
+  //   let phoneTemp = ''
+  //   for (let i in phone) {
+  //     i = Number(i)
+  //     phoneTemp += phone[i]
+  //     if (!phoneArr.length && i === 2) {
+  //       phoneArr.push(phoneTemp)
+  //       phoneTemp = ''
+  //     } else if (phoneTemp.length === 4) {
+  //       phoneArr.push(phoneTemp)
+  //       phoneTemp = ''
+  //     } else if (i === (phone.length - 1)) {
+  //       phoneArr.push(phoneTemp)
+  //       phoneTemp = ''
+  //     }
+  //   }
+  //   this.$nextTick(() => {
+  //     this.orderInfo[field] = phoneArr.join(' ')
+  //   })
+  // },
   // 二级页面信息回显
   showConsumerInfo () {
     let infos = []
