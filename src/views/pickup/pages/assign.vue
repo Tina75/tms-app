@@ -571,7 +571,7 @@ export default {
         rules: {
           pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/,
           custom: (val) => {
-            return NP.plus(_this.model.fuelCardAmount, _this.model.cashAmount) === NP.plus(0, _this.model.freightFee)
+            return NP.plus(_this.model.fuelCardAmount, _this.model.cashAmount) === NP.plus(0, _this.model.totalFee)
           }
         },
         messages: {
@@ -599,7 +599,7 @@ export default {
       return new Promise((resolve, reject) => {
         console.log(this.model.settlementType)
         console.log(this.model.fuelCardAmount, this.model.cashAmount)
-        resolve(this.model.settlementType !== 1 || (NP.plus(this.model.fuelCardAmount, this.model.cashAmount) === NP.plus(0, this.model.freightFee)))
+        resolve(this.model.settlementType !== 1 || (NP.plus(this.model.fuelCardAmount, this.model.cashAmount) === NP.plus(0, this.model.totalFee)))
       })
     }
   },
