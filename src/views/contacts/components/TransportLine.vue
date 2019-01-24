@@ -150,6 +150,7 @@ export default {
       height 6px
       width 6px
       border-radius 100%
+      box-shadow 0 0 4px #00A4BD
       background #00A4BD
     &::after
       content ''
@@ -159,5 +160,6 @@ export default {
       height 6px
       width 6px
       border-radius 100%
+      box-shadow 0 0 4px #252A2F
       background #252A2F
 </style>
