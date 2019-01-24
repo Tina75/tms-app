@@ -130,11 +130,6 @@ export default {
       this.loadTruckDetail(carId)
       setAppRightBtn([
         {
-          text: '删除',
-          iconType: 'delete',
-          action: this.removeHandle
-        },
-        {
           text: '修改',
           iconType: 'edit',
           action: () => {
@@ -146,6 +141,11 @@ export default {
               }
             })
           }
+        },
+        {
+          text: '删除',
+          iconType: 'delete',
+          action: this.removeHandle
         }
       ])
     },

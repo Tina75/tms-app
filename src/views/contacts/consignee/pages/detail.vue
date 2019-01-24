@@ -84,6 +84,13 @@ export default {
     setButton() {
       setAppRightBtn([
         {
+          text: '修改',
+          iconType: 'edit',
+          action: () => {
+            this.$router.push({ name: 'contacts-consignee-modify', query: { consigneeId: this.consigneeDetail.id } })
+          }
+        },
+        {
           text: '删除',
           iconType: 'delete',
           action: () => {
@@ -93,13 +100,6 @@ export default {
               icon: 'cubeic-alert',
               onConfirm: this.remove.bind(this)
             }).show()
-          }
-        },
-        {
-          text: '修改',
-          iconType: 'edit',
-          action: () => {
-            this.$router.push({ name: 'contacts-consignee-modify', query: { consigneeId: this.consigneeDetail.id } })
           }
         }
       ])

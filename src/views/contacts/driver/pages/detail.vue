@@ -140,6 +140,11 @@ export default {
     setButton() {
       setAppRightBtn([
         {
+          text: '修改',
+          iconType: 'edit',
+          action: this.editDriver.bind(this)
+        },
+        {
           text: '删除',
           iconType: 'delete',
           action: () => {
@@ -151,11 +156,6 @@ export default {
               onConfirm: this.remove.bind(this)
             }).show()
           }
-        },
-        {
-          text: '修改',
-          iconType: 'edit',
-          action: this.editDriver.bind(this)
         }
       ])
     },
