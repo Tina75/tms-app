@@ -71,7 +71,7 @@
             {{detail.isInvoice == 1 ? `是（${rate(detail.invoiceRate)}%）` : '否'}}
           </FormItem> -->
           <FormItem v-if="detail.remark" label="备注">
-            {{detail.remark}}
+            <p>{{detail.remark}}</p>
           </FormItem>
         </Panel>
       </cube-scroll-nav-panel>
@@ -85,7 +85,7 @@
             <a slot="right" :href="`tel:${detail.consignerPhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
           </FormItem>
           <FormItem v-if="detail.consignerAddress" label="发货地址">
-            {{detail.consignerAddress}}
+            <p>{{detail.consignerAddress}}</p>
           </FormItem>
         </Panel>
         <Panel title="收货人">
@@ -97,10 +97,10 @@
             <a slot="right" :href="`tel:${detail.consigneePhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
           </FormItem>
           <FormItem v-if="detail.consigneeAddress" label="收货地址">
-            {{detail.consigneeAddress}}
+            <p>{{detail.consigneeAddress}}</p>
           </FormItem>
           <FormItem v-if="detail.consigneeCompanyName" label="收货人单位">
-            {{detail.consigneeCompanyName}}
+            <p>{{detail.consigneeCompanyName}}</p>
           </FormItem>
         </Panel>
       </cube-scroll-nav-panel>
@@ -130,7 +130,7 @@
       </cube-scroll-nav-panel>
     </cube-scroll-nav>
     <div v-if="!!detail.receiptOrder" class="upstream-footer">
-      <cube-button v-if="detail.receiptOrder.receiptStatus === 0 && detail.status === 40" class="footer-item-btn" @click="receipt">回收</cube-button>
+      <cube-button v-if="detail.receiptOrder.receiptStatus === 0 && detail.status === 40" class="footer-item-btn footer-item-primary" @click="receipt">回收</cube-button>
       <cube-button v-if="detail.receiptOrder.receiptStatus === 1" class="footer-item-btn" @click="backFactory">返厂</cube-button>
       <cube-button v-if="detail.receiptOrder.receiptStatus > 0 && !detail.receiptOrder.receiptUrl.length" class="footer-item-btn  footer-item-primary" @click="uploadPic">上传回单</cube-button>
       <cube-button v-if="detail.receiptOrder.receiptStatus > 0 && detail.receiptOrder.receiptUrl.length" class="footer-item-btn footer-item-primary" @click="updatePic">修改回单</cube-button>
@@ -214,7 +214,7 @@ export default {
           const params = {
             orderIds: [item.id],
             recoveryName: promptValue,
-            receiptStatus: item.receiptOrder.receiptStatus,
+            receiptStatus: 1,
             ids: [item.receiptOrder.orderId]
           }
           API.updateReceipt(params)
@@ -240,7 +240,7 @@ export default {
           const params = {
             orderIds: [item.id],
             returnName: promptValue,
-            receiptStatus: item.receiptOrder.receiptStatus,
+            receiptStatus: 2,
             ids: [item.receiptOrder.orderId]
           }
           API.updateReceipt(params)
