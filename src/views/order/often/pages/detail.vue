@@ -45,13 +45,14 @@ export default {
     ...mapGetters('order/create', [ 'oftenPermission' ])
   },
   methods: {
-    ...mapMutations('order/create', [ 'SET_ORDER_RESET' ]),
+    ...mapMutations('order/create', [ 'SET_ORDER_RESET', 'SET_ONE_MORE_ID' ]),
     ...mapMutations('order/often', [ 'SET_DETAIL' ]),
     ...mapActions('order/often', [ 'getOftenDetail', 'deleteOftenOrder' ]),
 
     orderOneMore () {
       this.SET_ORDER_RESET(true)
-      this.$router.push({ name: 'order-one-more', params: { id: this.detail.id } })
+      this.SET_ONE_MORE_ID(this.detail.id)
+      this.$router.back()
     },
 
     setRightButton () {

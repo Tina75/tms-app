@@ -6,6 +6,7 @@ const state = {
   orderConfig: {}, // 开单配置
   oftenPermission: null, // 常发订单权限 100400-常发订单 100401-再来一单 100402-删除
   orderNeedReset: false,
+  oneMoreId: void 0,
   // 订单信息
   orderInfo: {
     consignerName: '',

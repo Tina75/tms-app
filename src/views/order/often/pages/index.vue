@@ -87,10 +87,10 @@ export default {
   computed: {
     ...mapState('order/often', [ 'oftenList' ]),
     ...mapState('order/create', [ 'oftenPermission' ]),
-    ...mapGetters('order/create', [ 'oftenPermission' ])
+    ...mapGetters('order/create', [ 'oftenPermission', 'oneMoreId' ])
   },
   methods: {
-    ...mapMutations('order/create', [ 'SET_ORDER_RESET' ]),
+    ...mapMutations('order/create', [ 'SET_ORDER_RESET', 'SET_ONE_MORE_ID' ]),
     ...mapActions('order/often', [ 'loadOftenList', 'deleteOftenOrder' ]),
     ...mapActions('order/create', [ 'getOftenPermission' ]),
 
@@ -98,10 +98,8 @@ export default {
 
     orderAdd (id) {
       this.SET_ORDER_RESET(true)
-      this.$router.push({
-        name: 'order-one-more',
-        params: { id }
-      })
+      this.SET_ONE_MORE_ID(id)
+      this.$router.back()
     },
 
     orderDelete (id, index) {
@@ -120,6 +118,10 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(async vm => {
+      if (vm.oneMoreId) {
+        vm.$router.back()
+        return
+      }
       if (!vm.oftenPermission) await vm.getOftenPermission()
     })
   }

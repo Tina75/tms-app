@@ -14,6 +14,8 @@ export default {
       state.orderInfo[key] = payload[key]
     }
   },
+  // 设置再来一单id
+  SET_ONE_MORE_ID: (state, payload) => { state.oneMoreId = payload },
   // 重置订单
   RESET_ORDER: state => {
     const temp = {
