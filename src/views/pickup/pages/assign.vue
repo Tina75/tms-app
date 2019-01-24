@@ -572,7 +572,9 @@ export default {
     },
     freightValid () {
       return new Promise((resolve, reject) => {
-        resolve(NP.plus(this.model.fuelCardAmount, this.model.cashAmount) === NP.plus(0, this.model.freightFee))
+        console.log(this.model.settlementType)
+        console.log(this.model.fuelCardAmount, this.model.cashAmount)
+        resolve(this.model.settlementType !== 1 || (NP.plus(this.model.fuelCardAmount, this.model.cashAmount) === NP.plus(0, this.model.freightFee)))
       })
     }
   },
@@ -662,6 +664,7 @@ export default {
               display: flex
               .cube-input
                 flex: 1
+                width 100%
               .iconfont
                 width: 30px;
                 margin: 15px 10px;
@@ -672,6 +675,9 @@ export default {
             display: block
             .cube-form-field
               display: block
+          .cube-validator-content
+            .cube-input
+              width 100%
         .cube-form-label
           padding-top: 12px;
           width: 140px;
