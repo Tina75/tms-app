@@ -65,11 +65,11 @@ export default {
     ...mapActions('order/detail', ['getDetail']),
     initTitleBtns() {
       let btnList = []
-      if (this.deleteBtnVisable(this.Detail)) {
-        btnList.push({ text: '删除', iconType: 'delete', action: () => { this.handleClickDelete(this.Detail) } })
-      }
       if (this.editOrderBtnVisable(this.Detail)) {
         btnList.push({ text: '编辑', iconType: 'edit', action: () => { this.handleClickEditOrder(this.Detail.id) } })
+      }
+      if (this.deleteBtnVisable(this.Detail)) {
+        btnList.push({ text: '删除', iconType: 'delete', action: () => { this.handleClickDelete(this.Detail) } })
       }
       setAppRightBtn(btnList)
     },
