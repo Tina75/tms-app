@@ -8,7 +8,9 @@ export default {
     if (!this.saveConsigner.id) return
     let consigner = this.saveConsigner
     let consignerAddress
+    console.log(1)
     if (this.saveConsigner.id === this.consignerId) return
+    console.log(2)
     this.SET_CONSIGNER_ID(this.saveConsigner.id)
     consigner = await this.getConsignerData(this.consignerId)
     if (consigner.addressList.length) consignerAddress = consigner.addressList[0]

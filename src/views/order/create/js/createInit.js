@@ -19,7 +19,8 @@ export default {
     //   this.$refs.$form.reset()
     // })
     if (this.mode === 'create' && !this.oneMoreId) return
-    // if (this.orderInfo.consignerName) return
+    // 存在客户名称时不再往下执行，编辑订单是以此判断是否已经初始化数据
+    if (this.orderInfo.consignerName) return
     window.loading(true)
     let orderInfo
     let cargoList

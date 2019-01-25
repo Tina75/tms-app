@@ -33,8 +33,6 @@ export function addressConcat (address, cityName, extra) {
   if (!extra) extra = ''
   const cityArr = cityName.replace(addressReg, '$1/$6/$7/$9').split('/')
   const addressArr = address.replace(addressReg, '$1/$6/$7/$9').split('/')
-  console.log(cityName, cityArr)
-  console.log(address, addressArr)
   const province = addressArr[0] ? addressArr[0] : cityArr[0]
   const city = addressArr[1] ? addressArr[1] : cityArr[1]
   const district = addressArr[2] ? addressArr[2] : cityArr[2]
