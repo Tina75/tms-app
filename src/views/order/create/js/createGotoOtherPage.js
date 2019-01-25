@@ -43,6 +43,9 @@ export default {
     //   window.toast('请通过通讯录选择发货方')
     //   return
     // }
+    if (!this.orderCargoList.length) {
+      return window.toast('请先填写货物信息')
+    }
     const order = this.orderInfo
     let query = { partnerType: 1, partnerId: this.saveConsigner.id }
     query.departure = String(order.start)
