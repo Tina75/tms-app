@@ -78,7 +78,7 @@ export default {
       window.location.href = `tel:${this.viewData.phone}`
     },
     async remove () {
-      await this.removeConsignee({ id: this.viewData.id })
+      await this.removeConsignee({ id: this.$route.query.consigneeId })
       this.$refreshPage('contacts-consignee')
       window.toast('删除成功')
       this.$router.back(true)
@@ -89,7 +89,7 @@ export default {
           text: '修改',
           iconType: 'edit',
           action: () => {
-            this.$router.push({ name: 'contacts-consignee-modify', query: { consigneeId: this.viewData.id } })
+            this.$router.push({ name: 'contacts-consignee-modify', query: { consigneeId: this.$route.query.consigneeId } })
           }
         },
         {

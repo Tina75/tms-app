@@ -41,6 +41,18 @@ import { mapMutations, mapActions } from 'vuex'
 import NP from 'number-precision'
 import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-rule.png'
+import { CHARGE_RULES } from '../../js/constant'
+
+const {
+  WEIGHT_TON,
+  VOLUME,
+  WEIGHT_TON_KM,
+  VOLUME_KM,
+  CAR_TYPE,
+  WEIGHT_KG,
+  WEIGHT_KG_KM,
+  QUANTITY
+} = CHARGE_RULES
 
 export default {
   name: 'order-charge-rule',
@@ -51,7 +63,7 @@ export default {
       NO_DATA,
       loading: true,
       ruleList: [],
-      info: this.$route.query.info || this.$route.query
+      info: {}
     }
   },
   methods: {
@@ -61,11 +73,19 @@ export default {
     async pickRuleAndCalc (item) {
       let { departure, destination, weight, volume, distance, carType, carLength, cargoInfos } = this.info
       let query = { departure, destination, distance, carType, carLength, cargoInfos }
-      if (item.ruleType === 1) query.input = NP.divide(weight || 0, 10)
-      else query.input = NP.times(volume || 0, 100)
-      query.ruleId = item.id
+
+      const ruleType = item.ruleType
+      if ([ WEIGHT_TON, WEIGHT_TON_KM ].indexOf(ruleType) > -1 && weight) query.input = NP.divide(weight, 1000)
+      else if ([ WEIGHT_KG, WEIGHT_KG_KM ].indexOf(ruleType) > -1 && weight) query.input = weight
+      else if ([ VOLUME, VOLUME_KM ].indexOf(ruleType) > -1 && volume) query.input = volume
+      else if ([ WEIGHT_TON_KM, WEIGHT_KG_KM, VOLUME_KM ].indexOf(ruleType) > -1 && !distance) return window.toast('未能找到相应的计费规则')
+      else if (CAR_TYPE === ruleType && !carType) return window.toast('未能找到相应的计费规则')
+      else if (QUANTITY === ruleType) {}
+      else return window.toast('未能找到相应的计费规则')
 
       window.loading(true)
+      query.ruleId = item.id
+      if (query.input) query.input = NP.times(query.input, 100)
       try {
         await this.calculateAmount(query)
         this.$router.back()
@@ -80,8 +100,9 @@ export default {
     next(async vm => {
       vm.CLEAR_CALCULATED_AMOUNT()
       vm.loading = true
+      vm.info = vm.$route.query.info || vm.$route.query
       const { partnerType, partnerId, departure, destination } = vm.info
-      if (!partnerType || !partnerId || !departure || !destination) {
+      if (!partnerType || !partnerId) {
         // window.toast('缺少参数')
         // vm.$router.back()
         vm.loading = false

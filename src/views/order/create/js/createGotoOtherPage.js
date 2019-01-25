@@ -48,9 +48,9 @@ export default {
     }
     const order = this.orderInfo
     let query = { partnerType: 1, partnerId: this.saveConsigner.id }
-    query.departure = String(order.start)
-    query.destination = String(order.end)
-    if (!query.partnerId || !query.departure || !query.destination || !(await this.getRuleList(query)).length) {
+    query.departure = order.start ? String(order.start) : void 0
+    query.destination = order.end ? String(order.end) : void 0
+    if (!query.partnerId || !(await this.getRuleList(query)).length) {
       return window.toast('暂无符合的计费规则')
     }
     query.distance = NP.times((order.mileage || 0), 1000)

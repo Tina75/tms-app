@@ -225,7 +225,7 @@ export default {
       this.formList = tempCargoList
       if (!this.formList.length) this.cargoAdd()
       this.setChoosedCargo()
-      this.$refs.$scroll.refresh()
+      this.refresh()
     },
     // 提交货物信息
     async submitCargoList () {
@@ -246,7 +246,10 @@ export default {
     // 添加货物
     cargoAdd (index) {
       this.formList.push(this.getEmptyCargo())
-      this.$refs.$scroll.refresh()
+      this.refresh()
+    },
+    refresh () {
+      this.$nextTick(() => { this.$refs.$scroll.refresh() })
     },
     // 返回一个空的货物信息
     getEmptyCargo () {
