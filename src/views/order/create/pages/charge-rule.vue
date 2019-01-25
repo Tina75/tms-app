@@ -61,11 +61,15 @@ export default {
     async pickRuleAndCalc (item) {
       let { departure, destination, weight, volume, distance, carType, carLength, cargoInfos } = this.info
       let query = { departure, destination, distance, carType, carLength, cargoInfos }
-      if (item.ruleType === 1) query.input = NP.divide(weight || 0, 10)
-      else query.input = NP.times(volume || 0, 100)
-      query.ruleId = item.id
+      
+      if ([ 1, 3, 6, 7].indexOf(item.ruleType) > -1 && weight) query.input = NP.divide(weight || 0, 10)
+      else return window.toast('未能找到相应的计费规则')
+      if ([ 2, 4 ].indexOf(item.ruleType) > -1 && volume) query.input = NP.times(volume || 0, 100)
+      else return window.toast('未能找到相应的计费规则')
+      if ([ 2, 4, 7 ].indexOf(item.ruleType)> -1 && !distance) return window.toast('未能找到相应的计费规则')
 
       window.loading(true)
+      query.ruleId = item.id
       try {
         await this.calculateAmount(query)
         this.$router.back()

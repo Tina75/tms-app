@@ -57,6 +57,7 @@ export default {
       },
       rules: {
         invoiceRate: {
+          required: true,
           type: 'number',
           min: 0,
           max: 100
