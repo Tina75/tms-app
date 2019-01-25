@@ -200,17 +200,18 @@ export default {
       padding 10px 0px
       margin-left 9px
       color #333333
-      span
-        display inline-block
-        margin-left 10px
-        background-color #FCA950
-        padding 0px 5px
-        font-size 12px
-        color  #FFFFFF
       h2
         font-size 18px
         font-weight 500
         line-height 18px
+        span
+          display inline-block
+          margin-left 10px
+          background-color #FCA950
+          padding 0px 5px
+          font-size 12px
+          color  #FFFFFF
+          vertical-align top
       p
         font-size 14px
         line-height 14px
