@@ -135,9 +135,7 @@ export default {
     ...mapActions('order/create', [ 'getOftenAddress' ]),
 
     onSelectAddress (item) {
-      const address = item.detail === item.name ? item.detail : (item.detail || '') + (item.name || '')
-      // const temp = address.replace(/((.{0,}省){0,1}(.{0,}市))/, '')
-      this.form.address = address
+      this.form.address = item.detail === item.name ? item.detail : (item.detail || '') + (item.name || '')
       this.form.latitude = item.data.point.lat
       this.form.longitude = item.data.point.lng
       this.allowSearch = false
