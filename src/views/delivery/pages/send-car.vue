@@ -1,69 +1,72 @@
 <template>
   <div class="pickup-assign">
-    <div class="edit-form">
-      <dispatch-city
-        v-if="isEditMode"
-        :start-code.sync="start"
-        :end-code.sync="end"/>
-      <cube-form
-        ref="assign-form"
-        :model="model"
-        :options="options"
-        :immediate-validate="false"
-        @validate="validateHandler">
-        <cube-form-group class="cube-mt-15">
-          <cube-form-item :field="fields['assignCarType']" />
-        </cube-form-group>
-        <cube-form-group v-if="model.assignCarType === 1">
-          <cube-form-item :field="fields['carrierName']"/>
-          <cube-form-item :field="fields['carrierCarNo']"/>
-          <cube-form-item :field="fields['carrierDriverName']"/>
-          <cube-form-item :field="fields['carrierDriverPhone']"/>
-          <cube-form-item :field="fields['carType']"/>
-          <cube-form-item :field="fields['carLength']"/>
-          <cube-form-item :field="fields['carrierWaybillNo']"/>
-        </cube-form-group>
-        <cube-form-group v-if="model.assignCarType === 2">
-          <cube-form-item :field="fields['selCarNo']"/>
-          <cube-form-item :field="fields['selfDriverName']"/>
-          <cube-form-item :field="fields['selfAssistantDriverName']"/>
-        </cube-form-group>
-        <cube-form-group>
-          <cube-form-item :field="fields['mileage']"/>
-          <cube-form-item v-if="model.assignCarType === 1" :field="fields['freightFee']"/>
-          <cube-form-item v-if="model.assignCarType === 2" :field="fields['gasFee']"/>
-          <cube-form-item :field="fields['loadFee']"/>
-          <cube-form-item :field="fields['unloadFee']"/>
-          <cube-form-item :field="fields['tollFee']"/>
-          <cube-form-item v-if="model.assignCarType === 2" :field="fields['accommodation']"/>
-          <cube-form-item :field="fields['insuranceFee']"/>
-          <cube-form-item :field="fields['otherFee']"/>
-          <cube-form-item v-if="model.assignCarType === 1" :field="fields['infoFee']"/>
-          <cube-form-item :field="fields['totalFee']">
-            <span class="total-money">{{model.totalFee}}</span>
-          </cube-form-item>
-          <!-- 结算方式 -->
-          <cube-form-item v-if="model.assignCarType === 1" :field="fields['settlementType']"/>
-          <div v-if="model.assignCarType === 1 && model.settlementType === 1">
-            <cube-form-item  :field="fields['fuelCardAmount1']"/>
-            <cube-form-item :field="fields['cashAmount1']"/>
-            <cube-form-item  :field="fields['fuelCardAmount2']"/>
-            <cube-form-item :field="fields['cashAmount2']"/>
-            <cube-form-item :field="fields['fuelCardAmount3']"/>
-            <cube-form-item :field="fields['cashAmount3']"/>
-            <cube-form-item :field="fields['fuelCardAmount4']"/>
-            <cube-form-item :field="fields['cashAmount4']"/>
-          </div>
-        </cube-form-group>
-        <cube-form-group >
-          <cube-form-item v-if="WaybillDetail.orderList&&WaybillDetail.orderList.length>1" :field="fields['allocationStrategy']"/>
-          <cube-form-item v-if="model.assignCarType === 1" :field="fields['cashBack']"/>
-        </cube-form-group>
-        <cube-form-group>
-          <cube-form-item class="text-item" :field="fields['remark']"/>
-        </cube-form-group>
-      </cube-form>
-    </div>
+    <cube-scroll  ref="$scroll" class="scroll-box">
+      <div class="edit-form">
+        <dispatch-city
+          v-if="isEditMode"
+          :start-code.sync="start"
+          :end-code.sync="end"/>
+        <cube-form
+          ref="assign-form"
+          :model="model"
+          :options="options"
+          :immediate-validate="false"
+          @validate="validateHandler">
+          <cube-form-group class="cube-mt-15">
+            <cube-form-item :field="fields['assignCarType']" />
+          </cube-form-group>
+          <cube-form-group v-if="model.assignCarType === 1">
+            <cube-form-item :field="fields['carrierName']"/>
+            <cube-form-item :field="fields['carrierCarNo']"/>
+            <cube-form-item :field="fields['carrierDriverName']"/>
+            <cube-form-item :field="fields['carrierDriverPhone']"/>
+            <cube-form-item :field="fields['carType']"/>
+            <cube-form-item :field="fields['carLength']"/>
+            <cube-form-item :field="fields['carrierWaybillNo']"/>
+          </cube-form-group>
+          <cube-form-group v-if="model.assignCarType === 2">
+            <cube-form-item :field="fields['selCarNo']"/>
+            <cube-form-item :field="fields['selfDriverName']"/>
+            <cube-form-item :field="fields['selfAssistantDriverName']"/>
+          </cube-form-group>
+          <cube-form-group>
+            <cube-form-item :field="fields['mileage']"/>
+            <cube-form-item v-if="model.assignCarType === 1" :field="fields['freightFee']"/>
+            <cube-form-item v-if="model.assignCarType === 2" :field="fields['gasFee']"/>
+            <cube-form-item :field="fields['loadFee']"/>
+            <cube-form-item :field="fields['unloadFee']"/>
+            <cube-form-item :field="fields['tollFee']"/>
+            <cube-form-item v-if="model.assignCarType === 2" :field="fields['accommodation']"/>
+            <cube-form-item :field="fields['insuranceFee']"/>
+            <cube-form-item :field="fields['otherFee']"/>
+            <cube-form-item v-if="model.assignCarType === 1" :field="fields['infoFee']"/>
+            <cube-form-item :field="fields['totalFee']">
+              <span class="total-money">{{model.totalFee}}</span>
+            </cube-form-item>
+            <!-- 结算方式 -->
+            <cube-form-item v-if="model.assignCarType === 1" :field="fields['settlementType']"/>
+            <div v-if="model.assignCarType === 1 && model.settlementType === 1">
+              <cube-form-item  :field="fields['fuelCardAmount1']"/>
+              <cube-form-item :field="fields['cashAmount1']"/>
+              <cube-form-item  :field="fields['fuelCardAmount2']"/>
+              <cube-form-item :field="fields['cashAmount2']"/>
+              <cube-form-item :field="fields['fuelCardAmount3']"/>
+              <cube-form-item :field="fields['cashAmount3']"/>
+              <cube-form-item :field="fields['fuelCardAmount4']"/>
+              <cube-form-item :field="fields['cashAmount4']"/>
+            </div>
+          </cube-form-group>
+          <cube-form-group >
+            <cube-form-item v-if="WaybillDetail.orderList&&WaybillDetail.orderList.length>1" :field="fields['allocationStrategy']"/>
+            <cube-form-item v-if="model.assignCarType === 1" :field="fields['cashBack']"/>
+          </cube-form-group>
+          <cube-form-group>
+            <cube-form-item class="text-item" :field="fields['remark']"/>
+          </cube-form-group>
+        </cube-form>
+      </div>
+    </cube-scroll>
+
     <cube-button class="confirm-btn" @click="submitAssign">确定</cube-button>
   </div>
 </template>
@@ -88,6 +91,7 @@ export default {
       start: -1,
       end: -1,
       isEditMode: false, // 是否为编辑模式
+      isSubmitValid: false,
       allDriverList: [],
       model: {
         assignCarType: 1,
@@ -418,38 +422,24 @@ export default {
             placeholder: '请输入'
           }
         },
-        freightFee: {
-          type: 'input',
-          modelKey: 'freightFee',
-          label: '运输费(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        gasFee: {
-          type: 'input',
-          modelKey: 'freightFee',
-          label: '油费(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
+        freightFee: _this.createMoneyField('freightFee', '运输费(元)'),
+        gasFee: _this.createMoneyField('freightFee', '油费(元)'),
+        loadFee: _this.createMoneyField('loadFee', '装货费(元)'),
+        unloadFee: _this.createMoneyField('unloadFee', '卸货费(元)'),
+        insuranceFee: _this.createMoneyField('insuranceFee', '保险费(元)'),
+        otherFee: _this.createMoneyField('otherFee', '其他(元)'),
+        accommodation: _this.createMoneyField('accommodation', '住宿费(元)'),
+        infoFee: _this.createMoneyField('infoFee', '信息(元)'),
+        tollFee: _this.createMoneyField('tollFee', '路桥费(元)'),
+        fuelCardAmount1: _this.createMoneyField('fuelCardAmount1', '预付油卡(元)'),
+        fuelCardAmount2: _this.createMoneyField('fuelCardAmount2', '到付油卡(元)'),
+        fuelCardAmount3: _this.createMoneyField('fuelCardAmount3', '回付油卡(元)'),
+        fuelCardAmount4: _this.createMoneyField('fuelCardAmount4', '尾付油卡(元)'),
+        cashAmount1: _this.createMoneyField('cashAmount1', '预付现金(元)'),
+        cashAmount2: _this.createMoneyField('cashAmount2', '到付现金(元)'),
+        cashAmount3: _this.createMoneyField('cashAmount3', '回付现金(元)'),
+        cashAmount4: _this.createMoneyField('cashAmount4', '尾付现金(元)'),
+        cashBack: _this.createMoneyField('cashBack', '返现运费(元)'),
         mileage: {
           type: 'input',
           modelKey: 'mileage',
@@ -466,267 +456,12 @@ export default {
           },
           trigger: 'blur'
         },
-        loadFee: {
-          type: 'input',
-          modelKey: 'loadFee',
-          label: '装货费(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        unloadFee: {
-          type: 'input',
-          modelKey: 'unloadFee',
-          label: '卸货费(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        tollFee: {
-          type: 'input',
-          modelKey: 'tollFee',
-          label: '路桥费(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        accommodation: {
-          type: 'input',
-          modelKey: 'accommodation',
-          label: '住宿费(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        insuranceFee: {
-          type: 'input',
-          modelKey: 'insuranceFee',
-          label: '保险费(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        otherFee: {
-          type: 'input',
-          modelKey: 'otherFee',
-          label: '其他(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        infoFee: {
-          type: 'input',
-          modelKey: 'infoFee',
-          label: '信息费(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
         totalFee: {
           modelKey: 'totalFee',
           label: '费用合计(元)',
           debounce: true
         },
-        fuelCardAmount1: {
-          type: 'input',
-          modelKey: 'fuelCardAmount1',
-          label: '预付油卡(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        fuelCardAmount2: {
-          type: 'input',
-          modelKey: 'fuelCardAmount2',
-          label: '到付油卡(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        fuelCardAmount3: {
-          type: 'input',
-          modelKey: 'fuelCardAmount3',
-          label: '回付油卡(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        fuelCardAmount4: {
-          type: 'input',
-          modelKey: 'fuelCardAmount4',
-          label: '尾付油卡(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        cashAmount1: {
-          type: 'input',
-          modelKey: 'cashAmount1',
-          label: '预付现金(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        cashAmount2: {
-          type: 'input',
-          modelKey: 'cashAmount2',
-          label: '到付现金(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        cashAmount3: {
-          type: 'input',
-          modelKey: 'cashAmount3',
-          label: '回付现金(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        cashAmount4: {
-          type: 'input',
-          modelKey: 'cashAmount4',
-          label: '尾付现金(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
-        cashBack: {
-          type: 'input',
-          modelKey: 'cashBack',
-          label: '返现运费(元)',
-          props: {
-            placeholder: '请输入',
-            type: 'number'
-          },
-          rules: {
-            pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
-          },
-          messages: {
-            pattern: '请输入正确的金额'
-          },
-          trigger: 'blur'
-        },
+
         settlementType: {
           type: 'select',
           modelKey: 'settlementType',
@@ -819,6 +554,16 @@ export default {
               this.model.insuranceFee,
               this.model.otherFee) - this.model.infoFee
       }
+      if (this.isSubmitValid) {
+        let resultArray = Object.values(result.validity)
+        if (resultArray.some(item => item.result.required && !item.result.required.valid)) {
+          window.toast('请填写必填信息')
+        }
+        if (resultArray.some(item => item.result.pattern && !item.result.pattern.valid)) {
+          window.toast('已填信息格式不正确')
+        }
+        this.isSubmitValid = false
+      }
       // }
       // console.log('validity', result.validity, result.valid, result.dirty, result.firstInvalidFieldIndex)
     },
@@ -828,6 +573,23 @@ export default {
         return this.model.carrierDriverPhone.split(' ').join('')
       } else {
         return this.model.selfDriverName.split('-')[1]
+      }
+    },
+    createMoneyField (field, name) {
+      return {
+        type: 'input',
+        modelKey: field,
+        label: name,
+        props: {
+          placeholder: '请输入'
+        },
+        rules: {
+          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
+        },
+        messages: {
+          pattern: '不得超过9位整数和4位小数'
+        },
+        trigger: 'blur'
       }
     },
     async submitAssign () {
@@ -899,6 +661,8 @@ export default {
         }
 
         this.$router.back()
+      } else {
+        this.isSubmitValid = true
       }
     },
     goGetRule() {
@@ -988,6 +752,8 @@ export default {
     height: 100%
     display: flex
     flex-direction column
+    .scroll-box
+      height calc(100vh - 44px)
     .edit-form
       flex 1
       overflow auto

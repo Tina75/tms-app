@@ -74,7 +74,7 @@ export default {
       setAppRightBtn(btnList)
     },
     handleClickDelete(info) {
-      let msg = '确认删除订单？删除之后可以在电脑端订单回收站恢复'
+      let msg = '删除之后可以在电脑端订单回收站恢复'
       if (info.status === 50) { // 已回单
         msg = '订单删除后，提货单和运单将一并删除，且订单不支持再还原'
       } else if (info.status === 20 && info.pickup === 1) {
@@ -82,7 +82,7 @@ export default {
       }
       this.$createDialog({
         type: 'confirm',
-        title: '确认删除订单？',
+        title: '删除订单',
         content: msg,
         onConfirm: () => {
           this.$emit('delete', info.id)

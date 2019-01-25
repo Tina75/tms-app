@@ -12,12 +12,14 @@
           <div class="list-item__flag">
             <span v-if="info.disassembleStatus===1" class="item" style="background:#418DF9">子</span>
             <span v-if="info.collectionMoney>0" class="item" style="background:#FCA950">代</span>
-            <!-- <span v-if="item.cashBack>0" class="item green" style="background:#40D1A4">返</span> -->
-            <!-- <span v-if="item.abnormalLabel==2" class="item red" style="background:#F35851">异</span> -->
           </div>
         </div>
         <div class="list-item__body">
-          <p class="list-item__city">{{info.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{info.endName}}</p>
+          <p class="list-item__city">
+            {{info.startName?info.startName:info.consignerAddress}}
+            <i class="iconfont icon-line cube-ml-5 cube-mr-5"/>
+            {{info.endName?info.endName:info.consigneeAddress}}
+          </p>
           <div>
             <span v-if="info.weight" class="list-item__count">{{info.weight}}吨</span>
             <span v-if="info.volume" class="list-item__count">{{info.volume}}方</span>

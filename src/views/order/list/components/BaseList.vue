@@ -18,12 +18,12 @@
           </div>
         </div>
         <div class="list-item__body">
-          <p v-if="item.startName || item.endName" class="list-item__city">{{item.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{item.endName}}</p>
-          <p v-else class="list-item__city">
-            <span class="address">{{item.consignerAddress}}</span>
+          <p class="list-item__city">
+            {{item.startName?item.startName:item.consignerAddress}}
             <i class="iconfont icon-line cube-ml-5 cube-mr-5"/>
-            <span class="address">{{item.consigneeAddress}}</span>
+            {{item.endName?item.endName:item.consigneeAddress}}
           </p>
+
           <div>
             <span v-if="item.cargoNames" class="list-item__count">
               {{item.cargoNames[0]|textOverflow(10)}}
