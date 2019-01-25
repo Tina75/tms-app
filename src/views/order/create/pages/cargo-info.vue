@@ -64,7 +64,8 @@
               prop="quantity"
               type="number"
               label="包装数量"
-              @on-focus="inputFocus" />
+              @on-focus="inputFocus"
+              @on-blur="quantityChangeHandler(index)" />
             <form-item
               v-if="orderConfig.dimensionOption"
               v-model="form.size"
@@ -178,7 +179,8 @@ export default {
       showUnitType: false,
       unitTypes: CargoDetail.unitTypes,
       dimension: null,
-      showDimensionInput: false
+      showDimensionInput: false,
+      tempQuantity: 0
     }
   },
   computed: {
@@ -283,7 +285,25 @@ export default {
       }
       this.cargoIndex = void 0
     },
-
+    // 记录常发货物数量的原数据
+    inputFocusHandler (e, prop) {
+      if (prop !== 'quantity') return
+      this.tempQuantity = Number(e.target.value) || 1
+    },
+    // 常发货物修改数量时联动修改其他数据
+    quantityChangeHandler (index) {
+      const cargo = this.formList[index]
+      if (!cargo.fromOften) return
+      const quantity = cargo.quantity
+      if (!quantity) return
+      const volumeSingle = NP.divide(cargo.volume || 0, this.tempQuantity)
+      const weightSingle = NP.divide((this.orderConfig.weightKgOption ? cargo.weightKg : cargo.weight) || 0, this.tempQuantity)
+      const cargoCostSingle = NP.divide(cargo.cargoCost || 0, this.tempQuantity)
+      cargo.volume = NP.times(volumeSingle, quantity)
+      if (this.orderConfig.weightKgOption) cargo.weightKg = NP.times(weightSingle, quantity)
+      else cargo.weight = NP.times(weightSingle, quantity)
+      cargo.cargoCost = NP.times(cargoCostSingle, quantity)
+    },
     // 显示包装方式弹窗
     showUnitDialog (index) {
       this.cargoIndex = index
