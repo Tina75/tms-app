@@ -392,6 +392,7 @@ export default {
       textarea
         border-style none
         font-size 15px
+        line-height 1.5
       .form-item-counter
         margin-top 5px
         font-size 13px

@@ -33,7 +33,6 @@ export default [
   {
     path: '/order/cargo-info',
     name: 'order-cargo-info', // 货物信息
-    meta: { formLeaveConfirm: true },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/cargo-info.vue')
   },
   {
@@ -44,25 +43,21 @@ export default [
   {
     path: '/order/edit-address',
     name: 'order-edit-address', // 详细地址
-    meta: { formLeaveConfirm: true },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/edit-address.vue')
   },
   {
     path: '/order/fee-info',
     name: 'order-fee-info', // 其他费用
-    meta: { formLeaveConfirm: true },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/fee-info.vue')
   },
   {
     path: '/order/consumer-info',
     name: 'order-consumer-info', // 客户订单号及其他
-    meta: { formLeaveConfirm: true },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/consumer-info.vue')
   },
   {
     path: '/order/other-info',
     name: 'order-other-info', // 其他信息
-    meta: { formLeaveConfirm: true },
     component: () => import(/* webpackChunkName: "order" */ './create/pages/other-info.vue')
   },
   {
