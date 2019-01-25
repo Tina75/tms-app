@@ -72,7 +72,7 @@
               type="click"
               :show-arrow="false"
               placeholder="请输入长*宽*高"
-              @click.native="showSizeDialog(index)" />
+              @click.native="showDimensionDialog(index)" />
             <form-item
               v-if="orderConfig.cargoNoOption"
               v-model="form.cargoNo"
@@ -95,20 +95,6 @@
               type="textarea"
               maxlength="100"
               @on-focus="inputFocus" />
-            <!-- <form-item
-              v-if="orderConfig.remark3Option"
-              v-model="form.remark3"
-              label="备注3"
-              placeholder="请输入(最多输入200字)"
-              type="textarea"
-              maxlength="200" />
-            <form-item
-              v-if="orderConfig.remark4Option"
-              v-model="form.remark4"
-              label="备注4"
-              placeholder="请输入(最多输入200字)"
-              type="textarea"
-              maxlength="200" /> -->
           </div>
         </form-group>
         <cube-button
@@ -138,6 +124,19 @@
         primary
         @click="submitCargoList">确定</cube-button>
     </div>
+
+    <checkbox-popup
+      v-model="showUnitType"
+      :value="unit"
+      :options="unitTypes"
+      placeholder="请输入包装方式"
+      @confirm="setCargoUnit"
+      @show="dialogToggle" />
+    <dimension-popup
+      v-model="showDimensionInput"
+      :value="dimension"
+      @confirm="setCargoDimension"
+      @show="dialogToggle" />
   </div>
 </template>
 
@@ -145,13 +144,15 @@
 import NP from 'number-precision'
 import { mapGetters, mapMutations } from 'vuex'
 import { FormGroup, FormItem, FormTitle } from '@/components/Form'
-import dialogs from '../js/cargoDialog'
+import CheckboxPopup from '@/views/contacts/components/CheckboxPopup'
+import DimensionPopup from '@/views/contacts/components/DimensionPopup'
 import inputAutoPosition from '../js/inputAutoPosition'
+import { CargoDetail } from '@/views/contacts/shipper/modules/model'
 const CARGO_IMAGE = require('../assets/box.png')
 
 export default {
   metaInfo: { title: '货物信息' },
-  components: { FormGroup, FormItem, FormTitle },
+  components: { FormGroup, FormItem, FormTitle, CheckboxPopup, DimensionPopup },
   data () {
     return {
       windowOriginHeight: 0,
@@ -159,7 +160,6 @@ export default {
       CARGO_IMAGE,
       formList: [],
       cargoIndex: void 0,
-      unit: void 0,
       rules: {
         cargoName: { required: true, type: 'string' },
         weight: { type: 'number', min: 0 },
@@ -173,7 +173,12 @@ export default {
             pattern: '整数位不得超过9位'
           }
         }
-      }
+      },
+      unit: '',
+      showUnitType: false,
+      unitTypes: CargoDetail.unitTypes,
+      dimension: null,
+      showDimensionInput: false
     }
   },
   computed: {
@@ -279,7 +284,39 @@ export default {
       this.cargoIndex = void 0
     },
 
-    ...dialogs
+    // 显示包装方式弹窗
+    showUnitDialog (index) {
+      this.cargoIndex = index
+      this.unit = this.formList[index].unit
+      this.showUnitType = true
+    },
+    // 设置货物包装
+    setCargoUnit (unit) {
+      const cargo = this.formList[this.cargoIndex]
+      cargo.unit = unit
+      this.unit = ''
+      this.cargoIndex = void 0
+    },
+    // 显示货物尺寸弹窗
+    showDimensionDialog (index) {
+      this.cargoIndex = index
+      this.dimension = this.formList[index].dimension
+      this.showDimensionInput = true
+    },
+    // 设置货物尺寸
+    setCargoDimension (dimension) {
+      const cargo = this.formList[this.cargoIndex]
+      cargo.dimension = dimension
+      cargo.size = !dimension.length && !dimension.width && !dimension.height
+        ? ''
+        : [ dimension.length || '', dimension.width || '', dimension.height || '' ].join('x')
+      this.dimension = {}
+      this.cargoIndex = void 0
+    },
+    // 弹窗隐藏
+    dialogToggle (show) {
+      if (!show) this.cargoIndex = void 0
+    }
   },
 
   beforeRouteEnter (to, from, next) {
