@@ -8,7 +8,7 @@
             {{detail.orderNo}}
           </FormItem>
           <FormItem v-if="detail.shipperCompanyName" label="客户名称">
-            {{detail.shipperCompanyName}}
+            <p>{{detail.shipperCompanyName}}</p>
           </FormItem>
           <FormItem v-if="detail.customerOrderNo" label="客户订单号">
             {{detail.customerOrderNo}}
