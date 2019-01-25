@@ -61,18 +61,19 @@ export default {
   components: { IconFont },
   data () {
     return {
-      viewData: {}
     }
   },
   computed: {
-    ...mapState(moudleName, ['consigneeDetail'])
+    ...mapState(moudleName, ['consigneeDetail']),
+    viewData () {
+      return ConsigneeDetail.toView(this.consigneeDetail)
+    }
   },
   methods: {
     ...mapActions(moudleName, ['loadConsigneeDetail', 'removeConsignee']),
     async onPageRefresh() {
       this.viewData = {}
       await this.loadConsigneeDetail()
-      this.viewData = ConsigneeDetail.toView(this.consigneeDetail)
     },
     callPhone () {
       window.location.href = `tel:${this.viewData.phone}`
