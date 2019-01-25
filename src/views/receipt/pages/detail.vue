@@ -271,14 +271,13 @@ export default {
 <style lang="stylus" scoped>
 .receipt-detail
   height 100%
+  display: flex
+  flex-direction column
 .upstream-footer
   display flex
-  width 100%
-  position fixed
-  bottom 0
-  left 0
-  right 0
-  z-index 10
+  >>> .cube-btn
+    font-size 17px
+    padding 15px
   .footer-item-btn
     flex 1
     background #27c4d3
@@ -316,7 +315,7 @@ export default {
     background #189cb2
     border-radius 2px
   .cube-scroll-nav-panels
-    padding-bottom 40px
+    padding-bottom 5px
   .cube-scroll-nav-panel
     .cube-sticky-ele
       height 0

@@ -22,7 +22,7 @@ export default {
 <style lang="stylus" scoped>
 .detail-panel
   background #ffffff
-  margin-top  15px
+  margin-top 15px
   padding-left 15px
   .detail-panel-header
     color #333
