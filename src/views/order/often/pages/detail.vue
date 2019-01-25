@@ -1,7 +1,7 @@
 
 <template>
   <div v-if="detail" class="pickup-order-detail">
-    <cube-scroll-nav>
+    <cube-scroll-nav ref="$scroll">
       <cube-scroll-nav-panel
         v-for="(item, index) in pageData"
         :key="index"
@@ -82,6 +82,7 @@ export default {
         window.loading(true)
         await vm.getOftenDetail(vm.orderId)
         vm.setRightButton()
+        vm.$nextTick(() => { vm.$refs.$scroll.refresh() })
       } catch (err) {
         //
       } finally {
