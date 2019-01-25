@@ -27,7 +27,6 @@ export default {
       info.consignerAddressLongitude = consignerAddress.longitude || ''
       info.consignerAddressLatitude = consignerAddress.latitude || ''
       info.consignerAddressText = addressConcat(info.consignerAddress, info.startName, info.consignerHourseNumber)
-      console.log(info.consignerAddress, info.startName, info.consignerHourseNumber)
     } else {
       info.consignerHourseNumber = info.consignerHourseNumber || consigner.consignerHourseNumber || ''
     }
@@ -136,7 +135,7 @@ export default {
     }
   },
   showFreightFee () {
-    if (!this.calculatedAmount) return
+    if (this.calculatedAmount === undefined) return
     this.orderInfo.freightFee = this.calculatedAmount || ''
     this.CLEAR_CALCULATED_AMOUNT()
   }
