@@ -26,7 +26,7 @@
     <CellItem
       class="cube-mt-15"
       label="合作车辆"
-      left-icon="icon-ico_driver cube-font-25 cube-mt-5"
+      left-icon="icon-ico_driverr cube-font-23"
       :right-title="viewData.carCnt"
       @click="$router.push({name: 'contacts-carrier-truck', query:{carrierId: viewData.id}})"
     />
