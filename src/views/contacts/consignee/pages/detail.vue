@@ -9,27 +9,27 @@
         />
       </div>
       <div class="consignee-detail_info__consignor">
-        <h2>{{viewData.contact}}</h2>
-        <p>{{viewData.phone}}</p>
+        <h2 v-text="viewData.contact"/>
+        <p v-text="viewData.phone"/>
       </div>
     </div>
     <div class="consignee-detail_other">
       <div class="consignee-detail_other__card border-bottom-1px">
         <div class="consignee-detail_title">收货地址</div>
-        <div class="consignee-detail_address">{{viewData.cityName}}</div>
-        <div class="consignee-detail_address">{{viewData.address}}</div>
+        <div class="consignee-detail_address" v-text="viewData.cityName"/>
+        <div class="consignee-detail_address" v-text="viewData.address"/>
       </div>
       <div class="consignee-detail_other__card border-bottom-1px">
         <div class="consignee-detail_title">所属发货方</div>
-        <div class="consignee-detail_address">{{viewData.consignerName}}</div>
+        <div class="consignee-detail_address" v-text="viewData.consignerName"/>
       </div>
       <div class="consignee-detail_other__card border-bottom-1px">
         <div class="consignee-detail_title">收货人单位</div>
-        <div class="consignee-detail_address">{{viewData.consigneeCompanyName}}</div>
+        <div class="consignee-detail_address" v-text="viewData.consigneeCompanyName"/>
       </div>
       <div class="consignee-detail_other__card">
         <div class="consignee-detail_title">备注</div>
-        <div class="consignee-detail_address">{{viewData.remark}}</div>
+        <div class="consignee-detail_address" v-text="viewData.remark"/>
       </div>
     </div>
     <div class="consignee-detail_call">
@@ -108,7 +108,9 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
-    next(vm => vm.setButton())
+    next(vm => {
+      vm.setButton()
+    })
   }
 }
 </script>

@@ -10,6 +10,7 @@
           <form-item
             v-if="isInvoice"
             v-model="form.invoiceRate"
+            prop="invoiceRate"
             label="开票税率(%)"
             type="number"
             precision="2" />
@@ -55,6 +56,11 @@ export default {
         remark: ''
       },
       rules: {
+        invoiceRate: {
+          type: 'number',
+          min: 0,
+          max: 100
+        },
         collectionMoney: {
           type: 'number',
           min: 0,

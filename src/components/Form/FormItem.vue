@@ -211,32 +211,32 @@ export default {
   },
   methods: {
     inputBlurTrigger () { Array.from(document.getElementsByTagName('input')).forEach($input => { $input.blur() }) },
-    iconClickHandler () { if (!this.inputDisabled) this.$emit('on-icon-click') },
+    iconClickHandler () { if (!this.inputDisabled) this.$emit('on-icon-click', this.prop) },
     inputClickHandler () {
       if (this.type === 'click' && !this.inputDisabled) {
         this.inputBlurTrigger()
-        this.$emit('on-click')
+        this.$emit('on-click', this.prop)
       }
     },
     inputBlurHandler (e) {
       if (this.type === 'click') return
-      this.$emit('on-blur', e)
+      this.$emit('on-blur', e, this.prop)
       this.doValidate()
     },
     inputFocusHandler (e) {
-      this.$emit('on-focus', e)
+      this.$emit('on-focus', e, this.prop)
       if (this.focusOnEnd && this.type !== 'textarea') {
         this.$nextTick(() => this.moveToEnd(e.target))
       }
     },
-    selectChangeHandler (value, index, text) { this.$emit('change', value, index, text) },
+    selectChangeHandler (value, index, text) { this.$emit('change', value, index, text, this.prop) },
     pickerShowHandler () {
       this.picker = this.$refs.$picker.picker
       this.inputBlurTrigger()
-      this.$emit('picker-show')
+      this.$emit('picker-show', this.prop)
     },
     pickerHideHandler () {
-      this.$emit('picker-hide')
+      this.$emit('picker-hide', this.prop)
       this.doValidate()
     },
     inputEmit () {
@@ -247,9 +247,9 @@ export default {
           }
           break
         case 'phone':
-          return this.$emit('input', this.inputValue.replace(/\s/g, ''))
+          return this.$emit('input', this.inputValue.replace(/\s/g, ''), this.prop)
       }
-      this.$emit('input', this.inputValue)
+      this.$emit('input', this.inputValue, this.prop)
     },
 
     rulesParser () {
@@ -392,6 +392,7 @@ export default {
       textarea
         border-style none
         font-size 15px
+        line-height 1.5
       .form-item-counter
         margin-top 5px
         font-size 13px

@@ -49,7 +49,9 @@ export default {
 
     pickCargo (item) {
       const cargo = Object.assign({}, item)
+      cargo.fromOften = true // 标记是否来自选择的货物
       cargo.cargoCost = NP.divide(cargo.cargoCost || 0, 100)
+      cargo.quantity = 1
       cargo.size = !item.dimension.length && !item.dimension.width && !item.dimension.height
         ? ''
         : [ item.dimension.length || '-', item.dimension.width || '-', item.dimension.height || '-' ].join('x')
