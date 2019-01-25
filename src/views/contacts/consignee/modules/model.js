@@ -48,6 +48,13 @@ export class ConsigneeDetail {
     })
     return data
   }
+  static toView(data) {
+    const view = {
+      ...data,
+      address: data.consignerHourseNumber ? data.address + data.consignerHourseNumber : data.address
+    }
+    return view
+  }
   static toServer(data) {
     const server = {
       address: data.address,
