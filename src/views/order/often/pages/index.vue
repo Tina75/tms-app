@@ -226,9 +226,13 @@ export default {
       &-item
         display inline-block
         height 18px
+        max-width 140px
         padding 0 4px
         margin-right 10px
         line-height 18px
+        white-space nowrap
+        text-overflow ellipsis
+        overflow hidden
         background #f3f5f9
     &-user
       font-size 12px

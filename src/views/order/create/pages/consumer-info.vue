@@ -20,7 +20,6 @@
             label="对接业务员"
             type="select"
             :options="operators"
-            :show-arrow="false"
             @change="saleChangeHandler" />
         </div>
         <div class="form-section">
