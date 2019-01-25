@@ -5,8 +5,11 @@
       <div v-if="status[data.acceptStatus]" :class="status[data.acceptStatus].color" class="order-status right">{{status[data.acceptStatus].name}}</div>
     </div>
     <div class="consignee-info">
-      <div class="city">
-        {{data.departureCityName | textOverflow(7)}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{data.destinationCityName | textOverflow(7)}}
+      <div v-if="data.departureCityName || data.destinationCityName" class="city">
+        {{data.departureCityName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{data.destinationCityName}}
+      </div>
+      <div v-else class="city">
+        <span class="cityAdress">{{data.consignerAddress}}</span> <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> <span class="cityAdress">{{data.consigneeAddress}}</span>
       </div>
       <div class="cargos">
         <div class="cargo-infos">{{cargoName}}</div>
@@ -111,7 +114,16 @@ export default {
   .city
     color #333
     font-size 18px
-    font-weight bold
+    font-weight 600
+    white-space nowrap
+    overflow hidden
+    text-overflow ellipsis
+    span
+      display inline-block
+      max-width 150px
+      white-space nowrap
+      overflow hidden
+      text-overflow ellipsis
   .cargos
     margin-top 6px
     .cargo-infos

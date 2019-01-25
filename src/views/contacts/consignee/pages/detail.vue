@@ -9,27 +9,27 @@
         />
       </div>
       <div class="consignee-detail_info__consignor">
-        <h2>{{consigneeDetail.contact}}</h2>
-        <p>{{consigneeDetail.phone}}</p>
+        <h2 v-text="viewData.contact"/>
+        <p v-text="viewData.phone"/>
       </div>
     </div>
     <div class="consignee-detail_other">
       <div class="consignee-detail_other__card border-bottom-1px">
         <div class="consignee-detail_title">收货地址</div>
-        <div class="consignee-detail_address">{{consigneeDetail.cityName}}</div>
-        <div class="consignee-detail_address">{{address}}</div>
+        <div class="consignee-detail_address" v-text="viewData.cityName"/>
+        <div class="consignee-detail_address" v-text="viewData.address"/>
       </div>
       <div class="consignee-detail_other__card border-bottom-1px">
         <div class="consignee-detail_title">所属发货方</div>
-        <div class="consignee-detail_address">{{consigneeDetail.consignerName}}</div>
+        <div class="consignee-detail_address" v-text="viewData.consignerName"/>
       </div>
       <div class="consignee-detail_other__card border-bottom-1px">
         <div class="consignee-detail_title">收货人单位</div>
-        <div class="consignee-detail_address">{{consigneeDetail.consigneeCompanyName}}</div>
+        <div class="consignee-detail_address" v-text="viewData.consigneeCompanyName"/>
       </div>
       <div class="consignee-detail_other__card">
         <div class="consignee-detail_title">备注</div>
-        <div class="consignee-detail_address">{{consigneeDetail.remark}}</div>
+        <div class="consignee-detail_address" v-text="viewData.remark"/>
       </div>
     </div>
     <div class="consignee-detail_call">
@@ -51,6 +51,7 @@
 import IconFont from '@/components/Iconfont'
 import { mapState, mapActions } from 'vuex'
 import { setAppRightBtn } from '@/libs/bridgeUtil'
+import { ConsigneeDetail } from '../modules/model'
 const moudleName = 'contacts/consignee'
 export default {
   name: 'ConsigneeDetail',
@@ -58,25 +59,26 @@ export default {
     title: ''
   },
   components: { IconFont },
-  computed: {
-    ...mapState(moudleName, ['consigneeDetail']),
-    address () {
-      if (this.consigneeDetail.consignerHourseNumber) {
-        return this.consigneeDetail.address + this.consigneeDetail.consignerHourseNumber
-      }
-      return this.consigneeDetail.address
+  data () {
+    return {
+      viewData: {}
     }
+  },
+  computed: {
+    ...mapState(moudleName, ['consigneeDetail'])
   },
   methods: {
     ...mapActions(moudleName, ['loadConsigneeDetail', 'removeConsignee']),
-    onPageRefresh() {
-      this.loadConsigneeDetail()
+    async onPageRefresh() {
+      this.viewData = {}
+      await this.loadConsigneeDetail()
+      this.viewData = ConsigneeDetail.toView(this.consigneeDetail)
     },
     callPhone () {
-      window.location.href = `tel:${this.consigneeDetail.phone}`
+      window.location.href = `tel:${this.viewData.phone}`
     },
     async remove () {
-      await this.removeConsignee({ id: this.consigneeDetail.id })
+      await this.removeConsignee({ id: this.viewData.id })
       this.$refreshPage('contacts-consignee')
       window.toast('删除成功')
       this.$router.back(true)
@@ -87,7 +89,7 @@ export default {
           text: '修改',
           iconType: 'edit',
           action: () => {
-            this.$router.push({ name: 'contacts-consignee-modify', query: { consigneeId: this.consigneeDetail.id } })
+            this.$router.push({ name: 'contacts-consignee-modify', query: { consigneeId: this.viewData.id } })
           }
         },
         {
@@ -106,7 +108,9 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
-    next(vm => vm.setButton())
+    next(vm => {
+      vm.setButton()
+    })
   }
 }
 </script>

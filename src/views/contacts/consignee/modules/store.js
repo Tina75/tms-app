@@ -31,7 +31,7 @@ const store = {
       commit('saveAddress', data)
     },
     loadConsigneeDetail: ({ commit, rootState }) => {
-      Server({
+      return Server({
         method: 'get',
         url: '/consigner/consignee/detail',
         loading: true,
