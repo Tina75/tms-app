@@ -5,7 +5,7 @@
       <cube-scroll-nav-panel label="基本信息">
         <Panel title="基本信息">
           <FormItem v-if="detail.consignerName" label="客户名称">
-            {{detail.consignerName}}
+            <p>{{detail.consignerName}}</p>
           </FormItem>
           <FormItem v-if="detail.orderNo" label="订单号">
             {{detail.orderNo}}
@@ -211,17 +211,26 @@ export default {
           maxlength: 15
         },
         onConfirm: (e, promptValue) => {
-          const params = {
-            orderIds: [item.id],
-            recoveryName: promptValue,
-            receiptStatus: 1,
-            ids: [item.receiptOrder.orderId]
+          if (promptValue === '') {
+            this.dialog.show()
+            this.$createToast({
+              type: 'warn',
+              time: 1000,
+              txt: `请输入回收人`
+            }).show()
+          } else {
+            const params = {
+              orderIds: [item.id],
+              recoveryName: promptValue,
+              receiptStatus: 1,
+              ids: [item.receiptOrder.orderId]
+            }
+            API.updateReceipt(params)
+              .then(res => {
+                this.initDetail()
+                window.toast('回收成功')
+              })
           }
-          API.updateReceipt(params)
-            .then(res => {
-              this.initDetail()
-              window.toast('回收成功')
-            })
         }
       }, false).show()
     },
@@ -237,17 +246,26 @@ export default {
           maxlength: 15
         },
         onConfirm: (e, promptValue) => {
-          const params = {
-            orderIds: [item.id],
-            returnName: promptValue,
-            receiptStatus: 2,
-            ids: [item.receiptOrder.orderId]
+          if (promptValue === '') {
+            this.dialog.show()
+            this.$createToast({
+              type: 'warn',
+              time: 1000,
+              txt: `请输入接收人`
+            }).show()
+          } else {
+            const params = {
+              orderIds: [item.id],
+              returnName: promptValue,
+              receiptStatus: 2,
+              ids: [item.receiptOrder.orderId]
+            }
+            API.updateReceipt(params)
+              .then(res => {
+                this.initDetail()
+                window.toast('返厂成功')
+              })
           }
-          API.updateReceipt(params)
-            .then(res => {
-              this.initDetail()
-              window.toast('返厂成功')
-            })
         }
       }, false).show()
     },

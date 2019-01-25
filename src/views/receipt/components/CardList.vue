@@ -71,7 +71,7 @@ export default {
     },
     // 回收
     receipt (item) {
-      this.$createDialog({
+      this.dialog = this.$createDialog({
         type: 'prompt',
         title: '回收',
         prompt: {
@@ -80,18 +80,27 @@ export default {
           maxlength: 15
         },
         onConfirm: (e, promptValue) => {
-          const params = {
-            orderIds: [item.id],
-            recoveryName: promptValue,
-            receiptStatus: 1,
-            ids: [item.receiptOrder.orderId]
+          if (promptValue === '') {
+            this.dialog.show()
+            this.$createToast({
+              type: 'warn',
+              time: 1000,
+              txt: `请输入回收人`
+            }).show()
+          } else {
+            const params = {
+              orderIds: [item.id],
+              recoveryName: promptValue,
+              receiptStatus: 1,
+              ids: [item.receiptOrder.orderId]
+            }
+            API.updateReceipt(params)
+              .then(res => {
+                this.getReceiptStatusCnt()
+                this.initReceiptList({ key: this.keys })
+                window.toast('回收成功')
+              })
           }
-          API.updateReceipt(params)
-            .then(res => {
-              this.getReceiptStatusCnt()
-              this.initReceiptList({ key: this.keys })
-              window.toast('回收成功')
-            })
         }
       }, false).show()
     },
@@ -106,18 +115,27 @@ export default {
           maxlength: 15
         },
         onConfirm: (e, promptValue) => {
-          const params = {
-            orderIds: [item.id],
-            returnName: promptValue,
-            receiptStatus: 2,
-            ids: [item.receiptOrder.orderId]
+          if (promptValue === '') {
+            this.dialog.show()
+            this.$createToast({
+              type: 'warn',
+              time: 1000,
+              txt: `请输入接收人`
+            }).show()
+          } else {
+            const params = {
+              orderIds: [item.id],
+              returnName: promptValue,
+              receiptStatus: 2,
+              ids: [item.receiptOrder.orderId]
+            }
+            API.updateReceipt(params)
+              .then(res => {
+                this.getReceiptStatusCnt()
+                this.initReceiptList({ key: this.keys })
+                window.toast('返厂成功')
+              })
           }
-          API.updateReceipt(params)
-            .then(res => {
-              this.getReceiptStatusCnt()
-              this.initReceiptList({ key: this.keys })
-              window.toast('返厂成功')
-            })
         }
       }, false).show()
     },
