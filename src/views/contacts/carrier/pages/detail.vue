@@ -4,13 +4,13 @@
       <span class="cube-font-20 cube-font-weight cube-ellipsis" v-text="viewData.carrierName"/>
       <div class="carrier-detail__flexbox cube-font-14 cube-c-grey">
         <div class="carrier-detail__flex">
-          <div class="cube-mt-15">
+          <div class="cube-mt-15 flex-center">
             <i class="cubeic-person cube-mr-10" style="color: #FCA950"/>
             <span class="cube-mr-10 cube-ellipsis carrier-detail__carrierPrincipal" v-text="viewData.carrierPrincipal"/>
             <span v-text="viewData.carrierPhone"/>
           </div>
-          <div v-if="viewData.customerCarrierPhone" class="cube-mt-10">
-            <i class="iconfont icon-ico_KF1 cube-mr-10" style="color: #A4AFC0"/>
+          <div v-if="viewData.customerCarrierPhone" class="cube-mt-10 flex-center">
+            <i class="iconfont icon-ico_KF1 cube-mr-10 cube-font-14" style="color: #A4AFC0"/>
             <span class="cube-mr-10">客服</span>
             <span v-text="viewData.customerCarrierPhone"/>
           </div>
@@ -26,7 +26,7 @@
     <CellItem
       class="cube-mt-15"
       label="合作车辆"
-      left-icon="icon-ico_driver cube-font-25"
+      left-icon="icon-ico_driverr cube-font-23"
       :right-title="viewData.carCnt"
       @click="$router.push({name: 'contacts-carrier-truck', query:{carrierId: viewData.id}})"
     />
@@ -106,6 +106,9 @@ export default {
 
 <style lang='stylus'>
 .carrier-detail
+  .flex-center
+    display flex
+    align-items center
   .cell-item
     background #fff
   &__header
@@ -120,6 +123,8 @@ export default {
     padding 16px 15px
     min-height 100px
     background #ffffff
+    p
+      line-height 24px
   &__flexbox
     display flex
     align-items flex-end
