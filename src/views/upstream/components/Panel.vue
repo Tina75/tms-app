@@ -29,7 +29,7 @@ export default {
     font-size 16px
     line-height 49px
     font-weight 600
-  border-bottom 1px solid #f3f5f9
+    border-bottom 1px solid #E4E7EC
   .detail-panel-main
     overflow hidden
 </style>

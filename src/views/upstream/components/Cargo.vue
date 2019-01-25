@@ -36,6 +36,7 @@ export default {
   padding 10px
   margin-right 15px
   margin-bottom 10px
+  margin-top 10px
   background #f3f5f9
 .cargo-name
   font-size 15px

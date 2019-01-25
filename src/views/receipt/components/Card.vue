@@ -1,10 +1,10 @@
 <template>
   <div class="tab-card">
-    <div class="tab-card-title">
+    <div class="tab-card-title border-bottom-1px">
       <div class="create-time">{{data.createTime | datetimeFormat}}</div>
       <div v-if="data.collectionMoney>0" class="order-status right">代</div>
     </div>
-    <div class="consignee-info">
+    <div class="consignee-info border-bottom-1px">
       <div v-if="data.startName || data.endName"  class="city">
         {{data.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{data.endName}}
       </div>
@@ -74,7 +74,6 @@ export default {
   margin-top 15px
 .tab-card-title
   padding 10px 15px
-  border-bottom 1px solid #F3F5F9
   .create-time
     font-size 14px
     line-height 20px
@@ -118,7 +117,6 @@ export default {
     font-size 14px
     line-height 20px
 .footer
-  border-top 1px solid #F3F5F9
   overflow hidden
   padding 8px 15px
   .left
