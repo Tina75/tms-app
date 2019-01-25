@@ -9,8 +9,8 @@
         />
       </div>
       <div class="driver">
-        <h2>{{driverDetail.driverName}} <span>{{driverDetail.carNO}}</span></h2>
-        <p>{{driverDetail.driverPhone}}</p>
+        <h2>{{viewData.driverName}} <span>{{viewData.carNO}}</span></h2>
+        <p>{{viewData.driverPhone}}</p>
       </div>
     </div>
     <div v-if="infoList.length" class="driver-detail__info">
@@ -83,11 +83,13 @@ export default {
     title: ''
   },
   components: { IconFont },
+  data () {
+    return {
+      viewData: {}
+    }
+  },
   computed: {
     ...mapState(moudleName, ['driverDetail']),
-    viewData() {
-      return DriverDetail.toView(this.driverDetail)
-    },
     photoList () {
       const detail = this.viewData
       if (detail) {
@@ -125,8 +127,10 @@ export default {
   },
   methods: {
     ...mapActions(moudleName, ['loadDriverDetail', 'removeDriver']),
-    onPageRefresh() {
-      this.loadDriverDetail()
+    async onPageRefresh() {
+      this.viewData = {}
+      await this.loadDriverDetail()
+      this.viewData = DriverDetail.toView(this.driverDetail)
     },
     callPhone () {
       window.location.href = `tel: ${this.driverDetail.driverPhone}`
