@@ -123,6 +123,8 @@ export default {
     padding 16px 15px
     min-height 100px
     background #ffffff
+    p
+      line-height 24px
   &__flexbox
     display flex
     align-items flex-end
