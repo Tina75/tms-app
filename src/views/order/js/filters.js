@@ -26,7 +26,7 @@ export function totalFee (order) {
   )
 }
 
-const addressReg = /(.{1,}(省|自治区))?(.{1,}市)?(.{1,}区)?(.{0,})/
+const addressReg = /(.{1,}(省|自治区))(.{1,}市)(.{1,}区)(.{0,})/
 export function addressConcat (address, cityName, extra) {
   if (!address) address = ''
   if (!cityName) cityName = ''
