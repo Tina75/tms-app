@@ -82,7 +82,9 @@ export default {
   .order-status
     color #ffffff
     background #fcaf3b
-    padding 2px
+    padding 3px
+    border-radius 2px
+    font-size 12px
 .consignee-info
   padding 14px 15px
   .city
