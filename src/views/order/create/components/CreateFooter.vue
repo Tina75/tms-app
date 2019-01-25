@@ -89,6 +89,9 @@ export default {
   .rotate
     transform rotate(180deg)
 
+  >>>.cube-checkbox-wrap
+    padding-top 15px
+
   .create-footer
     position fixed
     bottom 0
