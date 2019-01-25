@@ -301,6 +301,20 @@ export default {
 </style>
 <style lang="stylus">
 .receipt-detail
+  .cube-scroll-nav-bar-item
+    position relative
+  .cube-scroll-nav-bar-item_active:after
+    position absolute
+    left 0
+    right 0
+    margin auto
+    bottom 0
+    content ''
+    display block
+    height 2px
+    width 20px
+    background #189cb2
+    border-radius 2px
   .cube-scroll-nav-panels
     padding-bottom 40px
   .cube-scroll-nav-panel
