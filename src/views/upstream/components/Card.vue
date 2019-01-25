@@ -1,10 +1,11 @@
 <template>
   <div class="tab-card">
-    <div class="tab-card-title">
+    <div class="tab-card-title border-bottom-1px">
       <div class="create-time">{{data.createTime | datetimeFormat}}</div>
       <div v-if="status[data.acceptStatus]" :class="status[data.acceptStatus].color" class="order-status right">{{status[data.acceptStatus].name}}</div>
+      <div v-if="data.collectionMoney>0" class="collect right">代</div>
     </div>
-    <div class="consignee-info">
+    <div class="consignee-info border-bottom-1px">
       <div v-if="data.departureCityName || data.destinationCityName" class="city">
         {{data.departureCityName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{data.destinationCityName}}
       </div>
@@ -70,7 +71,7 @@ export default {
         if (cargoNm) {
           name = cargoNm.length > 10 ? `${cargoNm.substr(0, 10)}...` : cargoNm
           if (arr.length > 1) {
-            name += '等'
+            name += ' 等'
           }
         }
       }
@@ -95,20 +96,24 @@ export default {
   margin-top 15px
 .tab-card-title
   padding 10px 15px
-  border-bottom 1px solid #F3F5F9
   .create-time
     font-size 14px
     line-height 20px
     color #666
     display inline-block
-  .order-status
-    width 45px
+  .right
     font-size 12px
     line-height 20px
     display inline-block
     text-align center
     color #fff
     border-radius 2px
+    margin-left 5px
+  .collect
+    background #fcaf3b
+    padding 0 3px
+  .order-status
+    width 45px
 .consignee-info
   padding 14px 15px
   .city
@@ -143,7 +148,6 @@ export default {
     font-size 14px
     line-height 20px
 .footer
-  border-top 1px solid #F3F5F9
   overflow hidden
   padding 8px 15px
   .left
