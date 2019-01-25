@@ -50,7 +50,7 @@ export default {
     pickCargo (item) {
       const cargo = Object.assign({}, item)
       cargo.cargoCost = NP.divide(cargo.cargoCost || 0, 100)
-      cargo.quantity = cargo.quantity ? cargo.quantity : 1
+      cargo.quantity = 1
       cargo.size = !item.dimension.length && !item.dimension.width && !item.dimension.height
         ? ''
         : [ item.dimension.length || '-', item.dimension.width || '-', item.dimension.height || '-' ].join('x')
