@@ -102,6 +102,6 @@ export default {
     white-space pre-wrap
     span,
     p
-      line-height 1.1em
-      min-height 1.1em
+      line-height 1.2em
+      min-height 1.2em
 </style>

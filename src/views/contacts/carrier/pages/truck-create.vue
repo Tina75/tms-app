@@ -51,8 +51,8 @@
       />
 
       <card class="cube-mb-15" title="常跑线路">
-        <transport-line v-model="regularLine1" :visible.sync="cityPickerVisible" :label="['出发地1', '目的地1']"/>
-        <transport-line v-model="regularLine2" :visible.sync="cityPickerVisible" :label="['出发地2', '目的地2']"/>
+        <transport-line v-model="regularLine1" :visible.sync="cityPickerVisible[0]" :label="['出发地1', '目的地1']"/>
+        <transport-line v-model="regularLine2" :visible.sync="cityPickerVisible[1]" :label="['出发地2', '目的地2']"/>
       </card>
 
       <card class="cube-mb-15" title="证件上传">
@@ -108,7 +108,7 @@ export default {
       rules: truckRule,
       submiting: false,
       showKeyboard: false,
-      cityPickerVisible: false,
+      cityPickerVisible: [false, false],
       purchDate: '', // 生产日期
       regularLine1: '', // 常发线路1
       regularLine2: '' // 常发线路2
@@ -227,7 +227,7 @@ export default {
     next(vm => vm.setForm())
   },
   beforeRouteLeave(to, from, next) {
-    this.cityPickerVisible = false
+    this.cityPickerVisible = [false, false]
     next()
   }
 }
