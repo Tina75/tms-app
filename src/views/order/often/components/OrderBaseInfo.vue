@@ -1,7 +1,7 @@
 <template>
   <detail-panel :title="'基本信息'">
     <detail-panel-item :label="'客户名称'">
-      <p>{{ detail.consignerName }}</p>
+      <p class="text-over">{{ detail.consignerName }}</p>
     </detail-panel-item>
     <!-- <detail-panel-item :label="'客户订单号'">
       <p class="remix-content">
@@ -76,16 +76,15 @@ export default {
 }
 </script>
 <style scoped lang="stylus">
-  >>> .detail-panel-item
-    label
-      flex none
-    .cell-content
-      width 0
-    p
-      white-space nowrap
-      text-overflow ellipsis
-      overflow hidden
-      
+  p
+    max-width 240px
+    float right
+
+  .text-over
+    white-space nowrap
+    text-overflow ellipsis
+    overflow hidden
+
   .remix-content
     display: flex
     span
@@ -93,10 +92,11 @@ export default {
       text-align: right
     a
       margin-left 10px
-      padding-left: 10px;
-      color: #00a4bd;
+      padding-left: 10px
+      color: #00a4bd
   .remark
     max-width 240px
     text-align: left
     float: right
+    word-break: break-all
 </style>

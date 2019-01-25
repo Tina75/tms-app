@@ -8,12 +8,11 @@ export default {
     if (!this.saveConsigner.id) return
     let consigner = this.saveConsigner
     let consignerAddress
-    if (this.saveConsigner.id !== this.consignerId) {
-      this.SET_CONSIGNER_ID(this.saveConsigner.id)
-      consigner = await this.getConsignerData(this.consignerId)
-      if (consigner.addressList.length) consignerAddress = consigner.addressList[0]
-      if (consigner.consigneeList.length) this.SET_CONSIGNEE_INFO(consigner.consigneeList[0])
-    }
+    if (this.saveConsigner.id === this.consignerId) return
+    this.SET_CONSIGNER_ID(this.saveConsigner.id)
+    consigner = await this.getConsignerData(this.consignerId)
+    if (consigner.addressList.length) consignerAddress = consigner.addressList[0]
+    if (consigner.consigneeList.length) this.SET_CONSIGNEE_INFO(consigner.consigneeList[0])
     const info = this.orderInfo
     info.consignerName = consigner.name || ''
     info.consignerContact = consigner.contact || ''
@@ -22,11 +21,13 @@ export default {
     info.pickup = consigner.pickUp || ''
     if (consignerAddress) {
       info.start = consignerAddress.cityCode || ''
+      info.startName = consignerAddress.cityName || ''
       info.consignerAddress = consignerAddress.address || ''
-      info.consignerHourseNumber = info.consignerHourseNumber || consignerAddress.consignerHourseNumber || ''
+      info.consignerHourseNumber = consignerAddress.consignerHourseNumber || ''
       info.consignerAddressLongitude = consignerAddress.longitude || ''
       info.consignerAddressLatitude = consignerAddress.latitude || ''
-      info.consignerAddressText = addressConcat(info.consignerAddress, info.cityName, info.consignerHourseNumber)
+      info.consignerAddressText = addressConcat(info.consignerAddress, info.startName, info.consignerHourseNumber)
+      console.log(info.consignerAddress, info.startName, info.consignerHourseNumber)
     } else {
       info.consignerHourseNumber = info.consignerHourseNumber || consigner.consignerHourseNumber || ''
     }
@@ -60,11 +61,12 @@ export default {
     info.consigneePhone = consignee.phone || ''
     info.consigneeCompanyName = consignee.consigneeCompanyName || ''
     info.end = consignee.cityCode || ''
+    info.endName = consignee.cityName || ''
     info.consigneeAddress = consignee.address || ''
     info.consigneeHourseNumber = info.consigneeHourseNumber || consignee.consigneeHourseNumber || ''
     info.consigneeAddressLongitude = consignee.longitude || ''
     info.consigneeAddressLatitude = consignee.latitude || ''
-    info.consigneeAddressText = addressConcat(info.consigneeAddress, info.cityName, info.consigneeHourseNumber)
+    info.consigneeAddressText = addressConcat(info.consigneeAddress, info.endName, info.consigneeHourseNumber)
     this.SET_CONSIGNEE_INFO(null)
     this.TRIGGER_ADDRESS_CHANGE(true)
   },

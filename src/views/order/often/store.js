@@ -48,7 +48,7 @@ const lists = [
     url: '/ordertemplate/list',
     method: 'post',
     itemParser: data => {
-      data.cargoNames = data.cargoNames + (data.cargoNames.length > 1 ? '等' : '')
+      data.cargoNames = data.cargoNames[0] + (data.cargoNames.length > 1 ? '等' : '')
       return data
     }
   }

@@ -14,12 +14,12 @@
             label="客户运单号"
             maxlength="30" />
           <form-item
+            ref="picker1"
             v-if="orderConfig.salesmanIdOption"
             v-model="form.salesmanId"
             label="对接业务员"
             type="select"
             :options="operators"
-            :show-arrow="false"
             @change="saleChangeHandler" />
         </div>
         <div class="form-section">
@@ -50,6 +50,10 @@ import dayjs from 'dayjs'
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { FormItem } from '@/components/Form'
 
+// 选择器 用来主动收起picker
+let picker2 // 第二个选择器 发货时间
+let picker3 // 第三个选择器 到货时间
+
 export default {
   metaInfo: { title: '客户订单号及其他' },
   components: { FormItem },
@@ -79,7 +83,7 @@ export default {
     pickTimeHandler (type) {
       this.timePickerType = type
       if (type === 'delivery') {
-        this.$createDatePicker({
+        picker2 = this.$createDatePicker({
           title: '发货时间',
           min: new Date(),
           max: this.form.arriveTime ? new Date(this.form.arriveTime) : new Date(2020, 12, 31),
@@ -92,9 +96,10 @@ export default {
             hour: 'h点'
           },
           onSelect: this.selectTime
-        }).show()
+        })
+        picker2.show()
       } else {
-        this.$createDatePicker({
+        picker3 = this.$createDatePicker({
           title: '到货时间',
           min: this.form.deliveryTime ? new Date(this.form.deliveryTime) : new Date(),
           value: this.form.arriveTime ? new Date(this.form.arriveTime) : new Date(),
@@ -106,7 +111,8 @@ export default {
             hour: 'h点'
           },
           onSelect: this.selectTime
-        }).show()
+        })
+        picker3.show()
       }
     },
     selectTime (date) {
@@ -123,6 +129,14 @@ export default {
       this.SET_CONSUMER_INFO(Object.assign({}, this.form))
       this.$formWillLeave()
       this.$router.back()
+    },
+    // 离开页面时如果picker正在显示，则离开页面后picker不会收起，需要手动收起picker
+    hideSelectorWhenLeave () {
+      this.$formWillLeave(false, () => {
+        this.$refs.picker1 && this.$refs.picker1.picker && this.$refs.picker1.picker.hide()
+        picker2 && picker2.hide()
+        picker3 && picker3.hide()
+      })
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -130,6 +144,7 @@ export default {
       for (let key in vm.form) {
         vm.form[key] = vm.consumerInfo[key] === undefined ? '' : vm.consumerInfo[key]
       }
+      vm.hideSelectorWhenLeave()
       vm.operators = (await vm.getOpetator()).map(item => {
         return {
           value: item.id,
