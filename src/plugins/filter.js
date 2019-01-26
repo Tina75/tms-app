@@ -2,12 +2,17 @@ import dayjs from 'dayjs'
 import Vue from 'vue'
 import City from '@/libs/city'
 import NP from 'number-precision'
-
 const URL_HOST = process.env.VUE_APP_IMG_HOST
-
+// 0 时区和北京时间的时差 单位分
+const bjOffset = -480
+// 当前环境的和北京时间的时差
+const timeOffset = new Date().getTimezoneOffset() - bjOffset
+console.info(dayjs)
 Vue.filter('datetimeFormat', (value, formatting = 'YYYY-MM-DD HH:mm', placeholder = '') => {
   if (!value) return placeholder
-  return dayjs(Number(value)).format(formatting)
+  let time = dayjs(Number(value))
+  time = time.set('minute', time.minute() + timeOffset)
+  return time.format(formatting)
 })
 
 Vue.filter('imgUrlFormat', function (value) {
