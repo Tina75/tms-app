@@ -38,7 +38,7 @@
   </style>
   <style>
     /**页面样式*/
-    *{box-sizing:border-box;color:#333;background:#efefef;}section *{background:#fff;}section header{font-size:1rem;font-weight:bold;height:2.8125rem;line-height:2.8125rem;vertical-align:bottom;padding:0 1rem;position:relative;margin-top: 0.725rem}section header::after{border-top-width:1px}section header::after{content:' ';position:absolute;pointer-events:none;box-sizing:border-box;top:-50%;left:-50%;right:-50%;bottom:-50%;-webkit-transform:scale(0.5);transform:scale(0.5);border-bottom:1px solid #e4e7ec;z-index:999}article div{padding:1rem 1.16rem 0;text-align:center;display:inline-block}.ssld{position:relative}.ssld aside{position:absolute;height:1rem;width:1rem;background:#f15a5b;font-size:.6rem;border-radius:10px;line-height:1rem;color:#fff;text-align:center;right:1.5rem;top:.5rem;display:inline-block}article div svg{text-align:center}article div span{padding:.8rem 0;display:block;font-size:.8125rem}
+    *{box-sizing:border-box;color:#333;background:#efefef;}section *{background:#fff;}section header{font-size:1rem;font-weight:bold;height:2.8125rem;line-height:2.8125rem;vertical-align:bottom;padding:0 1rem;position:relative;margin-top: 0.725rem}section header::after{border-top-width:1px}section header::after{content:' ';position:absolute;pointer-events:none;box-sizing:border-box;top:-50%;left:-50%;right:-50%;bottom:-50%;-webkit-transform:scale(0.5);transform:scale(0.5);border-bottom:1px solid #e4e7ec;z-index:999}article div{padding:1rem 1.16rem 0;text-align:center;display:inline-block}.ssld{position:relative}.ssld aside{position:absolute;height:1.2rem;width:1.2rem;background:#f15a5b;font-size:.6rem;border-radius:15px;line-height:1.2rem;color:#fff;text-align:center;right:1.3rem;top:.5rem;display:inline-block}article div svg{text-align:center}article div span{padding:.8rem 0;display:block;font-size:.8125rem}
   </style>
 </head>
 
@@ -50,7 +50,7 @@
         <div v-if="find('110000')" class="ssld" @click="intoPage('upstream')" >
           <?xml version="1.0" encoding="UTF-8"?><svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>syla</title><desc>Created with Sketch.</desc><defs><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1"><stop stop-color="#76C1FD" offset="0%"></stop><stop stop-color="#4483DD" offset="100%"></stop></linearGradient></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="切图" transform="translate(-474.000000, -30.000000)"><g id="syla" transform="translate(474.000000, 30.000000)"><g id="Group-2"><rect id="Rectangle-77" fill="#D8D8D8" opacity="0" x="0" y="0" width="30" height="30"></rect><path d="M9.4484007,8.6860208e-16 L26.998583,0 C27.5508677,-1.01453063e-16 27.998583,0.44771525 27.998583,1 L27.998583,29 C27.998583,29.5522847 27.5508677,30 26.998583,30 L3,30 C2.44771525,30 2,29.5522847 2,29 C2,28.999528 2.00000033,28.999056 2.000001,28.998584 L2.03044092,7.5017015 C2.03081255,7.23925859 2.13434008,6.98748053 2.31868839,6.8006862 L8.73664917,0.297568681 C8.92455023,0.107174455 9.18089973,4.93228341e-16 9.4484007,4.4408921e-16 Z M23.0291138,17.9755859 L17.998583,13 L17.998583,25.0910645 L19.998583,25.0910645 L19.998583,17.9755859 L23.0291138,17.9755859 Z M7,9 L7,11 L23,11 L23,9 L7,9 Z M6.99858298,15 L6.99858298,17 L14.998583,17 L14.998583,15 L6.99858298,15 Z M6.99858298,21 L6.99858298,23 L14.998583,23 L14.998583,21 L6.99858298,21 Z" id="Combined-Shape" fill="url(#linearGradient-1)"></path></g></g></g></g></svg>
           <span>上游来单</span>
-          <aside v-if="Number(number) !== 0">{{number}}</aside>
+          <aside v-if="Number(number) !== 0">{{(Number(number) > 99 ? 99+ : number)}}</aside>
         </div>
         <div v-if="find('100000')" @click="intoPage('order/create')">
           <?xml version="1.0" encoding="UTF-8"?><svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>slkd</title><desc>Created with Sketch.</desc><defs><linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2"><stop stop-color="#00E2BB" offset="0%"></stop><stop stop-color="#1CB283" offset="100%"></stop></linearGradient></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="切图" transform="translate(-567.000000, -30.000000)"><g id="slkd" transform="translate(567.000000, 30.000000)"><g id="Group-7"><rect id="Rectangle-77" fill="#D8D8D8" opacity="0" x="0" y="0" width="30" height="30"></rect><path d="M3,0 L27,0 C27.5522847,-1.01453063e-16 28,0.44771525 28,1 L28,29 C28,29.5522847 27.5522847,30 27,30 L3,30 C2.44771525,30 2,29.5522847 2,29 L2,1 C2,0.44771525 2.44771525,1.01453063e-16 3,0 Z M7,6 L7,8 L24,8 L24,6 L7,6 Z M7,11 L7,13 L18,13 L18,11 L7,11 Z M21.1084883,15.1213203 L13.3303137,22.8994949 C13.67794,23.2471212 14.0255663,23.5947476 14.3731926,23.9423739 C14.7208189,24.2900002 15.0802994,24.6494806 15.451634,25.0208153 L23.2298086,17.2426407 L21.1084883,15.1213203 Z M13.3303137,22.8994949 L13.0606602,25.2904688 L15.451634,25.0208153 L13.3303137,22.8994949 Z M23.9369154,13.7071068 C23.5463911,13.3165825 22.9132261,13.3165825 22.5227018,13.7071068 L21.8155951,14.4142136 C22.1632214,14.7618399 22.5108477,15.1094662 22.858474,15.4570925 C23.2061003,15.8047188 23.5655808,16.1641993 23.9369154,16.5355339 L24.6440222,15.8284271 C25.0345465,15.4379028 25.0345465,14.8047379 24.6440222,14.4142136 L23.9369154,13.7071068 Z" id="Combined-Shape" fill="url(#linearGradient-2)"></path></g></g></g></g></svg>
@@ -98,16 +98,16 @@
     var env = ''; // 环境判断
     switch (dsBridge.call('user.getUserInfo').data.env) {
       case 'dev':
-        env = 'https://dev.tms5566.com/'
+        env = 'https://dev.tms5566.com/tms-app/'
         break;
       case 'qa':
-        env = 'https://qa.tms5566.com/'
+        env = 'https://qa.tms5566.com/tms-app/'
         break;
       case 'pro':
-        env = 'https://yzg.tms5566.com/'
+        env = 'https://yzg.tms5566.com/tms-app/'
         break;
       default:
-        env = 'https://yzg.tms5566.com/'
+        env = 'https://yzg.tms5566.com/tms-app/'
     }
 
     var app = new Vue({
@@ -121,7 +121,7 @@
         intoPage: function(val) {
           dsBridge.call(
             'webviews.open',
-            { url: encodeURI(env + 'tms-app/#/' + val), id: 'work' }, 
+            { url: encodeURI(env + '#/' + val), id: 'work' }, 
             function() {}
           )
         },
