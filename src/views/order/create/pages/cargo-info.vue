@@ -5,6 +5,7 @@
         <form-group ref="$form" :rules="rules">
           <div v-for="(form, index) in formList" :key="index" class="form-section">
             <form-title
+              ref="$formTitle"
               :image="CARGO_IMAGE"
               :title="'货物' + (index + 1)">
               <span
@@ -100,7 +101,7 @@
         </form-group>
         <cube-button
           class="form-add border-top-1px"
-          @click="cargoAdd">
+          @click="cargoAdd(true)">
           <span>+</span>
           添加货物
         </cube-button>
@@ -221,7 +222,7 @@ export default {
         return item
       })
       this.formList = tempCargoList
-      if (!this.formList.length) this.cargoAdd()
+      if (!this.formList.length) this.cargoAdd(false)
       this.setChoosedCargo()
       this.refresh()
     },
@@ -242,9 +243,19 @@ export default {
       this.formList.splice(index, 1)
     },
     // 添加货物
-    cargoAdd (index) {
+    cargoAdd (scrollToLast) {
       this.formList.push(this.getEmptyCargo())
-      this.refresh()
+      this.$nextTick(() => {
+        this.refresh()
+        if (!scrollToLast) return
+        this.$nextTick(() => {
+          const $formTitles = this.$refs.$formTitle
+          this.$refs.$scroll.scroll.scrollToElement(
+            $formTitles[$formTitles.length - 1].$vnode.elm,
+            200
+          )
+        })
+      })
     },
     refresh () {
       this.$nextTick(() => { this.$refs.$scroll.refresh() })
