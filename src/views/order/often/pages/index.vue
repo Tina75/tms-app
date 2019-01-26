@@ -84,7 +84,7 @@ export default {
     placeRender (city, address) {
       console.log(city, address)
       if (city) return city
-      else return `<span>${ address }</span>`
+      else return `<span>${address}</span>`
     }
   },
   data () {

@@ -156,8 +156,6 @@ export default {
   components: { FormGroup, FormItem, FormTitle, CheckboxPopup, DimensionPopup },
   data () {
     return {
-      windowOriginHeight: 0,
-      windowIsResize: false,
       CARGO_IMAGE,
       formList: [],
       cargoIndex: void 0,

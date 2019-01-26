@@ -41,18 +41,15 @@ import { mapMutations, mapActions } from 'vuex'
 import NP from 'number-precision'
 import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-rule.png'
-import { CHARGE_RULES } from '../../js/constant'
 
-const {
-  WEIGHT_TON,
-  VOLUME,
-  WEIGHT_TON_KM,
-  VOLUME_KM,
-  CAR_TYPE,
-  WEIGHT_KG,
-  WEIGHT_KG_KM,
-  QUANTITY
-} = CHARGE_RULES
+const WEIGHT_TON = 1 // 重量吨
+const VOLUME = 2 // 体积方
+const WEIGHT_TON_KM = 3 // 吨公里
+const VOLUME_KM = 4 // 方公里
+const CAR_TYPE = 5 // 车型
+const WEIGHT_KG = 6 // 重量公斤
+const WEIGHT_KG_KM = 7 // 公斤公里
+const QUANTITY = 8 // 件
 
 export default {
   name: 'order-charge-rule',
@@ -71,17 +68,45 @@ export default {
     ...mapActions('order/create', [ 'getRuleList', 'calculateAmount' ]),
 
     async pickRuleAndCalc (item) {
-      let { departure, destination, weight, volume, distance, carType, carLength, cargoInfos } = this.info
-      let query = { departure, destination, distance, carType, carLength, cargoInfos }
+      let { departure, destination, weight, volume, distance, carType, cargoInfos } = this.info
+      let query = { departure, destination }
 
-      const ruleType = item.ruleType
-      if ([ WEIGHT_TON, WEIGHT_TON_KM ].indexOf(ruleType) > -1 && weight) query.input = NP.divide(weight, 1000)
-      else if ([ WEIGHT_KG, WEIGHT_KG_KM ].indexOf(ruleType) > -1 && weight) query.input = weight
-      else if ([ VOLUME, VOLUME_KM ].indexOf(ruleType) > -1 && volume) query.input = volume
-      else if ([ WEIGHT_TON_KM, WEIGHT_KG_KM, VOLUME_KM ].indexOf(ruleType) > -1 && !distance) return window.toast('未能找到相应的计费规则')
-      else if (CAR_TYPE === ruleType && !carType) return window.toast('未能找到相应的计费规则')
-      else if (QUANTITY === ruleType) {}
-      else return window.toast('未能找到相应的计费规则')
+      switch (item.ruleType) {
+        case WEIGHT_TON:
+          if (weight) return window.toast('未能找到相应的计费规则')
+          query.input = NP.divide(weight, 1000)
+          break
+        case WEIGHT_TON_KM:
+          if (weight) return window.toast('未能找到相应的计费规则')
+          query.input = NP.divide(weight, 1000)
+          query.distance = distance
+          break
+        case WEIGHT_KG:
+          if (weight) return window.toast('未能找到相应的计费规则')
+          query.input = weight
+          break
+        case WEIGHT_KG_KM:
+          if (weight) return window.toast('未能找到相应的计费规则')
+          query.input = weight
+          query.distance = distance
+          break
+        case VOLUME:
+          if (!volume) return window.toast('未能找到相应的计费规则')
+          query.input = volume
+          break
+        case VOLUME_KM:
+          if (!volume) return window.toast('未能找到相应的计费规则')
+          query.input = volume
+          query.distance = distance
+          break
+        case CAR_TYPE:
+          if (!carType) return window.toast('未能找到相应的计费规则')
+          query.carType = carType
+          break
+        case QUANTITY:
+          if (!cargoInfos.length) return window.toast('未能找到相应的计费规则')
+          query.cargoInfos = cargoInfos
+      }
 
       window.loading(true)
       query.ruleId = item.id

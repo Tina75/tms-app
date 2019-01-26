@@ -59,7 +59,7 @@ export default {
         weight: NP.plus(last.weight, item.weight || 0),
         weightKg: NP.plus(last.weightKg, item.weightKg || 0),
         volume: NP.plus(last.volume, item.volume || 0),
-        cargoInfos: last.cargoInfos.concat({ key: item.cargoName, value: Number(item.quantity) })
+        cargoInfos: last.cargoInfos.concat({ key: item.cargoName, value: item.quantity })
       }
     }, {
       weight: 0,

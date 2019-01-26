@@ -124,4 +124,5 @@ export default {
     padding 0
     border-radius 0
     font-weight bold
+    z-index 1
 </style>

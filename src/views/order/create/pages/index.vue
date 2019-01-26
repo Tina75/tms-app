@@ -109,6 +109,7 @@
             prop="pickup"
             type="select"
             label="提货方式"
+            :disabled="pickupDisabled"
             :options="pickupOptions" />
           <form-item
             v-model="orderInfo.receiptCount"
@@ -217,10 +218,10 @@ export default {
       mode: '',
       id: '',
       loading: false,
-      windowOriginHeight: 0,
-      windowIsResize: false,
+      editOrderHasInit: false,
       settlementOptions: SETTLEMENT_TYPE,
       pickupOptions: PICKUP_TYPE,
+      pickupDisabled: false,
       rules: {
         consignerName: {
           required: true,

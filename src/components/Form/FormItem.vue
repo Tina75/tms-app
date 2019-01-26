@@ -29,8 +29,8 @@
 
           <!-- 选择器 type = selece -->
           <cube-select
-            ref="$picker"
             v-if="type === 'select'"
+            ref="$picker"
             v-model="inputValue"
             class="form-item-input"
             :class="inputAlignment"
@@ -426,6 +426,9 @@ export default {
       color #F35851 !important
   .validate-message .cube-validator-msg
     padding-bottom 10px
+
+  .cube-select_disabled
+    background #ffffff
 
   .form-item-input-box
     .cube-select

@@ -19,8 +19,10 @@ export default {
     //   this.$refs.$form.reset()
     // })
     if (this.mode === 'create' && !this.oneMoreId) return
-    // 存在客户名称时不再往下执行，编辑订单是以此判断是否已经初始化数据
-    if (this.orderInfo.consignerName) return
+    if (this.editOrderHasInit) {
+      this.$formWillLeave(false, () => { this.editOrderHasInit = false })
+      return
+    }
     window.loading(true)
     let orderInfo
     let cargoList
@@ -32,6 +34,8 @@ export default {
       } else {
         orderInfo = await this.fetchOrderInfo(this.id)
         cargoList = orderInfo.orderCargoList
+        this.editOrderHasInit = true
+        if (orderInfo.status === 20 && orderInfo.pickupStatus === 1) this.pickupDisabled = true
       }
       // 设置订单基础信息
       setOrderBaseInfo(orderInfo, this)

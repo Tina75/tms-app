@@ -3,7 +3,7 @@
     v-if="!loading && !cargoList.length"
     :img="NO_DATA"
     message="暂无常发货物" />
-  <cube-scroll ref="$scroll" v-else>
+  <cube-scroll v-else ref="$scroll">
     <ul class="list">
       <li
         v-for="item in cargoList" :key="item.id"

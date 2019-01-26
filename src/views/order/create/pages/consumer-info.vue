@@ -14,8 +14,8 @@
             label="客户运单号"
             maxlength="30" />
           <form-item
-            ref="picker1"
             v-if="orderConfig.salesmanIdOption"
+            ref="picker1"
             v-model="form.salesmanId"
             label="对接业务员"
             type="select"
@@ -129,14 +129,6 @@ export default {
       this.SET_CONSUMER_INFO(Object.assign({}, this.form))
       this.$formWillLeave()
       this.$router.back()
-    },
-    // 离开页面时如果picker正在显示，则离开页面后picker不会收起，需要手动收起picker
-    hideSelectorWhenLeave () {
-      this.$formWillLeave(false, () => {
-        this.$refs.picker1 && this.$refs.picker1.picker && this.$refs.picker1.picker.hide()
-        picker2 && picker2.hide()
-        picker3 && picker3.hide()
-      })
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -144,7 +136,6 @@ export default {
       for (let key in vm.form) {
         vm.form[key] = vm.consumerInfo[key] === undefined ? '' : vm.consumerInfo[key]
       }
-      vm.hideSelectorWhenLeave()
       vm.operators = (await vm.getOpetator()).map(item => {
         return {
           value: item.id,
@@ -152,6 +143,13 @@ export default {
         }
       })
     })
+  },
+  // 离开页面时如果picker正在显示，则离开页面后picker不会收起，需要手动收起picker
+  beforeRouteLeave (to, from, next) {
+    this.$refs.picker1 && this.$refs.picker1.picker && this.$refs.picker1.picker.hide()
+    picker2 && picker2.hide()
+    picker3 && picker3.hide()
+    next()
   }
 }
 </script>
