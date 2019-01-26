@@ -88,7 +88,7 @@ export default {
         content: msg,
         onConfirm: () => {
           this.deleteOrder(info.id).then(() => {
-            this.getDetail()
+            this.getDetail(info.id)
           })
         }
       }).show()
