@@ -78,7 +78,7 @@ export default {
       let msg = '删除之后可以在电脑端订单回收站恢复'
       if (info.status === 50) { // 已回单
         msg = '订单删除后，提货单和运单将一并删除，且订单不支持再还原'
-      } else if (info.status === 20 && info.pickup === 1) {
+      } else if (info.status === 20 && info.pickupStatus === 1) {
         msg = '订单删除后，提货单将一并删除，且订单不支持再还原'
       }
       this.$createDialog({
@@ -106,7 +106,7 @@ export default {
       } else if (item.status === 20) {
         hasDispatched = item.dispatchStatus
       }
-      const list = ['1000', '1001', '2000', '2001', '5010'] // 见文档
+      const list = ['1000', '1001', '2000', '2001', '500'] // 见文档
       arr.push(item.status)
       arr.push(hasDispatched)
       arr.push(item.disassembleStatus)
