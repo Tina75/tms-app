@@ -56,13 +56,13 @@ export default {
           }
           break
         case '待送货':
-          if (vm.PickupList.length) {
+          if (vm.DeliveryList.length) {
             vm.clearDelivery()
             vm.getDelivery()
           }
           break
         case '待提货':
-          if (vm.DeliveryList.length) {
+          if (vm.PickupList.length) {
             vm.clearPickup()
             vm.getPickup()
           }
