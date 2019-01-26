@@ -63,7 +63,8 @@ export default {
   },
 
   methods: {
-    ...mapActions('order/detail', ['getDetail', 'clearDetail', 'deleteOrder']),
+    ...mapActions('order/detail', ['getDetail', 'clearDetail']),
+    ...mapActions('order/list', ['deleteOrder']),
     initTitleBtns() {
       let btnList = []
       if (this.editOrderBtnVisable(this.Detail)) {
@@ -87,7 +88,7 @@ export default {
         content: msg,
         onConfirm: () => {
           this.deleteOrder(info.id).then(() => {
-            this.$router.back()
+            this.getDetail()
           })
         }
       }).show()
