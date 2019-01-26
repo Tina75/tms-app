@@ -34,7 +34,7 @@ export default {
             content: '确定要删除消息吗？',
             onConfirm: () => {
               this.deleteMsgById(this.$route.params.id).then(() => {
-                this.$route.back()
+                this.$router.back()
               })
             }
           }).show()
