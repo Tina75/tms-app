@@ -8,6 +8,9 @@ export default {
   mutations: {
     DETAIL: (state, info) => {
       state.detail = { ...info }
+    },
+    CLEAR_DETAIL: (state) => {
+      state.detail = {}
     }
   },
   getters: {
@@ -19,6 +22,9 @@ export default {
       Server(`/order/detail?id=${id}`).then(({ data }) => {
         commit('DETAIL', data.data)
       })
+    },
+    clearDetail: ({ commit }) => {
+      commit('CLEAR_DETAIL')
     }
   }
 }

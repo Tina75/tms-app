@@ -16,9 +16,9 @@
         </div>
         <div class="list-item__body">
           <p class="list-item__city">
-            {{info.startName?info.startName:info.consignerAddress}}
+            {{info.startName?info.startName:info.consignerAddress |textOverflow}}
             <i class="iconfont icon-line cube-ml-5 cube-mr-5"/>
-            {{info.endName?info.endName:info.consigneeAddress}}
+            {{info.endName?info.endName:info.consigneeAddress |textOverflow}}
           </p>
           <div>
             <span v-if="info.weight" class="list-item__count">{{info.weight}}吨</span>

@@ -50,6 +50,7 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     setAppRightBtn([{ text: '', action: () => {} }])
+    this.clearDetail()
     next()
   },
   watch: {
@@ -62,7 +63,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('order/detail', ['getDetail']),
+    ...mapActions('order/detail', ['getDetail', 'clearDetail']),
     initTitleBtns() {
       let btnList = []
       if (this.editOrderBtnVisable(this.Detail)) {
@@ -99,17 +100,30 @@ export default {
 
     deleteBtnVisable(item) {
       let arr = []
-      const list = ['1000', '1001', '2000', '2001'] // 见文档
+      let hasDispatched = ''
+      if (item.status === 10) {
+        hasDispatched = item.pickupStatus
+      } else if (item.status === 20) {
+        hasDispatched = item.dispatchStatus
+      }
+      const list = ['1000', '1001', '2000', '2001', '5010'] // 见文档
       arr.push(item.status)
-      arr.push(item.pickupStatus)
+      arr.push(hasDispatched)
       arr.push(item.disassembleStatus)
+      console.log('xxxx' + arr.join(''))
       return list.includes(arr.join(''))
     },
     editOrderBtnVisable(item) {
       let arr = []
+      let hasDispatched = ''
+      if (item.status === 10) {
+        hasDispatched = item.pickupStatus
+      } else if (item.status === 20) {
+        hasDispatched = item.dispatchStatus
+      }
       const list = ['1000', '2000']
       arr.push(item.status)
-      arr.push(item.pickupStatus)
+      arr.push(hasDispatched)
       arr.push(item.disassembleStatus)
       return list.includes(arr.join(''))
     },
