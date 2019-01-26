@@ -1,6 +1,6 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10 driver-create">
-    <FromGroup ref="form" :rules="rules" >
+    <FromGroup ref="$form" :rules="rules" >
       <FormItem v-model="model.driverName" label="司机姓名" :maxlength="rules.driverName.max" prop="driverName"/>
       <FormItem v-model="model.driverPhone" label="手机号" type="phone" :maxlength="rules.driverPhone.max" prop="driverPhone"/>
       <FormItem
@@ -122,7 +122,7 @@ export default {
     async submit() {
       try {
         this.submiting = true
-        if (!(await this.$refs.form.validate())) {
+        if (!(await this.$refs.$form.validate())) {
           return window.toast('请输入必填信息')
         }
 
@@ -163,7 +163,6 @@ export default {
     },
 
     async setForm() {
-      this.$refs.form.reset()
       if (!this.isCreate) {
         // 编辑操作, 判断store中的值是否是目标, 不是则拉新的
         const urlId = +this.$route.query.carrierId

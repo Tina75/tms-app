@@ -1,6 +1,6 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10">
-    <FromGroup ref="form" :rules="rules">
+    <FromGroup ref="$form" :rules="rules">
       <FormItem v-model="model.carrierName" label="承运商名称" :maxlength="rules.carrierName.max" prop="carrierName"/>
       <FormItem v-model="model.carrierPrincipal" label="负责人" :maxlength="rules.carrierPrincipal.max" prop="carrierPrincipal"/>
       <FormItem
@@ -66,7 +66,7 @@ export default {
     async submit() {
       try {
         this.submiting = true
-        if (!(await this.$refs.form.validate())) {
+        if (!(await this.$refs.$form.validate())) {
           return window.toast('请输入必填信息')
         }
         await this.modifyContact(ContactDetail.toServer(this.model))
@@ -85,7 +85,6 @@ export default {
       this.$router.back()
     },
     async setForm() {
-      this.$refs.form.reset()
       if (!this.isCreate) {
         // 编辑操作, 判断store中的值是否是目标, 不是则拉新的
         const urlId = +this.$route.query.carrier

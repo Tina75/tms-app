@@ -1,6 +1,6 @@
 <template>
   <div class="cube-has-bottom-btn cube-pt-10">
-    <FromGroup ref="form" :rules="rules">
+    <FromGroup ref="$form" :rules="rules">
       <FormItem v-model="form.name" label="发货方名称" prop="name" :maxlength="rules.name.max"/>
       <FormItem v-model="form.contact" label="联系人" prop="contact" :maxlength="rules.contact.max"/>
       <FormItem
@@ -15,6 +15,7 @@
       <FormItem
         v-model="form.pickUp"
         :options="options.pickUp"
+        :disabled="selectState[0]"
         type="select"
         label="提货方式"
         placeholder="请选择"
@@ -83,7 +84,10 @@ export default {
       },
       operatorSelectType: 'select',
       rules: contactRule,
-      submiting: false
+      submiting: false,
+      selectState: [
+        false, false, false, false, false
+      ]
     }
   },
   computed: {
@@ -104,7 +108,7 @@ export default {
     async submit() {
       try {
         this.submiting = true
-        if (!(await this.$refs.form.validate())) {
+        if (!(await this.$refs.$form.validate())) {
           return window.toast('请输入必填信息')
         }
         await this.modifyContact(ContactDetail.toServer(this.form))
@@ -119,7 +123,6 @@ export default {
       }
     },
     async setForm() {
-      this.$refs.form.reset()
       this.loadOperators()
       if (!this.isCreate) {
         // 编辑操作, 判断store中的值是否是目标, 不是则拉新的

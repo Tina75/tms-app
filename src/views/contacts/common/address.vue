@@ -1,6 +1,6 @@
 <template>
   <div class="contacts-address">
-    <FromGroup ref="form" :rules="rules" class="border-bottom-1px">
+    <FromGroup ref="$form" :rules="rules" class="border-bottom-1px">
       <FormItem
         :value="localeView"
         label="所在地区"
@@ -100,7 +100,7 @@ export default {
     async submit() {
       try {
         this.submiting = true
-        if (!(await this.$refs.form.validate())) {
+        if (!(await this.$refs.$form.validate())) {
           return window.toast('请填写详细地址')
         }
         const dispatchName = this.AddressPage.dispatch
@@ -123,7 +123,6 @@ export default {
       this.form.locale = data
     },
     reset() {
-      this.$refs.form.reset()
       const options = this.AddressPage
       this.form = Address.toForm(options.data)
       if (options.appButton) {
