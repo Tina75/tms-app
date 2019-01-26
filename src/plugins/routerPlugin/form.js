@@ -38,6 +38,15 @@ export default {
         $formState.willLeave(to, from)
         $formState.willLeave = () => {}
         allowLeave()
+        const formGroup = this.$refs.$form
+        if (formGroup) {
+          // 重置表单
+          formGroup.reset()
+          // 关闭所有select弹出层
+          if (formGroup.closeAllSelect) {
+            formGroup.closeAllSelect()
+          }
+        }
       }
     }).show()
   }
