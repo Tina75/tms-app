@@ -63,7 +63,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('order/detail', ['getDetail', 'clearDetail']),
+    ...mapActions('order/detail', ['getDetail', 'clearDetail', 'deleteOrder']),
     initTitleBtns() {
       let btnList = []
       if (this.editOrderBtnVisable(this.Detail)) {
@@ -78,7 +78,7 @@ export default {
       let msg = '删除之后可以在电脑端订单回收站恢复'
       if (info.status === 50) { // 已回单
         msg = '订单删除后，提货单和运单将一并删除，且订单不支持再还原'
-      } else if (info.status === 20 && info.pickupStatus === 1) {
+      } else if (info.status === 20 && info.pickup === 1) {
         msg = '订单删除后，提货单将一并删除，且订单不支持再还原'
       }
       this.$createDialog({
@@ -86,10 +86,13 @@ export default {
         title: '删除订单',
         content: msg,
         onConfirm: () => {
-          this.$emit('delete', info.id)
+          this.deleteOrder(info.id).then(() => {
+            this.$router.back()
+          })
         }
       }).show()
     },
+
     handleClickEditOrder(id) {
       this.$router.push({ name: 'order-edit', params: { id } })
     },

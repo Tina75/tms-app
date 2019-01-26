@@ -81,15 +81,21 @@ export default {
 <style scoped lang="stylus">
   .remix-content
     display: flex
+    float right
     span
       flex 1
-      text-align: right
+      text-align: left
       padding-right: 10px;
+      word-wrap:break-word
+      max-width 210px
     a
       padding-left: 10px;
       color: #00a4bd;
+  >>>.detail-panel-item label
+    min-width 90px
   .remark
     max-width 240px
     text-align: left
     float: right
+    word-wrap break-word
 </style>
