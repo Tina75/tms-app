@@ -19,15 +19,15 @@
         </div>
         <div class="list-item__body">
           <p class="list-item__city">
-            {{item.startName?item.startName:item.consignerAddress}}
+            {{item.startName?item.startName:item.consignerAddress|textOverflow}}
             <i class="iconfont icon-line cube-ml-5 cube-mr-5"/>
-            {{item.endName?item.endName:item.consigneeAddress}}
+            {{item.endName?item.endName:item.consigneeAddress|textOverflow}}
           </p>
 
           <div>
             <span v-if="item.cargoNames" class="list-item__count">
               {{item.cargoNames[0]|textOverflow(10)}}
-              <span v-if="item.cargoNames[0].length<10&& item.cargoNames.length>1">等</span>
+              <span v-if="item.cargoNames[0]&&item.cargoNames[0].length<10&& item.cargoNames.length>1">等</span>
             </span>
             <span v-if="item.weight" class="list-item__count">{{item.weight}}吨</span>
             <span v-if="item.volume" class="list-item__count">{{item.volume}}方</span>
@@ -124,21 +124,32 @@ export default {
     },
     deleteBtnVisable(item) {
       let arr = []
+      let hasDispatched = ''
+      if (item.status === 10) {
+        hasDispatched = item.pickupStatus
+      } else if (item.status === 20) {
+        hasDispatched = item.dispatchStatus
+      }
+      // 是否调度
       // status + pickupStatus + dispachStatus + disassembleStatus
-      const list = ['10000', '10001', '20000', '20001', '50010', '50100'] // 见文档
+      const list = ['1000', '1001', '2000', '2001', '5010'] // 见文档
       arr.push(item.status)
-      arr.push(item.pickupStatus)
-      arr.push(item.dispatchStatus)
+      arr.push(hasDispatched)
       arr.push(item.disassembleStatus)
       console.log('xxxx' + arr.join(''))
       return list.includes(arr.join(''))
     },
     editOrderBtnVisable(item) {
       let arr = []
-      const list = ['10000', '20000']
+      let hasDispatched = ''
+      if (item.status === 10) {
+        hasDispatched = item.pickupStatus
+      } else if (item.status === 20) {
+        hasDispatched = item.dispatchStatus
+      }
+      const list = ['1000', '2000']
       arr.push(item.status)
-      arr.push(item.pickupStatus)
-      arr.push(item.dispatchStatus)
+      arr.push(hasDispatched)
       arr.push(item.disassembleStatus)
       return list.includes(arr.join(''))
     },

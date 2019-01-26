@@ -60,6 +60,7 @@ export default {
     next(vm => {
       const tab = to.query.tab
       if (tab) { vm.selectedLabel = vm.tabs[tab - 1].label }
+      vm.updateView(vm.selectedLabel)
       vm.getTabCount()
       vm.setRightBtn()
       switch (vm.selectedLabel) {
@@ -98,7 +99,7 @@ export default {
 
   mounted() {
     setAppRightBtn([{ text: '调度', action: () => { this.$router.push({ name: 'delivery-workbench-multi' }) } }])
-    this.updateView(this.selectedLabel)
+    // this.updateView(this.selectedLabel)
   },
   methods: {
     ...mapActions('delivery', ['getTabCount',
