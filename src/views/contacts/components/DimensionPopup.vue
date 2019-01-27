@@ -23,7 +23,7 @@
               >
             </div>
           </div>
-          <div class="cube-validator-msg-def dimension-popup__msg border-bottom-1px"> {{!valid ? '整数位最多6位数' : ''}}</div>
+          <div class="cube-validator-msg-def dimension-popup__msg border-bottom-1px"> {{!valid ? '最多6位整数,1位小数' : ''}}</div>
           <div class="dimension-popup__btns">
             <a class="cube-dialog-btn border-right-1px" @click="toggle()">取消</a>
             <a
@@ -39,7 +39,7 @@
 
 <script>
 // 支持数字和1位小数
-const pattern = /^\d{1,6}$/
+const pattern = /^(\d{1,6}(\.\d{1})?$)$/
 export default {
   name: 'DimensionPopup',
   model: {

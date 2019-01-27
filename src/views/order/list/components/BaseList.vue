@@ -25,9 +25,9 @@
           </p>
 
           <div>
-            <span v-if="item.cargoNames" class="list-item__count">
+            <span v-if="item.cargoNames && item.cargoNames[0]" class="list-item__count">
               {{item.cargoNames[0]|textOverflow(10)}}
-              <span v-if="item.cargoNames[0]&&item.cargoNames[0].length<10&& item.cargoNames.length>1">等</span>
+              <span v-if="item.cargoNames&&item.cargoNames[0]&&item.cargoNames[0].length<10&& item.cargoNames.length>1">等</span>
             </span>
             <span v-if="item.weight" class="list-item__count">{{item.weight}}吨</span>
             <span v-if="item.volume" class="list-item__count">{{item.volume}}方</span>
@@ -46,7 +46,7 @@
             子状态为 其它,列表展示“改单”按钮，详情展示“改单”“分享”按钮
           -->
           <div class="list-item__btngroup">
-            <cube-button v-if="deleteBtnVisable(item)" class="btn" :outline="true"  :inline="true" @click.stop="handleClickDelete(item.id)">删除</cube-button>
+            <cube-button v-if="deleteBtnVisable(item)" class="btn" :outline="true"  :inline="true" @click.stop="handleClickDelete(item)">删除</cube-button>
             <cube-button v-if="editOrderBtnVisable(item)" class="btn" :outline="true"  :inline="true" primary @click.stop="handleClickEditOrder(item.id)">编辑</cube-button>
             <!-- <cube-button v-if="editBillBtnVisable(item)" class="btn" :outline="true" :inline="true" :primary="true" @click.stop="handleClickEditBill">改单</cube-button> -->
           </div>
@@ -106,13 +106,19 @@ export default {
       }
       return color
     },
-    handleClickDelete(id) {
+    handleClickDelete(info) {
+      let msg = '删除之后可以在电脑端订单回收站恢复'
+      if (info.status === 50) { // 已回单
+        msg = '订单删除后，提货单和运单将一并删除，且订单不支持再还原'
+      } else if (info.status === 20 && info.pickup === 1) {
+        msg = '订单删除后，提货单将一并删除，且订单不支持再还原'
+      }
       this.$createDialog({
         type: 'confirm',
-        title: '确认删除订单？',
-        content: '删除后可以在电脑端订单回收站恢复',
+        title: '删除订单',
+        content: msg,
         onConfirm: () => {
-          this.$emit('delete', id)
+          this.$emit('delete', info.id)
         }
       }).show()
     },
@@ -132,7 +138,7 @@ export default {
       }
       // 是否调度
       // status + pickupStatus + dispachStatus + disassembleStatus
-      const list = ['1000', '1001', '2000', '2001', '5010'] // 见文档
+      const list = ['1000', '1001', '2000', '2001', '500'] // 见文档
       arr.push(item.status)
       arr.push(hasDispatched)
       arr.push(item.disassembleStatus)

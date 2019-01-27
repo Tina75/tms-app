@@ -64,6 +64,7 @@ export default {
 
   methods: {
     ...mapActions('order/detail', ['getDetail', 'clearDetail']),
+    ...mapActions('order/list', ['deleteOrder']),
     initTitleBtns() {
       let btnList = []
       if (this.editOrderBtnVisable(this.Detail)) {
@@ -86,10 +87,13 @@ export default {
         title: '删除订单',
         content: msg,
         onConfirm: () => {
-          this.$emit('delete', info.id)
+          this.deleteOrder(info.id).then(() => {
+            this.getDetail(info.id)
+          })
         }
       }).show()
     },
+
     handleClickEditOrder(id) {
       this.$router.push({ name: 'order-edit', params: { id } })
     },
@@ -106,7 +110,7 @@ export default {
       } else if (item.status === 20) {
         hasDispatched = item.dispatchStatus
       }
-      const list = ['1000', '1001', '2000', '2001', '5010'] // 见文档
+      const list = ['1000', '1001', '2000', '2001', '500'] // 见文档
       arr.push(item.status)
       arr.push(hasDispatched)
       arr.push(item.disassembleStatus)
