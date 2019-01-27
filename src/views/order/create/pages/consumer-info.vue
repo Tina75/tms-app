@@ -26,6 +26,7 @@
           <form-item
             v-if="orderConfig.deliveryTimeOption"
             v-model="form.deliveryTimeText"
+            prop="deliveryTimeText"
             label="发货时间"
             type="click"
             placeholder="请选择"
@@ -33,6 +34,7 @@
           <form-item
             v-if="orderConfig.arriveTimeOption"
             v-model="form.arriveTimeText"
+            prop="arriveTimeText"
             label="到货时间"
             type="click"
             placeholder="请选择"
@@ -126,6 +128,7 @@ export default {
     },
     saleChangeHandler (value, index, text) { this.form.salesmanName = text },
     ensure () {
+      if (this.form.deliveryTime === this.form.arriveTime) return window.toast('发到货时间不能相同')
       this.SET_CONSUMER_INFO(Object.assign({}, this.form))
       this.$formWillLeave()
       this.$router.back()

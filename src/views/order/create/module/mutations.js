@@ -147,7 +147,7 @@ export default {
   // 设置计费规矩金额
   SET_CALCULATE_AMOUNT: (state, payload) => { state.calculatedAmount = payload },
   // 清空计费规则计算金额结果
-  CLEAR_CALCULATED_AMOUNT: state => { state.calculatedAmount = void 0 }
+  CLEAR_CALCULATED_AMOUNT: state => { state.calculatedAmount = '' }
 }
 
 function resetFields (object) {

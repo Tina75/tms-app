@@ -73,38 +73,38 @@ export default {
 
       switch (item.ruleType) {
         case WEIGHT_TON:
-          if (weight) return window.toast('未能找到相应的计费规则')
+          if (weight) return window.toast('当前计费规则不适应')
           query.input = NP.divide(weight, 1000)
           break
         case WEIGHT_TON_KM:
-          if (weight) return window.toast('未能找到相应的计费规则')
+          if (weight) return window.toast('当前计费规则不适应')
           query.input = NP.divide(weight, 1000)
           query.distance = distance
           break
         case WEIGHT_KG:
-          if (weight) return window.toast('未能找到相应的计费规则')
+          if (weight) return window.toast('当前计费规则不适应')
           query.input = weight
           break
         case WEIGHT_KG_KM:
-          if (weight) return window.toast('未能找到相应的计费规则')
+          if (weight) return window.toast('当前计费规则不适应')
           query.input = weight
           query.distance = distance
           break
         case VOLUME:
-          if (!volume) return window.toast('未能找到相应的计费规则')
+          if (!volume) return window.toast('当前计费规则不适应')
           query.input = volume
           break
         case VOLUME_KM:
-          if (!volume) return window.toast('未能找到相应的计费规则')
+          if (!volume) return window.toast('当前计费规则不适应')
           query.input = volume
           query.distance = distance
           break
         case CAR_TYPE:
-          if (!carType) return window.toast('未能找到相应的计费规则')
+          if (!carType) return window.toast('当前计费规则不适应')
           query.carType = carType
           break
         case QUANTITY:
-          if (!cargoInfos.length) return window.toast('未能找到相应的计费规则')
+          if (!cargoInfos.length) return window.toast('当前计费规则不适应')
           query.cargoInfos = cargoInfos
       }
 

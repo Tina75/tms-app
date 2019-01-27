@@ -15,7 +15,7 @@
             v-if="inputType"
             v-model="inputValue"
             class="form-item-input"
-            :class="inputAlignment"
+            :class="inputExtraClass"
             :style="invalidStyle"
             :type="inputType"
             :autofocus="autofocus"
@@ -33,7 +33,7 @@
             ref="$picker"
             v-model="inputValue"
             class="form-item-input"
-            :class="inputAlignment"
+            :class="inputExtraClass"
             :options="options"
             :placeholder="inputPlaceHolder"
             :title="label"
@@ -160,8 +160,8 @@ export default {
       if (isNaN(maxlength)) return Infinity
       return maxlength
     },
-    inputAlignment () {
-      return 'form-item-input-align-' + this.align
+    inputExtraClass () {
+      return 'form-item-input-align-' + this.align + (this.disabled ? ' form-item-input-disabled' : '')
     },
     inputClickClass () {
       let classes = 'form-item-input-align-' + this.align
@@ -454,6 +454,8 @@ export default {
       text-align right
     &-align-center, &-align-center input
       text-align center
+    &-disabled, &-disabled input
+      color #C5C8CE !important
 
   .form-item-textarea
     resize none

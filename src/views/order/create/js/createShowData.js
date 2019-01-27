@@ -137,8 +137,8 @@ export default {
     }
   },
   showFreightFee () {
-    if (this.calculatedAmount === undefined) return
-    this.orderInfo.freightFee = this.calculatedAmount || ''
+    if (this.calculatedAmount === '') return
+    this.orderInfo.freightFee = this.calculatedAmount || this.orderInfo.freightFee || ''
     this.CLEAR_CALCULATED_AMOUNT()
   }
 }

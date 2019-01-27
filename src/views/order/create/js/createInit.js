@@ -94,6 +94,7 @@ function setOrderBaseInfo (orderInfo, context) {
   orderBaseInfo.consignerAddressLocale = []
   orderBaseInfo.consigneeAddressLocale = []
   orderBaseInfo.freightFee = orderInfo.freightFee === null ? '' : NP.divide(orderInfo.freightFee, 100)
+  console.log(orderBaseInfo.freightFee)
   orderBaseInfo.isSaveOrderTemplate = 0
   orderBaseInfo.consignerAddressMapType = 1
   orderBaseInfo.consigneeAddressMapType = 1
