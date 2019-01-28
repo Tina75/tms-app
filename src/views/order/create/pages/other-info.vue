@@ -10,6 +10,7 @@
           <form-item
             v-if="isInvoice"
             v-model="form.invoiceRate"
+            prop="invoiceRate"
             label="开票税率(%)"
             type="number"
             precision="2" />
@@ -27,8 +28,8 @@
             v-model="form.remark"
             label="备注"
             type="textarea"
-            placeholder="请输入(最多输入200字)"
-            maxlength="200" />
+            placeholder="请输入(最多输入100字)"
+            maxlength="100" />
         </div>
       </form-group>
     </cube-scroll>
@@ -55,7 +56,20 @@ export default {
         remark: ''
       },
       rules: {
-        collectionMoney: { type: 'number', min: 0 }
+        invoiceRate: {
+          required: true,
+          type: 'number',
+          min: 0,
+          max: 100
+        },
+        collectionMoney: {
+          type: 'number',
+          min: 0,
+          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/,
+          messages: {
+            pattern: '整数位不得超过9位'
+          }
+        }
       }
     }
   },
@@ -110,4 +124,5 @@ export default {
     padding 0
     border-radius 0
     font-weight bold
+    z-index 1
 </style>

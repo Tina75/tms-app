@@ -19,7 +19,8 @@
         maxlength="100"
         placeholder="请输入详细地址"
         clearable
-        @on-focus="allowSearch = true" />
+        @on-focus="allowSearch = true"
+        @on-blur="allowSearch = false" />
       <form-item
         v-model="form.extra"
         label="补充地址"
@@ -28,7 +29,7 @@
         clearable />
     </form-group>
     <div class="contacts-address-list">
-      <template v-if="showOftenList">
+      <template v-if="(showOftenList || !allowSearch) && oftenAddresses.length">
         <p class="address-list-title">常用地址</p>
         <ul class="address-often-list list">
           <li
@@ -42,14 +43,14 @@
             <div class="item-info border-bottom-1px">
               <p class="item-info-title">{{ item.cityName || '' }}</p>
               <p class="item-info-data">
-                {{ item.address }}
+                {{ item.address + (item.consignerHourseNumber || '') }}
               </p>
             </div>
           </li>
         </ul>
       </template>
       <bmap-address-list
-        v-show="showAddressList"
+        v-show="showAddressList && allowSearch"
         :city="limitCityGeo"
         :search="allowSearch ? form.address : ''"
         @select="onSelectAddress" />
@@ -102,7 +103,7 @@ export default {
       },
       oftenAddresses: [],
       showCityPicker: false,
-      allowSearch: true
+      allowSearch: false
     }
   },
   computed: {
@@ -134,7 +135,7 @@ export default {
     ...mapActions('order/create', [ 'getOftenAddress' ]),
 
     onSelectAddress (item) {
-      this.form.address = ((item.detail || '') + (item.name || '')).replace(/(.{0,}省){0,1}(.{0,}市){0,1}/, '')
+      this.form.address = item.detail === item.name ? item.detail : (item.detail || '') + (item.name || '')
       this.form.latitude = item.data.point.lat
       this.form.longitude = item.data.point.lng
       this.allowSearch = false
@@ -193,6 +194,7 @@ export default {
     next(vm => {
       const info = vm.orderInfo
       const form = vm.form
+      vm.$formWillLeave(false, () => { vm.showCityPicker = false })
       if (vm.currentArrdessType === 'send') {
         form.cityCode = info.start
         form.address = info.consignerAddress.replace(info.startCityName, '') || ''

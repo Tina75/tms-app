@@ -5,7 +5,7 @@
       <cube-scroll-nav-panel label="基本信息">
         <Panel title="基本信息">
           <FormItem v-if="detail.consignerName" label="客户名称">
-            {{detail.consignerName}}
+            <p>{{detail.consignerName}}</p>
           </FormItem>
           <FormItem v-if="detail.orderNo" label="订单号">
             {{detail.orderNo}}
@@ -71,7 +71,7 @@
             {{detail.isInvoice == 1 ? `是（${rate(detail.invoiceRate)}%）` : '否'}}
           </FormItem> -->
           <FormItem v-if="detail.remark" label="备注">
-            {{detail.remark}}
+            <p>{{detail.remark}}</p>
           </FormItem>
         </Panel>
       </cube-scroll-nav-panel>
@@ -85,7 +85,7 @@
             <a slot="right" :href="`tel:${detail.consignerPhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
           </FormItem>
           <FormItem v-if="detail.consignerAddress" label="发货地址">
-            {{detail.consignerAddress}}
+            <p>{{detail.consignerAddress}}</p>
           </FormItem>
         </Panel>
         <Panel title="收货人">
@@ -97,10 +97,10 @@
             <a slot="right" :href="`tel:${detail.consigneePhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
           </FormItem>
           <FormItem v-if="detail.consigneeAddress" label="收货地址">
-            {{detail.consigneeAddress}}
+            <p>{{detail.consigneeAddress}}</p>
           </FormItem>
           <FormItem v-if="detail.consigneeCompanyName" label="收货人单位">
-            {{detail.consigneeCompanyName}}
+            <p>{{detail.consigneeCompanyName}}</p>
           </FormItem>
         </Panel>
       </cube-scroll-nav-panel>
@@ -130,7 +130,7 @@
       </cube-scroll-nav-panel>
     </cube-scroll-nav>
     <div v-if="!!detail.receiptOrder" class="upstream-footer">
-      <cube-button v-if="detail.receiptOrder.receiptStatus === 0 && detail.status === 40" class="footer-item-btn" @click="receipt">回收</cube-button>
+      <cube-button v-if="detail.receiptOrder.receiptStatus === 0 && detail.status === 40" class="footer-item-btn footer-item-primary" @click="receipt">回收</cube-button>
       <cube-button v-if="detail.receiptOrder.receiptStatus === 1" class="footer-item-btn" @click="backFactory">返厂</cube-button>
       <cube-button v-if="detail.receiptOrder.receiptStatus > 0 && !detail.receiptOrder.receiptUrl.length" class="footer-item-btn  footer-item-primary" @click="uploadPic">上传回单</cube-button>
       <cube-button v-if="detail.receiptOrder.receiptStatus > 0 && detail.receiptOrder.receiptUrl.length" class="footer-item-btn footer-item-primary" @click="updatePic">修改回单</cube-button>
@@ -191,18 +191,10 @@ export default {
       })
     },
     copyBtn (e) {
-      this.$createToast({
-        type: 'correct',
-        time: 1000,
-        txt: '复制成功'
-      }).show()
+      window.toast('复制成功')
     },
     onError (e) {
-      this.$createToast({
-        type: 'error',
-        time: 1000,
-        txt: '复制失败'
-      }).show()
+      window.toast('复制失败')
     },
     rate (val) {
       return getRate(val)
@@ -219,20 +211,26 @@ export default {
           maxlength: 15
         },
         onConfirm: (e, promptValue) => {
-          const params = {
-            orderIds: [item.id],
-            recoveryName: promptValue,
-            receiptStatus: item.receiptOrder.receiptStatus,
-            ids: [item.receiptOrder.orderId]
+          if (promptValue === '') {
+            this.dialog.show()
+            this.$createToast({
+              type: 'warn',
+              time: 1000,
+              txt: `请输入回收人`
+            }).show()
+          } else {
+            const params = {
+              orderIds: [item.id],
+              recoveryName: promptValue,
+              receiptStatus: 1,
+              ids: [item.receiptOrder.orderId]
+            }
+            API.updateReceipt(params)
+              .then(res => {
+                this.initDetail()
+                window.toast('回收成功')
+              })
           }
-          API.updateReceipt(params)
-            .then(res => {
-              this.$createToast({
-                type: 'warn',
-                time: 1000,
-                txt: '回收成功'
-              }).show()
-            })
         }
       }, false).show()
     },
@@ -248,20 +246,26 @@ export default {
           maxlength: 15
         },
         onConfirm: (e, promptValue) => {
-          const params = {
-            orderIds: [item.id],
-            returnName: promptValue,
-            receiptStatus: item.receiptOrder.receiptStatus,
-            ids: [item.receiptOrder.orderId]
+          if (promptValue === '') {
+            this.dialog.show()
+            this.$createToast({
+              type: 'warn',
+              time: 1000,
+              txt: `请输入接收人`
+            }).show()
+          } else {
+            const params = {
+              orderIds: [item.id],
+              returnName: promptValue,
+              receiptStatus: 2,
+              ids: [item.receiptOrder.orderId]
+            }
+            API.updateReceipt(params)
+              .then(res => {
+                this.initDetail()
+                window.toast('返厂成功')
+              })
           }
-          API.updateReceipt(params)
-            .then(res => {
-              this.$createToast({
-                type: 'warn',
-                time: 1000,
-                txt: '返厂成功'
-              }).show()
-            })
         }
       }, false).show()
     },
@@ -285,14 +289,13 @@ export default {
 <style lang="stylus" scoped>
 .receipt-detail
   height 100%
+  display: flex
+  flex-direction column
 .upstream-footer
   display flex
-  width 100%
-  position fixed
-  bottom 0
-  left 0
-  right 0
-  z-index 10
+  >>> .cube-btn
+    font-size 17px
+    padding 15px
   .footer-item-btn
     flex 1
     background #27c4d3
@@ -315,8 +318,22 @@ export default {
 </style>
 <style lang="stylus">
 .receipt-detail
+  .cube-scroll-nav-bar-item
+    position relative
+  .cube-scroll-nav-bar-item_active:after
+    position absolute
+    left 0
+    right 0
+    margin auto
+    bottom 0
+    content ''
+    display block
+    height 2px
+    width 20px
+    background #189cb2
+    border-radius 2px
   .cube-scroll-nav-panels
-    padding-bottom 40px
+    padding-bottom 5px
   .cube-scroll-nav-panel
     .cube-sticky-ele
       height 0

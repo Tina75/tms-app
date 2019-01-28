@@ -109,7 +109,6 @@ export default {
       })[key]
     },
     async save() {
-      window.toast('save')
       let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)
       this.addBillOrder(ids)
       await this.updatetBillOrders(this.$route.params.id)

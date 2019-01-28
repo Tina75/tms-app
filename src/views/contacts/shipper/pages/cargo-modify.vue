@@ -1,6 +1,6 @@
 <template>
   <div class="cube-default-background cube-has-bottom-btn cube-pt-10">
-    <FromGroup ref="form" :rules="rules">
+    <FromGroup ref="$form" :rules="rules">
       <FormItem
         v-model="form.cargoName"
         label="货物名称"
@@ -128,7 +128,7 @@ export default {
         if (!this.form.cargoName) {
           return window.toast('请填写货物名称')
         }
-        if (!(await this.$refs.form.validate())) {
+        if (!(await this.$refs.$form.validate())) {
           return
         }
         const server = CargoDetail.toServer(this.form)
@@ -156,7 +156,9 @@ export default {
       }
     },
     setForm() {
-      this.$refs.form.reset()
+      // 重置弹出框
+      this.showPackageType = false
+      this.showDismensionInput = false
       const list = this.cargoList.list
       const id = this.$route.query.id
       let detailData

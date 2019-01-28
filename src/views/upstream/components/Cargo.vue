@@ -8,7 +8,7 @@
       <span v-if="data.volume">{{data.volume | volume}}方</span>
       <span>{{data.packageUnit}}</span>
       <span v-if="data.num">{{data.num}}件</span>
-      <span v-if="data.cost">{{data.cost | money}}元</span>
+      <span v-if="data.cost">{{data.cost | moneyFormat}}元</span>
       <span>{{data.remark1}}</span>
       <span>{{data.remark2}}</span>
     </div>
@@ -36,7 +36,8 @@ export default {
   padding 10px
   margin-right 15px
   margin-bottom 10px
-  background #f3f5f9
+  margin-top 10px
+  background #F9F9F9
 .cargo-name
   font-size 15px
   color #000

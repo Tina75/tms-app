@@ -16,9 +16,9 @@
 
           <div class="order-body order-container border-top-1px border-bottom-1px">
             <p class="order-body-cities">
-              <span>{{ item.startName || item.consignerAddress }}</span>
+              <span :class="{ 'order-body-cities-over': !item.startName }">{{ item.startName || item.consignerAddress }}</span>
               <icon-font name="icon-line" size="20" />
-              <span>{{ item.endName || item.consigneeAddress }}</span>
+              <span :class="{ 'order-body-cities-over': !item.startName }">{{ item.endName || item.consigneeAddress }}</span>
             </p>
             <ul class="order-body-info">
               <li class="order-body-info-item">{{ item.cargoNames }}</li>
@@ -77,7 +77,16 @@ export default {
   name: 'order-often',
   metaInfo: { title: '常发订单' },
   components: { NoData, InfiniteList },
-  filters: { settlementType, totalFee, addressConcat },
+  filters: {
+    settlementType,
+    totalFee,
+    addressConcat,
+    placeRender (city, address) {
+      console.log(city, address)
+      if (city) return city
+      else return `<span>${address}</span>`
+    }
+  },
   data () {
     return {
       NO_DATA,
@@ -87,10 +96,10 @@ export default {
   computed: {
     ...mapState('order/often', [ 'oftenList' ]),
     ...mapState('order/create', [ 'oftenPermission' ]),
-    ...mapGetters('order/create', [ 'oftenPermission' ])
+    ...mapGetters('order/create', [ 'oftenPermission', 'oneMoreId' ])
   },
   methods: {
-    ...mapMutations('order/create', [ 'SET_ORDER_RESET' ]),
+    ...mapMutations('order/create', [ 'SET_ORDER_RESET', 'SET_ONE_MORE_ID' ]),
     ...mapActions('order/often', [ 'loadOftenList', 'deleteOftenOrder' ]),
     ...mapActions('order/create', [ 'getOftenPermission' ]),
 
@@ -98,10 +107,8 @@ export default {
 
     orderAdd (id) {
       this.SET_ORDER_RESET(true)
-      this.$router.push({
-        name: 'order-one-more',
-        params: { id }
-      })
+      this.SET_ONE_MORE_ID(id)
+      this.$router.back()
     },
 
     orderDelete (id, index) {
@@ -120,6 +127,10 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(async vm => {
+      if (vm.oneMoreId) {
+        vm.$router.back()
+        return
+      }
       if (!vm.oftenPermission) await vm.getOftenPermission()
     })
   }
@@ -190,30 +201,38 @@ export default {
     padding-top 14px
     padding-bottom 14px
     &-cities
-      display flex
       line-height 1.1
       font-size 18px
       font-weight bold
+      white-space nowrap
+      text-overflow ellipsis
+      overflow hidden
       i
-        flex none
+        display inline-block
         width 40px
         text-align center
+        vertical-align baseline
       span
-        flex none
+        display inline-block
+        font-size 18px
+        font-weight bold
+      &-over
         max-width calc(50% - 20px)
         white-space nowrap
         text-overflow ellipsis
         overflow hidden
-        font-size 18px
-        font-weight bold
     &-info
       margin 10px 0
       &-item
         display inline-block
         height 18px
+        max-width 140px
         padding 0 4px
         margin-right 10px
         line-height 18px
+        white-space nowrap
+        text-overflow ellipsis
+        overflow hidden
         background #f3f5f9
     &-user
       font-size 12px

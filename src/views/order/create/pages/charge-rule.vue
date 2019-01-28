@@ -42,6 +42,15 @@ import NP from 'number-precision'
 import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-rule.png'
 
+const WEIGHT_TON = 1 // 重量吨
+const VOLUME = 2 // 体积方
+const WEIGHT_TON_KM = 3 // 吨公里
+const VOLUME_KM = 4 // 方公里
+const CAR_TYPE = 5 // 车型
+const WEIGHT_KG = 6 // 重量公斤
+const WEIGHT_KG_KM = 7 // 公斤公里
+const QUANTITY = 8 // 件
+
 export default {
   name: 'order-charge-rule',
   metaInfo: { title: '请选择计费规则' },
@@ -51,7 +60,7 @@ export default {
       NO_DATA,
       loading: true,
       ruleList: [],
-      info: this.$route.query.info || this.$route.query
+      info: {}
     }
   },
   methods: {
@@ -59,13 +68,49 @@ export default {
     ...mapActions('order/create', [ 'getRuleList', 'calculateAmount' ]),
 
     async pickRuleAndCalc (item) {
-      let { departure, destination, weight, volume, distance, carType, carLength, cargoInfos } = this.info
-      let query = { departure, destination, distance, carType, carLength, cargoInfos }
-      if (item.ruleType === 1) query.input = NP.divide(weight || 0, 10)
-      else query.input = NP.times(volume || 0, 100)
-      query.ruleId = item.id
+      let { departure, destination, weight, volume, distance, carType, cargoInfos } = this.info
+      let query = { departure, destination }
+
+      switch (item.ruleType) {
+        case WEIGHT_TON:
+          if (weight) return window.toast('当前计费规则不适应')
+          query.input = NP.divide(weight, 1000)
+          break
+        case WEIGHT_TON_KM:
+          if (weight) return window.toast('当前计费规则不适应')
+          query.input = NP.divide(weight, 1000)
+          query.distance = distance
+          break
+        case WEIGHT_KG:
+          if (weight) return window.toast('当前计费规则不适应')
+          query.input = weight
+          break
+        case WEIGHT_KG_KM:
+          if (weight) return window.toast('当前计费规则不适应')
+          query.input = weight
+          query.distance = distance
+          break
+        case VOLUME:
+          if (!volume) return window.toast('当前计费规则不适应')
+          query.input = volume
+          break
+        case VOLUME_KM:
+          if (!volume) return window.toast('当前计费规则不适应')
+          query.input = volume
+          query.distance = distance
+          break
+        case CAR_TYPE:
+          if (!carType) return window.toast('当前计费规则不适应')
+          query.carType = carType
+          break
+        case QUANTITY:
+          if (!cargoInfos.length) return window.toast('当前计费规则不适应')
+          query.cargoInfos = cargoInfos
+      }
 
       window.loading(true)
+      query.ruleId = item.id
+      if (query.input) query.input = NP.times(query.input, 100)
       try {
         await this.calculateAmount(query)
         this.$router.back()
@@ -80,8 +125,9 @@ export default {
     next(async vm => {
       vm.CLEAR_CALCULATED_AMOUNT()
       vm.loading = true
+      vm.info = vm.$route.query.info || vm.$route.query
       const { partnerType, partnerId, departure, destination } = vm.info
-      if (!partnerType || !partnerId || !departure || !destination) {
+      if (!partnerType || !partnerId) {
         // window.toast('缺少参数')
         // vm.$router.back()
         vm.loading = false

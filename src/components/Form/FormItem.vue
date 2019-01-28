@@ -15,7 +15,7 @@
             v-if="inputType"
             v-model="inputValue"
             class="form-item-input"
-            :class="inputAlignment"
+            :class="inputExtraClass"
             :style="invalidStyle"
             :type="inputType"
             :autofocus="autofocus"
@@ -30,9 +30,10 @@
           <!-- 选择器 type = selece -->
           <cube-select
             v-if="type === 'select'"
+            ref="$picker"
             v-model="inputValue"
             class="form-item-input"
-            :class="inputAlignment"
+            :class="inputExtraClass"
             :options="options"
             :placeholder="inputPlaceHolder"
             :title="label"
@@ -123,18 +124,17 @@ export default {
   data () {
     return {
       inputValue: this.value,
-      picker: null,
       valid: true,
       resetValidator: false,
       rule: null,
-      rows: 2
+      rows: 2,
+      picker: null
     }
   },
   computed: {
     inputType () {
       const type = this.type
-      if (type === 'text' || type === 'number') return type
-      if (type === 'phone') return 'text'
+      if (type === 'text' || type === 'number' || type === 'phone') return 'text'
       if (type === 'textarea' && this.value) {
         this.initTextAreaRow(this.value)
       }
@@ -160,8 +160,8 @@ export default {
       if (isNaN(maxlength)) return Infinity
       return maxlength
     },
-    inputAlignment () {
-      return 'form-item-input-align-' + this.align
+    inputExtraClass () {
+      return 'form-item-input-align-' + this.align + (this.disabled ? ' form-item-input-disabled' : '')
     },
     inputClickClass () {
       let classes = 'form-item-input-align-' + this.align
@@ -188,7 +188,7 @@ export default {
         case 'number':
           if (isNaN(Number(newVal))) {
             this.$nextTick(() => {
-              this.inputValue = ''
+              this.inputValue = oldVal
               this.inputEmit()
             })
             return
@@ -211,31 +211,32 @@ export default {
   },
   methods: {
     inputBlurTrigger () { Array.from(document.getElementsByTagName('input')).forEach($input => { $input.blur() }) },
-    iconClickHandler () { if (!this.inputDisabled) this.$emit('on-icon-click') },
+    iconClickHandler () { if (!this.inputDisabled) this.$emit('on-icon-click', this.prop) },
     inputClickHandler () {
       if (this.type === 'click' && !this.inputDisabled) {
         this.inputBlurTrigger()
-        this.$emit('on-click')
+        this.$emit('on-click', this.prop)
       }
     },
     inputBlurHandler (e) {
       if (this.type === 'click') return
-      this.$emit('on-blur', e)
+      this.$emit('on-blur', e, this.prop)
       this.doValidate()
     },
     inputFocusHandler (e) {
-      this.$emit('on-focus', e)
+      this.$emit('on-focus', e, this.prop)
       if (this.focusOnEnd && this.type !== 'textarea') {
         this.$nextTick(() => this.moveToEnd(e.target))
       }
     },
-    selectChangeHandler (value, index, text) { this.$emit('change', value, index, text) },
+    selectChangeHandler (value, index, text) { this.$emit('change', value, index, text, this.prop) },
     pickerShowHandler () {
+      this.picker = this.$refs.$picker.picker
       this.inputBlurTrigger()
-      this.$emit('picker-show')
+      this.$emit('picker-show', this.prop)
     },
     pickerHideHandler () {
-      this.$emit('picker-hide')
+      this.$emit('picker-hide', this.prop)
       this.doValidate()
     },
     inputEmit () {
@@ -246,9 +247,9 @@ export default {
           }
           break
         case 'phone':
-          return this.$emit('input', this.inputValue.replace(/\s/g, ''))
+          return this.$emit('input', this.inputValue.replace(/\s/g, ''), this.prop)
       }
-      this.$emit('input', this.inputValue)
+      this.$emit('input', this.inputValue, this.prop)
     },
 
     rulesParser () {
@@ -338,6 +339,7 @@ export default {
         display inline-block
         width 18px
         height 18px
+        margin-left 2px
         margin-right 10px
         border-radius 2px
         vertical-align text-top
@@ -390,6 +392,7 @@ export default {
       textarea
         border-style none
         font-size 15px
+        line-height 1.5
       .form-item-counter
         margin-top 5px
         font-size 13px
@@ -424,6 +427,9 @@ export default {
   .validate-message .cube-validator-msg
     padding-bottom 10px
 
+  .cube-select_disabled
+    background #ffffff
+
   .form-item-input-box
     .cube-select
       padding-right 0
@@ -448,6 +454,8 @@ export default {
       text-align right
     &-align-center, &-align-center input
       text-align center
+    &-disabled, &-disabled input
+      color #C5C8CE !important
 
   .form-item-textarea
     resize none

@@ -15,21 +15,24 @@ export default {
       }
     }
 
-    this.$formWillLeave(false, () => {
-      this.$refs.$form.reset()
-    })
-    if (this.mode === 'create') return
-    if (this.orderInfo.consignerName) return
+    // this.$formWillLeave(false, () => {
+    //   this.$refs.$form.reset()
+    // })
+    if (this.mode === 'create' && !this.oneMoreId) return
     window.loading(true)
     let orderInfo
     let cargoList
     try {
-      if (this.mode === 'oneMore') {
-        orderInfo = await this.getOftenDetail(this.id)
+      if (this.mode !== 'edit') {
+        orderInfo = await this.getOftenDetail(this.oneMoreId)
         cargoList = orderInfo.orderCargoTemplateList
+        this.SET_ONE_MORE_ID()
       } else {
         orderInfo = await this.fetchOrderInfo(this.id)
         cargoList = orderInfo.orderCargoList
+        this.editOrderHasInit = true
+        if (orderInfo.status === 20 && orderInfo.pickupStatus === 1) this.pickupDisabled = true
+        this.$formWillLeave(false, () => { this.editOrderHasInit = false })
       }
       // 设置订单基础信息
       setOrderBaseInfo(orderInfo, this)
@@ -61,6 +64,7 @@ function setOrderBaseInfo (orderInfo, context) {
     'consignerContact',
     'consignerPhone',
     'start',
+    'startName',
     'consignerAddress',
     'consignerHourseNumber',
     'consignerAddressLongitude',
@@ -68,6 +72,7 @@ function setOrderBaseInfo (orderInfo, context) {
     'consigneeContact',
     'consigneePhone',
     'end',
+    'endName',
     'consigneeAddress',
     'consigneeHourseNumber',
     'consigneeAddressLongitude',
@@ -86,6 +91,7 @@ function setOrderBaseInfo (orderInfo, context) {
   orderBaseInfo.consignerAddressLocale = []
   orderBaseInfo.consigneeAddressLocale = []
   orderBaseInfo.freightFee = orderInfo.freightFee === null ? '' : NP.divide(orderInfo.freightFee, 100)
+  console.log(orderBaseInfo.freightFee)
   orderBaseInfo.isSaveOrderTemplate = 0
   orderBaseInfo.consignerAddressMapType = 1
   orderBaseInfo.consigneeAddressMapType = 1

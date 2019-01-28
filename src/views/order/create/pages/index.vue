@@ -1,6 +1,6 @@
 <template>
   <div class="create-order-page">
-    <cube-scroll v-if="showPage" ref="$scroll" class="scroll-box">
+    <cube-scroll ref="$scroll" class="scroll-box">
       <!-- <cube-button primary @click="$router.push({ name: 'order-often' })">常发订单</cube-button> -->
       <form-group
         ref="$form"
@@ -16,8 +16,8 @@
             prop="consignerName"
             required
             label="客户名称"
-            autofocus
             maxlength="20"
+            autofocus
             click-icon="icon-ico_custerm"
             @on-icon-click="gotoConsignerPage"
             @on-focus="inputFocus" />
@@ -32,7 +32,7 @@
             prop="consignerPhone"
             label="联系号码"
             maxlength="20"
-            @input="consignerPhoneInputHandler"
+            type="phone"
             @on-focus="inputFocus" />
           <form-item
             v-model="orderInfo.consignerAddressText"
@@ -67,7 +67,7 @@
             prop="consigneePhone"
             label="联系号码"
             maxlength="20"
-            @input="consigneePhoneInputHandler"
+            type="phone"
             @on-focus="inputFocus" />
           <form-item
             v-model="orderInfo.consigneeAddressText"
@@ -109,6 +109,7 @@
             prop="pickup"
             type="select"
             label="提货方式"
+            :disabled="pickupDisabled"
             :options="pickupOptions" />
           <form-item
             v-model="orderInfo.receiptCount"
@@ -193,7 +194,8 @@ const NO_RESET_PAGE = [
   'order-select-consigner', // 选择发货人
   'order-select-consignee', // 选择收货人
   'pickup-assign', // 提货发运
-  'delivery-send-car' // 送货发运
+  'delivery-send-car', // 送货发运,
+  'order-often' // 常发订单
 ]
 
 export default {
@@ -212,15 +214,14 @@ export default {
     const phoneMessage = { phoneValidate: '请输入正确的手机号或座机号' }
 
     return {
-      showPage: true, // scroll 组件在数据更新后可能会出现卡顿的情况，所以在确认显示数据以后再显示 scroll
       IMAGES,
       mode: '',
       id: '',
       loading: false,
-      windowOriginHeight: 0,
-      windowIsResize: false,
+      editOrderHasInit: false,
       settlementOptions: SETTLEMENT_TYPE,
       pickupOptions: PICKUP_TYPE,
+      pickupDisabled: false,
       rules: {
         consignerName: {
           required: true,
@@ -236,7 +237,14 @@ export default {
         settlementType: { required: true, type: 'number' },
         pickup: { required: true, type: 'number' },
         receiptCount: { required: true, type: 'number', min: 0 },
-        freightFee: { type: 'number', min: 0 }
+        freightFee: {
+          type: 'number',
+          min: 0,
+          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/,
+          messages: {
+            pattern: '整数位不得超过9位'
+          }
+        }
       }
     }
   },
@@ -259,7 +267,8 @@ export default {
       'calculatedAmount',
       'orderConfig',
       'orderNeedReset',
-      'oftenPermission'
+      'oftenPermission',
+      'oneMoreId'
     ]),
     ...mapState('contacts/consignee', [
       'saveConsigner'
@@ -295,8 +304,7 @@ export default {
         vm.showOtherInfo()
         vm.showFreightFee()
         vm.calculateDistance()
-        vm.showPage = false
-        vm.$nextTick(() => { vm.showPage = true })
+        vm.$nextTick(() => { vm.$refs.$scroll.refresh() })
       })
     })
   }
@@ -308,7 +316,7 @@ export default {
     height calc(100vh - 88px)
 
   .form
-    margin-bottom 15px
+    margin-bottom 50px
 
     &-section
       margin-top 15px

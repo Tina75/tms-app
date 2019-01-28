@@ -19,7 +19,7 @@
         <NoData message="老板，您还没有记录发货方信息" >
           <img
             slot="img"
-            class="contacts-consignee__placeholder"
+            class="contacts-consigner__placeholder"
             src="@/assets/contacts/shipper-list-empty.png"
           >
         </NoData>

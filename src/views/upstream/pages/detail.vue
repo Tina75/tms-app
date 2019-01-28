@@ -8,7 +8,7 @@
             {{detail.orderNo}}
           </FormItem>
           <FormItem v-if="detail.shipperCompanyName" label="客户名称">
-            {{detail.shipperCompanyName}}
+            <p>{{detail.shipperCompanyName}}</p>
           </FormItem>
           <FormItem v-if="detail.customerOrderNo" label="客户订单号">
             {{detail.customerOrderNo}}
@@ -48,10 +48,10 @@
             {{detail.handlerUserName}}
           </FormItem>
           <FormItem v-if="detail.isInvoice" label="是否开票">
-            {{detail.isInvoice == 1 ? `是（${detail.invoiceRate | rate}%）` : '否'}}
+            {{detail.isInvoice == 1 ? `是` : '否'}}
           </FormItem>
           <FormItem v-if="detail.remark" label="备注">
-            {{detail.remark}}
+            <p>{{detail.remark}}</p>
           </FormItem>
         </Panel>
       </cube-scroll-nav-panel>
@@ -65,7 +65,7 @@
             <a slot="right" :href="`tel:${detail.consignerPhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
           </FormItem>
           <FormItem v-if="detail.consignerAddress" label="发货地址">
-            {{detail.consignerAddress}}
+            <p>{{detail.consignerAddress}}</p>
           </FormItem>
         </Panel>
         <Panel title="收货人">
@@ -77,7 +77,7 @@
             <a slot="right" :href="`tel:${detail.consigneePhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
           </FormItem>
           <FormItem v-if="detail.consigneeAddress" label="收货地址">
-            {{detail.consigneeAddress}}
+            <p>{{detail.consigneeAddress}}</p>
           </FormItem>
         </Panel>
       </cube-scroll-nav-panel>
@@ -171,7 +171,7 @@ export default {
         title: '确认拒绝订单?',
         onConfirm: () => {
           API.refuse(this.id).then(response => {
-            this.reFresh({ key: 'waitAccept' })
+            // this.reFresh({ key: 'waitAccept' })
             window.toast('拒绝成功')
             this.initDetail()
           })
@@ -180,24 +180,16 @@ export default {
     },
     receipt () {
       API.receipt(this.id).then(response => {
-        this.reFresh({ key: 'waitAccept' })
+        // this.reFresh({ key: 'waitAccept' })
         window.toast('接收成功')
         this.initDetail()
       })
     },
     copyBtn (e) {
-      this.$createToast({
-        type: 'correct',
-        time: 1000,
-        txt: '复制成功'
-      }).show()
+      window.toast('复制成功')
     },
     onError (e) {
-      this.$createToast({
-        type: 'error',
-        time: 1000,
-        txt: '复制失败'
-      }).show()
+      window.toast('复制失败')
     },
     orderStatus (val) {
       return orderStatus(val)
@@ -208,14 +200,13 @@ export default {
 <style lang="stylus" scoped>
 .upstream-detail
   height 100%
+  display: flex
+  flex-direction column
 .upstream-footer
   display flex
-  width 100%
-  position fixed
-  bottom 0
-  left 0
-  right 0
-  z-index 10
+  >>> .cube-btn
+    font-size 17px
+    padding 15px
   .footer-item-btn
     flex 1
     background #27c4d3
@@ -241,8 +232,22 @@ export default {
 </style>
 <style lang="stylus">
 .upstream-detail
+  .cube-scroll-nav-bar-item
+    position relative
+  .cube-scroll-nav-bar-item_active:after
+    position absolute
+    left 0
+    right 0
+    margin auto
+    bottom 0
+    content ''
+    display block
+    height 2px
+    width 20px
+    background #189cb2
+    border-radius 2px
   .cube-scroll-nav-panels
-      padding-bottom 40px
+      padding-bottom 5px
   .cube-scroll-nav-panel
     .cube-sticky-ele
       height 0
