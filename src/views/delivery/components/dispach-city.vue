@@ -10,7 +10,7 @@
         <i class="iconfont icon-ico_right"/>
       </div>
     </div>
-    <city-picker :value="startSelVisable" :deep="3" @confirm="confirmStart"/>
+    <city-picker v-if="startSelVisable" :value="startSelVisable" :deep="3" @confirm="confirmStart"/>
     <div class="city-cell cube-ml-15" @click="endSelVisable = !endSelVisable">
       <div class="city-left">
         <span class="city-icon end-icon">收</span>收货城市
@@ -20,7 +20,7 @@
         <i class="iconfont icon-ico_right"/>
       </div>
     </div>
-    <city-picker :value="endSelVisable" :deep="3" @confirm="confirmEnd"/>
+    <city-picker v-if="endSelVisable" :value="endSelVisable" :deep="3" @confirm="confirmEnd"/>
   </div>
 </template>
 
