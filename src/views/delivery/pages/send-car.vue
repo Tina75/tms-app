@@ -607,7 +607,7 @@ export default {
           mileage: NP.times(this.model.mileage, 1000),
           freightFee: NP.times(this.model.freightFee, 100),
           tollFee: NP.times(this.model.tollFee, 100),
-          accommodation: NP.times(this.model.accommodation, 100),
+          accommodation: this.model.assignCarType === 2 ? NP.times(this.model.accommodation, 100) : '',
           loadFee: NP.times(this.model.loadFee, 100),
           unloadFee: NP.times(this.model.unloadFee, 100),
           otherFee: NP.times(this.model.otherFee, 100),
