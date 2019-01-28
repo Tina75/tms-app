@@ -16,9 +16,11 @@
 
           <div class="order-body order-container border-top-1px border-bottom-1px">
             <p class="order-body-cities">
-              <span :class="{ 'order-body-cities-over': !item.startName }">{{ item.startName || item.consignerAddress }}</span>
+              <template v-if="item.startName">{{ item.startName }}</template>
+              <span v-else class="order-body-cities-over">{{ item.consignerAddress }}</span>
               <icon-font name="icon-line" size="20" />
-              <span :class="{ 'order-body-cities-over': !item.startName }">{{ item.endName || item.consigneeAddress }}</span>
+              <template v-if="item.endName">{{ item.endName }}</template>
+              <span v-else class="order-body-cities-over">{{ item.consigneeAddress }}</span>
             </p>
             <ul class="order-body-info">
               <li class="order-body-info-item">{{ item.cargoNames }}</li>
