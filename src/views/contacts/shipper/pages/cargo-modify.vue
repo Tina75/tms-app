@@ -169,7 +169,9 @@ export default {
         }
       }
       this.form = CargoDetail.toForm(detailData)
-      if (!this.isCreate) {
+      if (this.isCreate) {
+        this.$refs.$form.reset()
+      } else {
         setAppRightBtn({
           text: '删除',
           color: '#00A4BD',
