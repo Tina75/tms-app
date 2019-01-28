@@ -18,7 +18,7 @@
         </cube-tab-panel>
       </cube-tab-panels>
     </div>
-    <no-data v-else message="老板，还没有回单记得催一催哦～">
+    <no-data v-else  class="emty-data"  message="老板，还没有回单记得催一催哦～">
       <img slot="img" src="@/assets/img-no-receipt.png">
     </no-data>
   </div>
@@ -142,8 +142,11 @@ export default {
     .tab-label, .tab-count
       color: #00A4BD;
 .list-bar
-    height calc(100% - 50px)
-    overflow-y auto
+  height calc(100% - 50px)
+  overflow-y auto
+.emty-data
+  max-height 100%
+  min-height 100%
 </style>
 <style lang="stylus">
 .receipt

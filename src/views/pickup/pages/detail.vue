@@ -1,6 +1,6 @@
 <template>
   <div class="pickup-detail">
-    <cube-scroll-nav @change="changeHandler">
+    <cube-scroll-nav ref="content-scroll" :class="{'full-height': pickupDetail.status === 3}" @change="changeHandler">
       <div slot="prepend" class="status-block">
         <h2>{{statusMap[pickupDetail.status]}}</h2>
         <p>{{pickupDetail.createTime|datetimeFormat}}</p>
@@ -14,7 +14,7 @@
         </ul>
       </cube-scroll-nav-panel>
     </cube-scroll-nav>
-    <div class="handle-btns">
+    <div v-if="pickupDetail.status !== 3" class="handle-btns">
       <template v-if="pickupDetail.status === 1">
         <a v-if="(pickupDetail.assignCarType === 1 && pickupDetail.carrierName) || (pickupDetail.assignCarType === 2 && pickupDetail.carNo)" @click="pickup">提货</a>
         <a v-else @click="assign">派车</a>
@@ -162,6 +162,7 @@ export default {
           await _this.arriveBill(_this.pickupDetail.pickUpId)
           // await _this.removePicking(_this.$route.query.index)
           await _this.getPickupDetail(_this.$route.params.id)
+          this.$refs['content-scroll'].refresh()
           _this.$createToast({
             type: 'warn',
             time: 1000,
@@ -233,6 +234,8 @@ export default {
     flex: 1
     -webkit-box-flex: 1
     height: calc(100% - 45px)
+    &.full-height
+      height: 100%
   .handle-btns
     display: flex
     display: -webkit-box;

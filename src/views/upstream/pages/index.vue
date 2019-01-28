@@ -18,7 +18,7 @@
         </cube-tab-panel>
       </cube-tab-panels>
     </div>
-    <no-data v-else message="老板，还没有上游给您派单多找找关系啊～">
+    <no-data v-else class="emty-data" message="老板，还没有上游给您派单多找找关系啊～">
       <img slot="img" src="@/assets/img-no-upstream.png">
     </no-data>
   </div>
@@ -106,7 +106,6 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .upstream
-  user-select none
   background #EFEFEF
   .header
     background #fff
@@ -132,6 +131,9 @@ export default {
   .list-bar
     height calc(100% - 50px)
     overflow-y auto
+  .emty-data
+    max-height 100%
+    min-height 100%
 </style>
 <style lang="stylus">
 .upstream
