@@ -13,7 +13,6 @@
             <cube-form-item :field="fields['carrierDriverPhone']"/>
             <cube-form-item :field="fields['carType']"/>
             <cube-form-item :field="fields['carLength']"/>
-            <cube-form-item :field="fields['carrierWaybillNo']"/>
           </cube-form-group>
           <cube-form-group v-if="model.assignCarType === 2">
             <cube-form-item :field="fields['carNo']"/>
@@ -79,7 +78,6 @@ export default {
         carrierDriverPhone: '',
         carType: '',
         carLength: '',
-        carrierWaybillNo: '',
         freightFee: '',
         loadFee: '',
         unloadFee: '',
@@ -379,14 +377,6 @@ export default {
             placeholder: '请选择'
           }
         },
-        carrierWaybillNo: {
-          type: 'input',
-          modelKey: 'carrierWaybillNo',
-          label: '承运商运单号',
-          props: {
-            placeholder: '请输入'
-          }
-        },
         freightFee: _this.createMoneyField('freightFee', '运输费(元)'),
         gasFee: _this.createMoneyField('freightFee', '油费(元)'),
         loadFee: _this.createMoneyField('loadFee', '装货费(元)'),
@@ -621,7 +611,6 @@ export default {
           vm.model.carrierDriverPhone = data.assignCarType === 1 ? data.driverPhone : ''
           vm.model.carType = data.assignCarType === 1 ? data.carType : ''
           vm.model.carLength = data.assignCarType === 1 ? data.carLength : ''
-          vm.model.carrierWaybillNo = data.carrierWaybillNo
           vm.model.freightFee = moneyInit(data.freightFee)
           vm.model.insuranceFee = moneyInit(data.insuranceFee)
           vm.model.loadFee = moneyInit(data.loadFee)
