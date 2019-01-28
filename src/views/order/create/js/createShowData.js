@@ -60,11 +60,11 @@ export default {
     const consignee = this.consigneeInfo
     info.consigneeContact = consignee.contact || ''
     info.consigneePhone = consignee.phone || ''
-    info.consigneeCompanyName = consignee.consigneeCompanyName || ''
+    info.consigneeCompanyName = consignee.consignerCompanyName || '' // consignerCompanyName 接口返回字段名错误，下次版本接口修复后修正
     info.end = consignee.cityCode || ''
     info.endName = consignee.cityName || ''
     info.consigneeAddress = consignee.address || ''
-    info.consigneeHourseNumber = info.consigneeHourseNumber || consignee.consigneeHourseNumber || ''
+    info.consigneeHourseNumber = info.consigneeHourseNumber || consignee.consignerHourseNumber || '' // consignerHourseNumber 接口返回字段名错误，下次版本接口修复后修正
     info.consigneeAddressLongitude = consignee.longitude || ''
     info.consigneeAddressLatitude = consignee.latitude || ''
     info.consigneeAddressText = addressConcat(info.consigneeAddress, info.endName, info.consigneeHourseNumber)
