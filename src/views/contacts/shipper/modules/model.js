@@ -1,6 +1,5 @@
 import NP from 'number-precision'
 const isNum = (v) => typeof v === 'number'
-console.info('NP', NP)
 export class ContactDetail {
   id = ''
   name = ''
