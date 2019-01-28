@@ -1,6 +1,6 @@
 <template>
   <div class="pickup-assign">
-    <cube-scroll  ref="$scroll" class="scroll-box">
+    <cube-scroll  ref="scroll" class="scroll-box">
       <div class="edit-form">
         <dispatch-city
           v-if="isEditMode"
@@ -723,6 +723,7 @@ export default {
         vm.fields.selfAssistantDriverName.props.options = list
         vm.allDriverList = [...list]
       })
+      vm.$refs.scroll.refresh()
     })
   }
 }
