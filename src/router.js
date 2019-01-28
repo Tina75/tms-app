@@ -5,10 +5,6 @@ import store from '@/store'
 
 Vue.use(Router)
 let routes = [{
-  path: '/',
-  name: 'home',
-  component: () => import(/* webpackChunkName: "home" */ './views/home.vue')
-}, {
   path: '/preview',
   name: 'image-preview',
   component: () => import(/* webpackChunkName: "odd" */'./components/Upload/ImagePreview.vue')
