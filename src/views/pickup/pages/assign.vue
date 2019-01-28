@@ -1,6 +1,6 @@
 <template>
   <div class="pickup-assign">
-    <cube-scroll v-if="showPage">
+    <cube-scroll v-if="showPage" ref="$scroll">
       <div class="edit-form">
         <cube-form ref="assign-form" :model="model" :options="options" :immediate-validate="false" @validate="validateHandler">
           <cube-form-group>
@@ -13,7 +13,6 @@
             <cube-form-item :field="fields['carrierDriverPhone']"/>
             <cube-form-item :field="fields['carType']"/>
             <cube-form-item :field="fields['carLength']"/>
-            <cube-form-item :field="fields['carrierWaybillNo']"/>
           </cube-form-group>
           <cube-form-group v-if="model.assignCarType === 2">
             <cube-form-item :field="fields['carNo']"/>
@@ -52,6 +51,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import NP from 'number-precision'
+import inputAutoPosition from '../../order/create/js/inputAutoPosition'
 
 export default {
   name: 'pickup-assign',
@@ -79,7 +79,6 @@ export default {
         carrierDriverPhone: '',
         carType: '',
         carLength: '',
-        carrierWaybillNo: '',
         freightFee: '',
         loadFee: '',
         unloadFee: '',
@@ -182,6 +181,11 @@ export default {
           messages: {
             required: '承运商必填'
           },
+          events: {
+            'focus': (e) => {
+              _this.inputFocus(e)
+            }
+          },
           trigger: 'blur'
         },
         carrierCarNo: {
@@ -196,7 +200,13 @@ export default {
           },
           messages: {
             pattern: '请输入正确的车牌号'
-          }
+          },
+          events: {
+            'focus': (e) => {
+              _this.inputFocus(e)
+            }
+          },
+          trigger: 'blur'
         },
         carrierDriverName: {
           type: 'input',
@@ -205,6 +215,11 @@ export default {
           props: {
             maxlength: 15,
             placeholder: '请输入'
+          },
+          events: {
+            'focus': (e) => {
+              _this.inputFocus(e)
+            }
           }
         },
         carrierDriverPhone: {
@@ -221,6 +236,9 @@ export default {
             pattern: '请输入正确的手机号码'
           },
           events: {
+            'focus': (e) => {
+              _this.inputFocus(e)
+            },
             'input': (val) => {
               if (!val || val[0] !== '1') return
               val = val.trim().split(' ').join('')
@@ -379,14 +397,6 @@ export default {
             placeholder: '请选择'
           }
         },
-        carrierWaybillNo: {
-          type: 'input',
-          modelKey: 'carrierWaybillNo',
-          label: '承运商运单号',
-          props: {
-            placeholder: '请输入'
-          }
-        },
         freightFee: _this.createMoneyField('freightFee', '运输费(元)'),
         gasFee: _this.createMoneyField('freightFee', '油费(元)'),
         loadFee: _this.createMoneyField('loadFee', '装货费(元)'),
@@ -450,6 +460,11 @@ export default {
           props: {
             autoExpand: true,
             placeholder: '请输入'
+          },
+          events: {
+            'focus': (e) => {
+              _this.inputFocus(e)
+            }
           }
         }
       }
@@ -462,6 +477,7 @@ export default {
   methods: {
     ...mapActions('pickup', ['getPickupDetailForForm', 'getCarrierNameList', 'getSelfCarList', 'getSelfDriverList', 'assign', 'pickupEdit']),
     ...mapActions('order/create', ['sendDirectly']),
+    ...inputAutoPosition,
     validateHandler(result) {
       this.validity = result.validity
       if (result.valid !== false) {
@@ -492,7 +508,7 @@ export default {
         let req = {
           carrierName: this.model.carrierName,
           driverName: this.model.assignCarType === 1 ? this.model.carrierDriverName : this.model.selfDriverName.split('-')[0],
-          driverPhone: this.model.assignCarType === 1 ? this.model.carrierDriverPhone.split(' ').join('') : this.model.selfDriverName.split('-')[1],
+          driverPhone: this.model.assignCarType === 1 ? (this.model.carrierDriverPhone || '').split(' ').join('') : this.model.selfDriverName.split('-')[1],
           carNo: this.model.assignCarType === 1 ? this.model.carrierCarNo : this.model.carNo.split('-')[0],
           carType: this.model.assignCarType === 1 ? this.model.carType : this.model.carNo.split('-')[1],
           carLength: this.model.assignCarType === 1 ? this.model.carLength : this.model.carNo.split('-')[2],
@@ -539,23 +555,16 @@ export default {
           placeholder: '请输入'
         },
         rules: {
-          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
+          pattern: /^((([1-9]\d{0,8})|0)(\.\d{1,4})?)?$/
         },
         messages: {
           pattern: '不得超过9位整数和4位小数'
         },
         trigger: 'blur',
         events: {
-          // 'focus': () => {
-          //   if (Number(this.model[field]) === 0) {
-          //     this.model[field] = ''
-          //   }
-          // },
-          // 'blur': () => {
-          //   if (this.model[field] === 0 || this.model[field] === '0') {
-          //     this.model[field] = 0
-          //   }
-          // }
+          'focus': (e) => {
+            this.inputFocus(e)
+          }
         }
       }
     },
@@ -569,7 +578,7 @@ export default {
           placeholder: '请输入'
         },
         rules: {
-          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/,
+          pattern: /^((([1-9]\d{0,8})|0)(\.\d{1,4})?)?$/,
           custom: (val) => {
             return NP.plus(_this.model.fuelCardAmount, _this.model.cashAmount) === NP.plus(0, _this.model.totalFee)
           }
@@ -580,17 +589,12 @@ export default {
         },
         trigger: 'blur',
         events: {
-          // 'focus': () => {
-          //   if (Number(this.model[field]) === 0) {
-          //     this.model[field] = ''
-          //   }
-          // },
+          'focus': (e) => {
+            _this.inputFocus(e)
+          },
           'blur': () => {
-            // if (Number(this.model[field]) === 0) {
-            //   this.model[field] = 0
-            // }
-            _this.$refs['fuel-item'].validate()
-            _this.$refs['cash-item'].validate()
+            this.$refs['fuel-item'].validate()
+            this.$refs['cash-item'].validate()
           }
         }
       }
@@ -599,7 +603,7 @@ export default {
       return new Promise((resolve, reject) => {
         console.log(this.model.settlementType)
         console.log(this.model.fuelCardAmount, this.model.cashAmount)
-        resolve(this.model.settlementType !== 1 || (NP.plus(this.model.fuelCardAmount, this.model.cashAmount) === NP.plus(0, this.model.totalFee)))
+        resolve((this.model.assignCarType !== 1 || this.model.settlementType !== 1) || (NP.plus(this.model.fuelCardAmount, this.model.cashAmount) === NP.plus(0, this.model.totalFee)))
       })
     }
   },
@@ -621,7 +625,6 @@ export default {
           vm.model.carrierDriverPhone = data.assignCarType === 1 ? data.driverPhone : ''
           vm.model.carType = data.assignCarType === 1 ? data.carType : ''
           vm.model.carLength = data.assignCarType === 1 ? data.carLength : ''
-          vm.model.carrierWaybillNo = data.carrierWaybillNo
           vm.model.freightFee = moneyInit(data.freightFee)
           vm.model.insuranceFee = moneyInit(data.insuranceFee)
           vm.model.loadFee = moneyInit(data.loadFee)
@@ -635,6 +638,32 @@ export default {
           vm.model.allocationStrategy = data.orderLength > 1 ? (data.allocationStrategy || vm.UserConfig.allocationStrategyInfo.waybillStrategy || 1) : null
           vm.model.remark = data.remark || ''
         })
+      } else {
+        vm.orderLength = 0
+        vm.model = {
+          assignCarType: 1,
+          carNo: '',
+          selfDriverName: '',
+          selfAssistantDriverName: '',
+          carrierName: '',
+          carrierCarNo: '',
+          carrierDriverName: '',
+          carrierDriverPhone: '',
+          carType: '',
+          carLength: '',
+          freightFee: '',
+          loadFee: '',
+          unloadFee: '',
+          insuranceFee: '',
+          otherFee: '',
+          totalFee: '',
+          settlementType: 1,
+          payType: 2,
+          cashAmount: '',
+          fuelCardAmount: '',
+          allocationStrategy: '',
+          remark: ''
+        }
       }
       vm.getSelfCarList().then(list => {
         vm.fields.carNo.props.options = list
@@ -727,6 +756,7 @@ export default {
             color: #e64340;
         .cube-form-field
           display: flex
+          margin-top: 3px;
           justify-content:flex-end
           .total-money
             font-size: 20px;

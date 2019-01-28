@@ -15,6 +15,7 @@
 import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 import NP from 'number-precision'
+import { MODULE_NAME } from '../../js/constant'
 
 export default {
   name: 'pickupInfo',
@@ -33,7 +34,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order/often', [ 'detail' ]),
+    ...mapGetters(MODULE_NAME.ORDER_OFTEN, [ 'detail' ]),
     cargoList () {
       return this.detail.orderCargoTemplateList
     }

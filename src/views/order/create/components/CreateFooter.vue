@@ -42,6 +42,7 @@
 import MoneyLabel from '../components/MoneyLabel'
 import { mapGetters, mapMutations } from 'vuex'
 import NP from 'number-precision'
+import { MODULE_NAME } from '../../js/constant'
 
 export default {
   name: 'CreateFooter',
@@ -56,12 +57,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order/create', [
+    ...mapGetters(MODULE_NAME.ORDER_CREATE, [
       'feeInfo',
       'freightFee'
     ]),
     orderOften: {
-      get: mapGetters('order/create', [ 'orderOften' ]).orderOften,
+      get: mapGetters(MODULE_NAME.ORDER_CREATE, [ 'orderOften' ]).orderOften,
       set: function (val) { this.SET_OFTEN_ORDER(val) }
     },
     total () {
@@ -76,7 +77,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('order/create', [ 'SET_OFTEN_ORDER' ]),
+    ...mapMutations(MODULE_NAME.ORDER_CREATE, [ 'SET_OFTEN_ORDER' ]),
     saveOrder (isDirectShip) {
       this.showDetail = false
       this.$emit('on-save-order', isDirectShip)

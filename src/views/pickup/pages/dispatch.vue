@@ -85,6 +85,9 @@ import NP from 'number-precision'
 
 export default {
   name: 'DispatchingList',
+  metaInfo: {
+    title: '调度'
+  },
   components: { IconFont },
   data () {
     return {
@@ -209,11 +212,15 @@ export default {
 .pickup-dispatch
   height: 100%
   display: flex
+  display: -webkit-box;
+  display: -webkit-flex;
   padding-top: 15px;
   flex-direction column
   .dispatch-list
     overflow auto
     flex 1
+    -webkit-box-flex: 1
+    height: calc(100% - 108px)
     .order-item
       background-color: #ffffff;
       margin-bottom: 15px;

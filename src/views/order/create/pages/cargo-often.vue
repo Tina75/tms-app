@@ -31,6 +31,7 @@ import { mapGetters, mapMutations, mapActions } from 'vuex'
 import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-data.png'
 import NP from 'number-precision'
+import { MODULE_NAME } from '../../js/constant'
 
 export default {
   name: 'cargo-often',
@@ -43,10 +44,10 @@ export default {
       cargoList: []
     }
   },
-  computed: mapGetters('order/create', [ 'consignerId' ]),
+  computed: mapGetters(MODULE_NAME.ORDER_CREATE, [ 'consignerId' ]),
   methods: {
-    ...mapMutations('order/create', [ 'SET_CARGO_OFTEN' ]),
-    ...mapActions('order/create', [ 'getOftenCargo' ]),
+    ...mapMutations(MODULE_NAME.ORDER_CREATE, [ 'SET_CARGO_OFTEN' ]),
+    ...mapActions(MODULE_NAME.ORDER_CREATE, [ 'getOftenCargo' ]),
 
     pickCargo (item) {
       const cargo = Object.assign({}, item)

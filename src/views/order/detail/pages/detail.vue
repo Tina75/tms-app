@@ -88,7 +88,8 @@ export default {
         content: msg,
         onConfirm: () => {
           this.deleteOrder(info.id).then(() => {
-            this.getDetail(info.id)
+            // this.getDetail(info.id)
+            this.$router.back()
           })
         }
       }).show()
