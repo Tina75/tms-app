@@ -117,7 +117,8 @@ export default {
     deleteItem(id) {
       this.$createDialog({
         type: 'confirm',
-        icon: 'cubeic-important',
+        // icon: 'cubeic-important',
+        title: '提示',
         content: '是否确认删除？',
         onConfirm: () => {
           this.deleteBillById(id).then(() => {
