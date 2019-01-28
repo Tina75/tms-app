@@ -43,14 +43,14 @@ import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-rule.png'
 import { MODULE_NAME } from '../../js/constant'
 
-const WEIGHT_TON = 1 // 重量吨
-const VOLUME = 2 // 体积方
+const WEIGHT_TON    = 1 // 重量吨
+const VOLUME        = 2 // 体积方
 const WEIGHT_TON_KM = 3 // 吨公里
-const VOLUME_KM = 4 // 方公里
-const CAR_TYPE = 5 // 车型
-const WEIGHT_KG = 6 // 重量公斤
-const WEIGHT_KG_KM = 7 // 公斤公里
-const QUANTITY = 8 // 件
+const VOLUME_KM     = 4 // 方公里
+const CAR_TYPE      = 5 // 车型
+const WEIGHT_KG     = 6 // 重量公斤
+const WEIGHT_KG_KM  = 7 // 公斤公里
+const QUANTITY      = 8 // 件
 
 export default {
   name: 'order-charge-rule',
@@ -74,38 +74,38 @@ export default {
 
       switch (item.ruleType) {
         case WEIGHT_TON:
-          if (weight) return window.toast('当前计费规则不适应')
+          if (!weight) return window.toast('当前计费规则不适用')
           query.input = NP.divide(weight, 1000)
           break
         case WEIGHT_TON_KM:
-          if (weight) return window.toast('当前计费规则不适应')
+          if (!weight || !distance) return window.toast('当前计费规则不适用')
           query.input = NP.divide(weight, 1000)
           query.distance = distance
           break
         case WEIGHT_KG:
-          if (weight) return window.toast('当前计费规则不适应')
+          if (!weight) return window.toast('当前计费规则不适用')
           query.input = weight
           break
         case WEIGHT_KG_KM:
-          if (weight) return window.toast('当前计费规则不适应')
+          if (!weight || !distance) return window.toast('当前计费规则不适用')
           query.input = weight
           query.distance = distance
           break
         case VOLUME:
-          if (!volume) return window.toast('当前计费规则不适应')
+          if (!volume) return window.toast('当前计费规则不适用')
           query.input = volume
           break
         case VOLUME_KM:
-          if (!volume) return window.toast('当前计费规则不适应')
+          if (!volume || !distance) return window.toast('当前计费规则不适用')
           query.input = volume
           query.distance = distance
           break
         case CAR_TYPE:
-          if (!carType) return window.toast('当前计费规则不适应')
+          if (!carType) return window.toast('当前计费规则不适用')
           query.carType = carType
           break
         case QUANTITY:
-          if (!cargoInfos.length) return window.toast('当前计费规则不适应')
+          if (!cargoInfos.length) return window.toast('当前计费规则不适用')
           query.cargoInfos = cargoInfos
       }
 
