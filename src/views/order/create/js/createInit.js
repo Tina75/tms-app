@@ -19,10 +19,6 @@ export default {
     //   this.$refs.$form.reset()
     // })
     if (this.mode === 'create' && !this.oneMoreId) return
-    if (this.editOrderHasInit) {
-      this.$formWillLeave(false, () => { this.editOrderHasInit = false })
-      return
-    }
     window.loading(true)
     let orderInfo
     let cargoList
@@ -36,6 +32,7 @@ export default {
         cargoList = orderInfo.orderCargoList
         this.editOrderHasInit = true
         if (orderInfo.status === 20 && orderInfo.pickupStatus === 1) this.pickupDisabled = true
+        this.$formWillLeave(false, () => { this.editOrderHasInit = false })
       }
       // 设置订单基础信息
       setOrderBaseInfo(orderInfo, this)
