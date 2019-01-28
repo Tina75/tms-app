@@ -72,6 +72,7 @@ import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-often.png'
 import { settlementType, totalFee, addressConcat } from '../../js/filters'
+import { MODULE_NAME } from '../../js/constant'
 
 export default {
   name: 'order-often',
@@ -94,14 +95,14 @@ export default {
     }
   },
   computed: {
-    ...mapState('order/often', [ 'oftenList' ]),
-    ...mapState('order/create', [ 'oftenPermission' ]),
-    ...mapGetters('order/create', [ 'oftenPermission', 'oneMoreId' ])
+    ...mapState(MODULE_NAME.ORDER_OFTEN, [ 'oftenList' ]),
+    ...mapState(MODULE_NAME.ORDER_CREATE, [ 'oftenPermission' ]),
+    ...mapGetters(MODULE_NAME.ORDER_CREATE, [ 'oftenPermission', 'oneMoreId' ])
   },
   methods: {
-    ...mapMutations('order/create', [ 'SET_ORDER_RESET', 'SET_ONE_MORE_ID' ]),
-    ...mapActions('order/often', [ 'loadOftenList', 'deleteOftenOrder' ]),
-    ...mapActions('order/create', [ 'getOftenPermission' ]),
+    ...mapMutations(MODULE_NAME.ORDER_CREATE, [ 'SET_ORDER_RESET', 'SET_ONE_MORE_ID' ]),
+    ...mapActions(MODULE_NAME.ORDER_OFTEN, [ 'loadOftenList', 'deleteOftenOrder' ]),
+    ...mapActions(MODULE_NAME.ORDER_CREATE, [ 'getOftenPermission' ]),
 
     onPageRefresh() { this.loading = true },
 

@@ -41,6 +41,7 @@ import { mapMutations, mapActions } from 'vuex'
 import NP from 'number-precision'
 import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-rule.png'
+import { MODULE_NAME } from '../../js/constant'
 
 const WEIGHT_TON = 1 // 重量吨
 const VOLUME = 2 // 体积方
@@ -64,8 +65,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('order/create', [ 'CLEAR_CALCULATED_AMOUNT' ]),
-    ...mapActions('order/create', [ 'getRuleList', 'calculateAmount' ]),
+    ...mapMutations(MODULE_NAME.ORDER_CREATE, [ 'CLEAR_CALCULATED_AMOUNT' ]),
+    ...mapActions(MODULE_NAME.ORDER_CREATE, [ 'getRuleList', 'calculateAmount' ]),
 
     async pickRuleAndCalc (item) {
       let { departure, destination, weight, volume, distance, carType, cargoInfos } = this.info

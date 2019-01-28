@@ -66,7 +66,7 @@ Vue.mixin({
       try {
         setGlobalBack()
         if (ENTER_HANDLERS_LENGTH) {
-          ENTER_HANDLERS.forEach((handler) => handler(to, from, vm))
+          ENTER_HANDLERS.forEach((handler) => handler.call(vm, to, from))
         }
       } catch (e) {
         console.error(e)

@@ -8,6 +8,7 @@
       </div>
       <div
         class="cube-pull-right cube-font-15 cube-c-blue"
+        style="color: #00A4BD"
         @click="$emit('confirm')">
         确定
       </div>

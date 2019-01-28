@@ -64,43 +64,13 @@ export default {
     info.end = consignee.cityCode || ''
     info.endName = consignee.cityName || ''
     info.consigneeAddress = consignee.address || ''
-    info.consigneeHourseNumber = info.consigneeHourseNumber || consignee.consigneeHourseNumber || ''
+    info.consigneeHourseNumber = info.consigneeHourseNumber || consignee.consignerHourseNumber || '' // consignerHourseNumber 接口返回字段名错误，下次版本接口修复后修正
     info.consigneeAddressLongitude = consignee.longitude || ''
     info.consigneeAddressLatitude = consignee.latitude || ''
     info.consigneeAddressText = addressConcat(info.consigneeAddress, info.endName, info.consigneeHourseNumber)
     this.SET_CONSIGNEE_INFO(null)
     this.TRIGGER_ADDRESS_CHANGE(true)
   },
-  // 联系电话格式化
-  // consignerPhoneInputHandler (phone) {
-  //   this.phoneFormatter(phone, 'consignerPhone')
-  // },
-  // consigneePhoneInputHandler (phone) {
-  //   this.phoneFormatter(phone, 'consigneePhone')
-  // },
-  // phoneFormatter (phone, field) {
-  //   if (!phone || phone[0] !== '1') return
-  //   phone = phone.trim().split(' ').join('')
-  //   let phoneArr = []
-  //   let phoneTemp = ''
-  //   for (let i in phone) {
-  //     i = Number(i)
-  //     phoneTemp += phone[i]
-  //     if (!phoneArr.length && i === 2) {
-  //       phoneArr.push(phoneTemp)
-  //       phoneTemp = ''
-  //     } else if (phoneTemp.length === 4) {
-  //       phoneArr.push(phoneTemp)
-  //       phoneTemp = ''
-  //     } else if (i === (phone.length - 1)) {
-  //       phoneArr.push(phoneTemp)
-  //       phoneTemp = ''
-  //     }
-  //   }
-  //   this.$nextTick(() => {
-  //     this.orderInfo[field] = phoneArr.join(' ')
-  //   })
-  // },
   // 二级页面信息回显
   showConsumerInfo () {
     let infos = []

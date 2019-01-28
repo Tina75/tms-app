@@ -34,12 +34,13 @@ import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
 import { settlementType, totalFee } from '../../js/filters'
+import { MODULE_NAME } from '../../js/constant'
 
 export default {
   name: 'pickupInfo',
   components: { detailPanel, detailPanelItem },
   filters: { settlementType, totalFee },
-  computed: mapGetters('order/often', [ 'detail' ])
+  computed: mapGetters(MODULE_NAME.ORDER_OFTEN, [ 'detail' ])
 }
 </script>
 <style scoped lang="stylus">
