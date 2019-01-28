@@ -555,7 +555,7 @@ export default {
           placeholder: '请输入'
         },
         rules: {
-          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
+          pattern: /^((([1-9]\d{0,8})|0)(\.\d{1,4})?)?$/
         },
         messages: {
           pattern: '不得超过9位整数和4位小数'
@@ -578,7 +578,7 @@ export default {
           placeholder: '请输入'
         },
         rules: {
-          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/,
+          pattern: /^((([1-9]\d{0,8})|0)(\.\d{1,4})?)?$/,
           custom: (val) => {
             return NP.plus(_this.model.fuelCardAmount, _this.model.cashAmount) === NP.plus(0, _this.model.totalFee)
           }
