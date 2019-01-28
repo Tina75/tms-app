@@ -17,12 +17,12 @@
         </div>
         <div class="item-content border-bottom-1px">
           <p class="order-route">
-            <span class="address">{{item.consignerAddress|textOverflow}}</span>
+            <span class="address">{{item.startName || item.consignerAddress|textOverflow}}</span>
             <icon-font
               name="icon-line"
               :size="20"
               color="#333333"/>
-            <span class="address">{{item.consigneeAddress|textOverflow}}</span>
+            <span class="address">{{item.endName || item.consigneeAddress|textOverflow}}</span>
           </p>
           <p class="order-stat">
             <span v-if="item.weight">{{item.weight}}吨</span>

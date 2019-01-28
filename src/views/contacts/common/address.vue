@@ -128,6 +128,7 @@ export default {
       this.form.locale = data
     },
     reset() {
+      this.$refs.$form.reset()
       const options = this.AddressPage
       this.form = Address.toForm(options.data)
       if (!this.form.address) {

@@ -124,9 +124,9 @@ export default {
     },
     async setForm() {
       this.loadOperators()
+      this.$refs.$form.reset()
       if (this.isCreate) {
         this.form = new ContactDetail()
-        this.$refs.$form.reset()
       } else {
         // 编辑操作, 判断store中的值是否是目标, 不是则拉新的
         const urlId = +this.$route.query.consignerId
