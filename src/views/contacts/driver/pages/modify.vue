@@ -153,7 +153,7 @@ export default {
 
     /* 校验运输线路 */
     validRegularline (line, msg) {
-      if (!line) return true
+      if (!line || !line.length) return true
       const { s, sn, e, en } = line
       const valid = s && sn && e && en
       if (!valid) {
