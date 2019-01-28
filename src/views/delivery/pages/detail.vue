@@ -7,7 +7,7 @@
       </div>
       <waybill-info/>
     </div> -->
-    <cube-scroll-nav >
+    <cube-scroll-nav style="height:100%">
       <div slot="prepend" class="status-block">
         <h2>{{Waybill.status | billType}}</h2>
         <p>{{Waybill.createTime | datetimeFormat}}</p>
@@ -147,7 +147,7 @@ export default {
       >>> .cube-btn
         font-size 17px
         font-weight 500
-        padding 15px
+        padding 14px
       a
         flex: 1
         background: #27A3BD;
