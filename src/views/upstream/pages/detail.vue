@@ -202,6 +202,9 @@ export default {
   height 100%
   display: flex
   flex-direction column
+  .cube-scroll-nav
+    flex: 1
+    -webkit-box-flex: 1
 .upstream-footer
   display flex
   >>> .cube-btn
@@ -247,7 +250,7 @@ export default {
     background #189cb2
     border-radius 2px
   .cube-scroll-nav-panels
-      padding-bottom 5px
+    padding-bottom 5px
   .cube-scroll-nav-panel
     .cube-sticky-ele
       height 0

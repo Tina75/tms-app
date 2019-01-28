@@ -291,6 +291,9 @@ export default {
   height 100%
   display: flex
   flex-direction column
+  .cube-scroll-nav
+    flex: 1
+    -webkit-box-flex: 1
 .upstream-footer
   display flex
   >>> .cube-btn
