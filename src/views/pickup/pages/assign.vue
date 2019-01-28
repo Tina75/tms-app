@@ -1,6 +1,6 @@
 <template>
   <div class="pickup-assign">
-    <cube-scroll v-if="showPage">
+    <cube-scroll v-if="showPage" ref="$scroll">
       <div class="edit-form">
         <cube-form ref="assign-form" :model="model" :options="options" :immediate-validate="false" @validate="validateHandler">
           <cube-form-group>
