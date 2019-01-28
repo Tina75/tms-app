@@ -30,7 +30,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('order/list', ['getArrival', 'clearArrival', 'deleteOrder', 'setDeliveryList', 'getTabCount']),
+    ...mapActions('order/list', ['getArrival', 'clearArrival', 'deleteOrder', 'setArrivalList', 'getTabCount']),
 
     refresh() {
       this.clearArrival()
@@ -45,7 +45,7 @@ export default {
     },
     deleteById(id) {
       this.deleteOrder(id).then(() => {
-        this.setDeliveryList(this.DeliveryList.filter(item => item.id !== id))
+        this.setArrivalList(this.ArrivalList.filter(item => item.id !== id))
         this.getTabCount()
       })
     }

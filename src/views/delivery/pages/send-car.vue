@@ -429,7 +429,7 @@ export default {
         insuranceFee: _this.createMoneyField('insuranceFee', '保险费(元)'),
         otherFee: _this.createMoneyField('otherFee', '其他(元)'),
         accommodation: _this.createMoneyField('accommodation', '住宿费(元)'),
-        infoFee: _this.createMoneyField('infoFee', '信息(元)'),
+        infoFee: _this.createMoneyField('infoFee', '信息费(元)'),
         tollFee: _this.createMoneyField('tollFee', '路桥费(元)'),
         fuelCardAmount1: _this.createMoneyField('fuelCardAmount1', '预付油卡(元)'),
         fuelCardAmount2: _this.createMoneyField('fuelCardAmount2', '到付油卡(元)'),
@@ -614,7 +614,7 @@ export default {
           infoFee: NP.times(this.model.infoFee, 100),
           insuranceFee: NP.times(this.model.insuranceFee, 100),
           settlementType: this.model.assignCarType === 1 ? this.model.settlementType : '',
-          settlementPayInfo: this.model.assignCarType === 1 ? [
+          settlementPayInfo: this.model.assignCarType === 1 && this.model.settlementType === 1 ? [
             {
               payType: 1,
               fuelCardAmount: NP.times(this.model.fuelCardAmount1, 100),
@@ -648,9 +648,7 @@ export default {
           await this.sendDirectly(data)
         } else {
           if (this.isEditMode) {
-            await this.doEditWaybill(data).then(() => {
-              window.toast('编辑成功')
-            })
+            await this.doEditWaybill(data)
           } else {
             await this.doSendCar(data).then(() => {
               window.toast('派车成功')
