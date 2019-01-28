@@ -14,10 +14,6 @@ export default {
         window.loading(false)
       }
     }
-
-    // this.$formWillLeave(false, () => {
-    //   this.$refs.$form.reset()
-    // })
     if (this.mode === 'create' && !this.oneMoreId) return
     window.loading(true)
     let orderInfo

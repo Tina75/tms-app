@@ -54,6 +54,7 @@ export default {
     },
     onPullingDown () {
       this.receiptReFresh({ key: this.keys })
+      this.getReceiptStatusCnt()
     },
     onPullingUp () {
       this.receiptLoadMore({ key: this.keys })

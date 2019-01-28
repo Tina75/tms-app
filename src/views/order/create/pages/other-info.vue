@@ -42,6 +42,7 @@
 import { mapGetters, mapMutations } from 'vuex'
 import { FormGroup, FormItem } from '@/components/Form'
 import NP from 'number-precision'
+import { MODULE_NAME } from '../../js/constant'
 
 export default {
   metaInfo: { title: '其他信息' },
@@ -73,12 +74,12 @@ export default {
       }
     }
   },
-  computed: mapGetters('order/create', [ 'otherInfo', 'orderConfig' ]),
+  computed: mapGetters(MODULE_NAME.ORDER_CREATE, [ 'otherInfo', 'orderConfig' ]),
   watch: {
     isInvoice (val) { this.form.isInvoice = Number(val) }
   },
   methods: {
-    ...mapMutations('order/create', [ 'SET_OTHER_INFO' ]),
+    ...mapMutations(MODULE_NAME.ORDER_CREATE, [ 'SET_OTHER_INFO' ]),
 
     async ensure () {
       if (!(await this.$refs.$form.validate())) return

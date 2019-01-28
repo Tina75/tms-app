@@ -30,7 +30,7 @@
         </div>
       </div>
       <div v-if="status[data.acceptStatus].name == '待接收'" class="right">
-        <cube-button :outline="true" :inline="true" @click.stop="refuse">拒绝</cube-button>
+        <cube-button :outline="true" :inline="true" style="color:#999; border-color:#999" @click.stop="refuse">拒绝</cube-button>
         <cube-button :outline="true" :inline="true" primary style="margin-left: 8px" @click.stop="recept">接收</cube-button>
       </div>
     </div>

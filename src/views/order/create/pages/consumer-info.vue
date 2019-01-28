@@ -51,6 +51,7 @@
 import dayjs from 'dayjs'
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { FormItem } from '@/components/Form'
+import { MODULE_NAME } from '../../js/constant'
 
 // 选择器 用来主动收起picker
 let picker2 // 第二个选择器 发货时间
@@ -75,12 +76,10 @@ export default {
       timePickerType: ''
     }
   },
-  computed: {
-    ...mapGetters('order/create', [ 'consumerInfo', 'orderConfig' ])
-  },
+  computed: mapGetters(MODULE_NAME.ORDER_CREATE, [ 'consumerInfo', 'orderConfig' ]),
   methods: {
-    ...mapMutations('order/create', [ 'SET_CONSUMER_INFO' ]),
-    ...mapActions('order/create', [ 'getOpetator' ]),
+    ...mapMutations(MODULE_NAME.ORDER_CREATE, [ 'SET_CONSUMER_INFO' ]),
+    ...mapActions(MODULE_NAME.ORDER_CREATE, [ 'getOpetator' ]),
 
     pickTimeHandler (type) {
       this.timePickerType = type

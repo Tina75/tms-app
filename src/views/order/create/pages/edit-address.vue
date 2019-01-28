@@ -74,6 +74,7 @@ import CityPicker from '@/components/CityPicker'
 import FormGroup from '@/components/Form/FormGroup'
 import FormItem from '@/components/Form/FormItem'
 import BmapAddressList from '@/views/contacts/components/BmapAddressList'
+import { MODULE_NAME } from '../../js/constant'
 
 export default {
   name: 'edit-address',
@@ -107,7 +108,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order/create', [ 'currentArrdessType', 'orderInfo', 'orderConfig', 'consignerId' ]),
+    ...mapGetters(MODULE_NAME.ORDER_CREATE, [ 'currentArrdessType', 'orderInfo', 'orderConfig', 'consignerId' ]),
 
     showOftenList () { return this.currentArrdessType === 'send' && !this.form.address && this.oftenAddresses.length },
     showAddressList () { return !!this.form.address },
@@ -131,8 +132,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('order/create', [ 'SET_ADDRESS_INFO' ]),
-    ...mapActions('order/create', [ 'getOftenAddress' ]),
+    ...mapMutations(MODULE_NAME.ORDER_CREATE, [ 'SET_ADDRESS_INFO' ]),
+    ...mapActions(MODULE_NAME.ORDER_CREATE, [ 'getOftenAddress' ]),
 
     onSelectAddress (item) {
       this.form.address = item.detail === item.name ? item.detail : (item.detail || '') + (item.name || '')
