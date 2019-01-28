@@ -16,13 +16,14 @@
               <input
                 v-model="item.value"
                 type="number"
+                :class="valid ? 'cube-c-black' : 'cube-validator-msg-def'"
                 class="dimension-popup__input cube-c-placeholder "
                 :placeholder="item.placeholder"
                 @input="checkValid"
               >
             </div>
           </div>
-          <div class="cube-validator-msg-def border-bottom-1px"> {{!valid ? '支持输入数字和1位小数' : ''}}</div>
+          <div class="cube-validator-msg-def dimension-popup__msg border-bottom-1px"> {{!valid ? '最多6位整数,1位小数' : ''}}</div>
           <div class="dimension-popup__btns">
             <a class="cube-dialog-btn border-right-1px" @click="toggle()">取消</a>
             <a
@@ -38,7 +39,7 @@
 
 <script>
 // 支持数字和1位小数
-const pattern = /^(\d+(\.\d{1})?$)$/
+const pattern = /^(\d{1,6}(\.\d{1})?$)$/
 export default {
   name: 'DimensionPopup',
   model: {
@@ -91,6 +92,7 @@ export default {
           key = config.key
           config.value = !Number.isNaN(value[key]) ? value[key] : ''
         })
+        console.info(this.options)
       }
     },
     toggle(show) {
@@ -107,6 +109,7 @@ export default {
           'confirm',
           this.options.reduce((result, item) => {
             result[item.key] = item.value === '' ? '' : +item.value
+            console.info(result)
             return result
           }, {})
         )
@@ -126,7 +129,7 @@ export default {
 .dimension-popup
   background #fff
   width 270px
-  .cube-validator-msg-def
+  &__msg
     text-align center
     padding 5px 0
     height 25px

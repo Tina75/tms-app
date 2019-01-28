@@ -31,7 +31,7 @@ const store = {
       commit('saveAddress', data)
     },
     loadConsigneeDetail: ({ commit, rootState }) => {
-      Server({
+      return Server({
         method: 'get',
         url: '/consigner/consignee/detail',
         loading: true,
@@ -81,7 +81,7 @@ const lists = [
     itemParser: (data) => ({
       id: data.id,
       name: data.contact + '  ' + data.phone,
-      detail: data.cityName + hasCity(data.address, data.cityCode),
+      detail: data.cityName ? data.cityName + hasCity(data.address, data.cityCode) : hasCity(data.address, data.cityCode),
       phone: data.phone,
       data
     })

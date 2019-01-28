@@ -15,17 +15,18 @@
             maxlength="30" />
           <form-item
             v-if="orderConfig.salesmanIdOption"
+            ref="picker1"
             v-model="form.salesmanId"
             label="对接业务员"
             type="select"
             :options="operators"
-            :show-arrow="false"
             @change="saleChangeHandler" />
         </div>
         <div class="form-section">
           <form-item
             v-if="orderConfig.deliveryTimeOption"
             v-model="form.deliveryTimeText"
+            prop="deliveryTimeText"
             label="发货时间"
             type="click"
             placeholder="请选择"
@@ -33,6 +34,7 @@
           <form-item
             v-if="orderConfig.arriveTimeOption"
             v-model="form.arriveTimeText"
+            prop="arriveTimeText"
             label="到货时间"
             type="click"
             placeholder="请选择"
@@ -49,6 +51,10 @@
 import dayjs from 'dayjs'
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { FormItem } from '@/components/Form'
+
+// 选择器 用来主动收起picker
+let picker2 // 第二个选择器 发货时间
+let picker3 // 第三个选择器 到货时间
 
 export default {
   metaInfo: { title: '客户订单号及其他' },
@@ -79,7 +85,7 @@ export default {
     pickTimeHandler (type) {
       this.timePickerType = type
       if (type === 'delivery') {
-        this.$createDatePicker({
+        picker2 = this.$createDatePicker({
           title: '发货时间',
           min: new Date(),
           max: this.form.arriveTime ? new Date(this.form.arriveTime) : new Date(2020, 12, 31),
@@ -92,9 +98,10 @@ export default {
             hour: 'h点'
           },
           onSelect: this.selectTime
-        }).show()
+        })
+        picker2.show()
       } else {
-        this.$createDatePicker({
+        picker3 = this.$createDatePicker({
           title: '到货时间',
           min: this.form.deliveryTime ? new Date(this.form.deliveryTime) : new Date(),
           value: this.form.arriveTime ? new Date(this.form.arriveTime) : new Date(),
@@ -106,7 +113,8 @@ export default {
             hour: 'h点'
           },
           onSelect: this.selectTime
-        }).show()
+        })
+        picker3.show()
       }
     },
     selectTime (date) {
@@ -120,6 +128,7 @@ export default {
     },
     saleChangeHandler (value, index, text) { this.form.salesmanName = text },
     ensure () {
+      if (this.form.deliveryTime === this.form.arriveTime) return window.toast('发到货时间不能相同')
       this.SET_CONSUMER_INFO(Object.assign({}, this.form))
       this.$formWillLeave()
       this.$router.back()
@@ -137,6 +146,13 @@ export default {
         }
       })
     })
+  },
+  // 离开页面时如果picker正在显示，则离开页面后picker不会收起，需要手动收起picker
+  beforeRouteLeave (to, from, next) {
+    this.$refs.picker1 && this.$refs.picker1.picker && this.$refs.picker1.picker.hide()
+    picker2 && picker2.hide()
+    picker3 && picker3.hide()
+    next()
   }
 }
 </script>

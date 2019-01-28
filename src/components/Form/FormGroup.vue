@@ -41,6 +41,21 @@ export default {
     async validate () {
       const valids = await Promise.all(this.getAllItems().map(item => item.doValidate()))
       return valids.every(valid => valid === true)
+    },
+    closeAllSelect() {
+      let hasOpened = false
+      this.$children.forEach(item => {
+        if (item.type === 'select') {
+          const select = item.$refs.$picker
+          if (select && select.picker) {
+            hasOpened = hasOpened || select.picker.isVisible
+            select.picker.hide()
+          } else {
+            console.warn('[ FormGroup.closeAllSelect ]: type is select but the refs may changed, can not hide picker anymore')
+          }
+        }
+      })
+      return hasOpened
     }
   }
 }

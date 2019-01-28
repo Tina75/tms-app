@@ -50,6 +50,7 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     setAppRightBtn([{ text: '', action: () => {} }])
+    this.clearDetail()
     next()
   },
   watch: {
@@ -62,7 +63,8 @@ export default {
   },
 
   methods: {
-    ...mapActions('order/detail', ['getDetail']),
+    ...mapActions('order/detail', ['getDetail', 'clearDetail']),
+    ...mapActions('order/list', ['deleteOrder']),
     initTitleBtns() {
       let btnList = []
       if (this.editOrderBtnVisable(this.Detail)) {
@@ -74,7 +76,7 @@ export default {
       setAppRightBtn(btnList)
     },
     handleClickDelete(info) {
-      let msg = '确认删除订单？删除之后可以在电脑端订单回收站恢复'
+      let msg = '删除之后可以在电脑端订单回收站恢复'
       if (info.status === 50) { // 已回单
         msg = '订单删除后，提货单和运单将一并删除，且订单不支持再还原'
       } else if (info.status === 20 && info.pickup === 1) {
@@ -82,13 +84,17 @@ export default {
       }
       this.$createDialog({
         type: 'confirm',
-        title: '确认删除订单？',
+        title: '删除订单',
         content: msg,
         onConfirm: () => {
-          this.$emit('delete', info.id)
+          this.deleteOrder(info.id).then(() => {
+            // this.getDetail(info.id)
+            this.$router.back()
+          })
         }
       }).show()
     },
+
     handleClickEditOrder(id) {
       this.$router.push({ name: 'order-edit', params: { id } })
     },
@@ -99,17 +105,30 @@ export default {
 
     deleteBtnVisable(item) {
       let arr = []
-      const list = ['1000', '1001', '2000', '2001'] // 见文档
+      let hasDispatched = ''
+      if (item.status === 10) {
+        hasDispatched = item.pickupStatus
+      } else if (item.status === 20) {
+        hasDispatched = item.dispatchStatus
+      }
+      const list = ['1000', '1001', '2000', '2001', '500'] // 见文档
       arr.push(item.status)
-      arr.push(item.pickupStatus)
+      arr.push(hasDispatched)
       arr.push(item.disassembleStatus)
+      console.log('xxxx' + arr.join(''))
       return list.includes(arr.join(''))
     },
     editOrderBtnVisable(item) {
       let arr = []
+      let hasDispatched = ''
+      if (item.status === 10) {
+        hasDispatched = item.pickupStatus
+      } else if (item.status === 20) {
+        hasDispatched = item.dispatchStatus
+      }
       const list = ['1000', '2000']
       arr.push(item.status)
-      arr.push(item.pickupStatus)
+      arr.push(hasDispatched)
       arr.push(item.disassembleStatus)
       return list.includes(arr.join(''))
     },

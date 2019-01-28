@@ -43,11 +43,14 @@ export default {
     //   window.toast('请通过通讯录选择发货方')
     //   return
     // }
+    if (!this.orderCargoList.length) {
+      return window.toast('请先填写货物信息')
+    }
     const order = this.orderInfo
     let query = { partnerType: 1, partnerId: this.saveConsigner.id }
-    query.departure = String(order.start)
-    query.destination = String(order.end)
-    if (!query.partnerId || !query.departure || !query.destination || !(await this.getRuleList(query)).length) {
+    query.departure = order.start ? String(order.start) : void 0
+    query.destination = order.end ? String(order.end) : void 0
+    if (!query.partnerId || !(await this.getRuleList(query)).length) {
       return window.toast('暂无符合的计费规则')
     }
     query.distance = NP.times((order.mileage || 0), 1000)
@@ -56,7 +59,7 @@ export default {
         weight: NP.plus(last.weight, item.weight || 0),
         weightKg: NP.plus(last.weightKg, item.weightKg || 0),
         volume: NP.plus(last.volume, item.volume || 0),
-        cargoInfos: last.cargoInfos.concat({ key: item.cargoName, value: Number(item.quantity) })
+        cargoInfos: last.cargoInfos.concat({ key: item.cargoName, value: item.quantity })
       }
     }, {
       weight: 0,
@@ -101,6 +104,7 @@ export default {
     setAppTitleBtn({
       text: '常发订单',
       action: () => {
+        this.$formWillLeave()
         this.$router.push({ name: 'order-often' })
       }
     })

@@ -18,7 +18,7 @@
         <NoData message="老板，您还没有记录收货人信息">
           <img
             slot="img"
-            class="contacts-consignee__placeholder"
+            class="order-create-consignee__placeholder"
             src="@/assets/contacts/shipper-list-empty.png"
           >
         </NoData>

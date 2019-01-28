@@ -11,6 +11,7 @@ export default {
       this.feeInfo,
       this.otherInfo
     )
+    data.isInvoice = Number(data.isInvoice)
     data.consignerPhone = data.consignerPhone.replace(/\s/g, '')
     data.consigneePhone = data.consigneePhone.replace(/\s/g, '')
     data.freightFee = data.freightFee === '' ? '' : NP.times(data.freightFee, 100)

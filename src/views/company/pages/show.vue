@@ -255,7 +255,7 @@ export default {
     formatImag (value) {
       if (!value) return ''
       if (value.indexOf('aliyuncs.com') > 0) return 'https://' + value
-      return value ? `${process.env.VUE_APP_IMG_HOST}${value}?x-oss-process=image/resize,m_fill,h_40,w_40` : ' '
+      return value ? `${process.env.VUE_APP_IMG_HOST}${value}?x-oss-process=style/weixin.jpg` : ' '
     },
     // 分享
     async sharePath () {

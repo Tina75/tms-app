@@ -14,6 +14,8 @@ export default {
       state.orderInfo[key] = payload[key]
     }
   },
+  // 设置再来一单id
+  SET_ONE_MORE_ID: (state, payload) => { state.oneMoreId = payload },
   // 重置订单
   RESET_ORDER: state => {
     const temp = {
@@ -145,7 +147,7 @@ export default {
   // 设置计费规矩金额
   SET_CALCULATE_AMOUNT: (state, payload) => { state.calculatedAmount = payload },
   // 清空计费规则计算金额结果
-  CLEAR_CALCULATED_AMOUNT: state => { state.calculatedAmount = void 0 }
+  CLEAR_CALCULATED_AMOUNT: state => { state.calculatedAmount = '' }
 }
 
 function resetFields (object) {

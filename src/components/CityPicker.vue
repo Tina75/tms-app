@@ -29,7 +29,9 @@
           :key="i"
           class="item border-bottom-1px border-right-1px"
           @click="choseItem(item)"
-        >{{item.shortName}}</div>
+        >
+          <div class="cube-ellipsis" v-text="item.shortName"/>
+        </div>
       </div>
     </div>
     <div class="cover" @click="hide"/>
@@ -302,6 +304,7 @@ export default {
     flex-wrap wrap
     .item
       width 25%
+      box-sizing border-box
       height 50px
       line-height 50px
       font-size 16px

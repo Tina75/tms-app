@@ -29,8 +29,9 @@ export default {
 .form-item
   overflow hidden
   font-size 15px
-  padding 12px 0
+  padding 10px 0
   display flex
+  line-height 22px
 .form-item-label
   color #666
   width 85px
@@ -43,6 +44,13 @@ export default {
   word-break break-all
   .input-box
     flex 1
+    vertical-align middle
+    p
+      display inline-block
+      text-align left
   .right-action
     float right
+    vertical-align middle
+    i
+      margin-left 5px
 </style>

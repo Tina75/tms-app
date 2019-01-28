@@ -13,7 +13,7 @@ export class ContactDetail {
   pickUp = '' // 提货方式
   exploiteChannel = 1 // 开括渠道
   // 值和展示内容的印射
-  static pickUp = [{ text: '小车上门自提', value: 1 }, { text: '大车直接送货', value: 2 }]
+  static pickUp = [{ text: '小车上门自提', value: 1 }, { text: '大车直送客户', value: 2 }]
   static payType = [
     { text: '现付', value: 1 },
     { text: '到付', value: 2 },

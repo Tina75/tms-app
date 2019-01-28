@@ -8,12 +8,13 @@ export default {
     if (!this.saveConsigner.id) return
     let consigner = this.saveConsigner
     let consignerAddress
-    if (this.saveConsigner.id !== this.consignerId) {
-      this.SET_CONSIGNER_ID(this.saveConsigner.id)
-      consigner = await this.getConsignerData(this.consignerId)
-      if (consigner.addressList.length) consignerAddress = consigner.addressList[0]
-      if (consigner.consigneeList.length) this.SET_CONSIGNEE_INFO(consigner.consigneeList[0])
-    }
+    console.log(1)
+    if (this.saveConsigner.id === this.consignerId) return
+    console.log(2)
+    this.SET_CONSIGNER_ID(this.saveConsigner.id)
+    consigner = await this.getConsignerData(this.consignerId)
+    if (consigner.addressList.length) consignerAddress = consigner.addressList[0]
+    if (consigner.consigneeList.length) this.SET_CONSIGNEE_INFO(consigner.consigneeList[0])
     const info = this.orderInfo
     info.consignerName = consigner.name || ''
     info.consignerContact = consigner.contact || ''
@@ -22,13 +23,14 @@ export default {
     info.pickup = consigner.pickUp || ''
     if (consignerAddress) {
       info.start = consignerAddress.cityCode || ''
+      info.startName = consignerAddress.cityName || ''
       info.consignerAddress = consignerAddress.address || ''
       info.consignerHourseNumber = consignerAddress.consignerHourseNumber || ''
       info.consignerAddressLongitude = consignerAddress.longitude || ''
       info.consignerAddressLatitude = consignerAddress.latitude || ''
-      info.consignerAddressText = addressConcat(info.consignerAddress, info.cityName, info.consignerHourseNumber)
+      info.consignerAddressText = addressConcat(info.consignerAddress, info.startName, info.consignerHourseNumber)
     } else {
-      info.consignerHourseNumber = consigner.consignerHourseNumber || ''
+      info.consignerHourseNumber = info.consignerHourseNumber || consigner.consignerHourseNumber || ''
     }
     this.TRIGGER_ADDRESS_CHANGE(true)
     this.SET_OTHER_INFO({
@@ -60,43 +62,14 @@ export default {
     info.consigneePhone = consignee.phone || ''
     info.consigneeCompanyName = consignee.consigneeCompanyName || ''
     info.end = consignee.cityCode || ''
+    info.endName = consignee.cityName || ''
     info.consigneeAddress = consignee.address || ''
-    info.consigneeHourseNumber = consignee.consigneeHourseNumber || ''
+    info.consigneeHourseNumber = info.consigneeHourseNumber || consignee.consignerHourseNumber || '' // consignerHourseNumber 接口返回字段名错误，下次版本接口修复后修正
     info.consigneeAddressLongitude = consignee.longitude || ''
     info.consigneeAddressLatitude = consignee.latitude || ''
-    info.consigneeAddressText = addressConcat(info.consigneeAddress, info.cityName, info.consigneeHourseNumber)
+    info.consigneeAddressText = addressConcat(info.consigneeAddress, info.endName, info.consigneeHourseNumber)
     this.SET_CONSIGNEE_INFO(null)
     this.TRIGGER_ADDRESS_CHANGE(true)
-  },
-  // 联系电话格式化
-  consignerPhoneInputHandler (phone) {
-    this.phoneFormatter(phone, 'consignerPhone')
-  },
-  consigneePhoneInputHandler (phone) {
-    this.phoneFormatter(phone, 'consigneePhone')
-  },
-  phoneFormatter (phone, field) {
-    if (!phone || phone[0] !== '1') return
-    phone = phone.trim().split(' ').join('')
-    let phoneArr = []
-    let phoneTemp = ''
-    for (let i in phone) {
-      i = Number(i)
-      phoneTemp += phone[i]
-      if (!phoneArr.length && i === 2) {
-        phoneArr.push(phoneTemp)
-        phoneTemp = ''
-      } else if (phoneTemp.length === 4) {
-        phoneArr.push(phoneTemp)
-        phoneTemp = ''
-      } else if (i === (phone.length - 1)) {
-        phoneArr.push(phoneTemp)
-        phoneTemp = ''
-      }
-    }
-    this.$nextTick(() => {
-      this.orderInfo[field] = phoneArr.join(' ')
-    })
   },
   // 二级页面信息回显
   showConsumerInfo () {
@@ -134,8 +107,8 @@ export default {
     }
   },
   showFreightFee () {
-    if (!this.calculatedAmount) return
-    this.orderInfo.freightFee = this.calculatedAmount || ''
+    if (this.calculatedAmount === '') return
+    this.orderInfo.freightFee = this.calculatedAmount || this.orderInfo.freightFee || ''
     this.CLEAR_CALCULATED_AMOUNT()
   }
 }

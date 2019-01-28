@@ -51,6 +51,7 @@ export default {
         color: #000000;
         font-size: 15px;
         margin-bottom: 5px;
+        line-height: 1.3;
       .cargo-content
         color: #666666
         font-size: 12px;

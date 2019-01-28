@@ -43,7 +43,7 @@
       <p>{{Detail.salesmanName}}</p>
     </detail-panel-item>
     <detail-panel-item  :label="'是否开票'">
-      <p>{{Detail.isInvoice?'是':'否'}}<span v-if="Detail.isInvoice">({{Detail.invoiceRate*100}}%)</span></p>
+      <p>{{Detail.isInvoice?'是':'否'}}<span v-if="Detail.isInvoice">({{invoiceRateCalc}}%)</span></p>
     </detail-panel-item>
     <detail-panel-item v-if="Detail.invoiceAmount" :label="'开票税额'">
       <p>{{Detail.invoiceAmount | moneyFormat}}元</p>
@@ -60,13 +60,18 @@ import { mapGetters } from 'vuex'
 import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
 import VueClipboard from 'vue-clipboard2'
+import NP from 'number-precision'
+
 Vue.use(VueClipboard)
 
 export default {
   name: 'order-base-info',
   components: { detailPanel, detailPanelItem },
   computed: {
-    ...mapGetters('order/detail', ['Detail'])
+    ...mapGetters('order/detail', ['Detail']),
+    invoiceRateCalc: function() {
+      return NP.times(this.Detail.invoiceRate, 100)
+    }
   },
   methods: {
     copySuccess() { window.toast('复制成功') }
@@ -76,15 +81,21 @@ export default {
 <style scoped lang="stylus">
   .remix-content
     display: flex
+    float right
     span
       flex 1
-      text-align: right
+      text-align: left
       padding-right: 10px;
+      word-wrap:break-word
+      max-width 210px
     a
       padding-left: 10px;
       color: #00a4bd;
+  >>>.detail-panel-item label
+    min-width 90px
   .remark
     max-width 240px
     text-align: left
     float: right
+    word-wrap break-word
 </style>

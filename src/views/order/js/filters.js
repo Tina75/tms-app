@@ -26,13 +26,13 @@ export function totalFee (order) {
   )
 }
 
-const addressReg = /(.{1,}省){0,1}(.{1,}市){0,1}(.{1,}区){0,1}(.{0,})/
+const addressReg = /(.{2,5}(省|(自治区)|(香港)|(澳门))){0,1}(.{1,4}市){0,1}(.{1,}(区|市)){0,1}(.{0,})/
 export function addressConcat (address, cityName, extra) {
   if (!address) address = ''
   if (!cityName) cityName = ''
   if (!extra) extra = ''
-  const cityArr = cityName.replace(addressReg, '$1/$2/$3/$4').split('/')
-  const addressArr = address.replace(addressReg, '$1/$2/$3/$4').split('/')
+  const cityArr = cityName.replace(addressReg, '$1/$6/$7/$9').split('/')
+  const addressArr = address.replace(addressReg, '$1/$6/$7/$9').split('/')
   const province = addressArr[0] ? addressArr[0] : cityArr[0]
   const city = addressArr[1] ? addressArr[1] : cityArr[1]
   const district = addressArr[2] ? addressArr[2] : cityArr[2]
