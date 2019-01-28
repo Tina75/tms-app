@@ -157,6 +157,7 @@ export default {
     },
     setForm() {
       // 重置弹出框
+      this.$refs.$form.reset()
       this.showPackageType = false
       this.showDismensionInput = false
       const list = this.cargoList.list

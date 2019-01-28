@@ -155,13 +155,17 @@ export default {
     setArrivalList: ({ commit }, list) => { commit('SET_ARRIVAL_LIST', list) },
 
     deleteOrder: ({ commit, state }, id) => {
-      Server({
-        url: '/order/delete',
-        method: 'post',
-        data: { orderIds: [id] }
-      }).then(({ data }) => {
-        window.toast('删除成功')
-        // TODO: update list
+      return new Promise((resolve, reject) => {
+        Server({
+          url: '/order/delete',
+          method: 'post',
+          data: { orderIds: [id] }
+        }).then(({ data }) => {
+          window.toast('删除成功')
+          resolve()
+        }).catch((e) => {
+          reject(e)
+        })
       })
     },
     getTabCount: ({ commit, state }) => {

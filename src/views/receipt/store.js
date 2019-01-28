@@ -3,6 +3,7 @@ import * as Api from './libs/api'
 export default {
   state: {
     receiptStatuNumObj: {
+      total: 0,
       waiting_sign: 0, // 待签收
       waiting_recovery: 0, // 待回收
       waiting_return_factory: 0, // 待返厂
@@ -121,7 +122,15 @@ export default {
     }
   },
   getters: {
-    receiptStatusCnt: (state) => state.receiptStatuNumObj,
+    receiptStatusCnt: (state) => {
+      return {
+        totalCnt: state.receiptStatuNumObj.total,
+        waiting_sign: state.receiptStatuNumObj.waiting_sign, // 待签收
+        waiting_recovery: state.receiptStatuNumObj.waiting_recovery, // 待回收
+        waiting_return_factory: state.receiptStatuNumObj.waiting_return_factory,
+        already_returned_factory: state.receiptStatuNumObj.already_returned_factory
+      }
+    },
     receiptList (state) {
       return {
         total: state.total.data,

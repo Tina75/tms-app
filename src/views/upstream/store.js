@@ -4,6 +4,7 @@ export default {
   state: {
     // 全部
     statusUpstreamCntObj: {
+      total: 0,
       waitAccept: 0,
       rejected: 0,
       accepted: 0

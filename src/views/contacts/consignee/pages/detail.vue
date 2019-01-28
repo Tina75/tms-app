@@ -98,8 +98,9 @@ export default {
           action: () => {
             this.$createDialog({
               type: 'confirm',
+              title: '提醒',
               content: '确定删除？',
-              icon: 'cubeic-alert',
+              // icon: 'cubeic-alert',
               onConfirm: this.remove.bind(this)
             }).show()
           }

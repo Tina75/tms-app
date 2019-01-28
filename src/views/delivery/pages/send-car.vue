@@ -1,6 +1,6 @@
 <template>
   <div class="pickup-assign">
-    <cube-scroll  ref="$scroll" class="scroll-box">
+    <cube-scroll  ref="scroll" class="scroll-box">
       <div class="edit-form">
         <dispatch-city
           v-if="isEditMode"
@@ -46,14 +46,14 @@
             <!-- 结算方式 -->
             <cube-form-item v-if="model.assignCarType === 1" :field="fields['settlementType']"/>
             <div v-if="model.assignCarType === 1 && model.settlementType === 1">
-              <cube-form-item  :field="fields['fuelCardAmount1']"/>
               <cube-form-item :field="fields['cashAmount1']"/>
-              <cube-form-item  :field="fields['fuelCardAmount2']"/>
+              <cube-form-item  :field="fields['fuelCardAmount1']"/>
               <cube-form-item :field="fields['cashAmount2']"/>
-              <cube-form-item :field="fields['fuelCardAmount3']"/>
+              <cube-form-item  :field="fields['fuelCardAmount2']"/>
               <cube-form-item :field="fields['cashAmount3']"/>
-              <cube-form-item :field="fields['fuelCardAmount4']"/>
+              <cube-form-item :field="fields['fuelCardAmount3']"/>
               <cube-form-item :field="fields['cashAmount4']"/>
+              <cube-form-item :field="fields['fuelCardAmount4']"/>
             </div>
           </cube-form-group>
           <cube-form-group >
@@ -429,7 +429,7 @@ export default {
         insuranceFee: _this.createMoneyField('insuranceFee', '保险费(元)'),
         otherFee: _this.createMoneyField('otherFee', '其他(元)'),
         accommodation: _this.createMoneyField('accommodation', '住宿费(元)'),
-        infoFee: _this.createMoneyField('infoFee', '信息(元)'),
+        infoFee: _this.createMoneyField('infoFee', '信息费(元)'),
         tollFee: _this.createMoneyField('tollFee', '路桥费(元)'),
         fuelCardAmount1: _this.createMoneyField('fuelCardAmount1', '预付油卡(元)'),
         fuelCardAmount2: _this.createMoneyField('fuelCardAmount2', '到付油卡(元)'),
@@ -607,14 +607,14 @@ export default {
           mileage: NP.times(this.model.mileage, 1000),
           freightFee: NP.times(this.model.freightFee, 100),
           tollFee: NP.times(this.model.tollFee, 100),
-          accommodation: NP.times(this.model.accommodation, 100),
+          accommodation: this.model.assignCarType === 2 ? NP.times(this.model.accommodation, 100) : '',
           loadFee: NP.times(this.model.loadFee, 100),
           unloadFee: NP.times(this.model.unloadFee, 100),
           otherFee: NP.times(this.model.otherFee, 100),
           infoFee: NP.times(this.model.infoFee, 100),
           insuranceFee: NP.times(this.model.insuranceFee, 100),
           settlementType: this.model.assignCarType === 1 ? this.model.settlementType : '',
-          settlementPayInfo: this.model.assignCarType === 1 ? [
+          settlementPayInfo: this.model.assignCarType === 1 && this.model.settlementType === 1 ? [
             {
               payType: 1,
               fuelCardAmount: NP.times(this.model.fuelCardAmount1, 100),
@@ -648,9 +648,7 @@ export default {
           await this.sendDirectly(data)
         } else {
           if (this.isEditMode) {
-            await this.doEditWaybill(data).then(() => {
-              window.toast('编辑成功')
-            })
+            await this.doEditWaybill(data)
           } else {
             await this.doSendCar(data).then(() => {
               window.toast('派车成功')
@@ -725,6 +723,7 @@ export default {
         vm.fields.selfAssistantDriverName.props.options = list
         vm.allDriverList = [...list]
       })
+      vm.$refs.scroll.refresh()
     })
   }
 }

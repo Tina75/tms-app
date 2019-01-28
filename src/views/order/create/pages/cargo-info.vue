@@ -150,6 +150,8 @@ import CheckboxPopup from '@/views/contacts/components/CheckboxPopup'
 import DimensionPopup from '@/views/contacts/components/DimensionPopup'
 import inputAutoPosition from '../js/inputAutoPosition'
 import { CargoDetail } from '@/views/contacts/shipper/modules/model'
+import { MODULE_NAME } from '../../js/constant'
+
 const CARGO_IMAGE = require('../assets/box.png')
 
 export default {
@@ -183,7 +185,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order/create', [ 'cargoOften', 'orderCargoList', 'orderConfig' ]),
+    ...mapGetters(MODULE_NAME.ORDER_CREATE, [ 'cargoOften', 'orderCargoList', 'orderConfig' ]),
 
     total () {
       return this.formList.reduce((last, item) => {
@@ -205,7 +207,7 @@ export default {
   },
   methods: {
     ...inputAutoPosition,
-    ...mapMutations('order/create', [ 'CLEAR_CARGO_OFTEN', 'SET_CARGO_LIST' ]),
+    ...mapMutations(MODULE_NAME.ORDER_CREATE, [ 'CLEAR_CARGO_OFTEN', 'SET_CARGO_LIST' ]),
     // 初始化货物信息
     initCargoList (fromName) {
       const tempCargoList = Object.assign(

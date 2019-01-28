@@ -12,7 +12,12 @@
       </cube-checkbox>
     </div>
     <div class="list-item__body">
-      <p class="list-item__city">{{info.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{info.endName}}</p>
+      <p class="list-item__city">
+        {{info.startName?info.startName:info.consignerAddress |textOverflow}}
+        <i class="iconfont icon-line cube-ml-5 cube-mr-5"/>
+        {{info.endName?info.endName:info.consigneeAddress |textOverflow}}
+      </p>
+      <!-- <p class="list-item__city">{{info.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{info.endName}}</p> -->
       <div>
         <span v-if="info.weight" class="list-item__count">{{info.weight}}吨</span>
         <span v-if="info.volume" class="list-item__count">{{info.volume}}方</span>

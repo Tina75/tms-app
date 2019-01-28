@@ -90,9 +90,9 @@ export default {
       action: () => {
         this.$createDialog({
           type: 'confirm',
-          title: '',
+          title: '提醒',
           content: '信息未保存，是否确认离开？',
-          icon: 'cubeic-alert',
+          // icon: 'cubeic-alert',
           onConfirm: () => {
             closeWindow({ logOut: false })
           }

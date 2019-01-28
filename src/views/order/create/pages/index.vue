@@ -17,7 +17,6 @@
             required
             label="客户名称"
             maxlength="20"
-            autofocus
             click-icon="icon-ico_custerm"
             @on-icon-click="gotoConsignerPage"
             @on-focus="inputFocus" />
@@ -166,7 +165,7 @@
 import { mapState, mapGetters } from 'vuex'
 import CreateFooter from '../components/CreateFooter'
 import { FormGroup, FormItem, FormTitle } from '@/components/Form'
-import { SETTLEMENT_TYPE, PICKUP_TYPE } from '../../js/constant'
+import { SETTLEMENT_TYPE, PICKUP_TYPE, MODULE_NAME } from '../../js/constant'
 import mapMethods from '../js/createMapMethods'
 import gotoOtherPages from '../js/createGotoOtherPage'
 import showData from '../js/createShowData'
@@ -250,13 +249,13 @@ export default {
   },
   computed: {
     orderInfo: {
-      get: mapGetters('order/create', [ 'orderInfo' ]).orderInfo,
+      get: mapGetters(MODULE_NAME.ORDER_CREATE, [ 'orderInfo' ]).orderInfo,
       set: function () {
         this.saveConsignerInfo()
         this.RESET_ORDER()
       }
     },
-    ...mapGetters('order/create', [
+    ...mapGetters(MODULE_NAME.ORDER_CREATE, [
       'consignerId',
       'consumerInfo', // 客户订单号及其他
       'orderCargoList', // 货物信息
@@ -270,7 +269,7 @@ export default {
       'oftenPermission',
       'oneMoreId'
     ]),
-    ...mapState('contacts/consignee', [
+    ...mapState(MODULE_NAME.CONTACTS_CONSIGNEE, [
       'saveConsigner'
     ])
   },

@@ -54,6 +54,7 @@ export default {
     },
     onPullingDown () {
       this.reFresh({ key: this.keys })
+      this.getUpstreamStatusCnt()
     },
     onPullingUp () {
       this.loadMore({ key: this.keys })

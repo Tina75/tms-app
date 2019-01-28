@@ -16,9 +16,11 @@
 
           <div class="order-body order-container border-top-1px border-bottom-1px">
             <p class="order-body-cities">
-              <span :class="{ 'order-body-cities-over': !item.startName }">{{ item.startName || item.consignerAddress }}</span>
+              <template v-if="item.startName">{{ item.startName }}</template>
+              <span v-else class="order-body-cities-over">{{ item.consignerAddress }}</span>
               <icon-font name="icon-line" size="20" />
-              <span :class="{ 'order-body-cities-over': !item.startName }">{{ item.endName || item.consigneeAddress }}</span>
+              <template v-if="item.endName">{{ item.endName }}</template>
+              <span v-else class="order-body-cities-over">{{ item.consigneeAddress }}</span>
             </p>
             <ul class="order-body-info">
               <li class="order-body-info-item">{{ item.cargoNames }}</li>
@@ -72,6 +74,7 @@ import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-often.png'
 import { settlementType, totalFee, addressConcat } from '../../js/filters'
+import { MODULE_NAME } from '../../js/constant'
 
 export default {
   name: 'order-often',
@@ -94,14 +97,14 @@ export default {
     }
   },
   computed: {
-    ...mapState('order/often', [ 'oftenList' ]),
-    ...mapState('order/create', [ 'oftenPermission' ]),
-    ...mapGetters('order/create', [ 'oftenPermission', 'oneMoreId' ])
+    ...mapState(MODULE_NAME.ORDER_OFTEN, [ 'oftenList' ]),
+    ...mapState(MODULE_NAME.ORDER_CREATE, [ 'oftenPermission' ]),
+    ...mapGetters(MODULE_NAME.ORDER_CREATE, [ 'oftenPermission', 'oneMoreId' ])
   },
   methods: {
-    ...mapMutations('order/create', [ 'SET_ORDER_RESET', 'SET_ONE_MORE_ID' ]),
-    ...mapActions('order/often', [ 'loadOftenList', 'deleteOftenOrder' ]),
-    ...mapActions('order/create', [ 'getOftenPermission' ]),
+    ...mapMutations(MODULE_NAME.ORDER_CREATE, [ 'SET_ORDER_RESET', 'SET_ONE_MORE_ID' ]),
+    ...mapActions(MODULE_NAME.ORDER_OFTEN, [ 'loadOftenList', 'deleteOftenOrder' ]),
+    ...mapActions(MODULE_NAME.ORDER_CREATE, [ 'getOftenPermission' ]),
 
     onPageRefresh() { this.loading = true },
 
@@ -114,9 +117,9 @@ export default {
     orderDelete (id, index) {
       this.$createDialog({
         type: 'confirm',
-        title: '',
+        title: '提醒',
         content: '确认需要删除此常发订单？',
-        icon: 'cubeic-alert',
+        // icon: 'cubeic-alert',
         onConfirm: async () => {
           await this.deleteOftenOrder(id)
           this.oftenList.list.splice(index, 1)

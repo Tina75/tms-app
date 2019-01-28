@@ -21,10 +21,10 @@
           @click.prevent="copy(detail.customerWaybillNo)">复制</a>
       </p>
     </detail-panel-item> -->
-    <detail-panel-item v-if="detail.startName" :label="'始发地'">
+    <detail-panel-item v-if="detail.startName" :label="'发货城市'">
       <p>{{ detail.startName }}</p>
     </detail-panel-item>
-    <detail-panel-item v-if="detail.endName" :label="'目的地'">
+    <detail-panel-item v-if="detail.endName" :label="'收货城市'">
       <p>{{ detail.endName }}</p>
     </detail-panel-item>
     <detail-panel-item v-if="detail.deliveryTime" :label="'发货时间'">
@@ -60,13 +60,14 @@ import detailPanel from '@/components/DetailPanel'
 import detailPanelItem from '@/components/DetailPanelItem'
 import { pickupType } from '../../js/filters'
 import NP from 'number-precision'
+import { MODULE_NAME } from '../../js/constant'
 
 export default {
   name: 'pickupInfo',
   components: { detailPanel, detailPanelItem },
   filters: { pickupType },
   computed: {
-    ...mapGetters('order/often', [ 'detail' ]),
+    ...mapGetters(MODULE_NAME.ORDER_OFTEN, [ 'detail' ]),
 
     invoiceRender () {
       if (!this.detail.isInvoice) return '否'

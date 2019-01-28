@@ -44,13 +44,18 @@ export default {
       this.getDelivery()
     },
     deleteById(id) {
-      this.deleteOrder(id).then(() => {
+      this.deleteOrder(id).then((e) => {
         this.setDeliveryList(this.DeliveryList.filter(item => item.id !== id))
         this.getTabCount()
       })
     },
     editOrderById(id) { // 修改订单
-      this.$router.push({ name: 'order-edit', params: { id } })
+      if (id) {
+        this.$router.push({ name: 'order-edit', params: { id } })
+        // console.log(`order-edit id = ${id}`)
+      } else {
+        window.toast(`id${id}不存在`)
+      }
     },
     editBillById(id, type) {
       // TODO: 提货单和送货单不同

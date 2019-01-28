@@ -160,24 +160,34 @@ export default {
     },
     // 派车
     doSendCar: ({ commit, state }, info) => {
-      return Server({
-        url: '/waybill/assign/vehicle',
-        method: 'post',
-        data: info
-      }).then(() => {
-        // 派车成功，刷新列表
-        // let list = state.send.list.filter(item => info.id !== item.id)
-        // commit('SET_SEND_LIST', list)
+      return new Promise((resolve, reject) => {
+        Server({
+          url: '/waybill/assign/vehicle',
+          method: 'post',
+          data: info
+        }).then(() => {
+          resolve()
+          // 派车成功，刷新列表
+          // let list = state.send.list.filter(item => info.id !== item.id)
+          // commit('SET_SEND_LIST', list)
+        }).catch(e => {
+          reject(e)
+        })
       })
     },
     // 发运
     doSetOff: ({ commit, state }, id) => {
-      Server({
-        url: '/waybill/shipment',
-        method: 'post',
-        data: { waybillIds: [id] }
-      }).then(({ data }) => {
-        window.toast('发运成功')
+      return new Promise((resolve, reject) => {
+        Server({
+          url: '/waybill/shipment',
+          method: 'post',
+          data: { waybillIds: [id] }
+        }).then(({ data }) => {
+          window.toast('发运成功')
+          resolve()
+        }).catch(e => {
+          reject(e)
+        })
       })
     },
     getTabCount: ({ commit, state }) => {
@@ -187,26 +197,36 @@ export default {
     },
     // 到货
     doArrival: ({ commit, state }, id) => {
-      return Server({
-        url: '/waybill/confirm/arrival',
-        method: 'post',
-        data: { waybillIds: [id] }
-      }).then(({ data }) => {
-        // window.toast('到货成功')
-        // let list = state.arrival.list.filter(item => item.id !== id)
-        // commit('SET_SENDING_LIST', list)
+      return new Promise((resolve, reject) => {
+        return Server({
+          url: '/waybill/confirm/arrival',
+          method: 'post',
+          data: { waybillIds: [id] }
+        }).then(({ data }) => {
+          // window.toast('到货成功')
+          // let list = state.arrival.list.filter(item => item.id !== id)
+          // commit('SET_SENDING_LIST', list)
+          resolve()
+        }).catch(e => {
+          reject(e)
+        })
       })
     },
     // 调度 and 创建运单
     dispatchOrder: ({ commit, state }, data) => {
       // const ids = data.orderIds
-      return Server({
-        url: '/waybill/create',
-        method: 'post',
-        data
-      }).then(({ data }) => {
-        // let list = state.dispatch.list.filter(item => !(ids.includes(item.id)))
-        // commit('SET_DISPATCH', list)
+      return new Promise((resolve, reject) => {
+        return Server({
+          url: '/waybill/create',
+          method: 'post',
+          data
+        }).then(({ data }) => {
+          // let list = state.dispatch.list.filter(item => !(ids.includes(item.id)))
+          // commit('SET_DISPATCH', list)
+          resolve()
+        }).catch(e => {
+          reject(e)
+        })
       })
     },
     // 获取运单详情
@@ -225,11 +245,16 @@ export default {
     },
     // 删除运单
     deleteBillById: ({ commit }, id) => {
-      return Server({
-        url: '/waybill/delete',
-        method: 'post',
-        data: { waybillIds: [id] }
-      }).then(({ data }) => {
+      return new Promise((resolve, reject) => {
+        return Server({
+          url: '/waybill/delete',
+          method: 'post',
+          data: { waybillIds: [id] }
+        }).then(({ data }) => {
+          resolve()
+        }).catch(e => {
+          reject(e)
+        })
       })
     },
     // 获取运单中的订单列表

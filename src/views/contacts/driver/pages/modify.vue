@@ -153,7 +153,7 @@ export default {
 
     /* 校验运输线路 */
     validRegularline (line, msg) {
-      if (!line) return true
+      if (!line || !line.length) return true
       const { s, sn, e, en } = line
       const valid = s && sn && e && en
       if (!valid) {
@@ -163,6 +163,7 @@ export default {
     },
 
     async setForm() {
+      this.$refs.$form.reset()
       if (!this.isCreate) {
         // 编辑操作, 判断store中的值是否是目标, 不是则拉新的
         const urlId = +this.$route.query.carrierId
@@ -218,6 +219,7 @@ export default {
   beforeRouteLeave(to, from, next) {
     this.cityPickerVisible = [false, false]
     this.showKeyboard = false
+    this.purchDate = ''
     next()
   }
 }

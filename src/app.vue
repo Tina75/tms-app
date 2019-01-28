@@ -35,9 +35,8 @@ export default {
     window.alert = (msg, fn) => {
       this.$createDialog({
         type: 'alert',
-        title: '',
+        title: '提示',
         content: msg,
-        icon: 'cubeic-alert',
         onConfirm: () => {
           if (typeof fn === 'function') fn()
         }

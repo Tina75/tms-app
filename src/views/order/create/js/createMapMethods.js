@@ -1,7 +1,14 @@
 import { mapMutations, mapActions } from 'vuex'
+import { MODULE_NAME } from '../../js/constant'
+
+const {
+  ORDER_CREATE,
+  ORDER_OFTEN,
+  CONTACTS_CONSIGNEE
+} = MODULE_NAME
 
 export default {
-  ...mapMutations('order/create', [
+  ...mapMutations(ORDER_CREATE, [
     'SET_CONSIGNER_ID',
     'SET_ORDER_INFO',
     'SET_CONSIGNER_ID',
@@ -17,8 +24,8 @@ export default {
     'RESET_ORDER',
     'SET_ONE_MORE_ID'
   ]),
-  ...mapActions('contacts/consignee', [ 'saveConsignerInfo' ]),
-  ...mapActions('order/create', [
+  ...mapActions(CONTACTS_CONSIGNEE, [ 'saveConsignerInfo' ]),
+  ...mapActions(ORDER_CREATE, [
     'getOpetator',
     'getConsignerData',
     'createOrder',
@@ -29,7 +36,7 @@ export default {
     'getOftenPermission',
     'getRuleList'
   ]),
-  ...mapActions('order/often', [
+  ...mapActions(ORDER_OFTEN, [
     'getOftenDetail'
   ])
 }

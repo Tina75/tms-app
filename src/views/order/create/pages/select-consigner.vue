@@ -33,7 +33,8 @@ import ListItem from '@/views/contacts/components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import { mapActions, mapState } from 'vuex'
-const moudleName = 'contacts/consignee'
+import { MODULE_NAME } from '../../js/constant'
+
 export default {
   name: 'select-consigner',
   metaInfo: {
@@ -45,9 +46,9 @@ export default {
       loading: false
     }
   },
-  computed: mapState(moudleName, ['senderList']),
+  computed: mapState(MODULE_NAME.CONTACTS_CONSIGNEE, ['senderList']),
   methods: {
-    ...mapActions(moudleName, ['loadSenderList', 'saveConsignerInfo']),
+    ...mapActions(MODULE_NAME.CONTACTS_CONSIGNEE, ['loadSenderList', 'saveConsignerInfo']),
     loader(refresh) {
       this.loadSenderList(refresh)
     },
