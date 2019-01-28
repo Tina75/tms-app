@@ -22,11 +22,6 @@ export default {
   },
   onEnter(to, from) {
     $formState.hasSubmitted = false
-    const formGroup = this.$refs.$form
-    if (formGroup) {
-      // 重置表单
-      formGroup.reset()
-    }
   },
   onLeave(to, from, allowLeave) {
     const { formLeaveConfirm } = from.meta
@@ -50,6 +45,11 @@ export default {
           $formState.willLeave(to, from)
           $formState.willLeave = () => {}
           allowLeave()
+          const formGroup = this.$refs.$form
+          if (formGroup) {
+            // 重置表单
+            formGroup.reset()
+          }
         }
       }).show()
     }
