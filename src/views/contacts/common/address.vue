@@ -18,7 +18,12 @@
       />
       <FormItem v-model="form.additional" label="补充地址" placeholder="请输入楼号-门牌号"/>
     </FromGroup>
-    <BmapAddressList v-if="allowSearch" :city="limitCityGeo" :search="form.address" @select="onSelectAddress"/>
+    <BmapAddressList
+      v-if="allowSearch"
+      :city="limitCityGeo"
+      :search="form.address"
+      @select="onSelectAddress"
+    />
     <LoadingButton :loading="submiting" class="cube-bottom-button" @click="submit"/>
     <CityPicker v-model="showCityPicker" @confirm="confirmCity"/>
   </div>
@@ -125,6 +130,9 @@ export default {
     reset() {
       const options = this.AddressPage
       this.form = Address.toForm(options.data)
+      if (!this.form.address) {
+        this.$refs.$form.reset()
+      }
       if (options.appButton) {
         const namespace = this.AddressPage.namespace
           ? this.AddressPage.namespace + '/'
