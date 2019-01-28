@@ -43,14 +43,14 @@ import NoData from '@/components/NoData'
 import NO_DATA from '@/assets/img-no-rule.png'
 import { MODULE_NAME } from '../../js/constant'
 
-const WEIGHT_TON    = 1 // 重量吨
-const VOLUME        = 2 // 体积方
+const WEIGHT_TON = 1 // 重量吨
+const VOLUME = 2 // 体积方
 const WEIGHT_TON_KM = 3 // 吨公里
-const VOLUME_KM     = 4 // 方公里
-const CAR_TYPE      = 5 // 车型
-const WEIGHT_KG     = 6 // 重量公斤
-const WEIGHT_KG_KM  = 7 // 公斤公里
-const QUANTITY      = 8 // 件
+const VOLUME_KM = 4 // 方公里
+const CAR_TYPE = 5 // 车型
+const WEIGHT_KG = 6 // 重量公斤
+const WEIGHT_KG_KM = 7 // 公斤公里
+const QUANTITY = 8 // 件
 
 export default {
   name: 'order-charge-rule',
