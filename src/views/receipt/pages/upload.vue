@@ -40,7 +40,9 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
-      vm.getUrlList()
+      if (from.name !== 'image-preview') {
+        vm.getUrlList()
+      }
     })
   },
   methods: {
