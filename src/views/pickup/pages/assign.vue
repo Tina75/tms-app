@@ -603,7 +603,7 @@ export default {
       return new Promise((resolve, reject) => {
         console.log(this.model.settlementType)
         console.log(this.model.fuelCardAmount, this.model.cashAmount)
-        resolve(this.model.settlementType !== 1 || (NP.plus(this.model.fuelCardAmount, this.model.cashAmount) === NP.plus(0, this.model.totalFee)))
+        resolve((this.model.assignCarType !== 1 || this.model.settlementType !== 1) || (NP.plus(this.model.fuelCardAmount, this.model.cashAmount) === NP.plus(0, this.model.totalFee)))
       })
     }
   },
