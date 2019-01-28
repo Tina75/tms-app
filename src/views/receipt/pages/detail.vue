@@ -289,11 +289,14 @@ export default {
 <style lang="stylus" scoped>
 .receipt-detail
   height 100%
-  display: flex
+  display flex
+  display -webkit-box
+  display -webkit-flex
   flex-direction column
   .cube-scroll-nav
-    flex: 1
-    -webkit-box-flex: 1
+    flex 1
+    -webkit-box-flex 1
+    height calc(100% - 47px)
 .upstream-footer
   display flex
   >>> .cube-btn
