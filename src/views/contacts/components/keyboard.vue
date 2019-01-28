@@ -3,13 +3,13 @@
     <div class="confirm-group">
       <div
         class="cube-pull-left cube-font-15"
-        @click="$emit('cancel')">
+        @click.stop="$emit('cancel')">
         取消
       </div>
       <div
         class="cube-pull-right cube-font-15 cube-c-blue"
         style="color: #00A4BD"
-        @click="$emit('confirm')">
+        @click.stop="$emit('confirm')">
         确定
       </div>
     </div>
@@ -22,12 +22,12 @@
           v-for="(btn,j) in row"
           :key="j"
           class="keyboard-btn border-left-1px"
-          @click="clickBtn(btn)"
+          @click.stop="clickBtn(btn)"
           v-text="btn" />
         <div
           v-if="i===btns.length-1"
           class="keyboard-btn remove-btn border-left-1px"
-          @click="clickBtn()">
+          @click.stop="clickBtn()">
           <div>
             X
           </div>
