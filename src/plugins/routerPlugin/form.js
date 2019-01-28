@@ -20,7 +20,7 @@ export default {
       }
     }
   },
-  onEnter() {
+  onEnter(to, from) {
     $formState.hasSubmitted = false
   },
   onLeave(to, from, allowLeave) {
@@ -29,25 +29,29 @@ export default {
       $formState.willLeave(to, from)
       return true
     }
-    this.$createDialog({
-      type: 'confirm',
-      title: '',
-      content: '信息未保存，确认退出吗？',
-      icon: 'cubeic-alert',
-      onConfirm: () => {
-        $formState.willLeave(to, from)
-        $formState.willLeave = () => {}
-        allowLeave()
-        const formGroup = this.$refs.$form
-        if (formGroup) {
-          // 重置表单
-          formGroup.reset()
-          // 关闭所有select弹出层
-          if (formGroup.closeAllSelect) {
-            formGroup.closeAllSelect()
+    let hasOpened = false
+    const formGroup = this.$refs.$form
+    // 关闭所有select弹出层, 产品端木要求有打开的蒙层先关蒙层 再点击返回才返回
+    if (formGroup && formGroup.closeAllSelect) {
+      hasOpened = formGroup.closeAllSelect()
+    }
+    if (!hasOpened) {
+      this.$createDialog({
+        type: 'confirm',
+        title: '',
+        content: '信息未保存，确认退出吗？',
+        icon: 'cubeic-alert',
+        onConfirm: () => {
+          $formState.willLeave(to, from)
+          $formState.willLeave = () => {}
+          allowLeave()
+          const formGroup = this.$refs.$form
+          if (formGroup) {
+            // 重置表单
+            formGroup.reset()
           }
         }
-      }
-    }).show()
+      }).show()
+    }
   }
 }

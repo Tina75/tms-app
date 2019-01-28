@@ -31,7 +31,7 @@
         <!-- 业务联系人 -->
         <div v-for="(item, index) in busiContactInit" :key="index" class="cardInfo" >
           <div class="cardInfo-content">
-            <span class="cardTitle">公司联系人</span>
+            <span class="cardTitle">业务联系人</span>
             <span class="cardContent">{{item.name}}</span>
           </div>
           <div class="hr"/>
@@ -253,7 +253,7 @@ export default {
       this.$router.push({ name: 'image-preview', params: { imgs: [this.companyInfo.logoUrl], index } })
     },
     formatImag (value) {
-      if (!value) return ''
+      if (!value) return 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/logo/logo.png'
       if (value.indexOf('aliyuncs.com') > 0) return 'https://' + value
       return value ? `${process.env.VUE_APP_IMG_HOST}${value}?x-oss-process=style/weixin.jpg` : ' '
     },
