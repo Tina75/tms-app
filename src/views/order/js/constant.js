@@ -1,3 +1,9 @@
+export const MODULE_NAME = {
+  ORDER_CREATE: 'order/create',
+  ORDER_OFTEN: 'order/often',
+  CONTACTS_CONSIGNEE: 'contacts/consignee'
+}
+
 export const SETTLEMENT_TYPE = [
   { value: 1, text: '现付' },
   { value: 2, text: '到付' },

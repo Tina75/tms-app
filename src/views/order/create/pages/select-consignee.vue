@@ -32,6 +32,7 @@ import ListItem from '@/views/contacts/components/ListItem'
 import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
 import { mapState, mapMutations, mapActions } from 'vuex'
+import { MODULE_NAME } from '../../js/constant'
 
 export default {
   name: 'select-consignee',
@@ -44,10 +45,10 @@ export default {
       loading: false
     }
   },
-  computed: mapState('contacts/consignee', [ 'consigneeList' ]),
+  computed: mapState(MODULE_NAME.CONTACTS_CONSIGNEE, [ 'consigneeList' ]),
   methods: {
-    ...mapMutations('order/create', [ 'SET_CONSIGNEE_INFO' ]),
-    ...mapActions('contacts/consignee', [ 'loadConsigneeList' ]),
+    ...mapMutations(MODULE_NAME.ORDER_CREATE, [ 'SET_CONSIGNEE_INFO' ]),
+    ...mapActions(MODULE_NAME.CONTACTS_CONSIGNEE, [ 'loadConsigneeList' ]),
 
     loader(refresh) { this.loadConsigneeList(refresh) },
 

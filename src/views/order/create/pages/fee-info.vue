@@ -56,6 +56,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import MoneyLabel from '../components/MoneyLabel'
 import { FormGroup, FormItem } from '@/components/Form'
 import NP from 'number-precision'
+import { MODULE_NAME } from '../../js/constant'
 
 export default {
   metaInfo: { title: '费用信息' },
@@ -88,13 +89,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order/create', [ 'feeInfo', 'orderConfig' ]),
+    ...mapGetters(MODULE_NAME.ORDER_CREATE, [ 'feeInfo', 'orderConfig' ]),
     total () {
       return NP.plus(this.form.pickupFee, this.form.loadFee, this.form.unloadFee, this.form.insuranceFee, this.form.otherFee)
     }
   },
   methods: {
-    ...mapMutations('order/create', [ 'SET_FEE_INFO' ]),
+    ...mapMutations(MODULE_NAME.ORDER_CREATE, [ 'SET_FEE_INFO' ]),
 
     ensure () {
       const temp = Object.assign({}, this.form)
