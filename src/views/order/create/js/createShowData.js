@@ -30,7 +30,7 @@ export default {
       info.consignerAddressLatitude = consignerAddress.latitude || ''
       info.consignerAddressText = addressConcat(info.consignerAddress, info.startName, info.consignerHourseNumber)
     } else {
-      info.consignerHourseNumber = info.consignerHourseNumber || consigner.consignerHourseNumber || ''
+      info.consignerHourseNumber = consigner.consignerHourseNumber || ''
     }
     this.TRIGGER_ADDRESS_CHANGE(true)
     this.SET_OTHER_INFO({
@@ -64,7 +64,7 @@ export default {
     info.end = consignee.cityCode || ''
     info.endName = consignee.cityName || ''
     info.consigneeAddress = consignee.address || ''
-    info.consigneeHourseNumber = info.consigneeHourseNumber || consignee.consignerHourseNumber || '' // consignerHourseNumber 接口返回字段名错误，下次版本接口修复后修正
+    info.consigneeHourseNumber = consignee.consignerHourseNumber || '' // consignerHourseNumber 接口返回字段名错误，下次版本接口修复后修正
     info.consigneeAddressLongitude = consignee.longitude || ''
     info.consigneeAddressLatitude = consignee.latitude || ''
     info.consigneeAddressText = addressConcat(info.consigneeAddress, info.endName, info.consigneeHourseNumber)

@@ -43,10 +43,10 @@
               v-clipboard:error="onError"
               class="act-btn">复制</span>
           </FormItem>
-          <FormItem v-if="detail.startName" label="始发地">
+          <FormItem v-if="detail.startName" label="发货城市">
             {{detail.startName}}
           </FormItem>
-          <FormItem v-if="detail.endName" label="目的地">
+          <FormItem v-if="detail.endName" label="收货城市">
             {{detail.endName}}
           </FormItem>
           <FormItem v-if="detail.deliveryTime" label="发货时间">

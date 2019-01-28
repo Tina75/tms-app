@@ -124,7 +124,10 @@ export default {
     },
     async setForm() {
       this.loadOperators()
-      if (!this.isCreate) {
+      this.$refs.$form.reset()
+      if (this.isCreate) {
+        this.form = new ContactDetail()
+      } else {
         // 编辑操作, 判断store中的值是否是目标, 不是则拉新的
         const urlId = +this.$route.query.consignerId
         if (urlId !== +this.contactDetail.id) {
@@ -133,8 +136,6 @@ export default {
           this.$refreshPage('contacts-shipper-detail')
         }
         this.form = ContactDetail.toForm(this.contactDetail)
-      } else {
-        this.form = new ContactDetail()
       }
     },
     async loadOperators() {

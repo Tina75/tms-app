@@ -1,6 +1,6 @@
 <template>
   <div class="pickup-assign">
-    <cube-scroll v-if="showPage">
+    <cube-scroll v-if="showPage" ref="$scroll">
       <div class="edit-form">
         <cube-form ref="assign-form" :model="model" :options="options" :immediate-validate="false" @validate="validateHandler">
           <cube-form-group>
@@ -555,7 +555,7 @@ export default {
           placeholder: '请输入'
         },
         rules: {
-          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/
+          pattern: /^((([1-9]\d{0,8})|0)(\.\d{1,4})?)?$/
         },
         messages: {
           pattern: '不得超过9位整数和4位小数'
@@ -578,7 +578,7 @@ export default {
           placeholder: '请输入'
         },
         rules: {
-          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/,
+          pattern: /^((([1-9]\d{0,8})|0)(\.\d{1,4})?)?$/,
           custom: (val) => {
             return NP.plus(_this.model.fuelCardAmount, _this.model.cashAmount) === NP.plus(0, _this.model.totalFee)
           }
@@ -603,7 +603,7 @@ export default {
       return new Promise((resolve, reject) => {
         console.log(this.model.settlementType)
         console.log(this.model.fuelCardAmount, this.model.cashAmount)
-        resolve(this.model.settlementType !== 1 || (NP.plus(this.model.fuelCardAmount, this.model.cashAmount) === NP.plus(0, this.model.totalFee)))
+        resolve((this.model.assignCarType !== 1 || this.model.settlementType !== 1) || (NP.plus(this.model.fuelCardAmount, this.model.cashAmount) === NP.plus(0, this.model.totalFee)))
       })
     }
   },
