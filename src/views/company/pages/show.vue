@@ -263,7 +263,7 @@ export default {
       this.shareUrl = this.basePath + 'company-phone.html?shareOutNo=' + this.shareOutNo
       let title = this.companyInfo.shortName ? this.companyInfo.shortName : this.companyInfo.name
       let param = {}
-      param.title = '【' + title + '】提供专业可靠物流运输服务，期待携手合作！'
+      param.title = '【' + title + '】提供专业可靠物流运输服务'
       param.desc = '物流运输管理就用运掌柜TMS，免费试用'
       param.url = this.shareUrl
       param.thumburl = this.formatImag(this.companyInfo.logoUrl)
