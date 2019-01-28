@@ -8,13 +8,14 @@ export default {
     if (!this.saveConsigner.id) return
     let consigner = this.saveConsigner
     let consignerAddress
-    console.log(1)
     if (this.saveConsigner.id === this.consignerId) return
-    console.log(2)
     this.SET_CONSIGNER_ID(this.saveConsigner.id)
     consigner = await this.getConsignerData(this.consignerId)
     if (consigner.addressList.length) consignerAddress = consigner.addressList[0]
-    if (consigner.consigneeList.length) this.SET_CONSIGNEE_INFO(consigner.consigneeList[0])
+    if (consigner.consigneeList.length) {
+      this.SET_CONSIGNEE_INFO(consigner.consigneeList[0])
+    }
+    this.SET_CONSIGNEE_LIST(consigner.consigneeList)
     const info = this.orderInfo
     info.consignerName = consigner.name || ''
     info.consignerContact = consigner.contact || ''
