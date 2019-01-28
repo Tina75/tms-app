@@ -108,8 +108,8 @@ export default {
     },
     doDispatch() {
       let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)
-      if (this.startCode <= 0) return window.toast('请选择始发地')
-      if (this.endCode <= 0) return window.toast('请选择目的地')
+      if (this.startCode <= 0) return window.toast('请选择发货城市')
+      if (this.endCode <= 0) return window.toast('请选择收货城市')
       if (!ids.length) return window.toast('请至少选择一单')
       const data = {
         start: this.startCode,
