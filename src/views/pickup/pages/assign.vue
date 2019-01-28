@@ -30,8 +30,8 @@
               <span class="total-money">{{model.totalFee}}</span>
             </cube-form-item>
             <cube-form-item v-if="model.assignCarType === 1" :field="fields['settlementType']"/>
-            <cube-form-item v-if="model.assignCarType === 1 && model.settlementType === 1" ref="fuel-item" :field="fields['fuelCardAmount']"/>
             <cube-form-item v-if="model.assignCarType === 1 && model.settlementType === 1" ref="cash-item" :field="fields['cashAmount']"/>
+            <cube-form-item v-if="model.assignCarType === 1 && model.settlementType === 1" ref="fuel-item" :field="fields['fuelCardAmount']"/>
           </cube-form-group>
           <cube-form-group>
             <cube-form-item v-if="orderLength > 1" :field="fields['allocationStrategy']"/>
