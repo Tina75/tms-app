@@ -1,6 +1,6 @@
 <template>
   <div class="receipt page">
-    <div class="header">
+    <div v-if="receiptStatusCnt.totalCnt" class="header">
       <cube-tab-bar
         v-model="selectedLabel"
         show-slider
@@ -11,17 +11,21 @@
         </cube-tab>
       </cube-tab-bar>
     </div>
-    <div class="list-bar">
+    <div v-if="receiptStatusCnt.totalCnt" class="list-bar">
       <cube-tab-panels v-model="selectedLabel">
         <cube-tab-panel v-for="(item) in tabs" :key="item.label" :label="item.label">
           <CardList :card-list="receiptList[item.key]" :keys="item.key"/>
         </cube-tab-panel>
       </cube-tab-panels>
     </div>
+    <no-data v-else message="老板，还没有回单记得催一催哦～">
+      <img slot="img" src="@/assets/img-no-receipt.png">
+    </no-data>
   </div>
 </template>
 <script>
 import CardList from '../components/CardList'
+import NoData from '@/components/NoData'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'receipt',
@@ -29,7 +33,8 @@ export default {
     title: '回单管理'
   },
   components: {
-    CardList
+    CardList,
+    NoData
   },
   data () {
     return {

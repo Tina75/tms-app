@@ -1,6 +1,6 @@
 <template>
   <div class="upstream page">
-    <div class="header">
+    <div v-if="totalCnt" class="header">
       <cube-tab-bar
         v-model="selectedLabel"
         show-slider
@@ -11,18 +11,21 @@
         </cube-tab>
       </cube-tab-bar>
     </div>
-    <div class="list-bar">
+    <div v-if="totalCnt" class="list-bar">
       <cube-tab-panels v-model="selectedLabel">
         <cube-tab-panel v-for="(item) in tabs" :key="item.label" :label="item.label">
-          <!-- {{upstreamNext[item.key]}} -->
           <CardList :card-list="UpstreamList[item.key]" :keys="item.key"/>
         </cube-tab-panel>
       </cube-tab-panels>
     </div>
+    <no-data v-else message="老板，还没有上游给您派单多找找关系啊～">
+      <img slot="img" src="@/assets/img-no-upstream.png">
+    </no-data>
   </div>
 </template>
 <script>
 import CardList from '../components/CardList'
+import NoData from '@/components/NoData'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -31,7 +34,8 @@ export default {
     title: '上游来单'
   },
   components: {
-    CardList
+    CardList,
+    NoData
   },
   data () {
     return {
@@ -62,7 +66,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['statusCnt', 'UpstreamList', 'upstreamNext'])
+    ...mapGetters(['statusCnt', 'UpstreamList', 'upstreamNext']),
+    totalCnt () {
+      return this.statusCnt['rejected'] + this.statusCnt['accepted'] + this.statusCnt['waitAccept']
+    }
   },
   watch: {
     selectedLabel (val) {

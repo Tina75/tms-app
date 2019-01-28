@@ -24,6 +24,7 @@ import ReceiveAndSend from '../components/ReceiveAndSend'
 import OrderCargoList from '../components/OrderCargoList'
 import CostDetail from '../components/CostDetail'
 import { setAppTitleBtn } from '@/libs/bridgeUtil'
+import { MODULE_NAME } from '../../js/constant'
 
 export default {
   name: 'order-often-detail',
@@ -41,13 +42,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('order/often', [ 'detail' ]),
-    ...mapGetters('order/create', [ 'oftenPermission' ])
+    ...mapGetters(MODULE_NAME.ORDER_OFTEN, [ 'detail' ]),
+    ...mapGetters(MODULE_NAME.ORDER_CREATE, [ 'oftenPermission' ])
   },
   methods: {
-    ...mapMutations('order/create', [ 'SET_ORDER_RESET', 'SET_ONE_MORE_ID' ]),
-    ...mapMutations('order/often', [ 'SET_DETAIL' ]),
-    ...mapActions('order/often', [ 'getOftenDetail', 'deleteOftenOrder' ]),
+    ...mapMutations(MODULE_NAME.ORDER_CREATE, [ 'SET_ORDER_RESET', 'SET_ONE_MORE_ID' ]),
+    ...mapMutations(MODULE_NAME.ORDER_OFTEN, [ 'SET_DETAIL' ]),
+    ...mapActions(MODULE_NAME.ORDER_OFTEN, [ 'getOftenDetail', 'deleteOftenOrder' ]),
 
     orderOneMore () {
       this.SET_ORDER_RESET(true)
