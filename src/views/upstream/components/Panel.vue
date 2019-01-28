@@ -1,6 +1,6 @@
 <template>
   <div class="detail-panel">
-    <div class="detail-panel-header">
+    <div class="detail-panel-header border-bottom-1px">
       {{title}}
     </div>
     <div class="detail-panel-main">
@@ -29,7 +29,7 @@ export default {
     font-size 16px
     line-height 49px
     font-weight 600
-    border-bottom 1px solid #E4E7EC
+    // border-bottom 1px solid #E4E7EC
   .detail-panel-main
     overflow hidden
 </style>
