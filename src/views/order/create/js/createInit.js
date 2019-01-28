@@ -14,7 +14,7 @@ export default {
         window.loading(false)
       }
     }
-    if (this.mode === 'create' && !this.oneMoreId) return
+    if ((this.mode === 'create' && !this.oneMoreId) || this.editOrderHasInit) return
     window.loading(true)
     let orderInfo
     let cargoList

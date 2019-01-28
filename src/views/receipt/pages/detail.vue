@@ -1,6 +1,6 @@
 <template>
   <div class="receipt-detail">
-    <cube-scroll-nav>
+    <cube-scroll-nav ref="$navPanel">
       <StatusBar slot="prepend" :status="detail.receiptOrder && detail.receiptOrder.receiptStatus" :time="detail.createTime" type="receipt"/>
       <cube-scroll-nav-panel label="基本信息">
         <Panel title="基本信息">
@@ -181,6 +181,9 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
+      vm.$nextTick(() => {
+        vm.$refs.$navPanel.refresh()
+      })
       vm.initDetail()
     })
   },

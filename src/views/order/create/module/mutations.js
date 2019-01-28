@@ -103,8 +103,10 @@ export default {
   CLEAR_CARGO_OFTEN: (state, payload) => { state.cargoOften = null },
   // 设置货物信息
   SET_CARGO_LIST: (state, payload) => {
-    payload.forEach(item => { resetFields(item) })
-    state.orderCargoList = payload
+    state.orderCargoList = payload.map(item => {
+      resetFields(item)
+      return item
+    })
   },
   // 设置当前编辑地址类型
   SET_ADDRESS_TYPE: (state, payload) => {
