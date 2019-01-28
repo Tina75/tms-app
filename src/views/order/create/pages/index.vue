@@ -17,7 +17,6 @@
             required
             label="客户名称"
             maxlength="20"
-            autofocus
             click-icon="icon-ico_custerm"
             @on-icon-click="gotoConsignerPage"
             @on-focus="inputFocus" />
