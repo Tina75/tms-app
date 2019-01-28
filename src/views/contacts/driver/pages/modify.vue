@@ -219,6 +219,7 @@ export default {
   beforeRouteLeave(to, from, next) {
     this.cityPickerVisible = [false, false]
     this.showKeyboard = false
+    this.purchDate = ''
     next()
   }
 }
