@@ -157,6 +157,7 @@ export default {
     },
     setForm() {
       // 重置弹出框
+      this.$refs.$form.reset()
       this.showPackageType = false
       this.showDismensionInput = false
       const list = this.cargoList.list
@@ -169,9 +170,7 @@ export default {
         }
       }
       this.form = CargoDetail.toForm(detailData)
-      if (this.isCreate) {
-        this.$refs.$form.reset()
-      } else {
+      if (!this.isCreate) {
         setAppRightBtn({
           text: '删除',
           color: '#00A4BD',
