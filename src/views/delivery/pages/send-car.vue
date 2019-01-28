@@ -46,14 +46,14 @@
             <!-- 结算方式 -->
             <cube-form-item v-if="model.assignCarType === 1" :field="fields['settlementType']"/>
             <div v-if="model.assignCarType === 1 && model.settlementType === 1">
-              <cube-form-item  :field="fields['fuelCardAmount1']"/>
               <cube-form-item :field="fields['cashAmount1']"/>
-              <cube-form-item  :field="fields['fuelCardAmount2']"/>
+              <cube-form-item  :field="fields['fuelCardAmount1']"/>
               <cube-form-item :field="fields['cashAmount2']"/>
-              <cube-form-item :field="fields['fuelCardAmount3']"/>
+              <cube-form-item  :field="fields['fuelCardAmount2']"/>
               <cube-form-item :field="fields['cashAmount3']"/>
-              <cube-form-item :field="fields['fuelCardAmount4']"/>
+              <cube-form-item :field="fields['fuelCardAmount3']"/>
               <cube-form-item :field="fields['cashAmount4']"/>
+              <cube-form-item :field="fields['fuelCardAmount4']"/>
             </div>
           </cube-form-group>
           <cube-form-group >
