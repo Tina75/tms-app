@@ -1,5 +1,6 @@
-
-const isNum = v => typeof v === 'number'
+import NP from 'number-precision'
+const isNum = (v) => typeof v === 'number'
+console.info('NP', NP)
 export class ContactDetail {
   id = ''
   name = ''
@@ -27,7 +28,11 @@ export class ContactDetail {
   static toView(server, operators = []) {
     const view = fillEmpty(server)
     view.isInvoice = !!view.isInvoice
-    view.invoiceRate = !!view.isInvoice ? +view.invoiceRate * 100 + '%' : ''
+    if (!!view.isInvoice) {
+      var re = /([0-9]+\.[0-9]{4})[0-9]*/
+      let rate = (view.invoiceRate + '').replace(re, '$1')
+      view.invoiceRate = NP.times(+rate, 100) + '%'
+    }
     if (view.salesmanId) {
       view.salesmanId = +view.salesmanId
       const operator = operators.find((item) => +item.id === view.salesmanId)
@@ -47,7 +52,11 @@ export class ContactDetail {
     // cube-switch 需要boolean类型 防止报错
     form.isInvoice = !!form.isInvoice
     // 后端是0.xx 前端显示xx%
-    form.invoiceRate = form.isInvoice ? +form.invoiceRate * 100 : ''
+    if (!!form.isInvoice) {
+      var re = /([0-9]+\.[0-9]{4})[0-9]*/
+      let rate = (form.invoiceRate + '').replace(re, '$1')
+      form.invoiceRate = NP.times(+rate, 100)
+    }
     form.salesmanId = form.salesmanId || ''
     return form
   }
@@ -57,7 +66,7 @@ export class ContactDetail {
     const server = filterEmpty(form)
     server.isInvoice = server.isInvoice ? 1 : 0
     // 后端最大值是1....
-    server.invoiceRate = server.isInvoice ? +server.invoiceRate / 100 : ''
+    server.invoiceRate = server.isInvoice ? NP.divide(+server.invoiceRate, 100) : ''
     return server
   }
 }
