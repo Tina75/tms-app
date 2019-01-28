@@ -35,8 +35,7 @@ export default {
     this.TRIGGER_ADDRESS_CHANGE(true)
     this.SET_OTHER_INFO({
       isInvoice: consigner.isInvoice || 0,
-      invoiceRate: consigner.invoiceRate === null ? '' : consigner.invoiceRate,
-      remark: consigner.remark
+      invoiceRate: consigner.invoiceRate === null ? '' : consigner.invoiceRate
     })
     this.showOtherInfo()
     if (consigner.salesmanId) {
