@@ -482,7 +482,7 @@ export default {
         let req = {
           carrierName: this.model.carrierName,
           driverName: this.model.assignCarType === 1 ? this.model.carrierDriverName : this.model.selfDriverName.split('-')[0],
-          driverPhone: this.model.assignCarType === 1 ? this.model.carrierDriverPhone.split(' ').join('') : this.model.selfDriverName.split('-')[1],
+          driverPhone: this.model.assignCarType === 1 ? (this.model.carrierDriverPhone || '').split(' ').join('') : this.model.selfDriverName.split('-')[1],
           carNo: this.model.assignCarType === 1 ? this.model.carrierCarNo : this.model.carNo.split('-')[0],
           carType: this.model.assignCarType === 1 ? this.model.carType : this.model.carNo.split('-')[1],
           carLength: this.model.assignCarType === 1 ? this.model.carLength : this.model.carNo.split('-')[2],
