@@ -181,11 +181,9 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
-      if (from.name === 'receipt-upload') {
-        vm.$nextTick(() => {
-          vm.$refs.$navPanel.refresh()
-        })
-      }
+      vm.$nextTick(() => {
+        vm.$refs.$navPanel.refresh()
+      })
       vm.initDetail()
     })
   },
