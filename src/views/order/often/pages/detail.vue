@@ -64,9 +64,9 @@ export default {
         action: () => {
           this.$createDialog({
             type: 'confirm',
-            title: '',
+            title: '提醒',
             content: '确认需要删除此常发订单？',
-            icon: 'cubeic-alert',
+            // icon: 'cubeic-alert',
             onConfirm: async () => {
               await this.deleteOftenOrder(this.orderId)
               window.toast('删除成功')
