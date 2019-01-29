@@ -45,8 +45,8 @@
 
       <card class="cube-mb-15" title="证件上传">
         <div class="uploadWrap">
-          <upload v-model="model.drivePhoto" label="点击上传行驶证"/>
-          <upload v-model="model.travelPhoto" label="点击上传驾驶证"/>
+          <upload v-model="model.travelPhoto" label="点击上传行驶证"/>
+          <upload v-model="model.drivePhoto" label="点击上传驾驶证"/>
         </div>
       </card>
 
