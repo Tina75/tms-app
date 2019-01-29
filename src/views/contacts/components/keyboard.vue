@@ -22,12 +22,12 @@
           v-for="(btn,j) in row"
           :key="j"
           class="keyboard-btn border-left-1px"
-          @click.stop="clickBtn(btn)"
+          @click.stop.prevent="clickBtn(btn)"
           v-text="btn" />
         <div
           v-if="i===btns.length-1"
           class="keyboard-btn remove-btn border-left-1px"
-          @click.stop="clickBtn()">
+          @click.stop.prevent="clickBtn()">
           <div>
             X
           </div>
