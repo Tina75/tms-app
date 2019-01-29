@@ -756,7 +756,6 @@ export default {
             color: #e64340;
         .cube-form-field
           display: flex
-          margin-top: 3px;
           justify-content:flex-end
           .total-money
             font-size: 20px;
@@ -766,6 +765,7 @@ export default {
             display: flex
             justify-content:flex-end
           input
+            margin-top: 3px;
             font-size: 15px;
             text-align: right
           &.cube-validator
@@ -792,7 +792,7 @@ export default {
           span
             font-size: 15px;
             display: inline-block
-            margin-top: 5px;
+            margin-top: 3px;
           .cube-select-icon
             @extend .icon
             @extend .iconfont
@@ -801,7 +801,7 @@ export default {
             vertical-align: middle
             border: none
             margin-left: 10px;
-            margin-top: 3px
+            margin-top: 5px
             transform none
         .cube-textarea-wrapper
           height: auto
