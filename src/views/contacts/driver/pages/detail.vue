@@ -80,6 +80,11 @@ const ListConfig = [
   { text: '结算方式', key: 'payType' }
 ]
 const moudleName = 'contacts/driver'
+const completeOssImage = (src) => {
+  const hasDomain = /^(http|https):\/\//ig.test(src)
+  if (hasDomain) return src
+  return process.env.VUE_APP_IMG_HOST + src
+}
 export default {
   name: 'DriverDetail',
   metaInfo: {
@@ -97,8 +102,8 @@ export default {
       const detail = this.viewData
       if (detail) {
         const arr = []
-        if (detail.drivePhoto) { arr.push(process.env.VUE_APP_IMG_HOST + detail.drivePhoto) }
-        if (detail.travelPhoto) { arr.push(process.env.VUE_APP_IMG_HOST + detail.travelPhoto) }
+        if (detail.drivePhoto) { arr.push(completeOssImage(detail.travelPhoto)) }
+        if (detail.travelPhoto) { arr.push(completeOssImage(detail.drivePhoto)) }
         return arr
       }
       return []

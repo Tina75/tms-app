@@ -15,7 +15,7 @@
             <div v-for="item in options" :key="item.key" class="cube-input cube-ml-5 cube-mr-5">
               <input
                 v-model="item.value"
-                type="number"
+                type="text"
                 :class="valid ? 'cube-c-black' : 'cube-validator-msg-def'"
                 class="dimension-popup__input cube-c-placeholder "
                 :placeholder="item.placeholder"
@@ -39,7 +39,7 @@
 
 <script>
 // 支持数字和1位小数
-const pattern = /^(\d{1,6}(\.\d{1})?$)$/
+const pattern = /^([0-9]{1,6}(\.[0-9]{1})?$)$/
 export default {
   name: 'DimensionPopup',
   model: {

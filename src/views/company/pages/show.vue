@@ -254,7 +254,7 @@ export default {
     },
     formatImag (value) {
       if (!value) return 'https://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphinfile/logo/logo.png'
-      if (value.indexOf('aliyuncs.com') > 0) return 'https://' + value
+      if (value.indexOf('aliyuncs.com') > 0) return value + '?x-oss-process=style/weixin.jpg'
       return value ? `${process.env.VUE_APP_IMG_HOST}${value}?x-oss-process=style/weixin.jpg` : ' '
     },
     // 分享

@@ -57,8 +57,8 @@
 
       <card class="cube-mb-15" title="证件上传">
         <div class="uploadWrap">
-          <upload v-model="model.drivePhoto" label="点击上传行驶证"/>
-          <upload v-model="model.travelPhoto" label="点击上传道路运输证"/>
+          <upload v-model="model.travelPhoto" label="点击上传行驶证"/>
+          <upload v-model="model.drivePhoto" label="点击上传道路运输证"/>
         </div>
       </card>
 
@@ -229,6 +229,7 @@ export default {
   beforeRouteLeave(to, from, next) {
     this.cityPickerVisible = [false, false]
     this.showKeyboard = false
+    this.purchDate = ''
     next()
   }
 }
