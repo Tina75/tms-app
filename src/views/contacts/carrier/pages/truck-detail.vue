@@ -65,6 +65,12 @@ const ListConfig = [
   { text: '购买时间', key: 'purchDate' }
 ]
 
+const completeOssImage = (src) => {
+  const hasDomain = /^(http|https):\/\//ig.test(src)
+  if (hasDomain) return src
+  return process.env.VUE_APP_IMG_HOST + src
+}
+
 export default {
   name: 'TruckDetail',
 
@@ -83,8 +89,8 @@ export default {
       const detail = this.viewData
       if (detail) {
         const arr = []
-        detail.drivePhoto && arr.push(process.env.VUE_APP_IMG_HOST + detail.drivePhoto)
-        detail.travelPhoto && arr.push(process.env.VUE_APP_IMG_HOST + detail.travelPhoto)
+        detail.drivePhoto && arr.push(completeOssImage(detail.drivePhoto))
+        detail.travelPhoto && arr.push(completeOssImage(detail.travelPhoto))
         return arr
       }
       return []
