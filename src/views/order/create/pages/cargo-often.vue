@@ -69,7 +69,7 @@ export default {
       window.loading(true)
       try {
         vm.cargoList = await vm.getOftenCargo(vm.consignerId)
-        vm.$nextTick(() => { this.$refs.$scroll.refresh() })
+        vm.$nextTick(() => { vm.$refs.$scroll.refresh() })
       } catch (err) {
         //
       } finally {
