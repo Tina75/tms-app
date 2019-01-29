@@ -31,7 +31,7 @@ const lists = [
     itemParser: (data) => ({
       id: data.id,
       name: data.carrierName,
-      detail: data.carrierPhone,
+      detail: data.carNo,
       phone: data.carrierPhone,
       data
     })

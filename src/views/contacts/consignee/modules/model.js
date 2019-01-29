@@ -1,3 +1,4 @@
+import cityUtil from '@/libs/city'
 const validator = {
   // 手机号码
   phone (value) {
@@ -27,6 +28,13 @@ export const consigneeRule = {
   address: { required: true }
 }
 
+const hasCity = (address, cityCode) => {
+  const cityForm = cityUtil.getCityNameArray(cityCode)
+  cityForm.forEach(name => {
+    address = address.replace(name, '')
+  })
+  return address
+}
 export class ConsigneeDetail {
   id = ''
   consigneeCompanyName = '' // 收货人单位
@@ -51,7 +59,7 @@ export class ConsigneeDetail {
   static toView(data) {
     const view = {
       ...data,
-      address: data.consignerHourseNumber ? data.address + data.consignerHourseNumber : data.address
+      address: data.consignerHourseNumber ? hasCity(data.address, data.cityCode) + data.consignerHourseNumber : hasCity(data.address, data.cityCode)
     }
     return view
   }

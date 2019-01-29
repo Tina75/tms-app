@@ -43,6 +43,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import { FormGroup, FormItem } from '@/components/Form'
 import NP from 'number-precision'
 import { MODULE_NAME } from '../../js/constant'
+import { money as moneyValidator } from '../../js/validator'
 
 export default {
   metaInfo: { title: '其他信息' },
@@ -57,20 +58,8 @@ export default {
         remark: ''
       },
       rules: {
-        invoiceRate: {
-          required: true,
-          type: 'number',
-          min: 0,
-          max: 100
-        },
-        collectionMoney: {
-          type: 'number',
-          min: 0,
-          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/,
-          messages: {
-            pattern: '整数位不得超过9位'
-          }
-        }
+        invoiceRate: { required: true, type: 'number', min: 0, max: 100 },
+        collectionMoney: { type: 'number', min: 0, ...moneyValidator }
       }
     }
   },
