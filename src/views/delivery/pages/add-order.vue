@@ -152,6 +152,8 @@ export default {
     div
       display inline-block
   .btn-bottom
-    height 44px
+    font-size 17px
+    padding 15px
+    font-weight bold
 
 </style>
