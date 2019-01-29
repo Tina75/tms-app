@@ -1,59 +1,58 @@
 import NP from 'number-precision'
 import { setAppTitleBtn, closeWindow } from '@/libs/bridgeUtil'
 
+function gotoPage (vm, routeName, query) {
+  vm.$formWillLeave()
+  vm.$router.push({ name: routeName, query })
+}
+
 export default {
+
   // 进入客户订单号及其他信息
   gotoConsumerInfoPage () {
-    this.$formWillLeave()
-    this.$router.push({ name: 'order-consumer-info' })
+    gotoPage(this, 'order-consumer-info')
   },
   // 进入其他信息页面
   gotoOtherInfoPage () {
-    this.$formWillLeave()
-    this.$router.push({ name: 'order-other-info' })
+    gotoPage(this, 'order-other-info')
   },
   gotoFeeInfoPage () {
-    this.$formWillLeave()
-    this.$router.push({ name: 'order-fee-info' })
+    gotoPage(this, 'order-fee-info')
   },
   // 进入货物信息页面
   gotoCargoInfoPage () {
-    this.$formWillLeave()
-    this.$router.push({ name: 'order-cargo-info' })
+    gotoPage(this, 'order-cargo-info')
   },
   // 进入编辑地址页面
   gotoAddressInfoPage (type) {
     this.SET_ADDRESS_TYPE(type)
-    this.$formWillLeave()
-    this.$router.push({ name: 'order-edit-address' })
+    gotoPage(this, 'order-edit-address')
   },
   // 进入发货人列表
   gotoConsignerPage () {
-    this.$formWillLeave()
-    this.$router.push({ name: 'order-select-consigner' })
+    gotoPage(this, 'order-select-consigner')
   },
   // 进入收货人列表
   gotoConsigneePage () {
-    this.$formWillLeave()
-    this.$router.push({ name: 'order-select-consignee' })
+    gotoPage(this, 'order-select-consignee')
   },
   // 进入计费规则列表
   async gotoChargeRulePage () {
-    // if (!this.saveConsigner.id) {
-    //   window.toast('请通过通讯录选择发货方')
-    //   return
-    // }
+    if (!this.consignerId) {
+      return window.toast('暂无符合的计费规则')
+    }
     if (!this.orderCargoList.length) {
       return window.toast('请先填写货物信息')
     }
-    const order = this.orderInfo
-    let query = { partnerType: 1, partnerId: this.saveConsigner.id }
-    query.departure = order.start ? String(order.start) : void 0
-    query.destination = order.end ? String(order.end) : void 0
+    const { start, end, mileage } = this.orderInfo
+    // 提前校验是否存在相应计费规则
+    let query = { partnerType: 1, partnerId: this.consignerId }
+    query.departure = start || void 0
+    query.destination = end || void 0
     if (!query.partnerId || !(await this.getRuleList(query)).length) {
       return window.toast('暂无符合的计费规则')
     }
-    query.distance = NP.times((order.mileage || 0), 1000)
+    query.distance = NP.times((mileage || 0), 1000)
     const { weight, weightKg, volume, cargoInfos } = this.orderCargoList.reduce((last, item) => {
       return {
         weight: NP.plus(last.weight, item.weight || 0),
@@ -67,6 +66,7 @@ export default {
       volume: 0,
       cargoInfos: []
     })
+    // 格式化重量单位为公斤
     if (this.orderConfig.weightKgOption) {
       query.weight = weightKg
     } else {
@@ -74,11 +74,7 @@ export default {
     }
     query.volume = volume
     query.cargoInfos = cargoInfos
-    this.$formWillLeave()
-    this.$router.push({
-      name: 'order-charge-rule',
-      query
-    })
+    gotoPage(this, 'order-charge-rule', query)
   },
   // 设置导航栏按钮
   async setTitleButtons () {
@@ -92,20 +88,19 @@ export default {
           type: 'confirm',
           title: '提醒',
           content: '信息未保存，是否确认离开？',
-          // icon: 'cubeic-alert',
           onConfirm: () => {
             closeWindow({ logOut: false })
           }
         }).show()
       }
     })
+    // 查询常发订单权限，无权限则不设置按钮
     if (!this.oftenPermission) await this.getOftenPermission()
     if (!this.oftenPermission || this.oftenPermission.indexOf(100400) === -1) return
     setAppTitleBtn({
       text: '常发订单',
       action: () => {
-        this.$formWillLeave()
-        this.$router.push({ name: 'order-often' })
+        gotoPage(this, 'order-often')
       }
     })
   }

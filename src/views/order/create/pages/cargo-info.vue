@@ -151,6 +151,7 @@ import DimensionPopup from '@/views/contacts/components/DimensionPopup'
 import inputAutoPosition from '../js/inputAutoPosition'
 import { CargoDetail } from '@/views/contacts/shipper/modules/model'
 import { MODULE_NAME } from '../../js/constant'
+import { money as moneyValidator } from '../../js/validator'
 
 const CARGO_IMAGE = require('../assets/box.png')
 
@@ -168,13 +169,7 @@ export default {
         weightKg: { type: 'number', min: 0 },
         volume: { type: 'number', min: 0 },
         quantity: { type: 'number', min: 1 },
-        cargoCost: {
-          type: 'number',
-          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/,
-          messages: {
-            pattern: '整数位不得超过9位'
-          }
-        }
+        cargoCost: { type: 'number', ...moneyValidator }
       },
       unit: '',
       showUnitType: false,
