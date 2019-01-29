@@ -1,6 +1,7 @@
 const webpack = require('webpack')
 const useBundleAnalyzer = false // 是否开启打包分析
 const proxyUrl = 'https://dev.tms5566.com/dolphin-app'
+const dllMap = `./public/${process.env.VUE_APP_STATUS !== 'local' ? 'prod' : 'dev'}/dll/common.json`
 let i = 0
 const config = {
   publicPath: './',
@@ -46,7 +47,7 @@ const config = {
   configureWebpack: {
     plugins: [
       new webpack.DllReferencePlugin({
-        manifest: require('./public/dll/common.json')
+        manifest: require(dllMap)
       })
     ],
     externals: {

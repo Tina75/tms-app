@@ -1,6 +1,5 @@
 const path = require('path')
 const webpack = require('webpack')
-
 const dlls = [
   'core-js',
   'vue',
@@ -18,14 +17,15 @@ const dlls = [
   './src/assets/font/iconfont'
 ]
 // const polyfill = ['core-js']
-
+const index = process.argv.indexOf('--mode')
+const mode = process.argv[index + 1]
+const distName = mode === 'production' ? 'prod' : 'dev'
 module.exports = {
   entry: {
     common: dlls
-    // polyfill
   },
   output: {
-    path: path.resolve(__dirname, 'public/dll'),
+    path: path.resolve(__dirname, `public/${distName}/dll`),
     filename: '[name].dll.js',
     library: '[name]'
   },
@@ -38,7 +38,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DllPlugin({
-      path: path.resolve(__dirname, 'public/dll', '[name].json'),
+      path: path.resolve(__dirname, `public/${distName}/dll`, '[name].json'),
       name: '[name]'
     })
   ]

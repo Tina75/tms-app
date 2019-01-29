@@ -1,10 +1,11 @@
 const webpack = require('webpack')
 const useBundleAnalyzer = false // 是否开启打包分析
-const dllmap = require('../public/dll/common.json')
+const envPath = process.env.VUE_APP_STATUS === 'prod' ? 'prod' : 'dev'
+const dllmap = require(`../public/${envPath}/dll/common.json`)
 const config = {
-  publicPath: './',
+  publicPath: './cube/static',
   assetsDir: '',
-  outputDir: 'public/cube',
+  outputDir: `public/${envPath}/cube`,
   productionSourceMap: false,
   parallel: true,
   lintOnSave: undefined,
