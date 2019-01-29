@@ -267,11 +267,10 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       const fromPage = from.name
-
       vm.id = vm.$route.params.id
       vm.mode = vm.$route.meta.mode
-      vm.setTitleButtons()
       vm.$nextTick(async () => {
+        vm.setTitleButtons()
         // 非指定页面或需要重置表单时重置表单
         if (NO_RESET_PAGES.indexOf(fromPage) === -1 || vm.orderNeedReset) {
           vm.$refs.$form.reset()
