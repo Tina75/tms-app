@@ -102,8 +102,8 @@ export default {
       const detail = this.viewData
       if (detail) {
         const arr = []
-        if (detail.drivePhoto) { arr.push(completeOssImage(detail.travelPhoto)) }
-        if (detail.travelPhoto) { arr.push(completeOssImage(detail.drivePhoto)) }
+        if (detail.travelPhoto) { arr.push(completeOssImage(detail.travelPhoto)) }
+        if (detail.drivePhoto) { arr.push(completeOssImage(detail.drivePhoto)) }
         return arr
       }
       return []
