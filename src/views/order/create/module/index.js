@@ -69,7 +69,9 @@ const state = {
   // 选择的收货人信息
   consigneeInfo: null,
   // 计费规则计算金额
-  calculatedAmount: ''
+  calculatedAmount: '',
+  // 收货人列表
+  consigneeList: []
 }
 
 export default {

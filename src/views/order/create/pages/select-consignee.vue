@@ -1,58 +1,57 @@
 <template>
-  <div class="order-create-consignee">
-    <InfiniteList
-      v-model="loading"
-      :has-data="consigneeList.list.length"
-      :loader="loadConsigneeList"
-      :has-next="consigneeList.hasNext"
+  <NoData
+    v-if="!list.length"
+    message="老板，您还没有记录收货人信息">
+    <img
+      slot="img"
+      class="order-create-consignee__placeholder"
+      src="@/assets/contacts/shipper-list-empty.png"
     >
-      <ListItem
-        v-for="(item, i) in consigneeList.list"
-        :key="item.id"
-        :index="i"
-        :item="item"
-        :use-name-icon="true"
-        @click="onItemClick"
-      />
-      <template slot="empty">
-        <NoData message="老板，您还没有记录收货人信息">
-          <img
-            slot="img"
-            class="order-create-consignee__placeholder"
-            src="@/assets/contacts/shipper-list-empty.png"
-          >
-        </NoData>
-      </template>
-    </InfiniteList>
-  </div>
+  </NoData>
+  <cube-scroll v-else ref="$scroll">
+    <ListItem
+      v-for="(item, i) in list"
+      :key="item.id"
+      :index="i"
+      :item="item"
+      :use-name-icon="true"
+      @click="onItemClick"
+    />
+  </cube-scroll>
 </template>
 
 <script>
 import ListItem from '@/views/contacts/components/ListItem'
-import InfiniteList from '@/components/InfiniteList'
 import NoData from '@/components/NoData'
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { MODULE_NAME } from '../../js/constant'
+import { addressConcat } from '../../js/filters'
 
 export default {
   name: 'select-consignee',
   metaInfo: {
     title: '选择收货人'
   },
-  components: { ListItem, NoData, InfiniteList },
+  components: { ListItem, NoData },
   data() {
     return {
       loading: false
     }
   },
-  computed: mapState(MODULE_NAME.CONTACTS_CONSIGNEE, [ 'consigneeList' ]),
+  computed: {
+    ...mapState(MODULE_NAME.ORDER_CREATE, [ 'consigneeList' ]),
+    list () {
+      return this.consigneeList.map(item => ({
+        id: item.id,
+        name: item.contact + '  ' + item.phone,
+        detail: addressConcat(item.address, item.startName, item.consignerHourseNumber),
+        phone: item.phone,
+        data: item
+      }))
+    }
+  },
   methods: {
     ...mapMutations(MODULE_NAME.ORDER_CREATE, [ 'SET_CONSIGNEE_INFO' ]),
-    ...mapActions(MODULE_NAME.CONTACTS_CONSIGNEE, [ 'loadConsigneeList' ]),
-
-    loader(refresh) { this.loadConsigneeList(refresh) },
-
-    onPageRefresh() { this.loading = true },
 
     onItemClick(item) {
       this.SET_CONSIGNEE_INFO(item.data)
@@ -63,12 +62,10 @@ export default {
 </script>
 
 <style lang='stylus'>
-  .order-create-consignee
-    height 100%
-    &__placeholder
-      width 179px
-      height 133px
+  .order-create-consignee__placeholder
+    width 179px
+    height 133px
 
-    .contact-item__right-icon
-      display none
+  .contact-item__right-icon
+    display none
 </style>

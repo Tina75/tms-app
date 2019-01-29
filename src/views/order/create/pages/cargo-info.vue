@@ -23,6 +23,12 @@
               @on-icon-click="chooseCargoInfo(index)"
               @on-focus="inputFocus" />
             <form-item
+              v-if="orderConfig.cargoNoOption"
+              v-model="form.cargoNo"
+              label="货物编码"
+              maxlength="200"
+              @on-focus="inputFocus" />
+            <form-item
               v-if="orderConfig.weightTonOption"
               v-model="form.weight"
               prop="weight"
@@ -75,12 +81,6 @@
               :show-arrow="false"
               placeholder="请输入长*宽*高"
               @click.native="showDimensionDialog(index)" />
-            <form-item
-              v-if="orderConfig.cargoNoOption"
-              v-model="form.cargoNo"
-              label="货物编码"
-              maxlength="200"
-              @on-focus="inputFocus" />
             <form-item
               v-if="orderConfig.remark1Option"
               v-model="form.remark1"

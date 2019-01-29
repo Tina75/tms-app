@@ -42,6 +42,7 @@ export default {
         delete data.isSaveOrderTemplate
         data.id = this.id
         await this.updateOrder(data)
+        this.editOrderHasInit = false
         window.toast('修改成功')
       }
       this.$formWillLeave()
