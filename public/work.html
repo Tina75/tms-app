@@ -110,6 +110,8 @@
         env = 'https://yzg.tms5566.com/tms-app/'
     }
 
+    var dependenciesPath = env + 'prod/'
+
     var app = new Vue({
       el: '#app',
       data: {
@@ -152,14 +154,14 @@
   </script>
   <script src="https://polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
   <script type="text/javascript">
-    // var commonJs = env + 'dll/common.dll.js'
-    // var cubeJs = env + 'cube/cube-chunk.js'
-    // var cubeCss = env + 'cube/css/chunk-vendors.css'
+    var commonJs = dependenciesPath + 'dll/common.dll.js'
+    var cubeJs = dependenciesPath + 'cube/cube-chunk.js'
+    var cubeCss = dependenciesPath + 'cube/css/chunk-vendors.css'
     /** 闲时拉取资源 */
     window.addEventListener('load', () => {
       quicklink({
         origins: true,
-        urls: [env +'index.html']
+        urls: [commonJs, cubeJs, cubeCss]
       })
     })
   </script>
