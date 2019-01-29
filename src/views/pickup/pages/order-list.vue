@@ -60,7 +60,8 @@ export default {
     title: '订单信息'
   },
   computed: {
-    ...mapGetters('pickup', ['billOrderList', 'orderSettlementTypeMap']),
+    ...mapGetters('pickup', ['billOrderList', 'orderSettlementTypeMap', 'pickupDetail']),
+    ...mapGetters(['UserConfig']),
     options () {
       return {
         scrollbar: true
@@ -84,10 +85,13 @@ export default {
     ])
   },
   methods: {
-    ...mapActions('pickup', ['getBillOrderList', 'removeBillOrder', 'editBillOrders']),
+    ...mapActions('pickup', ['getBillOrderList', 'removeBillOrder', 'editBillOrders', 'getPickupDetail']),
     async remove (item) {
       await this.removeBillOrder(item.id)
-      await this.editBillOrders(this.$route.params.id)
+      await this.editBillOrders({
+        id: this.$route.params.id,
+        allocationStrategy: this.pickupDetail.allocationStrategy
+      })
       await this.getBillOrderList(this.$route.params.id)
     }
   },
@@ -107,6 +111,7 @@ export default {
           }
         }
       ])
+      vm.getPickupDetail(to.params.id)
       vm.getBillOrderList(to.params.id)
     })
   },

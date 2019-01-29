@@ -59,6 +59,7 @@ export default {
   components: { IconFont },
   computed: {
     ...mapGetters('pickup', ['dispatchingData', 'orderSettlementTypeMap']),
+    ...mapGetters(['UserConfig']),
     options () {
       return {
         pullDownRefresh: {
@@ -100,7 +101,10 @@ export default {
           href: 'javascript:;'
         },
         async onConfirm () {
-          await _this.createPickup([data.id])
+          await _this.createPickup({
+            list: [data.id],
+            allocationStrategy: _this.UserConfig.allocationStrategyInfo.waybillStrategy || null
+          })
           await _this.removeOrder(index)
           await _this.getPickupCount()
           _this.$createToast({

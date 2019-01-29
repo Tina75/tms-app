@@ -65,6 +65,14 @@
           </span>
           <span class="text">全选</span>
           <span class="label"><i>{{chosenList.length}}</i>单</span>
+          <span class="text strategy" @click="showStrategyPicker">
+            分摊策略：{{strategyMap[allocationStrategy]}}
+            <icon-font
+              name="icon-ico_right"
+              :size="15"
+              color="#ADADAD"
+              class="link-icon"/>
+          </span>
         </p>
         <p class="total-stat">
           <span class="text">合计</span>
@@ -84,7 +92,7 @@ import { mapGetters, mapActions } from 'vuex'
 import NP from 'number-precision'
 
 export default {
-  name: 'DispatchingList',
+  name: 'dispatch',
   metaInfo: {
     title: '调度'
   },
@@ -97,11 +105,19 @@ export default {
         weight: 0,
         volume: 0,
         quantity: 0
+      },
+      allocationStrategy: 1,
+      strategyMap: {
+        1: '订单数',
+        2: '件数',
+        3: '重量',
+        4: '体积'
       }
     }
   },
   computed: {
-    ...mapGetters('pickup', ['dispatchingData', 'orderSettlementTypeMap']),
+    ...mapGetters('pickup', ['dispatchingData', 'orderSettlementTypeMap', 'pickupDetail']),
+    ...mapGetters(['UserConfig']),
     options () {
       return {
         pullUpLoad: this.dispatchingData.next,
@@ -178,9 +194,15 @@ export default {
           if (_this.$route.params.id) {
             console.log('hitConfirm')
             await _this.addBillOrder(_this.chosenList)
-            await _this.editBillOrders(_this.$route.params.id)
+            await _this.editBillOrders({
+              id: _this.$route.params.id,
+              allocationStrategy: _this.allocationStrategy
+            })
           } else {
-            await _this.createPickup(_this.chosenList)
+            await _this.createPickup({
+              list: _this.chosenList,
+              allocationStrategy: _this.allocationStrategy
+            })
             await _this.setPageStart('dispatchingData')
             await _this.getDispatching()
           }
@@ -190,6 +212,34 @@ export default {
             time: 1000,
             txt: '创建成功'
           }).show()
+        }
+      }).show()
+    },
+    showStrategyPicker () {
+      const _this = this
+      this.$createActionSheet({
+        title: '选择分摊策略',
+        active: _this.allocationStrategy - 1,
+        data: [
+          {
+            value: 1,
+            content: '订单数'
+          },
+          {
+            value: 2,
+            content: '件数'
+          },
+          {
+            value: 3,
+            content: '重量'
+          },
+          {
+            value: 4,
+            content: '体积'
+          }
+        ],
+        onSelect: (item) => {
+          _this.allocationStrategy = item.value
         }
       }).show()
     }
@@ -203,6 +253,7 @@ export default {
       }
       vm.chosenList = []
       vm.chosenAll = false
+      vm.allocationStrategy = vm.pickupDetail.allocationStrategy || vm.UserConfig.allocationStrategyInfo.waybillStrategy || 1
       vm.setPageStart('dispatchingData')
       vm.getDispatching()
     })
@@ -330,21 +381,30 @@ export default {
         vertical-align: middle
         line-height: 44px;
         &.select-all
-          width: 130px;
+          width: 100%;
+          display: flex
+          align-items center
+          .text
+            display: block
+          .strategy
+            flex: 1
+            text-align: right
+            .iconfont
+              display: inline-block
+              vertical-align: top
+              margin-top: 1px;
         &.total-stat
           flex: 1
         .check-icon
           display: inline-block
           vertical-align: middle
-          margin-top: -3px;
           width: 18px;
           height: 18px;
           border-radius: 100%
           border: 1px solid #d1d1d1
           margin-right: 10px;
+          line-height: 18px;
         .checked
-          margin-top: -5px;
-          vertical-align: baseline;
           border: none
         .text
           margin-right: 10px;
@@ -361,7 +421,7 @@ export default {
           i
             color: #00A4BD;
             font-style: normal
-            margin-right: 5px;
+            margin-right: 5px
     .confirm-btn
       height: 44px
       background-color: #00A4BD;
