@@ -97,8 +97,8 @@ export default {
     showDialog(msg, fn) {
       this.$createDialog({
         type: 'confirm',
-        icon: 'cubeic-alert',
-        // title: '我是标题',
+        // icon: 'cubeic-alert',
+        title: '提醒',
         content: msg,
         confirmBtn: { text: '确定', active: true },
         cancelBtn: { text: '取消' },

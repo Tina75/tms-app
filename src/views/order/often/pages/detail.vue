@@ -1,6 +1,6 @@
 
 <template>
-  <div v-if="detail" class="pickup-order-detail">
+  <div v-if="detail" class="often-order-detail">
     <cube-scroll-nav ref="$scroll">
       <cube-scroll-nav-panel
         v-for="(item, index) in pageData"
@@ -57,15 +57,16 @@ export default {
     },
 
     setRightButton () {
+      if (this.oftenPermission.indexOf(100402) === -1) return
       setAppTitleBtn({
         text: '删除',
         iconType: 'delete',
         action: () => {
           this.$createDialog({
             type: 'confirm',
-            title: '',
+            title: '提醒',
             content: '确认需要删除此常发订单？',
-            icon: 'cubeic-alert',
+            // icon: 'cubeic-alert',
             onConfirm: async () => {
               await this.deleteOftenOrder(this.orderId)
               window.toast('删除成功')
@@ -98,13 +99,12 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-  .pickup-order-detail
+  .often-order-detail
     height: 100%
-    background-color: #EFEFEF;
-    display: flex
-    flex-direction column
+    background-color: #EFEFEF
+
     .cube-scroll-nav
-      flex: 1
+      height calc(100% - 45px)
     .handle-btns
       height: 45px
       display: flex

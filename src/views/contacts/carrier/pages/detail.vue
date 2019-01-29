@@ -63,9 +63,9 @@ export default {
     removeHandle () {
       this.$createDialog({
         type: 'confirm',
-        title: '',
+        title: '提醒',
         content: '请确认是否需要删除该信息?',
-        icon: 'cubeic-alert',
+        // icon: 'cubeic-alert',
         onConfirm: () => {
           const data = {
             carrierId: this.$route.query.carrierId

@@ -23,6 +23,12 @@
               @on-icon-click="chooseCargoInfo(index)"
               @on-focus="inputFocus" />
             <form-item
+              v-if="orderConfig.cargoNoOption"
+              v-model="form.cargoNo"
+              label="货物编码"
+              maxlength="200"
+              @on-focus="inputFocus" />
+            <form-item
               v-if="orderConfig.weightTonOption"
               v-model="form.weight"
               prop="weight"
@@ -75,12 +81,6 @@
               :show-arrow="false"
               placeholder="请输入长*宽*高"
               @click.native="showDimensionDialog(index)" />
-            <form-item
-              v-if="orderConfig.cargoNoOption"
-              v-model="form.cargoNo"
-              label="货物编码"
-              maxlength="200"
-              @on-focus="inputFocus" />
             <form-item
               v-if="orderConfig.remark1Option"
               v-model="form.remark1"
@@ -151,6 +151,7 @@ import DimensionPopup from '@/views/contacts/components/DimensionPopup'
 import inputAutoPosition from '../js/inputAutoPosition'
 import { CargoDetail } from '@/views/contacts/shipper/modules/model'
 import { MODULE_NAME } from '../../js/constant'
+import { money as moneyValidator } from '../../js/validator'
 
 const CARGO_IMAGE = require('../assets/box.png')
 
@@ -168,13 +169,7 @@ export default {
         weightKg: { type: 'number', min: 0 },
         volume: { type: 'number', min: 0 },
         quantity: { type: 'number', min: 1 },
-        cargoCost: {
-          type: 'number',
-          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/,
-          messages: {
-            pattern: '整数位不得超过9位'
-          }
-        }
+        cargoCost: { type: 'number', ...moneyValidator }
       },
       unit: '',
       showUnitType: false,

@@ -1,3 +1,4 @@
+import cityUtil from '@/libs/city'
 const validator = {
   // 手机号码
   phone (value) {
@@ -27,6 +28,15 @@ export const consigneeRule = {
   address: { required: true }
 }
 
+const hasCity = (address, cityCode) => {
+  const cityForm = cityUtil.getCityNameArray(cityCode)
+  cityForm.forEach(name => {
+    if(address.indexOf(name) === 0){
+      address = address.replace(name, '')
+    }
+  })
+  return address
+}
 export class ConsigneeDetail {
   id = ''
   consigneeCompanyName = '' // 收货人单位
@@ -42,16 +52,17 @@ export class ConsigneeDetail {
     const data = {}
     const arr = ['address', 'cityCode', 'consigneeCompanyName', 'consignerHourseNumber', 'consignerId', 'consignerName', 'contact', 'id', 'phone', 'remark']
     arr.forEach((key) => {
-      data[key] = server[key]
-      data.cityCode = data.cityCode ? data.cityCode : ''
-      data.address = server.consignerHourseNumber ? server.address + server.consignerHourseNumber : server.address
+      data[key] = server[key] ? server[key] : ''
+      data.cityName = server.cityName ? server.cityName : ''
+      data.consignerHourseNumber = data.consignerHourseNumber ? data.consignerHourseNumber : ''
+      data.address = data.cityName + server.address + server.consignerHourseNumber
     })
     return data
   }
   static toView(data) {
     const view = {
       ...data,
-      address: data.consignerHourseNumber ? data.address + data.consignerHourseNumber : data.address
+      address: data.consignerHourseNumber ? hasCity(data.address, data.cityCode) + data.consignerHourseNumber : hasCity(data.address, data.cityCode)
     }
     return view
   }

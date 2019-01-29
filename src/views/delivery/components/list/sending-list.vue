@@ -47,7 +47,8 @@ export default {
     handleArrival(id) {
       this.$createDialog({
         type: 'confirm',
-        icon: 'cubeic-alert',
+        title: '提醒',
+        // icon: 'cubeic-alert',
         content: '是否确认到货？',
         onConfirm: () => {
           this.doArrival(id).then(() => {
