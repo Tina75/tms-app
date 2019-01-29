@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "build": "vue-cli-service build --mode dev",
-    "build_all": "npm run build_dll && npm run build_cube",
-    "build_all_prod": "npm run build_dll_prod && npm run build_cube_prod",
+    "build_all": "npm run build_dll && npm run build_cube && npm run build_dll_prod && npm run build_cube_prod",
     "build_dll": "webpack --config dll.config.js --mode development",
     "build_dll_prod": "webpack --config dll.config.js --mode production",
     "build_cube": "node cube/before && vue-cli-service build --mode cube && node cube/after",
