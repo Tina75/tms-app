@@ -21,7 +21,7 @@
         <span>{{pickupDetail.totalFee|moneyFormat}}元</span>
       </div>
     </detail-panel>
-    <detail-panel v-if="pickupDetail.assignCarType === 1" :title="'结算方式'">
+    <detail-panel v-if="pickupDetail.assignCarType === 1 && pickupDetail.settlementType" :title="'结算方式'">
       <detail-panel-item :label="'结算方式'">
         <p>{{settlementTypeMap[pickupDetail.settlementType]}}</p>
       </detail-panel-item>
