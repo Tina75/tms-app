@@ -202,6 +202,7 @@ export default {
         quantity: 0
       }
       vm.chosenList = []
+      vm.chosenAll = false
       vm.setPageStart('dispatchingData')
       vm.getDispatching()
     })
