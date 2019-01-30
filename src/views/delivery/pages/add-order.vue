@@ -173,8 +173,6 @@ export default {
     color #333
     .ploy
       float right
-        // transform:rotate(180deg)
-        // -webkit-transform:rotate(180deg);
   .total
     height 44px
     line-height 44px
