@@ -19,11 +19,14 @@
     </cube-scroll>
     <div class="footer">
       <div class="footer-calc">
-        <cube-checkbox v-model="checkAll" class="cube-font-18">
-          <span class="cube-font-15">全选</span>
-        </cube-checkbox>
-        <span class="cube-c-green">{{totalCount}}</span>单
-        <div style="float:right">
+        <div class="select">
+          <cube-checkbox v-model="checkAll" class="cube-font-18">
+            <span class="cube-font-15">全选</span>
+          </cube-checkbox>
+          <span class="cube-c-green">{{totalCount}}</span>单
+          <span class="ploy">分摊策略：{{allocationStrategy}} <i class="iconfont icon-ico_up"/></span>
+        </div>
+        <div class="total">
           合计&nbsp;
           <div v-if="totalWeight"><span class="cube-c-green">{{totalWeight}}</span>吨&nbsp;</div>
           <div v-if="totalVolume"><span class="cube-c-green">{{totalVolume}}</span>方&nbsp;</div>
@@ -48,7 +51,8 @@ export default {
     return {
       startCode: -1,
       endCode: -1,
-      checkAll: false
+      checkAll: false,
+      allocationStrategy: ''
     }
   },
 
@@ -155,10 +159,20 @@ export default {
     // display -webkit-flex
     // align-items center
     color #666666
+    .ploy
+      float right
+  .total
+    height 44px
+    line-height 44px
+    padding-left 40px
+    div
+      display inline-block
+  .select
     height 44px
     line-height 44px
     div
       display inline-block
+
   .btn-bottom
     padding 15px
     font-size 17px

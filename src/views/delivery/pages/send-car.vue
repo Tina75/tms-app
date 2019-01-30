@@ -652,10 +652,11 @@ export default {
           } else {
             await this.doSendCar(data).then(() => {
               window.toast('派车成功')
+              this.$router.back()
             })
           }
-          await this.clearSend()// 刷新列表
-          await this.getSend()
+          // await this.clearSend()// 刷新列表
+          // await this.getSend()
         }
 
         this.$router.back()
