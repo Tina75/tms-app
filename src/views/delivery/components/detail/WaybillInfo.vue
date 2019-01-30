@@ -12,10 +12,10 @@
         <a v-clipboard:copy="Waybill.carrierWaybillNo" v-clipboard:success="copySuccess">复制</a>
       </p>
     </detail-panel-item>
-    <detail-panel-item v-if="Waybill.startName" :label="'始发地'">
+    <detail-panel-item v-if="Waybill.startName" :label="'发货城市'">
       <p>{{Waybill.startName}}</p>
     </detail-panel-item>
-    <detail-panel-item v-if="Waybill.endName" :label="'目的地'">
+    <detail-panel-item v-if="Waybill.endName" :label="'收货城市'">
       <p>{{Waybill.endName}}</p>
     </detail-panel-item>
     <detail-panel-item v-if="(Waybill.assignCarType === 1 && Waybill.carrierName) || (Waybill.assignCarType === 2 && Waybill.carNo)" :label="'派车方式'">

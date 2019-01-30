@@ -30,8 +30,8 @@
           <p v-if="info.id && info.customerOrderNo" class="list-item__number">客户订单号：{{info.customerOrderNo}}</p>
         </div>
         <div class="list-item__money border-top-1px">
-          <p v-if="info.totalFee"  class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormatForOrder}})</p>
-          <div v-if="info.totalFee"  class="cube-c-yellow  cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.totalFee |moneyFormat}}</span>/元</div>
+          <p  class="cube-c-black cube-font-12 cube-ml-15">应收费用({{info.settlementType|settlementTypeFormatForOrder}})</p>
+          <div   class="cube-c-yellow  cube-ml-15"><span class="cube-font-20" style="font-weight:bold">{{info.totalFee |moneyFormat}}</span>/元</div>
           <!-- 状态 10：待提货 20：待调度 30：在途 40：已到货 50：已回单；100被删除到回收站 -->
           <cube-button
             v-if="!info.waybillId"

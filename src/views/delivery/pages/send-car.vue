@@ -41,19 +41,19 @@
             <cube-form-item :field="fields['otherFee']"/>
             <cube-form-item v-if="model.assignCarType === 1" :field="fields['infoFee']"/>
             <cube-form-item :field="fields['totalFee']">
-              <span class="total-money">{{model.totalFee}}</span>
+              <span class="total-money">{{model.totalFee || 0}}</span>
             </cube-form-item>
             <!-- 结算方式 -->
             <cube-form-item v-if="model.assignCarType === 1" :field="fields['settlementType']"/>
             <div v-if="model.assignCarType === 1 && model.settlementType === 1">
-              <cube-form-item  :field="fields['fuelCardAmount1']"/>
               <cube-form-item :field="fields['cashAmount1']"/>
-              <cube-form-item  :field="fields['fuelCardAmount2']"/>
+              <cube-form-item  :field="fields['fuelCardAmount1']"/>
               <cube-form-item :field="fields['cashAmount2']"/>
-              <cube-form-item :field="fields['fuelCardAmount3']"/>
+              <cube-form-item  :field="fields['fuelCardAmount2']"/>
               <cube-form-item :field="fields['cashAmount3']"/>
-              <cube-form-item :field="fields['fuelCardAmount4']"/>
+              <cube-form-item :field="fields['fuelCardAmount3']"/>
               <cube-form-item :field="fields['cashAmount4']"/>
+              <cube-form-item :field="fields['fuelCardAmount4']"/>
             </div>
           </cube-form-group>
           <cube-form-group >
@@ -607,7 +607,7 @@ export default {
           mileage: NP.times(this.model.mileage, 1000),
           freightFee: NP.times(this.model.freightFee, 100),
           tollFee: NP.times(this.model.tollFee, 100),
-          accommodation: NP.times(this.model.accommodation, 100),
+          accommodation: this.model.assignCarType === 2 ? NP.times(this.model.accommodation, 100) : '',
           loadFee: NP.times(this.model.loadFee, 100),
           unloadFee: NP.times(this.model.unloadFee, 100),
           otherFee: NP.times(this.model.otherFee, 100),
@@ -652,10 +652,11 @@ export default {
           } else {
             await this.doSendCar(data).then(() => {
               window.toast('派车成功')
+              this.$router.back()
             })
           }
-          await this.clearSend()// 刷新列表
-          await this.getSend()
+          // await this.clearSend()// 刷新列表
+          // await this.getSend()
         }
 
         this.$router.back()

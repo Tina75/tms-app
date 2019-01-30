@@ -127,7 +127,7 @@ export default {
     },
     saleChangeHandler (value, index, text) { this.form.salesmanName = text },
     ensure () {
-      if (this.form.deliveryTime === this.form.arriveTime) return window.toast('发到货时间不能相同')
+      if (this.form.deliveryTime && this.form.deliveryTime && this.form.deliveryTime === this.form.arriveTime) return window.toast('发到货时间不能相同')
       this.SET_CONSUMER_INFO(Object.assign({}, this.form))
       this.$formWillLeave()
       this.$router.back()

@@ -9,16 +9,25 @@
     <link rel="dns-prefetch" href="//aliyuncs.com">
     <link rel="dns-prefetch" href="//at.alicdn.com">
     <link rel="dns-prefetch" href="//yzg.tms5566.com">
-    <link href="./cube/css/chunk-vendors.css" rel=stylesheet>
+    <% if (process.env.VUE_APP_STATUS === 'local'){ %>
+    <link href="./dev/cube/css/chunk-vendors.css" rel=stylesheet>
+    <% } else { %> 
+      <link href="./prod/cube/css/chunk-vendors.css" rel=stylesheet>  
+    <%  }%>  
     <link rel="stylesheet" href="//at.alicdn.com/t/font_1002205_4qfw8qatdce.css    ">
     <title></title>
   </head>
   <body>
     <div id="app"></div>
-    <script src="./dll/common.dll.js"></script>
-    <script src="./cube/cube-chunk.js"></script>
-    <%= process.env.VUE_APP_STATUS !== 'production' ?
-      '<script src="//web.yundada56.com/common-lib/vconsole/3.2.0/vconsole.min.js"></script><script>new VConsole()</script>' : ''
-    %>
+    <% if (process.env.VUE_APP_STATUS === 'local'){ %>
+      <script src="./dev/dll/common.dll.js"></script>
+      <script src="./dev/cube/cube-chunk.js"></script>
+    <% } else { %> 
+      <script src="./prod/dll/common.dll.js"></script>
+      <script src="./prod/cube/cube-chunk.js"></script>
+    <%  }%>
+    <% if (process.env.VUE_APP_STATUS !== 'prod') { %>
+      <script src="//web.yundada56.com/common-lib/vconsole/3.2.0/vconsole.min.js"></script><script>new VConsole()</script>
+    <%  }%>  
   </body>
 </html>

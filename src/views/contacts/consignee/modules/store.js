@@ -66,9 +66,10 @@ const store = {
 
 const hasCity = (address, cityCode) => {
   const cityForm = cityUtil.getCityNameArray(cityCode)
-  cityForm.forEach(({ name = '', shortName = '' }) => {
-    address = address.replace(name, '')
-    address = address.replace(shortName, '')
+  cityForm.forEach(name => {
+    if(address.indexOf(name) === 0){
+      address = address.replace(name, '')
+    }
   })
   return address
 }

@@ -40,7 +40,7 @@ export default {
         type: 'confirm',
         title: '',
         content: '信息未保存，确认退出吗？',
-        icon: 'cubeic-alert',
+        // icon: 'cubeic-alert',
         onConfirm: () => {
           $formState.willLeave(to, from)
           $formState.willLeave = () => {}
