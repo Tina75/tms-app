@@ -24,7 +24,7 @@
             <span class="cube-font-15 cube-c-black">全选</span>
           </cube-checkbox>
           <span class="cube-c-green">{{totalCount}}</span>单
-          <span class="ploy" @click.stop="showPicker">分摊策略：{{allocationStrategy|allocationStrategy}} <i class="iconfont icon-ico_up cube-font-12"/></span>
+          <span class="ploy" @click.stop="showPicker">分摊策略：{{allocationStrategy|allocationStrategy}} <i class="iconfont icon-ico_up cube-font-12 ploy-icon"/></span>
         </div>
         <div class="total">
           合计&nbsp;&nbsp;&nbsp;
@@ -132,7 +132,7 @@ export default {
     async save() {
       let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)
       this.addBillOrder(ids)
-      await this.updatetBillOrders(this.$route.params.id)
+      await this.updatetBillOrders({ id: this.$route.params.id, allocationStrategy: this.allocationStrategy })
       this.$router.back()
     },
     showPicker() {
@@ -149,20 +149,8 @@ export default {
           this.allocationStrategy = item.value
         }
       }).show()
-    },
-    doDispatch() {
-      let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)
-      // if (!this.startCode) return window.toast('请选择始发地')
-      // if (!this.endCode) return window.toast('请选择目的地')
-      if (!ids.length) return window.toast('请至少选择一单')
-      const data = {
-        start: this.startCode,
-        end: this.endCode,
-        orderIds: ids,
-        allocationStrategy: this.allocationStrategy
-      }
-      this.dispatchOrder(data).then(() => { this.$router.back() })
     }
+
   }
 }
 
@@ -185,6 +173,8 @@ export default {
     color #333
     .ploy
       float right
+        transform:rotate(180deg)
+        -webkit-transform:rotate(180deg);
   .total
     height 44px
     line-height 44px

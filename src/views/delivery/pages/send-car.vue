@@ -41,7 +41,7 @@
             <cube-form-item :field="fields['otherFee']"/>
             <cube-form-item v-if="model.assignCarType === 1" :field="fields['infoFee']"/>
             <cube-form-item :field="fields['totalFee']">
-              <span class="total-money">{{model.totalFee}}</span>
+              <span class="total-money">{{model.totalFee || 0}}</span>
             </cube-form-item>
             <!-- 结算方式 -->
             <cube-form-item v-if="model.assignCarType === 1" :field="fields['settlementType']"/>
