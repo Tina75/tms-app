@@ -33,16 +33,6 @@
           <div v-if="totalQuantity"><span class="cube-c-green">{{totalQuantity}}</span>件</div>
         </div>
       </div>
-      <!-- <div class="footer-calc">
-        <cube-checkbox v-model="checkAll">全选</cube-checkbox>
-        <span class="cube-c-green">{{totalCount}}</span>单
-        <div style="float:right">
-          合计&nbsp;
-          <div v-if="totalWeight"><span class="cube-c-green">{{totalWeight}}</span>吨&nbsp;</div>
-          <div v-if="totalVolume"><span class="cube-c-green">{{totalVolume}}</span>方&nbsp;</div>
-          <div v-if="totalQuantity"><span class="cube-c-green">{{totalQuantity}}</span>件</div>
-        </div>
-      </div> -->
       <cube-button class="btn-bottom"  @click.stop="save">保存</cube-button>
     </div>
   </div>
@@ -51,7 +41,6 @@
 <script>
 
 import { mapGetters, mapActions } from 'vuex'
-// import DispatchCity from '../components/dispach-city'
 import WorkbenchListItem from '../components/ListItemWorkbench.vue'
 export default {
   name: 'delivery-add-order',
@@ -67,7 +56,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('delivery', ['DispatchList', 'Waybill']),
+    ...mapGetters('delivery', ['DispatchList', 'Waybill', 'CurrentBillOrderIds']),
     ...mapGetters(['UserConfig']),
     options() {
       return {
@@ -131,8 +120,12 @@ export default {
     },
     async save() {
       let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)
-      this.addBillOrder(ids)
-      await this.updatetBillOrders({ id: this.$route.params.id, allocationStrategy: this.allocationStrategy })
+      // this.addBillOrder(ids)
+      await this.updatetBillOrders({
+        id: this.$route.params.id,
+        orderIds: ids.concat(this.CurrentBillOrderIds),
+        allocationStrategy: this.allocationStrategy
+      })
       this.$router.back()
     },
     showPicker() {
@@ -157,7 +150,7 @@ export default {
 </script>
 <style lang='stylus' scoped>
 .scroll-wrap
-  margin-bottom 64px
+  height calc(100vh - 64px)
 .footer
   width 100%
   position fixed
