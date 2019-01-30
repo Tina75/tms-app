@@ -26,6 +26,12 @@ import IconFont from '@/components/Iconfont'
 import { uploadOSS } from '@/libs/ossUtil'
 import bridge from '@/libs/dsbridge'
 
+const completeOssImage = (src) => {
+  const hasDomain = /^(http|https):\/\//ig.test(src)
+  if (hasDomain) return src
+  return process.env.VUE_APP_IMG_HOST + src
+}
+
 export default {
   name: 'oss-upload',
 
@@ -51,7 +57,7 @@ export default {
   computed: {
     imageSrc () {
       // return 'http://tms5566dev.oss-cn-hangzhou.aliyuncs.com/dolphine/driver/d13cf069-7e1f-4687-ad28-9098ad00dd77/'
-      return process.env.VUE_APP_IMG_HOST + this.file + '?x-oss-process=image/resize,w_160'
+      return completeOssImage(this.file + '?x-oss-process=image/resize,w_160')
     }
   },
 

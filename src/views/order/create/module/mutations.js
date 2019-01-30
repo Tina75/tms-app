@@ -58,6 +58,7 @@ export default {
       state.orderInfo[key] = temp[key]
     }
     state.consignerId = void 0
+    state.consigneeList = []
     state.orderCargoList = []
     state.consumerInfo = {}
     state.feeInfo = {}
@@ -146,6 +147,8 @@ export default {
     resetFields(payload)
     state.consigneeInfo = payload
   },
+  // 设置收货人列表
+  SET_CONSIGNEE_LIST: (state, payload) => { state.consigneeList = payload },
   // 设置计费规矩金额
   SET_CALCULATE_AMOUNT: (state, payload) => { state.calculatedAmount = payload },
   // 清空计费规则计算金额结果

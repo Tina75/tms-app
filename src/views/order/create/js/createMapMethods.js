@@ -13,6 +13,7 @@ export default {
     'SET_ORDER_INFO',
     'SET_CONSIGNER_ID',
     'SET_CONSIGNEE_INFO',
+    'SET_CONSIGNEE_LIST',
     'SET_CONSUMER_INFO',
     'SET_CARGO_LIST',
     'SET_FEE_INFO',

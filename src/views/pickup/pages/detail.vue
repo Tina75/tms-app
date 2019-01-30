@@ -213,7 +213,9 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.getPickupDetail(to.params.id)
-      vm.$refs['content-scroll'].refresh()
+      vm.$nextTick(() => {
+        vm.$refs['content-scroll'].refresh()
+      })
     })
   },
   beforeRouteLeave (to, from, next) {

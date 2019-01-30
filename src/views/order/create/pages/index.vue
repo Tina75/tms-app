@@ -166,12 +166,13 @@ import { mapState, mapGetters } from 'vuex'
 import CreateFooter from '../components/CreateFooter'
 import { FormGroup, FormItem, FormTitle } from '@/components/Form'
 import { SETTLEMENT_TYPE, PICKUP_TYPE, MODULE_NAME } from '../../js/constant'
-import mapMethods from '../js/createMapMethods'
-import gotoOtherPages from '../js/createGotoOtherPage'
-import showData from '../js/createShowData'
-import orderSubmit from '../js/createSubmit'
-import createInit from '../js/createInit'
-import inputAutoPosition from '../js/inputAutoPosition'
+import { phone as phoneValidator, money as moneyValidator } from '../../js/validator'
+import createInit from '../js/createInit' // 初始化
+import mapMethods from '../js/createMapMethods' // store methods
+import gotoOtherPages from '../js/createGotoOtherPage' // 路由跳转处理
+import showData from '../js/createShowData' // 数据回显
+import orderSubmit from '../js/createSubmit' // 数据提交
+import inputAutoPosition from '../js/inputAutoPosition' // 输入框位置自动调节
 
 const IMAGES = {
   ACCEPT: require('../assets/accept.png'),
@@ -181,9 +182,8 @@ const IMAGES = {
   SEND: require('../assets/send.png')
 }
 
-const VALIDATE_PHONE = /^1[0-9]{10}$/
-const VALIDATE_TEL = /^[(（）)\-02-9][(（）)\-0-9]{1,19}$/
-const NO_RESET_PAGE = [
+// 不需要重置表单的from route name
+const NO_RESET_PAGES = [
   'order-charge-rule', // 计费规则
   'order-cargo-info', // 货物信息
   'order-edit-address', // 编辑地址
@@ -206,48 +206,47 @@ export default {
   },
   components: { FormGroup, FormItem, FormTitle, CreateFooter },
   data () {
-    const phoneValidate = val => {
-      val = val.replace(/\s/g, '')
-      return VALIDATE_PHONE.test(val) || VALIDATE_TEL.test(val)
-    }
-    const phoneMessage = { phoneValidate: '请输入正确的手机号或座机号' }
-
     return {
       IMAGES,
-      mode: '',
       id: '',
+      mode: '',
       loading: false,
-      editOrderHasInit: false,
+      editOrderHasInit: false, // 编辑的订单是否已经初始化，进编辑时有效
       settlementOptions: SETTLEMENT_TYPE,
       pickupOptions: PICKUP_TYPE,
       pickupDisabled: false,
       rules: {
-        consignerName: {
-          required: true,
-          type: 'string'
-        },
+        consignerName: { required: true, type: 'string' },
         consignerContact: { required: true, type: 'string' },
-        consignerPhone: { required: true, type: 'string', phoneValidate, messages: phoneMessage },
+        consignerPhone: { required: true, type: 'string', ...phoneValidator },
         consignerAddressText: { required: true, type: 'string' },
         consigneeContact: { required: true, type: 'string' },
-        consigneePhone: { required: true, type: 'string', phoneValidate, messages: phoneMessage },
+        consigneePhone: { required: true, type: 'string', ...phoneValidator },
         consigneeAddressText: { required: true, type: 'string' },
         orderCargoList: { required: true, type: 'string' },
         settlementType: { required: true, type: 'number' },
         pickup: { required: true, type: 'number' },
         receiptCount: { required: true, type: 'number', min: 0 },
-        freightFee: {
-          type: 'number',
-          min: 0,
-          pattern: /^((([1-9]\d{0,8})|0)(\.\d{0,3}[1-9])?)?$/,
-          messages: {
-            pattern: '整数位不得超过9位'
-          }
-        }
+        freightFee: { type: 'number', min: 0, ...moneyValidator }
       }
     }
   },
   computed: {
+    ...mapGetters(MODULE_NAME.ORDER_CREATE, [
+      'oneMoreId',
+      'consignerId',
+      'consigneeInfo',
+      'addressChanged',
+      'consumerInfo',
+      'orderCargoList',
+      'feeInfo',
+      'otherInfo',
+      'calculatedAmount',
+      'orderConfig',
+      'orderNeedReset',
+      'oftenPermission'
+    ]),
+    ...mapState(MODULE_NAME.CONTACTS_CONSIGNEE, [ 'saveConsigner' ]),
     orderInfo: {
       get: mapGetters(MODULE_NAME.ORDER_CREATE, [ 'orderInfo' ]).orderInfo,
       set: function () {
@@ -255,41 +254,25 @@ export default {
         this.RESET_ORDER()
       }
     },
-    ...mapGetters(MODULE_NAME.ORDER_CREATE, [
-      'consignerId',
-      'consumerInfo', // 客户订单号及其他
-      'orderCargoList', // 货物信息
-      'feeInfo', // 费用信息
-      'otherInfo', // 其他信息
-      'addressChanged',
-      'consigneeInfo',
-      'calculatedAmount',
-      'orderConfig',
-      'orderNeedReset',
-      'oftenPermission',
-      'oneMoreId'
-    ]),
-    ...mapState(MODULE_NAME.CONTACTS_CONSIGNEE, [
-      'saveConsigner'
-    ])
   },
   methods: {
+    ...createInit,
     ...mapMethods,
     ...gotoOtherPages,
     ...showData,
     ...orderSubmit,
-    ...createInit,
     ...inputAutoPosition
   },
 
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.mode = vm.$route.meta.mode
+      const fromPage = from.name
       vm.id = vm.$route.params.id
+      vm.mode = vm.$route.meta.mode
       vm.$nextTick(async () => {
         vm.setTitleButtons()
-        const fromPage = from.name
-        if (NO_RESET_PAGE.indexOf(fromPage) === -1 || vm.orderNeedReset) {
+        // 非指定页面或需要重置表单时重置表单
+        if (NO_RESET_PAGES.indexOf(fromPage) === -1 || vm.orderNeedReset) {
           vm.$refs.$form.reset()
         }
         // 发运页面返回的情况不查询订单数据
@@ -303,6 +286,7 @@ export default {
         vm.showOtherInfo()
         vm.showFreightFee()
         vm.calculateDistance()
+        // 回显数据完成后刷新scroll组件
         vm.$nextTick(() => { vm.$refs.$scroll.refresh() })
       })
     })
