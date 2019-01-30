@@ -16,7 +16,7 @@
     </cube-scroll-nav>
     <div v-if="pickupDetail.status !== 3" class="handle-btns">
       <template v-if="pickupDetail.status === 1">
-        <a v-if="hasSendCar" @click="pickup">提货</a>
+        <a v-if="(pickupDetail.assignCarType === 1 && pickupDetail.carrierName) || (pickupDetail.assignCarType === 2 && pickupDetail.carNo)" @click="pickup">提货</a>
         <a v-else @click="assign">派车</a>
       </template>
       <template v-if="pickupDetail.status === 2">
@@ -60,8 +60,7 @@ export default {
         1: '待提货',
         2: '提货中',
         3: '已提货'
-      },
-      hasSendCar: false
+      }
     }
   },
   computed: {
@@ -71,7 +70,7 @@ export default {
     'pickupDetail.status' (val) {
       if (val === 1) {
         let btns = []
-        if (this.hasSendCar) {
+        if ((this.pickupDetail.assignCarType === 1 && this.pickupDetail.carrierName) || (this.pickupDetail.assignCarType === 2 && this.pickupDetail.carNo)) {
           btns.push({
             text: '编辑',
             iconType: 'edit',
@@ -215,9 +214,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.getPickupDetail(to.params.id).then((pickupDetail) => {
-        vm.hasSendCar = (pickupDetail.assignCarType === 1 && pickupDetail.carrierName) || (pickupDetail.assignCarType === 2 && pickupDetail.carNo)
-      })
+      vm.getPickupDetail(to.params.id)
       vm.$nextTick(() => {
         vm.$refs['content-scroll'].refresh()
       })
