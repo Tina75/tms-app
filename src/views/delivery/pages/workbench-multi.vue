@@ -21,13 +21,13 @@
       <div class="footer-calc">
         <div class="select">
           <cube-checkbox v-model="checkAll" class="cube-font-18">
-            <span class="cube-font-15">全选</span>
+            <span class="cube-font-15 cube-c-black">全选</span>
           </cube-checkbox>
           <span class="cube-c-green">{{totalCount}}</span>单
-          <span class="ploy" @click="showPicker">分摊策略：{{allocationStrategy|allocationStrategy}} <i class="iconfont icon-ico_up"/></span>
+          <span class="ploy" @click.stop="showPicker">分摊策略：{{allocationStrategy|allocationStrategy}} <i class="iconfont icon-ico_up cube-font-12"/></span>
         </div>
         <div class="total">
-          合计&nbsp;
+          合计&nbsp;&nbsp;&nbsp;
           <div v-if="totalWeight"><span class="cube-c-green">{{totalWeight}}</span>吨&nbsp;</div>
           <div v-if="totalVolume"><span class="cube-c-green">{{totalVolume}}</span>方&nbsp;</div>
           <div v-if="totalQuantity"><span class="cube-c-green">{{totalQuantity}}</span>件</div>
@@ -123,7 +123,8 @@ export default {
       const data = {
         start: this.startCode,
         end: this.endCode,
-        orderIds: ids
+        orderIds: ids,
+        allocationStrategy: this.allocationStrategy
       }
       this.$createDialog({
         type: 'confirm',
@@ -178,7 +179,7 @@ export default {
     // display flex
     // display -webkit-flex
     // align-items center
-    color #666666
+    color #333
     .ploy
       float right
   .total

@@ -19,6 +19,21 @@
     </cube-scroll>
     <div class="footer">
       <div class="footer-calc">
+        <div class="select">
+          <cube-checkbox v-model="checkAll" class="cube-font-18">
+            <span class="cube-font-15 cube-c-black">全选</span>
+          </cube-checkbox>
+          <span class="cube-c-green">{{totalCount}}</span>单
+          <span class="ploy" @click.stop="showPicker">分摊策略：{{allocationStrategy|allocationStrategy}} <i class="iconfont icon-ico_up cube-font-12"/></span>
+        </div>
+        <div class="total">
+          合计&nbsp;&nbsp;&nbsp;
+          <div v-if="totalWeight"><span class="cube-c-green">{{totalWeight}}</span>吨&nbsp;</div>
+          <div v-if="totalVolume"><span class="cube-c-green">{{totalVolume}}</span>方&nbsp;</div>
+          <div v-if="totalQuantity"><span class="cube-c-green">{{totalQuantity}}</span>件</div>
+        </div>
+      </div>
+      <!-- <div class="footer-calc">
         <cube-checkbox v-model="checkAll">全选</cube-checkbox>
         <span class="cube-c-green">{{totalCount}}</span>单
         <div style="float:right">
@@ -27,7 +42,7 @@
           <div v-if="totalVolume"><span class="cube-c-green">{{totalVolume}}</span>方&nbsp;</div>
           <div v-if="totalQuantity"><span class="cube-c-green">{{totalQuantity}}</span>件</div>
         </div>
-      </div>
+      </div> -->
       <cube-button class="btn-bottom"  @click.stop="save">保存</cube-button>
     </div>
   </div>
@@ -46,12 +61,14 @@ export default {
     return {
       // startCode: -1,
       // endCode: -1,
-      checkAll: false
+      checkAll: false,
+      allocationStrategy: ''
     }
   },
 
   computed: {
-    ...mapGetters('delivery', ['DispatchList']),
+    ...mapGetters('delivery', ['DispatchList', 'Waybill']),
+    ...mapGetters(['UserConfig']),
     options() {
       return {
         pullDownRefresh: { pullDownRefresh: 60, stopTime: 600, txt: '刷新成功' },
@@ -88,11 +105,15 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.refresh()
+      vm.getWaybillDetail(to.params.id).then(() => {
+        vm.allocationStrategy = vm.Waybill.allocationStrategy
+      })
     })
   },
-
+  mounted() {
+  },
   methods: {
-    ...mapActions('delivery', ['getDispatch', 'clearDispatch', 'dispatchOrder', 'addBillOrder', 'updatetBillOrders']),
+    ...mapActions('delivery', ['getWaybillDetail', 'getDispatch', 'clearDispatch', 'dispatchOrder', 'addBillOrder', 'updatetBillOrders']),
     refresh() {
       this.clearDispatch()
       this.getDispatch().then(() => { this.checkAll = false })
@@ -114,16 +135,31 @@ export default {
       await this.updatetBillOrders(this.$route.params.id)
       this.$router.back()
     },
+    showPicker() {
+      this.$createActionSheet({
+        title: '请选择',
+        pickerStyle: true,
+        data: [
+          { content: '按订单数分摊', value: 1 },
+          { content: '按件数分摊', value: 2 },
+          { content: '按重量分摊', value: 3 },
+          { content: '按体积分摊', value: 4 }
+        ],
+        onSelect: (item, index) => {
+          this.allocationStrategy = item.value
+        }
+      }).show()
+    },
     doDispatch() {
       let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)
       // if (!this.startCode) return window.toast('请选择始发地')
       // if (!this.endCode) return window.toast('请选择目的地')
       if (!ids.length) return window.toast('请至少选择一单')
-      console.log('选中的id有 ' + JSON.stringify(ids))
       const data = {
         start: this.startCode,
         end: this.endCode,
-        orderIds: ids
+        orderIds: ids,
+        allocationStrategy: this.allocationStrategy
       }
       this.dispatchOrder(data).then(() => { this.$router.back() })
     }
@@ -146,7 +182,16 @@ export default {
     // display flex
     // display -webkit-flex
     // align-items center
-    color #666666
+    color #333
+    .ploy
+      float right
+  .total
+    height 44px
+    line-height 44px
+    padding-left 40px
+    div
+      display inline-block
+  .select
     height 44px
     line-height 44px
     div
