@@ -381,7 +381,7 @@ export default {
           }
         }).then((response) => {
           commit('getPickupDetail', response.data.data)
-          resolve()
+          resolve(response.data.data.loadbill)
         })
       })
     },
