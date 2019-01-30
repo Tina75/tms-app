@@ -16,7 +16,7 @@
     </cube-scroll-nav>
     <div v-if="pickupDetail.status !== 3" class="handle-btns">
       <template v-if="pickupDetail.status === 1">
-        <a v-if="(pickupDetail.assignCarType === 1 && pickupDetail.carrierName) || (pickupDetail.assignCarType === 2 && pickupDetail.carNo)" @click="pickup">提货</a>
+        <a v-if="hasSendCar" @click="pickup">提货</a>
         <a v-else @click="assign">派车</a>
       </template>
       <template v-if="pickupDetail.status === 2">
@@ -60,7 +60,8 @@ export default {
         1: '待提货',
         2: '提货中',
         3: '已提货'
-      }
+      },
+      hasSendCar: false
     }
   },
   computed: {
@@ -69,8 +70,9 @@ export default {
   watch: {
     'pickupDetail.status' (val) {
       if (val === 1) {
-        setAppRightBtn([
-          {
+        let btns = []
+        if (this.hasSendCar) {
+          btns.push({
             text: '编辑',
             iconType: 'edit',
             action: () => {
@@ -84,41 +86,42 @@ export default {
                 }
               })
             }
-          },
-          {
-            text: '删除',
-            iconType: 'delete',
-            action: () => {
-              const _this = this
-              this.$createDialog({
-                type: 'confirm',
-                title: '提示',
-                content: '确定要删除吗？',
-                confirmBtn: {
-                  text: '是',
-                  active: true,
-                  disabled: false,
-                  href: 'javascript:;'
-                },
-                cancelBtn: {
-                  text: '否',
-                  active: false,
-                  disabled: false,
-                  href: 'javascript:;'
-                },
-                async onConfirm () {
-                  await _this.deleteBill(_this.$route.params.id)
-                  _this.$createToast({
-                    type: 'warn',
-                    time: 1000,
-                    txt: '删除成功'
-                  }).show()
-                  _this.$router.back()
-                }
-              }).show()
-            }
+          })
+        }
+        btns.push({
+          text: '删除',
+          iconType: 'delete',
+          action: () => {
+            const _this = this
+            this.$createDialog({
+              type: 'confirm',
+              title: '提示',
+              content: '确定要删除吗？',
+              confirmBtn: {
+                text: '是',
+                active: true,
+                disabled: false,
+                href: 'javascript:;'
+              },
+              cancelBtn: {
+                text: '否',
+                active: false,
+                disabled: false,
+                href: 'javascript:;'
+              },
+              async onConfirm () {
+                await _this.deleteBill(_this.$route.params.id)
+                _this.$createToast({
+                  type: 'warn',
+                  time: 1000,
+                  txt: '删除成功'
+                }).show()
+                _this.$router.back()
+              }
+            }).show()
           }
-        ])
+        })
+        setAppRightBtn(btns)
       } else {
         setAppRightBtn([{ text: '', action: () => {} }])
       }
@@ -214,6 +217,7 @@ export default {
     next(vm => {
       vm.getPickupDetail(to.params.id)
       vm.$nextTick(() => {
+        vm.hasSendCar = (this.pickupDetail.assignCarType === 1 && this.pickupDetail.carrierName) || (this.pickupDetail.assignCarType === 2 && this.pickupDetail.carNo)
         vm.$refs['content-scroll'].refresh()
       })
     })
