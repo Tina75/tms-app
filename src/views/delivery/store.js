@@ -89,7 +89,7 @@ export default {
       state.currentBillOrderIds.splice(state.currentBillOrderIds.indexOf(id), 1)
     },
     addBillOrder (state, ids) {
-      state.currentBillOrderIds.push(...ids)
+      state.currentBillOrderIds = [...ids]
     }
   },
   actions: {
@@ -274,9 +274,9 @@ export default {
     removeBillOrder: ({ state, commit }, id) => {
       commit('removeBillOrder', id)
     },
-    addBillOrder: ({ state, commit }, ids) => {
-      commit('addBillOrder', ids)
-    },
+    // addBillOrder: ({ state, commit }, ids) => {
+    //   commit('addBillOrder', ids)
+    // },
     updatetBillOrders: ({ state, commit }, obj) => {
       return new Promise((resolve, reject) => {
         Server({
@@ -284,7 +284,7 @@ export default {
           url: '/waybill/update/order',
           data: {
             id: obj.id,
-            orderIds: state.currentBillOrderIds,
+            orderIds: obj.orderIds ? obj.orderIds : state.currentBillOrderIds,
             allocationStrategy: obj.allocationStrategy
           }
         }).then((response) => {

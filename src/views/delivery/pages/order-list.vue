@@ -82,7 +82,10 @@ export default {
     },
     async removeItem(orderId) {
       await this.removeBillOrder(orderId)
-      await this.updatetBillOrders({ id: this.waybillId, allocationStrategy: this.Waybill.allocationStrategy })
+      await this.updatetBillOrders({
+        id: this.waybillId,
+        allocationStrategy: this.Waybill.allocationStrategy
+      })
       this.getOrderListByWaybillId(this.waybillId)
     }
   }

@@ -69,8 +69,9 @@ export default {
   watch: {
     'pickupDetail.status' (val) {
       if (val === 1) {
-        setAppRightBtn([
-          {
+        let btns = []
+        if ((this.pickupDetail.assignCarType === 1 && this.pickupDetail.carrierName) || (this.pickupDetail.assignCarType === 2 && this.pickupDetail.carNo)) {
+          btns.push({
             text: '编辑',
             iconType: 'edit',
             action: () => {
@@ -84,41 +85,42 @@ export default {
                 }
               })
             }
-          },
-          {
-            text: '删除',
-            iconType: 'delete',
-            action: () => {
-              const _this = this
-              this.$createDialog({
-                type: 'confirm',
-                title: '提示',
-                content: '确定要删除吗？',
-                confirmBtn: {
-                  text: '是',
-                  active: true,
-                  disabled: false,
-                  href: 'javascript:;'
-                },
-                cancelBtn: {
-                  text: '否',
-                  active: false,
-                  disabled: false,
-                  href: 'javascript:;'
-                },
-                async onConfirm () {
-                  await _this.deleteBill(_this.$route.params.id)
-                  _this.$createToast({
-                    type: 'warn',
-                    time: 1000,
-                    txt: '删除成功'
-                  }).show()
-                  _this.$router.back()
-                }
-              }).show()
-            }
+          })
+        }
+        btns.push({
+          text: '删除',
+          iconType: 'delete',
+          action: () => {
+            const _this = this
+            this.$createDialog({
+              type: 'confirm',
+              title: '提示',
+              content: '确定要删除吗？',
+              confirmBtn: {
+                text: '是',
+                active: true,
+                disabled: false,
+                href: 'javascript:;'
+              },
+              cancelBtn: {
+                text: '否',
+                active: false,
+                disabled: false,
+                href: 'javascript:;'
+              },
+              async onConfirm () {
+                await _this.deleteBill(_this.$route.params.id)
+                _this.$createToast({
+                  type: 'warn',
+                  time: 1000,
+                  txt: '删除成功'
+                }).show()
+                _this.$router.back()
+              }
+            }).show()
           }
-        ])
+        })
+        setAppRightBtn(btns)
       } else {
         setAppRightBtn([{ text: '', action: () => {} }])
       }

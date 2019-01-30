@@ -13,18 +13,18 @@
       @pulling-up="loadmore">
       <ul>
         <li v-for="item in DispatchList" :key="item.id" >
-          <workbench-list-item :info="item"/>
+          <workbench-list-item :info="item" @on-item-click="handleClickItem"/>
         </li>
       </ul>
     </cube-scroll>
     <div class="footer">
       <div class="footer-calc">
-        <div class="select">
-          <cube-checkbox v-model="checkAll" class="cube-font-18">
+        <div class="select"  @click="toggleAll">
+          <cube-checkbox v-model="checkAll" class="cube-font-18" >
             <span class="cube-font-15 cube-c-black">全选</span>
           </cube-checkbox>
           <span class="cube-c-green">{{totalCount}}</span>单
-          <span class="ploy" @click.stop="showPicker">分摊策略：{{allocationStrategy|allocationStrategy}} <i class="iconfont icon-ico_up cube-font-12 ploy-icon"/></span>
+          <span class="ploy" @click.stop="showPicker">分摊策略：{{allocationStrategy|allocationStrategy}} <i class="iconfont icon-ico_up cube-font-12"/></span>
         </div>
         <div class="total">
           合计&nbsp;&nbsp;&nbsp;
@@ -33,16 +33,6 @@
           <div v-if="totalQuantity"><span class="cube-c-green">{{totalQuantity}}</span>件</div>
         </div>
       </div>
-      <!-- <div class="footer-calc">
-        <cube-checkbox v-model="checkAll">全选</cube-checkbox>
-        <span class="cube-c-green">{{totalCount}}</span>单
-        <div style="float:right">
-          合计&nbsp;
-          <div v-if="totalWeight"><span class="cube-c-green">{{totalWeight}}</span>吨&nbsp;</div>
-          <div v-if="totalVolume"><span class="cube-c-green">{{totalVolume}}</span>方&nbsp;</div>
-          <div v-if="totalQuantity"><span class="cube-c-green">{{totalQuantity}}</span>件</div>
-        </div>
-      </div> -->
       <cube-button class="btn-bottom"  @click.stop="save">保存</cube-button>
     </div>
   </div>
@@ -51,7 +41,6 @@
 <script>
 
 import { mapGetters, mapActions } from 'vuex'
-// import DispatchCity from '../components/dispach-city'
 import WorkbenchListItem from '../components/ListItemWorkbench.vue'
 export default {
   name: 'delivery-add-order',
@@ -67,7 +56,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('delivery', ['DispatchList', 'Waybill']),
+    ...mapGetters('delivery', ['DispatchList', 'Waybill', 'CurrentBillOrderIds']),
     ...mapGetters(['UserConfig']),
     options() {
       return {
@@ -90,9 +79,9 @@ export default {
     }
   },
   watch: {
-    checkAll: function(val) {
-      this.DispatchList.forEach(item => { item.checked = val })
-    },
+    // checkAll: function(val) {
+    //   this.DispatchList.forEach(item => { item.checked = val })
+    // },
     DispatchList: function(newList) {
       if (newList && newList.length) {
         const firstOne = newList[0]
@@ -114,6 +103,12 @@ export default {
   },
   methods: {
     ...mapActions('delivery', ['getWaybillDetail', 'getDispatch', 'clearDispatch', 'dispatchOrder', 'addBillOrder', 'updatetBillOrders']),
+    toggleAll() {
+      this.$nextTick(() => {
+        let val = this.checkAll
+        this.DispatchList.forEach(item => { item.checked = val })
+      })
+    },
     refresh() {
       this.clearDispatch()
       this.getDispatch().then(() => { this.checkAll = false })
@@ -129,10 +124,18 @@ export default {
         return obj
       })[key]
     },
+    handleClickItem() {
+      let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)
+      this.checkAll = ids.length === this.DispatchList.length
+    },
     async save() {
       let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)
-      this.addBillOrder(ids)
-      await this.updatetBillOrders({ id: this.$route.params.id, allocationStrategy: this.allocationStrategy })
+      // this.addBillOrder(ids)
+      await this.updatetBillOrders({
+        id: this.$route.params.id,
+        orderIds: ids.concat(this.CurrentBillOrderIds),
+        allocationStrategy: this.allocationStrategy
+      })
       this.$router.back()
     },
     showPicker() {
@@ -157,7 +160,7 @@ export default {
 </script>
 <style lang='stylus' scoped>
 .scroll-wrap
-  margin-bottom 64px
+  height calc(100vh - 104px)
 .footer
   width 100%
   position fixed
@@ -173,12 +176,12 @@ export default {
     color #333
     .ploy
       float right
-        transform:rotate(180deg)
-        -webkit-transform:rotate(180deg);
   .total
     height 44px
     line-height 44px
     padding-left 40px
+    overflow hidden
+    white-space nowrap
     div
       display inline-block
   .select
