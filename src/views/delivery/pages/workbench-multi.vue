@@ -58,6 +58,8 @@ export default {
 
   computed: {
     ...mapGetters('delivery', ['DispatchList']),
+    ...mapGetters(['UserConfig']),
+
     options() {
       return {
         pullDownRefresh: { pullDownRefresh: 60, stopTime: 600, txt: '刷新成功' },
@@ -92,6 +94,9 @@ export default {
     this.checkAll = false
   },
 
+  mounted() {
+    this.allocationStrategy = this.UserConfig.allocationStrategyInfo.waybillStrategy
+  },
   methods: {
     ...mapActions('delivery', ['getDispatch', 'clearDispatch', 'dispatchOrder']),
     refresh() {

@@ -66,7 +66,7 @@
           <span class="text">全选</span>
           <span class="label"><i>{{chosenList.length}}</i>单</span>
           <span class="text strategy" @click="showStrategyPicker">
-            分摊策略：{{strategyMap[allocationStrategy]}}
+            分摊策略：{{strategyMap[strategy]}}
             <icon-font
               name="icon-ico_right"
               :size="15"
@@ -106,7 +106,7 @@ export default {
         volume: 0,
         quantity: 0
       },
-      allocationStrategy: 1,
+      strategy: 1,
       strategyMap: {
         1: '订单数',
         2: '件数',
@@ -116,7 +116,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('pickup', ['dispatchingData', 'orderSettlementTypeMap', 'pickupDetail']),
+    ...mapGetters('pickup', ['dispatchingData', 'orderSettlementTypeMap', 'allocationStrategy']),
     ...mapGetters(['UserConfig']),
     options () {
       return {
@@ -126,7 +126,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('pickup', ['setPageStart', 'getDispatching', 'createPickup', 'addBillOrder', 'editBillOrders', 'setPageStart']),
+    ...mapActions('pickup', ['setPageStart', 'getDispatching', 'createPickup', 'editBillOrders', 'setPageStart']),
     /** 上拉加载 */
     async onPullingUp () {
       await this.getDispatching()
@@ -151,6 +151,9 @@ export default {
       } else {
         this.chosenList.push(id)
       }
+      if (this.chosenList.length < this.dispatchingData.list.length) {
+        this.chosenAll = false
+      }
       this.setStat()
     },
     setStat () {
@@ -172,7 +175,6 @@ export default {
     },
     async batchDispatch () {
       const _this = this
-      console.log(this.$route.params.id)
       const confirmText = this.$route.params.id ? '是否确认添加这些订单' : '是否确认做提货调度，创建提货单'
       this.$createDialog({
         type: 'confirm',
@@ -193,15 +195,15 @@ export default {
         async onConfirm () {
           if (_this.$route.params.id) {
             console.log('hitConfirm')
-            await _this.addBillOrder(_this.chosenList)
             await _this.editBillOrders({
               id: _this.$route.params.id,
-              allocationStrategy: _this.allocationStrategy
+              chosenList: _this.chosenList,
+              allocationStrategy: _this.strategy
             })
           } else {
             await _this.createPickup({
               list: _this.chosenList,
-              allocationStrategy: _this.allocationStrategy
+              allocationStrategy: _this.strategy
             })
             await _this.setPageStart('dispatchingData')
             await _this.getDispatching()
@@ -219,7 +221,7 @@ export default {
       const _this = this
       this.$createActionSheet({
         title: '选择分摊策略',
-        active: _this.allocationStrategy - 1,
+        active: _this.strategy - 1,
         data: [
           {
             value: 1,
@@ -239,7 +241,7 @@ export default {
           }
         ],
         onSelect: (item) => {
-          _this.allocationStrategy = item.value
+          _this.strategy = item.value
         }
       }).show()
     }
@@ -253,10 +255,15 @@ export default {
       }
       vm.chosenList = []
       vm.chosenAll = false
-      vm.allocationStrategy = vm.pickupDetail.allocationStrategy || vm.UserConfig.allocationStrategyInfo.waybillStrategy || 1
+      vm.strategy = (to.params.id ? vm.allocationStrategy : 0) || vm.UserConfig.allocationStrategyInfo.waybillStrategy || 1
       vm.setPageStart('dispatchingData')
       vm.getDispatching()
     })
+  },
+  beforeRouteLeave (to, form, next) {
+    this.chosenList = []
+    this.chosenAll = false
+    next()
   }
 }
 </script>

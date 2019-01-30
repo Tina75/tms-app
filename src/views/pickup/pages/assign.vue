@@ -480,7 +480,7 @@ export default {
     ...inputAutoPosition,
     validateHandler(result) {
       this.validity = result.validity
-      if (result.valid !== false) {
+      if (result.valid !== false || result.firstInvalidFieldIndex > 13) {
         this.model.totalFee = NP.plus(this.model.freightFee, this.model.loadFee, this.model.unloadFee, this.model.otherFee, this.model.insuranceFee)
       }
       if (this.isSubmitValid) {

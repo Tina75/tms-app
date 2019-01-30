@@ -13,8 +13,7 @@ const dlls = [
   'ali-oss',
   'dayjs',
   'number-precision',
-  'vue-clipboard2',
-  './src/assets/font/iconfont'
+  'vue-clipboard2'
 ]
 // const polyfill = ['core-js']
 const index = process.argv.indexOf('--mode')
