@@ -49,13 +49,6 @@ export default {
       content = '',
       onConfirm = () => {}
     } = {}) => {
-      console.info({
-        type: 'confirm',
-        title,
-        content,
-        // icon,
-        onConfirm
-      })
       this.$createDialog({
         type: 'confirm',
         title,

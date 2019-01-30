@@ -24,7 +24,7 @@
             <span class="cube-font-15">全选</span>
           </cube-checkbox>
           <span class="cube-c-green">{{totalCount}}</span>单
-          <span class="ploy">分摊策略：{{allocationStrategy}} <i class="iconfont icon-ico_up"/></span>
+          <span class="ploy" @click="showPicker">分摊策略：{{allocationStrategy|allocationStrategy}} <i class="iconfont icon-ico_up"/></span>
         </div>
         <div class="total">
           合计&nbsp;
@@ -138,6 +138,21 @@ export default {
         this.startCode = firstOne.start
         this.endCode = firstOne.end
       }
+    },
+    showPicker() {
+      this.$createActionSheet({
+        title: '请选择',
+        pickerStyle: true,
+        data: [
+          { content: '按订单数分摊', value: 1 },
+          { content: '按件数分摊', value: 2 },
+          { content: '按重量分摊', value: 3 },
+          { content: '按体积分摊', value: 4 }
+        ],
+        onSelect: (item, index) => {
+          this.allocationStrategy = item.value
+        }
+      }).show()
     }
   }
 }

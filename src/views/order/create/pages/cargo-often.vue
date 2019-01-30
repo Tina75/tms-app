@@ -54,7 +54,7 @@ export default {
       cargo.quantity = 1
       cargo.size = !item.dimension.length && !item.dimension.width && !item.dimension.height
         ? ''
-        : [ item.dimension.length || '-', item.dimension.width || '-', item.dimension.height || '-' ].join('x')
+        : [ item.dimension.length || '-', item.dimension.width || '-', item.dimension.height || '-' ].join(' x ')
       this.SET_CARGO_OFTEN(cargo)
       this.$router.back()
     }
