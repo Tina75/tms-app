@@ -89,7 +89,7 @@ export default {
       state.currentBillOrderIds.splice(state.currentBillOrderIds.indexOf(id), 1)
     },
     addBillOrder (state, ids) {
-      state.currentBillOrderIds.push(...ids)
+      state.currentBillOrderIds = [...ids]
     }
   },
   actions: {
@@ -231,13 +231,17 @@ export default {
     },
     // 获取运单详情
     getWaybillDetail: ({ commit }, id) => {
-      return Server(
-        { url: '/waybill/details',
-          method: 'post',
-          data: { waybillId: id } }
-      ).then(({ data }) => {
-        commit('WAYBILL_DETAIL', data.data)
-        return data.data
+      return new Promise((resolve, reject) => {
+        Server(
+          { url: '/waybill/details',
+            method: 'post',
+            data: { waybillId: id } }
+        ).then(({ data }) => {
+          commit('WAYBILL_DETAIL', data.data)
+          resolve(data.data)
+        }).catch(e => {
+          reject(e)
+        })
       })
     },
     clearWaybillDetail: ({ commit }) => {
@@ -270,17 +274,18 @@ export default {
     removeBillOrder: ({ state, commit }, id) => {
       commit('removeBillOrder', id)
     },
-    addBillOrder: ({ state, commit }, ids) => {
-      commit('addBillOrder', ids)
-    },
-    updatetBillOrders: ({ state, commit }, id) => {
+    // addBillOrder: ({ state, commit }, ids) => {
+    //   commit('addBillOrder', ids)
+    // },
+    updatetBillOrders: ({ state, commit }, obj) => {
       return new Promise((resolve, reject) => {
         Server({
           method: 'post',
           url: '/waybill/update/order',
           data: {
-            id: id,
-            orderIds: state.currentBillOrderIds
+            id: obj.id,
+            orderIds: obj.orderIds ? obj.orderIds : state.currentBillOrderIds,
+            allocationStrategy: obj.allocationStrategy
           }
         }).then((response) => {
           resolve()

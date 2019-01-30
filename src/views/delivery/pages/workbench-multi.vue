@@ -13,18 +13,21 @@
       @pulling-up="loadmore">
       <ul>
         <li v-for="item in DispatchList" :key="item.id" >
-          <workbench-list-item :info="item" @update-city="updateCity"/>
+          <workbench-list-item :info="item" @update-city="updateCity" @on-item-click="handleClickItem"/>
         </li>
       </ul>
     </cube-scroll>
     <div class="footer">
       <div class="footer-calc">
-        <cube-checkbox v-model="checkAll" class="cube-font-18">
-          <span class="cube-font-15">全选</span>
-        </cube-checkbox>
-        <span class="cube-c-green">{{totalCount}}</span>单
-        <div style="float:right">
-          合计&nbsp;
+        <div class="select" @click="toggleAll">
+          <cube-checkbox v-model="checkAll" class="cube-font-18">
+            <span class="cube-font-15 cube-c-black">全选</span>
+          </cube-checkbox>
+          <span class="cube-c-green">{{totalCount}}</span>单
+          <span class="ploy" @click.stop="showPicker">分摊策略：{{allocationStrategy|allocationStrategy}} <i class="iconfont icon-ico_up cube-font-12"/></span>
+        </div>
+        <div class="total">
+          合计&nbsp;&nbsp;&nbsp;
           <div v-if="totalWeight"><span class="cube-c-green">{{totalWeight}}</span>吨&nbsp;</div>
           <div v-if="totalVolume"><span class="cube-c-green">{{totalVolume}}</span>方&nbsp;</div>
           <div v-if="totalQuantity"><span class="cube-c-green">{{totalQuantity}}</span>件</div>
@@ -48,12 +51,15 @@ export default {
     return {
       startCode: -1,
       endCode: -1,
-      checkAll: false
+      checkAll: false,
+      allocationStrategy: ''
     }
   },
 
   computed: {
     ...mapGetters('delivery', ['DispatchList']),
+    ...mapGetters(['UserConfig']),
+
     options() {
       return {
         pullDownRefresh: { pullDownRefresh: 60, stopTime: 600, txt: '刷新成功' },
@@ -74,12 +80,12 @@ export default {
       return this.DispatchList.filter(item => item.checked === true).length
     }
   },
-  watch: {
-    checkAll: function(val) {
-      this.DispatchList.forEach(item => { item.checked = val })
-      this.updateCity()
-    }
-  },
+  // watch: {
+  //   checkAll: function(val) {
+  //     this.DispatchList.forEach(item => { item.checked = val })
+  //     this.updateCity()
+  //   }
+  // },
 
   activated () {
     this.refresh()
@@ -88,6 +94,9 @@ export default {
     this.checkAll = false
   },
 
+  mounted() {
+    this.allocationStrategy = this.UserConfig.allocationStrategyInfo.waybillStrategy
+  },
   methods: {
     ...mapActions('delivery', ['getDispatch', 'clearDispatch', 'dispatchOrder']),
     refresh() {
@@ -106,6 +115,19 @@ export default {
         return obj
       })[key]
     },
+    toggleAll() {
+      this.$nextTick(() => {
+        let val = this.checkAll
+        this.DispatchList.forEach(item => { item.checked = val })
+        if (val) {
+          this.updateCity()
+        }
+      })
+    },
+    handleClickItem() {
+      let list = this.DispatchList.filter(item => item.checked)
+      this.checkAll = list.length === this.DispatchList.length
+    },
     doDispatch() {
       let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)
       if (this.startCode <= 0) return window.toast('请选择发货城市')
@@ -114,7 +136,8 @@ export default {
       const data = {
         start: this.startCode,
         end: this.endCode,
-        orderIds: ids
+        orderIds: ids,
+        allocationStrategy: this.allocationStrategy
       }
       this.$createDialog({
         type: 'confirm',
@@ -134,6 +157,21 @@ export default {
         this.startCode = firstOne.start
         this.endCode = firstOne.end
       }
+    },
+    showPicker() {
+      this.$createActionSheet({
+        title: '请选择',
+        pickerStyle: true,
+        data: [
+          { content: '按订单数分摊', value: 1 },
+          { content: '按件数分摊', value: 2 },
+          { content: '按重量分摊', value: 3 },
+          { content: '按体积分摊', value: 4 }
+        ],
+        onSelect: (item, index) => {
+          this.allocationStrategy = item.value
+        }
+      }).show()
     }
   }
 }
@@ -154,11 +192,24 @@ export default {
     // display flex
     // display -webkit-flex
     // align-items center
-    color #666666
+    color #333
+    .ploy
+      float right
+      i
+        transform:rotate(180deg)
+        -webkit-transform:rotate(180deg);
+  .total
+    height 44px
+    line-height 44px
+    padding-left 40px
+    div
+      display inline-block
+  .select
     height 44px
     line-height 44px
     div
       display inline-block
+
   .btn-bottom
     padding 15px
     font-size 17px

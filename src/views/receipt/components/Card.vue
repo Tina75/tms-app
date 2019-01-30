@@ -5,12 +5,12 @@
       <div v-if="data.collectionMoney>0" class="order-status right">代</div>
     </div>
     <div class="consignee-info border-bottom-1px">
-      <div v-if="data.startName || data.endName"  class="city">
-        {{data.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{data.endName}}
+      <div class="city">
+        {{data.startName || data.consignerAddress | textOverflow}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{data.endName || data.consigneeAddress | textOverflow}}
       </div>
-      <div v-else class="city">
+      <!-- <div v-else class="city">
         <span class="cityAdress">{{data.consignerAddress}}</span><i class="iconfont icon-line cube-ml-5 cube-mr-5"/><span class="cityAdress">{{data.consigneeAddress}}</span>
-      </div>
+      </div> -->
       <div class="cargos">
         <div v-if="data.weight" class="cargo-infos">{{data.weight}}吨</div>
         <div v-if="data.volume" class="cargo-infos">{{data.volume}}方</div>
@@ -90,7 +90,7 @@ export default {
   .city
     color #333
     font-size 18px
-    font-weight 600
+    font-weight bold
     white-space nowrap
     overflow hidden
     text-overflow ellipsis

@@ -56,7 +56,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters('delivery', ['DispatchList'])
+    ...mapGetters('delivery', ['DispatchList']),
+    ...mapGetters(['UserConfig'])
   },
 
   activated () {
@@ -72,7 +73,8 @@ export default {
       const data = {
         start: this.startCode,
         end: this.endCode,
-        orderIds: [this.info.id]
+        orderIds: [this.info.id],
+        allocationStrategy: this.UserConfig.allocationStrategyInfo.waybillStrategy || null
       }
       this.$createDialog({
         type: 'confirm',

@@ -82,7 +82,8 @@ export default {
       addressList: []
     },
     billOrderList: [],
-    currentBillOrderIds: []
+    currentBillOrderIds: [],
+    allocationStrategy: 0
   },
   mutations: {
     getPickupCount (state, data) {
@@ -119,6 +120,7 @@ export default {
       state.pickupCargoDetail = noArray.map(no => {
         return { orderNo: no, cargoList: data.cargoList.filter(item => item.orderNo === no) }
       })
+      state.allocationStrategy = data.loadbill.allocationStrategy
     },
     clearDetail (state) {
       state.pickupDetail = {}
@@ -255,13 +257,14 @@ export default {
         })
       })
     },
-    createPickup: ({ commit, state }, ids) => {
+    createPickup: ({ commit, state }, data) => {
       return new Promise((resolve, reject) => {
         server({
           method: 'post',
           url: 'load/bill/create',
           data: {
-            orderIds: ids
+            orderIds: data.list,
+            allocationStrategy: data.allocationStrategy
           }
         }).then(() => {
           resolve()
@@ -437,18 +440,17 @@ export default {
       commit('removeBillOrder', id)
     },
     addBillOrder: ({ state, commit }, ids) => {
-      console.log('hitAction1')
       commit('addBillOrder', ids)
     },
-    editBillOrders: ({ state, commit }, id) => {
-      console.log('hitAction2')
+    editBillOrders: ({ state, commit }, data) => {
       return new Promise((resolve, reject) => {
         server({
           method: 'post',
           url: 'load/bill/update/order',
           data: {
-            id: id,
-            orderIds: state.currentBillOrderIds
+            id: data.id,
+            orderIds: [...state.currentBillOrderIds, ...data.chosenList],
+            allocationStrategy: data.allocationStrategy
           }
         }).then((response) => {
           resolve()
@@ -528,6 +530,7 @@ export default {
     carTypeMap: (state) => state.carTypeMap,
     carLengthMap: (state) => state.carLengthMap,
     locationDetail: (state) => state.locationDetail,
-    billOrderList: (state) => state.billOrderList
+    billOrderList: (state) => state.billOrderList,
+    allocationStrategy: (state) => state.allocationStrategy
   }
 }

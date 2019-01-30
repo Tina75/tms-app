@@ -1,5 +1,4 @@
 import cityUtil from 'ydd_area'
-console.info('cityUtil', cityUtil)
 cityUtil.getCityNameArray = (data) => {
   if (typeof data === 'number' || typeof data === 'string') {
     data = cityUtil.getPathByCode(data)

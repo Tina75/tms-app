@@ -41,7 +41,7 @@
             <cube-form-item :field="fields['otherFee']"/>
             <cube-form-item v-if="model.assignCarType === 1" :field="fields['infoFee']"/>
             <cube-form-item :field="fields['totalFee']">
-              <span class="total-money">{{model.totalFee}}</span>
+              <span class="total-money">{{model.totalFee || 0}}</span>
             </cube-form-item>
             <!-- 结算方式 -->
             <cube-form-item v-if="model.assignCarType === 1" :field="fields['settlementType']"/>
@@ -342,72 +342,68 @@ export default {
           props: {
             options: [
               {
-                value: 1,
-                text: '1.8米'
-              },
-              {
-                value: 2,
-                text: '2.7米'
-              },
-              {
-                value: 3,
-                text: '3.8米'
-              },
-              {
-                value: 4,
-                text: '4.2米'
-              },
-              {
-                value: 5,
-                text: '5米'
-              },
-              {
-                value: 6,
-                text: '6.2米'
-              },
-              {
-                value: 7,
-                text: '6.8米'
-              },
-              {
-                value: 8,
-                text: '7.7米'
-              },
-              {
-                value: 9,
-                text: '8.2米'
-              },
-              {
-                value: 10,
-                text: '8.7米'
-              },
-              {
-                value: 11,
-                text: '9.6米'
-              },
-              {
-                value: 12,
-                text: '11.7米'
-              },
-              {
-                value: 13,
-                text: '12.5米'
-              },
-              {
-                value: 14,
-                text: '13米'
-              },
-              {
-                value: 15,
-                text: '15米'
+                value: 17,
+                text: '17.5米'
               },
               {
                 value: 16,
                 text: '16米'
               },
               {
-                value: 17,
-                text: '17.5米'
+                value: 15,
+                text: '15米'
+              },
+              {
+                value: 14,
+                text: '13米'
+              },
+              {
+                value: 13,
+                text: '12.5米'
+              },
+              {
+                value: 12,
+                text: '11.7米'
+              },
+              {
+                value: 11,
+                text: '9.6米'
+              },
+              {
+                value: 10,
+                text: '8.7米'
+              },
+              {
+                value: 9,
+                text: '8.2米'
+              },
+              {
+                value: 8,
+                text: '7.7米'
+              },
+              {
+                value: 7,
+                text: '6.8米'
+              },
+              {
+                value: 6,
+                text: '6.2米'
+              },
+              {
+                value: 4,
+                text: '4.2米'
+              },
+              {
+                value: 3,
+                text: '3.8米'
+              },
+              {
+                value: 2,
+                text: '2.7米'
+              },
+              {
+                value: 1,
+                text: '1.8米'
               }
             ],
             placeholder: '请选择'
@@ -652,10 +648,11 @@ export default {
           } else {
             await this.doSendCar(data).then(() => {
               window.toast('派车成功')
+              this.$router.back()
             })
           }
-          await this.clearSend()// 刷新列表
-          await this.getSend()
+          // await this.clearSend()// 刷新列表
+          // await this.getSend()
         }
 
         this.$router.back()

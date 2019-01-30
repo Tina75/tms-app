@@ -89,6 +89,7 @@ export default {
         onConfirm: () => {
           this.doSetOff(id).then(() => {
             this.getWaybillDetail(id)
+            setAppRightBtn([{ text: '', action: () => { } }])
           })
         }
       }).show()

@@ -15,7 +15,12 @@
             </div>
           </div>
           <div class="list-item__body">
-            <p class="list-item__city">{{info.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{info.endName}}</p>
+            <!-- <p class="list-item__city">{{info.startName}} <i class="iconfont icon-line cube-ml-5 cube-mr-5"/> {{info.endName}}</p> -->
+            <p class="list-item__city">
+              {{info.startName?info.startName:info.consignerAddress |textOverflow}}
+              <i class="iconfont icon-line cube-ml-5 cube-mr-5"/>
+              {{info.endName?info.endName:info.consigneeAddress |textOverflow}}
+            </p>
             <div>
               <span v-if="info.weight" class="list-item__count">{{info.weight}}吨</span>
               <span v-if="info.volume" class="list-item__count">{{info.volume}}方</span>
@@ -54,13 +59,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('delivery', ['BillOrderList', 'CurrentBillOrderIds'])
+    ...mapGetters('delivery', ['Waybill', 'BillOrderList', 'CurrentBillOrderIds'])
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
       vm.waybillId = to.params.id
       setAppRightBtn([{ text: '添加', iconType: 'add', action: () => { vm.$router.push({ name: 'delivery-add-order', params: { id: to.params.id } }) } }])
-      // vm.getWaybillDetail(vm.waybillId)
+      vm.getWaybillDetail(vm.waybillId)
       vm.getOrderListByWaybillId(vm.waybillId)
     })
   },
@@ -75,10 +80,13 @@ export default {
       // 外转且有承运商名称  or 自送且有车牌号
       return (info.assignCarType === 1 && info.carrierName) || (info.assignCarType === 2 && info.carNo)
     },
-    removeItem(orderId) {
-      this.updatetBillOrders(this.waybillId).then(() => {
-        this.removeBillOrder(orderId)
+    async removeItem(orderId) {
+      await this.removeBillOrder(orderId)
+      await this.updatetBillOrders({
+        id: this.waybillId,
+        allocationStrategy: this.Waybill.allocationStrategy
       })
+      this.getOrderListByWaybillId(this.waybillId)
     }
   }
 }

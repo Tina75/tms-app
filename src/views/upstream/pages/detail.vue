@@ -65,7 +65,7 @@
             <a slot="right" :href="`tel:${detail.consignerPhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
           </FormItem>
           <FormItem v-if="detail.consignerAddress" label="发货地址">
-            <p>{{detail.consignerAddress}}</p>
+            <p>{{pick(detail.consignerAddress, detail.departureCityName)}}</p>
           </FormItem>
         </Panel>
         <Panel title="收货人">
@@ -77,7 +77,7 @@
             <a slot="right" :href="`tel:${detail.consigneePhone}`" class="act-btn">联系TA<i class="iconfont icon-ico_call"/></a>
           </FormItem>
           <FormItem v-if="detail.consigneeAddress" label="收货地址">
-            <p>{{detail.consigneeAddress}}</p>
+            <p>{{pick(detail.consigneeAddress, detail.destinationCityName)}}</p>
           </FormItem>
         </Panel>
       </cube-scroll-nav-panel>
@@ -193,6 +193,58 @@ export default {
     },
     orderStatus (val) {
       return orderStatus(val)
+    },
+    // 拼装 去重 地址
+    /**
+     * 省 市 自治区
+     * 市 县 区
+     */
+    pick (addr, city) {
+      if (this.exist(addr, '省') || this.isMunicipality(addr)) {
+        // 有省级市城市
+        return addr
+      } else if (this.exist(addr, '区') || this.exist(addr, '县') || this.exist(addr, '市')) {
+        // 详细地址有区县市区 过滤
+        const areaName = addr.split('区').length > 1 ? addr.split('区')[0] : addr.split('县').length > 1 ? addr.split('县')[0] : addr.split('市').length > 1 ? addr.split('市')[0] : ''
+        return this.exist(city, areaName) ? city.split(areaName)[0] + addr : city + addr
+      } else {
+        return city + addr
+      }
+    },
+    isMunicipality (addr) {
+      const arr = ['上海市', '北京市', '天津市', '重庆市', '深圳市']
+      const res = arr.some(el => {
+        return new RegExp(`^${el}`).test(addr)
+      })
+      return res
+    },
+    exist (str, key) {
+      return str.indexOf(key) !== -1
+    },
+    /**
+     * @Description: 发货城市将省市区和详细地址拼接，并且去掉详细地址中重复的省市区信息
+     * @Date 2019/1/29
+     * @param 省市区(CityName) 详细地址(addressName)
+     */
+    methodCity (addressName, CityName) {
+      let str = CityName || ''
+      let address = addressName || ''
+      let index1 = str.indexOf('省')
+      if (index1) {
+        let province = str.slice(0, index1 + 1)
+        address = address.replace(province, '')
+      }
+      let index2 = str.indexOf('市')
+      if (index2) {
+        let city = str.slice(index1 + 1, index2 + 1)
+        address = address.replace(city, '')
+      }
+      let index3 = str.indexOf('区')
+      if (index3) {
+        let area = str.slice(index2 + 1, str.length)
+        address = address.replace(area, '')
+      }
+      return str + address
     }
   }
 }

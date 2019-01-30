@@ -45,22 +45,15 @@ export default {
     // 全局弹窗
     window.confirm = ({
       title = '',
-      icon = 'cubeic-alert',
+      // icon = 'cubeic-alert',
       content = '',
       onConfirm = () => {}
     } = {}) => {
-      console.info({
-        type: 'confirm',
-        title,
-        content,
-        icon,
-        onConfirm
-      })
       this.$createDialog({
         type: 'confirm',
         title,
         content,
-        icon,
+        // icon,
         onConfirm
       }).show()
     }
