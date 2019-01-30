@@ -150,7 +150,7 @@ export default {
 </script>
 <style lang='stylus' scoped>
 .scroll-wrap
-  height calc(100vh - 64px)
+  height calc(100vh - 104px)
 .footer
   width 100%
   position fixed
@@ -170,6 +170,8 @@ export default {
     height 44px
     line-height 44px
     padding-left 40px
+    overflow hidden
+    white-space nowrap
     div
       display inline-block
   .select
