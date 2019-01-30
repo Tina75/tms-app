@@ -24,7 +24,7 @@
             <span class="cube-font-15 cube-c-black">全选</span>
           </cube-checkbox>
           <span class="cube-c-green">{{totalCount}}</span>单
-          <span class="ploy" @click.stop="showPicker">分摊策略：{{allocationStrategy|allocationStrategy}} <i class="iconfont icon-ico_up cube-font-12 ploy-icon"/></span>
+          <span class="ploy" @click.stop="showPicker">分摊策略：{{allocationStrategy|allocationStrategy}} <i class="iconfont icon-ico_up cube-font-12"/></span>
         </div>
         <div class="total">
           合计&nbsp;&nbsp;&nbsp;
@@ -173,8 +173,8 @@ export default {
     color #333
     .ploy
       float right
-        transform:rotate(180deg)
-        -webkit-transform:rotate(180deg);
+        // transform:rotate(180deg)
+        // -webkit-transform:rotate(180deg);
   .total
     height 44px
     line-height 44px
