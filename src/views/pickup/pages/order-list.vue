@@ -90,6 +90,7 @@ export default {
       await this.removeBillOrder(item.id)
       await this.editBillOrders({
         id: this.$route.params.id,
+        chosenList: [],
         allocationStrategy: this.allocationStrategy
       })
       await this.getBillOrderList(this.$route.params.id)
