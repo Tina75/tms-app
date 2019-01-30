@@ -35,9 +35,8 @@ export default {
     window.alert = (msg, fn) => {
       this.$createDialog({
         type: 'alert',
-        title: '',
+        title: '提示',
         content: msg,
-        icon: 'cubeic-alert',
         onConfirm: () => {
           if (typeof fn === 'function') fn()
         }
@@ -46,22 +45,15 @@ export default {
     // 全局弹窗
     window.confirm = ({
       title = '',
-      icon = 'cubeic-alert',
+      // icon = 'cubeic-alert',
       content = '',
       onConfirm = () => {}
     } = {}) => {
-      console.info({
-        type: 'confirm',
-        title,
-        content,
-        icon,
-        onConfirm
-      })
       this.$createDialog({
         type: 'confirm',
         title,
         content,
-        icon,
+        // icon,
         onConfirm
       }).show()
     }

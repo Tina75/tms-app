@@ -3,24 +3,24 @@
   <div class="city-content">
     <div class="city-cell start border-bottom-1px" @click="startSelVisable = !startSelVisable" >
       <div class="city-left">
-        <span class="city-icon start-icon">始</span>始发地
+        <span class="city-icon start-icon">发</span>发货城市
       </div>
       <div class="city-right">
         {{startCode | codeToName}}&nbsp;
         <i class="iconfont icon-ico_right"/>
       </div>
     </div>
-    <city-picker :value="startSelVisable" :deep="3" @confirm="confirmStart"/>
+    <city-picker v-if="startSelVisable" :value="startSelVisable" :deep="3" @confirm="confirmStart"/>
     <div class="city-cell cube-ml-15" @click="endSelVisable = !endSelVisable">
       <div class="city-left">
-        <span class="city-icon end-icon">目</span>目的地
+        <span class="city-icon end-icon">收</span>收货城市
       </div>
       <div class="city-right">
         {{endCode | codeToName}}&nbsp;
         <i class="iconfont icon-ico_right"/>
       </div>
     </div>
-    <city-picker :value="endSelVisable" :deep="3" @confirm="confirmEnd"/>
+    <city-picker v-if="endSelVisable" :value="endSelVisable" :deep="3" @confirm="confirmEnd"/>
   </div>
 </template>
 

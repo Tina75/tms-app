@@ -89,6 +89,7 @@ export default {
         onConfirm: () => {
           this.doSetOff(id).then(() => {
             this.getWaybillDetail(id)
+            setAppRightBtn([{ text: '', action: () => { } }])
           })
         }
       }).show()
@@ -117,7 +118,8 @@ export default {
     deleteItem(id) {
       this.$createDialog({
         type: 'confirm',
-        icon: 'cubeic-important',
+        // icon: 'cubeic-important',
+        title: '提示',
         content: '是否确认删除？',
         onConfirm: () => {
           this.deleteBillById(id).then(() => {
@@ -139,15 +141,21 @@ export default {
     height: 100%
     background-color: #EFEFEF;
     display: flex
+    display: -webkit-box;
+    display : -webkit-flex
     flex-direction column
     .cube-scroll-nav
       flex: 1
+      -webkit-box-flex: 1
+      height: calc(100% - 45px)
     .handle-btns
       display: flex
+      display: -webkit-box;
+      display : -webkit-flex
       >>> .cube-btn
         font-size 17px
         font-weight 500
-        padding 15px
+        padding 14px
       a
         flex: 1
         background: #27A3BD;
@@ -175,6 +183,8 @@ export default {
       width 100%
       .cube-scroll-nav-bar-items
         display: flex
+        display: -webkit-box;
+        display : -webkit-flex
         // border-bottom 1px solid #ebebeb
         .cube-scroll-nav-bar-item
           flex 1

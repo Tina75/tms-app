@@ -1,6 +1,6 @@
 <template>
   <div class="receipt-detail">
-    <cube-scroll-nav>
+    <cube-scroll-nav ref="$navPanel">
       <StatusBar slot="prepend" :status="detail.receiptOrder && detail.receiptOrder.receiptStatus" :time="detail.createTime" type="receipt"/>
       <cube-scroll-nav-panel label="基本信息">
         <Panel title="基本信息">
@@ -43,10 +43,10 @@
               v-clipboard:error="onError"
               class="act-btn">复制</span>
           </FormItem>
-          <FormItem v-if="detail.startName" label="始发地">
+          <FormItem v-if="detail.startName" label="发货城市">
             {{detail.startName}}
           </FormItem>
-          <FormItem v-if="detail.endName" label="目的地">
+          <FormItem v-if="detail.endName" label="收货城市">
             {{detail.endName}}
           </FormItem>
           <FormItem v-if="detail.deliveryTime" label="发货时间">
@@ -181,6 +181,9 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
+      vm.$nextTick(() => {
+        vm.$refs.$navPanel.refresh()
+      })
       vm.initDetail()
     })
   },
@@ -289,8 +292,14 @@ export default {
 <style lang="stylus" scoped>
 .receipt-detail
   height 100%
-  display: flex
+  display flex
+  display -webkit-box
+  display -webkit-flex
   flex-direction column
+  .cube-scroll-nav
+    flex 1
+    -webkit-box-flex 1
+    height calc(100% - 47px)
 .upstream-footer
   display flex
   >>> .cube-btn

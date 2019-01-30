@@ -2,12 +2,12 @@ import dayjs from 'dayjs'
 import Vue from 'vue'
 import City from '@/libs/city'
 import NP from 'number-precision'
+
 const URL_HOST = process.env.VUE_APP_IMG_HOST
 // 0 时区和北京时间的时差 单位分
 const bjOffset = -480
 // 当前环境的和北京时间的时差
 const timeOffset = new Date().getTimezoneOffset() - bjOffset
-console.info(dayjs)
 Vue.filter('datetimeFormat', (value, formatting = 'YYYY-MM-DD HH:mm', placeholder = '') => {
   if (!value) return placeholder
   let time = dayjs(Number(value))
@@ -97,4 +97,10 @@ Vue.filter('payType', value => {
 Vue.filter('carType', value => {
   const types = { 1: '平板', 2: '高栏', 3: '厢车', 4: '自卸', 5: '冷藏', 6: '保温', 7: '高低板', 8: '面包车', 9: '爬梯车', 10: '飞翼车', 11: '罐车' }
   return types[value]
+})
+
+// 分摊策略
+Vue.filter('allocationStrategy', value => {
+  const types = { 1: '订单数', 2: '件数', 3: '重量', 4: '体积' }
+  return value ? types[value] : '请选择'
 })

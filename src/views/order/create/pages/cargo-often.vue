@@ -3,27 +3,25 @@
     v-if="!loading && !cargoList.length"
     :img="NO_DATA"
     message="暂无常发货物" />
-  <cube-scroll v-else ref="$scroll">
-    <ul class="list">
-      <li
-        v-for="item in cargoList" :key="item.id"
-        class="list-item"
-        @click="pickCargo(item)">
-        <div class="item-icon">
-          <icon-font name="icon-ico_thing" size="20" color="#ffffff" />
-        </div>
+  <ul v-else class="list">
+    <li
+      v-for="item in cargoList" :key="item.id"
+      class="list-item"
+      @click="pickCargo(item)">
+      <div class="item-icon">
+        <icon-font name="icon-ico_thing" size="20" color="#ffffff" />
+      </div>
 
-        <div class="item-info border-bottom-1px">
-          <p class="item-info-title">{{ item.cargoName }}</p>
-          <p class="item-info-data">
-            <span v-if="item.weight">{{ item.weight }}吨</span>
-            <span v-if="item.volume">{{ item.volume }}方</span>
-            <span v-if="item.unit">{{ item.unit }}</span>
-          </p>
-        </div>
-      </li>
-    </ul>
-  </cube-scroll>
+      <div class="item-info border-bottom-1px">
+        <p class="item-info-title">{{ item.cargoName }}</p>
+        <p class="item-info-data">
+          <span v-if="item.weight">{{ item.weight }}吨</span>
+          <span v-if="item.volume">{{ item.volume }}方</span>
+          <span v-if="item.unit">{{ item.unit }}</span>
+        </p>
+      </div>
+    </li>
+  </ul>
 </template>
 
 <script>
@@ -56,7 +54,7 @@ export default {
       cargo.quantity = 1
       cargo.size = !item.dimension.length && !item.dimension.width && !item.dimension.height
         ? ''
-        : [ item.dimension.length || '-', item.dimension.width || '-', item.dimension.height || '-' ].join('x')
+        : [ item.dimension.length || '-', item.dimension.width || '-', item.dimension.height || '-' ].join(' x ')
       this.SET_CARGO_OFTEN(cargo)
       this.$router.back()
     }
@@ -69,7 +67,6 @@ export default {
       window.loading(true)
       try {
         vm.cargoList = await vm.getOftenCargo(vm.consignerId)
-        this.$nextTick(() => { this.$refs.$scroll.refresh() })
       } catch (err) {
         //
       } finally {

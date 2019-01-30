@@ -1,16 +1,17 @@
 const webpack = require('webpack')
 const useBundleAnalyzer = false // 是否开启打包分析
-const dllmap = require('../public/dll/common.json')
+const envPath = process.env.VUE_APP_STATUS === 'prod' ? 'prod' : 'dev'
+const dllmap = require(`../public/${envPath}/dll/common.json`)
 const config = {
-  publicPath: './',
+  publicPath: './cube/static',
   assetsDir: '',
-  outputDir: 'public/cube',
+  outputDir: `cube/static/${envPath}`,
   productionSourceMap: false,
   parallel: true,
   lintOnSave: undefined,
   // 去掉文件名中的 hash
   filenameHashing: false,
-   // 删除 HTML 相关的 webpack 插件
+  // 删除 HTML 相关的 webpack 插件
   chainWebpack: config => {
     config.plugins.delete('html')
     config.plugins.delete('preload')

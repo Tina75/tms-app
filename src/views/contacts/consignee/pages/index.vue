@@ -54,7 +54,6 @@ export default {
   methods: {
     ...mapActions(moudleName, ['loadConsigneeList']),
     onPageRefresh() {
-      console.info('onPageRefresh')
       this.loading = true
     },
     setBtn () {
