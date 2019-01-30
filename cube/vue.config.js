@@ -5,7 +5,7 @@ const dllmap = require(`../public/${envPath}/dll/common.json`)
 const config = {
   publicPath: './cube/static',
   assetsDir: '',
-  outputDir: `public/${envPath}/cube`,
+  outputDir: `cube/static/${envPath}`,
   productionSourceMap: false,
   parallel: true,
   lintOnSave: undefined,
