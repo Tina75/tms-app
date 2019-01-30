@@ -96,7 +96,8 @@ export default {
         this._doSearch()
       }
     },
-    changeCity(v) {
+    async changeCity(v) {
+      await loadBMap()
       this._localSearch.setLocation(this.limitCity)
       this.doSearch()
     },

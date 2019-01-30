@@ -65,6 +65,12 @@ const ListConfig = [
   { text: '购买时间', key: 'purchDate' }
 ]
 
+const completeOssImage = (src) => {
+  const hasDomain = /^(http|https):\/\//ig.test(src)
+  if (hasDomain) return src
+  return process.env.VUE_APP_IMG_HOST + src
+}
+
 export default {
   name: 'TruckDetail',
 
@@ -83,8 +89,8 @@ export default {
       const detail = this.viewData
       if (detail) {
         const arr = []
-        detail.drivePhoto && arr.push(process.env.VUE_APP_IMG_HOST + detail.drivePhoto)
-        detail.travelPhoto && arr.push(process.env.VUE_APP_IMG_HOST + detail.travelPhoto)
+        detail.travelPhoto && arr.push(completeOssImage(detail.travelPhoto))
+        detail.drivePhoto && arr.push(completeOssImage(detail.drivePhoto))
         return arr
       }
       return []
@@ -152,9 +158,9 @@ export default {
     removeHandle () {
       this.$createDialog({
         type: 'confirm',
-        title: '',
+        title: '提醒',
         content: '请确认是否需要删除该信息?',
-        icon: 'cubeic-alert',
+        // icon: 'cubeic-alert',
         onConfirm: () => {
           const data = {
             carId: this.$route.query.carId

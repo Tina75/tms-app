@@ -59,6 +59,8 @@ export default {
   beforeRouteEnter(to, from, next) {
     next(vm => {
       const tab = to.query.tab
+      console.log(tab)
+
       if (tab) { vm.selectedLabel = vm.tabs[tab - 1].label }
       vm.updateView(vm.selectedLabel)
       vm.getTabCount()

@@ -24,30 +24,33 @@
         <div class="cube-font-14 cube-c-light-grey cube-mt-10" v-text="item.text"/>
       </div>
     </div>
-    <div v-if="regularLine.length" class="driver-detail_line cube-mt-15">
-      <div class="routes">
-        <h2 class="cube-c-grey-dark cube-font-16">常跑路线</h2>
-        <div class="cube-c-grey cube-pl-15 cube-pr-15 cube-font-15">
-          <p v-for="(item, index) in regularLine" :key="index" class="cube-mb-15">
-            <span>{{item.en}}</span>
-            <IconFont name="icon-line" color="#9DA1B0" class="route-line cube-ml-20 cube-mr-20"/>
-            <span>{{item.sn}}</span>
-          </p>
-        </div>
+
+    <div v-if="regularLine.length" class="driver-detail__card cube-font-15 cube-mt-15 border-bottom-1px">
+      <div class="cube-c-black cube-mb-15" v-text="'常跑线路'"/>
+      <div class="cube-c-grey cube-font-15">
+        <p v-for="(item, index) in regularLine" :key="index" class="cube-mb-15 driver-detail__regularLine">
+          <span>{{item.en}}</span>
+          <IconFont name="icon-line" color="#9DA1B0" class="route-line cube-ml-20 cube-mr-20"/>
+          <span>{{item.sn}}</span>
+        </p>
       </div>
-      <div v-if="photoList.length" class="identImg border-top-1px">
-        <h2 class="cube-c-grey-dark cube-font-16">证件照片</h2>
-        <div class="imgs">
-          <img v-for="(item, index) in photoList" :key="index" :src="item" alt="">
-        </div>
-      </div>
-      <div v-if="viewData.remark" class="remark border-top-1px">
-        <h2 class="cube-c-grey-dark cube-font-16">备注</h2>
-        <div class="cube-pa-15 cube-font-15 cube-c-grey">
-          {{viewData.remark}}
+    </div>
+    <div v-if="photoList.length" class="driver-detail__card cube-font-15 cube-mt-15">
+      <div class="cube-c-black cube-mb-15" v-text="'证件照片'"/>
+      <div class="photoWrap">
+        <div v-for="(item, index) in photoList" :key="index" class="photo">
+          <div :style="{'background-image': `url(${item})`}" class="photo-preview"/>
         </div>
       </div>
     </div>
+
+    <div v-if="viewData.remark" class="driver-detail__card cube-font-15 cube-mt-15 border-top-1px">
+      <h2 class="cube-c-grey-dark cube-font-16">备注</h2>
+      <div class="cube-pa-15 cube-font-15 cube-c-grey">
+        {{viewData.remark}}
+      </div>
+    </div>
+
     <div class="driver-detail_call">
       <cube-button
         :primary="true"
@@ -77,6 +80,11 @@ const ListConfig = [
   { text: '结算方式', key: 'payType' }
 ]
 const moudleName = 'contacts/driver'
+const completeOssImage = (src) => {
+  const hasDomain = /^(http|https):\/\//ig.test(src)
+  if (hasDomain) return src
+  return process.env.VUE_APP_IMG_HOST + src
+}
 export default {
   name: 'DriverDetail',
   metaInfo: {
@@ -94,8 +102,8 @@ export default {
       const detail = this.viewData
       if (detail) {
         const arr = []
-        if (detail.drivePhoto) { arr.push(process.env.VUE_APP_IMG_HOST + detail.drivePhoto) }
-        if (detail.travelPhoto) { arr.push(process.env.VUE_APP_IMG_HOST + detail.travelPhoto) }
+        if (detail.travelPhoto) { arr.push(completeOssImage(detail.travelPhoto)) }
+        if (detail.drivePhoto) { arr.push(completeOssImage(detail.drivePhoto)) }
         return arr
       }
       return []
@@ -154,9 +162,9 @@ export default {
           action: () => {
             this.$createDialog({
               type: 'confirm',
-              title: '',
+              title: '提醒',
               content: '请确认是否需要删除该信息?',
-              icon: 'cubeic-alert',
+              // icon: 'cubeic-alert',
               onConfirm: this.remove.bind(this)
             }).show()
           }
@@ -178,6 +186,27 @@ export default {
   padding-bottom 44px
   box-sizing border-box
   overflow-y auto
+  &__card
+    padding 16px 15px
+    min-height 100px
+    background #ffffff
+  &__regularLine
+    display flex
+    align-items center
+  .photoWrap
+    display flex
+    .photo
+      margin-left 25px
+      border-radius 2px
+      height 90px
+      width 160px
+      &:first-child
+        margin-left 0
+      &-preview
+        position relative
+        background center no-repeat #F9F9F9
+        background-size cover
+        height 100px
   &_info
     width 100%
     height 110px
@@ -247,14 +276,6 @@ export default {
       h2
         font-weight 500
         padding 24px 15px 0px 15px
-      .imgs
-        display flex
-        justify-content space-between
-        padding 15px
-        img
-          width 160px
-          height 90px
-          vertical-align middle
     .remark
       h2
         font-weight 500

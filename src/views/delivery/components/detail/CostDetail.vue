@@ -34,8 +34,8 @@
       <div v-for="item in Waybill.settlementPayInfo" :key="item.payType"  >
         <detail-panel-item  v-if="item.cashAmount || item.fuelCardAmount"  :label="item.payType | payType">
           <p >
-            <span v-if="item.cashAmount">{{item.cashAmount | moneyFormat}}元(现金)</span> &nbsp;
-            <span v-if="item.fuelCardAmount" class="fuel-txt">{{item.fuelCardAmount | moneyFormat}}元(油卡)</span>
+            <span v-if="item.cashAmount">{{item.cashAmount | moneyFormat}}元(现金)</span>
+            <span v-if="item.fuelCardAmount" class="fuel-txt"> &nbsp;{{item.fuelCardAmount | moneyFormat}}元(油卡)</span>
           </p>
         </detail-panel-item>
       </div>

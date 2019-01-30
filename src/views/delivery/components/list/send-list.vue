@@ -49,7 +49,8 @@ export default {
     setOff(id) {
       this.$createDialog({
         type: 'confirm',
-        icon: 'cubeic-alert',
+        title: '提醒',
+        // icon: 'cubeic-alert',
         content: '是否发运？',
         onConfirm: () => {
           this.doSetOff(id).then(() => {
@@ -64,7 +65,8 @@ export default {
     deleteItem(id) {
       this.$createDialog({
         type: 'confirm',
-        icon: 'cubeic-important',
+        // icon: 'cubeic-important',
+        title: '提醒',
         content: '是否确认删除？',
         onConfirm: () => {
           this.deleteBillById(id).then(() => {
