@@ -449,7 +449,7 @@ export default {
           url: 'load/bill/update/order',
           data: {
             id: data.id,
-            orderIds: state.currentBillOrderIds,
+            orderIds: [...state.currentBillOrderIds, ...data.chosenList],
             allocationStrategy: data.allocationStrategy
           }
         }).then((response) => {
