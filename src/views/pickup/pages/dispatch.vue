@@ -116,7 +116,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('pickup', ['dispatchingData', 'orderSettlementTypeMap', 'pickupDetail']),
+    ...mapGetters('pickup', ['dispatchingData', 'orderSettlementTypeMap', 'allocationStrategy']),
     ...mapGetters(['UserConfig']),
     options () {
       return {
@@ -253,7 +253,7 @@ export default {
       }
       vm.chosenList = []
       vm.chosenAll = false
-      vm.allocationStrategy = vm.pickupDetail.allocationStrategy || vm.UserConfig.allocationStrategyInfo.waybillStrategy || 1
+      vm.allocationStrategy = (to.params.id ? vm.allocationStrategy : 0) || vm.UserConfig.allocationStrategyInfo.waybillStrategy || 1
       vm.setPageStart('dispatchingData')
       vm.getDispatching()
     })

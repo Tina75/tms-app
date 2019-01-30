@@ -120,6 +120,7 @@ export default {
       state.pickupCargoDetail = noArray.map(no => {
         return { orderNo: no, cargoList: data.cargoList.filter(item => item.orderNo === no) }
       })
+      state.allocationStrategy = data.loadbill.allocationStrategy
     },
     clearDetail (state) {
       state.pickupDetail = {}
@@ -529,6 +530,7 @@ export default {
     carTypeMap: (state) => state.carTypeMap,
     carLengthMap: (state) => state.carLengthMap,
     locationDetail: (state) => state.locationDetail,
-    billOrderList: (state) => state.billOrderList
+    billOrderList: (state) => state.billOrderList,
+    allocationStrategy: (state) => state.allocationStrategy
   }
 }
