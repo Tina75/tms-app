@@ -104,7 +104,6 @@ export default {
     startHackLoading() {
       this.loading = true
       const pullDownDistance = flexValue(45)
-      console.info('pullDownDistance', pullDownDistance)
       setTimeout(() => {
         let scroll = this.getCubeScroll()
         if (scroll) {

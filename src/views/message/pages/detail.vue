@@ -30,7 +30,8 @@ export default {
         action: () => {
           this.$createDialog({
             type: 'confirm',
-            icon: 'cubeic-alert',
+            // icon: 'cubeic-alert',
+            title: '提醒',
             content: '确定要删除消息吗？',
             onConfirm: () => {
               this.deleteMsgById(this.$route.params.id).then(() => {

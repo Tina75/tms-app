@@ -136,7 +136,9 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    next(vm => vm.setBtns())
+    next(vm => {
+      vm.setBtns()
+    })
   }
 }
 </script>

@@ -146,6 +146,7 @@ export default {
   overflow-y auto
 .emty-data
   max-height 100%
+  min-height 100%
 </style>
 <style lang="stylus">
 .receipt

@@ -21,10 +21,10 @@
           @click.prevent="copy(detail.customerWaybillNo)">复制</a>
       </p>
     </detail-panel-item> -->
-    <detail-panel-item v-if="detail.startName" :label="'始发地'">
+    <detail-panel-item v-if="detail.startName" :label="'发货城市'">
       <p>{{ detail.startName }}</p>
     </detail-panel-item>
-    <detail-panel-item v-if="detail.endName" :label="'目的地'">
+    <detail-panel-item v-if="detail.endName" :label="'收货城市'">
       <p>{{ detail.endName }}</p>
     </detail-panel-item>
     <detail-panel-item v-if="detail.deliveryTime" :label="'发货时间'">

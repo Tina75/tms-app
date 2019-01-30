@@ -1,7 +1,10 @@
 <template>
   <detail-panel :title="'基本信息'">
-    <detail-panel-item v-if="Detail.orderNo" :label="'系统订单号'">
-      <p>{{Detail.orderNo}}</p>
+    <detail-panel-item v-if="Detail.orderNo" :label="'订单号'">
+      <p class="remix-content">
+        <span class="border-right-1px">{{Detail.orderNo}}</span>
+        <a v-clipboard:copy="Detail.orderNo" v-clipboard:success="copySuccess">复制</a>
+      </p>
     </detail-panel-item>
     <detail-panel-item v-if="Detail.consignerName" :label="'客户名称'">
       <p>{{Detail.consignerName}}</p>
@@ -18,10 +21,10 @@
         <a v-clipboard:copy="Detail.customerWaybillNo" v-clipboard:success="copySuccess">复制</a>
       </p>
     </detail-panel-item>
-    <detail-panel-item v-if="Detail.startName" :label="'始发地'">
+    <detail-panel-item v-if="Detail.startName" :label="'发货城市'">
       <p>{{Detail.startName}}</p>
     </detail-panel-item>
-    <detail-panel-item v-if="Detail.endName" :label="'目的地'">
+    <detail-panel-item v-if="Detail.endName" :label="'收货城市'">
       <p>{{Detail.endName}}</p>
     </detail-panel-item>
     <detail-panel-item v-if="Detail.deliveryTime" :label="'发货时间'">
