@@ -203,9 +203,9 @@ export default {
       if (this.exist(addr, '省') || this.isMunicipality(addr)) {
         // 有省级市城市
         return addr
-      } else if (this.exist(addr, '区') || this.exist(addr, '县') || this.exist(addr, '市')){
+      } else if (this.exist(addr, '区') || this.exist(addr, '县') || this.exist(addr, '市')) {
         // 详细地址有区县市区 过滤
-        const areaName = addr.split('区').length > 1 ? addr.split('区')[0] : addr.split('县').length > 1 ?          addr.split('县')[0] : addr.split('市').length > 1 ? addr.split('市')[0] : ''
+        const areaName = addr.split('区').length > 1 ? addr.split('区')[0] : addr.split('县').length > 1 ? addr.split('县')[0] : addr.split('市').length > 1 ? addr.split('市')[0] : ''
         return this.exist(city, areaName) ? city.split(areaName)[0] + addr : city + addr
       } else {
         return city + addr
@@ -221,7 +221,7 @@ export default {
     exist (str, key) {
       return str.indexOf(key) !== -1
     },
-     /**
+    /**
      * @Description: 发货城市将省市区和详细地址拼接，并且去掉详细地址中重复的省市区信息
      * @Date 2019/1/29
      * @param 省市区(CityName) 详细地址(addressName)
@@ -245,7 +245,7 @@ export default {
         address = address.replace(area, '')
       }
       return str + address
-    },
+    }
   }
 }
 </script>
