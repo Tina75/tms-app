@@ -215,9 +215,10 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.getPickupDetail(to.params.id)
+      vm.getPickupDetail(to.params.id).then((pickupDetail) => {
+        vm.hasSendCar = (pickupDetail.assignCarType === 1 && pickupDetail.carrierName) || (pickupDetail.assignCarType === 2 && pickupDetail.carNo)
+      })
       vm.$nextTick(() => {
-        vm.hasSendCar = (this.pickupDetail.assignCarType === 1 && this.pickupDetail.carrierName) || (this.pickupDetail.assignCarType === 2 && this.pickupDetail.carNo)
         vm.$refs['content-scroll'].refresh()
       })
     })
