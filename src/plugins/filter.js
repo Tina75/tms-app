@@ -54,8 +54,10 @@ Vue.filter('phoneFormat', function (value) {
 })
 
 Vue.filter('textOverflow', function (value, length = 8) {
-  if (value.length < length) return value
-  return value.substring(0, length) + '...'
+  if (value) {
+    if (value.length < length) return value
+    return value.substring(0, length) + '...'
+  } else return ''
 })
 Vue.filter('settlementTypeFormat', (value) => {
   const settlement = ['未知', '按单结', '按单结', '按单结', '月结']

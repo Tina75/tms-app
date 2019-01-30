@@ -15,7 +15,7 @@ export const getUserInfo = reuse(() => {
       userInfo = require('./login.json')
     } catch (e) {
       userInfo = {
-        Authorization: 'Bearer 14ea9c099547cc7ca95fa42cff5c3d481548033155302',
+        Authorization: 'Bearer b34494e7d1d42cfe6081cac30c9072201548846276685',
         ClientInfo: '2240563ecfa80fe26c4eb4dd4f6053037db4eee8/yzgdriver/1.0.0/ios'
       }
     }
