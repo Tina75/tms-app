@@ -13,13 +13,13 @@
       @pulling-up="loadmore">
       <ul>
         <li v-for="item in DispatchList" :key="item.id" >
-          <workbench-list-item :info="item" @update-city="updateCity"/>
+          <workbench-list-item :info="item" @update-city="updateCity" @on-item-click="handleClickItem"/>
         </li>
       </ul>
     </cube-scroll>
     <div class="footer">
       <div class="footer-calc">
-        <div class="select">
+        <div class="select" @click="toggleAll">
           <cube-checkbox v-model="checkAll" class="cube-font-18">
             <span class="cube-font-15 cube-c-black">全选</span>
           </cube-checkbox>
@@ -80,12 +80,12 @@ export default {
       return this.DispatchList.filter(item => item.checked === true).length
     }
   },
-  watch: {
-    checkAll: function(val) {
-      this.DispatchList.forEach(item => { item.checked = val })
-      this.updateCity()
-    }
-  },
+  // watch: {
+  //   checkAll: function(val) {
+  //     this.DispatchList.forEach(item => { item.checked = val })
+  //     this.updateCity()
+  //   }
+  // },
 
   activated () {
     this.refresh()
@@ -114,6 +114,19 @@ export default {
         obj[key] = obj1[key] + obj2[key]
         return obj
       })[key]
+    },
+    toggleAll() {
+      this.$nextTick(() => {
+        let val = this.checkAll
+        this.DispatchList.forEach(item => { item.checked = val })
+        if (val) {
+          this.updateCity()
+        }
+      })
+    },
+    handleClickItem() {
+      let list = this.DispatchList.filter(item => item.checked)
+      this.checkAll = list.length === this.DispatchList.length
     },
     doDispatch() {
       let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)

@@ -13,14 +13,14 @@
       @pulling-up="loadmore">
       <ul>
         <li v-for="item in DispatchList" :key="item.id" >
-          <workbench-list-item :info="item"/>
+          <workbench-list-item :info="item" @on-item-click="handleClickItem"/>
         </li>
       </ul>
     </cube-scroll>
     <div class="footer">
       <div class="footer-calc">
-        <div class="select">
-          <cube-checkbox v-model="checkAll" class="cube-font-18">
+        <div class="select"  @click="toggleAll">
+          <cube-checkbox v-model="checkAll" class="cube-font-18" >
             <span class="cube-font-15 cube-c-black">全选</span>
           </cube-checkbox>
           <span class="cube-c-green">{{totalCount}}</span>单
@@ -79,9 +79,9 @@ export default {
     }
   },
   watch: {
-    checkAll: function(val) {
-      this.DispatchList.forEach(item => { item.checked = val })
-    },
+    // checkAll: function(val) {
+    //   this.DispatchList.forEach(item => { item.checked = val })
+    // },
     DispatchList: function(newList) {
       if (newList && newList.length) {
         const firstOne = newList[0]
@@ -103,6 +103,12 @@ export default {
   },
   methods: {
     ...mapActions('delivery', ['getWaybillDetail', 'getDispatch', 'clearDispatch', 'dispatchOrder', 'addBillOrder', 'updatetBillOrders']),
+    toggleAll() {
+      this.$nextTick(() => {
+        let val = this.checkAll
+        this.DispatchList.forEach(item => { item.checked = val })
+      })
+    },
     refresh() {
       this.clearDispatch()
       this.getDispatch().then(() => { this.checkAll = false })
@@ -117,6 +123,10 @@ export default {
         obj[key] = obj1[key] + obj2[key]
         return obj
       })[key]
+    },
+    handleClickItem() {
+      let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)
+      this.checkAll = ids.length === this.DispatchList.length
     },
     async save() {
       let ids = this.DispatchList.filter(item => item.checked).map(ele => ele.id)

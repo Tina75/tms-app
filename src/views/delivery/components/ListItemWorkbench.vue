@@ -51,6 +51,7 @@ export default {
     handleClick() {
       this.info.checked = !this.info.checked
       this.$emit('update-city')
+      this.$emit('on-item-click')
     }
   }
 }
