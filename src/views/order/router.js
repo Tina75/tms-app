@@ -13,7 +13,7 @@ export default [
       title: '手工开单',
       formLeaveConfirm: true
     },
-    component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
+    component: () => import(/* webpackChunkName: "order-create" */ './create/pages/index.vue')
   },
   {
     path: '/order/edit/:id',
@@ -23,65 +23,65 @@ export default [
       title: '编辑订单',
       formLeaveConfirm: true
     },
-    component: () => import(/* webpackChunkName: "order" */ './create/pages/index.vue')
+    component: () => import(/* webpackChunkName: "order-create" */ './create/pages/index.vue')
   },
   {
     path: '/order/charge-rule',
     name: 'order-charge-rule', // 计费规则
-    component: () => import(/* webpackChunkName: "order" */ './create/pages/charge-rule.vue')
+    component: () => import(/* webpackChunkName: "order-create" */ './create/pages/charge-rule.vue')
   },
   {
     path: '/order/cargo-info',
     name: 'order-cargo-info', // 货物信息
-    component: () => import(/* webpackChunkName: "order" */ './create/pages/cargo-info.vue')
+    component: () => import(/* webpackChunkName: "order-create" */ './create/pages/cargo-info.vue')
   },
   {
     path: '/order/cargo-often',
     name: 'order-cargo-often', // 选择货物
-    component: () => import(/* webpackChunkName: "order" */ './create/pages/cargo-often.vue')
+    component: () => import(/* webpackChunkName: "order-create" */ './create/pages/cargo-often.vue')
   },
   {
     path: '/order/edit-address',
     name: 'order-edit-address', // 详细地址
-    component: () => import(/* webpackChunkName: "order" */ './create/pages/edit-address.vue')
+    component: () => import(/* webpackChunkName: "order-create" */ './create/pages/edit-address.vue')
   },
   {
     path: '/order/fee-info',
     name: 'order-fee-info', // 其他费用
-    component: () => import(/* webpackChunkName: "order" */ './create/pages/fee-info.vue')
+    component: () => import(/* webpackChunkName: "order-create" */ './create/pages/fee-info.vue')
   },
   {
     path: '/order/consumer-info',
     name: 'order-consumer-info', // 客户订单号及其他
-    component: () => import(/* webpackChunkName: "order" */ './create/pages/consumer-info.vue')
+    component: () => import(/* webpackChunkName: "order-create" */ './create/pages/consumer-info.vue')
   },
   {
     path: '/order/other-info',
     name: 'order-other-info', // 其他信息
-    component: () => import(/* webpackChunkName: "order" */ './create/pages/other-info.vue')
+    component: () => import(/* webpackChunkName: "order-create" */ './create/pages/other-info.vue')
   },
   {
     path: '/order/select-consigner',
     name: 'order-select-consigner', // 选择发货人
     meta: { noNeedRefresh: [] },
-    component: () => import(/* webpackChunkName: "order" */ './create/pages/select-consigner.vue')
+    component: () => import(/* webpackChunkName: "order-create" */ './create/pages/select-consigner.vue')
   },
   {
     path: '/order/select-consignee',
     name: 'order-select-consignee', // 选择收货人
     meta: { noNeedRefresh: [] },
-    component: () => import(/* webpackChunkName: "order" */ './create/pages/select-consignee.vue')
+    component: () => import(/* webpackChunkName: "order-create" */ './create/pages/select-consignee.vue')
   },
   {
     path: '/order/often',
     name: 'order-often', // 常发订单
     meta: { noNeedRefresh: [] },
-    component: () => import(/* webpackChunkName: "order" */ './often/pages/index.vue')
+    component: () => import(/* webpackChunkName: "order-often" */ './often/pages/index.vue')
   },
   {
     path: '/order/often/detail/:orderId',
     name: 'order-often-detail', // 常发订单详情
-    component: () => import(/* webpackChunkName: "order" */ './often/pages/detail.vue')
+    component: () => import(/* webpackChunkName: "order-often" */ './often/pages/detail.vue')
   },
   {
     path: '/order/list',
@@ -90,7 +90,7 @@ export default [
   },
   {
     path: '/order/detail/:id',
-    name: 'order-detail', // 订单列表
+    name: 'order-detail', // 订单详情
     component: () => import(/* webpackChunkName: "order" */'./detail/pages/detail.vue')
   }
 ]

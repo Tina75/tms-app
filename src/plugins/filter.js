@@ -7,7 +7,6 @@ const URL_HOST = process.env.VUE_APP_IMG_HOST
 const bjOffset = -480
 // 当前环境的和北京时间的时差
 const timeOffset = new Date().getTimezoneOffset() - bjOffset
-console.info(dayjs)
 Vue.filter('datetimeFormat', (value, formatting = 'YYYY-MM-DD HH:mm', placeholder = '') => {
   if (!value) return placeholder
   let time = dayjs(Number(value))
