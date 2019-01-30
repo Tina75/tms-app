@@ -24,7 +24,7 @@
             <span class="cube-font-15">全选</span>
           </cube-checkbox>
           <span class="cube-c-green">{{totalCount}}</span>单
-          <span class="ploy">分摊策略：{{allocationStrategy}} <i class="iconfont icon-ico_up"/></span>
+          <span class="ploy" @click.stop="showPicker">分摊策略：{{allocationStrategy}} <i class="iconfont icon-ico_up"/></span>
         </div>
         <div class="total">
           合计&nbsp;
