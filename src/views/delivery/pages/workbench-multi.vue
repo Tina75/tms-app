@@ -199,6 +199,9 @@ export default {
         transform:rotate(180deg)
         -webkit-transform:rotate(180deg);
   .total
+    width 100%
+    white-space nowrap
+    overflow hidden
     height 44px
     line-height 44px
     padding-left 40px

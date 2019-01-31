@@ -178,6 +178,7 @@ export default {
       float right
   .total
     height 44px
+    width 100%
     line-height 44px
     padding-left 40px
     overflow hidden
